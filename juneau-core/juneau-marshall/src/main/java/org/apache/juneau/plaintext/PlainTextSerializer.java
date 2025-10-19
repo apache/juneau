@@ -102,6 +102,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addRootType() {
 			super.addRootType();
@@ -604,13 +605,13 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -744,6 +745,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 
 	/** Default serializer, all default settings.*/
 	public static final PlainTextSerializer DEFAULT = new PlainTextSerializer(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -752,6 +754,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private final Map<ClassMeta<?>,PlainTextClassMeta> plainTextClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,PlainTextBeanPropertyMeta> plainTextBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -771,7 +774,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	}
 
 	@Override /* Overridden from Context */
-	public  PlainTextSerializerSession.Builder createSession() {
+	public PlainTextSerializerSession.Builder createSession() {
 		return PlainTextSerializerSession.create(this);
 	}
 
@@ -786,6 +789,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		}
 		return m;
 	}
+
 	@Override /* Overridden from PlainTextMetaProvider */
 	public PlainTextClassMeta getPlainTextClassMeta(ClassMeta<?> cm) {
 		PlainTextClassMeta m = plainTextClassMetas.get(cm);
@@ -797,7 +801,5 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	}
 
 	@Override /* Overridden from Context */
-	public PlainTextSerializerSession getSession() {
-		return createSession().build();
-	}
+	public PlainTextSerializerSession getSession() { return createSession().build(); }
 }

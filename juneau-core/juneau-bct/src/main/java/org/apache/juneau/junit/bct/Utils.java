@@ -102,7 +102,7 @@ class Utils {
 	 * @throws IllegalArgumentException If the expression evaluates to false.
 	 */
 	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
-		if (! expression)
+		if (!expression)
 			throw new IllegalArgumentException(MessageFormat.format(msg, args));
 	}
 
@@ -203,9 +203,15 @@ class Utils {
 	 * @return true if the objects are equal according to the test predicate.
 	 */
 	public static <T,U> boolean eq(T o1, U o2, BiPredicate<T,U> test) {
-		if (o1 == null) { return o2 == null; }
-		if (o2 == null) { return false; }
-		if (o1 == o2) { return true; }
+		if (o1 == null) {
+			return o2 == null;
+		}
+		if (o2 == null) {
+			return false;
+		}
+		if (o1 == o2) {
+			return true;
+		}
 		return test.test(o1, o2);
 	}
 
@@ -241,19 +247,33 @@ class Utils {
 		var sb = new StringBuilder();
 		for (var c : s.toCharArray()) {
 			switch (c) {
-				case '\"': sb.append("\\\""); break;
-				case '\\': sb.append("\\\\"); break;
-				case '\n': sb.append("\\n"); break;
-				case '\r': sb.append("\\r"); break;
-				case '\t': sb.append("\\t"); break;
-				case '\f': sb.append("\\f"); break;
-				case '\b': sb.append("\\b"); break;
-				default:
-					if (c < 0x20 || c > 0x7E) {
-						sb.append(String.format("\\u%04x", (int)c));
-					} else {
-						sb.append(c);
-					}
+			case '\"':
+				sb.append("\\\"");
+				break;
+			case '\\':
+				sb.append("\\\\");
+				break;
+			case '\n':
+				sb.append("\\n");
+				break;
+			case '\r':
+				sb.append("\\r");
+				break;
+			case '\t':
+				sb.append("\\t");
+				break;
+			case '\f':
+				sb.append("\\f");
+				break;
+			case '\b':
+				sb.append("\\b");
+				break;
+			default:
+				if (c < 0x20 || c > 0x7E) {
+					sb.append(String.format("\\u%04x", (int)c));
+				} else {
+					sb.append(c);
+				}
 			}
 		}
 		return sb.toString();
@@ -303,7 +323,7 @@ class Utils {
 	 * @return A {@link Supplier} that produces the formatted message when called.
 	 */
 	public static Supplier<String> fs(String msg, Object...args) {
-		return ()->f(msg, args);
+		return () -> f(msg, args);
 	}
 
 	/**
@@ -389,7 +409,7 @@ class Utils {
 	 * @return true if the objects are not equal according to {@link Objects#equals(Object, Object)}.
 	 */
 	public static <T> boolean ne(T o1, T o2) {
-		return ! eq(o1, o2);
+		return !eq(o1, o2);
 	}
 
 	/**
@@ -472,7 +492,7 @@ class Utils {
 	public static String safeToString(Object o) {
 		try {
 			return o.toString();
-		} catch (Throwable t) {  // NOSONAR
+		} catch (Throwable t) { // NOSONAR
 			return t(t) + ": " + t.getMessage();
 		}
 	}

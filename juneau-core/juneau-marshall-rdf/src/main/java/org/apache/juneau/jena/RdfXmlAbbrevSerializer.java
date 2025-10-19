@@ -39,6 +39,7 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	public static RdfSerializer.Builder create() {
 		return RdfSerializer.create().xmlabbrev();
 	}
+
 	/**
 	 * Constructor.
 	 *

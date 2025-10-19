@@ -42,17 +42,11 @@ public class RestartCommand extends ConsoleCommand {
 	}
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getDescription() {
-		return mb.getString("description");
-	}
+	public String getDescription() { return mb.getString("description"); }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getInfo() {
-		return mb.getString("info");
-	}
+	public String getInfo() { return mb.getString("info"); }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getName() {
-		return "restart";
-	}
+	public String getName() { return "restart"; }
 }

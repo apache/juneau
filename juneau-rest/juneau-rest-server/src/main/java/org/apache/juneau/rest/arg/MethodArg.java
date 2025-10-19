@@ -55,8 +55,7 @@ public class MethodArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 */
-	protected MethodArg() {
-	}
+	protected MethodArg() {}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {

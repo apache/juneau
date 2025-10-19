@@ -109,14 +109,16 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-@Bean(typeName="feed")
+@Bean(typeName = "feed")
 public class Feed extends CommonEntry {
 
+	// @formatter:off
 	private Generator generator;  // atomGenerator?
 	private Icon icon;            // atomIcon?
 	private Logo logo;            // atomLogo?
 	private Text subtitle;        // atomSubtitle?
 	private Entry[] entries;      // atomEntry*
+	// @formatter:on
 
 	/** Bean constructor. */
 	public Feed() {}
@@ -142,6 +144,7 @@ public class Feed extends CommonEntry {
 	public Feed(String id, String title, String updated) {
 		super(id, title, updated);
 	}
+
 	/**
 	 * Bean property getter:  <property>entries</property>.
 	 *
@@ -155,10 +158,8 @@ public class Feed extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=COLLAPSED)
-	public Entry[] getEntries() {
-		return entries;
-	}
+	@Xml(format = COLLAPSED)
+	public Entry[] getEntries() { return entries; }
 
 	/**
 	 * Bean property getter:  <property>generator</property>.
@@ -172,9 +173,7 @@ public class Feed extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Generator getGenerator() {
-		return generator;
-	}
+	public Generator getGenerator() { return generator; }
 
 	/**
 	 * Bean property getter:  <property>icon</property>.
@@ -188,9 +187,7 @@ public class Feed extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Icon getIcon() {
-		return icon;
-	}
+	public Icon getIcon() { return icon; }
 
 	/**
 	 * Bean property getter:  <property>logo</property>.
@@ -203,9 +200,7 @@ public class Feed extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Logo getLogo() {
-		return logo;
-	}
+	public Logo getLogo() { return logo; }
 
 	/**
 	 * Bean property getter:  <property>subtitle</property>.
@@ -219,9 +214,7 @@ public class Feed extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Text getSubtitle() {
-		return subtitle;
-	}
+	public Text getSubtitle() { return subtitle; }
 
 	@Override /* Overridden from CommonEntry */
 	public Feed setAuthors(Person...value) {
@@ -309,6 +302,7 @@ public class Feed extends CommonEntry {
 		this.generator = value;
 		return this;
 	}
+
 	/**
 	 * Bean property setter:  <property>icon</property>.
 	 *

@@ -43,6 +43,7 @@ public class UonUtils {
 	 */
 	public static boolean needsQuotes(String s) {
 		char c0 = s.isEmpty() ? 0 : s.charAt(0);
+		// @formatter:off
 		return (
 			s.isEmpty()
 			|| c0 == '@'
@@ -58,5 +59,6 @@ public class UonUtils {
 				)
 			)
 		);
+		// @formatter:on
 	}
 }

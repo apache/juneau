@@ -30,7 +30,7 @@ public class PojoComplex {
 
 	private final String id;
 	private final Pojo innerPojo;
-	private final HashMap<String, List<Pojo>> values;
+	private final HashMap<String,List<Pojo>> values;
 
 	/**
 	 * Constructor.
@@ -40,7 +40,7 @@ public class PojoComplex {
 	 * @param values The <bc>values</bc> property value.
 	 */
 	@Beanc
-	public PojoComplex(@Name("id") String id, @Name("innerPojo") Pojo innerPojo, @Name("values") HashMap<String, List<Pojo>> values) {
+	public PojoComplex(@Name("id") String id, @Name("innerPojo") Pojo innerPojo, @Name("values") HashMap<String,List<Pojo>> values) {
 		this.id = id;
 		this.innerPojo = innerPojo;
 		this.values = values;
@@ -51,25 +51,19 @@ public class PojoComplex {
 	 *
 	 * @return The value of the <property>id</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public String getId() {
-		return id;
-	}
+	public String getId() { return id; }
 
 	/**
 	 * Bean property getter:  <property>innerPojo</property>.
 	 *
 	 * @return The value of the <property>innerPojo</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Pojo getInnerPojo() {
-		return innerPojo;
-	}
+	public Pojo getInnerPojo() { return innerPojo; }
 
 	/**
 	 * Bean property getter:  <property>values</property>.
 	 *
 	 * @return The value of the <property>values</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public HashMap<String,List<Pojo>> getValues() {
-		return values;
-	}
+	public HashMap<String,List<Pojo>> getValues() { return values; }
 }

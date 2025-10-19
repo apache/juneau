@@ -36,6 +36,7 @@ public class HashKey {
 	public static HashKey of(Object...array) {
 		return new HashKey(array);
 	}
+
 	private final int hashCode;
 	private final Object[] array;
 
@@ -62,9 +63,11 @@ public class HashKey {
 
 	@Override /* Overridden from Object */
 	public String toString() {
+		// @formatter:off
 		return filteredMap()
 			.append("hashCode", hashCode())
 			.append("array", array)
 			.asString();
+		// @formatter:on
 	}
 }

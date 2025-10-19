@@ -41,8 +41,7 @@ public class StreamEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 */
-	public StreamEntity() {
-	}
+	public StreamEntity() {}
 
 	/**
 	 * Constructor.
@@ -71,6 +70,7 @@ public class StreamEntity extends BasicHttpEntity {
 			return byteCache;
 		return readBytes(content(), getMaxLength());
 	}
+
 	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		if (isCached() && stringCache == null)
@@ -100,17 +100,13 @@ public class StreamEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return isCached();
-	}
+	public boolean isRepeatable() { return isCached(); }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isStreaming() {
-		return ! isCached();
-	}
+	public boolean isStreaming() { return ! isCached(); }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setCached() throws IOException{
+	public StreamEntity setCached() throws IOException {
 		super.setCached();
 		return this;
 	}
@@ -120,6 +116,7 @@ public class StreamEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public StreamEntity setChunked() {
 		super.setChunked();
@@ -206,6 +203,6 @@ public class StreamEntity extends BasicHttpEntity {
 	}
 
 	private InputStream content() {
-		return Objects.requireNonNull(contentOrElse((InputStream) null), "Input stream is null.");
+		return Objects.requireNonNull(contentOrElse((InputStream)null), "Input stream is null.");
 	}
 }

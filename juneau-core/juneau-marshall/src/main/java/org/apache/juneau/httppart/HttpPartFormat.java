@@ -218,7 +218,7 @@ public enum HttpPartFormat {
 	 * @return The enum.
 	 */
 	public static HttpPartFormat fromString(String value) {
-		value = value.toUpperCase().replace('-','_');
+		value = value.toUpperCase().replace('-', '_');
 		return valueOf(value);
 	}
 
@@ -237,7 +237,7 @@ public enum HttpPartFormat {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		String s = name().toLowerCase().replace('_','-');
+		String s = name().toLowerCase().replace('_', '-');
 		return s;
 	}
 }

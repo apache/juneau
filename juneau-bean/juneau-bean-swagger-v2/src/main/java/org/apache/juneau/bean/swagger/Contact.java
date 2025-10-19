@@ -101,6 +101,7 @@ public class Contact extends SwaggerElement {
 	public Contact copy() {
 		return new Contact(this);
 	}
+
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
@@ -120,9 +121,7 @@ public class Contact extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getEmail() {
-		return email;
-	}
+	public String getEmail() { return email; }
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -132,9 +131,7 @@ public class Contact extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Bean property getter:  <property>url</property>.
@@ -144,17 +141,17 @@ public class Contact extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public URI getUrl() {
-		return url;
-	}
+	public URI getUrl() { return url; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(email != null, "email")
 			.addIf(name != null, "name")
 			.addIf(url != null, "url")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

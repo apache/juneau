@@ -62,6 +62,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public JsonSchemaSerializerSession build() {
 			return new JsonSchemaSerializerSession(this);
@@ -175,6 +176,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -184,6 +186,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 	public static Builder create(JsonSchemaSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final JsonSchemaGeneratorSession genSession;
 	private final JsonSchemaSerializer ctx;
 
@@ -206,6 +209,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			throw new SerializeException(e);
 		}
 	}
+
 	/**
 	 * Returns the language-specific metadata on the specified bean property.
 	 *

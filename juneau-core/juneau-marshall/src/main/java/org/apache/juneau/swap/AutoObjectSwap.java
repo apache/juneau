@@ -85,9 +85,11 @@ import org.apache.juneau.serializer.*;
  */
 public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 
+	// @formatter:off
 	private static final Set<String>
 		SWAP_METHOD_NAMES = u(set("swap", "toObject")),
 		UNSWAP_METHOD_NAMES = u(set("unswap", "create", "fromObject", "of"));
+	// @formatter:on
 
 	/**
 	 * Inspects the specified class and returns a swap of this type if possible.
@@ -124,6 +126,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 	}
 
 	private static boolean isSwapMethod(BeanContext bc, MethodInfo mi) {
+		// @formatter:off
 		return
 			mi.isNotDeprecated()
 			&& mi.isNotStatic()
@@ -131,17 +134,21 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.hasName(SWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
+		// @formatter:on
 	}
 
 	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
+		// @formatter:off
 		return
 			cs.isNotDeprecated()
 			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasMatchingParamTypes(rt)
 			&& cs.hasNoAnnotation(bc, BeanIgnore.class);
+		// @formatter:on
 	}
 
 	private static boolean isUnswapMethod(BeanContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
+		// @formatter:off
 		return
 			mi.isNotDeprecated()
 			&& mi.isStatic()
@@ -150,12 +157,11 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
+		// @formatter:on
 	}
 
 	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
-		return
-			ci.hasAnnotation(bc, BeanIgnore.class)
-			|| ci.isNonStaticMemberClass();
+		return ci.hasAnnotation(bc, BeanIgnore.class) || ci.isNonStaticMemberClass();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

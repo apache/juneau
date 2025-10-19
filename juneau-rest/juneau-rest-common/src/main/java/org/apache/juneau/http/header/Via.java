@@ -167,6 +167,7 @@ public class Via extends BasicCsvHeader {
 	public static Via of(Supplier<String[]> value) {
 		return value == null ? null : new Via(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

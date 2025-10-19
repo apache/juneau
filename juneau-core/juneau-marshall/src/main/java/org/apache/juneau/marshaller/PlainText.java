@@ -53,6 +53,7 @@ public class PlainText extends CharMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final PlainText DEFAULT = new PlainText();
+
 	/**
 	 * Serializes a Java object to a Plain Text string.
 	 *

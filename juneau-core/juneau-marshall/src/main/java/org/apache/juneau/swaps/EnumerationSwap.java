@@ -32,7 +32,7 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class EnumerationSwap extends ObjectSwap<Enumeration,List> {
 
 	/**

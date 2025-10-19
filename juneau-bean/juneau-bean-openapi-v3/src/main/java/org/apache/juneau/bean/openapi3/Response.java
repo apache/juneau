@@ -75,7 +75,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-public class Response extends OpenApiElement{
+public class Response extends OpenApiElement {
 
 	private String description;
 	private Map<String,HeaderInfo> headers;
@@ -85,7 +85,7 @@ public class Response extends OpenApiElement{
 	/**
 	 * Default constructor.
 	 */
-	public Response() { }
+	public Response() {}
 
 	/**
 	 * Copy constructor.
@@ -169,9 +169,7 @@ public class Response extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, MediaType> getContent() {
-		return content;
-	}
+	public Map<String,MediaType> getContent() { return content; }
 
 	/**
 	 * Returns the content with the specified media type.
@@ -192,9 +190,7 @@ public class Response extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Returns the header with the specified name.
@@ -212,9 +208,7 @@ public class Response extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, HeaderInfo> getHeaders() {
-		return headers;
-	}
+	public Map<String,HeaderInfo> getHeaders() { return headers; }
 
 	/**
 	 * Returns the link with the specified name.
@@ -232,9 +226,7 @@ public class Response extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, Link> getLinks() {
-		return links;
-	}
+	public Map<String,Link> getLinks() { return links; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -251,10 +243,10 @@ public class Response extends OpenApiElement{
 	public Response set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "content" -> setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
+			case "content" -> setContent(mapBuilder(String.class, MediaType.class).sparse().addAny(value).build());
 			case "description" -> setDescription(Utils.s(value));
-			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
-			case "links" -> setLinks(mapBuilder(String.class,Link.class).sparse().addAny(value).build());
+			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
+			case "links" -> setLinks(mapBuilder(String.class, Link.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -270,7 +262,7 @@ public class Response extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Response setContent(Map<String, MediaType> value) {
+	public Response setContent(Map<String,MediaType> value) {
 		content = copyOf(value);
 		return this;
 	}
@@ -303,7 +295,7 @@ public class Response extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Response setHeaders(Map<String, HeaderInfo> value) {
+	public Response setHeaders(Map<String,HeaderInfo> value) {
 		headers = copyOf(value);
 		return this;
 	}
@@ -316,7 +308,7 @@ public class Response extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Response setLinks(Map<String, Link> value) {
+	public Response setLinks(Map<String,Link> value) {
 		links = copyOf(value);
 		return this;
 	}

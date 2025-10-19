@@ -587,18 +587,14 @@ public abstract class Context implements AnnotationProvider {
 		 *
 		 * @return All the annotations that have been applied to this builder.
 		 */
-		public AnnotationWorkList getApplied() {
-			return applied;
-		}
+		public AnnotationWorkList getApplied() { return applied; }
 
 		/**
 		 * Returns the context class that this builder should create.
 		 *
 		 * @return The context class if it was specified.
 		 */
-		public Optional<Class<?>> getType() {
-			return Utils.opt(type);
-		}
+		public Optional<Class<?>> getType() { return Utils.opt(type); }
 
 		/**
 		 * Returns the hashkey of this builder.
@@ -630,9 +626,8 @@ public abstract class Context implements AnnotationProvider {
 		 *
 		 * @return <jk>true</jk> if debug is enabled.
 		 */
-		public boolean isDebug() {
-			return debug;
-		}
+		public boolean isDebug() { return debug; }
+
 		/**
 		 * Associates a context class with this builder.
 		 *
@@ -653,10 +648,12 @@ public abstract class Context implements AnnotationProvider {
 		private ConstructorInfo getContextConstructor() {
 			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
 			if (cci == null) {
+				// @formatter:off
 				cci = ClassInfo.of(type).getPublicConstructor(
 					x -> x.hasNumParams(1)
 					&& x.getParam(0).canAccept(this)
 				);
+				// @formatter:on
 				if (cci == null)
 					throw new BasicRuntimeException("Public constructor not found: {0}({1})", className(type), className(this));
 				CONTEXT_CONSTRUCTORS.put(type, cci);
@@ -670,7 +667,7 @@ public abstract class Context implements AnnotationProvider {
 			if (impl != null && type.isInstance(impl))
 				return type.cast(impl);
 			if (cache != null)
-				return cache.get(hashKey(), ()->getContextConstructor().invoke(this));
+				return cache.get(hashKey(), () -> getContextConstructor().invoke(this));
 			return getContextConstructor().invoke(this);
 		}
 
@@ -716,6 +713,7 @@ public abstract class Context implements AnnotationProvider {
 	 * Predicate for annotations that themselves are annotated with {@link ContextApply}.
 	 */
 	public static final Predicate<AnnotationInfo<?>> CONTEXT_APPLY_FILTER = x -> x.hasAnnotation(ContextApply.class);
+
 	/**
 	 * Instantiates a builder of the specified context class.
 	 *
@@ -733,12 +731,14 @@ public abstract class Context implements AnnotationProvider {
 				ClassInfo c = ClassInfo.of(type);
 				for (ConstructorInfo ci : c.getPublicConstructors()) {
 					if (ci.matches(x -> x.hasNumParams(1) && ! x.getParam(0).getParameterType().is(type))) {
+						// @formatter:off
 						mi = c.getPublicMethod(
 							x -> x.isStatic()
 							&& x.isNotDeprecated()
 							&& x.hasName("create")
 							&& x.hasReturnType(ci.getParam(0).getParameterType())
 						);
+						// @formatter:on
 						if (mi != null)
 							break;
 					}
@@ -754,6 +754,7 @@ public abstract class Context implements AnnotationProvider {
 			throw asRuntimeException(e);
 		}
 	}
+
 	final List<Annotation> annotations;
 	final boolean debug;
 
@@ -783,7 +784,8 @@ public abstract class Context implements AnnotationProvider {
 				MethodInfo mi = ci.getPublicMethod(x -> x.hasName("onClass"));
 				if (mi != null) {
 					if (! mi.getReturnType().is(Class[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.", a.getClass().getSimpleName());
+						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.",
+							a.getClass().getSimpleName());
 					for (Class<?> c : (Class<?>[])mi.accessible().invoke(a))
 						rmb.append(c.getName(), a);
 				}
@@ -791,7 +793,8 @@ public abstract class Context implements AnnotationProvider {
 				mi = ci.getPublicMethod(x -> x.hasName("on"));
 				if (mi != null) {
 					if (! mi.getReturnType().is(String[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.", a.getClass().getSimpleName());
+						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.",
+							a.getClass().getSimpleName());
 					for (String s : (String[])mi.accessible().invoke(a))
 						rmb.append(s, a);
 				}
@@ -802,11 +805,11 @@ public abstract class Context implements AnnotationProvider {
 		});
 		this.annotationMap = rmb.build();
 		boolean disabled = Boolean.getBoolean("juneau.disableAnnotationCaching");
-		classAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-		declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2)));
-		methodAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-		fieldAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-		constructorAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		classAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2)));
+		methodAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		fieldAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		constructorAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
 	}
 
 	/**
@@ -867,6 +870,7 @@ public abstract class Context implements AnnotationProvider {
 					return a;
 		return null;
 	}
+
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 		if (type != null && onField != null)
@@ -875,6 +879,7 @@ public abstract class Context implements AnnotationProvider {
 					return a;
 		return null;
 	}
+
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 		if (type != null && onMethod != null)
@@ -936,9 +941,7 @@ public abstract class Context implements AnnotationProvider {
 	 *
 	 * @return A new session object.
 	 */
-	public ContextSession getSession() {
-		return createSession().build();
-	}
+	public ContextSession getSession() { return createSession().build(); }
 
 	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
@@ -995,9 +998,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	public boolean isDebug() {
-		return debug;
-	}
+	public boolean isDebug() { return debug; }
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
@@ -1078,6 +1079,7 @@ public abstract class Context implements AnnotationProvider {
 	private <A extends Annotation> A[] declaredAnnotations(Class<A> type, Class<?> onClass) {
 		return (A[])declaredClassAnnotationCache.get(onClass, type);
 	}
+
 	/**
 	 * Perform optional initialization on builder before it is used.
 	 *

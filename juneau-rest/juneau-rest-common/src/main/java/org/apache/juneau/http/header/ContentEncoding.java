@@ -77,7 +77,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("Content-Encoding")
-@Schema(_enum={"gzip","compress","deflate","identity","other"})
+@Schema(_enum = { "gzip", "compress", "deflate", "identity", "other" })
 public class ContentEncoding extends BasicStringHeader {
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Encoding";
@@ -108,6 +108,7 @@ public class ContentEncoding extends BasicStringHeader {
 	public static ContentEncoding of(Supplier<String> value) {
 		return value == null ? null : new ContentEncoding(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

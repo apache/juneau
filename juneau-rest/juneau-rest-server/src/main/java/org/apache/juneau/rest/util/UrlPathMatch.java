@@ -64,7 +64,7 @@ public class UrlPathMatch {
 	public String getPrefix() {
 		int c = 0;
 		for (int j = 0; j < matchedParts; j++) {
-			c = path.indexOf('/', c+1);
+			c = path.indexOf('/', c + 1);
 			if (c == -1)
 				c = path.length();
 		}
@@ -112,9 +112,7 @@ public class UrlPathMatch {
 	 * 	An unmodifiable map of variable keys/values.
 	 * 	<br>Returns an empty map if no variables were found in the path.
 	 */
-	public Map<String,String> getVars() {
-		return vars;
-	}
+	public Map<String,String> getVars() { return vars; }
 
 	/**
 	 * Returns <jk>true</jk> if any of the variable values are blank.
@@ -139,9 +137,11 @@ public class UrlPathMatch {
 
 	@Override /* Overridden from Object */
 	public String toString() {
+		// @formatter:off
 		return filteredMap()
 			.append("v", getVars())
 			.append("r", getRemainder())
 			.asString();
+		// @formatter:on
 	}
 }

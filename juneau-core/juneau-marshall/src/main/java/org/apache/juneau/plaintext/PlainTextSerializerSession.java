@@ -61,6 +61,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public PlainTextSerializerSession build() {
 			return new PlainTextSerializerSession(this);
@@ -174,6 +175,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -183,6 +185,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 	public static Builder create(PlainTextSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	/**
 	 * Constructor.
 	 *

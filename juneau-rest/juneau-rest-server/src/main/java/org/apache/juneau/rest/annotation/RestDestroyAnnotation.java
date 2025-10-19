@@ -35,7 +35,7 @@ public class RestDestroyAnnotation {
 	 * A collection of {@link RestDestroy @RestDestroy annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -74,6 +74,7 @@ public class RestDestroyAnnotation {
 		}
 
 	}
+
 	private static class Impl extends TargetedAnnotationImpl implements RestDestroy {
 
 		Impl(Builder b) {
@@ -81,8 +82,10 @@ public class RestDestroyAnnotation {
 			postConstruct();
 		}
 	}
+
 	/** Default value */
 	public static final RestDestroy DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

@@ -121,27 +121,21 @@ public class Version implements Comparable<Version> {
 	 *
 	 * @return The version part, never <jk>null</jk>.
 	 */
-	public Optional<Integer> getMaintenance() {
-		return getPart(2);
-	}
+	public Optional<Integer> getMaintenance() { return getPart(2); }
 
 	/**
 	 * Returns the major version part (i.e. part at index 0).
 	 *
 	 * @return The version part, never <jk>null</jk>.
 	 */
-	public Optional<Integer> getMajor() {
-		return getPart(0);
-	}
+	public Optional<Integer> getMajor() { return getPart(0); }
 
 	/**
 	 * Returns the minor version part (i.e. part at index 1).
 	 *
 	 * @return The version part, never <jk>null</jk>.
 	 */
-	public Optional<Integer> getMinor() {
-		return getPart(1);
-	}
+	public Optional<Integer> getMinor() { return getPart(1); }
 
 	/**
 	 * Returns the version part at the specified zero-indexed value.

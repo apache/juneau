@@ -119,7 +119,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,METHOD,TYPE,FIELD})
+@Target({ PARAMETER, METHOD, TYPE, FIELD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(FormDataAnnotation.Array.class)

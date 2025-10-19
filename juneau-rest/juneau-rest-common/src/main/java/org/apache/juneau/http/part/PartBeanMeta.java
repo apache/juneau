@@ -85,6 +85,7 @@ public class PartBeanMeta<T> {
 		}
 		return (PartBeanMeta<T>)m;
 	}
+
 	private final Class<T> type;
 	private final Constructor<T> constructor;
 
@@ -143,7 +144,7 @@ public class PartBeanMeta<T> {
 	public T construct(String name, Object value) {
 
 		if (constructor == null)
-			throw new UnsupportedOperationException("Constructor for type "+type.getName()+" could not be found.");
+			throw new UnsupportedOperationException("Constructor for type " + type.getName() + " could not be found.");
 
 		if (name == null)
 			name = schema.getName();
@@ -154,7 +155,7 @@ public class PartBeanMeta<T> {
 			args[0] = pt[0] == String.class ? Utils.s(value) : value;
 		} else {
 			if (name == null)
-				throw new UnsupportedOperationException("Constructor for type "+type.getName()+" requires a name as the first argument.");
+				throw new UnsupportedOperationException("Constructor for type " + type.getName() + " requires a name as the first argument.");
 			args[0] = name;
 			args[1] = pt[1] == String.class ? Utils.s(value) : value;
 		}
@@ -175,7 +176,5 @@ public class PartBeanMeta<T> {
 	 *
 	 * @return The schema information.
 	 */
-	public HttpPartSchema getSchema() {
-		return schema;
-	}
+	public HttpPartSchema getSchema() { return schema; }
 }

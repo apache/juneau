@@ -37,7 +37,7 @@ import org.apache.juneau.config.store.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@SuppressWarnings({"resource","unused"})
+@SuppressWarnings({ "resource", "unused" })
 public class SqlStore extends ConfigStore {
 	/**
 	 * Builder class.
@@ -127,6 +127,7 @@ public class SqlStore extends ConfigStore {
 		SQLSTORE_nameColumn = "SqlStore.nameColumn",
 		SQLSTORE_valueColumn = "SqlStore.valueColumn",
 		SQLSTORE_pollInterval = "SqlStore.pollInterval";
+
 	/**
 	 * Instantiates a builder for this object.
 	 *
@@ -135,6 +136,7 @@ public class SqlStore extends ConfigStore {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private final String jdbcUrl;
 	private final String tableName, nameColumn, valueColumn;
 	private final Timer watcher;
@@ -221,7 +223,7 @@ public class SqlStore extends ConfigStore {
 	synchronized void poll() {
 
 		// Loop through all our entries and find the latest values.
-		cache.forEach((name,cacheContents) -> {
+		cache.forEach((name, cacheContents) -> {
 			var newContents = getDatabaseValue(name);
 
 			// Change detected!

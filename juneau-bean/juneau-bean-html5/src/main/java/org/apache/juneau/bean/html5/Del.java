@@ -63,7 +63,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="del")
+@Bean(typeName = "del")
 public class Del extends HtmlElementMixed {
 
 	/**
@@ -81,7 +81,7 @@ public class Del extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Del _class(String value) {  // NOSONAR - Intentional naming.
+	public Del _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -91,6 +91,7 @@ public class Del extends HtmlElementMixed {
 		super.accesskey(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Del attr(String key, Object val) {
 		super.attr(key, val);

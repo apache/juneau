@@ -60,7 +60,7 @@ public class BeanpAnnotation {
 	 * A collection of {@link Beanp @Beanp annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -82,9 +82,9 @@ public class BeanpAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationMFBuilder<Builder> {
 
-		Class<?> type=void.class;
-		Class<?>[] dictionary=new Class[0], params=new Class[0];
-		String format="", name="", properties="", ro="", value="", wo="";
+		Class<?> type = void.class;
+		Class<?>[] dictionary = new Class[0], params = new Class[0];
+		String format = "", name = "", properties = "", ro = "", value = "", wo = "";
 
 		/**
 		 * Constructor.
@@ -268,8 +268,10 @@ public class BeanpAnnotation {
 			return wo;
 		}
 	}
+
 	/** Default value */
 	public static final Beanp DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -278,6 +280,7 @@ public class BeanpAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static Beanp copy(Beanp a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.dictionary(a.dictionary())
@@ -291,7 +294,9 @@ public class BeanpAnnotation {
 			.value(r.resolve(a.value()))
 			.wo(r.resolve(a.wo()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -300,6 +305,7 @@ public class BeanpAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

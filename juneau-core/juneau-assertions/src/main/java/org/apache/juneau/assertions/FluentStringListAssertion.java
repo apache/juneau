@@ -125,7 +125,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentStringListAssertion<R> extends FluentListAssertion<String,R> {
 
-
 	/**
 	 * Chained constructor.
 	 *
@@ -161,7 +160,6 @@ public class FluentStringListAssertion<R> extends FluentListAssertion<String,R> 
 	public FluentStringListAssertion(List<String> value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Concatenates this list of strings into a {@link FluentStringAssertion}.

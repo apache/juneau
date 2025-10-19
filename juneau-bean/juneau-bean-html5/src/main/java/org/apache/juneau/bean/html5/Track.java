@@ -86,7 +86,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="track")
+@Bean(typeName = "track")
 public class Track extends HtmlElementVoid {
 
 	/**
@@ -106,7 +106,7 @@ public class Track extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Track _class(String value) {  // NOSONAR - Intentional naming.
+	public Track _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -130,7 +130,7 @@ public class Track extends HtmlElementVoid {
 	 * @param value Whether this track should be enabled by default.
 	 * @return This object.
 	 */
-	public Track _default(String value) {  // NOSONAR - Intentional naming.
+	public Track _default(String value) { // NOSONAR - Intentional naming.
 		attr("default", value);
 		return this;
 	}
@@ -152,6 +152,7 @@ public class Track extends HtmlElementVoid {
 		super.attrUri(key, val);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Track contenteditable(Object value) {
 		super.contenteditable(value);

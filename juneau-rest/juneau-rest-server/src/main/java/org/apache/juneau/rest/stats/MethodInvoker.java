@@ -44,27 +44,21 @@ public class MethodInvoker {
 	 *
 	 * @return The declaring class of the method.
 	 */
-	public ClassInfo getDeclaringClass() {
-		return m.getDeclaringClass();
-	}
+	public ClassInfo getDeclaringClass() { return m.getDeclaringClass(); }
 
 	/**
 	 * Convenience method for calling <c>inner().getName()</c>
 	 *
 	 * @return The name of the method.
 	 */
-	public String getFullName() {
-		return m.getFullName();
-	}
+	public String getFullName() { return m.getFullName(); }
 
 	/**
 	 * Returns the stats of this method invoker.
 	 *
 	 * @return The stats of this method invoker.
 	 */
-	public MethodExecStats getStats() {
-		return stats;
-	}
+	public MethodExecStats getStats() { return stats; }
 
 	/**
 	 * Returns the inner method.
@@ -88,7 +82,7 @@ public class MethodInvoker {
 	public Object invoke(BeanStore beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (beanStore.hasAllParams(m))
 			return invoke(o, beanStore.getParams(m));
-		throw new IllegalArgumentException("Could not find prerequisites to invoke method '"+getFullName()+"': "+beanStore.getMissingParams(m));
+		throw new IllegalArgumentException("Could not find prerequisites to invoke method '" + getFullName() + "': " + beanStore.getMissingParams(m));
 	}
 
 	/**
@@ -106,7 +100,7 @@ public class MethodInvoker {
 		stats.started();
 		try {
 			return m.inner().invoke(o, args);
-		} catch (IllegalAccessException|IllegalArgumentException e) {
+		} catch (IllegalAccessException | IllegalArgumentException e) {
 			stats.error(e);
 			throw e;
 		} catch (InvocationTargetException e) {

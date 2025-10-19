@@ -83,7 +83,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="textarea")
+@Bean(typeName = "textarea")
 public class Textarea extends HtmlElementRawText {
 
 	/**
@@ -103,7 +103,7 @@ public class Textarea extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Textarea _class(String value) {  // NOSONAR - Intentional naming.
+	public Textarea _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -294,6 +294,7 @@ public class Textarea extends HtmlElementRawText {
 		attr("inputmode", value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Textarea lang(String value) {
 		super.lang(value);

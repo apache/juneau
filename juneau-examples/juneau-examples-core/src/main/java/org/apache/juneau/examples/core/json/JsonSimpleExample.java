@@ -39,7 +39,7 @@ public class JsonSimpleExample {
 	 * @throws Exception Unused.
 	 */
 	@SuppressWarnings({ "unused", "rawtypes" })
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception {
 		// Juneau provides static constants with the most commonly used configurations
 		// Get a reference to a serializer - converting POJO to flat format
 		// Produces
@@ -48,7 +48,7 @@ public class JsonSimpleExample {
 		// Get a reference to a parser - converts that flat format back into the POJO
 		JsonParser jsonParser = JsonParser.DEFAULT;
 
-		Pojo pojo = new Pojo("id","name");
+		Pojo pojo = new Pojo("id", "name");
 
 		String flat = jsonSerializer.serialize(pojo);
 		// Print out the created POJO in JSON format.

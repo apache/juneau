@@ -42,7 +42,7 @@ import org.apache.juneau.*;
  * </ul>
  */
 @Documented
-@Target({FIELD,METHOD,PARAMETER,TYPE})
+@Target({ FIELD, METHOD, PARAMETER, TYPE })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeanpAnnotation.Array.class)

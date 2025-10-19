@@ -59,13 +59,13 @@ import org.apache.juneau.internal.*;
  */
 public class Assertion {
 
-
 	private static final Messages MESSAGES = Messages.of(Assertion.class, "Messages");
 
-	static final String
+	// @formatter:off
+	static final String 
 		MSG_parameterCannotBeNull = MESSAGES.getString("parameterCannotBeNull"),
 		MSG_causedBy = MESSAGES.getString("causedBy");
-
+	// @formatter:on
 
 	/**
 	 * Convenience method for getting the array class of the specified element type.
@@ -76,8 +76,9 @@ public class Assertion {
 	 */
 	@SuppressWarnings("unchecked")
 	protected static <E> Class<E[]> arrayClass(Class<E> c) {
-		return (Class<E[]>)Array.newInstance(c,0).getClass();
+		return (Class<E[]>)Array.newInstance(c, 0).getClass();
 	}
+
 	/**
 	 * Convenience method for getting the class name for an object.
 	 *
@@ -87,11 +88,11 @@ public class Assertion {
 	protected static String className(Object o) {
 		return ClassUtils.className(o);
 	}
+
 	private String msg;
 	private Object[] msgArgs;
 
-	private PrintStream out = System.err;  // NOSONAR - Intentional.
-
+	private PrintStream out = System.err; // NOSONAR - Intentional.
 
 	private Class<? extends RuntimeException> throwable;
 
@@ -160,14 +161,13 @@ public class Assertion {
 		return setOut(null);
 	}
 
-
 	/**
 	 * If an error occurs, send the error message to STDOUT instead of STDERR.
 	 *
 	 * @return This object.
 	 */
 	public Assertion setStdOut() {
-		return setOut(System.out);  // NOSONAR - Intentional.
+		return setOut(System.out); // NOSONAR - Intentional.
 	}
 
 	/**

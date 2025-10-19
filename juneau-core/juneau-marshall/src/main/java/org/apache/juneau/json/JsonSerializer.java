@@ -170,6 +170,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		/**
 		 * Add <js>"_type"</js> properties when needed.
 		 *
@@ -227,6 +228,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -526,12 +528,14 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				addBeanTypesJson,
 				escapeSolidus,
 				simpleAttrs
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -845,13 +849,13 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1019,6 +1023,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 	/** Default serializer, all default settings.*/
 	public static final JsonSerializer DEFAULT_READABLE = new Readable(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -1027,6 +1032,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final boolean addBeanTypesJson, escapeSolidus, simpleAttrs;
 
 	private final boolean addBeanTypes;
@@ -1080,6 +1086,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 		return m;
 	}
+
 	/**
 	 * Returns the schema serializer based on the settings of this serializer.
 	 *
@@ -1096,9 +1103,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	}
 
 	@Override /* Overridden from Context */
-	public JsonSerializerSession getSession() {
-		return createSession().build();
-	}
+	public JsonSerializerSession getSession() { return createSession().build(); }
+
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
@@ -1108,9 +1114,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() {
-		return addBeanTypes;
-	}
+	protected final boolean isAddBeanTypes() { return addBeanTypes; }
 
 	/**
 	 * Prefix solidus <js>'/'</js> characters with escapes.
@@ -1119,9 +1123,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * @return
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */
-	protected final boolean isEscapeSolidus() {
-		return escapeSolidus;
-	}
+	protected final boolean isEscapeSolidus() { return escapeSolidus; }
 
 	/**
 	 * Simple JSON mode.
@@ -1131,9 +1133,8 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
 	 * 	<br>Otherwise, they are always quoted.
 	 */
-	protected final boolean isSimpleAttrs() {
-		return simpleAttrs;
-	}
+	protected final boolean isSimpleAttrs() { return simpleAttrs; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("simpleAttrs", simpleAttrs, "escapeSolidus", escapeSolidus, "addBeanTypesJson", addBeanTypesJson);

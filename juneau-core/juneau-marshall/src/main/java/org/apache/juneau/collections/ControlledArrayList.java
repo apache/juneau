@@ -54,6 +54,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 		super(list);
 		this.unmodifiable = unmodifiable;
 	}
+
 	@Override
 	public boolean add(E element) {
 		assertModifiable();
@@ -89,9 +90,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	 *
 	 * @return <jk>true</jk> if this list is modifiable.
 	 */
-	public boolean isModifiable() {
-		return ! unmodifiable;
-	}
+	public boolean isModifiable() { return ! unmodifiable; }
 
 	@Override
 	public Iterator<E> iterator() {

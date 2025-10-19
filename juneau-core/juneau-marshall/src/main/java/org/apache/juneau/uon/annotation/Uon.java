@@ -39,7 +39,7 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,FIELD,METHOD})
+@Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(UonAnnotation.Array.class)

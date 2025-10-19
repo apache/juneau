@@ -109,6 +109,7 @@ public class MaxForwards extends BasicIntegerHeader {
 	public static MaxForwards of(Supplier<Integer> value) {
 		return value == null ? null : new MaxForwards(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

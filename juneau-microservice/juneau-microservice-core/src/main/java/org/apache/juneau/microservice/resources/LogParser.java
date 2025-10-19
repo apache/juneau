@@ -56,7 +56,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 					logger = formatter.getField("logger", m);
 					text = formatter.getField("msg", m);
 					if (logger != null && logger.indexOf('.') > -1)
-						logger = logger.substring(logger.lastIndexOf('.')+1);
+						logger = logger.substring(logger.lastIndexOf('.') + 1);
 				}
 			} catch (ParseException e) {
 				throw new IOException(e);
@@ -84,9 +84,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 			return sb.toString();
 		}
 
-		public String getThread() {
-			return thread;
-		}
+		public String getThread() { return thread; }
 
 		protected Writer append(Writer w) throws IOException {
 			w.append(line).append('\n');
@@ -118,11 +116,13 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 			return true;
 		}
 	}
+
 	static String toHtml(String s) {
 		if (s.indexOf('<') != -1)
 			return s.replaceAll("<", "&lt;");//$NON-NLS-2$
 		return s;
 	}
+
 	private BufferedReader br;
 	LogEntryFormatter formatter;
 	Date start, end;
@@ -219,8 +219,9 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		try {
 			if (! hasNext())
 				w.append("[EMPTY]");
-			else for (LogParser.Entry le : this)
-				le.append(w);
+			else
+				for (LogParser.Entry le : this)
+					le.append(w);
 		} finally {
 			close();
 		}

@@ -137,6 +137,7 @@ public class Config extends Context implements ConfigEventListener {
 			super.annotations(values);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
@@ -237,6 +238,7 @@ public class Config extends Context implements ConfigEventListener {
 			super.impl(value);
 			return this;
 		}
+
 		/**
 		 * Configuration store.
 		 *
@@ -401,6 +403,7 @@ public class Config extends Context implements ConfigEventListener {
 			return this;
 		}
 	}
+
 	private static final boolean DISABLE_AUTO_SYSTEM_PROPS = Boolean.getBoolean("juneau.disableAutoSystemProps");
 
 	private static final AtomicReference<Config> SYSTEM_DEFAULT = new AtomicReference<>(findSystemDefault());
@@ -484,9 +487,7 @@ public class Config extends Context implements ConfigEventListener {
 	 *
 	 * @return The system default configuration, or <jk>null</jk> if it doesn't exist.
 	 */
-	public static synchronized Config getSystemDefault() {
-		return SYSTEM_DEFAULT.get();
-	}
+	public static synchronized Config getSystemDefault() { return SYSTEM_DEFAULT.get(); }
 
 	/**
 	 * Sets a system default configuration.
@@ -506,6 +507,7 @@ public class Config extends Context implements ConfigEventListener {
 			return Config.create(name).store(ClasspathStore.DEFAULT).build();
 		return null;
 	}
+
 	private static synchronized Config findSystemDefault() {
 
 		for (var n : getCandidateSystemDefaultConfigNames()) {
@@ -519,6 +521,7 @@ public class Config extends Context implements ConfigEventListener {
 
 		return null;
 	}
+
 	final String name;
 	final ConfigStore store;
 	final WriterSerializer serializer;
@@ -552,12 +555,7 @@ public class Config extends Context implements ConfigEventListener {
 		beanSession = parser.getBeanContext().getSession();
 		mods = u(copyOf(builder.mods));
 		varResolver = builder.varResolver;
-		varSession = varResolver
-			.copy()
-			.vars(ConfigVar.class)
-			.bean(Config.class, this)
-			.build()
-			.createSession();
+		varSession = varResolver.copy().vars(ConfigVar.class).bean(Config.class, this).build().createSession();
 		binaryLineLength = builder.binaryLineLength;
 		binaryFormat = builder.binaryFormat;
 		multiLineValuesOnSeparateLines = builder.multiLineValuesOnSeparateLines;
@@ -633,6 +631,7 @@ public class Config extends Context implements ConfigEventListener {
 	public void close() {
 		configMap.unregister(this);
 	}
+
 	/**
 	 * Commit the changes in this config to the store.
 	 *
@@ -682,6 +681,7 @@ public class Config extends Context implements ConfigEventListener {
 	public Entry get(String key) {
 		return new Entry(this, configMap, sname(key), skey(key));
 	}
+
 	/**
 	 * Returns the keys of the entries in the specified section.
 	 *
@@ -695,14 +695,13 @@ public class Config extends Context implements ConfigEventListener {
 	public Set<String> getKeys(String section) {
 		return configMap.getKeys(section(section));
 	}
+
 	/**
 	 * Returns the name associated with this config (usually a file name).
 	 *
 	 * @return The name associated with this config, or <jk>null</jk> if it has no name.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Gets the section with the specified name.
@@ -722,9 +721,7 @@ public class Config extends Context implements ConfigEventListener {
 	 *
 	 * @return The section names defined in this config.
 	 */
-	public Set<String> getSectionNames() {
-		return u(configMap.getSections());
-	}
+	public Set<String> getSectionNames() { return u(configMap.getSections()); }
 
 	/**
 	 * Gets the entry with the specified key.
@@ -782,6 +779,7 @@ public class Config extends Context implements ConfigEventListener {
 		configMap.load(read(contents), synchronous);
 		return this;
 	}
+
 	/**
 	 * Overwrites the contents of the config file.
 	 *
@@ -1126,6 +1124,7 @@ public class Config extends Context implements ConfigEventListener {
 		var c = (Class<?>)t;
 		return (c == String.class || c.isPrimitive() || c.isAssignableFrom(Number.class) || c == Boolean.class || c.isEnum());
 	}
+
 	private String nlIfMl(CharSequence cs) {
 		var s = cs.toString();
 		if (s.indexOf('\n') != -1 && multiLineValuesOnSeparateLines)
@@ -1139,6 +1138,7 @@ public class Config extends Context implements ConfigEventListener {
 			return "";
 		return section;
 	}
+
 	private String serialize(Object value, Serializer serializer) throws SerializeException {
 		if (value == null)
 			return "";
@@ -1174,14 +1174,15 @@ public class Config extends Context implements ConfigEventListener {
 			r = (String)serializer.serialize(value);
 
 		if (r.startsWith("'"))
-			return r.substring(1, r.length()-1);
+			return r.substring(1, r.length() - 1);
 		return r;
 	}
+
 	private static String skey(String key) {
 		var i = key.indexOf('/');
 		if (i == -1)
 			return key;
-		return key.substring(i+1);
+		return key.substring(i + 1);
 	}
 
 	private static String sname(String key) {
@@ -1204,21 +1205,18 @@ public class Config extends Context implements ConfigEventListener {
 			throw new UnsupportedOperationException("Cannot call this method on a read-only configuration.");
 	}
 
-	ConfigMap getConfigMap() {
-		return configMap;
-	}
+	ConfigMap getConfigMap() { return configMap; }
 
-	List<ConfigEventListener> getListeners() {
-		return u(listeners);
-	}
+	List<ConfigEventListener> getListeners() { return u(listeners); }
 
 	Mod getMod(char id) {
 		var x = mods.get(id);
 		return x == null ? Mod.NO_OP : x;
 	}
+
 	String removeMods(String mods, String x) {
 		if (mods != null && x != null)
-			for (int i = mods.length()-1; i > -1; i--)
+			for (int i = mods.length() - 1; i > -1; i--)
 				x = getMod(mods.charAt(i)).doRemove(x);
 		return x;
 	}

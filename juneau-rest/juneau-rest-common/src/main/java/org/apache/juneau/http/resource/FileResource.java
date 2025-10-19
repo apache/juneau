@@ -62,6 +62,7 @@ public class FileResource extends BasicResource {
 		super.addHeader(name, value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicResource */
 	public FileResource addHeaders(Header...values) {
 		super.addHeaders(values);
@@ -74,7 +75,7 @@ public class FileResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public FileResource setCached() throws IOException{
+	public FileResource setCached() throws IOException {
 		super.setCached();
 		return this;
 	}

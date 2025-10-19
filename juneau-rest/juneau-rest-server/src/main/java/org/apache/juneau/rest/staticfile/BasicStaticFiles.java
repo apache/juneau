@@ -57,6 +57,7 @@ public class BasicStaticFiles implements StaticFiles {
 	public static StaticFiles.Builder create(BeanStore beanStore) {
 		return new StaticFiles.Builder(beanStore);
 	}
+
 	private final Header[] headers;
 	private final MimetypesFileTypeMap mimeTypes;
 	private final int hashCode;
@@ -69,6 +70,7 @@ public class BasicStaticFiles implements StaticFiles {
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
 	public BasicStaticFiles(BeanStore beanStore) {
+		// @formatter:off
 		this(StaticFiles
 			.create(beanStore)
 			.type(BasicStaticFiles.class)
@@ -80,6 +82,7 @@ public class BasicStaticFiles implements StaticFiles {
 			.exclude("(?i).*\\.(class|properties)")
 			.headers(cacheControl("max-age=86400, public"))
 		);
+		// @formatter:on
 	}
 
 	/**
@@ -109,7 +112,7 @@ public class BasicStaticFiles implements StaticFiles {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return super.equals(o) && o instanceof BasicStaticFiles && Utils.eq(this, (BasicStaticFiles)o, (x,y)->Utils.eq(x.headers, y.headers));
+		return super.equals(o) && o instanceof BasicStaticFiles && Utils.eq(this, (BasicStaticFiles)o, (x, y) -> Utils.eq(x.headers, y.headers));
 	}
 
 	@Override /* Overridden from FileFinder */
@@ -143,9 +146,7 @@ public class BasicStaticFiles implements StaticFiles {
 			Optional<InputStream> is = getStream(path, locale);
 			if (! is.isPresent())
 				return Utils.opte();
-			return Utils.opt(streamResource(is.get())
-			.setHeaders(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
-			.addHeaders(headers));
+			return Utils.opt(streamResource(is.get()).setHeaders(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path)))).addHeaders(headers));
 		} catch (IOException e) {
 			throw new InternalServerError(e);
 		}
@@ -153,8 +154,6 @@ public class BasicStaticFiles implements StaticFiles {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return filteredMap()
-			.append("headers", headers)
-			.asReadableString();
+		return filteredMap().append("headers", headers).asReadableString();
 	}
 }

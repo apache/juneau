@@ -41,14 +41,10 @@ public class Pojo {
 	/**
 	 * @return The <bc>id</bc> property value.
 	 */
-	public String getId() {
-		return id;
-	}
+	public String getId() { return id; }
 
 	/**
 	 * @return The <bc>name</bc> property value.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 }

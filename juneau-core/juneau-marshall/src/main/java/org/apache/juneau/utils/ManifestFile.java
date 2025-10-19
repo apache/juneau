@@ -59,7 +59,7 @@ public class ManifestFile extends JsonMap {
 		if (! classPath.startsWith("jar")) {
 			return;
 		}
-		String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) +  "/META-INF/MANIFEST.MF";
+		String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
 		try {
 			Manifest mf = new Manifest(new URL(manifestPath).openStream());
 			load(mf);
@@ -82,7 +82,7 @@ public class ManifestFile extends JsonMap {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
-			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(f), e);
+			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f), e);
 		}
 	}
 
@@ -120,7 +120,7 @@ public class ManifestFile extends JsonMap {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
-			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(path), e);
+			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(path), e);
 		}
 	}
 
@@ -148,6 +148,7 @@ public class ManifestFile extends JsonMap {
 		super.append(key, value);
 		return this;
 	}
+
 	@Override /* Overridden from JsonMap */
 	public ManifestFile appendIf(boolean flag, String key, Object value) {
 		super.appendIf(flag, key, value);
@@ -192,7 +193,7 @@ public class ManifestFile extends JsonMap {
 	@Override /* Overridden from Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		forEach((k,v) -> sb.append(k).append(": ").append(v));
+		forEach((k, v) -> sb.append(k).append(": ").append(v));
 		return sb.toString();
 	}
 
@@ -202,6 +203,6 @@ public class ManifestFile extends JsonMap {
 	}
 
 	private void load(Manifest mf) {
-		mf.getMainAttributes().forEach((k,v) -> put(k.toString(), v.toString()));
+		mf.getMainAttributes().forEach((k, v) -> put(k.toString(), v.toString()));
 	}
 }

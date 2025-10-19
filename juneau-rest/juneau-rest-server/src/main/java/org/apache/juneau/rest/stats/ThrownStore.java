@@ -70,6 +70,7 @@ public class ThrownStore {
 			this.ignoreClasses = Utils.set(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
@@ -101,6 +102,7 @@ public class ThrownStore {
 			this.statsImplClass = value;
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -124,6 +126,7 @@ public class ThrownStore {
 	public static Builder create() {
 		return new Builder(BeanStore.INSTANCE);
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -133,6 +136,7 @@ public class ThrownStore {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final ConcurrentHashMap<Long,ThrownStats> db = new ConcurrentHashMap<>();
 	private final Optional<ThrownStore> parent;
 	private final BeanStore beanStore;
@@ -176,7 +180,7 @@ public class ThrownStore {
 	public ThrownStats add(Throwable e) {
 		ThrownStats s = find(e);
 		s.increment();
-		parent.ifPresent(x->x.add(e));
+		parent.ifPresent(x -> x.add(e));
 		return s;
 	}
 
@@ -185,9 +189,7 @@ public class ThrownStore {
 	 *
 	 * @return The list of all stack traces in this database, cloned and sorted by count descending.
 	 */
-	public List<ThrownStats> getStats() {
-		return db.values().stream().map(ThrownStats::clone).sorted(comparingInt(ThrownStats::getCount).reversed()).collect(toList());
-	}
+	public List<ThrownStats> getStats() { return db.values().stream().map(ThrownStats::clone).sorted(comparingInt(ThrownStats::getCount).reversed()).collect(toList()); }
 
 	/**
 	 * Retrieves the stack trace information for the exception with the specified hash as calculated by {@link #hash(Throwable)}.
@@ -226,6 +228,7 @@ public class ThrownStore {
 
 		ThrownStats stc = db.get(hash);
 		if (stc == null) {
+			// @formatter:off
 			stc = ThrownStats
 				.create(beanStore)
 				.type(statsImplClass)
@@ -234,6 +237,7 @@ public class ThrownStore {
 				.stackTrace(createStackTrace(t))
 				.causedBy(find(t.getCause()))
 				.build();
+			// @formatter:on
 
 			db.putIfAbsent(hash, stc);
 			stc = db.get(hash);
@@ -271,7 +275,7 @@ public class ThrownStore {
 		for (String s : createStackTrace(t)) {
 			int len = s.length();
 			for (int i = 0; i < len; i++)
-				h = 31*h + s.charAt(i);
+				h = 31 * h + s.charAt(i);
 		}
 		return h;
 	}

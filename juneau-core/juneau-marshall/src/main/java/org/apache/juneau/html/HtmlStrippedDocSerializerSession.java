@@ -64,6 +64,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public HtmlStrippedDocSerializerSession build() {
 			return new HtmlStrippedDocSerializerSession(this);
@@ -177,6 +178,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -186,6 +188,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 	public static Builder create(HtmlStrippedDocSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	/**
 	 * Constructor.
 	 *
@@ -198,9 +201,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (HtmlWriter w = getHtmlWriter(out)) {
-			if (o == null
-				|| (o instanceof Collection && ((Collection<?>)o).isEmpty())
-				|| (isArray(o) && Array.getLength(o) == 0))
+			if (o == null || (o instanceof Collection && ((Collection<?>)o).isEmpty()) || (isArray(o) && Array.getLength(o) == 0))
 				w.sTag(1, "p").append("No Results").eTag("p").nl(1);
 			else
 				super.doSerialize(out, o);

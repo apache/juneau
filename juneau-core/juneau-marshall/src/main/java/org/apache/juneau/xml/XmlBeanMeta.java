@@ -36,20 +36,15 @@ import org.apache.juneau.xml.annotation.*;
 public class XmlBeanMeta extends ExtendedBeanMeta {
 
 	private static class XmlBeanMetaBuilder {
-		Map<String,BeanPropertyMeta>
-			attrs = map(),
-			elements = map(),
-			collapsedProperties = map();
-		BeanPropertyMeta
-			attrsProperty,
-			contentProperty;
+		Map<String,BeanPropertyMeta> attrs = map(), elements = map(), collapsedProperties = map();
+		BeanPropertyMeta attrsProperty, contentProperty;
 		XmlFormat contentFormat = DEFAULT;
 
 		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 			Class<?> c = beanMeta.getClassMeta().getInnerClass();
 			Value<XmlFormat> defaultFormat = Value.empty();
 
-			mp.forEachAnnotation(Xml.class, c, x-> true, x -> {
+			mp.forEachAnnotation(Xml.class, c, x -> true, x -> {
 				XmlFormat xf = x.format();
 				if (xf == ATTRS)
 					defaultFormat.set(XmlFormat.ATTR);
@@ -58,8 +53,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 				else if (xf == VOID) {
 					contentFormat = VOID;
 					defaultFormat.set(VOID);
-				}
-				else
+				} else
 					throw new BeanRuntimeException(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", x.format());
 			});
 
@@ -104,6 +98,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 			});
 		}
 	}
+
 	// XML related fields
 	private final Map<String,BeanPropertyMeta> attrs;                        // Map of bean properties that are represented as XML attributes.
 	private final Map<String,BeanPropertyMeta> elements;                     // Map of bean properties that are represented as XML elements.
@@ -151,9 +146,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 *
 	 * @return Map of property names to property metadata.
 	 */
-	public Map<String,BeanPropertyMeta> getAttrProperties() {
-		return attrs;
-	}
+	public Map<String,BeanPropertyMeta> getAttrProperties() { return attrs; }
 
 	/**
 	 * Returns the format of the inner XML content of this bean.
@@ -173,45 +166,35 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 *
 	 * @return The format of the inner XML content of this bean.
 	 */
-	public XmlFormat getContentFormat() {
-		return contentFormat;
-	}
+	public XmlFormat getContentFormat() { return contentFormat; }
 
 	/**
 	 * The property that represents the inner XML content of this bean.
 	 *
 	 * @return The bean property metadata, or <jk>null</jk> if there is no such method.
 	 */
-	public BeanPropertyMeta getContentProperty() {
-		return contentProperty;
-	}
+	public BeanPropertyMeta getContentProperty() { return contentProperty; }
 
 	/**
 	 * The list of names of properties that should be rendered as XML attributes.
 	 *
 	 * @return Set of property names.
 	 */
-	protected Set<String> getAttrPropertyNames() {
-		return attrs.keySet();
-	}
+	protected Set<String> getAttrPropertyNames() { return attrs.keySet(); }
 
 	/**
 	 * The property that returns a map of XML attributes as key/value pairs.
 	 *
 	 * @return The bean property metadata, or <jk>null</jk> if there is no such method.
 	 */
-	protected BeanPropertyMeta getAttrsProperty() {
-		return attrsProperty;
-	}
+	protected BeanPropertyMeta getAttrsProperty() { return attrsProperty; }
 
 	/**
 	 * The name of the property that returns a map of XML attributes as key/value pairs.
 	 *
 	 * @return The bean property name, or <jk>null</jk> if there is no such method.
 	 */
-	protected String getAttrsPropertyName() {
-		return attrsProperty == null ? null : attrsProperty.getName();
-	}
+	protected String getAttrsPropertyName() { return attrsProperty == null ? null : attrsProperty.getName(); }
 
 	/**
 	 * The list of properties that should be rendered as collapsed child elements.
@@ -219,45 +202,35 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 *
 	 * @return Map of property names to property metadata.
 	 */
-	protected Map<String,BeanPropertyMeta> getCollapsedProperties() {
-		return collapsedProperties;
-	}
+	protected Map<String,BeanPropertyMeta> getCollapsedProperties() { return collapsedProperties; }
 
 	/**
 	 * The list of names of properties that should be rendered as collapsed child elements.
 	 *
 	 * @return Set of property names.
 	 */
-	protected Set<String> getCollapsedPropertyNames() {
-		return collapsedProperties.keySet();
-	}
+	protected Set<String> getCollapsedPropertyNames() { return collapsedProperties.keySet(); }
 
 	/**
 	 * The name of the property that represents the inner XML content of this bean.
 	 *
 	 * @return The bean property name, or <jk>null</jk> if there is no such method.
 	 */
-	protected String getContentPropertyName() {
-		return contentProperty == null ? null : contentProperty.getName();
-	}
+	protected String getContentPropertyName() { return contentProperty == null ? null : contentProperty.getName(); }
 
 	/**
 	 * The list of properties that should be rendered as child elements.
 	 *
 	 * @return Map of property names to property metadata.
 	 */
-	protected Map<String,BeanPropertyMeta> getElementProperties() {
-		return elements;
-	}
+	protected Map<String,BeanPropertyMeta> getElementProperties() { return elements; }
 
 	/**
 	 * The list of names of properties that should be rendered as child elements.
 	 *
 	 * @return Set of property names.
 	 */
-	protected Set<String> getElementPropertyNames() {
-		return elements.keySet();
-	}
+	protected Set<String> getElementPropertyNames() { return elements.keySet(); }
 
 	/**
 	 * Returns bean property meta with the specified name.

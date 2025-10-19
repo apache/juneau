@@ -91,12 +91,7 @@ import org.apache.juneau.internal.*;
  */
 public class Info extends SwaggerElement {
 
-	private String
-		siteName,
-		title,
-		description,
-		termsOfService,
-		version;
+	private String siteName, title, description, termsOfService, version;
 	private Contact contact;
 	private License license;
 
@@ -130,6 +125,7 @@ public class Info extends SwaggerElement {
 	public Info copy() {
 		return new Info(this);
 	}
+
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
@@ -153,9 +149,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Contact getContact() {
-		return contact;
-	}
+	public Contact getContact() { return contact; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -165,9 +159,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>license</property>.
@@ -177,9 +169,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public License getLicense() {
-		return license;
-	}
+	public License getLicense() { return license; }
 
 	/**
 	 * Bean property getter:  <property>siteName</property>.
@@ -189,9 +179,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getSiteName() {
-		return siteName;
-	}
+	public String getSiteName() { return siteName; }
 
 	/**
 	 * Bean property getter:  <property>termsOfService</property>.
@@ -201,9 +189,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getTermsOfService() {
-		return termsOfService;
-	}
+	public String getTermsOfService() { return termsOfService; }
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -213,9 +199,7 @@ public class Info extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getTitle() {
-		return title;
-	}
+	public String getTitle() { return title; }
 
 	/**
 	 * Bean property getter:  <property>version</property>.
@@ -225,12 +209,11 @@ public class Info extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getVersion() {
-		return version;
-	}
+	public String getVersion() { return version; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(contact != null, "contact")
 			.addIf(description != null, "description")
@@ -240,6 +223,7 @@ public class Info extends SwaggerElement {
 			.addIf(title != null, "title")
 			.addIf(version != null, "version")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

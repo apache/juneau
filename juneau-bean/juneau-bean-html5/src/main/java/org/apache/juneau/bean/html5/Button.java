@@ -74,7 +74,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="button")
+@Bean(typeName = "button")
 public class Button extends HtmlElementMixed {
 
 	/**
@@ -103,7 +103,7 @@ public class Button extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Button _class(String value) {  // NOSONAR - Intentional naming.
+	public Button _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -229,6 +229,7 @@ public class Button extends HtmlElementMixed {
 		attrUri("formaction", value);
 		return this;
 	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype">formenctype</a> attribute.
 	 *

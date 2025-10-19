@@ -43,7 +43,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class RangeNotSatisfiable extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -128,6 +128,7 @@ public class RangeNotSatisfiable extends BasicHttpException {
 	public RangeNotSatisfiable copy() {
 		return new RangeNotSatisfiable(this);
 	}
+
 	@Override /* Overridden from BasicHttpException */
 	public RangeNotSatisfiable setContent(HttpEntity value) {
 		super.setContent(value);
@@ -193,8 +194,9 @@ public class RangeNotSatisfiable extends BasicHttpException {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpException */
-	public RangeNotSatisfiable setStatusCode2(int code) throws IllegalStateException{
+	public RangeNotSatisfiable setStatusCode2(int code) throws IllegalStateException {
 		super.setStatusCode2(code);
 		return this;
 	}

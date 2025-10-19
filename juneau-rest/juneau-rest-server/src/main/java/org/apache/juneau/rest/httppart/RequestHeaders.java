@@ -204,6 +204,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		add(new RequestHeader(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
+
 	/**
 	 * Adds default entries to these headers.
 	 *
@@ -308,7 +309,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(HEADER, cm).orElseThrow(()->new BasicRuntimeException("@Header(name) not found on class {0}", className(type)));
+		String name = HttpParts.getName(HEADER, cm).orElseThrow(() -> new BasicRuntimeException("@Header(name) not found on class {0}", className(type)));
 		return get(name).as(type);
 	}
 
@@ -335,6 +336,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		}
 		return new RequestHeader(req, name, sb.toString()).parser(parser);
 	}
+
 	/**
 	 * Returns all headers with the specified name.
 	 *
@@ -357,7 +359,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeader getFirst(String name) {
 		Utils.assertArgNotNull("name", name);
-		return stream(name).findFirst().orElseGet(()->new RequestHeader(req, name, null).parser(parser));
+		return stream(name).findFirst().orElseGet(() -> new RequestHeader(req, name, null).parser(parser));
 	}
 
 	/**
@@ -381,9 +383,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * Returns all the unique header names in this list.
 	 * @return The list of all unique header names in this list.
 	 */
-	public List<String> getNames() {
-		return stream().map(RequestHeader::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
-	}
+	public List<String> getNames() { return stream().map(RequestHeader::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList()); }
 
 	/**
 	 * Returns all headers in sorted order.
@@ -395,7 +395,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		if (caseSensitive)
 			x = Comparator.comparing(RequestHeader::getName);
 		else
-			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+			x = (x1, x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
 		return stream().sorted(x);
 	}
 
@@ -471,6 +471,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	public Stream<RequestHeader> stream(String name) {
 		return stream().filter(x -> eq(x.getName(), name));
 	}
+
 	/**
 	 * Returns a copy of this object but only with the specified header names copied.
 	 *

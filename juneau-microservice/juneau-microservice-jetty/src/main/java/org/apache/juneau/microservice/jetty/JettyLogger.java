@@ -56,7 +56,7 @@ public class JettyLogger implements LocationAwareLogger {
 	 * @param args The arguments to substitute into the message.
 	 * @return The formatted message string.
 	 */
-	private static String format(String msg, Object... args) {
+	private static String format(String msg, Object...args) {
 		msg = String.valueOf(msg);
 		if (args.length == 0)
 			return msg;
@@ -119,7 +119,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void debug(Marker marker, String format, Object... arguments) {
+	public void debug(Marker marker, String format, Object...arguments) {
 		// TODO Auto-generated method stub
 
 	}
@@ -154,7 +154,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void debug(String msg, Object... args) {
+	public void debug(String msg, Object...args) {
 		if (isLoggable(FINE))
 			log(FINE, format(msg, args), null);
 	}
@@ -198,7 +198,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void error(Marker marker, String format, Object... arguments) {
+	public void error(Marker marker, String format, Object...arguments) {
 		// TODO Auto-generated method stub
 	}
 
@@ -223,7 +223,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void error(String format, Object... arguments) {
+	public void error(String format, Object...arguments) {
 		// TODO Auto-generated method stub
 	}
 
@@ -248,9 +248,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public String getName() {
-		return logger.getName();
-	}
+	public String getName() { return logger.getName(); }
 
 	/**
 	 * Logs an ignored exception at the FINEST level.
@@ -274,7 +272,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void info(Marker marker, String format, Object... arguments) {
+	public void info(Marker marker, String format, Object...arguments) {
 		// TODO Auto-generated method stub
 	}
 
@@ -295,7 +293,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void info(String msg, Object... args) {
+	public void info(String msg, Object...args) {
 		if (isLoggable(INFO))
 			log(INFO, format(msg, args), null);
 	}
@@ -327,9 +325,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public boolean isDebugEnabled() {
-		return isLoggable(FINE);
-	}
+	public boolean isDebugEnabled() { return isLoggable(FINE); }
 
 	@Override
 	public boolean isDebugEnabled(Marker marker) {
@@ -420,7 +416,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void trace(Marker marker, String format, Object... argArray) {
+	public void trace(Marker marker, String format, Object...argArray) {
 		// TODO Auto-generated method stub
 
 	}
@@ -450,7 +446,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void trace(String format, Object... arguments) {
+	public void trace(String format, Object...arguments) {
 		// TODO Auto-generated method stub
 
 	}
@@ -478,7 +474,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void warn(Marker marker, String format, Object... arguments) {
+	public void warn(Marker marker, String format, Object...arguments) {
 		// TODO Auto-generated method stub
 	}
 
@@ -498,7 +494,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	@Override
-	public void warn(String msg, Object... args) {
+	public void warn(String msg, Object...args) {
 		if (isLoggable(WARNING))
 			log(WARNING, format(msg, args), null);
 	}
@@ -558,7 +554,7 @@ public class JettyLogger implements LocationAwareLogger {
 		if (SHOW_SOURCE) {
 			StackTraceElement[] stack = new Throwable().getStackTrace();
 			for (StackTraceElement e : stack) {
-				if (!e.getClassName().equals(getClass().getName())) {
+				if (! e.getClassName().equals(getClass().getName())) {
 					r.setSourceClassName(e.getClassName());
 					r.setSourceMethodName(e.getMethodName());
 					break;

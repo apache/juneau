@@ -80,7 +80,7 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpContext">RestOpContext</a>
  * </ul>
  */
-public class RestOpContext extends Context implements Comparable<RestOpContext>  {
+public class RestOpContext extends Context implements Comparable<RestOpContext> {
 	/**
 	 * Builder class.
 	 */
@@ -123,9 +123,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			this.parent = context.builder;
 			this.restMethod = method;
 
-			this.beanStore = BeanStore
-				.of(context.getBeanStore(), context.builder.resource().get())
-				.addBean(java.lang.reflect.Method.class, method);
+			this.beanStore = BeanStore.of(context.getBeanStore(), context.builder.resource().get()).addBean(java.lang.reflect.Method.class, method);
 
 			MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);
 
@@ -191,6 +189,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				beanContext = createBeanContext(beanStore(), parent, resource());
 			return beanContext;
 		}
+
 		/**
 		 * Returns access to the bean store being used by this builder.
 		 *
@@ -250,6 +249,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				throw new InternalServerError(e);
 			}
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
@@ -361,6 +361,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			consumes = addAll(consumes, values);
 			return this;
 		}
+
 		/**
 		 * Returns the response converter list sub-builder.
 		 *
@@ -417,6 +418,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			super.debug();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder debug(boolean value) {
 			super.debug(value);
@@ -504,6 +506,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), parent, resource());
 			return defaultRequestAttributes;
 		}
+
 		/**
 		 * Adds one or more default request attributes to this operation.
 		 *
@@ -576,6 +579,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			defaultRequestHeaders().append(value);
 			return this;
 		}
+
 		/**
 		 * Returns the default request query data.
 		 *
@@ -641,6 +645,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			dotAll = true;
 			return this;
 		}
+
 		/**
 		 * Returns the encoder group sub-builder.
 		 *
@@ -715,6 +720,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			guards().append(value);
 			return this;
 		}
+
 		/**
 		 * Adds one or more guards to this operation.
 		 *
@@ -825,6 +831,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			jsonSchemaGenerator().type(value);
 			return this;
 		}
+
 		/**
 		 * Specifies the JSON schema generator for this operation.
 		 *
@@ -887,6 +894,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			matchers().append(value);
 			return this;
 		}
+
 		/**
 		 * The maximum allowed input size (in bytes) on HTTP requests.
 		 *
@@ -1007,6 +1015,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				partParser = createPartParser(beanStore(), parent, resource());
 			return partParser;
 		}
+
 		/**
 		 * Specifies the part parser to use for parsing HTTP parts for this operation.
 		 *
@@ -1085,6 +1094,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			partSerializer().impl(value);
 			return this;
 		}
+
 		/**
 		 * Resource method paths.
 		 *
@@ -1138,6 +1148,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			produces = addAll(produces, values);
 			return this;
 		}
+
 		/**
 		 * Returns the REST servlet/bean instance that this context is defined against.
 		 *
@@ -1232,6 +1243,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			rolesDeclared = addAll(rolesDeclared, values);
 			return this;
 		}
+
 		/**
 		 * Returns the serializer group sub-builder.
 		 *
@@ -1277,6 +1289,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			serializers().add(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
@@ -1300,6 +1313,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			}
 			return false;
 		}
+
 		private boolean matches(MethodInfo annotated, String beanName) {
 			RestInject a = annotated.getAnnotation(RestInject.class);
 			if (a != null) {
@@ -1338,20 +1352,21 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected BeanContext.Builder createBeanContext(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<BeanContext.Builder> v = Value.of(
-				parent.beanContext().copy()
-			);
+			Value<BeanContext.Builder> v = Value.of(parent.beanContext().copy());
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] BeanContext xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(BeanContext.Builder.class, v.get())
 				.createMethodFinder(BeanContext.class, resource)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
+
 		/**
 		 * Instantiates the response converter list sub-builder.
 		 *
@@ -1432,27 +1447,16 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected RestConverterList.Builder createConverters(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<RestConverterList.Builder> v = Value.of(
-				RestConverterList
-					.create(beanStore)
-			);
+			Value<RestConverterList.Builder> v = Value.of(RestConverterList.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses()
-				.get(RestConverterList.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(RestConverterList.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(RestConverterList.class)
-				.ifPresent(x->v.get().impl(x));
+			beanStore.getBean(RestConverterList.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] RestConverterList xxx(<args>)
-			beanStore
-				.createMethodFinder(RestConverterList.class)
-				.addBean(RestConverterList.Builder.class, v.get())
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(RestConverterList.class).addBean(RestConverterList.Builder.class, v.get()).find(this::matches).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -1470,17 +1474,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<NamedAttributeMap> v = Value.of(
-				parent.defaultRequestAttributes().copy()
-			);
+			Value<NamedAttributeMap> v = Value.of(parent.defaultRequestAttributes().copy());
 
 			// Replace with bean from:  @RestInject(name="defaultRequestAttributes",methodScope="foo") public [static] NamedAttributeMap xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(NamedAttributeMap.class, v.get())
 				.createMethodFinder(NamedAttributeMap.class, resource)
 				.find(x -> matches(x, "defaultRequestAttributes"))
 				.run(x -> v.set(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1498,20 +1502,21 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		protected PartList createDefaultRequestFormData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<PartList> v = Value.of(
-				PartList.create()
-			);
+			Value<PartList> v = Value.of(PartList.create());
 
 			// Replace with bean from:  @RestInject(name="defaultRequestFormData",methodScope="foo") public [static] PartList xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(PartList.class, v.get())
 				.createMethodFinder(PartList.class, resource)
 				.find(x -> matches(x, "defaultRequestFormData"))
 				.run(x -> v.set(x));
+			// @formatter:on
 
 			return v.get();
 		}
+
 		/**
 		 * Instantiates the default request headers.
 		 *
@@ -1525,20 +1530,21 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<HeaderList> v = Value.of(
-				parent.defaultRequestHeaders().copy()
-			);
+			Value<HeaderList> v = Value.of(parent.defaultRequestHeaders().copy());
 
 			// Replace with bean from:  @RestInject(name="defaultRequestHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(HeaderList.class, v.get())
 				.createMethodFinder(HeaderList.class, resource)
 				.find(x -> matches(x, "defaultRequestHeaders"))
 				.run(x -> v.set(x));
+			// @formatter:on
 
 			return v.get();
 		}
+
 		/**
 		 * Instantiates the default request query data.
 		 *
@@ -1552,17 +1558,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		protected PartList createDefaultRequestQueryData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<PartList> v = Value.of(
-				PartList.create()
-			);
+			Value<PartList> v = Value.of(PartList.create());
 
 			// Replace with bean from:  @RestInject(name="defaultRequestQueryData",methodScope="foo") public [static] PartList xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(PartList.class, v.get())
 				.createMethodFinder(PartList.class, resource)
 				.find(x -> matches(x, "defaultRequestQueryData"))
 				.run(x -> v.set(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1580,17 +1586,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<HeaderList> v = Value.of(
-				parent.defaultResponseHeaders().copy()
-			);
+			Value<HeaderList> v = Value.of(parent.defaultResponseHeaders().copy());
 
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(HeaderList.class, v.get())
 				.createMethodFinder(HeaderList.class, resource)
 				.find(x -> matches(x, "defaultResponseHeaders"))
 				.run(x -> v.set(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1609,17 +1615,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected EncoderSet.Builder createEncoders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<EncoderSet.Builder> v = Value.of(
-				parent.encoders().copy()
-			);
+			Value<EncoderSet.Builder> v = Value.of(parent.encoders().copy());
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] EncoderSet xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(EncoderSet.Builder.class, v.get())
 				.createMethodFinder(EncoderSet.class, resource)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1657,27 +1663,22 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected RestGuardList.Builder createGuards(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<RestGuardList.Builder> v = Value.of(
-				RestGuardList
-					.create(beanStore)
-			);
+			Value<RestGuardList.Builder> v = Value.of(RestGuardList.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses()
-				.get(RestGuardList.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(RestGuardList.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(RestGuardList.class)
-				.ifPresent(x->v.get().impl(x));
+			beanStore.getBean(RestGuardList.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] RestGuardList xxx(<args>)
+			// @formatter:off
 			beanStore
 				.createMethodFinder(RestGuardList.class)
 				.addBean(RestGuardList.Builder.class, v.get())
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1696,17 +1697,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected JsonSchemaGenerator.Builder createJsonSchemaGenerator(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<JsonSchemaGenerator.Builder> v = Value.of(
-				parent.jsonSchemaGenerator().copy()
-			);
+			Value<JsonSchemaGenerator.Builder> v = Value.of(parent.jsonSchemaGenerator().copy());
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] JsonSchemaGenerator xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(JsonSchemaGenerator.Builder.class, v.get())
 				.createMethodFinder(JsonSchemaGenerator.class, resource)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1770,27 +1771,22 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected RestMatcherList.Builder createMatchers(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<RestMatcherList.Builder> v = Value.of(
-				RestMatcherList
-					.create(beanStore)
-			);
+			Value<RestMatcherList.Builder> v = Value.of(RestMatcherList.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses()
-				.get(RestMatcherList.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(RestMatcherList.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(RestMatcherList.class)
-				.ifPresent(x->v.get().impl(x));
+			beanStore.getBean(RestMatcherList.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] RestMatcherList xxx(<args>)
+			// @formatter:off
 			beanStore
 				.createMethodFinder(RestMatcherList.class)
 				.addBean(RestMatcherList.Builder.class, v.get())
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1809,17 +1805,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected ParserSet.Builder createParsers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<ParserSet.Builder> v = Value.of(
-				parent.parsers().copy()
-			);
+			Value<ParserSet.Builder> v = Value.of(parent.parsers().copy());
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] ParserSet xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(ParserSet.Builder.class, v.get())
 				.createMethodFinder(ParserSet.class, resource)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1838,17 +1834,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected HttpPartParser.Creator createPartParser(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<HttpPartParser.Creator> v = Value.of(
-				parent.partParser().copy()
-			);
+			Value<HttpPartParser.Creator> v = Value.of(parent.partParser().copy());
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] HttpPartParser xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(HttpPartParser.Creator.class, v.get())
 				.createMethodFinder(HttpPartParser.class, resource)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1867,17 +1863,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected HttpPartSerializer.Creator createPartSerializer(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<HttpPartSerializer.Creator> v = Value.of(
-				parent.partSerializer().copy()
-			);
+			Value<HttpPartSerializer.Creator> v = Value.of(parent.partSerializer().copy());
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] HttpPartSerializer xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(HttpPartSerializer.Creator.class, v.get())
 				.createMethodFinder(HttpPartSerializer.class, resource)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -1896,28 +1892,27 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		protected SerializerSet.Builder createSerializers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
 			// Default value.
-			Value<SerializerSet.Builder> v = Value.of(
-				parent.serializers().copy()
-			);
+			Value<SerializerSet.Builder> v = Value.of(parent.serializers().copy());
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] SerializerSet xxx(<args>)
+			// @formatter:off
 			BeanStore
 				.of(beanStore, resource)
 				.addBean(SerializerSet.Builder.class, v.get())
 				.createMethodFinder(SerializerSet.class, resource)
 				.find(this::matches)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
+
 		/**
 		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
 		 *
 		 * @return The default implementation class if not specified via {@link #type(Class)}.
 		 */
-		protected Class<? extends RestOpContext> getDefaultImplClass() {
-			return RestOpContext.class;
-		}
+		protected Class<? extends RestOpContext> getDefaultImplClass() { return RestOpContext.class; }
 
 		/**
 		 * Instantiates the path matchers for this method.
@@ -1926,9 +1921,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		protected UrlPathMatcherList getPathMatchers() {
 
-			Value<UrlPathMatcherList> v = Value.of(
-				UrlPathMatcherList.create()
-			);
+			Value<UrlPathMatcherList> v = Value.of(UrlPathMatcherList.create());
 
 			if (path != null) {
 				for (String p : path) {
@@ -1965,11 +1958,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			}
 
 			// Replace with bean from:  @RestInject(methodScope="foo") public [static] UrlPathMatcherList xxx(<args>)
+			// @formatter:off
 			beanStore
 				.createMethodFinder(UrlPathMatcherList.class, resource().get())
 				.addBean(UrlPathMatcherList.class, v.get())
 				.find(this::matches)
 				.run(x -> v.set(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -2026,13 +2021,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			}
 		}
 
-		Optional<BeanContext> getBeanContext() {
-			return Utils.opt(beanContext).map(BeanContext.Builder::build);
-		}
+		Optional<BeanContext> getBeanContext() { return Utils.opt(beanContext).map(BeanContext.Builder::build); }
 
-		Optional<EncoderSet> getEncoders() {
-			return Utils.opt(encoders).map(EncoderSet.Builder::build);
-		}
+		Optional<EncoderSet> getEncoders() { return Utils.opt(encoders).map(EncoderSet.Builder::build); }
 
 		RestGuardList getGuards() {
 			RestGuardList.Builder b = guards();
@@ -2049,9 +2040,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return guards.build();
 		}
 
-		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() {
-			return Utils.opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build);
-		}
+		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() { return Utils.opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build); }
 
 		RestMatcherList getMatchers(RestContext restContext) {
 			RestMatcherList.Builder b = matchers();
@@ -2061,22 +2050,16 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return b.build();
 		}
 
-		Optional<ParserSet> getParsers() {
-			return Utils.opt(parsers).map(ParserSet.Builder::build);
-		}
-		Optional<HttpPartParser> getPartParser() {
-			return Utils.opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create);
-		}
+		Optional<ParserSet> getParsers() { return Utils.opt(parsers).map(ParserSet.Builder::build); }
 
-		Optional<HttpPartSerializer> getPartSerializer() {
-			return Utils.opt(partSerializer).map(Creator::create);
-		}
+		Optional<HttpPartParser> getPartParser() { return Utils.opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create); }
 
-		Optional<SerializerSet> getSerializers() {
-			return Utils.opt(serializers).map(SerializerSet.Builder::build);
-		}
+		Optional<HttpPartSerializer> getPartSerializer() { return Utils.opt(partSerializer).map(Creator::create); }
+
+		Optional<SerializerSet> getSerializers() { return Utils.opt(serializers).map(SerializerSet.Builder::build); }
 
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -2087,9 +2070,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	public static Builder create(java.lang.reflect.Method method, RestContext context) {
 		return new Builder(method, context);
 	}
+
 	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer _default) {
 		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(_default);
 	}
+
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
 	private final RestGuard[] guards;
@@ -2098,9 +2083,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final RestContext context;
 	private final Method method;
 	private final RestOpInvoker methodInvoker;
-	private final RestOpInvoker[]
-		preCallMethods,
-		postCallMethods;
+	private final RestOpInvoker[] preCallMethods, postCallMethods;
 	private final MethodInfo mi;
 	private final BeanContext beanContext;
 	private final SerializerSet serializers;
@@ -2114,9 +2097,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final NamedAttributeMap defaultRequestAttributes;
 	private final Charset defaultCharset;
 	private final long maxInput;
-	private final List<MediaType>
-		supportedAcceptTypes,
-		supportedContentTypes;
+	private final List<MediaType> supportedAcceptTypes, supportedContentTypes;
 
 	private final CallLogger callLogger;
 	private final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
@@ -2147,10 +2128,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			mi = MethodInfo.of(method).accessible();
 			Object r = context.getResource();
 
+			// @formatter:off
 			BeanStore bs = BeanStore.of(context.getRootBeanStore(), r)
 				.addBean(RestOpContext.class, this)
 				.addBean(Method.class, method)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
+			// @formatter:on
 			bs.addBean(BeanStore.class, bs);
 
 			beanContext = bs.add(BeanContext.class, builder.getBeanContext().orElse(context.getBeanContext()));
@@ -2303,7 +2286,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof RestOpContext) && Utils.eq(this, (RestOpContext)o, (x,y)->x.method.equals(y.method));
+		return (o instanceof RestOpContext) && Utils.eq(this, (RestOpContext)o, (x, y) -> x.method.equals(y.method));
 	}
 
 	/**
@@ -2311,149 +2294,117 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The bean context associated with this context.
 	 */
-	public BeanContext getBeanContext() {
-		return beanContext;
-	}
+	public BeanContext getBeanContext() { return beanContext; }
 
 	/**
 	 * Returns the default charset.
 	 *
 	 * @return The default charset.  Never <jk>null</jk>.
 	 */
-	public Charset getDefaultCharset() {
-		return defaultCharset;
-	}
+	public Charset getDefaultCharset() { return defaultCharset; }
 
 	/**
 	 * Returns the default request attributes.
 	 *
 	 * @return The default request attributes.  Never <jk>null</jk>.
 	 */
-	public NamedAttributeMap getDefaultRequestAttributes() {
-		return defaultRequestAttributes;
-	}
+	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributes; }
 
 	/**
 	 * Returns the default form data parameters.
 	 *
 	 * @return The default form data parameters.  Never <jk>null</jk>.
 	 */
-	public PartList getDefaultRequestFormData() {
-		return defaultRequestFormData;
-	}
+	public PartList getDefaultRequestFormData() { return defaultRequestFormData; }
 
 	/**
 	 * Returns the default request headers.
 	 *
 	 * @return The default request headers.  Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultRequestHeaders() {
-		return defaultRequestHeaders;
-	}
+	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeaders; }
 
 	/**
 	 * Returns the default request query parameters.
 	 *
 	 * @return The default request query parameters.  Never <jk>null</jk>.
 	 */
-	public PartList getDefaultRequestQueryData() {
-		return defaultRequestQueryData;
-	}
+	public PartList getDefaultRequestQueryData() { return defaultRequestQueryData; }
 
 	/**
 	 * Returns the default response headers.
 	 *
 	 * @return The default response headers.  Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultResponseHeaders() {
-		return defaultResponseHeaders;
-	}
+	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeaders; }
 
 	/**
 	 * Returns the compression encoders to use for this method.
 	 *
 	 * @return The compression encoders to use for this method.
 	 */
-	public EncoderSet getEncoders() {
-		return encoders;
-	}
+	public EncoderSet getEncoders() { return encoders; }
 
 	/**
 	 * Returns the HTTP method name (e.g. <js>"GET"</js>).
 	 *
 	 * @return The HTTP method name.
 	 */
-	public String getHttpMethod() {
-		return httpMethod;
-	}
+	public String getHttpMethod() { return httpMethod; }
 
 	/**
 	 * Returns the underlying Java method that this context belongs to.
 	 *
 	 * @return The underlying Java method that this context belongs to.
 	 */
-	public Method getJavaMethod() {
-		return method;
-	}
+	public Method getJavaMethod() { return method; }
 
 	/**
 	 * Returns the JSON-Schema generator applicable to this Java method.
 	 *
 	 * @return The JSON-Schema generator applicable to this Java method.
 	 */
-	public JsonSchemaGenerator getJsonSchemaGenerator() {
-		return jsonSchemaGenerator;
-	}
+	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGenerator; }
 
 	/**
 	 * Returns the max number of bytes to process in the input content.
 	 *
 	 * @return The max number of bytes to process in the input content.
 	 */
-	public long getMaxInput() {
-		return maxInput;
-	}
+	public long getMaxInput() { return maxInput; }
 
 	/**
 	 * Returns the parsers to use for this method.
 	 *
 	 * @return The parsers to use for this method.
 	 */
-	public ParserSet getParsers() {
-		return parsers;
-	}
+	public ParserSet getParsers() { return parsers; }
 
 	/**
 	 * Bean property getter:  <property>partParser</property>.
 	 *
 	 * @return The value of the <property>partParser</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public HttpPartParser getPartParser() {
-		return partParser;
-	}
+	public HttpPartParser getPartParser() { return partParser; }
 
 	/**
 	 * Bean property getter:  <property>partSerializer</property>.
 	 *
 	 * @return The value of the <property>partSerializer</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public HttpPartSerializer getPartSerializer() {
-		return partSerializer;
-	}
+	public HttpPartSerializer getPartSerializer() { return partSerializer; }
 
 	/**
 	 * Returns the path pattern for this method.
 	 *
 	 * @return The path pattern.
 	 */
-	public String getPathPattern() {
-		return pathMatchers[0].toString();
-	}
+	public String getPathPattern() { return pathMatchers[0].toString(); }
 
 	/**
 	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.
 	 *
- 	 * @param o The response POJO.
+	 * @param o The response POJO.
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Response @Response}.
 	 */
 	public ResponseBeanMeta getResponseBeanMeta(Object o) {
@@ -2475,7 +2426,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/**
 	 * Returns metadata about the specified response object if it's annotated with {@link Header @Header}.
 	 *
- 	 * @param o The response POJO.
+	 * @param o The response POJO.
 	 * @return Metadata about the specified response object, or <jk>null</jk> if it's not annotated with {@link Header @Header}.
 	 */
 	public ResponsePartMeta getResponseHeaderMeta(Object o) {
@@ -2504,36 +2455,28 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The response bean meta or <jk>null</jk> if it's not a {@link Response}-annotated bean.
 	 */
-	public ResponseBeanMeta getResponseMeta() {
-		return responseMeta;
-	}
+	public ResponseBeanMeta getResponseMeta() { return responseMeta; }
 
 	/**
 	 * Returns the serializers to use for this method.
 	 *
 	 * @return The serializers to use for this method.
 	 */
-	public SerializerSet getSerializers() {
-		return serializers;
-	}
+	public SerializerSet getSerializers() { return serializers; }
 
 	/**
 	 * Returns a list of supported accept types.
 	 *
 	 * @return An unmodifiable list.
 	 */
-	public List<MediaType> getSupportedAcceptTypes() {
-		return supportedAcceptTypes;
-	}
+	public List<MediaType> getSupportedAcceptTypes() { return supportedAcceptTypes; }
 
 	/**
 	 * Returns the list of supported content types.
 	 *
 	 * @return An unmodifiable list.
 	 */
-	public List<MediaType> getSupportedContentTypes() {
-		return supportedContentTypes;
-	}
+	public List<MediaType> getSupportedContentTypes() { return supportedContentTypes; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
@@ -2547,6 +2490,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				pm = pp.match(call.getUrlPath());
 		return pm;
 	}
+
 	/**
 	 * Identifies if this method can process the specified call.
 	 *
@@ -2582,7 +2526,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			HttpServletRequest req = session.getRequest();
 
 			// If the method implements matchers, test them.
-			for (RestMatcher m :  requiredMatchers)
+			for (RestMatcher m : requiredMatchers)
 				if (! m.matches(req))
 					return 1;
 			if (optionalMatchers.length > 0) {
@@ -2602,29 +2546,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
-		return filteredMap()
-			.append("defaultRequestFormData", defaultRequestFormData)
-			.append("defaultRequestHeaders", defaultRequestHeaders)
-			.append("defaultRequestQueryData", defaultRequestQueryData)
+		return filteredMap().append("defaultRequestFormData", defaultRequestFormData).append("defaultRequestHeaders", defaultRequestHeaders).append("defaultRequestQueryData", defaultRequestQueryData)
 			.append("httpMethod", httpMethod);
 	}
 
-	RestConverter[] getConverters() {
-		return converters;
-	}
+	RestConverter[] getConverters() { return converters; }
 
-	RestGuard[] getGuards() {
-		return guards;
-	}
+	RestGuard[] getGuards() { return guards; }
 
-	RestOpInvoker getMethodInvoker() {
-		return methodInvoker;
-	}
-	RestOpInvoker[] getPostCallMethods() {
-		return postCallMethods;
-	}
+	RestOpInvoker getMethodInvoker() { return methodInvoker; }
 
-	RestOpInvoker[] getPreCallMethods() {
-		return preCallMethods;
-	}
+	RestOpInvoker[] getPostCallMethods() { return postCallMethods; }
+
+	RestOpInvoker[] getPreCallMethods() { return preCallMethods; }
 }

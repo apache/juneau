@@ -60,7 +60,6 @@ import org.apache.juneau.cp.*;
  */
 public class AssertionPredicate<T> implements Predicate<T> {
 
-
 	/**
 	 * Encapsulates multiple predicates into a single AND operation.
 	 *
@@ -74,8 +73,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 
 		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
 
-		private static final String
-			MSG_predicateTestFailed = MESSAGES.getString("predicateTestFailed");
+		private static final String MSG_predicateTestFailed = MESSAGES.getString("predicateTestFailed");
 		private final Predicate<T>[] inner;
 
 		/**
@@ -95,9 +93,9 @@ public class AssertionPredicate<T> implements Predicate<T> {
 				var p = inner[i];
 				if (p != null) {
 					var b = p.test(t);
-					if (! b) {
-						var m = format(MSG_predicateTestFailed, i+1);
-						if (p instanceof AssertionPredicate p2)  // NOSONAR - Intentional.
+					if (!b) {
+						var m = format(MSG_predicateTestFailed, i + 1);
+						if (p instanceof AssertionPredicate p2) // NOSONAR - Intentional.
 							m += "\n\t" + p2.getFailureMessage();
 						failedMessage.set(m);
 						return false;
@@ -119,8 +117,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	public static class Not<T> extends AssertionPredicate<T> {
 
 		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
-		private static final String
-			MSG_predicateTestsUnexpectedlyPassed = MESSAGES.getString("predicateTestsUnexpectedlyPassed");
+		private static final String MSG_predicateTestsUnexpectedlyPassed = MESSAGES.getString("predicateTestsUnexpectedlyPassed");
 
 		private final Predicate<T> inner;
 
@@ -147,6 +144,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			return true;
 		}
 	}
+
 	/**
 	 * Encapsulates multiple predicates into a single OR operation.
 	 *
@@ -159,8 +157,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	public static class Or<T> extends AssertionPredicate<T> {
 
 		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
-		private static final String
-			MSG_noPredicateTestsPassed = MESSAGES.getString("noPredicateTestsPassed");
+		private static final String MSG_noPredicateTestsPassed = MESSAGES.getString("noPredicateTestsPassed");
 
 		private final Predicate<T>[] inner;
 
@@ -186,24 +183,23 @@ public class AssertionPredicate<T> implements Predicate<T> {
 		}
 	}
 
-
 	/**
 	 * Argument placeholder for tested value.
 	 */
 	public static final Function<Object,String> VALUE = StringUtils::stringifyDeep;
 	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+	// @formatter:off
 	private static final String
 		MSG_valueDidNotPassTest = MESSAGES.getString("valueDidNotPassTest"),
 		MSG_valueDidNotPassTestWithValue = MESSAGES.getString("valueDidNotPassTestWithValue");
+	// @formatter:on
 	private final Predicate<T> inner;
 
 	private final String message;
 
 	private final Object[] args;
 
-
 	final ThreadLocal<String> failedMessage = new ThreadLocal<>();
-
 
 	/**
 	 * Constructor.
@@ -224,13 +220,12 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			this.args = args;
 		} else if (inner instanceof AssertionPredicate) {
 			this.message = MSG_valueDidNotPassTest;
-			this.args = new Object[]{};
+			this.args = new Object[] {};
 		} else {
 			this.message = MSG_valueDidNotPassTestWithValue;
-			this.args = new Object[]{VALUE};
+			this.args = new Object[] { VALUE };
 		}
 	}
-
 
 	AssertionPredicate() {
 		this.inner = null;
@@ -243,18 +238,18 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	public boolean test(T t) {
 		failedMessage.remove();
 		var b = inner.test(t);
-		if (! b) {
+		if (!b) {
 			var m = message;
 			var oargs = new Object[this.args.length];
 			for (var i = 0; i < oargs.length; i++) {
 				var a = this.args[i];
-				if (a instanceof Function af)  // NOSONAR - Intentional.
+				if (a instanceof Function af) // NOSONAR - Intentional.
 					oargs[i] = af.apply(t);
 				else
 					oargs[i] = a;
 			}
 			m = format(m, oargs);
-			if (inner instanceof AssertionPredicate inner2)  // NOSONAR - Intentional.
+			if (inner instanceof AssertionPredicate inner2) // NOSONAR - Intentional.
 				m += "\n\t" + inner2.getFailureMessage();
 			failedMessage.set(m);
 		}
@@ -266,7 +261,5 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 *
 	 * @return The error message, or <jk>null</jk> if there was no failure.
 	 */
-	protected String getFailureMessage() {
-		return failedMessage.get();
-	}
+	protected String getFailureMessage() { return failedMessage.get(); }
 }

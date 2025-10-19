@@ -52,10 +52,8 @@ import org.apache.juneau.internal.*;
 @SuppressWarnings("resource")
 public class VarResolverSession {
 
-	private static final AsciiSet
-		AS1 = AsciiSet.of("\\{"),
-		AS2 = AsciiSet.of("\\${}")
-	;
+	private static final AsciiSet AS1 = AsciiSet.of("\\{"), AS2 = AsciiSet.of("\\${}");
+
 	private static boolean containsVars(Collection<?> c) {
 		Flag f = Flag.create();
 		c.forEach(x -> {
@@ -67,7 +65,7 @@ public class VarResolverSession {
 
 	private static boolean containsVars(Map<?,?> m) {
 		Flag f = Flag.create();
-		m.forEach((k,v) -> {
+		m.forEach((k, v) -> {
 			if (v instanceof CharSequence && v.toString().contains("$"))
 				f.set();
 		});
@@ -186,7 +184,7 @@ public class VarResolverSession {
 		// This is a common case, so we want an optimized solution that doesn't involve string builders.
 		if (isSimpleVar(s)) {
 			String var = s.substring(1, s.indexOf('{'));
-			String val = s.substring(s.indexOf('{')+1, s.length()-1);
+			String val = s.substring(s.indexOf('{') + 1, s.length() - 1);
 			Var v = getVar(var);
 			if (v != null) {
 				try {
@@ -281,7 +279,7 @@ public class VarResolverSession {
 				if (! containsVars(m))
 					return o;
 				Map m2 = m.getClass().getDeclaredConstructor().newInstance();
-				m.forEach((k,v) -> m2.put(k, resolve(v)));
+				m.forEach((k, v) -> m2.put(k, resolve(v)));
 				return (T)m2;
 			} catch (VarResolverException e) {
 				throw e;
@@ -345,14 +343,14 @@ public class VarResolverSession {
 					hasInnerEscapes = true;
 					isInEscape = true;
 				} else if (c == '{') {
-					varType = s.substring(x+1, i);
+					varType = s.substring(x + 1, i);
 					x = i;
 					state = S3;
 				} else if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a')) {  // False trigger "$X "
 					if (hasInnerEscapes)
-						out.append(unEscapeChars(s.substring(x, i+1), AS1));
+						out.append(unEscapeChars(s.substring(x, i + 1), AS1));
 					else
-						out.append(s, x, i+1);
+						out.append(s, x, i + 1);
 					x = i + 1;
 					state = S1;
 					hasInnerEscapes = false;
@@ -370,14 +368,14 @@ public class VarResolverSession {
 					if (depth > 0) {
 						depth--;
 					} else {
-						varVal = s.substring(x+1, i);
+						varVal = s.substring(x + 1, i);
 						Var r = getVar(varType);
 						if (r == null) {
 							if (hasInnerEscapes)
-								out.append(unEscapeChars(s.substring(x2, i+1), AS2));
+								out.append(unEscapeChars(s.substring(x2, i + 1), AS2));
 							else
-								out.append(s, x2, i+1);
-							x = i+1;
+								out.append(s, x2, i + 1);
+							x = i + 1;
 						} else {
 							varVal = (hasInternalVar && r.allowNested() ? resolve(varVal) : varVal);
 							try {
@@ -397,7 +395,7 @@ public class VarResolverSession {
 							} catch (Exception e) {
 								throw new VarResolverException(e, "Problem occurred resolving variable ''{0}'' in string ''{1}''", varType, s);
 							}
-							x = i+1;
+							x = i + 1;
 						}
 						state = 1;
 						hasInnerEscapes = false;
@@ -408,9 +406,9 @@ public class VarResolverSession {
 		if (isInEscape)
 			out.append('\\');
 		else if (state == S2)
-			out.append('$').append(unEscapeChars(s.substring(x+1), AS1));
+			out.append('$').append(unEscapeChars(s.substring(x + 1), AS1));
 		else if (state == S3)
-			out.append('$').append(varType).append('{').append(unEscapeChars(s.substring(x+1), AS2));
+			out.append('$').append(varType).append('{').append(unEscapeChars(s.substring(x + 1), AS2));
 		return out;
 	}
 

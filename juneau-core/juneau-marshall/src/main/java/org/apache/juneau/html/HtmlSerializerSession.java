@@ -74,6 +74,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public HtmlSerializerSession build() {
 			return new HtmlSerializerSession(this);
@@ -187,6 +188,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -196,6 +198,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	public static Builder create(HtmlSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final HtmlSerializer ctx;
 	private final Pattern urlPattern = Pattern.compile("http[s]?\\:\\/\\/.*");
 	private final Pattern labelPattern;
@@ -231,7 +234,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			case LAST_TOKEN:
 				s = resolveUri(s);
 				if (s.indexOf('/') != -1)
-					s = s.substring(s.lastIndexOf('/')+1);
+					s = s.substring(s.lastIndexOf('/') + 1);
 				if (s.indexOf('?') != -1)
 					s = s.substring(0, s.indexOf('?'));
 				if (s.indexOf('#') != -1)
@@ -241,7 +244,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				return urlDecode(s);
 			case URI_ANCHOR:
 				if (s.indexOf('#') != -1)
-					s = s.substring(s.lastIndexOf('#')+1);
+					s = s.substring(s.lastIndexOf('#') + 1);
 				return urlDecode(s);
 			case PROPERTY_NAME:
 				return pMeta == null ? s : pMeta.getName();
@@ -259,9 +262,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* Overridden from XmlSerializer */
-	public boolean isHtmlMode() {
-		return true;
-	}
+	public boolean isHtmlMode() { return true; }
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is a URL.
@@ -291,7 +292,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @throws IOException If a problem occurred trying to send output to the writer.
 	 */
 	private XmlWriter doSerialize(Object o, XmlWriter w) throws IOException, SerializeException {
-		serializeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth()-1, true, false);
+		serializeAnything(w, o, getExpectedRootType(o), null, null, getInitialDepth() - 1, true, false);
 		return w;
 	}
 
@@ -313,7 +314,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		render = cMeta == null ? null : getHtmlClassMeta(cMeta).getRender();
 		return render;
 	}
-	@SuppressWarnings({"rawtypes","unchecked"})
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String getStyle(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
 		// Check for annotation style first
 		if (pMeta != null) {
@@ -333,7 +335,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 2-dimensional tables are used for collections of objects that all have the same set of property names.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws SerializeException  {
+	private Object[] getTableHeaders(Collection c, HtmlBeanPropertyMeta bpHtml) throws SerializeException {
 
 		if (c.isEmpty())
 			return null;
@@ -410,15 +412,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		out.w('>').nl(i);
 		if (isAddKeyValueTableHeaders() && ! (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())) {
-			out.sTag(i+1, "tr").nl(i+1);
-			out.sTag(i+2, "th").append("key").eTag("th").nl(i+2);
-			out.sTag(i+2, "th").append("value").eTag("th").nl(i+2);
-			out.ie(i+1).eTag("tr").nl(i+1);
+			out.sTag(i + 1, "tr").nl(i + 1);
+			out.sTag(i + 2, "th").append("key").eTag("th").nl(i + 2);
+			out.sTag(i + 2, "th").append("value").eTag("th").nl(i + 2);
+			out.ie(i + 1).eTag("tr").nl(i + 1);
 		}
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
 
-		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			ClassMeta<?> cMeta = pMeta.getClassMeta();
 
 			if (thrown != null)
@@ -436,9 +438,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (anchorText != null)
 				value = anchorText;
 
-			out.sTag(i+1, "tr").nl(i+1);
-			out.sTag(i+2, "td").text(key).eTag("td").nl(i+2);
-			out.oTag(i+2, "td");
+			out.sTag(i + 1, "tr").nl(i + 1);
+			out.sTag(i + 2, "td").text(key).eTag("td").nl(i + 2);
+			out.oTag(i + 2, "td");
 			String style = getStyle(this, pMeta, value);
 			if (style != null)
 				out.attr("style", style);
@@ -446,10 +448,10 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			try {
 				if (link != null)
-					out.oTag(i+3, "a").attrUri("href", link).cTag();
+					out.oTag(i + 3, "a").attrUri("href", link).cTag();
 				ContentResult cr = serializeAnything(out, value, cMeta, key, pMeta, 2, false, true);
 				if (cr == CR_ELEMENTS)
-					out.i(i+2);
+					out.i(i + 2);
 				if (link != null)
 					out.eTag("a");
 			} catch (SerializeException | Error e) {
@@ -457,8 +459,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} catch (Throwable e) {
 				onBeanGetterException(pMeta, e);
 			}
-			out.eTag("td").nl(i+2);
-			out.ie(i+1).eTag("tr").nl(i+1);
+			out.eTag("td").nl(i + 2);
+			out.ie(i + 1).eTag("tr").nl(i + 1);
 		});
 
 		out.ie(i).eTag("table").nl(i);
@@ -500,15 +502,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		if (th != null) {
 
-			out.oTag(i, "table").attr(btpn, type2).w('>').nl(i+1);
+			out.oTag(i, "table").attr(btpn, type2).w('>').nl(i + 1);
 			if (th.length > 0) {
-				out.sTag(i+1, "tr").nl(i+2);
+				out.sTag(i + 1, "tr").nl(i + 2);
 				for (Object key : th) {
-					out.sTag(i+2, "th");
+					out.sTag(i + 2, "th");
 					out.text(convertToType(key, String.class));
-					out.eTag("th").nl(i+2);
+					out.eTag("th").nl(i + 2);
 				}
-				out.ie(i+1).eTag("tr").nl(i+1);
+				out.ie(i + 1).eTag("tr").nl(i + 1);
 			} else {
 				th = null;
 			}
@@ -522,16 +524,16 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					cm = swap.getSwapClassMeta(this);
 				}
 
-				out.oTag(i+1, "tr");
+				out.oTag(i + 1, "tr");
 				String typeName = (cm == null ? null : cm.getDictionaryName());
 				String typeProperty = getBeanTypePropertyName(cm);
 
 				if (typeName != null && eType.getElementType() != cm)
 					out.attr(typeProperty, typeName);
-				out.cTag().nl(i+2);
+				out.cTag().nl(i + 2);
 
 				if (cm == null) {
-					out.i(i+2);
+					out.i(i + 2);
 					serializeAnything(out, o, null, null, null, 1, false, false);
 					out.nl(0);
 
@@ -542,11 +544,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 						th = m2.keySet().toArray(new Object[m2.size()]);
 
 					for (Object k : th) {
-						out.sTag(i+2, "td");
+						out.sTag(i + 2, "td");
 						ContentResult cr = serializeAnything(out, m2.get(k), eType.getElementType(), toString(k), null, 2, false, true);
 						if (cr == CR_ELEMENTS)
-							out.i(i+2);
-						out.eTag("td").nl(i+2);
+							out.i(i + 2);
+						out.eTag("td").nl(i + 2);
 					}
 				} else {
 					BeanMap m2 = toBeanMap(o);
@@ -570,7 +572,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 								value = anchorText;
 
 							String style = getStyle(this, pMeta, value);
-							out.oTag(i+2, "td");
+							out.oTag(i + 2, "td");
 							if (style != null)
 								out.attr("style", style);
 							out.cTag();
@@ -578,14 +580,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 								out.oTag("a").attrUri("href", link).cTag();
 							ContentResult cr = serializeAnything(out, value, pMeta.getClassMeta(), p.getKey().toString(), pMeta, 2, false, true);
 							if (cr == CR_ELEMENTS)
-								out.i(i+2);
+								out.i(i + 2);
 							if (link != null)
 								out.eTag("a");
-							out.eTag("td").nl(i+2);
+							out.eTag("td").nl(i + 2);
 						}
 					}
 				}
-				out.ie(i+1).eTag("tr").nl(i+1);
+				out.ie(i + 1).eTag("tr").nl(i + 1);
 			}
 			out.ie(i).eTag("table").nl(i);
 
@@ -593,13 +595,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.oTag(i, isDc ? "p" : "ul");
 			if (! type2.equals("array"))
 				out.attr(btpn, type2);
-			out.w('>').nl(i+1);
+			out.w('>').nl(i + 1);
 			boolean isFirst = true;
 			for (Object o : c) {
 				if (isDc && ! isFirst)
 					out.append(isCdc ? ", " : " ");
 				if (! isDc)
-					out.oTag(i+1, "li");
+					out.oTag(i + 1, "li");
 				String style = getStyle(this, ppMeta, o);
 				String link = getLink(ppMeta);
 				if (style != null && ! isDc)
@@ -607,14 +609,14 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				if (! isDc)
 					out.cTag();
 				if (link != null)
-					out.oTag(i+2, "a").attrUri("href", link.replace("{#}", Utils.s(o))).cTag();
+					out.oTag(i + 2, "a").attrUri("href", link.replace("{#}", Utils.s(o))).cTag();
 				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, null, 1, false, true);
 				if (link != null)
 					out.eTag("a");
 				if (cr == CR_ELEMENTS)
-					out.ie(i+1);
+					out.ie(i + 1);
 				if (! isDc)
-					out.eTag("li").nl(i+1);
+					out.eTag("li").nl(i + 1);
 				isFirst = false;
 			}
 			out.ie(i).eTag(isDc ? "p" : "ul").nl(i);
@@ -622,8 +624,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
-			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
+	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType, ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		ClassMeta<?> keyType = eKeyType == null ? string() : eKeyType;
 		ClassMeta<?> valueType = eValueType == null ? object() : eValueType;
@@ -638,12 +639,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (typeName != null && ppMeta != null && ppMeta.getClassMeta() != aType)
 			out.attr(getBeanTypePropertyName(sType), typeName);
 
-		out.append(">").nl(i+1);
+		out.append(">").nl(i + 1);
 		if (isAddKeyValueTableHeaders() && ! (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())) {
-			out.sTag(i+1, "tr").nl(i+2);
-			out.sTag(i+2, "th").append("key").eTag("th").nl(i+3);
-			out.sTag(i+2, "th").append("value").eTag("th").nl(i+3);
-			out.ie(i+1).eTag("tr").nl(i+2);
+			out.sTag(i + 1, "tr").nl(i + 2);
+			out.sTag(i + 2, "th").append("key").eTag("th").nl(i + 3);
+			out.sTag(i + 2, "th").append("value").eTag("th").nl(i + 3);
+			out.ie(i + 1).eTag("tr").nl(i + 2);
 		}
 
 		forEachEntry(m, x -> serializeMapEntry(out, x, keyType, valueType, i, ppMeta));
@@ -666,25 +667,25 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		String link = getLink(ppMeta);
 		String style = getStyle(this, ppMeta, value);
 
-		out.sTag(i+1, "tr").nl(i+2);
-		out.oTag(i+2, "td");
+		out.sTag(i + 1, "tr").nl(i + 2);
+		out.oTag(i + 2, "td");
 		if (style != null)
 			out.attr("style", style);
 		out.cTag();
 		if (link != null)
-			out.oTag(i+3, "a").attrUri("href", link.replace("{#}", Utils.s(value))).cTag();
+			out.oTag(i + 3, "a").attrUri("href", link.replace("{#}", Utils.s(value))).cTag();
 		ContentResult cr = serializeAnything(out, key, keyType, null, null, 2, false, false);
 		if (link != null)
 			out.eTag("a");
 		if (cr == CR_ELEMENTS)
-			out.i(i+2);
-		out.eTag("td").nl(i+2);
-		out.sTag(i+2, "td");
+			out.i(i + 2);
+		out.eTag("td").nl(i + 2);
+		out.sTag(i + 2, "td");
 		cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false, true);
 		if (cr == CR_ELEMENTS)
-			out.ie(i+2);
-		out.eTag("td").nl(i+2);
-		out.ie(i+1).eTag("tr").nl(i+1);
+			out.ie(i + 2);
+		out.eTag("td").nl(i + 2);
+		out.ie(i + 1).eTag("tr").nl(i + 1);
 
 	}
 
@@ -724,11 +725,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof HtmlWriter)
 			return (HtmlWriter)output;
-		HtmlWriter w = new HtmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(),
-			getUriResolver());
+		HtmlWriter w = new HtmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
+
 	/**
 	 * Link label parameter name.
 	 *
@@ -736,9 +737,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	The parameter name to look for when resolving link labels.
 	 */
-	protected final String getLabelParameter() {
-		return ctx.getLabelParameter();
-	}
+	protected final String getLabelParameter() { return ctx.getLabelParameter(); }
 
 	/**
 	 * Anchor text source.
@@ -748,9 +747,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * 	<xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
 	 */
-	protected final AnchorText getUriAnchorText() {
-		return ctx.getUriAnchorText();
-	}
+	protected final AnchorText getUriAnchorText() { return ctx.getUriAnchorText(); }
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -761,9 +758,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
+	protected final boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
 
 	/**
 	 * Add key/value headers on bean/map tables.
@@ -772,9 +767,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 */
-	protected final boolean isAddKeyValueTableHeaders() {
-		return ctx.isAddKeyValueTableHeaders();
-	}
+	protected final boolean isAddKeyValueTableHeaders() { return ctx.isAddKeyValueTableHeaders(); }
 
 	/**
 	 * Look for link labels in URIs.
@@ -783,9 +776,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if we should ook for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
-	protected final boolean isDetectLabelParameters() {
-		return ctx.isDetectLabelParameters();
-	}
+	protected final boolean isDetectLabelParameters() { return ctx.isDetectLabelParameters(); }
 
 	/**
 	 * Look for URLs in {@link String Strings}.
@@ -794,9 +785,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */
-	protected final boolean isDetectLinksInStrings() {
-		return ctx.isDetectLinksInStrings();
-	}
+	protected final boolean isDetectLinksInStrings() { return ctx.isDetectLinksInStrings(); }
+
 	/**
 	 * Serialize the specified object to the specified writer.
 	 *
@@ -814,8 +804,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected ContentResult serializeAnything(XmlWriter out, Object o,
-			ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement) throws SerializeException {
+	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement)
+		throws SerializeException {
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
@@ -847,7 +837,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		// Determine the type.
 		if (o == null || (aType.isChar() && ((Character)o).charValue() == 0)) {
-			if (addJsonTags) out.tag("null");
+			if (addJsonTags)
+				out.tag("null");
 			cr = ContentResult.CR_MIXED;
 
 		} else {
@@ -907,7 +898,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				if (nlIfElement)
 					out.nl(0);
 				super.serializeAnything(out, o, null, null, null, null, false, XmlFormat.MIXED, false, false, null);
-				indent -= xIndent+1;
+				indent -= xIndent + 1;
 				return cr;
 
 			} else if (cHtml.isPlainText() || bpHtml.isPlainText()) {
@@ -915,25 +906,26 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				cr = CR_MIXED;
 
 			} else if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
-				if (addJsonTags) out.tag("null");
+				if (addJsonTags)
+					out.tag("null");
 				cr = CR_MIXED;
 
 			} else if (sType.isNumber()) {
-				if (eType.isNumber() && !(isRoot && addJsonTags))
+				if (eType.isNumber() && ! (isRoot && addJsonTags))
 					out.append(o);
 				else
 					out.sTag("number").append(o).eTag("number");
 				cr = CR_MIXED;
 
 			} else if (sType.isBoolean()) {
-				if (eType.isBoolean() && !(isRoot && addJsonTags))
+				if (eType.isBoolean() && ! (isRoot && addJsonTags))
 					out.append(o);
 				else
 					out.sTag("boolean").append(o).eTag("boolean");
 				cr = CR_MIXED;
 
 			} else if (sType.isMap() || (wType != null && wType.isMap())) {
-				out.nlIf(! isRoot, xIndent+1);
+				out.nlIf(! isRoot, xIndent + 1);
 				if (o instanceof BeanMap)
 					serializeBeanMap(out, (BeanMap)o, eType, pMeta);
 				else
@@ -951,12 +943,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					out.oTag("a").attrUri("href", urlProp).w('>').text(nameProp).eTag("a");
 					cr = CR_MIXED;
 				} else {
-					out.nlIf(! isRoot, xIndent+2);
+					out.nlIf(! isRoot, xIndent + 2);
 					serializeBeanMap(out, m, eType, pMeta);
 				}
 
 			} else if (sType.isCollection() || sType.isArray() || (wType != null && wType.isCollection())) {
-				out.nlIf(! isRoot, xIndent+1);
+				out.nlIf(! isRoot, xIndent + 1);
 				serializeCollection(out, o, sType, eType, name, pMeta);
 
 			} else if (isUri(sType, pMeta, o)) {
@@ -981,18 +973,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	@SuppressWarnings({ "rawtypes" })
 	@Override /* Overridden from XmlSerializerSession */
-	protected ContentResult serializeAnything(
-			XmlWriter out,
-			Object o,
-			ClassMeta<?> eType,
-			String keyName,
-			String elementName,
-			Namespace elementNamespace,
-			boolean addNamespaceUris,
-			XmlFormat format,
-			boolean isMixed,
-			boolean preserveWhitespace,
-			BeanPropertyMeta pMeta) throws SerializeException {
+	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
+		boolean isMixed, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 
 		// If this is a bean, then we want to serialize it as HTML unless it's @Html(format=XML).
 		ClassMeta<?> type = push2(elementName, o, eType);

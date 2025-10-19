@@ -65,11 +65,13 @@ public class RestChildren {
 			list.add(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -91,6 +93,7 @@ public class RestChildren {
 			super(builder);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -100,6 +103,7 @@ public class RestChildren {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final Map<String,RestContext> children = synced(map());
 
 	/**
@@ -134,6 +138,7 @@ public class RestChildren {
 				((Servlet)r.getResource()).destroy();
 		}
 	}
+
 	/**
 	 * Looks through the registered children of this object and returns the best match.
 	 *

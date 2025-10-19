@@ -64,7 +64,7 @@ public class HashCode {
 	 * @return This object.
 	 */
 	public HashCode add(int i) {
-		hashCode = 31*hashCode + i;
+		hashCode = 31 * hashCode + i;
 		return this;
 	}
 

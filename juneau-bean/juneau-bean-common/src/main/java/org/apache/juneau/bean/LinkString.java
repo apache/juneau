@@ -48,7 +48,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 @HtmlLink
-@Bean(findFluentSetters=true)
+@Bean(findFluentSetters = true)
 public class LinkString implements Comparable<LinkString> {
 	private String name;
 	private java.net.URI uri;
@@ -68,7 +68,6 @@ public class LinkString implements Comparable<LinkString> {
 		setUri(uri, uriArgs);
 	}
 
-
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 *
@@ -77,9 +76,7 @@ public class LinkString implements Comparable<LinkString> {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Bean property setter:  <property>name</property>.
@@ -97,7 +94,6 @@ public class LinkString implements Comparable<LinkString> {
 		return this;
 	}
 
-
 	/**
 	 * Bean property getter:  <property>uri</property>.
 	 *
@@ -106,9 +102,7 @@ public class LinkString implements Comparable<LinkString> {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public java.net.URI getUri() {
-		return uri;
-	}
+	public java.net.URI getUri() { return uri; }
 
 	/**
 	 * Bean property setter:  <property>uri</property>.
@@ -125,6 +119,7 @@ public class LinkString implements Comparable<LinkString> {
 		this.uri = value;
 		return this;
 	}
+
 	/**
 	 * Bean property fluent setter:  <property>uri</property>.
 	 *
@@ -137,7 +132,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @return This object.
 	 */
 	public LinkString setUri(String value) {
-		setUri(value, new Object[0]);  // NOSONAR - Not fixable.
+		setUri(value, new Object[0]); // NOSONAR - Not fixable.
 		return this;
 	}
 
@@ -179,7 +174,7 @@ public class LinkString implements Comparable<LinkString> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof LinkString o2) && Utils.eq(this, o2, (x,y)->x.name.equals(y.name));
+		return (o instanceof LinkString o2) && Utils.eq(this, o2, (x, y) -> x.name.equals(y.name));
 	}
 
 	@Override /* Overridden from Object */

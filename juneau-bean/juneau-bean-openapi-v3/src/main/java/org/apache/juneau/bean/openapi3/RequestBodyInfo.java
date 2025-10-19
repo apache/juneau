@@ -65,7 +65,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-public class RequestBodyInfo extends OpenApiElement{
+public class RequestBodyInfo extends OpenApiElement {
 
 	private String description;
 	private Map<String,MediaType> content;
@@ -74,7 +74,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	/**
 	 * Default constructor.
 	 */
-	public RequestBodyInfo() { }
+	public RequestBodyInfo() {}
 
 	/**
 	 * Copy constructor.
@@ -131,9 +131,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, MediaType> getContent() {
-		return content;
-	}
+	public Map<String,MediaType> getContent() { return content; }
 
 	/**
 	 * Bean property getter:  <property>contentType</property>.
@@ -143,9 +141,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>required</property>.
@@ -155,9 +151,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getRequired() {
-		return required;
-	}
+	public Boolean getRequired() { return required; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -173,7 +167,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	public RequestBodyInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "content" -> setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
+			case "content" -> setContent(mapBuilder(String.class, MediaType.class).sparse().addAny(value).build());
 			case "description" -> setDescription(Utils.s(value));
 			case "required" -> setRequired(toBoolean(value));
 			default -> {
@@ -191,7 +185,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public RequestBodyInfo setContent(Map<String, MediaType> value) {
+	public RequestBodyInfo setContent(Map<String,MediaType> value) {
 		content = copyOf(value);
 		return this;
 	}

@@ -119,7 +119,7 @@ public class ResponseInfo extends SwaggerElement {
 	public ResponseInfo addExample(String mimeType, Object example) {
 		assertArgNotNull("mimeType", mimeType);
 		assertArgNotNull("example", example);
-		examples =  mapBuilder(examples).sparse().add(mimeType, example).build();
+		examples = mapBuilder(examples).sparse().add(mimeType, example).build();
 		return this;
 	}
 
@@ -136,6 +136,7 @@ public class ResponseInfo extends SwaggerElement {
 		headers = mapBuilder(headers).add(name, header).build();
 		return this;
 	}
+
 	/**
 	 * Make a deep copy of this object.
 	 *
@@ -187,9 +188,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -199,9 +198,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getExamples() {
-		return examples;
-	}
+	public Map<String,Object> getExamples() { return examples; }
 
 	/**
 	 * Returns the header information with the specified name.
@@ -222,9 +219,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,HeaderInfo> getHeaders() {
-		return headers;
-	}
+	public Map<String,HeaderInfo> getHeaders() { return headers; }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
@@ -234,18 +229,18 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
+	public SchemaInfo getSchema() { return schema; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
 			.addIf(examples != null, "examples")
 			.addIf(headers != null, "headers")
 			.addIf(schema != null, "schema")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -278,8 +273,8 @@ public class ResponseInfo extends SwaggerElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
-			case "examples" -> setExamples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
-			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
+			case "examples" -> setExamples(mapBuilder(String.class, Object.class).sparse().addAny(value).build());
+			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
 			default -> {
 				super.set(property, value);

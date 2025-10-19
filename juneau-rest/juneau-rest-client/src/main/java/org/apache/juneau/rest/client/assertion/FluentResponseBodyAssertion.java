@@ -139,6 +139,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	public FluentResponseBodyAssertion(ResponseContent value, R returns) {
 		this(null, value, returns);
 	}
+
 	/**
 	 * Converts the body to a type using {@link ResponseContent#as(Class)} and then returns the value as an object assertion.
 	 *
@@ -279,6 +280,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	public FluentStringAssertion<R> asString() {
 		return new FluentStringAssertion<>(valueAsString(), returns());
 	}
+
 	/**
 	 * Asserts that the body contains the specified value.
 	 *
@@ -307,9 +309,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEmpty() {
-		return asString().isEmpty();
-	}
+	public R isEmpty() { return asString().isEmpty(); }
 
 	/**
 	 * Asserts that the body doesn't contain any of the specified substrings.
@@ -328,9 +328,8 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isNotEmpty() {
-		return asString().isNotEmpty();
-	}
+	public R isNotEmpty() { return asString().isNotEmpty(); }
+
 	@Override /* Overridden from Assertion */
 	public FluentResponseBodyAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -348,6 +347,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 		super.setSilent();
 		return this;
 	}
+
 	@Override /* Overridden from Assertion */
 	public FluentResponseBodyAssertion<R> setStdOut() {
 		super.setStdOut();

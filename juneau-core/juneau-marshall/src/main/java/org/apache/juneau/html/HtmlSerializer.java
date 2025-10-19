@@ -167,7 +167,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			disableDetectLabelParameters = env("HtmlSerializer.disableDetectLabelParameters", false);
 			disableDetectLinksInStrings = env("HtmlSerializer.disableDetectLinksInStrings", false);
 			uriAnchorText = env("HtmlSerializer.uriAnchorText", AnchorText.TO_STRING);
-			labelParameter =  env("HtmlSerializer.labelParameter", "label");
+			labelParameter = env("HtmlSerializer.labelParameter", "label");
 		}
 
 		/**
@@ -217,6 +217,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		/**
 		 * Add <js>"_type"</js> properties when needed.
 		 *
@@ -326,17 +327,17 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			return this;
 		}
 
-	@Override /* Overridden from Builder */
-	public Builder addNamespaceUrisToRoot() {
-		super.addNamespaceUrisToRoot();
-		return this;
-	}
+		@Override /* Overridden from Builder */
+		public Builder addNamespaceUrisToRoot() {
+			super.addNamespaceUrisToRoot();
+			return this;
+		}
 
-	@Override /* Overridden from Builder */
-	public Builder addNamespaceUrisToRoot(boolean value) {
-		super.addNamespaceUrisToRoot(value);
-		return this;
-	}
+		@Override /* Overridden from Builder */
+		public Builder addNamespaceUrisToRoot(boolean value) {
+			super.addNamespaceUrisToRoot(value);
+			return this;
+		}
 
 		@Override /* Overridden from Builder */
 		public Builder addRootType() {
@@ -361,6 +362,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			super.apply(work);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
@@ -814,6 +816,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				addBeanTypesHtml,
@@ -823,6 +826,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 				labelParameter,
 				uriAnchorText
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -1064,13 +1068,13 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1407,6 +1411,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
 	/** Default serializer, single quotes, simplified (no JSON type tags on strings). */
 	public static final HtmlSerializer DEFAULT_SIMPLE_SQ = new HtmlSerializer(create().sq().disableJsonTags());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -1415,12 +1420,9 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final AnchorText uriAnchorText;
-	final boolean
-		detectLabelParameters,
-		detectLinksInStrings,
-		addKeyValueTableHeaders,
-		addBeanTypesHtml;
+	final boolean detectLabelParameters, detectLinksInStrings, addKeyValueTableHeaders, addBeanTypesHtml;
 	final String labelParameter;
 
 	private final Map<ClassMeta<?>,HtmlClassMeta> htmlClassMetas = new ConcurrentHashMap<>();
@@ -1474,6 +1476,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		}
 		return m;
 	}
+
 	/**
 	 * Returns the schema serializer.
 	 *
@@ -1486,9 +1489,8 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	}
 
 	@Override /* Overridden from Context */
-	public HtmlSerializerSession getSession() {
-		return createSession().build();
-	}
+	public HtmlSerializerSession getSession() { return createSession().build(); }
+
 	/**
 	 * Link label parameter name.
 	 *
@@ -1496,9 +1498,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 * @return
 	 * 	The parameter name to look for when resolving link labels.
 	 */
-	protected final String getLabelParameter() {
-		return labelParameter;
-	}
+	protected final String getLabelParameter() { return labelParameter; }
 
 	/**
 	 * Anchor text source.
@@ -1508,9 +1508,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 * 	When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * 	<xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
 	 */
-	protected final AnchorText getUriAnchorText() {
-		return uriAnchorText;
-	}
+	protected final AnchorText getUriAnchorText() { return uriAnchorText; }
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -1521,9 +1519,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() {
-		return addBeanTypesHtml || super.isAddBeanTypes();
-	}
+	protected final boolean isAddBeanTypes() { return addBeanTypesHtml || super.isAddBeanTypes(); }
 
 	/**
 	 * Add key/value headers on bean/map tables.
@@ -1532,9 +1528,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 * @return
 	 * 	<jk>true</jk> if <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 	 */
-	protected final boolean isAddKeyValueTableHeaders() {
-		return addKeyValueTableHeaders;
-	}
+	protected final boolean isAddKeyValueTableHeaders() { return addKeyValueTableHeaders; }
 
 	/**
 	 * Look for link labels in URIs.
@@ -1543,9 +1537,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 * @return
 	 * 	<jk>true</jk> if we should look for URL label parameters (e.g. <js>"?label=foobar"</js>).
 	 */
-	protected final boolean isDetectLabelParameters() {
-		return detectLabelParameters;
-	}
+	protected final boolean isDetectLabelParameters() { return detectLabelParameters; }
 
 	/**
 	 * Look for URLs in {@link String Strings}.
@@ -1554,11 +1546,11 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 * @return
 	 * 	<jk>true</jk> if we should automatically convert strings to URLs if they look like a URL.
 	 */
-	protected final boolean isDetectLinksInStrings() {
-		return detectLinksInStrings;
-	}
+	protected final boolean isDetectLinksInStrings() { return detectLinksInStrings; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("uriAnchorText", uriAnchorText)
 			.append("detectLabelParameters", detectLabelParameters)
@@ -1566,5 +1558,6 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			.append("labelParameter", labelParameter)
 			.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
 			.append("addBeanTypesHtml", addBeanTypesHtml);
+		// @formatter:on
 	}
 }

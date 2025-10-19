@@ -64,7 +64,7 @@ public class HtmlWidgetVar extends SimpleVar {
 
 		HtmlWidget w = m.get(key);
 		if (w == null)
-			return "unknown-widget-"+key;
+			return "unknown-widget-" + key;
 
 		return w.getHtml(session);
 	}

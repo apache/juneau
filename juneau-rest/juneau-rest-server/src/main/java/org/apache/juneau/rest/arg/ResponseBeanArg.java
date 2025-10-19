@@ -53,6 +53,7 @@ public class ResponseBeanArg implements RestOpArg {
 			return new ResponseBeanArg(paramInfo, annotations);
 		return null;
 	}
+
 	final ResponseBeanMeta meta;
 
 	private final Type type;

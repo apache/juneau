@@ -58,6 +58,7 @@ public class ResponseHeaderArg implements RestOpArg {
 			return new ResponseHeaderArg(paramInfo, annotations);
 		return null;
 	}
+
 	final ResponsePartMeta meta;
 	final String name;
 

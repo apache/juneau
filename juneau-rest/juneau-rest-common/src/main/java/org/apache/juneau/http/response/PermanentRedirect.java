@@ -41,7 +41,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class PermanentRedirect extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -94,6 +94,7 @@ public class PermanentRedirect extends BasicHttpResponse {
 	public PermanentRedirect copy() {
 		return new PermanentRedirect(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public PermanentRedirect setContent(HttpEntity value) {
 		super.setContent(value);

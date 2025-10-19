@@ -122,9 +122,7 @@ public class Contact extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getEmail() {
-		return email;
-	}
+	public String getEmail() { return email; }
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -134,9 +132,7 @@ public class Contact extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Bean property getter:  <property>url</property>.
@@ -146,9 +142,7 @@ public class Contact extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public URI getUrl() {
-		return url;
-	}
+	public URI getUrl() { return url; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

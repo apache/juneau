@@ -42,6 +42,7 @@ public class UrlPath {
 			throw new IllegalArgumentException("Invalid path specified. Must be null or start with '/' per HttpServletRequest.getPathInfo().");
 		return new UrlPath(path);
 	}
+
 	final String[] parts;
 
 	final String path;
@@ -69,7 +70,7 @@ public class UrlPath {
 	public Optional<String> getFileName() {
 		if (parts.length == 0)
 			return Utils.opte();
-		String p = parts[parts.length-1];
+		String p = parts[parts.length - 1];
 		if (p.indexOf('.') == -1)
 			return Utils.opte();
 		return Utils.opt(p);
@@ -80,33 +81,29 @@ public class UrlPath {
 	 *
 	 * @return The path parts.
 	 */
-	public String[] getParts() {
-		return parts;
-	}
+	public String[] getParts() { return parts; }
 
 	/**
 	 * Returns the raw path passed into this object.
 	 *
 	 * @return The raw path passed into this object.
 	 */
-	public String getPath() {
-		return path;
-	}
+	public String getPath() { return path; }
 
 	/**
 	 * Returns <jk>true</jk> if this path ends with a slash.
 	 *
 	 * @return <jk>true</jk> if this path ends with a slash.
 	 */
-	public boolean isTrailingSlash() {
-		return path != null && path.endsWith("/");
-	}
+	public boolean isTrailingSlash() { return path != null && path.endsWith("/"); }
 
 	@Override /* Overridden from Object */
 	public String toString() {
+		// @formatter:off
 		return filteredMap()
 			.append("raw", path)
 			.append("parts", parts)
 			.asReadableString();
+		// @formatter:on
 	}
 }

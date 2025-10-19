@@ -183,9 +183,7 @@ public interface SwaggerProvider {
 		 *
 		 * @return The default implementation class if not specified via {@link #type(Class)}.
 		 */
-		protected Class<? extends SwaggerProvider> getDefaultType() {
-			return BasicSwaggerProvider.class;
-		}
+		protected Class<? extends SwaggerProvider> getDefaultType() { return BasicSwaggerProvider.class; }
 	}
 
 	/**
@@ -196,6 +194,7 @@ public interface SwaggerProvider {
 	 * ultimately {@link BasicSwaggerProvider} if not specified at any level.
 	 */
 	public abstract class Void implements SwaggerProvider {}
+
 	/**
 	 * Static creator.
 	 *
@@ -205,6 +204,7 @@ public interface SwaggerProvider {
 	static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	/**
 	 * Returns the Swagger associated with the specified {@link Rest}-annotated class.
 	 *

@@ -128,6 +128,7 @@ public class RetryAfter extends BasicDateHeader {
 	public static RetryAfter of(ZonedDateTime value) {
 		return value == null ? null : new RetryAfter(value);
 	}
+
 	private final Integer value;
 	private final Supplier<?> supplier;
 

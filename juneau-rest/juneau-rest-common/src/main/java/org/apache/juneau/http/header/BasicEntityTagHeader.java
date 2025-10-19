@@ -87,6 +87,7 @@ public class BasicEntityTagHeader extends BasicHeader {
 	public static BasicEntityTagHeader of(String name, Supplier<EntityTag> value) {
 		return value == null ? null : new BasicEntityTagHeader(name, value);
 	}
+
 	private final EntityTag value;
 	private final Supplier<EntityTag> supplier;
 
@@ -149,9 +150,7 @@ public class BasicEntityTagHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
+	public String getValue() { return Utils.s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

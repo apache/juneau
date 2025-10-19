@@ -43,9 +43,7 @@ class OverrideableHttpServletRequest extends HttpServletRequestWrapper {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getServletPath() {
-		return servletPath == null ? super.getServletPath() : servletPath;
-	}
+	public String getServletPath() { return servletPath == null ? super.getServletPath() : servletPath; }
 
 	public OverrideableHttpServletRequest pathInfo(String value) {
 		validatePathInfo(value);

@@ -87,18 +87,14 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 *
 	 * @return The namespace associated with this bean property, or <jk>null</jk> if no namespace is associated with it.
 	 */
-	public Namespace getNamespace() {
-		return namespace;
-	}
+	public Namespace getNamespace() { return namespace; }
 
 	/**
 	 * Returns <jk>true</jk> if this bean property is marked with {@link Rdf#beanUri() @Rdf(beanUri)} as <jk>true</jk>.
 	 *
 	 * @return <jk>true</jk> if this bean property annotation is <jk>true</jk>.
 	 */
-	public boolean isBeanUri() {
-		return isBeanUri;
-	}
+	public boolean isBeanUri() { return isBeanUri; }
 
 	/**
 	 * Returns the RDF collection format of this property from the {@link Rdf#collectionFormat} annotation on this bean
@@ -106,7 +102,5 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 *
 	 * @return The RDF collection format, or {@link RdfCollectionFormat#DEFAULT} if annotation not specified.
 	 */
-	protected RdfCollectionFormat getCollectionFormat() {
-		return collectionFormat;
-	}
+	protected RdfCollectionFormat getCollectionFormat() { return collectionFormat; }
 }

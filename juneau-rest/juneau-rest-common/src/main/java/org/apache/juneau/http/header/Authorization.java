@@ -109,6 +109,7 @@ public class Authorization extends BasicStringHeader {
 	public static Authorization of(Supplier<String> value) {
 		return value == null ? null : new Authorization(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

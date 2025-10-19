@@ -138,6 +138,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	public FluentRequestContentAssertion(RequestContent value, R returns) {
 		this(null, value, returns);
 	}
+
 	/**
 	 * Converts the content to a type using {@link RequestContent#as(Class)} and then returns the value as an object assertion.
 	 *
@@ -227,6 +228,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	public FluentByteArrayAssertion<R> asBytes() {
 		return new FluentByteArrayAssertion<>(valueAsBytes(), returns());
 	}
+
 	/**
 	 * Asserts that the content contains the specified value.
 	 *
@@ -255,9 +257,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isEmpty() {
-		return asString().isEmpty();
-	}
+	public R isEmpty() { return asString().isEmpty(); }
 
 	/**
 	 * Asserts that the content doesn't contain any of the specified substrings.
@@ -276,9 +276,8 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isNotEmpty() {
-		return asString().isNotEmpty();
-	}
+	public R isNotEmpty() { return asString().isNotEmpty(); }
+
 	@Override /* Overridden from Assertion */
 	public FluentRequestContentAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -302,6 +301,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 		super.setStdOut();
 		return this;
 	}
+
 	@Override /* Overridden from Assertion */
 	public FluentRequestContentAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);

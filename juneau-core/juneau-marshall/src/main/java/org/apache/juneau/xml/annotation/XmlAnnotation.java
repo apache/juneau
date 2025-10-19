@@ -62,7 +62,7 @@ public class XmlAnnotation {
 	 * A collection of {@link Xml @Xml annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -84,8 +84,8 @@ public class XmlAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
-		String childName="", namespace="", prefix="";
-		XmlFormat format=XmlFormat.DEFAULT;
+		String childName = "", namespace = "", prefix = "";
+		XmlFormat format = XmlFormat.DEFAULT;
 
 		/**
 		 * Constructor.
@@ -186,6 +186,7 @@ public class XmlAnnotation {
 
 	/** Default value */
 	public static final Xml DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -194,6 +195,7 @@ public class XmlAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static Xml copy(Xml a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.childName(r.resolve(a.childName()))
@@ -203,7 +205,9 @@ public class XmlAnnotation {
 			.onClass(a.onClass())
 			.prefix(r.resolve(a.prefix()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -212,6 +216,7 @@ public class XmlAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -221,6 +226,7 @@ public class XmlAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

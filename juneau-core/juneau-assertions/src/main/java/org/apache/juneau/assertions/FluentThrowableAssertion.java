@@ -103,13 +103,13 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjectAssertion<T,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentThrowableAssertion.class, "Messages");
 	private static final String
 		MSG_exceptionWasNotExpectedType = MESSAGES.getString("exceptionWasNotExpectedType"),
 		MSG_exceptionWasNotThrown = MESSAGES.getString("exceptionWasNotThrown"),
 		MSG_causedByExceptionNotExpectedType = MESSAGES.getString("causedByExceptionNotExpectedType");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -146,7 +146,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	public FluentThrowableAssertion(T value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Returns an assertion against the caused-by throwable.
@@ -336,10 +335,9 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentThrowableAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
+	public FluentThrowableAssertion<T,R> asTransformed(Function<T,T> function) { // NOSONAR - Intentional.
 		return new FluentThrowableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
-
 
 	/**
 	 * Asserts that this throwable is exactly the specified type.
@@ -396,7 +394,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	@Override
 	public R isType(Class<?> parent) {
 		Utils.assertArgNotNull("parent", parent);
-		if (! parent.isInstance(value()))
+		if (!parent.isInstance(value()))
 			throw error(MSG_exceptionWasNotExpectedType, className(parent), className(value()));
 		return returns();
 	}
@@ -434,7 +432,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	@Override
 	protected boolean equals(Object o1, Object o2) {
 		if (o1 instanceof Throwable o1t && o2 instanceof Throwable o2t)
-			return Utils.eq(o1t, o2t, (x,y)->Utils.eq(x.getClass(),y.getClass()) && Utils.eq(x.getMessage(),y.getMessage()));
+			return Utils.eq(o1t, o2t, (x, y) -> Utils.eq(x.getClass(), y.getClass()) && Utils.eq(x.getMessage(), y.getMessage()));
 		return super.equals(o1, o2);
 	}
 }

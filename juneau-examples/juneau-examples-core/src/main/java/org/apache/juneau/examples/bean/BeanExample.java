@@ -105,7 +105,7 @@ public class BeanExample {
 		 *    ]
 		 * }
 		 */
-		html =  Json5Serializer.DEFAULT.serialize(mainJsp);
+		html = Json5Serializer.DEFAULT.serialize(mainJsp);
 
 		var feed =
 			feed("tag:foo.org", "Title", "2016-12-31T05:02:03Z")

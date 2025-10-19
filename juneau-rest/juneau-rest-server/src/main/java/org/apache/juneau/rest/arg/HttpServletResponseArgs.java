@@ -43,7 +43,7 @@ public class HttpServletResponseArgs extends SimpleRestOperationArg {
 	 */
 	public static HttpServletResponseArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(HttpServletResponse.class))
-			return new HttpServletResponseArgs(x->x);
+			return new HttpServletResponseArgs(x -> x);
 		return null;
 	}
 

@@ -106,7 +106,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 
-
 	/**
 	 * Chained constructor.
 	 *
@@ -142,7 +141,6 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 	public FluentLongAssertion(Long value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Converts this long into an integer and then returns it as an integer assertion.

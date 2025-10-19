@@ -69,7 +69,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="keygen")
+@Bean(typeName = "keygen")
 public class Keygen extends HtmlElementVoid {
 
 	/**
@@ -78,7 +78,7 @@ public class Keygen extends HtmlElementVoid {
 	public Keygen() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Keygen _class(String value) {  // NOSONAR - Intentional naming.
+	public Keygen _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -134,6 +134,7 @@ public class Keygen extends HtmlElementVoid {
 		attr("challenge", value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Keygen contenteditable(Object value) {
 		super.contenteditable(value);

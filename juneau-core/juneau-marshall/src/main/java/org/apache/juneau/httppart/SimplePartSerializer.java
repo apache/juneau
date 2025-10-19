@@ -47,8 +47,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 		/**
 		 * Constructor.
 		 */
-		protected Builder() {
-		}
+		protected Builder() {}
 
 		/**
 		 * Copy constructor.
@@ -66,18 +65,19 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 
 		@Override /* Overridden from Context */
 		public Builder cache(Cache<HashKey,? extends Context> value) {
-				super.cache(value);
-				return this;
-			}
+			super.cache(value);
+			return this;
+		}
 
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+		@Override
+		public Builder copy() {
+			return new Builder(this);
+		}
 	}
 
 	/** Reusable instance of {@link SimplePartSerializer}, all default settings. */
 	public static final SimplePartSerializer DEFAULT = create().build();
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -86,6 +86,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Constructor
 	 *
@@ -96,7 +97,5 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	}
 
 	@Override
-	public SimplePartSerializerSession getPartSession() {
-		return new SimplePartSerializerSession();
-	}
+	public SimplePartSerializerSession getPartSession() { return new SimplePartSerializerSession(); }
 }

@@ -63,7 +63,7 @@ public class HtmlDocConfigAnnotation {
 			bool(a.nowrap()).ifPresent(x -> b.nowrap(x));
 			bool(a.resolveBodyVars()).ifPresent(x -> b.resolveBodyVars(x));
 			type(a.template()).ifPresent(x -> b.template(x));
-			classes(a.widgets()).ifPresent(x -> b.widgets((Class<? extends HtmlWidget>[]) x));
+			classes(a.widgets()).ifPresent(x -> b.widgets((Class<? extends HtmlWidget>[])x));
 		}
 	}
 }

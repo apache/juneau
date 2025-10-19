@@ -77,7 +77,7 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="script")
+@Bean(typeName = "script")
 public class Script extends HtmlElementRawText {
 
 	/**
@@ -97,7 +97,7 @@ public class Script extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Script _class(String value) {  // NOSONAR - Intentional naming.
+	public Script _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -166,6 +166,7 @@ public class Script extends HtmlElementRawText {
 		attr("charset", value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Script contenteditable(Object value) {
 		super.contenteditable(value);

@@ -62,6 +62,7 @@ public class ByteArrayResource extends BasicResource {
 		super.addHeader(name, value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicResource */
 	public ByteArrayResource addHeaders(Header...values) {
 		super.addHeaders(values);
@@ -74,7 +75,7 @@ public class ByteArrayResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setCached() throws IOException{
+	public ByteArrayResource setCached() throws IOException {
 		super.setCached();
 		return this;
 	}

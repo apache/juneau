@@ -123,6 +123,7 @@ public class Messages extends ResourceBundle {
 			public String[] baseNames;
 			public String locale;
 		}
+
 		Class<?> forClass;
 		Locale locale;
 		String name;
@@ -130,7 +131,7 @@ public class Messages extends ResourceBundle {
 
 		List<Tuple2<Class<?>,String>> locations;
 
-		private String[] baseNames = {"{package}.{name}","{package}.i18n.{name}","{package}.nls.{name}","{package}.messages.{name}"};
+		private String[] baseNames = { "{package}.{name}", "{package}.i18n.{name}", "{package}.nls.{name}", "{package}.messages.{name}" };
 
 		/**
 		 * Constructor.
@@ -160,9 +161,10 @@ public class Messages extends ResourceBundle {
 		 * @return This object.
 		 */
 		public Builder baseNames(String...baseNames) {
-			this.baseNames = baseNames == null ? new String[]{} : baseNames;
+			this.baseNames = baseNames == null ? new String[] {} : baseNames;
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
@@ -240,6 +242,7 @@ public class Messages extends ResourceBundle {
 			this.parent = parent;
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -255,7 +258,7 @@ public class Messages extends ResourceBundle {
 
 				Builder x = null;
 
-				for (int i = mbl.length-1; i >= 0; i--) {
+				for (int i = mbl.length - 1; i >= 0; i--) {
 					Class<?> c = Utils.firstNonNull(mbl[i].getA(), forClass);
 					String value = mbl[i].getB();
 					if (isJsonObject(value, true)) {
@@ -276,6 +279,7 @@ public class Messages extends ResourceBundle {
 
 			return new Messages(this);
 		}
+
 		ResourceBundle getBundle() {
 			ClassLoader cl = forClass.getClassLoader();
 			JsonMap m = JsonMap.of("name", name, "package", forClass.getPackage().getName());
@@ -310,6 +314,7 @@ public class Messages extends ResourceBundle {
 	public static final Messages of(Class<?> forClass) {
 		return create(forClass).build();
 	}
+
 	/**
 	 * Constructor.
 	 *
@@ -323,6 +328,7 @@ public class Messages extends ResourceBundle {
 	public static final Messages of(Class<?> forClass, String name) {
 		return create(forClass).name(name).build();
 	}
+
 	private ResourceBundle rb;
 	private Class<?> c;
 	private Messages parent;
@@ -421,9 +427,7 @@ public class Messages extends ResourceBundle {
 	}
 
 	@Override /* Overridden from ResourceBundle */
-	public Enumeration<String> getKeys() {
-		return Collections.enumeration(keySet());
-	}
+	public Enumeration<String> getKeys() { return Collections.enumeration(keySet()); }
 
 	/**
 	 * Similar to {@link ResourceBundle#getString(String)} except allows you to pass in {@link MessageFormat} objects.

@@ -126,9 +126,7 @@ public class Example extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>externalValue</property>.
@@ -138,9 +136,7 @@ public class Example extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getExternalValue() {
-		return externalValue;
-	}
+	public String getExternalValue() { return externalValue; }
 
 	/**
 	 * Bean property getter:  <property>summary</property>.
@@ -150,9 +146,7 @@ public class Example extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getSummary() {
-		return summary;
-	}
+	public String getSummary() { return summary; }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -166,9 +160,7 @@ public class Example extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getValue() {
-		return value;
-	}
+	public Object getValue() { return value; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

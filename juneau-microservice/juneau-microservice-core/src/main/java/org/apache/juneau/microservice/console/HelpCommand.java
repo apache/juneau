@@ -39,18 +39,14 @@ public class HelpCommand extends ConsoleCommand {
 		Map<String,ConsoleCommand> commands = Microservice.getInstance().getConsoleCommands();
 		if (args.size() == 1) {
 			out.println(mb.getString("ListOfAvailableCommands"));
-			commands.forEach((k,v) -> out.append("\t").append(v.getName()).append(" -- ").append(indent(v.getInfo())).println());
+			commands.forEach((k, v) -> out.append("\t").append(v.getName()).append(" -- ").append(indent(v.getInfo())).println());
 			out.println();
 		} else {
 			ConsoleCommand cc = commands.get(args.getArg(1));
 			if (cc == null) {
 				out.println(mb.getString("CommandNotFound"));
 			} else {
-				String
-					info = cc.getInfo(),
-					synopsis = cc.getSynopsis(),
-					description = cc.getDescription(),
-					examples = cc.getExamples();
+				String info = cc.getInfo(), synopsis = cc.getSynopsis(), description = cc.getDescription(), examples = cc.getExamples();
 
 				out.append(mb.getString("NAME")).append("\n\t").append(cc.getName()).append(info == null ? "" : " -- " + indent(info)).println();
 
@@ -68,29 +64,19 @@ public class HelpCommand extends ConsoleCommand {
 	}
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getDescription() {
-		return mb.getString("description");
-	}
+	public String getDescription() { return mb.getString("description"); }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getExamples() {
-		return mb.getString("examples");
-	}
+	public String getExamples() { return mb.getString("examples"); }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getInfo() {
-		return mb.getString("info");
-	}
+	public String getInfo() { return mb.getString("info"); }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getName() {
-		return "help";
-	}
+	public String getName() { return "help"; }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getSynopsis() {
-		return "help [command]";
-	}
+	public String getSynopsis() { return "help [command]"; }
 
 	private static String indent(String in) {
 		if (in == null)

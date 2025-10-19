@@ -37,8 +37,8 @@ import org.apache.juneau.http.annotation.*;
 
  * </ul>
  */
-@Bean(properties="name,description", findFluentSetters=true)
-@Response(schema=@Schema(ignore=true))
+@Bean(properties = "name,description", findFluentSetters = true)
+@Response(schema = @Schema(ignore = true))
 public class ResourceDescription implements Comparable<ResourceDescription> {
 
 	private String name, uri, description;
@@ -89,7 +89,7 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof ResourceDescription) && Utils.eq(this, (ResourceDescription)o, (x,y)->Utils.eq(x.getName(), y.getName()));
+		return (o instanceof ResourceDescription) && Utils.eq(this, (ResourceDescription)o, (x, y) -> Utils.eq(x.getName(), y.getName()));
 	}
 
 	/**
@@ -97,28 +97,22 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 	 *
 	 * @return The description.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Returns the name field on this label.
 	 *
 	 * @return The name.
 	 */
-	@Html(link="servlet:/{uri}")
-	public String getName() {
-		return name;
-	}
+	@Html(link = "servlet:/{uri}")
+	public String getName() { return name; }
 
 	/**
 	 * Returns the uri on this label.
 	 *
 	 * @return The name.
 	 */
-	public String getUri() {
-		return uri == null ? name : uri;
-	}
+	public String getUri() { return uri == null ? name : uri; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {

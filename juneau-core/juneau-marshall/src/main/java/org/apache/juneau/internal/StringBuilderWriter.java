@@ -103,7 +103,7 @@ public class StringBuilderWriter extends Writer {
 
 	@Override /* Overridden from Writer */
 	public void write(int c) {
-		sb.append((char) c);
+		sb.append((char)c);
 	}
 
 	@Override /* Overridden from Writer */

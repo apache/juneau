@@ -79,9 +79,7 @@ public class PhotosResource extends BasicRestServlet {
 		 *
 		 * @return The photo ID.
 		 */
-		public int getID() {
-			return id;
-		}
+		public int getID() { return id; }
 
 		/**
 		 * The photo URL.
@@ -90,7 +88,7 @@ public class PhotosResource extends BasicRestServlet {
 		 */
 		public URI getURI() {
 			try {
-				return new URI("photos/"+id);
+				return new URI("photos/" + id);
 			} catch (URISyntaxException e) {
 				throw new IllegalStateException(e); // Shouldn't happen.
 			}
@@ -110,7 +108,7 @@ public class PhotosResource extends BasicRestServlet {
 	 * @param image The photo image.
 	 * @return OK.
 	 */
-	@RestPut(path="/{id}", parsers=ImageParser.class)
+	@RestPut(path = "/{id}", parsers = ImageParser.class)
 	public Ok addPhoto(@Path("id") int id, @Content BufferedImage image) {
 		photos.put(id, new Photo(id, image));
 		return Ok.OK;
@@ -139,9 +137,7 @@ public class PhotosResource extends BasicRestServlet {
 	 * @return A list of photo beans.
 	 */
 	@RestGet("/")
-	public Collection<Photo> getAllPhotos() {
-		return photos.values();
-	}
+	public Collection<Photo> getAllPhotos() { return photos.values(); }
 
 	/**
 	 * [HTTP GET /photos/{id}]
@@ -151,7 +147,7 @@ public class PhotosResource extends BasicRestServlet {
 	 * @return The photo image.
 	 * @throws NotFound If photo not found.
 	 */
-	@RestGet(path="/{id}", serializers=ImageSerializer.class)
+	@RestGet(path = "/{id}", serializers = ImageSerializer.class)
 	public BufferedImage getPhoto(@Path("id") int id) throws NotFound {
 		Photo p = photos.get(id);
 		if (p == null)
@@ -166,7 +162,7 @@ public class PhotosResource extends BasicRestServlet {
 	 * @param image The photo image.
 	 * @return The created photo bean.
 	 */
-	@RestPost(path="/", parsers=ImageParser.class)
+	@RestPost(path = "/", parsers = ImageParser.class)
 	public Photo setPhoto(@Content BufferedImage image) {
 		int id = photos.size();
 		Photo p = new Photo(id, image);

@@ -47,15 +47,14 @@ public class App {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * Optionally return an injectable message provider for the {@link HelloWorldResource} class.
 	 *
 	 * @return The message provider for the hello-world REST bean.
 	 */
 	@Bean
-	public HelloWorldMessageProvider getHelloWorldMessageProvider() {
-		return new HelloWorldMessageProvider("Hello Spring injection user!");
-	}
+	public HelloWorldMessageProvider getHelloWorldMessageProvider() { return new HelloWorldMessageProvider("Hello Spring injection user!"); }
 
 	/**
 	 * Optionally return the {@link HelloWorldResource} object as an injectable bean.
@@ -63,9 +62,7 @@ public class App {
 	 * @return The hello-world REST bean.
 	 */
 	@Bean
-	public HelloWorldResource getHelloWorldResource() {
-		return new HelloWorldResource();
-	}
+	public HelloWorldResource getHelloWorldResource() { return new HelloWorldResource(); }
 
 	/**
 	 * Our root REST bean.
@@ -78,9 +75,7 @@ public class App {
 	 * @return The root resources REST bean.
 	 */
 	@Bean
-	public RootResources getRootResources() {
-		return new RootResources();
-	}
+	public RootResources getRootResources() { return new RootResources(); }
 
 	/**
 	 * @param rootResources The root REST resource servlet

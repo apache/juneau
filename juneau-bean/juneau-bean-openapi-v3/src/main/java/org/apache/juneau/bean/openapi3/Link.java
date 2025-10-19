@@ -137,9 +137,7 @@ public class Link extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>externalValue</property>.
@@ -149,9 +147,7 @@ public class Link extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getOperationId() {
-		return operationId;
-	}
+	public String getOperationId() { return operationId; }
 
 	/**
 	 * Bean property getter:  <property>operationRef</property>.
@@ -161,9 +157,7 @@ public class Link extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getOperationRef() {
-		return operationRef;
-	}
+	public String getOperationRef() { return operationRef; }
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -173,9 +167,7 @@ public class Link extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getParameters() {
-		return parameters;
-	}
+	public Map<String,Object> getParameters() { return parameters; }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -189,18 +181,14 @@ public class Link extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getRequestBody() {
-		return requestBody;
-	}
+	public Object getRequestBody() { return requestBody; }
 
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Server getServer() {
-		return server;
-	}
+	public Server getServer() { return server; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

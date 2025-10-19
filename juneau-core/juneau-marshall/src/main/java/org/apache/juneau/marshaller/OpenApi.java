@@ -54,6 +54,7 @@ public class OpenApi extends CharMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final OpenApi DEFAULT = new OpenApi();
+
 	/**
 	 * Serializes a Java object to an OpenApi output.
 	 *
@@ -67,6 +68,7 @@ public class OpenApi extends CharMarshaller {
 	public static String of(HttpPartSchema schema, Object object) throws SerializeException {
 		return DEFAULT.s.serialize(HttpPartType.ANY, schema, object);
 	}
+
 	/**
 	 * Serializes a Java object to an OpenApi string.
 	 *

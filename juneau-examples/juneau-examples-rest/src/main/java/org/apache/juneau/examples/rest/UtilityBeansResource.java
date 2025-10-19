@@ -59,7 +59,7 @@ public class UtilityBeansResource extends BasicRestObject {
 	/**
 	 * Sample address bean used for demonstrating utility bean functionality.
 	 */
-	@Bean(p="street,city,state,zip,isCurrent")
+	@Bean(p = "street,city,state,zip,isCurrent")
 	public static class Address {
 
 		/** Street address. */

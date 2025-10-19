@@ -109,6 +109,7 @@ public class Referer extends BasicUriHeader {
 	public static Referer of(URI value) {
 		return value == null ? null : new Referer(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

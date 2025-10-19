@@ -56,6 +56,7 @@ public class MethodExecStats {
 			super.impl(value);
 			return this;
 		}
+
 		/**
 		 * Specifies the Java method.
 		 *
@@ -77,6 +78,7 @@ public class MethodExecStats {
 			thrownStore = value;
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -88,6 +90,7 @@ public class MethodExecStats {
 			return new MethodExecStats(this);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -97,19 +100,16 @@ public class MethodExecStats {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final long guid;
 	private final Method method;
 	private final ThrownStore thrownStore;
 
 	private volatile int minTime = -1, maxTime;
 
-	private AtomicInteger
-		starts = new AtomicInteger(),
-		finishes = new AtomicInteger(),
-		errors = new AtomicInteger();
+	private AtomicInteger starts = new AtomicInteger(), finishes = new AtomicInteger(), errors = new AtomicInteger();
 
-	private AtomicLong
-		totalTime = new AtomicLong();
+	private AtomicLong totalTime = new AtomicLong();
 
 	/**
 	 * Constructor.
@@ -142,7 +142,7 @@ public class MethodExecStats {
 	 */
 	public MethodExecStats finished(long nanoTime) {
 		finishes.incrementAndGet();
-		int milliTime = (int)(nanoTime/1_000_000);
+		int milliTime = (int)(nanoTime / 1_000_000);
 		totalTime.addAndGet(nanoTime);
 		minTime = minTime == -1 ? milliTime : Math.min(minTime, milliTime);
 		maxTime = Math.max(maxTime, milliTime);
@@ -164,9 +164,7 @@ public class MethodExecStats {
 	 *
 	 * @return The number of times the {@link #error(Throwable)} method was called.
 	 */
-	public int getErrors() {
-		return errors.get();
-	}
+	public int getErrors() { return errors.get(); }
 
 	/**
 	 * Returns a globally unique ID for this object.
@@ -178,72 +176,56 @@ public class MethodExecStats {
 	 *
 	 * @return The globally unique ID for this object.
 	 */
-	public long getGuid() {
-		return guid;
-	}
+	public long getGuid() { return guid; }
 
 	/**
 	 * Returns the max execution time.
 	 *
 	 * @return The average execution time in milliseconds.
 	 */
-	public int getMaxTime() {
-		return maxTime;
-	}
+	public int getMaxTime() { return maxTime; }
 
 	/**
 	 * Returns the method name of these stats.
 	 *
 	 * @return The method name of these stats.
 	 */
-	public Method getMethod() {
-		return method;
-	}
+	public Method getMethod() { return method; }
 
 	/**
 	 * Returns the max execution time.
 	 *
 	 * @return The average execution time in milliseconds.
 	 */
-	public int getMinTime() {
-		return minTime == -1 ? 0 : minTime;
-	}
+	public int getMinTime() { return minTime == -1 ? 0 : minTime; }
 
 	/**
 	 * Returns the number currently running method invocations.
 	 *
 	 * @return The number of currently running method invocations.
 	 */
-	public int getRunning() {
-		return starts.get() - finishes.get();
-	}
+	public int getRunning() { return starts.get() - finishes.get(); }
 
 	/**
 	 * Returns the number of times the {@link #started()} method was called.
 	 *
 	 * @return The number of times the {@link #started()} method was called.
 	 */
-	public int getRuns() {
-		return starts.get();
-	}
+	public int getRuns() { return starts.get(); }
 
 	/**
 	 * Returns information on all stack traces of all exceptions encountered.
 	 *
 	 * @return Information on all stack traces of all exceptions encountered.
 	 */
-	public ThrownStore getThrownStore() {
-		return thrownStore;
-	}
+	public ThrownStore getThrownStore() { return thrownStore; }
 
 	/**
 	 * Returns the total execution time.
 	 *
 	 * @return The total execution time in milliseconds.
 	 */
-	public long getTotalTime() {
-		return totalTime.get() / 1_000_000;
-	}
+	public long getTotalTime() { return totalTime.get() / 1_000_000; }
 
 	/**
 	 * Call when task is started.

@@ -69,7 +69,5 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 *
 	 * @return The schema information as a generic map.  Never <jk>null</jk>.
 	 */
-	protected JsonMap getSchema() {
-		return schema;
-	}
+	protected JsonMap getSchema() { return schema; }
 }

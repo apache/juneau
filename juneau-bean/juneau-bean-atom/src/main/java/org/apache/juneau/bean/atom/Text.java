@@ -91,7 +91,7 @@ import org.apache.juneau.xml.annotation.*;
 public class Text extends Common {
 
 	private String type;
-	private String text;  // NOSONAR - Intentional naming.
+	private String text; // NOSONAR - Intentional naming.
 
 	/** Bean constructor. */
 	public Text() {}
@@ -104,6 +104,7 @@ public class Text extends Common {
 	public Text(String type) {
 		setType(type);
 	}
+
 	/**
 	 * Bean property getter:  <property>text</property>.
 	 *
@@ -112,10 +113,8 @@ public class Text extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=XMLTEXT)
-	public String getText() {
-		return text;
-	}
+	@Xml(format = XMLTEXT)
+	public String getText() { return text; }
 
 	/**
 	 * Bean property getter:  <property>type</property>.
@@ -125,10 +124,8 @@ public class Text extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public String getType() {
-		return type;
-	}
+	@Xml(format = ATTR)
+	public String getType() { return type; }
 
 	@Override /* Overridden from Common */
 	public Text setBase(Object value) {
@@ -141,6 +138,7 @@ public class Text extends Common {
 		super.setLang(value);
 		return this;
 	}
+
 	/**
 	 * Bean property setter:  <property>text</property>.
 	 *

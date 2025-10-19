@@ -57,6 +57,7 @@ public class RestOperation {
 	public static RestOperation of(String method, Object url) {
 		return new RestOperation(method, url, NO_BODY);
 	}
+
 	/**
 	 * Creator.
 	 *
@@ -77,6 +78,7 @@ public class RestOperation {
 	public static RestOperation of(String method, Object url, Object body) {
 		return new RestOperation(method, url, body);
 	}
+
 	private final Object url;
 	private final String method;
 
@@ -115,27 +117,21 @@ public class RestOperation {
 	 * 	<br>Returns {@link #NO_BODY} if the request does not have a body set.
 	 * 	<br>A <jk>null</jk> value means <jk>null</jk> should be the serialized response.
 	 */
-	public Object getContent() {
-		return content;
-	}
+	public Object getContent() { return content; }
 
 	/**
 	 * Bean property getter:  <property>method</property>.
 	 *
 	 * @return The value of the <property>method</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public String getMethod() {
-		return method;
-	}
+	public String getMethod() { return method; }
 
 	/**
 	 * Bean property getter:  <property>url</property>.
 	 *
 	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Object getUri() {
-		return url;
-	}
+	public Object getUri() { return url; }
 
 	/**
 	 * Identifies whether this HTTP method typically has content.

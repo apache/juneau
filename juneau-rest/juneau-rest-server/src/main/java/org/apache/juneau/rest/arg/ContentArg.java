@@ -58,6 +58,7 @@ public class ContentArg implements RestOpArg {
 			return new ContentArg(paramInfo);
 		return null;
 	}
+
 	private final HttpPartSchema schema;
 
 	private final Type type;

@@ -48,7 +48,7 @@ public class RemoteOperationReturn {
 
 		AnnotationList al = m.getAnnotationList(REMOTE_OP_GROUP);
 		if (al.isEmpty())
-			al = m.getReturnType().unwrap(Value.class,Optional.class).getAnnotationList(REMOTE_OP_GROUP);
+			al = m.getReturnType().unwrap(Value.class, Optional.class).getAnnotationList(REMOTE_OP_GROUP);
 
 		RemoteReturn rv = null;
 
@@ -84,43 +84,33 @@ public class RemoteOperationReturn {
 	 *
 	 * @return Schema information about the HTTP part, or <jk>null</jk> if not found.
 	 */
-	public ResponseBeanMeta getResponseBeanMeta() {
-		return meta;
-	}
+	public ResponseBeanMeta getResponseBeanMeta() { return meta; }
 
 	/**
 	 * Returns the class type of the method return.
 	 *
 	 * @return The class type of the method return.
 	 */
-	public Type getReturnType() {
-		return returnType;
-	}
+	public Type getReturnType() { return returnType; }
 
 	/**
 	 * Specifies whether the return value is the body of the request or the HTTP status.
 	 *
 	 * @return The type of value returned.
 	 */
-	public RemoteReturn getReturnValue() {
-		return returnValue;
-	}
+	public RemoteReturn getReturnValue() { return returnValue; }
 
 	/**
 	 * Returns <jk>true</jk> if the return is wrapped in a {@link CompletableFuture}.
 	 *
 	 * @return <jk>true</jk> if the return is wrapped in a {@link CompletableFuture}.
 	 */
-	public boolean isCompletableFuture() {
-		return isCompletableFuture;
-	}
+	public boolean isCompletableFuture() { return isCompletableFuture; }
 
 	/**
 	 * Returns <jk>true</jk> if the return is wrapped in a {@link Future}.
 	 *
 	 * @return <jk>true</jk> if the return is wrapped in a {@link Future}.
 	 */
-	public boolean isFuture() {
-		return isFuture;
-	}
+	public boolean isFuture() { return isFuture; }
 }

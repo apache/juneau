@@ -105,6 +105,7 @@ public class VarResolver {
 			beanStore().addBean(c, value);
 			return this;
 		}
+
 		/**
 		 * Adds the default variables to this builder.
 		 *
@@ -173,6 +174,7 @@ public class VarResolver {
 			vars.append(values);
 			return this;
 		}
+
 		/**
 		 * Register new variables with this resolver.
 		 *
@@ -214,6 +216,7 @@ public class VarResolver {
 	 * </ul>
 	 */
 	public static final VarResolver DEFAULT = create().defaultVars().build();
+
 	/**
 	 * Instantiates a new clean-slate {@link Builder} object.
 	 *
@@ -222,11 +225,13 @@ public class VarResolver {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private static Var toVar(BeanStore bs, Object o) {
 		if (o instanceof Class)
 			return bs.createBean(Var.class).type((Class<?>)o).run();
 		return (Var)o;
 	}
+
 	final Var[] vars;
 	private final Map<String,Var> varMap;
 
@@ -238,7 +243,7 @@ public class VarResolver {
 	 * @param builder The builder for this object.
 	 */
 	protected VarResolver(Builder builder) {
-		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore(),x)).toArray(Var[]::new);
+		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore(), x)).toArray(Var[]::new);
 
 		Map<String,Var> m = new ConcurrentSkipListMap<>();
 		for (Var v : vars)
@@ -325,16 +330,12 @@ public class VarResolver {
 	 *
 	 * @return A map whose keys are var names (e.g. <js>"S"</js>) and values are {@link Var} instances.
 	 */
-	protected Map<String,Var> getVarMap() {
-		return varMap;
-	}
+	protected Map<String,Var> getVarMap() { return varMap; }
 
 	/**
 	 * Returns an array of variables define in this variable resolver context.
 	 *
 	 * @return A new array containing the variables in this context.
 	 */
-	protected Var[] getVars() {
-		return Arrays.copyOf(vars, vars.length);
-	}
+	protected Var[] getVars() { return Arrays.copyOf(vars, vars.length); }
 }

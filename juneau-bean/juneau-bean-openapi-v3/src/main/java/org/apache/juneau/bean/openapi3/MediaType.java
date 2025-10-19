@@ -67,7 +67,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-public class MediaType extends OpenApiElement{
+public class MediaType extends OpenApiElement {
 	private SchemaInfo schema;
 	private Object example;
 	private Map<String,Example> examples;
@@ -76,7 +76,7 @@ public class MediaType extends OpenApiElement{
 	/**
 	 * Default constructor.
 	 */
-	public MediaType() { }
+	public MediaType() {}
 
 	/**
 	 * Copy constructor.
@@ -148,9 +148,7 @@ public class MediaType extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, Encoding> getEncoding() {
-		return encoding;
-	}
+	public Map<String,Encoding> getEncoding() { return encoding; }
 
 	/**
 	 * Bean property getter:  <property>x-example</property>.
@@ -158,9 +156,7 @@ public class MediaType extends OpenApiElement{
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("x-example")
-	public Object getExample() {
-		return example;
-	}
+	public Object getExample() { return example; }
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -170,18 +166,14 @@ public class MediaType extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Example> getExamples() {
-		return examples;
-	}
+	public Map<String,Example> getExamples() { return examples; }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
+	public SchemaInfo getSchema() { return schema; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -198,8 +190,8 @@ public class MediaType extends OpenApiElement{
 	public MediaType set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "encoding" -> setEncoding(mapBuilder(String.class,Encoding.class).sparse().addAny(value).build());
-			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
+			case "encoding" -> setEncoding(mapBuilder(String.class, Encoding.class).sparse().addAny(value).build());
+			case "examples" -> setExamples(mapBuilder(String.class, Example.class).sparse().addAny(value).build());
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
 			case "x-example" -> setExample(value);
 			default -> {
@@ -217,7 +209,7 @@ public class MediaType extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public MediaType setEncoding(Map<String, Encoding> value) {
+	public MediaType setEncoding(Map<String,Encoding> value) {
 		encoding = copyOf(value);
 		return this;
 	}

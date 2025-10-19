@@ -49,7 +49,7 @@ public class Tuple5<A,B,C,D,E> {
 	 * @return A new tuple object.
 	 */
 	public static <A,B,C,D,E> Tuple5<A,B,C,D,E> of(A a, B b, C c, D d, E e) {
-		return new Tuple5<>(a,b,c,d, e);
+		return new Tuple5<>(a, b, c, d, e);
 	}
 
 	private final A a;
@@ -77,7 +77,7 @@ public class Tuple5<A,B,C,D,E> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple5 && Utils.eq(this, (Tuple5<?,?,?,?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b) && Utils.eq(x.c,y.c) && Utils.eq(x.d,y.d) && Utils.eq(x.e,y.e));
+		return o instanceof Tuple5 && Utils.eq(this, (Tuple5<?,?,?,?,?>)o, (x, y) -> Utils.eq(x.a, y.a) && Utils.eq(x.b, y.b) && Utils.eq(x.c, y.c) && Utils.eq(x.d, y.d) && Utils.eq(x.e, y.e));
 	}
 
 	/**
@@ -85,48 +85,38 @@ public class Tuple5<A,B,C,D,E> {
 	 *
 	 * @return The first object in this tuple.
 	 */
-	public A getA() {
-		return a;
-	}
+	public A getA() { return a; }
 
 	/**
 	 * Returns the second object in this tuple.
 	 *
 	 * @return The second object in this tuple.
 	 */
-	public B getB() {
-		return b;
-	}
+	public B getB() { return b; }
 
 	/**
 	 * Returns the third object in this tuple.
 	 *
 	 * @return The third object in this tuple.
 	 */
-	public C getC() {
-		return c;
-	}
+	public C getC() { return c; }
 
 	/**
 	 * Returns the fourth object in this tuple.
 	 *
 	 * @return The fourth object in this tuple.
 	 */
-	public D getD() {
-		return d;
-	}
+	public D getD() { return d; }
 
 	/**
 	 * Returns the fifth object in this tuple.
 	 *
 	 * @return The fifth object in this tuple.
 	 */
-	public E getE() {
-		return e;
-	}
+	public E getE() { return e; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return HashCode.of(a,b,c,d,e);
+		return HashCode.of(a, b, c, d, e);
 	}
 }

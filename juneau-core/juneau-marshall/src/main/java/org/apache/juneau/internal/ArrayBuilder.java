@@ -45,6 +45,7 @@ public class ArrayBuilder<E> {
 	public static <E> ArrayBuilder<E> of(Class<E> elementType) {
 		return new ArrayBuilder<>(elementType);
 	}
+
 	private Predicate<E> filter;
 	private final Class<E> elementType;
 	private int size = -1;
@@ -98,7 +99,7 @@ public class ArrayBuilder<E> {
 	public E[] orElse(E[] def) {
 		if (list == null)
 			return def;
-		E[] t = (E[]) Array.newInstance(elementType, list == null ? 0 : list.size());
+		E[] t = (E[])Array.newInstance(elementType, list == null ? 0 : list.size());
 		if (list != null)
 			list.toArray(t);
 		return t;

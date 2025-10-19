@@ -96,6 +96,7 @@ public class Source extends CommonEntry {
 	private Icon icon;
 	private Logo logo;
 	private Text subtitle;
+
 	/**
 	 * Bean property getter:  <property>generator</property>.
 	 *
@@ -104,9 +105,7 @@ public class Source extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Generator getGenerator() {
-		return generator;
-	}
+	public Generator getGenerator() { return generator; }
 
 	/**
 	 * Bean property getter:  <property>icon</property>.
@@ -116,9 +115,7 @@ public class Source extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Icon getIcon() {
-		return icon;
-	}
+	public Icon getIcon() { return icon; }
 
 	/**
 	 * Bean property getter:  <property>logo</property>.
@@ -128,9 +125,7 @@ public class Source extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Logo getLogo() {
-		return logo;
-	}
+	public Logo getLogo() { return logo; }
 
 	/**
 	 * Bean property getter:  <property>subtitle</property>.
@@ -140,9 +135,7 @@ public class Source extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Text getSubtitle() {
-		return subtitle;
-	}
+	public Text getSubtitle() { return subtitle; }
 
 	@Override /* Overridden from CommonEntry */
 	public Source setAuthors(Person...value) {
@@ -183,6 +176,7 @@ public class Source extends CommonEntry {
 		this.generator = value;
 		return this;
 	}
+
 	/**
 	 * Bean property setter:  <property>icon</property>.
 	 *

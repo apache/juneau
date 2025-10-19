@@ -105,6 +105,7 @@ public class MarshalledFilter {
 			return this;
 		}
 	}
+
 	/**
 	 * Create a new instance of this POJO filter.
 	 *
@@ -115,6 +116,7 @@ public class MarshalledFilter {
 	public static <T> Builder create(Class<T> marshalledClass) {
 		return new Builder(marshalledClass);
 	}
+
 	private final Class<?> marshalledClass;
 	private final Class<?> implClass;
 	private final String example;
@@ -135,25 +137,19 @@ public class MarshalledFilter {
 	 *
 	 * @return The example string associated with this class, or <jk>null</jk> if no example string is associated.
 	 */
-	public String getExample() {
-		return example;
-	}
+	public String getExample() { return example; }
 
 	/**
 	 * Returns the implementation class associated with this class.
 	 *
 	 * @return The implementation class associated with this class, or <jk>null</jk> if no implementation class is associated.
 	 */
-	public Class<?> getImplClass() {
-		return implClass;
-	}
+	public Class<?> getImplClass() { return implClass; }
 
 	/**
 	 * Returns the class that this filter applies to.
 	 *
 	 * @return The class that this filter applies to.
 	 */
-	public Class<?> getMarshalledClass() {
-		return marshalledClass;
-	}
+	public Class<?> getMarshalledClass() { return marshalledClass; }
 }

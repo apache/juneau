@@ -78,7 +78,7 @@ public class RdfUtils {
 					if (rdfNs.prefix().equals(prefix))
 						return Namespace.of(prefix, rdfNs.namespaceURI());
 			}
-			throw new BeanRuntimeException("Found @Rdf.prefix annotation with no matching URI.  prefix='"+prefix+"'");
+			throw new BeanRuntimeException("Found @Rdf.prefix annotation with no matching URI.  prefix='" + prefix + "'");
 		}
 
 		// If only namespaceURI specified, need to search for prefix.

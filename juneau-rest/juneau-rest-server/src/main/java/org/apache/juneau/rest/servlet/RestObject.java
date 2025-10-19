@@ -44,23 +44,21 @@ import jakarta.servlet.http.*;
 public abstract class RestObject {
 
 	private AtomicReference<RestContext> context = new AtomicReference<>();
+
 	/**
 	 * Returns the current thread-local HTTP request.
 	 *
 	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
 	 */
-	public synchronized RestRequest getRequest() {
-		return getContext().getLocalSession().getOpSession().getRequest();
-	}
+	public synchronized RestRequest getRequest() { return getContext().getLocalSession().getOpSession().getRequest(); }
 
 	/**
 	 * Returns the current thread-local HTTP response.
 	 *
 	 * @return The current thread-local HTTP response, or <jk>null</jk> if it wasn't created.
 	 */
-	public synchronized RestResponse getResponse() {
-		return getContext().getLocalSession().getOpSession().getResponse();
-	}
+	public synchronized RestResponse getResponse() { return getContext().getLocalSession().getOpSession().getResponse(); }
+
 	/**
 	 * Log a message.
 	 *
@@ -110,6 +108,7 @@ public abstract class RestObject {
 			logger = Logger.getLogger(className(this));
 		logger.log(level, cause, msg);
 	}
+
 	/**
 	 * Returns the read-only context object that contains all the configuration information about this resource.
 	 *

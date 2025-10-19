@@ -84,7 +84,6 @@ import java.io.*;
  */
 public abstract class FluentAssertion<R> extends Assertion {
 
-
 	private final R returns;
 
 	/**

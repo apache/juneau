@@ -69,6 +69,7 @@ public class FormDataArg implements RestOpArg {
 			return new FormDataArg(paramInfo, annotations);
 		return null;
 	}
+
 	/**
 	 * Gets the merged @FormData annotation combining class-level and parameter-level values.
 	 *
@@ -113,6 +114,7 @@ public class FormDataArg implements RestOpArg {
 		// Merge the two annotations: parameter-level takes precedence
 		return mergeAnnotations(classLevelFormData, paramFormData);
 	}
+
 	/**
 	 * Merges two @FormData annotations, with param-level taking precedence over class-level.
 	 *
@@ -121,16 +123,14 @@ public class FormDataArg implements RestOpArg {
 	 * @return Merged annotation.
 	 */
 	private static FormData mergeAnnotations(FormData classLevel, FormData paramLevel) {
-		return FormDataAnnotation.create()
-			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
-			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
-			.def(firstNonEmpty(paramLevel.def(), classLevel.def()))
+		return FormDataAnnotation.create().name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
+			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name())).def(firstNonEmpty(paramLevel.def(), classLevel.def()))
 			.description(paramLevel.description().length > 0 ? paramLevel.description() : classLevel.description())
 			.parser(paramLevel.parser() != HttpPartParser.Void.class ? paramLevel.parser() : classLevel.parser())
-			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
-			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
+			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer()).schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
 			.build();
 	}
+
 	/**
 	 * Merges two @Schema annotations, with param-level taking precedence.
 	 *
@@ -140,10 +140,11 @@ public class FormDataArg implements RestOpArg {
 	 */
 	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
 		// If parameter has a non-default schema, use it; otherwise use class-level
-		if (!SchemaAnnotation.empty(paramLevel))
+		if (! SchemaAnnotation.empty(paramLevel))
 			return paramLevel;
 		return classLevel;
 	}
+
 	private final boolean multi;
 
 	private final HttpPartParser partParser;
@@ -162,13 +163,13 @@ public class FormDataArg implements RestOpArg {
 	 */
 	protected FormDataArg(ParamInfo pi, AnnotationWorkList annotations) {
 		// Get the form data parameter name
-		this.name = findName(pi).orElseThrow(()->new ArgException(pi, "@FormData used without name or value"));
+		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@FormData used without name or value"));
 
 		// Check for class-level defaults and merge if found
 		FormData mergedFormData = getMergedFormData(pi, name);
 
 		// Use merged form data annotation for all lookups
-		this.def = mergedFormData != null && !mergedFormData.def().isEmpty() ? mergedFormData.def() : findDef(pi).orElse(null);
+		this.def = mergedFormData != null && ! mergedFormData.def().isEmpty() ? mergedFormData.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
 		this.schema = mergedFormData != null ? HttpPartSchema.create(mergedFormData) : HttpPartSchema.create(FormData.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();

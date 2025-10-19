@@ -115,6 +115,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	public void addHeader(Header header) {
 		headers.append(header);
 	}
+
 	/**
 	 * Adds a header to this message.
 	 *
@@ -127,6 +128,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	public void addHeader(String name, String value) {
 		headers.append(name, value);
 	}
+
 	/**
 	 * Provides the ability to perform fluent-style assertions on the response character encoding.
 	 *
@@ -215,6 +217,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	public FluentResponseBodyAssertion<RestResponse> assertContent() {
 		return new FluentResponseBodyAssertion<>(responseContent, this);
 	}
+
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
@@ -252,6 +255,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		assertContent().asString().isMatches(value);
 		return this;
 	}
+
 	/**
 	 * Provides the ability to perform fluent-style assertions on a response header.
 	 *
@@ -392,7 +396,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		try {
 			EntityUtils.consumeQuietly(response.getEntity());
 
-			if (!request.isLoggingSuppressed() && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
+			if (! request.isLoggingSuppressed() && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
 				if (client.logRequests == DetailLevel.SIMPLE) {
 					client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
 				} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
@@ -446,6 +450,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 			client.log(Level.WARNING, e, "Error during RestResponse close");
 		}
 	}
+
 	/**
 	 * Consumes the response body.
 	 *
@@ -509,9 +514,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @return The body of the response.
 	 */
-	public ResponseContent getContent() {
-		return responseContent;
-	}
+	public ResponseContent getContent() { return responseContent; }
 
 	/**
 	 * Shortcut for retrieving the response content type from the <l>Content-Type</l> header.
@@ -522,9 +525,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @return The response charset.
 	 * @throws RestCallException If REST call failed.
 	 */
-	public Optional<ContentType> getContentType() throws RestCallException {
-		return getHeader("Content-Type").as(ContentType.class);
-	}
+	public Optional<ContentType> getContentType() throws RestCallException { return getHeader("Content-Type").as(ContentType.class); }
 
 	/**
 	 * Obtains the message entity of this response.
@@ -540,9 +541,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @return The response entity.  Never <jk>null</jk>.
 	 */
 	@Override /* Overridden from HttpResponse */
-	public ResponseContent getEntity() {
-		return responseContent;
-	}
+	public ResponseContent getEntity() { return responseContent; }
 
 	/**
 	 * Returns the first header with a specified name of this message.
@@ -616,9 +615,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @return The locale of this response, never <jk>null</jk>.
 	 */
 	@Override /* Overridden from HttpResponse */
-	public Locale getLocale() {
-		return response.getLocale();
-	}
+	public Locale getLocale() { return response.getLocale(); }
 
 	/**
 	 * Returns the parameters effective for this message as set by {@link #setParams(HttpParams)}.
@@ -628,9 +625,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 */
 	@Override /* Overridden from HttpMessage */
 	@Deprecated
-	public HttpParams getParams() {
-		return response.getParams();
-	}
+	public HttpParams getParams() { return response.getParams(); }
 
 	/**
 	 * Returns the protocol version this message is compatible with.
@@ -638,9 +633,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @return The protocol version this message is compatible with.
 	 */
 	@Override /* Overridden from HttpMessage */
-	public ProtocolVersion getProtocolVersion() {
-		return response.getProtocolVersion();
-	}
+	public ProtocolVersion getProtocolVersion() { return response.getProtocolVersion(); }
 
 	/**
 	 * Returns the status line reason phrase of the response.
@@ -649,18 +642,14 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @return The status line reason phrase of the response.
 	 */
-	public String getReasonPhrase() {
-		return getStatusLine().getReasonPhrase();
-	}
+	public String getReasonPhrase() { return getStatusLine().getReasonPhrase(); }
 
 	/**
 	 * Returns the request object that created this response object.
 	 *
 	 * @return The request object that created this response object.
 	 */
-	public RestRequest getRequest() {
-		return request;
-	}
+	public RestRequest getRequest() { return request; }
 
 	/**
 	 * Returns the status code of the response.
@@ -669,9 +658,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @return The status code of the response.
 	 */
-	public int getStatusCode() {
-		return getStatusLine().getStatusCode();
-	}
+	public int getStatusCode() { return getStatusLine().getStatusCode(); }
 
 	/**
 	 * Obtains the status line of this response.
@@ -681,9 +668,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @return The status line, or <jk>null</jk> if not yet set.
 	 */
 	@Override /* Overridden from HttpResponse */
-	public ResponseStatusLine getStatusLine() {
-		return new ResponseStatusLine(this, response.getStatusLine());
-	}
+	public ResponseStatusLine getStatusLine() { return new ResponseStatusLine(this, response.getStatusLine()); }
 
 	/**
 	 * Shortcut for calling <code>getHeader(name).asString()</code>.
@@ -811,9 +796,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param headers The array of headers to set.
 	 */
 	@Override /* Overridden from HttpMessage */
-	public void setHeaders(Header[] headers) {
-		this.headers = HeaderList.of(headers);
-	}
+	public void setHeaders(Header[] headers) { this.headers = HeaderList.of(headers); }
 
 	/**
 	 * Changes the locale of this response.
@@ -905,6 +888,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 			partParserSession = client.getPartParser().getPartSession();
 		return partParserSession;
 	}
+
 	/**
 	 * Creates a session of the specified part parser.
 	 *
@@ -924,22 +908,19 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	<T> T as(ResponseBeanMeta rbm) {
 		Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
 		final RestClient rc = this.client;
-		return (T)Proxy.newProxyInstance(
-			c.getClassLoader(),
-			new Class[] { c },
-			(InvocationHandler) (proxy, method, args) -> {
-				ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
-				HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
-				HttpPartSchema schema = pm.getSchema();
-				HttpPartType pt = pm.getPartType();
-				String name = pm.getPartName().orElse(null);
-				ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
-				if (pt == RESPONSE_HEADER)
-					return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
-				if (pt == RESPONSE_STATUS)
-					return getStatusCode();
-				return getContent().schema(schema).as(type);
-			});
+		return (T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler)(proxy, method, args) -> {
+			ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
+			HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
+			HttpPartSchema schema = pm.getSchema();
+			HttpPartType pt = pm.getPartType();
+			String name = pm.getPartName().orElse(null);
+			ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
+			if (pt == RESPONSE_HEADER)
+				return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
+			if (pt == RESPONSE_STATUS)
+				return getStatusCode();
+			return getContent().schema(schema).as(type);
+		});
 	}
 
 	HttpResponse asHttpResponse() {

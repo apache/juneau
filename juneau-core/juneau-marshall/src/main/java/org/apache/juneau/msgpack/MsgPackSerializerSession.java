@@ -66,6 +66,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public MsgPackSerializerSession build() {
 			return new MsgPackSerializerSession(this);
@@ -161,6 +162,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 			return this;
 		}
 	}
+
 	private static class SimpleMapEntry {
 		final Object key;
 		final Object value;
@@ -170,6 +172,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 			this.value = value;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -265,23 +268,17 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 				serializeBeanMap(out, (BeanMap)o, typeName);
 			else
 				serializeMap(out, (Map)o, eType);
-		}
-		else if (sType.isCollection()) {
-			serializeCollection(out, (Collection) o, eType);
-		}
-		else if (sType.isByteArray()) {
+		} else if (sType.isCollection()) {
+			serializeCollection(out, (Collection)o, eType);
+		} else if (sType.isByteArray()) {
 			out.appendBinary((byte[])o);
-		}
-		else if (sType.isArray()) {
+		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
-		}
-		else if (sType.isReader()) {
+		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
-		}
-		else if (sType.isInputStream()) {
+		} else if (sType.isInputStream()) {
 			pipe((InputStream)o, out, SerializerSession::handleThrown);
-		}
-		else
+		} else
 			out.appendString(toString(o));
 
 		if (! isRecursion)
@@ -300,7 +297,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 			values.add(new BeanPropertyValue(pm, pm.getName(), typeName, null));
 		}
 
-		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			if (thrown != null) {
 				onBeanGetterException(pMeta, thrown);
 				return;
@@ -328,7 +325,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		});
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
 		List<Object> l = Utils.listOfSize(c.size());
@@ -348,7 +345,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		// The map size may change as we're iterating over it, so
 		// grab a snapshot of the entries in a separate list.
 		List<SimpleMapEntry> entries = Utils.listOfSize(m.size());
-		m.forEach((k,v) -> entries.add(new SimpleMapEntry(k, v)));
+		m.forEach((k, v) -> entries.add(new SimpleMapEntry(k, v)));
 
 		out.startMap(entries.size());
 
@@ -362,17 +359,16 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
 		ClassMeta<?> aType = push2(v.getName(), v.getValue(), v.getClassMeta());
-		 if (aType != null)
-			 pop();
-		 return aType == null;
+		if (aType != null)
+			pop();
+		return aType == null;
 	}
 
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getMsgPackOutputStream(out), o, getExpectedRootType(o), "root", null);
 	}
+
 	@Override
-	protected boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
+	protected boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
 }

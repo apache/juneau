@@ -24,14 +24,14 @@ import java.util.Map;
 import org.apache.juneau.config.Config;
 
 @SuppressWarnings("javadoc")
-public class GetConfiguration implements Command, GetValue<Map<String, ConfigItem>> {
+public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem>> {
 
 	private static final String APPLICATION = "APPLICATION";
 	private static final String PROJECT = "PROJECT";
 	private static final String EXT = ".cfg";
 	private static final String BAR = "/";
 
-	private Map<String, ConfigItem> configs = new HashMap<>();
+	private Map<String,ConfigItem> configs = new HashMap<>();
 
 	private String project;
 	private String branch;
@@ -80,7 +80,7 @@ public class GetConfiguration implements Command, GetValue<Map<String, ConfigIte
 	}
 
 	@Override
-	public Map<String, ConfigItem> get() {
+	public Map<String,ConfigItem> get() {
 		return configs;
 	}
 }

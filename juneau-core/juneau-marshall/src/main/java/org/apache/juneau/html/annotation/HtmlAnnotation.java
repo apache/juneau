@@ -64,7 +64,7 @@ public class HtmlAnnotation {
 	 * A collection of {@link Html @Html annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -86,10 +86,10 @@ public class HtmlAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
-		String anchorText="", link="", style="";
-		HtmlFormat format=HtmlFormat.HTML;
+		String anchorText = "", link = "", style = "";
+		HtmlFormat format = HtmlFormat.HTML;
 		boolean noTableHeaders, noTables;
-		Class<? extends HtmlRender> render=HtmlRender.class;
+		Class<? extends HtmlRender> render = HtmlRender.class;
 
 		/**
 		 * Constructor.
@@ -243,6 +243,7 @@ public class HtmlAnnotation {
 
 	/** Default value */
 	public static final Html DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -251,6 +252,7 @@ public class HtmlAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static Html copy(Html a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.anchorText(r.resolve(a.anchorText()))
@@ -262,7 +264,9 @@ public class HtmlAnnotation {
 			.onClass(a.onClass())
 			.render(a.render())
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -271,6 +275,7 @@ public class HtmlAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -280,6 +285,7 @@ public class HtmlAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

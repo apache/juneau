@@ -86,7 +86,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="figcaption")
+@Bean(typeName = "figcaption")
 public class Figcaption extends HtmlElementMixed {
 
 	/**
@@ -102,8 +102,9 @@ public class Figcaption extends HtmlElementMixed {
 	public Figcaption(Object...children) {
 		children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Figcaption _class(String value) {  // NOSONAR - Intentional naming.
+	public Figcaption _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

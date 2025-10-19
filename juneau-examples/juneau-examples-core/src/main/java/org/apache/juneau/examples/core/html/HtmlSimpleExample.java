@@ -32,7 +32,7 @@ public class HtmlSimpleExample {
 	 * @param args Unused.
 	 * @throws Exception Unused.
 	 */
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception {
 		// Juneau provides static constants with the most commonly used configurations
 		// Get a reference to a serializer - converting POJO to flat format
 		// Produces
@@ -41,7 +41,7 @@ public class HtmlSimpleExample {
 		// Get a reference to a parser - converts that flat format back into the POJO
 		HtmlParser htmlParser = HtmlParser.DEFAULT;
 
-		Pojo pojo = new Pojo("id","name");
+		Pojo pojo = new Pojo("id", "name");
 
 		String flat = htmlSerializer.serialize(pojo);
 

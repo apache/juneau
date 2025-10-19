@@ -69,7 +69,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-@Bean(typeName="generator")
+@Bean(typeName = "generator")
 public class Generator extends Common {
 
 	private URI uri;
@@ -87,6 +87,7 @@ public class Generator extends Common {
 	public Generator(String text) {
 		this.text = text;
 	}
+
 	/**
 	 * Bean property getter:  <property>text</property>.
 	 *
@@ -95,10 +96,8 @@ public class Generator extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=TEXT)
-	public String getText() {
-		return text;
-	}
+	@Xml(format = TEXT)
+	public String getText() { return text; }
 
 	/**
 	 * Bean property getter:  <property>uri</property>.
@@ -108,10 +107,8 @@ public class Generator extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public URI getUri() {
-		return uri;
-	}
+	@Xml(format = ATTR)
+	public URI getUri() { return uri; }
 
 	/**
 	 * Bean property getter:  <property>version</property>.
@@ -121,10 +118,8 @@ public class Generator extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public String getVersion() {
-		return version;
-	}
+	@Xml(format = ATTR)
+	public String getVersion() { return version; }
 
 	@Override /* Overridden from Common */
 	public Generator setBase(Object value) {
@@ -153,6 +148,7 @@ public class Generator extends Common {
 		this.text = value;
 		return this;
 	}
+
 	/**
 	 * Bean property setter:  <property>uri</property>.
 	 *

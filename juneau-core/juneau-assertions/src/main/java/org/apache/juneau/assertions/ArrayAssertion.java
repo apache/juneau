@@ -116,7 +116,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -129,7 +128,6 @@ public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>>
 	public static <E> ArrayAssertion<E> create(E[] value) {
 		return new ArrayAssertion<>(value);
 	}
-
 
 	/**
 	 * Constructor.

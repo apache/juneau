@@ -127,15 +127,11 @@ public class Callback extends OpenApiElement {
 	 *
 	 * @return The callbacks map.
 	 */
-	public Map<String,PathItem> getCallbacks() {
-		return callbacks;
-	}
+	public Map<String,PathItem> getCallbacks() { return callbacks; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(callbacks != null, "callbacks")
-			.build();
+		var s = setBuilder(String.class).addIf(callbacks != null, "callbacks").build();
 		return new MultiSet<>(s, super.keySet());
 	}
 

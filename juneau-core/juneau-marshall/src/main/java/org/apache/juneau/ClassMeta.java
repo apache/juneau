@@ -66,39 +66,24 @@ import org.apache.juneau.swap.*;
  *
  * @param <T> The class type of the wrapped class.
  */
-@Bean(properties="innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
+@Bean(properties = "innerClass,classCategory,elementType,keyType,valueType,notABeanReason,initException,beanMeta")
 public class ClassMeta<T> implements Type {
 
-	@SuppressWarnings({"unchecked","rawtypes","hiding"})
+	@SuppressWarnings({ "unchecked", "rawtypes", "hiding" })
 	private class ClassMetaBuilder<T> {
 		Class<T> innerClass;
 		ClassInfo ci;
 		Class<? extends T> implClass;
 		BeanContext beanContext;
 		ClassCategory cc = ClassCategory.OTHER;
-		boolean
-			isDelegate = false,
-			isMemberClass = false,
-			isAbstract = false;
-		Method
-			fromStringMethod = null;
-		Setter
-			parentPropertyMethod = null,
-			namePropertyMethod = null;
-		ConstructorInfo
-			noArgConstructor = null,
-			stringConstructor = null;
+		boolean isDelegate = false, isMemberClass = false, isAbstract = false;
+		Method fromStringMethod = null;
+		Setter parentPropertyMethod = null, namePropertyMethod = null;
+		ConstructorInfo noArgConstructor = null, stringConstructor = null;
 		Object primitiveDefault = null;
-		Map<String,Method>
-			publicMethods = map();
-		ClassMeta<?>
-			keyType = null,
-			valueType = null,
-			elementType = null;
-		String
-			typePropertyName = null,
-			notABeanReason = null,
-			dictionaryName = null;
+		Map<String,Method> publicMethods = map();
+		ClassMeta<?> keyType = null, valueType = null, elementType = null;
+		String typePropertyName = null, notABeanReason = null, dictionaryName = null;
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
 		List<ObjectSwap> swaps = list();
@@ -106,9 +91,7 @@ public class ClassMeta<T> implements Type {
 		InvocationHandler invocationHandler = null;
 		BeanRegistry beanRegistry = null;
 		ObjectSwap<?,?>[] childSwaps;
-		ConcurrentHashMap<Class<?>,ObjectSwap<?,?>>
-			childSwapMap,
-			childUnswapMap;
+		ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap, childUnswapMap;
 		Method exampleMethod;
 		Field exampleField;
 		String example;
@@ -140,8 +123,7 @@ public class ClassMeta<T> implements Type {
 						cc = DECIMAL;
 					else
 						cc = NUMBER;
-				}
-				else if (c == Character.TYPE)
+				} else if (c == Character.TYPE)
 					cc = CHAR;
 				else if (c == void.class || c == Void.class)
 					cc = VOID;
@@ -162,22 +144,19 @@ public class ClassMeta<T> implements Type {
 						cc = STR;
 					else
 						cc = CHARSEQ;
-				}
-				else if (ci.isChildOf(Number.class)) {
+				} else if (ci.isChildOf(Number.class)) {
 					if (ci.isChildOfAny(Float.class, Double.class))
 						cc = DECIMAL;
 					else
 						cc = NUMBER;
-				}
-				else if (ci.isChildOf(Collection.class))
+				} else if (ci.isChildOf(Collection.class))
 					cc = COLLECTION;
 				else if (ci.isChildOf(Map.class)) {
 					if (ci.isChildOf(BeanMap.class))
 						cc = BEANMAP;
 					else
 						cc = MAP;
-				}
-				else if (c == Character.class)
+				} else if (c == Character.class)
 					cc = CHAR;
 				else if (c == Boolean.class)
 					cc = BOOLEAN;
@@ -204,21 +183,29 @@ public class ClassMeta<T> implements Type {
 			// parse() is used by the java logging Level class.
 			// forName() is used by Class and Charset
 			String[] fromStringMethodNames = {"fromString","fromValue","valueOf","parse","parseString","forName","forString"};
-			fromStringMethod = Utils.opt(ci.getPublicMethod(
-			x -> x.isStatic()
-			&& x.isNotDeprecated()
-			&& x.hasReturnType(c)
-			&& x.hasParamTypes(String.class)
-			&& ArrayUtils.contains(x.getName(), fromStringMethodNames))).map(MethodInfo::inner)
-				.orElse(null);
+			// @formatter:off
+			fromStringMethod = Utils.opt(
+				ci.getPublicMethod(
+					x -> x.isStatic()
+					&& x.isNotDeprecated()
+					&& x.hasReturnType(c)
+					&& x.hasParamTypes(String.class)
+					&& ArrayUtils.contains(x.getName(), fromStringMethodNames))
+			).map(MethodInfo::inner)
+			.orElse(null);
+			// @formatter:on
 
 			// Find example() method if present.
-			exampleMethod = Utils.opt(ci.getPublicMethod(
-			x -> x.isStatic()
-			&& x.isNotDeprecated()
-			&& x.hasName("example")
-			&& x.hasFuzzyParamTypes(BeanSession.class))).map(MethodInfo::inner)
-				.orElse(null);
+			// @formatter:off
+			exampleMethod = Utils.opt(
+				ci.getPublicMethod(
+					x -> x.isStatic()
+					&& x.isNotDeprecated()
+					&& x.hasName("example")
+					&& x.hasFuzzyParamTypes(BeanSession.class))
+			).map(MethodInfo::inner)
+			.orElse(null);
+			// @formatter:on
 
 			ci.forEachAllField(x -> x.hasAnnotation(bc, ParentProperty.class), x -> {
 				if (x.isStatic())
@@ -240,7 +227,7 @@ public class ClassMeta<T> implements Type {
 
 			// Find @NameProperty and @ParentProperty methods if present.
 			List<MethodInfo> methods = ci.getMethods();
-			for (int i = methods.size()-1; i >=0; i--) {
+			for (int i = methods.size() - 1; i >= 0; i--) {
 				MethodInfo m = methods.get(i);
 				if (m.hasAnnotation(bc, ParentProperty.class)) {
 					if (m.isStatic() || ! m.hasNumParams(1))
@@ -280,10 +267,12 @@ public class ClassMeta<T> implements Type {
 
 			primitiveDefault = ci.getPrimitiveDefault();
 
+			// @formatter:off
 			ci.forEachPublicMethod(
 				MethodInfo::isNotDeprecated,
 				x -> publicMethods.put(x.getSignature(), x.inner())
 			);
+			// @formatter:on
 
 			BeanFilter beanFilter = findBeanFilter(bc);
 			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
@@ -297,14 +286,14 @@ public class ClassMeta<T> implements Type {
 
 			if (beanFilter != null) {
 				example = beanFilter.getExample();
-				implClass = (Class<? extends T>) beanFilter.getImplClass();
+				implClass = (Class<? extends T>)beanFilter.getImplClass();
 			}
 
 			if (marshalledFilter != null) {
 				if (example == null)
 					example = marshalledFilter.getExample();
 				if (implClass == null)
-					implClass = (Class<? extends T>) marshalledFilter.getImplClass();
+					implClass = (Class<? extends T>)marshalledFilter.getImplClass();
 			}
 
 			if (innerClass != Object.class) {
@@ -389,7 +378,7 @@ public class ClassMeta<T> implements Type {
 			}
 
 			if (example == null) {
-				switch(cc) {
+				switch (cc) {
 					case BOOLEAN:
 						example = "true";
 						break;
@@ -528,12 +517,13 @@ public class ClassMeta<T> implements Type {
 	enum ClassCategory {
 		MAP, COLLECTION, CLASS, METHOD, NUMBER, DECIMAL, BOOLEAN, CHAR, DATE, ARRAY, ENUM, OTHER, CHARSEQ, STR, OBJ, URI, BEANMAP, READER, INPUTSTREAM, VOID, ARGS, OPTIONAL
 	}
+
 	/**
 	 * Generated classes shouldn't be cacheable to prevent needlessly filling up the cache.
 	 */
 	private static boolean isCacheable(Class<?> c) {
 		String n = c.getName();
-		char x = n.charAt(n.length()-1);  // All generated classes appear to end with digits.
+		char x = n.charAt(n.length() - 1);  // All generated classes appear to end with digits.
 		if (x >= '0' && x <= '9') {
 			if (n.indexOf("$$") != -1 || n.startsWith("sun") || n.startsWith("com.sun") || n.indexOf("$Proxy") != -1)
 				return false;
@@ -554,57 +544,51 @@ public class ClassMeta<T> implements Type {
 	 * @param v The minimum visibility.
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
 	 */
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings({ "unchecked" })
 	protected static <T> Constructor<? extends T> findNoArgConstructor(Class<?> c, Visibility v) {
 		ClassInfo ci = ClassInfo.of(c);
 		if (ci.isAbstract())
 			return null;
 		boolean isMemberClass = ci.isMemberClass() && ci.isNotStatic();
+		// @formatter:off
 		ConstructorInfo cc = ci.getPublicConstructor(
 			x -> x.isVisible(v)
 			&& x.isNotDeprecated()
 			&& x.hasNumParams(isMemberClass ? 1 : 0)
 		);
+		// @formatter:on
 		if (cc != null)
-			return (Constructor<? extends T>) v.transform(cc.inner());
+			return (Constructor<? extends T>)v.transform(cc.inner());
 		return null;
 	}
+
 	final Class<T> innerClass;                              // The class being wrapped.
 	final ClassInfo info;
 	private final Class<? extends T> implClass;             // The implementation class to use if this is an interface.
 	private final ClassCategory cc;                         // The class category.
 	private final Method fromStringMethod;                  // The static valueOf(String) or fromString(String) or forString(String) method (if it has one).
-	private final ConstructorInfo
-		noArgConstructor,                                    // The no-arg constructor for this class (if it has one).
+	private final ConstructorInfo noArgConstructor,                                    // The no-arg constructor for this class (if it has one).
 		stringConstructor;                                   // The X(String) constructor (if it has one).
-	private final Method
-		exampleMethod;                                       // The example() or @Example-annotated method (if it has one).
-	private final Field
-		exampleField;                                        // The @Example-annotated field (if it has one).
-	private final Setter
-		namePropertyMethod,                                  // The method to set the name on an object (if it has one).
+	private final Method exampleMethod;                                       // The example() or @Example-annotated method (if it has one).
+	private final Field exampleField;                                        // The @Example-annotated field (if it has one).
+	private final Setter namePropertyMethod,                                  // The method to set the name on an object (if it has one).
 		parentPropertyMethod;                                // The method to set the parent on an object (if it has one).
-	private final boolean
-		isDelegate,                                          // True if this class extends Delegate.
+	private final boolean isDelegate,                                          // True if this class extends Delegate.
 		isAbstract,                                          // True if this class is abstract.
 		isMemberClass;                                       // True if this is a non-static member class.
 	private final Object primitiveDefault;                  // Default value for primitive type classes.
-	private final Map<String,Method>
-		publicMethods;                                       // All public methods, including static methods.
+	private final Map<String,Method> publicMethods;                                       // All public methods, including static methods.
 	private final ObjectSwap<?,?>[] childSwaps;              // Any ObjectSwaps where the normal type is a subclass of this class.
-	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>>
-		childSwapMap,                                        // Maps normal subclasses to ObjectSwaps.
+	private final ConcurrentHashMap<Class<?>,ObjectSwap<?,?>> childSwapMap,                                        // Maps normal subclasses to ObjectSwaps.
 		childUnswapMap;                                      // Maps swap subclasses to ObjectSwaps.
 	private final ObjectSwap<T,?>[] swaps;                     // The object POJO swaps associated with this bean (if it has any).
 	private final BuilderSwap<T,?> builderSwap;             // The builder swap associated with this bean (if it has one).
 	private final BeanContext beanContext;                  // The bean context that created this object.
-	private final ClassMeta<?>
-		elementType,                                         // If ARRAY or COLLECTION, the element class type.
+	private final ClassMeta<?> elementType,                                         // If ARRAY or COLLECTION, the element class type.
 		keyType,                                             // If MAP, the key class type.
 		valueType;                                           // If MAP, the value class type.
 	private final BeanMeta<T> beanMeta;                     // The bean meta for this bean class (if it's a bean).
-	private final String
-		typePropertyName,                                    // The property name of the _type property for this class and subclasses.
+	private final String typePropertyName,                                    // The property name of the _type property for this class and subclasses.
 		notABeanReason,                                      // If this isn't a bean, the reason why.
 		dictionaryName;                                      // The dictionary name of this class if it has one.
 	private final Throwable initException;                  // Any exceptions thrown in the init() method.
@@ -704,7 +688,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings("unchecked")
 	ClassMeta(ClassMeta<?>[] args) {
-		this.innerClass = (Class<T>) Object[].class;
+		this.innerClass = (Class<T>)Object[].class;
 		this.info = ClassInfo.of(innerClass);
 		this.args = args;
 		this.implClass = null;
@@ -865,7 +849,7 @@ public class ClassMeta<T> implements Type {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof ClassMeta) && Utils.eq(this, (ClassMeta<?>)o, (x,y)->Utils.eq(x.innerClass, y.innerClass));
+		return (o instanceof ClassMeta) && Utils.eq(this, (ClassMeta<?>)o, (x, y) -> Utils.eq(x.innerClass, y.innerClass));
 	}
 
 	/**
@@ -928,18 +912,14 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The argument types of this meta, or <jk>null</jk> if this isn't an array of argument types.
 	 */
-	public ClassMeta<?>[] getArgs() {
-		return args;
-	}
+	public ClassMeta<?>[] getArgs() { return args; }
 
 	/**
 	 * Returns the {@link BeanContext} that created this object.
 	 *
 	 * @return The bean context.
 	 */
-	public BeanContext getBeanContext() {
-		return beanContext;
-	}
+	public BeanContext getBeanContext() { return beanContext; }
 
 	/**
 	 * Returns the {@link BeanMeta} associated with this class.
@@ -948,9 +928,7 @@ public class ClassMeta<T> implements Type {
 	 * 	The {@link BeanMeta} associated with this class, or <jk>null</jk> if there is no bean meta associated with
 	 * 	this class.
 	 */
-	public BeanMeta<T> getBeanMeta() {
-		return beanMeta;
-	}
+	public BeanMeta<T> getBeanMeta() { return beanMeta; }
 
 	/**
 	 * Returns the bean registry for this class.
@@ -962,9 +940,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The bean registry for this class, or <jk>null</jk> if no bean registry is associated with it.
 	 */
-	public BeanRegistry getBeanRegistry() {
-		return beanRegistry;
-	}
+	public BeanRegistry getBeanRegistry() { return beanRegistry; }
 
 	/**
 	 * Returns the type property name associated with this class and subclasses.
@@ -976,9 +952,7 @@ public class ClassMeta<T> implements Type {
 	 * 	The type property name associated with this bean class, or <jk>null</jk> if there is no explicit type
 	 * 	property name defined or this isn't a bean.
 	 */
-	public String getBeanTypePropertyName() {
-		return typePropertyName;
-	}
+	public String getBeanTypePropertyName() { return typePropertyName; }
 
 	/**
 	 * Returns the builder swap associated with this class.
@@ -995,18 +969,14 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The category of this class.
 	 */
-	public ClassCategory getClassCategory() {
-		return cc;
-	}
+	public ClassCategory getClassCategory() { return cc; }
 
 	/**
 	 * Returns the no-arg constructor for this class.
 	 *
 	 * @return The no-arg constructor for this class, or <jk>null</jk> if it does not exist.
 	 */
-	public ConstructorInfo getConstructor() {
-		return noArgConstructor;
-	}
+	public ConstructorInfo getConstructor() { return noArgConstructor; }
 
 	/**
 	 * Returns the bean dictionary name associated with this class.
@@ -1018,9 +988,7 @@ public class ClassMeta<T> implements Type {
 	 * 	The type name associated with this bean class, or <jk>null</jk> if there is no type name defined or this
 	 * 	isn't a bean.
 	 */
-	public String getDictionaryName() {
-		return dictionaryName;
-	}
+	public String getDictionaryName() { return dictionaryName; }
 
 	/**
 	 * For array and {@code Collection} types, returns the class type of the components of the array or
@@ -1028,9 +996,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The element class type, or <jk>null</jk> if this class is not an array or Collection.
 	 */
-	public ClassMeta<?> getElementType() {
-		return elementType;
-	}
+	public ClassMeta<?> getElementType() { return elementType; }
 
 	/**
 	 * Returns the example of this class.
@@ -1041,7 +1007,7 @@ public class ClassMeta<T> implements Type {
 	 * @param jpSession The JSON parser for parsing examples into POJOs.
 	 * @return The serialized class type, or this object if no swap is associated with the class.
 	 */
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public T getExample(BeanSession session, JsonParserSession jpSession) {
 		try {
 			if (example != null)
@@ -1113,9 +1079,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The readable name for this class.
 	 */
-	public String getFullName() {
-		return info.getFullName();
-	}
+	public String getFullName() { return info.getFullName(); }
 
 	/**
 	 * Returns the no-arg constructor for this class based on the {@link Marshalled#implClass()} value.
@@ -1134,45 +1098,35 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The {@link ClassInfo} wrapper for the underlying class, never <jk>null</jk>.
 	 */
-	public ClassInfo getInfo() {
-		return info;
-	}
+	public ClassInfo getInfo() { return info; }
 
 	/**
 	 * Returns any exception that was throw in the <c>init()</c> method.
 	 *
 	 * @return The cached exception.
 	 */
-	public Throwable getInitException() {
-		return initException;
-	}
+	public Throwable getInitException() { return initException; }
 
 	/**
 	 * Returns the {@link Class} object that this class type wraps.
 	 *
 	 * @return The wrapped class object.
 	 */
-	public Class<T> getInnerClass() {
-		return innerClass;
-	}
+	public Class<T> getInnerClass() { return innerClass; }
 
 	/**
 	 * Returns the transform for this class for creating instances from an InputStream.
 	 *
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
-	public Mutater<InputStream,T> getInputStreamMutater() {
-		return getFromMutater(InputStream.class);
-	}
+	public Mutater<InputStream,T> getInputStreamMutater() { return getFromMutater(InputStream.class); }
 
 	/**
 	 * For {@code Map} types, returns the class type of the keys of the {@code Map}.
 	 *
 	 * @return The key class type, or <jk>null</jk> if this class is not a Map.
 	 */
-	public ClassMeta<?> getKeyType() {
-		return keyType;
-	}
+	public ClassMeta<?> getKeyType() { return keyType; }
 
 	/**
 	 * Shortcut for calling <c>getInnerClass().getAnnotation(a)</c>.
@@ -1198,9 +1152,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The  name of the inner class.
 	 */
-	public String getName() {
-		return innerClass.getName();
-	}
+	public String getName() { return innerClass.getName(); }
 
 	/**
 	 * Returns the method or field annotated with {@link NameProperty @NameProperty}.
@@ -1209,18 +1161,14 @@ public class ClassMeta<T> implements Type {
 	 * 	The method or field  annotated with {@link NameProperty @NameProperty} or <jk>null</jk> if method does not
 	 * 	exist.
 	 */
-	public Setter getNameProperty() {
-		return namePropertyMethod;
-	}
+	public Setter getNameProperty() { return namePropertyMethod; }
 
 	/**
 	 * Returns the reason why this class is not a bean, or <jk>null</jk> if it is a bean.
 	 *
 	 * @return The reason why this class is not a bean, or <jk>null</jk> if it is a bean.
 	 */
-	public synchronized String getNotABeanReason() {
-		return notABeanReason;
-	}
+	public synchronized String getNotABeanReason() { return notABeanReason; }
 
 	/**
 	 * If this is an {@link Optional}, returns an empty optional.
@@ -1243,9 +1191,7 @@ public class ClassMeta<T> implements Type {
 	 * 	The method or field annotated with {@link ParentProperty @ParentProperty} or <jk>null</jk> if method does not
 	 * 	exist.
 	 */
-	public Setter getParentProperty() {
-		return parentPropertyMethod;
-	}
+	public Setter getParentProperty() { return parentPropertyMethod; }
 
 	/**
 	 * Returns the default value for primitives such as <jk>int</jk> or <jk>Integer</jk>.
@@ -1253,9 +1199,7 @@ public class ClassMeta<T> implements Type {
 	 * @return The default value, or <jk>null</jk> if this class type is not a primitive.
 	 */
 	@SuppressWarnings("unchecked")
-	public T getPrimitiveDefault() {
-		return (T)primitiveDefault;
-	}
+	public T getPrimitiveDefault() { return (T)primitiveDefault; }
 
 	/**
 	 * Returns a calculated property on this context.
@@ -1267,7 +1211,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
-		Optional<T2> t = (Optional<T2>) properties.get(name);
+		Optional<T2> t = (Optional<T2>)properties.get(name);
 		if (t == null) {
 			t = Utils.opt(function.apply(this));
 			properties.put(name, t);
@@ -1280,9 +1224,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The interface proxy invocation handler, or <jk>null</jk> if it does not exist.
 	 */
-	public InvocationHandler getProxyInvocationHandler() {
-		return invocationHandler;
-	}
+	public InvocationHandler getProxyInvocationHandler() { return invocationHandler; }
 
 	/**
 	 * All public methods on this class including static methods.
@@ -1292,18 +1234,14 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The public methods on this class.
 	 */
-	public Map<String,Method> getPublicMethods() {
-		return publicMethods;
-	}
+	public Map<String,Method> getPublicMethods() { return publicMethods; }
 
 	/**
 	 * Returns the transform for this class for creating instances from a Reader.
 	 *
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
-	public Mutater<Reader,T> getReaderMutater() {
-		return getFromMutater(Reader.class);
-	}
+	public Mutater<Reader,T> getReaderMutater() { return getFromMutater(Reader.class); }
 
 	/**
 	 * Returns the serialized (swapped) form of this class if there is an {@link ObjectSwap} associated with it.
@@ -1323,18 +1261,14 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The simple name of the inner class.
 	 */
-	public String getSimpleName() {
-		return innerClass.getSimpleName();
-	}
+	public String getSimpleName() { return innerClass.getSimpleName(); }
 
 	/**
 	 * Returns the transform for this class for creating instances from a String.
 	 *
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
-	public Mutater<String,T> getStringMutater() {
-		return stringMutater;
-	}
+	public Mutater<String,T> getStringMutater() { return stringMutater; }
 
 	/**
 	 * Returns the {@link ObjectSwap} associated with this class that's the best match for the specified session.
@@ -1391,9 +1325,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The value class type, or <jk>null</jk> if this class is not a Map.
 	 */
-	public ClassMeta<?> getValueType() {
-		return valueType;
-	}
+	public ClassMeta<?> getValueType() { return valueType; }
 
 	/**
 	 * Shortcut for calling <code>getInnerClass().getAnnotation(a) != <jk>null</jk></code>.
@@ -1492,27 +1424,21 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is abstract.
 	 */
-	public boolean isAbstract() {
-		return isAbstract;
-	}
+	public boolean isAbstract() { return isAbstract; }
 
 	/**
 	 * Returns <jk>true</jk> if this metadata represents an array of argument types.
 	 *
 	 * @return <jk>true</jk> if this metadata represents an array of argument types.
 	 */
-	public boolean isArgs() {
-		return cc == ARGS;
-	}
+	public boolean isArgs() { return cc == ARGS; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is an array.
 	 *
 	 * @return <jk>true</jk> if this class is an array.
 	 */
-	public boolean isArray() {
-		return cc == ARRAY;
-	}
+	public boolean isArray() { return cc == ARRAY; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a superclass of or the same as the specified class.
@@ -1529,63 +1455,49 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is a bean.
 	 */
-	public boolean isBean() {
-		return beanMeta != null;
-	}
+	public boolean isBean() { return beanMeta != null; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link BeanMap}.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link BeanMap}.
 	 */
-	public boolean isBeanMap() {
-		return cc == BEANMAP;
-	}
+	public boolean isBeanMap() { return cc == BEANMAP; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Boolean}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Boolean}.
 	 */
-	public boolean isBoolean() {
-		return cc == BOOLEAN;
-	}
+	public boolean isBoolean() { return cc == BOOLEAN; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is <code><jk>byte</jk>[]</code>.
 	 *
 	 * @return <jk>true</jk> if this class is <code><jk>byte</jk>[]</code>.
 	 */
-	public boolean isByteArray() {
-		return cc == ARRAY && this.innerClass == byte[].class;
-	}
+	public boolean isByteArray() { return cc == ARRAY && this.innerClass == byte[].class; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Calendar}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Calendar}.
 	 */
-	public boolean isCalendar() {
-		return cc == DATE && info.isChildOf(Calendar.class);
-	}
+	public boolean isCalendar() { return cc == DATE && info.isChildOf(Calendar.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Character}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Character}.
 	 */
-	public boolean isChar() {
-		return cc == CHAR;
-	}
+	public boolean isChar() { return cc == CHAR; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link CharSequence}.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link CharSequence}.
 	 */
-	public boolean isCharSequence() {
-		return cc == STR || cc == CHARSEQ;
-	}
+	public boolean isCharSequence() { return cc == STR || cc == CHARSEQ; }
 
 	/**
 	 * Returns <jk>true</jk> if this metadata represents the specified type.
@@ -1602,72 +1514,56 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is {@link Class}.
 	 */
-	public boolean isClass() {
-		return cc == ClassCategory.CLASS;
-	}
+	public boolean isClass() { return cc == ClassCategory.CLASS; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection}.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Collection}.
 	 */
-	public boolean isCollection() {
-		return cc == COLLECTION;
-	}
+	public boolean isCollection() { return cc == COLLECTION; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Collection} or is an array.
 	 */
-	public boolean isCollectionOrArray() {
-		return cc == COLLECTION || cc == ARRAY;
-	}
+	public boolean isCollectionOrArray() { return cc == COLLECTION || cc == ARRAY; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Collection} or is an array or {@link Optional}.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Collection} or is an array or {@link Optional}.
 	 */
-	public boolean isCollectionOrArrayOrOptional() {
-		return cc == COLLECTION || cc == ARRAY || cc == OPTIONAL;
-	}
+	public boolean isCollectionOrArrayOrOptional() { return cc == COLLECTION || cc == ARRAY || cc == OPTIONAL; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Date}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Date}.
 	 */
-	public boolean isDate() {
-		return cc == DATE && info.isChildOf(Date.class);
-	}
+	public boolean isDate() { return cc == DATE && info.isChildOf(Date.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Date} or {@link Calendar}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Date} or {@link Calendar}.
 	 */
-	public boolean isDateOrCalendar() {
-		return cc == DATE;
-	}
+	public boolean isDateOrCalendar() { return cc == DATE; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Date} or {@link Calendar} or {@link Temporal}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Date} or {@link Calendar} or {@link Temporal}.
 	 */
-	public boolean isDateOrCalendarOrTemporal() {
-		return cc == DATE || info.isChildOf(Temporal.class);
-	}
+	public boolean isDateOrCalendarOrTemporal() { return cc == DATE || info.isChildOf(Temporal.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Float} or {@link Double}.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Float} or {@link Double}.
 	 */
-	public boolean isDecimal() {
-		return cc == DECIMAL;
-	}
+	public boolean isDecimal() { return cc == DECIMAL; }
 
 	/**
 	 * Returns <jk>true</jk> if this class implements {@link Delegate}, meaning it's a representation of some other
@@ -1675,45 +1571,35 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class implements {@link Delegate}.
 	 */
-	public boolean isDelegate() {
-		return isDelegate;
-	}
+	public boolean isDelegate() { return isDelegate; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is either {@link Double} or <jk>double</jk>.
 	 *
 	 * @return <jk>true</jk> if this class is either {@link Double} or <jk>double</jk>.
 	 */
-	public boolean isDouble() {
-		return innerClass == Double.class || innerClass == double.class;
-	}
+	public boolean isDouble() { return innerClass == Double.class || innerClass == double.class; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is an {@link Enum}.
 	 *
 	 * @return <jk>true</jk> if this class is an {@link Enum}.
 	 */
-	public boolean isEnum() {
-		return cc == ENUM;
-	}
+	public boolean isEnum() { return cc == ENUM; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is either {@link Float} or <jk>float</jk>.
 	 *
 	 * @return <jk>true</jk> if this class is either {@link Float} or <jk>float</jk>.
 	 */
-	public boolean isFloat() {
-		return innerClass == Float.class || innerClass == float.class;
-	}
+	public boolean isFloat() { return innerClass == Float.class || innerClass == float.class; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is an {@link InputStream}.
 	 *
 	 * @return <jk>true</jk> if this class is an {@link InputStream}.
 	 */
-	public boolean isInputStream() {
-		return cc == INPUTSTREAM;
-	}
+	public boolean isInputStream() { return cc == INPUTSTREAM; }
 
 	/**
 	 * Returns <jk>true</jk> if the specified object is an instance of this class.
@@ -1745,72 +1631,56 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is either {@link Integer} or <jk>int</jk>.
 	 */
-	public boolean isInteger() {
-		return innerClass == Integer.class || innerClass == int.class;
-	}
+	public boolean isInteger() { return innerClass == Integer.class || innerClass == int.class; }
 
 	/**
 	 * Returns <jk>true</jk> if this class extends from {@link List}.
 	 *
 	 * @return <jk>true</jk> if this class extends from {@link List}.
 	 */
-	public boolean isList() {
-		return cc == COLLECTION && info.isChildOf(List.class);
-	}
+	public boolean isList() { return cc == COLLECTION && info.isChildOf(List.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is either {@link Long} or <jk>long</jk>.
 	 *
 	 * @return <jk>true</jk> if this class is either {@link Long} or <jk>long</jk>.
 	 */
-	public boolean isLong() {
-		return innerClass == Long.class || innerClass == long.class;
-	}
+	public boolean isLong() { return innerClass == Long.class || innerClass == long.class; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Map}.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map}.
 	 */
-	public boolean isMap() {
-		return cc == MAP || cc == BEANMAP;
-	}
+	public boolean isMap() { return cc == MAP || cc == BEANMAP; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
 	 */
-	public boolean isMapOrBean() {
-		return cc == MAP || cc == BEANMAP || beanMeta != null;
-	}
+	public boolean isMapOrBean() { return cc == MAP || cc == BEANMAP || beanMeta != null; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is an inner class.
 	 *
 	 * @return <jk>true</jk> if this class is an inner class.
 	 */
-	public boolean isMemberClass() {
-		return isMemberClass;
-	}
+	public boolean isMemberClass() { return isMemberClass; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is {@link Method}.
 	 *
 	 * @return <jk>true</jk> if this class is {@link Method}.
 	 */
-	public boolean isMethod() {
-		return cc == METHOD;
-	}
+	public boolean isMethod() { return cc == METHOD; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is not {@link Object}.
 	 *
 	 * @return <jk>true</jk> if this class is not {@link Object}.
 	 */
-	public boolean isNotObject() {
-		return cc != OBJ;
-	}
+	public boolean isNotObject() { return cc != OBJ; }
 
 	/**
 	 * Returns <jk>true</jk> if instance of this object can be <jk>null</jk>.
@@ -1832,99 +1702,77 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Number}.
 	 */
-	public boolean isNumber() {
-		return cc == NUMBER || cc == DECIMAL;
-	}
+	public boolean isNumber() { return cc == NUMBER || cc == DECIMAL; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is {@link Object}.
 	 *
 	 * @return <jk>true</jk> if this class is {@link Object}.
 	 */
-	public boolean isObject() {
-		return cc == OBJ;
-	}
+	public boolean isObject() { return cc == OBJ; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link Optional}.
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Optional}.
 	 */
-	public boolean isOptional() {
-		return cc == OPTIONAL;
-	}
+	public boolean isOptional() { return cc == OPTIONAL; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a primitive.
 	 *
 	 * @return <jk>true</jk> if this class is a primitive.
 	 */
-	public boolean isPrimitive() {
-		return innerClass.isPrimitive();
-	}
+	public boolean isPrimitive() { return innerClass.isPrimitive(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Reader}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Reader}.
 	 */
-	public boolean isReader() {
-		return cc == READER;
-	}
+	public boolean isReader() { return cc == READER; }
 
 	/**
 	 * Returns <jk>true</jk> if this class extends from {@link Set}.
 	 *
 	 * @return <jk>true</jk> if this class extends from {@link Set}.
 	 */
-	public boolean isSet() {
-		return cc == COLLECTION && info.isChildOf(Set.class);
-	}
+	public boolean isSet() { return cc == COLLECTION && info.isChildOf(Set.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is either {@link Short} or <jk>short</jk>.
 	 *
 	 * @return <jk>true</jk> if this class is either {@link Short} or <jk>short</jk>.
 	 */
-	public boolean isShort() {
-		return innerClass == Short.class || innerClass == short.class;
-	}
+	public boolean isShort() { return innerClass == Short.class || innerClass == short.class; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link String}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link String}.
 	 */
-	public boolean isString() {
-		return cc == STR;
-	}
+	public boolean isString() { return cc == STR; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Temporal}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Temporal}.
 	 */
-	public boolean isTemporal() {
-		return info.isChildOf(Temporal.class);
-	}
+	public boolean isTemporal() { return info.isChildOf(Temporal.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link URI} or {@link URL}.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link URI} or {@link URL}.
 	 */
-	public boolean isUri() {
-		return cc == URI;
-	}
+	public boolean isUri() { return cc == URI; }
 
 	/**
 	 * Returns <jk>true</jk> if this class is {@link Void} or <jk>void</jk>.
 	 *
 	 * @return <jk>true</jk> if this class is {@link Void} or <jk>void</jk>.
 	 */
-	public boolean isVoid() {
-		return cc == VOID;
-	}
+	public boolean isVoid() { return cc == VOID; }
 
 	/**
 	 * Returns the last matching annotation on this class or parent classes/interfaces in parent-to-child order.
@@ -1941,7 +1789,7 @@ public class ClassMeta<T> implements Type {
 				return Optional.ofNullable(info.lastAnnotation(BeanContext.DEFAULT, type, filter));
 			return Optional.empty();
 		}
-		for (int i = array.length-1; i >= 0; i--)
+		for (int i = array.length - 1; i >= 0; i--)
 			if (test(filter, array[i]))
 				return Optional.of(array[i]);
 		return Optional.empty();
@@ -1953,7 +1801,7 @@ public class ClassMeta<T> implements Type {
 	 * @param o The object to transform.
 	 * @return The transformed object.
 	 */
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public T mutateFrom(Object o) {
 		Mutater t = getFromMutater(o.getClass());
 		return (T)(t == null ? null : t.mutate(o));
@@ -1967,7 +1815,7 @@ public class ClassMeta<T> implements Type {
 	 * @param c The class
 	 * @return The transformed object.
 	 */
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <O> O mutateTo(Object o, Class<O> c) {
 		Mutater t = getToMutater(c);
 		return (O)(t == null ? null : t.mutate(o));
@@ -2002,7 +1850,7 @@ public class ClassMeta<T> implements Type {
 		if (h != null)
 			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { getInnerClass(), java.io.Serializable.class }, h);
 		if (isArray())
-			return (T)Array.newInstance(this.elementType.innerClass,0);
+			return (T)Array.newInstance(this.elementType.innerClass, 0);
 		return null;
 	}
 
@@ -2044,7 +1892,7 @@ public class ClassMeta<T> implements Type {
 		if (isEnum()) {
 			T t = (T)enumValues.getKey(arg);
 			if (t == null && ! beanContext.isIgnoreUnknownEnumValues())
-				throw new ExecutableException("Could not resolve enum value '"+arg+"' on class '"+getInnerClass().getName()+"'");
+				throw new ExecutableException("Could not resolve enum value '" + arg + "' on class '" + getInnerClass().getName() + "'");
 			return t;
 		}
 
@@ -2062,7 +1910,7 @@ public class ClassMeta<T> implements Type {
 				return c.<T>invoke(outer, arg);
 			return c.<T>invoke(arg);
 		}
-		throw new ExecutableException("No string constructor or valueOf(String) method found for class '"+getInnerClass().getName()+"'");
+		throw new ExecutableException("No string constructor or valueOf(String) method found for class '" + getInnerClass().getName() + "'");
 	}
 
 	/**
@@ -2112,7 +1960,7 @@ public class ClassMeta<T> implements Type {
 		A[] array = (A[])annotationArrayMap.get(type);
 		if (array == null && beanContext != null) {
 			List<A> l = list();
-			info.forEachAnnotation(beanContext, type, x-> true, x -> l.add(x));
+			info.forEachAnnotation(beanContext, type, x -> true, x -> l.add(x));
 			array = (A[])Array.newInstance(type, l.size());
 			for (int i = 0; i < l.size(); i++)
 				Array.set(array, i, l.get(i));
@@ -2199,16 +2047,16 @@ public class ClassMeta<T> implements Type {
 		String n = innerClass.getName();
 		if (simple) {
 			int i = n.lastIndexOf('.');
-			n = n.substring(i == -1 ? 0 : i+1).replace('$', '.');
+			n = n.substring(i == -1 ? 0 : i + 1).replace('$', '.');
 		}
 		if (cc == ARRAY)
 			return elementType.toString(sb, simple).append('[').append(']');
 		if (cc == MAP)
-			return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<"+keyType.toString(simple)+","+valueType.toString(simple)+">");
+			return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<" + keyType.toString(simple) + "," + valueType.toString(simple) + ">");
 		if (cc == BEANMAP)
 			return sb.append(BeanMap.class.getName()).append('<').append(n).append('>');
 		if (cc == COLLECTION || cc == OPTIONAL)
-			return sb.append(n).append(elementType.isObject() ? "" : "<"+elementType.toString(simple)+">");
+			return sb.append(n).append(elementType.isObject() ? "" : "<" + elementType.toString(simple) + ">");
 		return sb.append(n);
 	}
 

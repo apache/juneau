@@ -61,7 +61,7 @@ public class BeanAnnotation {
 	 * A collection of {@link Bean @Bean annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -84,10 +84,10 @@ public class BeanAnnotation {
 	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
 
 		Class<?>[] dictionary = new Class[0];
-		Class<?> implClass=void.class, interfaceClass=void.class, stopClass=void.class;
-		Class<? extends BeanInterceptor<?>> interceptor=BeanInterceptor.Void.class;
-		Class<? extends PropertyNamer> propertyNamer=BasicPropertyNamer.class;
-		String example="", excludeProperties="", p="", properties="", readOnlyProperties="", ro="", typeName="", typePropertyName="", wo="", writeOnlyProperties="", xp="";
+		Class<?> implClass = void.class, interfaceClass = void.class, stopClass = void.class;
+		Class<? extends BeanInterceptor<?>> interceptor = BeanInterceptor.Void.class;
+		Class<? extends PropertyNamer> propertyNamer = BasicPropertyNamer.class;
+		String example = "", excludeProperties = "", p = "", properties = "", readOnlyProperties = "", ro = "", typeName = "", typePropertyName = "", wo = "", writeOnlyProperties = "", xp = "";
 		boolean findFluentSetters, sort;
 
 		/**
@@ -448,6 +448,7 @@ public class BeanAnnotation {
 
 	/** Default value */
 	public static final Bean DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -456,6 +457,7 @@ public class BeanAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static Bean copy(Bean a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.dictionary(a.dictionary())
@@ -480,7 +482,9 @@ public class BeanAnnotation {
 			.writeOnlyProperties(r.resolve(a.writeOnlyProperties()))
 			.xp(r.resolve(a.xp()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -489,6 +493,7 @@ public class BeanAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -498,6 +503,7 @@ public class BeanAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

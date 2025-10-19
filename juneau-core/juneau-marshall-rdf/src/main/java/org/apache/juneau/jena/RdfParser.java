@@ -66,9 +66,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 		private static final Cache<HashKey,RdfParser> CACHE = Cache.of(HashKey.class, RdfParser.class).build();
 
+		// @formatter:off
 		private static final Namespace
 			DEFAULT_JUNEAU_NS = Namespace.of("j", "http://www.apache.org/juneau/"),
 			DEFAULT_JUNEAUBP_NS = Namespace.of("jp", "http://www.apache.org/juneaubp/");
+		// @formatter:on
 
 		boolean trimWhitespace, looseCollections;
 		String language;
@@ -139,6 +141,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -424,6 +427,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			super.findFluentSetters();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
@@ -432,6 +436,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				trimWhitespace,
@@ -442,6 +447,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 				juneauBpNs,
 				jenaSettings
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -1241,13 +1247,13 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1396,6 +1402,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -1404,21 +1411,31 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private static String getConsumes(Builder builder) {
 		if (builder.getConsumes() != null)
 			return builder.getConsumes();
-		switch(builder.language) {
+		switch (builder.language) {
 			case "RDF/XML":
-			case "RDF/XML-ABBREV": return "text/xml+rdf";
-			case "N-TRIPLE": return "text/n-triple";
-			case "N3": return "text/n3";
-			case "N3-PP": return "text/n3-pp";
-			case "N3-PLAIN": return "text/n3-plain";
-			case "N3-TRIPLES": return "text/n3-triples";
-			case "TURTLE": return "text/turtle";
-			default: return "text/xml+rdf";
+			case "RDF/XML-ABBREV":
+				return "text/xml+rdf";
+			case "N-TRIPLE":
+				return "text/n-triple";
+			case "N3":
+				return "text/n3";
+			case "N3-PP":
+				return "text/n3-pp";
+			case "N3-PLAIN":
+				return "text/n3-plain";
+			case "N3-TRIPLES":
+				return "text/n3-triples";
+			case "TURTLE":
+				return "text/turtle";
+			default:
+				return "text/xml+rdf";
 		}
 	}
+
 	final boolean trimWhitespace, looseCollections;
 	final String language;
 	final Namespace juneauNs, juneauBpNs;
@@ -1470,6 +1487,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		}
 		return m;
 	}
+
 	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
 		RdfBeanPropertyMeta m = rdfBeanPropertyMetas.get(bpm);
@@ -1491,9 +1509,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	}
 
 	@Override /* Overridden from Context */
-	public RdfParserSession getSession() {
-		return createSession().build();
-	}
+	public RdfParserSession getSession() { return createSession().build(); }
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
@@ -1524,6 +1540,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		}
 		return m;
 	}
+
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
@@ -1531,9 +1548,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
-	protected final RdfCollectionFormat getCollectionFormat() {
-		return collectionFormat;
-	}
+	protected final RdfCollectionFormat getCollectionFormat() { return collectionFormat; }
 
 	/**
 	 * All Jena-related configuration properties.
@@ -1541,9 +1556,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
 	 */
-	protected final Map<String,Object> getJenaSettings() {
-		return jenaSettings;
-	}
+	protected final Map<String,Object> getJenaSettings() { return jenaSettings; }
 
 	/**
 	 * Default XML namespace for bean properties.
@@ -1552,9 +1565,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * @return
 	 * 	Default XML namespace for bean properties.
 	 */
-	protected final Namespace getJuneauBpNs() {
-		return juneauBpNs;
-	}
+	protected final Namespace getJuneauBpNs() { return juneauBpNs; }
 
 	/**
 	 * XML namespace for Juneau properties.
@@ -1563,9 +1574,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * @return
 	 * 	XML namespace for Juneau properties.
 	 */
-	protected final Namespace getJuneauNs() {
-		return juneauNs;
-	}
+	protected final Namespace getJuneauNs() { return juneauNs; }
 
 	/**
 	 * RDF language.
@@ -1574,9 +1583,8 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * @return
 	 * 	The RDF language to use.
 	 */
-	protected final String getLanguage() {
-		return language;
-	}
+	protected final String getLanguage() { return language; }
+
 	/**
 	 * Collections should be serialized and parsed as loose collections.
 	 *
@@ -1585,9 +1593,8 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 */
-	protected final boolean isLooseCollections() {
-		return looseCollections;
-	}
+	protected final boolean isLooseCollections() { return looseCollections; }
+
 	/**
 	 * Trim whitespace from text elements.
 	 *
@@ -1595,11 +1602,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 * @return
 	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
 	 */
-	protected final boolean isTrimWhitespace() {
-		return trimWhitespace;
-	}
+	protected final boolean isTrimWhitespace() { return trimWhitespace; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("trimWhitespace", trimWhitespace)
 			.append("looseCollections", looseCollections)
@@ -1607,5 +1614,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			.append("juneauNs", juneauNs)
 			.append("juneauBpNs", juneauBpNs)
 			.append("collectionFormat", collectionFormat);
+		// @formatter:on
 	}
 }

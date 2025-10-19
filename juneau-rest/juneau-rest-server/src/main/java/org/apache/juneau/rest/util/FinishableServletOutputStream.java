@@ -68,9 +68,7 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 	}
 
 	@Override /* Overridden from ServletOutputStream */
-	public boolean isReady() {
-		return sos == null ? true : sos.isReady();
-	}
+	public boolean isReady() { return sos == null ? true : sos.isReady(); }
 
 	@Override /* Overridden from ServletOutputStream */
 	public void setWriteListener(WriteListener arg0) {

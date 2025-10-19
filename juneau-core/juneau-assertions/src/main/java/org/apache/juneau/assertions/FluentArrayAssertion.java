@@ -115,7 +115,7 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentArrayAssertion.class, "Messages");
 	private static final String
 		MSG_arrayWasNotEmpty = MESSAGES.getString("arrayWasNotEmpty"),
@@ -126,7 +126,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		MSG_arrayDidNotContainExpectedValueAt = MESSAGES.getString("arrayDidNotContainExpectedValueAt"),
 		MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue"),
 		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -163,7 +163,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	public FluentArrayAssertion(E[] value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Converts this assertion into a {@link FluentBeanListAssertion}.
@@ -263,10 +262,9 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentArrayAssertion<E,R> asTransformed(Function<E[],E[]> function) {  // NOSONAR - Intentional.
+	public FluentArrayAssertion<E,R> asTransformed(Function<E[],E[]> function) { // NOSONAR - Intentional.
 		return new FluentArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
-
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
@@ -280,7 +278,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		isSize(tests.length);
 		for (int i = 0, j = length(); i < j; i++) {
 			var t = tests[i];
-			if (t != null && ! t.test(at(i)))
+			if (t != null && !t.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
@@ -296,7 +294,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	public R isAll(Predicate<E> test) throws AssertionError {
 		Utils.assertArgNotNull("test", test);
 		for (int i = 0, j = length(); i < j; i++)
-			if (! test.test(at(i)))
+			if (!test.test(at(i)))
 				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));
 		return returns();
 	}
@@ -353,7 +351,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	public R isHas(E...entries) throws AssertionError {
 		Utils.assertArgNotNull("entries", entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return is(p);
+		return is(p);
 	}
 
 	/**

@@ -67,7 +67,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="meta")
+@Bean(typeName = "meta")
 public class Meta extends HtmlElementVoid {
 
 	/**
@@ -76,7 +76,7 @@ public class Meta extends HtmlElementVoid {
 	public Meta() { /* Empty constructor. */ }
 
 	@Override /* Overridden from HtmlElement */
-	public Meta _class(String value) {  // NOSONAR - Intentional naming.
+	public Meta _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -98,6 +98,7 @@ public class Meta extends HtmlElementVoid {
 		super.attrUri(key, val);
 		return this;
 	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset">charset</a>
 	 * attribute.

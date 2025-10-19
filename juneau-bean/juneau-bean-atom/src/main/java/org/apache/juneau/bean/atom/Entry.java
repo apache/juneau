@@ -107,7 +107,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-@Bean(typeName="entry")
+@Bean(typeName = "entry")
 public class Entry extends CommonEntry {
 
 	private Content content;
@@ -139,6 +139,7 @@ public class Entry extends CommonEntry {
 	public Entry(String id, String title, String updated) {
 		super(id, title, updated);
 	}
+
 	/**
 	 * Bean property getter:  <property>content</property>.
 	 *
@@ -152,9 +153,7 @@ public class Entry extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Content getContent() {
-		return content;
-	}
+	public Content getContent() { return content; }
 
 	/**
 	 * Bean property getter:  <property>published</property>.
@@ -169,9 +168,7 @@ public class Entry extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Calendar getPublished() {
-		return published;
-	}
+	public Calendar getPublished() { return published; }
 
 	/**
 	 * Bean property getter:  <property>source</property>.
@@ -186,9 +183,7 @@ public class Entry extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Source getSource() {
-		return source;
-	}
+	public Source getSource() { return source; }
 
 	/**
 	 * Bean property getter:  <property>summary</property>.
@@ -203,9 +198,7 @@ public class Entry extends CommonEntry {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Text getSummary() {
-		return summary;
-	}
+	public Text getSummary() { return summary; }
 
 	@Override /* Overridden from CommonEntry */
 	public Entry setAuthors(Person...value) {
@@ -277,6 +270,7 @@ public class Entry extends CommonEntry {
 		super.setId(value);
 		return this;
 	}
+
 	@Override /* Overridden from CommonEntry */
 	public Entry setId(String value) {
 		super.setId(value);

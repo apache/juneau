@@ -50,6 +50,7 @@ public class BeanConfigAnnotation {
 		public void apply(AnnotationInfo<BeanConfig> ai, BeanContext.Builder b) {
 			BeanConfig a = ai.inner();
 
+			// @formatter:off
 			string(a.beanClassVisibility()).map(Visibility::valueOf).ifPresent(x -> b.beanClassVisibility(x));
 			string(a.beanConstructorVisibility()).map(Visibility::valueOf).ifPresent(x -> b.beanConstructorVisibility(x));
 			string(a.beanFieldVisibility()).map(Visibility::valueOf).ifPresent(x -> b.beanFieldVisibility(x));
@@ -86,6 +87,7 @@ public class BeanConfigAnnotation {
 			alist(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> b.annotations(x));
 			strings(a.notBeanPackages()).ifPresent(x -> b.notBeanPackages(x));
 			strings(a.notBeanPackages_replace()).ifPresent(x -> {b.notBeanPackages().clear(); b.notBeanPackages(x);});
+			// @formatter:on
 		}
 	}
 }

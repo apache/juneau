@@ -54,6 +54,7 @@ public class DefaultArg implements RestOpArg {
 	public static DefaultArg create(ParamInfo paramInfo) {
 		return new DefaultArg(paramInfo);
 	}
+
 	private final Class<?> type;
 	private final String name;
 
@@ -69,9 +70,10 @@ public class DefaultArg implements RestOpArg {
 		this.paramInfo = paramInfo;
 		this.name = findBeanName(paramInfo);
 	}
+
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getBeanStore().getBean(type, name).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
+		return opSession.getBeanStore().getBean(type, name).orElseThrow(() -> new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
 	}
 
 	private static String findBeanName(ParamInfo pi) {

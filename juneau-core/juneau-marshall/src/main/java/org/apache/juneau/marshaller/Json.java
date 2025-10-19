@@ -53,6 +53,7 @@ public class Json extends CharMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final Json DEFAULT = new Json();
+
 	/**
 	 * Serializes a Java object to a JSON string.
 	 *

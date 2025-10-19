@@ -66,7 +66,7 @@ public class HttpMethod {
 	/** Represents any HTTP method. */
 	public static final String ANY = "*";
 
-	private static final Set<String> NO_BODY_METHODS = u(set("GET","HEAD","DELETE","CONNECT","OPTIONS","TRACE"));
+	private static final Set<String> NO_BODY_METHODS = u(set("GET", "HEAD", "DELETE", "CONNECT", "OPTIONS", "TRACE"));
 
 	/**
 	 * Returns <jk>true</jk> if specified http method has content.

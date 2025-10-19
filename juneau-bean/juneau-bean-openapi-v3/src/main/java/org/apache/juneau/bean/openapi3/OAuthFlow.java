@@ -144,9 +144,7 @@ public class OAuthFlow extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getAuthorizationUrl() {
-		return authorizationUrl;
-	}
+	public String getAuthorizationUrl() { return authorizationUrl; }
 
 	/**
 	 * Bean property getter:  <property>externalValue</property>.
@@ -156,9 +154,7 @@ public class OAuthFlow extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getRefreshUrl() {
-		return refreshUrl;
-	}
+	public String getRefreshUrl() { return refreshUrl; }
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -168,9 +164,7 @@ public class OAuthFlow extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getScopes() {
-		return scopes;
-	}
+	public Map<String,String> getScopes() { return scopes; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -180,9 +174,7 @@ public class OAuthFlow extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getTokenUrl() {
-		return tokenUrl;
-	}
+	public String getTokenUrl() { return tokenUrl; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -201,7 +193,7 @@ public class OAuthFlow extends OpenApiElement {
 		return switch (property) {
 			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
 			case "refreshUrl" -> setRefreshUrl(Utils.s(value));
-			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "scopes" -> setScopes(mapBuilder(String.class, String.class).sparse().addAny(value).build());
 			case "tokenUrl" -> setTokenUrl(Utils.s(value));
 			default -> {
 				super.set(property, value);

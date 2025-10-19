@@ -58,6 +58,7 @@ public class MethodExecStore {
 			super.impl(value);
 			return this;
 		}
+
 		/**
 		 * Specifies a subclass of {@link MethodExecStats} to use for individual method statistics.
 		 *
@@ -97,6 +98,7 @@ public class MethodExecStore {
 				thrownStore = value;
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -117,6 +119,7 @@ public class MethodExecStore {
 	public static Builder create() {
 		return new Builder(BeanStore.INSTANCE);
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -126,6 +129,7 @@ public class MethodExecStore {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final ThrownStore thrownStore;
 	private final BeanStore beanStore;
 	private final Class<? extends MethodExecStats> statsImplClass;
@@ -148,6 +152,7 @@ public class MethodExecStore {
 	 * @return A report of all method execution times ordered by .
 	 */
 	public String getReport() {
+		// @formatter:off
 		StringBuilder sb = new StringBuilder()
 			.append(" Method                         Runs      Running   Errors   Avg          Total     \n")
 			.append("------------------------------ --------- --------- -------- ------------ -----------\n");
@@ -155,6 +160,7 @@ public class MethodExecStore {
 			.stream()
 			.sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())
 			.forEach(x -> sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));
+		// @formatter:on
 		return sb.toString();
 
 	}
@@ -164,9 +170,7 @@ public class MethodExecStore {
 	 *
 	 * @return All the statistics in this store.
 	 */
-	public Collection<MethodExecStats> getStats() {
-		return db.values();
-	}
+	public Collection<MethodExecStats> getStats() { return db.values(); }
 
 	/**
 	 * Returns the statistics for the specified method.
@@ -180,12 +184,14 @@ public class MethodExecStore {
 	public MethodExecStats getStats(Method m) {
 		MethodExecStats stats = db.get(m);
 		if (stats == null) {
+			// @formatter:off
 			stats = MethodExecStats
 				.create(beanStore)
 				.type(statsImplClass)
 				.method(m)
 				.thrownStore(ThrownStore.create(beanStore).parent(thrownStore).build())
 				.build();
+			// @formatter:on
 			db.putIfAbsent(m, stats);
 			stats = db.get(m);
 		}
@@ -197,16 +203,12 @@ public class MethodExecStore {
 	 *
 	 * @return A list of timing statistics ordered by average execution time descending.
 	 */
-	public List<MethodExecStats> getStatsByTotalTime() {
-		return getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(toList());
-	}
+	public List<MethodExecStats> getStatsByTotalTime() { return getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(toList()); }
 
 	/**
 	 * Returns the thrown exception store being used by this store.
 	 *
 	 * @return The thrown exception store being used by this store.
 	 */
-	public ThrownStore getThrownStore() {
-		return thrownStore;
-	}
+	public ThrownStore getThrownStore() { return thrownStore; }
 }

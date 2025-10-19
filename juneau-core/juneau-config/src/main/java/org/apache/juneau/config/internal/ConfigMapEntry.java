@@ -47,11 +47,11 @@ public class ConfigMapEntry {
 		var m1 = key2.indexOf('<');
 		var m2 = key2.indexOf('>');
 
-		modifiers = nullIfEmpty((m1 > -1 && m2 > m1) ? key2.substring(m1+1, m2) : null);
+		modifiers = nullIfEmpty((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
 
 		this.key = m1 == -1 ? key2 : key2.substring(0, m1);
 
-		line = line.substring(i+1);
+		line = line.substring(i + 1);
 
 		i = line.indexOf('#');
 		if (i != -1) {
@@ -84,45 +84,35 @@ public class ConfigMapEntry {
 	 *
 	 * @return The same-line comment of this entry.
 	 */
-	public String getComment() {
-		return comment;
-	}
+	public String getComment() { return comment; }
 
 	/**
 	 * Returns the name of this entry.
 	 *
 	 * @return The name of this entry.
 	 */
-	public String getKey() {
-		return key;
-	}
+	public String getKey() { return key; }
 
 	/**
 	 * Returns the modifiers for this entry.
 	 *
 	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
 	 */
-	public String getModifiers() {
-		return modifiers;
-	}
+	public String getModifiers() { return modifiers; }
 
 	/**
 	 * Returns the pre-lines of this entry.
 	 *
 	 * @return The pre-lines of this entry as an unmodifiable list.
 	 */
-	public List<String> getPreLines() {
-		return preLines;
-	}
+	public List<String> getPreLines() { return preLines; }
 
 	/**
 	 * Returns the raw value of this entry.
 	 *
 	 * @return The raw value of this entry.
 	 */
-	public String getValue() {
-		return value;
-	}
+	public String getValue() { return value; }
 
 	Writer writeTo(Writer w) throws IOException {
 		if (value == null)

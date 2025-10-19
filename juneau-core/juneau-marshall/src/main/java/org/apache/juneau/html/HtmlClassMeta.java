@@ -79,79 +79,61 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	 *
 	 * @return The value of the annotation.
 	 */
-	public HtmlRender<?> getRender() {
-		return render;
-	}
+	public HtmlRender<?> getRender() { return render; }
 
 	/**
 	 * Returns the {@link Html#noTableHeaders() @Html(noTableHeaders)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation.
 	 */
-	public boolean isNoTableHeaders() {
-		return noTableHeaders;
-	}
+	public boolean isNoTableHeaders() { return noTableHeaders; }
 
 	/**
 	 * Returns the {@link Html#format() @Html(format)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation.
 	 */
-	protected HtmlFormat getFormat() {
-		return format;
-	}
+	protected HtmlFormat getFormat() { return format; }
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
 	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
 	 */
-	protected boolean isHtml() {
-		return format == HtmlFormat.HTML;
-	}
+	protected boolean isHtml() { return format == HtmlFormat.HTML; }
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
 	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
 	 */
-	protected boolean isHtmlCdc() {
-		return format == HtmlFormat.HTML_CDC;
-	}
+	protected boolean isHtmlCdc() { return format == HtmlFormat.HTML_CDC; }
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
 	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
 	 */
-	protected boolean isHtmlSdc() {
-		return format == HtmlFormat.HTML_SDC;
-	}
+	protected boolean isHtmlSdc() { return format == HtmlFormat.HTML_SDC; }
 
 	/**
 	 * Returns the {@link Html#noTables() @Html(noTables)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation.
 	 */
-	protected boolean isNoTables() {
-		return noTables;
-	}
+	protected boolean isNoTables() { return noTables; }
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
 	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
 	 */
-	protected boolean isPlainText() {
-		return format == HtmlFormat.PLAIN_TEXT;
-	}
+	protected boolean isPlainText() { return format == HtmlFormat.PLAIN_TEXT; }
 
 	/**
 	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 *
 	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 */
-	protected boolean isXml() {
-		return format == HtmlFormat.XML;
-	}
+	protected boolean isXml() { return format == HtmlFormat.XML; }
 }

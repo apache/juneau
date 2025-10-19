@@ -40,7 +40,7 @@ import org.apache.juneau.msgpack.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,FIELD,METHOD})
+@Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(MsgPackAnnotation.Array.class)

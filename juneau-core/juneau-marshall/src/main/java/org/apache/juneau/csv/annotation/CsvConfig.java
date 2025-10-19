@@ -33,10 +33,10 @@ import org.apache.juneau.csv.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({CsvConfigAnnotation.SerializerApply.class,CsvConfigAnnotation.ParserApply.class})
+@ContextApply({ CsvConfigAnnotation.SerializerApply.class, CsvConfigAnnotation.ParserApply.class })
 public @interface CsvConfig {
 
 	/**

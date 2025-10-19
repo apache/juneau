@@ -35,7 +35,7 @@ import org.apache.juneau.xml.annotation.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@Xml(format=XMLTEXT)
+@Xml(format = XMLTEXT)
 public class HtmlText {
 	private final String text;
 

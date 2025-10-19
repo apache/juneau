@@ -80,7 +80,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="form")
+@Bean(typeName = "form")
 public class Form extends HtmlElementMixed {
 
 	/**
@@ -108,7 +108,7 @@ public class Form extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Form _class(String value) {  // NOSONAR - Intentional naming.
+	public Form _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -204,6 +204,7 @@ public class Form extends HtmlElementMixed {
 		super.child(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElementMixed */
 	public Form children(Object...value) {
 		super.children(value);

@@ -60,7 +60,7 @@ public class BeanIgnoreAnnotation {
 	 * A collection of {@link BeanIgnore @BeanIgnore annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -110,6 +110,7 @@ public class BeanIgnoreAnnotation {
 
 	/** Default value */
 	public static final BeanIgnore DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -118,12 +119,9 @@ public class BeanIgnoreAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static BeanIgnore copy(BeanIgnore a, VarResolverSession r) {
-		return
-			create()
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.build();
+		return create().on(r.resolve(a.on())).onClass(a.onClass()).build();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -132,6 +130,7 @@ public class BeanIgnoreAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -141,6 +140,7 @@ public class BeanIgnoreAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

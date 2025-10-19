@@ -46,7 +46,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class Gone extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -131,6 +131,7 @@ public class Gone extends BasicHttpException {
 	public Gone copy() {
 		return new Gone(this);
 	}
+
 	@Override /* Overridden from BasicHttpException */
 	public Gone setContent(HttpEntity value) {
 		super.setContent(value);
@@ -196,8 +197,9 @@ public class Gone extends BasicHttpException {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpException */
-	public Gone setStatusCode2(int code) throws IllegalStateException{
+	public Gone setStatusCode2(int code) throws IllegalStateException {
 		super.setStatusCode2(code);
 		return this;
 	}

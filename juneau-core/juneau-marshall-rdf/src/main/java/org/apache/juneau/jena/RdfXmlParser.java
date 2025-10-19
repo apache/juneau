@@ -39,6 +39,7 @@ public class RdfXmlParser extends RdfParser {
 	public static RdfParser.Builder create() {
 		return RdfParser.create().xml();
 	}
+
 	/**
 	 * Constructor.
 	 *

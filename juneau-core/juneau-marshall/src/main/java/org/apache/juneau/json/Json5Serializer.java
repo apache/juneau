@@ -63,14 +63,17 @@ public class Json5Serializer extends JsonSerializer {
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
 	public static final Json5Serializer DEFAULT_READABLE = new Readable(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
 	 * @return A new builder.
 	 */
 	public static JsonSerializer.Builder create() {
-		return JsonSerializer.create().simpleAttrs().quoteChar('\'').produces("application/json5").accept("application/json5,text/json5,application/json;q=0.9,text/json;q=0.9").type(Json5Serializer.class);
+		return JsonSerializer.create().simpleAttrs().quoteChar('\'').produces("application/json5").accept("application/json5,text/json5,application/json;q=0.9,text/json;q=0.9")
+			.type(Json5Serializer.class);
 	}
+
 	/**
 	 * Constructor.
 	 *

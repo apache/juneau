@@ -76,6 +76,7 @@ public class ReaderParserSession extends ParserSession {
 			super.debug(value);
 			return this;
 		}
+
 		/**
 		 * File charset.
 		 *
@@ -198,6 +199,7 @@ public class ReaderParserSession extends ParserSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -207,6 +209,7 @@ public class ReaderParserSession extends ParserSession {
 	public static Builder create(ReaderParser ctx) {
 		return new Builder(ctx);
 	}
+
 	private final ReaderParser ctx;
 	private final Charset fileCharset, streamCharset;
 
@@ -254,22 +257,18 @@ public class ReaderParserSession extends ParserSession {
 	 *
 	 * @return the file charset defined on this session.
 	 */
-	public Charset getFileCharset() {
-		return fileCharset;
-	}
+	public Charset getFileCharset() { return fileCharset; }
+
 	/**
 	 * Returns the stream charset defined on this session.
 	 *
 	 * @return the stream charset defined on this session.
 	 */
-	public Charset getStreamCharset() {
-		return streamCharset;
-	}
+	public Charset getStreamCharset() { return streamCharset; }
 
 	@Override /* Overridden from ParserSession */
-	public final boolean isReaderParser() {
-		return true;
-	}
+	public final boolean isReaderParser() { return true; }
+
 	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);

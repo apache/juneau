@@ -89,7 +89,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="link")
+@Bean(typeName = "link")
 public class Link extends HtmlElementVoid {
 
 	/**
@@ -107,7 +107,7 @@ public class Link extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Link _class(String value) {  // NOSONAR - Intentional naming.
+	public Link _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -163,6 +163,7 @@ public class Link extends HtmlElementVoid {
 		super.dir(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Link hidden(Object value) {
 		super.hidden(value);

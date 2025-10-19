@@ -46,11 +46,11 @@ public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
 	public static NamedAttributeMap of(NamedAttribute...values) {
 		return create().add(values);
 	}
+
 	/**
 	 * Constructor.
 	 */
-	public NamedAttributeMap() {
-	}
+	public NamedAttributeMap() {}
 
 	/**
 	 * Copy constructor.
@@ -72,6 +72,7 @@ public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
 			put(v.getName(), v);
 		return this;
 	}
+
 	/**
 	 * Creates a copy of this list.
 	 *

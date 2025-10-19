@@ -62,7 +62,7 @@ public class UrlEncodingAnnotation {
 	 * A collection of {@link UrlEncoding @UrlEncoding annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -133,6 +133,7 @@ public class UrlEncodingAnnotation {
 
 	/** Default value */
 	public static final UrlEncoding DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -141,13 +142,16 @@ public class UrlEncodingAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static UrlEncoding copy(UrlEncoding a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.expandedParams(a.expandedParams())
 			.on(r.resolve(a.on()))
 			.onClass(a.onClass())
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -156,6 +160,7 @@ public class UrlEncodingAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -165,6 +170,7 @@ public class UrlEncodingAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

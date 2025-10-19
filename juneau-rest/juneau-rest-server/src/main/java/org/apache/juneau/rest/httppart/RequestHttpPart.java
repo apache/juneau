@@ -75,6 +75,7 @@ public class RequestHttpPart {
 		this.value = value;
 		parser(null);
 	}
+
 	/**
 	 * Converts this part to the specified POJO type using the request {@link HttpPartParser} and optional schema.
 	 *
@@ -151,6 +152,7 @@ public class RequestHttpPart {
 	public <T> Optional<T> as(Type type, Type...args) throws BasicHttpException {
 		return as(request.getBeanSession().getClassMeta(type, args));
 	}
+
 	/**
 	 * Returns the value of this parameter as a boolean.
 	 *
@@ -447,23 +449,20 @@ public class RequestHttpPart {
 	public String get() {
 		return asString().get();
 	}
+
 	/**
 	 * Gets the name of this part.
 	 *
 	 * @return The name of this part, never <jk>null</jk>.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Returns the value of this part.
 	 *
 	 * @return The value of this part.
 	 */
-	public String getValue() {
-		return value;
-	}
+	public String getValue() { return value; }
 
 	/**
 	 * Returns <jk>true</jk> if this part exists on the request.
@@ -473,9 +472,7 @@ public class RequestHttpPart {
 	 *
 	 * @return <jk>true</jk> if this part exists on the request.
 	 */
-	public boolean isPresent() {
-		return asString().isPresent();
-	}
+	public boolean isPresent() { return asString().isPresent(); }
 
 	/**
 	 * Return the value if present, otherwise return other.
@@ -531,7 +528,5 @@ public class RequestHttpPart {
 	 *
 	 * @return The request that created this part.
 	 */
-	protected RestRequest getRequest() {
-		return request;
-	}
+	protected RestRequest getRequest() { return request; }
 }

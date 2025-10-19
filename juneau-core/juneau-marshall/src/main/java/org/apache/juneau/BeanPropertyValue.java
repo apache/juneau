@@ -56,52 +56,45 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	 *
 	 * @return The bean property metadata.
 	 */
-	public final ClassMeta<?> getClassMeta() {
-		return pMeta.getClassMeta();
-	}
+	public final ClassMeta<?> getClassMeta() { return pMeta.getClassMeta(); }
 
 	/**
 	 * Returns the bean property metadata.
 	 *
 	 * @return The bean property metadata.
 	 */
-	public final BeanPropertyMeta getMeta() {
-		return pMeta;
-	}
+	public final BeanPropertyMeta getMeta() { return pMeta; }
 
 	/**
 	 * Returns the bean property name.
 	 *
 	 * @return The bean property name.
 	 */
-	public final String getName() {
-		return name;
-	}
+	public final String getName() { return name; }
 
 	/**
 	 * Returns the exception thrown by calling the property getter.
 	 *
 	 * @return The exception thrown by calling the property getter.
 	 */
-	public final Throwable getThrown() {
-		return thrown;
-	}
+	public final Throwable getThrown() { return thrown; }
 
 	/**
 	 * Returns the bean property value.
 	 *
 	 * @return The bean property value.
 	 */
-	public final Object getValue() {
-		return value;
-	}
+	public final Object getValue() { return value; }
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonMap.create()
+		// @formatter:off
+		return JsonMap
+			.create()
 			.append("name", name)
 			.append("value", value)
 			.append("type", pMeta.getClassMeta().getInnerClass().getSimpleName())
 			.toString();
+		// @formatter:on
 	}
 }

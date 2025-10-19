@@ -61,8 +61,8 @@ public class ResultSetList extends LinkedList<Map<String,Object>> {
 			var colTypes = new int[cc];
 
 			for (var i = 0; i < cc; i++) {
-				columns[i+offset] = rsmd.getColumnName(i+1);
-				colTypes[i] = rsmd.getColumnType(i+1);
+				columns[i + offset] = rsmd.getColumnName(i + 1);
+				colTypes[i] = rsmd.getColumnType(i + 1);
 			}
 
 			while (--pos > 0 && rs.next()) { /* Skip to the specified position. */ }
@@ -73,8 +73,8 @@ public class ResultSetList extends LinkedList<Map<String,Object>> {
 				if (includeRowNums)
 					row[0] = rowNum++;
 				for (var i = 0; i < cc; i++) {
-					var o = readEntry(rs, i+1, colTypes[i]);
-					row[i+offset] = o;
+					var o = readEntry(rs, i + 1, colTypes[i]);
+					row[i + offset] = o;
 				}
 				add(new SimpleMap<>(columns, row));
 			}
@@ -109,7 +109,8 @@ public class ResultSetList extends LinkedList<Map<String,Object>> {
 				case Types.LONGVARCHAR -> "longvarchar[" + count(rs.getAsciiStream(col)) + "]";
 				case Types.LONGNVARCHAR -> "longnvarchar[" + count(rs.getCharacterStream(col)) + "]";
 				case Types.TIMESTAMP -> rs.getTimestamp(col); // Oracle returns com.oracle.TIMESTAMP objects from getObject()
-				default -> rs.getObject(col); };
+				default -> rs.getObject(col);
+			};
 		} catch (Exception e) {
 			return e.getLocalizedMessage();
 		}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.microservice.resources;
 
+import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.text.*;
@@ -57,6 +58,7 @@ public class LogEntryFormatter extends Formatter {
 		}
 		return Integer.toHexString(i);
 	}
+
 	private ConcurrentHashMap<String,AtomicInteger> hashes;
 	private DateFormat df;
 	private String format;
@@ -93,6 +95,7 @@ public class LogEntryFormatter extends Formatter {
 
 		fieldIndexes = new HashMap<>();
 
+		// @formatter:off
 		format = format
 			.replaceAll("\\{date\\}", "%1\\$s")
 			.replaceAll("\\{class\\}", "%2\\$s")
@@ -102,17 +105,19 @@ public class LogEntryFormatter extends Formatter {
 			.replaceAll("\\{msg\\}", "%6\\$s")
 			.replaceAll("\\{threadid\\}", "%7\\$s")
 			.replaceAll("\\{exception\\}", "%8\\$s");
+		// @formatter:on
 
 		this.format = format;
 
 		// Construct a regular expression to match this log entry.
 		int index = 1;
 		StringBuilder re = new StringBuilder();
-		int S1 = 1; // Looking for %
-		int S2 = 2; // Found %, looking for number.
-		int S3 = 3; // Found number, looking for $.
-		int S4 = 4; // Found $, looking for s.
-		int state = 1;
+
+		// S1: Looking for %
+		// S2: Found %, looking for number.
+		// S3: Found number, looking for $.
+		// S4: Found $, looking for s.
+		var state = S1;
 		int i1 = 0;
 		for (int i = 0; i < format.length(); i++) {
 			char c = format.charAt(i);
@@ -141,7 +146,7 @@ public class LogEntryFormatter extends Formatter {
 				}
 			} else if (state == S4) {
 				if (c == 's') {
-					int group = Integer.parseInt(format.substring(i1, i-1));
+					int group = Integer.parseInt(format.substring(i1, i - 1));
 					switch (group) {
 						case 1:
 							fieldIndexes.put("date", index++);
@@ -187,7 +192,7 @@ public class LogEntryFormatter extends Formatter {
 		// The log parser
 		String sre = re.toString();
 		if (sre.endsWith("\\%n"))
-			sre = sre.substring(0, sre.length()-3);
+			sre = sre.substring(0, sre.length() - 3);
 
 		// Replace instances of %n.
 		sre = sre.replaceAll("\\\\%n", "\\\\n");
@@ -214,14 +219,7 @@ public class LogEntryFormatter extends Formatter {
 				t = null;
 			}
 		}
-		String s = String.format(format,
-			df.format(new Date(r.getMillis())),
-			r.getSourceClassName(),
-			r.getSourceMethodName(),
-			r.getLoggerName(),
-			r.getLevel(),
-			msg,
-			r.getThreadID(),
+		String s = String.format(format, df.format(new Date(r.getMillis())), r.getSourceClassName(), r.getSourceMethodName(), r.getLoggerName(), r.getLevel(), msg, r.getThreadID(),
 			r.getThrown() == null ? "" : r.getThrown().getMessage());
 		if (t != null)
 			s += String.format("%n%s", ThrowableUtils.getStackTrace(r.getThrown()));
@@ -233,9 +231,7 @@ public class LogEntryFormatter extends Formatter {
 	 *
 	 * @return The {@link DateFormat} used for matching dates.
 	 */
-	public DateFormat getDateFormat() {
-		return df;
-	}
+	public DateFormat getDateFormat() { return df; }
 
 	/**
 	 * Given a matcher that has matched the pattern specified by {@link #getLogEntryPattern()}, returns the field value
@@ -267,7 +263,5 @@ public class LogEntryFormatter extends Formatter {
 	 *
 	 * @return The regular expression pattern used for matching log entries.
 	 */
-	public Pattern getLogEntryPattern() {
-		return rePattern;
-	}
+	public Pattern getLogEntryPattern() { return rePattern; }
 }

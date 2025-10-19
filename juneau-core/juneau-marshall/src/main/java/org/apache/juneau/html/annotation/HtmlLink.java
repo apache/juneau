@@ -50,7 +50,7 @@ import org.apache.juneau.html.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(HtmlLinkAnnotation.Array.class)

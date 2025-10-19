@@ -73,8 +73,7 @@ public class SubstringVar extends MultipartVar {
 				result = stringArg.substring(start);
 			if (start < 0 && -start <= stringArg.length())
 				result = stringArg.substring(stringArg.length() + start);
-		}
-		else if (args.length == 3) {
+		} else if (args.length == 3) {
 			int start = Integer.parseInt(args[1]);
 			int end = Integer.parseInt(args[2]);
 			if (start >= 0 && start < stringArg.length() && end >= 0 && end <= stringArg.length() && start < end)

@@ -37,13 +37,13 @@ public class OapiExample {
 	 * @throws Exception Unused.
 	 */
 	@SuppressWarnings("unused")
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception {
 
 		OpenApiSerializer oapiSerializer = OpenApiSerializer.DEFAULT;
 
 		OpenApiParser oapiParser = OpenApiParser.DEFAULT;
 
-		Pojo pojo = new Pojo("id","name");
+		Pojo pojo = new Pojo("id", "name");
 
 		String flat = oapiSerializer.serialize(pojo);
 		// Print out the created POJO in OpenAPI format.
@@ -66,7 +66,7 @@ public class OapiExample {
 				)
 			)
 			.build();
-		Object value = new long[][]{{1,2,3},{4,5,6},{7,8,9}};
+		Object value = new long[][] { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 		String output = OpenApiSerializer.DEFAULT.serialize(HEADER, schema, value);
 
 		HttpPartSchema schemab = HttpPartSchema.create().type("string").build();

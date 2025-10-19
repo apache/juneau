@@ -57,10 +57,11 @@ public class RestPostAnnotation {
 		Class<? extends RestMatcher>[] matchers = new Class[0];
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends Serializer>[] serializers = new Class[0];
-		Class<?>[] parsers={};
+		Class<?>[] parsers = {};
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
-		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] consumes={}, defaultRequestFormData={}, defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, path={}, produces={};
+		String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", defaultContentType = "", maxInput = "", rolesDeclared = "", roleGuard = "", summary = "", value = "";
+		String[] consumes = {}, defaultRequestFormData = {}, defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {},
+			produces = {};
 
 		/**
 		 * Constructor.
@@ -405,6 +406,7 @@ public class RestPostAnnotation {
 			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 		}
 	}
+
 	private static class Impl extends TargetedAnnotationImpl implements RestPost {
 
 		private final Class<? extends RestConverter>[] converters;
@@ -572,8 +574,10 @@ public class RestPostAnnotation {
 			return value;
 		}
 	}
+
 	/** Default value */
 	public static final RestPost DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

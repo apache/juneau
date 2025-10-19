@@ -111,7 +111,6 @@ public class Assertions {
 		return AnyAssertion.create(value);
 	}
 
-
 	/**
 	 * Performs an assertion on an array of POJOs.
 	 *
@@ -975,7 +974,6 @@ public class Assertions {
 	public static final ZonedDateTimeAssertion assertZonedDateTime(ZonedDateTime value) {
 		return ZonedDateTimeAssertion.create(value);
 	}
-
 
 	/**
 	 * Constructor.

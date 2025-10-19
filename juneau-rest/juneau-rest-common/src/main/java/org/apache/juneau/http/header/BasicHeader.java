@@ -80,6 +80,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	public static BasicHeader of(String name, Object value) {
 		return value == null ? null : new BasicHeader(name, value);
 	}
+
 	private final String name;
 	private final String stringValue;
 
@@ -172,7 +173,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		// Not a perfect equality operator if using SVL vars.
 		if (! (o instanceof Header))
 			return false;
-		return Utils.eq(this, (Header)o, (x,y)->Utils.eq(x.name, y.getName()) && Utils.eq(x.getValue(), y.getValue()));
+		return Utils.eq(this, (Header)o, (x, y) -> Utils.eq(x.name, y.getName()) && Utils.eq(x.getValue(), y.getValue()));
 	}
 
 	/**
@@ -210,9 +211,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	}
 
 	@Override /* Overridden from Header */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	@Override /* Overridden from Header */
 	public String getValue() {
@@ -235,9 +234,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 *
 	 * @return <jk>true</jk> if the value exists and is not empty.
 	 */
-	public boolean isNotEmpty() {
-		return ! asString().orElse("").isEmpty();
-	}
+	public boolean isNotEmpty() { return ! asString().orElse("").isEmpty(); }
 
 	/**
 	 * Returns <jk>true</jk> if the value exists.
@@ -247,9 +244,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 *
 	 * @return <jk>true</jk> if the value exists.
 	 */
-	public boolean isPresent() {
-		return asString().isPresent();
-	}
+	public boolean isPresent() { return asString().isPresent(); }
 
 	/**
 	 * If a value is present, returns the value, otherwise returns other.

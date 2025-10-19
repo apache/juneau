@@ -40,7 +40,7 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@org.apache.juneau.html.annotation.Html(format=XML)
+@org.apache.juneau.html.annotation.Html(format = XML)
 public abstract class HtmlElement {
 
 	private java.util.Map<String,Object> attrs;
@@ -55,7 +55,7 @@ public abstract class HtmlElement {
 	 * @param value Space-separated CSS class names (e.g., <js>"btn btn-primary"</js>).
 	 * @return This object.
 	 */
-	public HtmlElement _class(String value) {  // NOSONAR - Intentional naming.
+	public HtmlElement _class(String value) { // NOSONAR - Intentional naming.
 		attr("class", value);
 		return this;
 	}
@@ -196,11 +196,9 @@ public abstract class HtmlElement {
 	 *
 	 * @return The attributes of this element.
 	 */
-	@Xml(format=ATTRS)
+	@Xml(format = ATTRS)
 	@Beanp("a")
-	public java.util.Map<String,Object> getAttrs() {
-		return attrs;
-	}
+	public java.util.Map<String,Object> getAttrs() { return attrs; }
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/editing.html#the-hidden-attribute">hidden</a> attribute.
@@ -1154,6 +1152,7 @@ public abstract class HtmlElement {
 		attr("translate", value);
 		return this;
 	}
+
 	/**
 	 * If the specified attribute is a boolean, it gets converted to the attribute name if <jk>true</jk> or <jk>null</jk> if <jk>false</jk>.
 	 *

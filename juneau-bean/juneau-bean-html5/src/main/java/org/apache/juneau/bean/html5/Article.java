@@ -120,7 +120,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="article")
+@Bean(typeName = "article")
 public class Article extends HtmlElementMixed {
 
 	/**
@@ -138,7 +138,7 @@ public class Article extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Article _class(String value) {  // NOSONAR - Intentional naming.
+	public Article _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -160,6 +160,7 @@ public class Article extends HtmlElementMixed {
 		super.attrUri(key, val);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElementMixed */
 	public Article child(Object value) {
 		super.child(value);

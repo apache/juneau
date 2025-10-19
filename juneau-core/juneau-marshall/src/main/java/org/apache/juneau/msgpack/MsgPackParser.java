@@ -51,9 +51,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 * @param builder The builder for this object.
 		 */
 		public Base64(Builder builder) {
-			super(
-				builder.binaryFormat(BinaryFormat.BASE64)
-			);
+			super(builder.binaryFormat(BinaryFormat.BASE64));
 		}
 	}
 
@@ -106,6 +104,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -506,13 +505,13 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -605,9 +604,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 * @param builder The builder for this object.
 		 */
 		public SpacedHex(Builder builder) {
-			super(
-				builder.binaryFormat(BinaryFormat.SPACED_HEX)
-			);
+			super(builder.binaryFormat(BinaryFormat.SPACED_HEX));
 		}
 	}
 
@@ -618,6 +615,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 	/** Default parser, all default settings, string input encoded as BASE64.*/
 	public static final MsgPackParser DEFAULT_BASE64 = new Base64(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -626,6 +624,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private final Map<ClassMeta<?>,MsgPackClassMeta> msgPackClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,MsgPackBeanPropertyMeta> msgPackBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -659,6 +658,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		}
 		return m;
 	}
+
 	@Override /* Overridden from MsgPackMetaProvider */
 	public MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm) {
 		MsgPackClassMeta m = msgPackClassMetas.get(cm);
@@ -670,7 +670,5 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	}
 
 	@Override /* Overridden from Context */
-	public MsgPackParserSession getSession() {
-		return createSession().build();
-	}
+	public MsgPackParserSession getSession() { return createSession().build(); }
 }

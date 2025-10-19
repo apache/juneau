@@ -99,11 +99,13 @@ public class InputStreamParser extends Parser {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder autoCloseStreams() {
 			super.autoCloseStreams();
@@ -392,10 +394,7 @@ public class InputStreamParser extends Parser {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				binaryFormat
-			);
+			return HashKey.of(super.hashKey(), binaryFormat);
 		}
 
 		@Override /* Overridden from Builder */
@@ -525,13 +524,13 @@ public class InputStreamParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -614,6 +613,7 @@ public class InputStreamParser extends Parser {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -622,6 +622,7 @@ public class InputStreamParser extends Parser {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final BinaryFormat binaryFormat;
 
 	/**
@@ -640,14 +641,11 @@ public class InputStreamParser extends Parser {
 	}
 
 	@Override /* Overridden from Context */
-	public InputStreamParserSession getSession() {
-		return createSession().build();
-	}
+	public InputStreamParserSession getSession() { return createSession().build(); }
 
 	@Override /* Overridden from Parser */
-	public final boolean isReaderParser() {
-		return false;
-	}
+	public final boolean isReaderParser() { return false; }
+
 	/**
 	 * Binary input format.
 	 *
@@ -655,9 +653,8 @@ public class InputStreamParser extends Parser {
 	 * @return
 	 * 	The format to use when converting strings to byte arrays.
 	 */
-	protected final BinaryFormat getBinaryFormat() {
-		return binaryFormat;
-	}
+	protected final BinaryFormat getBinaryFormat() { return binaryFormat; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("binaryFormat", binaryFormat);

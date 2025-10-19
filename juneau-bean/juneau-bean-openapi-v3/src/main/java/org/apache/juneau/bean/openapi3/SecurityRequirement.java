@@ -57,7 +57,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 * @param scopes The required scopes.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public SecurityRequirement addRequirement(String schemeName, String... scopes) {
+	public SecurityRequirement addRequirement(String schemeName, String...scopes) {
 		assertArgNotNull("schemeName", schemeName);
 		assertVarargsNotNull("scopes", scopes);
 		if (requirements == null)
@@ -89,15 +89,15 @@ public class SecurityRequirement extends OpenApiElement {
 	 *
 	 * @return The security requirements map.
 	 */
-	public Map<String,List<String>> getRequirements() {
-		return requirements;
-	}
+	public Map<String,List<String>> getRequirements() { return requirements; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(requirements != null, "requirements")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

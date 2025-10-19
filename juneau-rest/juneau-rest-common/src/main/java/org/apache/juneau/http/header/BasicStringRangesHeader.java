@@ -86,6 +86,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	public static BasicStringRangesHeader of(String name, Supplier<StringRanges> value) {
 		return value == null ? null : new BasicStringRangesHeader(name, value);
 	}
+
 	private final String stringValue;
 	private final StringRanges value;
 	private final Supplier<StringRanges> supplier;
@@ -163,9 +164,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return stringValue != null ? stringValue : Utils.s(value());
-	}
+	public String getValue() { return stringValue != null ? stringValue : Utils.s(value()); }
 
 	/**
 	 * Given a list of media types, returns the best match for this string range header.

@@ -35,10 +35,10 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({HtmlConfigAnnotation.SerializerApply.class,HtmlConfigAnnotation.ParserApply.class})
+@ContextApply({ HtmlConfigAnnotation.SerializerApply.class, HtmlConfigAnnotation.ParserApply.class })
 public @interface HtmlConfig {
 
 	/**

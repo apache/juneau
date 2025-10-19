@@ -100,6 +100,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addBeanTypesHtml() {
 			super.addBeanTypesHtml();
@@ -722,13 +723,13 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -868,6 +869,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 
 	/** Default serializer, all default settings. */
 	public static final HtmlStrippedDocSerializer DEFAULT = new HtmlStrippedDocSerializer(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -876,6 +878,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Constructor.
 	 *
@@ -896,7 +899,5 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	}
 
 	@Override /* Overridden from Context */
-	public HtmlStrippedDocSerializerSession getSession() {
-		return createSession().build();
-	}
+	public HtmlStrippedDocSerializerSession getSession() { return createSession().build(); }
 }

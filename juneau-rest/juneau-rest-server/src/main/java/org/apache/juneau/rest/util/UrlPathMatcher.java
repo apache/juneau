@@ -52,9 +52,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 		}
 
 		@Override /* Overridden from UrlPathMatcher */
-		public String getComparator() {
-			return comparator;
-		}
+		public String getComparator() { return comparator; }
 
 		@Override /* Overridden from UrlPathMatcher */
 		public UrlPathMatch match(UrlPath pathInfo) {
@@ -91,9 +89,9 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 			String[] parts = new UrlPath(pattern).getParts();
 
-			this.hasRemainder = parts.length > 0 && "*".equals(parts[parts.length-1]);
+			this.hasRemainder = parts.length > 0 && "*".equals(parts[parts.length - 1]);
 
-			parts = hasRemainder ? Arrays.copyOf(parts, parts.length-1) : parts;
+			parts = hasRemainder ? Arrays.copyOf(parts, parts.length - 1) : parts;
 
 			this.parts = parts;
 			this.vars = new String[parts.length];
@@ -111,14 +109,10 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 		}
 
 		@Override
-		public String getComparator() {
-			return comparator;
-		}
+		public String getComparator() { return comparator; }
 
 		@Override
-		public String[] getVars() {
-			return varKeys == null ? new String[0] : Arrays.copyOf(varKeys, varKeys.length);
-		}
+		public String[] getVars() { return varKeys == null ? new String[0] : Arrays.copyOf(varKeys, varKeys.length); }
 
 		@Override
 		public boolean hasVars() {
@@ -215,9 +209,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 	 * 	The variable names or an empty array if no variables found.
 	 *	<br>Modifying the returned array does not modify this object.
 	 */
-	public String[] getVars() {
-		return new String[0];
-	}
+	public String[] getVars() { return new String[0]; }
 
 	/**
 	 * Returns <jk>true</jk> if this path pattern contains variables.

@@ -95,6 +95,7 @@ public class NTriple extends CharMarshaller {
 		DEFAULT.write(object, output);
 		return output;
 	}
+
 	/**
 	 * Parses an N-Triple input object to the specified Java type.
 	 *

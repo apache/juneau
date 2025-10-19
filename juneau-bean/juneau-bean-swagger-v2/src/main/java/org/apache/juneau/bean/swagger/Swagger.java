@@ -93,16 +93,12 @@ public class Swagger extends SwaggerElement {
 
 	private static final Comparator<String> PATH_COMPARATOR = (o1, o2) -> o1.replace('{', '@').compareTo(o2.replace('{', '@'));
 
-	private String
-		swagger = "2.0",  // NOSONAR - Intentional naming.
-		host,
-		basePath;
+	private String swagger = "2.0",  // NOSONAR - Intentional naming.
+		host, basePath;
 	private Info info;
 	private ExternalDocumentation externalDocs;
 	private Set<String> schemes;
-	private Set<MediaType>
-		consumes,
-		produces;
+	private Set<MediaType> consumes, produces;
 	private Set<Tag> tags;
 	private List<Map<String,List<String>>> security;
 	private Map<String,JsonMap> definitions;
@@ -138,7 +134,7 @@ public class Swagger extends SwaggerElement {
 
 		this.paths = copyOf(copyFrom.paths, v -> {
 			var m = new OperationMap();
-			v.forEach((k2,v2) -> m.put(k2, v2.copy()));
+			v.forEach((k2, v2) -> m.put(k2, v2.copy()));
 			return m;
 		});
 
@@ -148,7 +144,7 @@ public class Swagger extends SwaggerElement {
 
 		this.security = copyOf(copyFrom.security, x -> {
 			Map<String,List<String>> m2 = map();
-			x.forEach((k,v) -> m2.put(k, copyOf(v)));
+			x.forEach((k, v) -> m2.put(k, copyOf(v)));
 			return m2;
 		});
 
@@ -170,6 +166,7 @@ public class Swagger extends SwaggerElement {
 		consumes = setBuilder(consumes).sparse().addAll(values).build();
 		return this;
 	}
+
 	/**
 	 * Bean property appender:  <property>consumes</property>.
 	 *
@@ -499,9 +496,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getBasePath() {
-		return basePath;
-	}
+	public String getBasePath() { return basePath; }
 
 	/**
 	 * Bean property getter:  <property>consumes</property>.
@@ -511,9 +506,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getConsumes() {
-		return consumes;
-	}
+	public Set<MediaType> getConsumes() { return consumes; }
 
 	/**
 	 * Bean property getter:  <property>definitions</property>.
@@ -523,9 +516,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonMap> getDefinitions() {
-		return definitions;
-	}
+	public Map<String,JsonMap> getDefinitions() { return definitions; }
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
@@ -535,9 +526,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
+	public ExternalDocumentation getExternalDocs() { return externalDocs; }
 
 	/**
 	 * Bean property getter:  <property>host</property>.
@@ -547,9 +536,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getHost() {
-		return host;
-	}
+	public String getHost() { return host; }
 
 	/**
 	 * Bean property getter:  <property>info</property>.
@@ -559,9 +546,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Info getInfo() {
-		return info;
-	}
+	public Info getInfo() { return info; }
 
 	/**
 	 * Shortcut for calling <c>getPaths().get(path).get(operation);</c>
@@ -600,9 +585,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ParameterInfo> getParameters() {
-		return parameters;
-	}
+	public Map<String,ParameterInfo> getParameters() { return parameters; }
 
 	/**
 	 * Shortcut for calling <c>getPaths().get(path);</c>
@@ -623,9 +606,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,OperationMap> getPaths() {
-		return paths;
-	}
+	public Map<String,OperationMap> getPaths() { return paths; }
 
 	/**
 	 * Bean property getter:  <property>produces</property>.
@@ -635,9 +616,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getProduces() {
-		return produces;
-	}
+	public Set<MediaType> getProduces() { return produces; }
 
 	/**
 	 * Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c>
@@ -674,9 +653,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ResponseInfo> getResponses() {
-		return responses;
-	}
+	public Map<String,ResponseInfo> getResponses() { return responses; }
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
@@ -686,9 +663,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getSchemes() {
-		return schemes;
-	}
+	public Set<String> getSchemes() { return schemes; }
 
 	/**
 	 * Bean property getter:  <property>security</property>.
@@ -698,9 +673,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Map<String,List<String>>> getSecurity() {
-		return security;
-	}
+	public List<Map<String,List<String>>> getSecurity() { return security; }
 
 	/**
 	 * Bean property getter:  <property>securityDefinitions</property>.
@@ -710,9 +683,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,SecurityScheme> getSecurityDefinitions() {
-		return securityDefinitions;
-	}
+	public Map<String,SecurityScheme> getSecurityDefinitions() { return securityDefinitions; }
 
 	/**
 	 * Bean property getter:  <property>swagger</property>.
@@ -722,9 +693,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getSwagger() {
-		return swagger;
-	}
+	public String getSwagger() { return swagger; }
 
 	/**
 	 * Bean property getter:  <property>tags</property>.
@@ -734,12 +703,11 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Tag> getTags() {
-		return tags;
-	}
+	public Set<Tag> getTags() { return tags; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(basePath != null, "basePath")
 			.addIf(consumes != null, "consumes")
@@ -757,6 +725,7 @@ public class Swagger extends SwaggerElement {
 			.addIf(swagger != null, "swagger")
 			.addIf(tags != null, "tags")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -767,17 +736,17 @@ public class Swagger extends SwaggerElement {
 		return switch (property) {
 			case "basePath" -> setBasePath(Utils.s(value));
 			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "definitions" -> setDefinitions(mapBuilder(String.class,JsonMap.class).sparse().addAny(value).build());
+			case "definitions" -> setDefinitions(mapBuilder(String.class, JsonMap.class).sparse().addAny(value).build());
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			case "host" -> setHost(Utils.s(value));
 			case "info" -> setInfo(toType(value, Info.class));
-			case "parameters" -> setParameters(mapBuilder(String.class,ParameterInfo.class).sparse().addAny(value).build());
-			case "paths" -> setPaths(mapBuilder(String.class,OperationMap.class).sparse().addAny(value).build());
+			case "parameters" -> setParameters(mapBuilder(String.class, ParameterInfo.class).sparse().addAny(value).build());
+			case "paths" -> setPaths(mapBuilder(String.class, OperationMap.class).sparse().addAny(value).build());
 			case "produces" -> setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "responses" -> setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
+			case "responses" -> setResponses(mapBuilder(String.class, ResponseInfo.class).sparse().addAny(value).build());
 			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
-			case "security" -> setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
-			case "securityDefinitions" -> setSecurityDefinitions(mapBuilder(String.class,SecurityScheme.class).sparse().addAny(value).build());
+			case "security" -> setSecurity((List)listBuilder(Map.class, String.class, List.class, String.class).sparse().addAny(value).build());
+			case "securityDefinitions" -> setSecurityDefinitions(mapBuilder(String.class, SecurityScheme.class).sparse().addAny(value).build());
 			case "swagger" -> setSwagger(Utils.s(value));
 			case "tags" -> setTags(listBuilder(Tag.class).sparse().addAny(value).build());
 			default -> {
@@ -936,9 +905,10 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setPaths(Map<String,OperationMap> value) {
-		paths = mapBuilder(String.class,OperationMap.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
+		paths = mapBuilder(String.class, OperationMap.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
 		return this;
 	}
+
 	/**
 	 * Bean property setter:  <property>produces</property>.
 	 *

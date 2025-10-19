@@ -275,72 +275,56 @@ public class OpenApi extends OpenApiElement {
 	 *
 	 * @return The components object.
 	 */
-	public Components getComponents() {
-		return components;
-	}
+	public Components getComponents() { return components; }
 
 	/**
 	 * Returns the external documentation.
 	 *
 	 * @return The external documentation.
 	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
+	public ExternalDocumentation getExternalDocs() { return externalDocs; }
 
 	/**
 	 * Returns the info object.
 	 *
 	 * @return The info object.
 	 */
-	public Info getInfo() {
-		return info;
-	}
+	public Info getInfo() { return info; }
 
 	/**
 	 * Returns the OpenAPI version.
 	 *
 	 * @return The OpenAPI version.
 	 */
-	public String getOpenapi() {
-		return openapi;
-	}
+	public String getOpenapi() { return openapi; }
 
 	/**
 	 * Returns the paths map.
 	 *
 	 * @return The paths map.
 	 */
-	public Map<String,PathItem> getPaths() {
-		return paths;
-	}
+	public Map<String,PathItem> getPaths() { return paths; }
 
 	/**
 	 * Returns the security requirements list.
 	 *
 	 * @return The security requirements list.
 	 */
-	public List<SecurityRequirement> getSecurity() {
-		return security;
-	}
+	public List<SecurityRequirement> getSecurity() { return security; }
 
 	/**
 	 * Returns the servers list.
 	 *
 	 * @return The servers list.
 	 */
-	public List<Server> getServers() {
-		return servers;
-	}
+	public List<Server> getServers() { return servers; }
 
 	/**
 	 * Returns the tags list.
 	 *
 	 * @return The tags list.
 	 */
-	public List<Tag> getTags() {
-		return tags;
-	}
+	public List<Tag> getTags() { return tags; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -427,7 +411,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setPaths(Map<String,PathItem> value) {
-		this.paths = mapBuilder(String.class,PathItem.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
+		this.paths = mapBuilder(String.class, PathItem.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
 		return this;
 	}
 

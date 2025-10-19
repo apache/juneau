@@ -47,6 +47,7 @@ public class Json5Parser extends JsonParser {
 	public static JsonParser.Builder create() {
 		return JsonParser.create().consumes("application/json5,text/json5,application/json,text/json");
 	}
+
 	/**
 	 * Constructor.
 	 *

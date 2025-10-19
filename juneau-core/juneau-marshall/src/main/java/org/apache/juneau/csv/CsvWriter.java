@@ -42,8 +42,7 @@ public class CsvWriter extends SerializerWriter {
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected CsvWriter(Writer out, boolean useWhitespace, int maxIndent, char quoteChar,
-			boolean trimStrings, UriResolver uriResolver) {
+	protected CsvWriter(Writer out, boolean useWhitespace, int maxIndent, char quoteChar, boolean trimStrings, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 	}
 
@@ -58,36 +57,43 @@ public class CsvWriter extends SerializerWriter {
 		super.append(value);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter append(int indent, char c) {
 		super.append(indent, c);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter append(int indent, String text) {
 		super.append(indent, text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter append(String text) {
 		super.append(text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter appendIf(boolean b, char c) {
 		super.appendIf(b, c);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter appendIf(boolean b, String text) {
 		super.appendIf(b, text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
@@ -105,16 +111,19 @@ public class CsvWriter extends SerializerWriter {
 		super.appendUri(value);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter cr(int depth) {
 		super.cr(depth);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter cre(int depth) {
 		super.cre(depth);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public CsvWriter i(int indent) {
 		super.i(indent);

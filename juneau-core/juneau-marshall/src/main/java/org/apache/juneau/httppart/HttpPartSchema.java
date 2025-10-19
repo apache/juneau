@@ -745,7 +745,7 @@ public class HttpPartSchema {
 		 * 	The new value for this property.
 		 * @return This object.
 		 */
-		public Builder examples(String... value) {
+		public Builder examples(String...value) {
 			this.examples = value;
 			return this;
 		}
@@ -1941,7 +1941,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder property(String key, Builder value) {
-			if ( key != null && value != null) {
+			if (key != null && value != null) {
 				if (properties == null)
 					properties = map();
 				properties.put(key, value);
@@ -1966,7 +1966,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder property(String key, HttpPartSchema value) {
-			if ( key != null && value != null) {
+			if (key != null && value != null) {
 				if (properties == null)
 					properties = map();
 				properties.put(key, value);
@@ -2516,7 +2516,7 @@ public class HttpPartSchema {
 
 		private Builder properties(JsonMap value) {
 			if (value != null)
-				value.forEach((k,v) -> property(k, HttpPartSchema.create().apply((JsonMap)v)));
+				value.forEach((k, v) -> property(k, HttpPartSchema.create().apply((JsonMap)v)));
 			return this;
 		}
 
@@ -2621,7 +2621,8 @@ public class HttpPartSchema {
 			multipleOf(toNumber(a.multipleOf(), a.mo()));
 			pattern(firstNonEmpty(a.pattern(), a.p()));
 			type(firstNonEmpty(a.type(), a.t()));
-			uniqueItems(a.uniqueItems() || a.ui());			return this;
+			uniqueItems(a.uniqueItems() || a.ui());
+			return this;
 		}
 
 		// -----------------------------------------------------------------------------------------------------------------
@@ -2790,7 +2791,8 @@ public class HttpPartSchema {
 			multipleOf(toNumber(a.multipleOf(), a.mo()));
 			pattern(firstNonEmpty(a.pattern(), a.p()));
 			type(firstNonEmpty(a.type(), a.t()));
-			uniqueItems(a.uniqueItems() || a.ui());			return this;
+			uniqueItems(a.uniqueItems() || a.ui());
+			return this;
 		}
 
 		Builder applyAll(Class<? extends Annotation> c, java.lang.reflect.Type t) {
@@ -2916,7 +2918,7 @@ public class HttpPartSchema {
 						}
 						break;
 					default:
-					// Silently ignore other validation annotations we don't support yet
+						// Silently ignore other validation annotations we don't support yet
 				}
 			} catch (@SuppressWarnings("unused") Exception e) {
 				// If reflection fails, just skip this annotation - it's optional
@@ -3497,6 +3499,7 @@ public class HttpPartSchema {
 	public static Builder tString() {
 		return create().tString();
 	}
+
 	/**
 	 * Shortcut for <c><jsm>create</jsm>().type(HttpPartDataType.<jsf>STRING</jsf>).format(HttpPartFormat.<jsf>UON</jsf>)</c>.
 	 *
@@ -3505,13 +3508,15 @@ public class HttpPartSchema {
 	public static Builder tUon() {
 		return create().tString().fUon();
 	}
+
 	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
 		if (in == null)
 			return null;
 		Map<String,HttpPartSchema> m = map();
-		in.forEach((k,v) -> m.put(k, build(v, noValidate)));
+		in.forEach((k, v) -> m.put(k, build(v, noValidate)));
 		return u(m);
 	}
+
 	private static HttpPartSchema build(Object in, boolean noValidate) {
 		if (in == null)
 			return null;
@@ -3519,9 +3524,11 @@ public class HttpPartSchema {
 			return (HttpPartSchema)in;
 		return ((Builder)in).noValidate(noValidate).build();
 	}
+
 	private static <T> Set<T> copy(Set<T> in) {
 		return in == null ? emptySet() : u(copyOf(in));
 	}
+
 	final static JsonMap toJsonMap(String[] ss) {
 		String s = Utils.joinnl(ss);
 		if (s.isEmpty())
@@ -3534,6 +3541,7 @@ public class HttpPartSchema {
 			throw asRuntimeException(e);
 		}
 	}
+
 	final static Number toNumber(String...s) {
 		try {
 			for (String ss : s)
@@ -3544,6 +3552,7 @@ public class HttpPartSchema {
 			throw asRuntimeException(e);
 		}
 	}
+
 	final static Set<String> toSet(String s) {
 		if (Utils.isEmpty(s))
 			return null;
@@ -3555,6 +3564,7 @@ public class HttpPartSchema {
 		}
 		return set;
 	}
+
 	final static Set<String> toSet(String[]...s) {
 		boolean isNotEmpty = false;
 		for (String[] ss : s)
@@ -3568,6 +3578,7 @@ public class HttpPartSchema {
 					Utils.split(ss2, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}
+
 	final String name;
 	final String _default;
 	final Set<String> _enum;
@@ -3665,6 +3676,7 @@ public class HttpPartSchema {
 		List<String> errors = Utils.list();
 		ListBuilder<String> notAllowed = listBuilder(String.class);
 		boolean invalidFormat = false;
+		// @formatter:off
 		switch (type) {
 			case STRING: {
 				notAllowed
@@ -3776,12 +3788,13 @@ public class HttpPartSchema {
 			default:
 				break;
 		}
+		// @formatter:on
 
 		List<String> notAllowed2 = notAllowed.build();
 		if (! notAllowed2.isEmpty())
-			errors.add("Attributes not allow for type='"+type+"': " + Utils.join(notAllowed2, ","));
+			errors.add("Attributes not allow for type='" + type + "': " + Utils.join(notAllowed2, ","));
 		if (invalidFormat)
-			errors.add("Invalid format for type='"+type+"': '"+format+"'");
+			errors.add("Invalid format for type='" + type + "': '" + format + "'");
 		if (exclusiveMaximum && maximum == null)
 			errors.add("Cannot specify exclusiveMaximum with maximum.");
 		if (exclusiveMinimum && minimum == null)
@@ -3821,9 +3834,7 @@ public class HttpPartSchema {
 	 * @return The <c>collectionFormat</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#collectionFormat(String)
 	 */
-	public HttpPartCollectionFormat getCollectionFormat() {
-		return collectionFormat;
-	}
+	public HttpPartCollectionFormat getCollectionFormat() { return collectionFormat; }
 
 	/**
 	 * Returns the <c>default</c> field of this schema.
@@ -3831,9 +3842,7 @@ public class HttpPartSchema {
 	 * @return The default value for this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#_default(String)
 	 */
-	public String getDefault() {
-		return _default;
-	}
+	public String getDefault() { return _default; }
 
 	/**
 	 * Returns the <c>enum</c> field of this schema.
@@ -3841,9 +3850,7 @@ public class HttpPartSchema {
 	 * @return The <c>enum</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#_enum(Set)
 	 */
-	public Set<String> getEnum() {
-		return _enum;
-	}
+	public Set<String> getEnum() { return _enum; }
 
 	/**
 	 * Returns the <c>format</c> field of this schema.
@@ -3851,9 +3858,7 @@ public class HttpPartSchema {
 	 * @see HttpPartSchema.Builder#format(String)
 	 * @return The <c>format</c> field of this schema, or <jk>null</jk> if not specified.
 	 */
-	public HttpPartFormat getFormat() {
-		return format;
-	}
+	public HttpPartFormat getFormat() { return format; }
 
 	/**
 	 * Returns the <c>format</c> field of this schema.
@@ -3886,9 +3891,7 @@ public class HttpPartSchema {
 	 * @return The schema for child items of the object represented by this schema, or <jk>null</jk> if not defined.
 	 * @see HttpPartSchema.Builder#items(HttpPartSchema.Builder)
 	 */
-	public HttpPartSchema getItems() {
-		return items;
-	}
+	public HttpPartSchema getItems() { return items; }
 
 	/**
 	 * Returns the <c>maximum</c> field of this schema.
@@ -3896,9 +3899,7 @@ public class HttpPartSchema {
 	 * @return The <c>maximum</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#maximum(Number)
 	 */
-	public Number getMaximum() {
-		return maximum;
-	}
+	public Number getMaximum() { return maximum; }
 
 	/**
 	 * Returns the <c>xxx</c> field of this schema.
@@ -3906,9 +3907,7 @@ public class HttpPartSchema {
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#maxItems(Long)
 	 */
-	public Long getMaxItems() {
-		return maxItems;
-	}
+	public Long getMaxItems() { return maxItems; }
 
 	/**
 	 * Returns the <c>xxx</c> field of this schema.
@@ -3916,9 +3915,7 @@ public class HttpPartSchema {
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#maxLength(Long)
 	 */
-	public Long getMaxLength() {
-		return maxLength;
-	}
+	public Long getMaxLength() { return maxLength; }
 
 	/**
 	 * Returns the <c>xxx</c> field of this schema.
@@ -3926,9 +3923,7 @@ public class HttpPartSchema {
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#maxProperties(Long)
 	 */
-	public Long getMaxProperties() {
-		return maxProperties;
-	}
+	public Long getMaxProperties() { return maxProperties; }
 
 	/**
 	 * Returns the <c>minimum</c> field of this schema.
@@ -3936,9 +3931,7 @@ public class HttpPartSchema {
 	 * @return The <c>minimum</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#minimum(Number)
 	 */
-	public Number getMinimum() {
-		return minimum;
-	}
+	public Number getMinimum() { return minimum; }
 
 	/**
 	 * Returns the <c>xxx</c> field of this schema.
@@ -3946,9 +3939,7 @@ public class HttpPartSchema {
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#minItems(Long)
 	 */
-	public Long getMinItems() {
-		return minItems;
-	}
+	public Long getMinItems() { return minItems; }
 
 	/**
 	 * Returns the <c>xxx</c> field of this schema.
@@ -3956,9 +3947,7 @@ public class HttpPartSchema {
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#minLength(Long)
 	 */
-	public Long getMinLength() {
-		return minLength;
-	}
+	public Long getMinLength() { return minLength; }
 
 	/**
 	 * Returns the <c>xxx</c> field of this schema.
@@ -3966,9 +3955,7 @@ public class HttpPartSchema {
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#minProperties(Long)
 	 */
-	public Long getMinProperties() {
-		return minProperties;
-	}
+	public Long getMinProperties() { return minProperties; }
 
 	/**
 	 * Returns the <c>xxx</c> field of this schema.
@@ -3976,9 +3963,7 @@ public class HttpPartSchema {
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#multipleOf(Number)
 	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
+	public Number getMultipleOf() { return multipleOf; }
 
 	/**
 	 * Returns the name of the object described by this schema, for example the query or form parameter name.
@@ -3986,18 +3971,14 @@ public class HttpPartSchema {
 	 * @return The name, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#name(String)
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Returns the default parsed type for this schema.
 	 *
 	 * @return The default parsed type for this schema.  Never <jk>null</jk>.
 	 */
-	public ClassMeta<?> getParsedType() {
-		return parsedType;
-	}
+	public ClassMeta<?> getParsedType() { return parsedType; }
 
 	/**
 	 * Returns the <c>parser</c> field of this schema.
@@ -4005,9 +3986,7 @@ public class HttpPartSchema {
 	 * @return The <c>parser</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#parser(Class)
 	 */
-	public Class<? extends HttpPartParser> getParser() {
-		return parser;
-	}
+	public Class<? extends HttpPartParser> getParser() { return parser; }
 
 	/**
 	 * Returns the <c>xxx</c> field of this schema.
@@ -4015,9 +3994,7 @@ public class HttpPartSchema {
 	 * @return The <c>xxx</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#pattern(String)
 	 */
-	public Pattern getPattern() {
-		return pattern;
-	}
+	public Pattern getPattern() { return pattern; }
 
 	/**
 	 * Returns the schema information for the specified property.
@@ -4040,9 +4017,7 @@ public class HttpPartSchema {
 	 * @return The <c>serializer</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#serializer(Class)
 	 */
-	public Class<? extends HttpPartSerializer> getSerializer() {
-		return serializer;
-	}
+	public Class<? extends HttpPartSerializer> getSerializer() { return serializer; }
 
 	/**
 	 * Returns the <c>type</c> field of this schema.
@@ -4050,9 +4025,7 @@ public class HttpPartSchema {
 	 * @return The <c>type</c> field of this schema, or <jk>null</jk> if not specified.
 	 * @see HttpPartSchema.Builder#type(String)
 	 */
-	public HttpPartDataType getType() {
-		return type;
-	}
+	public HttpPartDataType getType() { return type; }
 
 	/**
 	 * Returns the <c>type</c> field of this schema.
@@ -4081,6 +4054,7 @@ public class HttpPartSchema {
 			return HttpPartDataType.ARRAY;
 		return HttpPartDataType.STRING;
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this schema has properties associated with it.
 	 *
@@ -4096,9 +4070,7 @@ public class HttpPartSchema {
 	 * @return The <c>skipIfEmpty</c> field of this schema.
 	 * @see HttpPartSchema.Builder#skipIfEmpty(Boolean)
 	 */
-	public boolean isAllowEmptyValue() {
-		return allowEmptyValue;
-	}
+	public boolean isAllowEmptyValue() { return allowEmptyValue; }
 
 	/**
 	 * Returns the <c>exclusiveMaximum</c> field of this schema.
@@ -4106,9 +4078,7 @@ public class HttpPartSchema {
 	 * @return The <c>exclusiveMaximum</c> field of this schema.
 	 * @see HttpPartSchema.Builder#exclusiveMaximum(Boolean)
 	 */
-	public boolean isExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
+	public boolean isExclusiveMaximum() { return exclusiveMaximum; }
 
 	/**
 	 * Returns the <c>exclusiveMinimum</c> field of this schema.
@@ -4116,9 +4086,7 @@ public class HttpPartSchema {
 	 * @return The <c>exclusiveMinimum</c> field of this schema.
 	 * @see HttpPartSchema.Builder#exclusiveMinimum(Boolean)
 	 */
-	public boolean isExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
+	public boolean isExclusiveMinimum() { return exclusiveMinimum; }
 
 	/**
 	 * Returns the <c>required</c> field of this schema.
@@ -4126,9 +4094,7 @@ public class HttpPartSchema {
 	 * @return The <c>required</c> field of this schema.
 	 * @see HttpPartSchema.Builder#required(Boolean)
 	 */
-	public boolean isRequired() {
-		return required;
-	}
+	public boolean isRequired() { return required; }
 
 	/**
 	 * Returns the <c>skipIfEmpty</c> field of this schema.
@@ -4136,9 +4102,7 @@ public class HttpPartSchema {
 	 * @return The <c>skipIfEmpty</c> field of this schema.
 	 * @see HttpPartSchema.Builder#skipIfEmpty(Boolean)
 	 */
-	public boolean isSkipIfEmpty() {
-		return skipIfEmpty;
-	}
+	public boolean isSkipIfEmpty() { return skipIfEmpty; }
 
 	/**
 	 * Returns the <c>uniqueItems</c> field of this schema.
@@ -4146,9 +4110,7 @@ public class HttpPartSchema {
 	 * @return The <c>uniqueItems</c> field of this schema.
 	 * @see HttpPartSchema.Builder#uniqueItems(Boolean)
 	 */
-	public boolean isUniqueItems() {
-		return uniqueItems;
-	}
+	public boolean isUniqueItems() { return uniqueItems; }
 
 	@Override
 	public String toString() {
@@ -4157,6 +4119,7 @@ public class HttpPartSchema {
 			Predicate<Boolean> nf = Utils::isTrue;
 			Predicate<Number> nm1 = Utils::isNotMinusOne;
 			Predicate<Object> nn = Utils::isNotNull;
+			// @formatter:off
 			JsonMap m = new JsonMap()
 				.appendIf(ne, "name", name)
 				.appendIf(ne, "type", type)
@@ -4185,6 +4148,7 @@ public class HttpPartSchema {
 				.appendIf(nm1, "minProperties", minProperties)
 				.append("parsedType", parsedType)
 			;
+			// @formatter:on
 			return m.toString();
 		} catch (@SuppressWarnings("unused") Exception e) {
 			return "";
@@ -4294,7 +4258,7 @@ public class HttpPartSchema {
 						throw new SchemaValidationException("Minimum number of properties not met.");
 					if (! isValidMaxProperties(m))
 						throw new SchemaValidationException("Maximum number of properties exceeded.");
-					m.forEach((k,v) -> {
+					m.forEach((k, v) -> {
 						String key = k.toString();
 						HttpPartSchema s2 = getProperty(key);
 						if (s2 != null)
@@ -4323,7 +4287,8 @@ public class HttpPartSchema {
 			case FILE:
 			case NO_TYPE:
 				break;
-			default: break;
+			default:
+				break;
 		}
 		return o;
 	}
@@ -4415,10 +4380,10 @@ public class HttpPartSchema {
 					return isValidTime(x);
 				case DURATION:
 					return isValidDuration(x);
-			case BYTE:
-			case BINARY:
-			case BINARY_SPACED:
-				return true; // These are transformation formats, not validation formats
+				case BYTE:
+				case BINARY:
+				case BINARY_SPACED:
+					return true; // These are transformation formats, not validation formats
 				case PASSWORD:
 					return true; // Password format is just a UI hint
 				case INT32:
@@ -4627,6 +4592,7 @@ public class HttpPartSchema {
 		}
 		return true;
 	}
+
 	private boolean isValidUniqueItems(Object x) {
 		if (uniqueItems) {
 			Set<Object> s = new HashSet<>();

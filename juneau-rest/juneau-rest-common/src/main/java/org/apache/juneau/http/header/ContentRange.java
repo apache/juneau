@@ -166,6 +166,7 @@ public class ContentRange extends BasicStringHeader {
 	public static ContentRange of(Supplier<String> value) {
 		return value == null ? null : new ContentRange(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

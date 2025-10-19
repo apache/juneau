@@ -80,7 +80,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://www.iana.org/assignments/link-relations/link-relations.xhtml">IANA Link Relations</a>
  * </ul>
  */
-@Bean(typeName="link")
+@Bean(typeName = "link")
 public class Link extends Common {
 
 	private String href;
@@ -103,6 +103,7 @@ public class Link extends Common {
 	public Link(String rel, String type, String href) {
 		setRel(rel).setType(type).setHref(href);
 	}
+
 	/**
 	 * Bean property getter:  <property>href</property>.
 	 *
@@ -114,10 +115,8 @@ public class Link extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public String getHref() {
-		return href;
-	}
+	@Xml(format = ATTR)
+	public String getHref() { return href; }
 
 	/**
 	 * Bean property getter:  <property>hreflang</property>.
@@ -130,10 +129,8 @@ public class Link extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public String getHreflang() {
-		return hreflang;
-	}
+	@Xml(format = ATTR)
+	public String getHreflang() { return hreflang; }
 
 	/**
 	 * Bean property getter:  <property>length</property>.
@@ -147,10 +144,8 @@ public class Link extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public Integer getLength() {
-		return length;
-	}
+	@Xml(format = ATTR)
+	public Integer getLength() { return length; }
 
 	/**
 	 * Bean property getter:  <property>rel</property>.
@@ -164,10 +159,8 @@ public class Link extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public String getRel() {
-		return rel;
-	}
+	@Xml(format = ATTR)
+	public String getRel() { return rel; }
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -180,10 +173,8 @@ public class Link extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public String getTitle() {
-		return title;
-	}
+	@Xml(format = ATTR)
+	public String getTitle() { return title; }
 
 	/**
 	 * Bean property getter:  <property>type</property>.
@@ -193,10 +184,8 @@ public class Link extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public String getType() {
-		return type;
-	}
+	@Xml(format = ATTR)
+	public String getType() { return type; }
 
 	@Override /* Overridden from Common */
 	public Link setBase(Object value) {
@@ -304,6 +293,7 @@ public class Link extends Common {
 		this.rel = value;
 		return this;
 	}
+
 	/**
 	 * Bean property setter:  <property>title</property>.
 	 *

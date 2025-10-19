@@ -124,6 +124,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -165,6 +166,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 			super.beanContext(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanDictionary(java.lang.Class<?>...values) {
 			super.beanDictionary(values);
@@ -407,6 +409,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				preserveRootElement,
@@ -415,6 +418,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 				reporter,
 				resolver
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -624,13 +628,13 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -742,6 +746,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 	/** Default parser, all default settings.*/
 	public static final XmlParser DEFAULT = new XmlParser(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -750,9 +755,8 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	public static Builder create() {
 		return new Builder();
 	}
-	final boolean
-		validating,
-		preserveRootElement;
+
+	final boolean validating, preserveRootElement;
 	final Class<? extends XMLEventAllocator> eventAllocator;
 	final Class<? extends XMLReporter> reporter;
 	final Class<? extends XMLResolver> resolver;
@@ -794,9 +798,8 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	}
 
 	@Override /* Overridden from Context */
-	public XmlParserSession getSession() {
-		return createSession().build();
-	}
+	public XmlParserSession getSession() { return createSession().build(); }
+
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
 		XmlBeanMeta m = xmlBeanMetas.get(bm);
@@ -827,6 +830,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		}
 		return m;
 	}
+
 	private static <T> T newInstance(Class<T> c) {
 		try {
 			return c.getDeclaredConstructor().newInstance();
@@ -842,9 +846,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 * @return
 	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	protected final XMLEventAllocator getEventAllocator() {
-		return eventAllocatorImpl;
-	}
+	protected final XMLEventAllocator getEventAllocator() { return eventAllocatorImpl; }
 
 	/**
 	 * XML reporter.
@@ -853,9 +855,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 * @return
 	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	protected final XMLReporter getReporter() {
-		return reporterImpl;
-	}
+	protected final XMLReporter getReporter() { return reporterImpl; }
 
 	/**
 	 * XML resolver.
@@ -864,9 +864,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 * @return
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	protected final XMLResolver getResolver() {
-		return resolverImpl;
-	}
+	protected final XMLResolver getResolver() { return resolverImpl; }
 
 	/**
 	 * Preserve root element during generalized parsing.
@@ -876,9 +874,8 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 * 	<jk>true</jk> if when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
 	 */
-	protected final boolean isPreserveRootElement() {
-		return preserveRootElement;
-	}
+	protected final boolean isPreserveRootElement() { return preserveRootElement; }
+
 	/**
 	 * Enable validation.
 	 *
@@ -886,17 +883,17 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */
-	protected final boolean isValidating() {
-		return validating;
-	}
+	protected final boolean isValidating() { return validating; }
 
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("validating", validating)
 			.append("preserveRootElement", preserveRootElement)
 			.append("reporter", reporter)
 			.append("resolver", resolver)
 			.append("eventAllocator", eventAllocator);
+		// @formatter:on
 	}
 }

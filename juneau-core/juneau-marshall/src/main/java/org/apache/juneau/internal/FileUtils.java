@@ -156,7 +156,7 @@ public class FileUtils {
 		int i = name.lastIndexOf('.');
 		if (i == -1)
 			return "";
-		return name.substring(i+1);
+		return name.substring(i + 1);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class FileUtils {
 			return null;
 		path = trimTrailingSlashes(path);
 		int i = path.lastIndexOf('/');
-		return i == -1 ? path : path.substring(i+1);
+		return i == -1 ? path : path.substring(i + 1);
 	}
 
 	/**

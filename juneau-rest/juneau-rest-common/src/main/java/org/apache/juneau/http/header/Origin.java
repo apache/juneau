@@ -61,6 +61,7 @@ public class Origin extends BasicStringHeader {
 	public static Origin of(Supplier<String> value) {
 		return value == null ? null : new Origin(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

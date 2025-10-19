@@ -193,8 +193,9 @@ import org.apache.juneau.swap.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a>
  * </ul>
  */
-@Bean(typeName="schema")
+@Bean(typeName = "schema")
 public class JsonSchema {
+	// @formatter:off
 	private String name;                                   // Property name.  Not serialized.
 	private URI idUri;                                     // Draft 2020-12: $id
 	private URI id;                                        // Draft 04: id (deprecated but kept for compatibility)
@@ -250,12 +251,12 @@ public class JsonSchema {
 	private URI ref;
 	private JsonSchemaMap schemaMap;
 	private JsonSchema master = this;
+	// @formatter:on
 
 	/**
 	 * Default constructor.
 	 */
 	public JsonSchema() { /* Empty constructor. */ }
-
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -266,9 +267,7 @@ public class JsonSchema {
 	 * @return The value of the <property>name</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@BeanIgnore
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Bean property setter:  <property>name</property>.
@@ -295,7 +294,7 @@ public class JsonSchema {
 	 */
 	@Beanp("$id")
 	public URI getIdUri() {
-		return idUri;  // Return only idUri, not id (to avoid double serialization)
+		return idUri; // Return only idUri, not id (to avoid double serialization)
 	}
 
 	/**
@@ -332,7 +331,7 @@ public class JsonSchema {
 	 */
 	@Deprecated
 	public URI getId() {
-		return id != null ? id : idUri;  // Fall back to new '$id' for compatibility when reading
+		return id != null ? id : idUri; // Fall back to new '$id' for compatibility when reading
 	}
 
 	/**
@@ -365,9 +364,7 @@ public class JsonSchema {
 	 * @return The value of the <property>$schema</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("$schema")
-	public URI getSchemaVersionUri() {
-		return schemaVersion;
-	}
+	public URI getSchemaVersionUri() { return schemaVersion; }
 
 	/**
 	 * Bean property setter:  <property>$schema</property>.
@@ -393,9 +390,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>title</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public String getTitle() {
-		return title;
-	}
+	public String getTitle() { return title; }
 
 	/**
 	 * Bean property setter:  <property>title</property>.
@@ -413,9 +408,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>description</property> property, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property setter:  <property>description</property>.
@@ -452,9 +445,7 @@ public class JsonSchema {
 	 * 	The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonTypeArray}.
 	 */
 	@BeanIgnore
-	public JsonType getTypeAsJsonType() {
-		return typeJsonType;
-	}
+	public JsonType getTypeAsJsonType() { return typeJsonType; }
 
 	/**
 	 * Bean property getter:  <property>type</property>.
@@ -465,9 +456,7 @@ public class JsonSchema {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonType}.
 	 */
 	@BeanIgnore
-	public JsonTypeArray getTypeAsJsonTypeArray() {
-		return typeJsonTypeArray;
-	}
+	public JsonTypeArray getTypeAsJsonTypeArray() { return typeJsonTypeArray; }
 
 	/**
 	 * Bean property setter:  <property>type</property>.
@@ -527,11 +516,7 @@ public class JsonSchema {
 
 		@Override /* Overridden from ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			var cm = (
-				o instanceof Collection
-				? session.getClassMeta(JsonTypeArray.class)
-				: session.getClassMeta(JsonType.class)
-			);
+			var cm = (o instanceof Collection ? session.getClassMeta(JsonTypeArray.class) : session.getClassMeta(JsonType.class));
 			return session.convertToType(o, cm);
 		}
 	}
@@ -547,7 +532,7 @@ public class JsonSchema {
 	 * 	The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,JsonSchema> getDefinitions() {
-		return definitions != null ? definitions : defs;  // Fall back to $defs for compatibility
+		return definitions != null ? definitions : defs; // Fall back to $defs for compatibility
 	}
 
 	/**
@@ -583,9 +568,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>properties</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonSchema> getProperties() {
-		return properties;
-	}
+	public Map<String,JsonSchema> getProperties() { return properties; }
 
 	/**
 	 * Returns the property with the specified name.
@@ -658,8 +641,7 @@ public class JsonSchema {
 			this.properties = map();
 		for (var p : properties) {
 			if (p.getName() == null)
-				throw new BeanRuntimeException(JsonSchema.class,
-					"Invalid property passed to JsonSchema.addProperties().  Property name was null.");
+				throw new BeanRuntimeException(JsonSchema.class, "Invalid property passed to JsonSchema.addProperties().  Property name was null.");
 			setMasterOn(p);
 			this.properties.put(p.getName(), p);
 		}
@@ -673,9 +655,7 @@ public class JsonSchema {
 	 * 	The value of the <property>patternProperties</property> property on this bean, or <jk>null</jk> if it is
 	 * 	not set.
 	 */
-	public Map<String,JsonSchema> getPatternProperties() {
-		return patternProperties;
-	}
+	public Map<String,JsonSchema> getPatternProperties() { return patternProperties; }
 
 	/**
 	 * Bean property setter:  <property>patternProperties</property>.
@@ -710,8 +690,7 @@ public class JsonSchema {
 			this.patternProperties = map();
 		for (var p : properties) {
 			if (p.getName() == null)
-				throw new BeanRuntimeException(JsonSchema.class,
-					"Invalid property passed to JsonSchema.addProperties().  Property name was null.");
+				throw new BeanRuntimeException(JsonSchema.class, "Invalid property passed to JsonSchema.addProperties().  Property name was null.");
 			setMasterOn(p);
 			this.patternProperties.put(p.getName(), p);
 		}
@@ -724,9 +703,7 @@ public class JsonSchema {
 	 * @return
 	 * 	The value of the <property>dependencies</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonSchema> getDependencies() {
-		return dependencies;
-	}
+	public Map<String,JsonSchema> getDependencies() { return dependencies; }
 
 	/**
 	 * Bean property setter:  <property>dependencies</property>.
@@ -779,9 +756,7 @@ public class JsonSchema {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
 	@BeanIgnore
-	public JsonSchema getItemsAsSchema() {
-		return itemsSchema;
-	}
+	public JsonSchema getItemsAsSchema() { return itemsSchema; }
 
 	/**
 	 * Bean property getter:  <property>items</property>.
@@ -792,9 +767,7 @@ public class JsonSchema {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
 	@BeanIgnore
-	public JsonSchemaArray getItemsAsSchemaArray() {
-		return itemsSchemaArray;
-	}
+	public JsonSchemaArray getItemsAsSchemaArray() { return itemsSchemaArray; }
 
 	/**
 	 * Used during parsing to convert the <property>items</property> property to the correct class type.
@@ -818,11 +791,7 @@ public class JsonSchema {
 
 		@Override /* Overridden from ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			var cm = (
-				o instanceof Collection
-				? session.getClassMeta(JsonSchemaArray.class)
-				: session.getClassMeta(JsonSchema.class)
-			);
+			var cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.class) : session.getClassMeta(JsonSchema.class));
 			return session.convertToType(o, cm);
 		}
 	}
@@ -872,9 +841,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>multipleOf</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
+	public Number getMultipleOf() { return multipleOf; }
 
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
@@ -892,9 +859,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>maximum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMaximum() {
-		return maximum;
-	}
+	public Number getMaximum() { return maximum; }
 
 	/**
 	 * Bean property setter:  <property>maximum</property>.
@@ -918,9 +883,7 @@ public class JsonSchema {
 	 * 	The value of the <property>exclusiveMaximum</property> property on this bean, or <jk>null</jk> if it is
 	 * 	not set.
 	 */
-	public Number getExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
+	public Number getExclusiveMaximum() { return exclusiveMaximum; }
 
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
@@ -942,9 +905,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>minimum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMinimum() {
-		return minimum;
-	}
+	public Number getMinimum() { return minimum; }
 
 	/**
 	 * Bean property setter:  <property>minimum</property>.
@@ -968,9 +929,7 @@ public class JsonSchema {
 	 * 	The value of the <property>exclusiveMinimum</property> property on this bean, or <jk>null</jk> if it is
 	 * 	not set.
 	 */
-	public Number getExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
+	public Number getExclusiveMinimum() { return exclusiveMinimum; }
 
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
@@ -992,9 +951,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>maxLength</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
+	public Integer getMaxLength() { return maxLength; }
 
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
@@ -1012,9 +969,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>minLength</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinLength() {
-		return minLength;
-	}
+	public Integer getMinLength() { return minLength; }
 
 	/**
 	 * Bean property setter:  <property>minLength</property>.
@@ -1032,9 +987,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>pattern</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public String getPattern() {
-		return pattern;
-	}
+	public String getPattern() { return pattern; }
 
 	/**
 	 * Bean property setter:  <property>pattern</property>.
@@ -1072,9 +1025,7 @@ public class JsonSchema {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchemaArray}.
 	 */
 	@BeanIgnore
-	public Boolean getAdditionalItemsAsBoolean() {
-		return additionalItemsBoolean;
-	}
+	public Boolean getAdditionalItemsAsBoolean() { return additionalItemsBoolean; }
 
 	/**
 	 * Bean property getter:  <property>additionalItems</property>.
@@ -1086,9 +1037,7 @@ public class JsonSchema {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
 	@BeanIgnore
-	public List<JsonSchema> getAdditionalItemsAsSchemaArray() {
-		return additionalItemsSchemaArray;
-	}
+	public List<JsonSchema> getAdditionalItemsAsSchemaArray() { return additionalItemsSchemaArray; }
 
 	/**
 	 * Bean property setter:  <property>additionalItems</property>.
@@ -1109,7 +1058,8 @@ public class JsonSchema {
 				this.additionalItemsSchemaArray = x;
 				setMasterOn(this.additionalItemsSchemaArray);
 			} else {
-				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray", className(additionalItems));
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray",
+					className(additionalItems));
 			}
 		}
 		return this;
@@ -1152,11 +1102,7 @@ public class JsonSchema {
 
 		@Override /* Overridden from ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			var cm = (
-				o instanceof Collection
-				? session.getClassMeta(JsonSchemaArray.class)
-				: session.getClassMeta(Boolean.class)
-			);
+			var cm = (o instanceof Collection ? session.getClassMeta(JsonSchemaArray.class) : session.getClassMeta(Boolean.class));
 			return session.convertToType(o, cm);
 		}
 	}
@@ -1166,9 +1112,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>maxItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxItems() {
-		return maxItems;
-	}
+	public Integer getMaxItems() { return maxItems; }
 
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
@@ -1186,9 +1130,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>minItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinItems() {
-		return minItems;
-	}
+	public Integer getMinItems() { return minItems; }
 
 	/**
 	 * Bean property setter:  <property>minItems</property>.
@@ -1207,9 +1149,7 @@ public class JsonSchema {
 	 * @return
 	 * 	The value of the <property>uniqueItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
-	}
+	public Boolean getUniqueItems() { return uniqueItems; }
 
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
@@ -1228,9 +1168,7 @@ public class JsonSchema {
 	 * @return
 	 * 	The value of the <property>maxProperties</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxProperties() {
-		return maxProperties;
-	}
+	public Integer getMaxProperties() { return maxProperties; }
 
 	/**
 	 * Bean property setter:  <property>maxProperties</property>.
@@ -1249,9 +1187,7 @@ public class JsonSchema {
 	 * @return
 	 * 	The value of the <property>minProperties</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinProperties() {
-		return minProperties;
-	}
+	public Integer getMinProperties() { return minProperties; }
 
 	/**
 	 * Bean property setter:  <property>minProperties</property>.
@@ -1269,9 +1205,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>required</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getRequired() {
-		return required;
-	}
+	public List<String> getRequired() { return required; }
 
 	/**
 	 * Bean property setter:  <property>required</property>.
@@ -1350,9 +1284,7 @@ public class JsonSchema {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link JsonSchema}.
 	 */
 	@BeanIgnore
-	public Boolean getAdditionalPropertiesAsBoolean() {
-		return additionalPropertiesBoolean;
-	}
+	public Boolean getAdditionalPropertiesAsBoolean() { return additionalPropertiesBoolean; }
 
 	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
@@ -1364,9 +1296,7 @@ public class JsonSchema {
 	 * @return The currently set value, or <jk>null</jk> if the property is not set, or is set as a {@link Boolean}.
 	 */
 	@BeanIgnore
-	public JsonSchema getAdditionalPropertiesAsSchema() {
-		return additionalPropertiesSchema;
-	}
+	public JsonSchema getAdditionalPropertiesAsSchema() { return additionalPropertiesSchema; }
 
 	/**
 	 * Bean property setter:  <property>additionalProperties</property>.
@@ -1377,7 +1307,7 @@ public class JsonSchema {
 	 * @return This object.
 	 * @throws BeanRuntimeException If invalid object type passed in.
 	 */
-	@Beanp(dictionary={JsonSchema.class})
+	@Beanp(dictionary = { JsonSchema.class })
 	public JsonSchema setAdditionalProperties(Object additionalProperties) {
 		this.additionalPropertiesBoolean = null;
 		this.additionalPropertiesSchema = null;
@@ -1388,8 +1318,7 @@ public class JsonSchema {
 				this.additionalPropertiesSchema = x;
 				setMasterOn(this.additionalPropertiesSchema);
 			} else
-				throw new BeanRuntimeException(JsonSchemaProperty.class,
-					"Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema",
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema",
 					className(additionalProperties));
 		}
 		return this;
@@ -1417,11 +1346,7 @@ public class JsonSchema {
 
 		@Override /* Overridden from ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
-			var cm = (
-				o instanceof Boolean
-				? session.getClassMeta(Boolean.class)
-				: session.getClassMeta(JsonSchema.class)
-			);
+			var cm = (o instanceof Boolean ? session.getClassMeta(Boolean.class) : session.getClassMeta(JsonSchema.class));
 			return session.convertToType(o, cm);
 		}
 	}
@@ -1431,9 +1356,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>enum</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() {
-		return _enum;
-	}
+	public List<Object> getEnum() { return _enum; }
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
@@ -1441,7 +1364,7 @@ public class JsonSchema {
 	 * @param _enum The new value for the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setEnum(List<Object> _enum) {  // NOSONAR - Intentional naming.
+	public JsonSchema setEnum(List<Object> _enum) { // NOSONAR - Intentional naming.
 		this._enum = _enum;
 		return this;
 	}
@@ -1452,7 +1375,7 @@ public class JsonSchema {
 	 * @param _enum The list of items to append to the <property>enum</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema addEnum(Object..._enum) {  // NOSONAR - Intentional naming.
+	public JsonSchema addEnum(Object..._enum) { // NOSONAR - Intentional naming.
 		if (this._enum == null)
 			this._enum = new LinkedList<>();
 		for (var e : _enum)
@@ -1465,9 +1388,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>allOf</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<JsonSchema> getAllOf() {
-		return allOf;
-	}
+	public List<JsonSchema> getAllOf() { return allOf; }
 
 	/**
 	 * Bean property setter:  <property>allOf</property>.
@@ -1498,9 +1419,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>anyOf</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<JsonSchema> getAnyOf() {
-		return anyOf;
-	}
+	public List<JsonSchema> getAnyOf() { return anyOf; }
 
 	/**
 	 * Bean property setter:  <property>anyOf</property>.
@@ -1534,9 +1453,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>oneOf</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<JsonSchema> getOneOf() {
-		return oneOf;
-	}
+	public List<JsonSchema> getOneOf() { return oneOf; }
 
 	/**
 	 * Bean property setter:  <property>oneOf</property>.
@@ -1570,9 +1487,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>not</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public JsonSchema getNot() {
-		return not;
-	}
+	public JsonSchema getNot() { return not; }
 
 	/**
 	 * Bean property setter:  <property>not</property>.
@@ -1594,9 +1509,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>const</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Object getConst() {
-		return _const;
-	}
+	public Object getConst() { return _const; }
 
 	/**
 	 * Bean property setter:  <property>const</property>.
@@ -1607,7 +1520,7 @@ public class JsonSchema {
 	 * @param _const The new value for the <property>const</property> property on this bean.
 	 * @return This object.
 	 */
-	public JsonSchema setConst(Object _const) {  // NOSONAR - Intentional naming.
+	public JsonSchema setConst(Object _const) { // NOSONAR - Intentional naming.
 		this._const = _const;
 		return this;
 	}
@@ -1620,9 +1533,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>examples</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getExamples() {
-		return examples;
-	}
+	public List<Object> getExamples() { return examples; }
 
 	/**
 	 * Bean property setter:  <property>examples</property>.
@@ -1661,9 +1572,7 @@ public class JsonSchema {
 	 * @return The value of the <property>if</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("if")
-	public JsonSchema getIf() {
-		return _if;
-	}
+	public JsonSchema getIf() { return _if; }
 
 	/**
 	 * Bean property setter:  <property>if</property>.
@@ -1675,7 +1584,7 @@ public class JsonSchema {
 	 * @return This object.
 	 */
 	@Beanp("if")
-	public JsonSchema setIf(JsonSchema _if) {  // NOSONAR - Intentional naming.
+	public JsonSchema setIf(JsonSchema _if) { // NOSONAR - Intentional naming.
 		this._if = _if;
 		setMasterOn(_if);
 		return this;
@@ -1690,9 +1599,7 @@ public class JsonSchema {
 	 * @return The value of the <property>then</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("then")
-	public JsonSchema getThen() {
-		return _then;
-	}
+	public JsonSchema getThen() { return _then; }
 
 	/**
 	 * Bean property setter:  <property>then</property>.
@@ -1704,7 +1611,7 @@ public class JsonSchema {
 	 * @return This object.
 	 */
 	@Beanp("then")
-	public JsonSchema setThen(JsonSchema _then) {  // NOSONAR - Intentional naming.
+	public JsonSchema setThen(JsonSchema _then) { // NOSONAR - Intentional naming.
 		this._then = _then;
 		setMasterOn(_then);
 		return this;
@@ -1719,9 +1626,7 @@ public class JsonSchema {
 	 * @return The value of the <property>else</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("else")
-	public JsonSchema getElse() {
-		return _else;
-	}
+	public JsonSchema getElse() { return _else; }
 
 	/**
 	 * Bean property setter:  <property>else</property>.
@@ -1733,7 +1638,7 @@ public class JsonSchema {
 	 * @return This object.
 	 */
 	@Beanp("else")
-	public JsonSchema setElse(JsonSchema _else) {  // NOSONAR - Intentional naming.
+	public JsonSchema setElse(JsonSchema _else) { // NOSONAR - Intentional naming.
 		this._else = _else;
 		setMasterOn(_else);
 		return this;
@@ -1747,9 +1652,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>readOnly</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getReadOnly() {
-		return readOnly;
-	}
+	public Boolean getReadOnly() { return readOnly; }
 
 	/**
 	 * Bean property setter:  <property>readOnly</property>.
@@ -1773,9 +1676,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>writeOnly</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getWriteOnly() {
-		return writeOnly;
-	}
+	public Boolean getWriteOnly() { return writeOnly; }
 
 	/**
 	 * Bean property setter:  <property>writeOnly</property>.
@@ -1799,9 +1700,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>contentMediaType</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public String getContentMediaType() {
-		return contentMediaType;
-	}
+	public String getContentMediaType() { return contentMediaType; }
 
 	/**
 	 * Bean property setter:  <property>contentMediaType</property>.
@@ -1825,9 +1724,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>contentEncoding</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public String getContentEncoding() {
-		return contentEncoding;
-	}
+	public String getContentEncoding() { return contentEncoding; }
 
 	/**
 	 * Bean property setter:  <property>contentEncoding</property>.
@@ -1854,7 +1751,7 @@ public class JsonSchema {
 	 */
 	@Beanp("$defs")
 	public Map<String,JsonSchema> getDefs() {
-		return defs;  // Return only defs, not definitions (to avoid double serialization)
+		return defs; // Return only defs, not definitions (to avoid double serialization)
 	}
 
 	/**
@@ -1898,9 +1795,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>prefixItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public JsonSchemaArray getPrefixItems() {
-		return prefixItems;
-	}
+	public JsonSchemaArray getPrefixItems() { return prefixItems; }
 
 	/**
 	 * Bean property setter:  <property>prefixItems</property>.
@@ -1939,9 +1834,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>unevaluatedItems</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public JsonSchema getUnevaluatedItems() {
-		return unevaluatedItems;
-	}
+	public JsonSchema getUnevaluatedItems() { return unevaluatedItems; }
 
 	/**
 	 * Bean property setter:  <property>unevaluatedItems</property>.
@@ -1966,9 +1859,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>unevaluatedProperties</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public JsonSchema getUnevaluatedProperties() {
-		return unevaluatedProperties;
-	}
+	public JsonSchema getUnevaluatedProperties() { return unevaluatedProperties; }
 
 	/**
 	 * Bean property setter:  <property>unevaluatedProperties</property>.
@@ -1993,9 +1884,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>dependentSchemas</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonSchema> getDependentSchemas() {
-		return dependentSchemas;
-	}
+	public Map<String,JsonSchema> getDependentSchemas() { return dependentSchemas; }
 
 	/**
 	 * Bean property setter:  <property>dependentSchemas</property>.
@@ -2036,9 +1925,7 @@ public class JsonSchema {
 	 *
 	 * @return The value of the <property>dependentRequired</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,List<String>> getDependentRequired() {
-		return dependentRequired;
-	}
+	public Map<String,List<String>> getDependentRequired() { return dependentRequired; }
 
 	/**
 	 * Bean property setter:  <property>dependentRequired</property>.
@@ -2074,9 +1961,7 @@ public class JsonSchema {
 	 * @return The value of the <property>$ref</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("$ref")
-	public URI getRef() {
-		return ref;
-	}
+	public URI getRef() { return ref; }
 
 	/**
 	 * Bean property setter:  <property>$ref</property>.

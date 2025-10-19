@@ -44,7 +44,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class Found extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -97,6 +97,7 @@ public class Found extends BasicHttpResponse {
 	public Found copy() {
 		return new Found(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public Found setContent(HttpEntity value) {
 		super.setContent(value);

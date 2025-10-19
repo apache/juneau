@@ -50,24 +50,22 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	 * @param bc The bean context to use for looking up annotations.
 	 * @return The list of object swaps that apply to this class.
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, BeanContext bc) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		ClassInfo ci = ClassInfo.of(c);
-		ci.forEachPublicConstructor(
-			x -> x.hasNoAnnotation(bc, BeanIgnore.class) && x.hasNumParams(1) && x.isPublic(),
-			x -> {
-				Class<?> pt = x.getRawParamType(0);
-				if (! pt.equals(c.getDeclaringClass())) {
-					// Find the unswap method if there is one.
-					MethodInfo mi = ci.getPublicMethod(y -> y.hasReturnType(pt));
-					Method unswapMethod = mi != null ? mi.inner() : null;
-					l.add(new SurrogateSwap(pt, x.inner(), unswapMethod));
-				}
+		ci.forEachPublicConstructor(x -> x.hasNoAnnotation(bc, BeanIgnore.class) && x.hasNumParams(1) && x.isPublic(), x -> {
+			Class<?> pt = x.getRawParamType(0);
+			if (! pt.equals(c.getDeclaringClass())) {
+				// Find the unswap method if there is one.
+				MethodInfo mi = ci.getPublicMethod(y -> y.hasReturnType(pt));
+				Method unswapMethod = mi != null ? mi.inner() : null;
+				l.add(new SurrogateSwap(pt, x.inner(), unswapMethod));
 			}
-		);
+		});
 		return l;
 	}
+
 	private Constructor<F> constructor;   // public F(T t);
 
 	private Method unswapMethod;        // public T build();

@@ -39,6 +39,7 @@ public class N3Parser extends RdfParser {
 	public static RdfParser.Builder create() {
 		return RdfParser.create().n3();
 	}
+
 	/**
 	 * Constructor.
 	 *

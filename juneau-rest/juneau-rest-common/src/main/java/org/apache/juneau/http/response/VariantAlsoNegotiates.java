@@ -42,7 +42,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class VariantAlsoNegotiates extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -127,6 +127,7 @@ public class VariantAlsoNegotiates extends BasicHttpException {
 	public VariantAlsoNegotiates copy() {
 		return new VariantAlsoNegotiates(this);
 	}
+
 	@Override /* Overridden from BasicHttpException */
 	public VariantAlsoNegotiates setContent(HttpEntity value) {
 		super.setContent(value);
@@ -192,8 +193,9 @@ public class VariantAlsoNegotiates extends BasicHttpException {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpException */
-	public VariantAlsoNegotiates setStatusCode2(int code) throws IllegalStateException{
+	public VariantAlsoNegotiates setStatusCode2(int code) throws IllegalStateException {
 		super.setStatusCode2(code);
 		return this;
 	}

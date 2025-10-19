@@ -46,6 +46,7 @@ class MockPathResolver {
 		return s;
 
 	}
+
 	private String uri, target, contextPath, servletPath, remainder;
 
 	private String error;
@@ -79,57 +80,46 @@ class MockPathResolver {
 	 *
 	 * @return The context path of the URL always starting with <js>'/'</js>, or an empty string if it doesn't exist.
 	 */
-	public String getContextPath() {
-		return contextPath;
-	}
+	public String getContextPath() { return contextPath; }
 
 	/**
 	 * Returns any parsing errors.
 	 *
 	 * @return Any parsing errors.
 	 */
-	public String getError() {
-		return error;
-	}
+	public String getError() { return error; }
 
 	/**
 	 * Returns the remainder of the URL following the context and servlet paths.
 	 *
 	 * @return The remainder of the URL.
 	 */
-	public String getRemainder() {
-		return remainder;
-	}
+	public String getRemainder() { return remainder; }
 
 	/**
 	 * Returns the servlet path of the URL.
 	 *
 	 * @return The servlet path of the URL always starting with <js>'/'</js>, or an empty string if it doesn't exist.
 	 */
-	public String getServletPath() {
-		return servletPath;
-	}
+	public String getServletPath() { return servletPath; }
 
 	/**
 	 * Returns just the hostname portion of the URL.
 	 *
 	 * @return The hostname portion of the URL.
 	 */
-	public String getTarget() {
-		return target;
-	}
+	public String getTarget() { return target; }
 
 	/**
 	 * Returns the fully-qualified URL.
 	 *
 	 * @return The fully-qualified URL.
 	 */
-	public String getURI() {
-		return uri;
-	}
+	public String getURI() { return uri; }
 
 	@Override
 	public String toString() {
+		// @formatter:off
 		return JsonMap.create()
 			.append("uri", uri)
 			.append("contextPath", contextPath)
@@ -138,6 +128,7 @@ class MockPathResolver {
 			.append("target", target)
 			.append("error", error)
 			.toString();
+		// @formatter:on
 	}
 
 	private void init(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
@@ -178,7 +169,7 @@ class MockPathResolver {
 		this.remainder = "";
 
 		int mark = 0;
-		for (int i = uri.indexOf("://")+3; i < uri.length(); i++) {
+		for (int i = uri.indexOf("://") + 3; i < uri.length(); i++) {
 			char c = uri.charAt(i);
 			if (state == S03) {
 				if (c != '/')

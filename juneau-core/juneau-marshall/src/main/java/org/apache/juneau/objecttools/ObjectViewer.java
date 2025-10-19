@@ -51,7 +51,7 @@ import org.apache.juneau.internal.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ObjectViewer implements ObjectTool<ViewArgs> {
 	/**
 	 * Default reusable searcher.
@@ -66,6 +66,7 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 	public static ObjectViewer create() {
 		return new ObjectViewer();
 	}
+
 	@Override /* Overridden from ObjectTool */
 	public Object run(BeanSession session, Object input, ViewArgs args) {
 

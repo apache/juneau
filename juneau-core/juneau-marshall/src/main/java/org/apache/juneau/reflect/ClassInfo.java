@@ -66,9 +66,7 @@ public class ClassInfo {
 	/** Reusable ClassInfo for Object class. */
 	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
 
-	private static final Map<Class<?>, Class<?>>
-		pmap1 = new HashMap<>(),
-		pmap2 = new HashMap<>();
+	private static final Map<Class<?>,Class<?>> pmap1 = new HashMap<>(), pmap2 = new HashMap<>();
 
 	static {
 		pmap1.put(boolean.class, Boolean.class);
@@ -90,6 +88,7 @@ public class ClassInfo {
 	}
 
 	@SuppressWarnings("rawtypes")
+	// @formatter:off
 	private static final Map<Class,Object> primitiveDefaultMap =
 		mapBuilder(Class.class,Object.class).unmodifiable()
 			.add(Boolean.TYPE, false)
@@ -109,6 +108,7 @@ public class ClassInfo {
 			.add(Double.class, 0d)
 			.add(Byte.class, (byte)0)
 			.build();
+	// @formatter:on
 
 	/**
 	 * Returns a class info wrapper around the specified class type.
@@ -149,6 +149,7 @@ public class ClassInfo {
 	public static ClassInfo of(Object o) {
 		return of(o == null ? null : o instanceof Class ? (Class<?>)o : o.getClass());
 	}
+
 	/**
 	 * Returns a class info wrapper around the specified class type.
 	 *
@@ -162,6 +163,7 @@ public class ClassInfo {
 			return of((Class<?>)t);
 		return new ClassInfo(ClassUtils.toClass(t), t);
 	}
+
 	/**
 	 * Same as {@link #of(Object)} but attempts to deproxify the object if it's wrapped in a CGLIB proxy.
 	 *
@@ -174,6 +176,7 @@ public class ClassInfo {
 		Class<?> c = getProxyFor(o);
 		return c == null ? ClassInfo.of(o) : ClassInfo.of(c);
 	}
+
 	private static void extractTypes(Map<Type,Type> typeMap, Class<?> c) {
 		Type gs = c.getGenericSuperclass();
 		if (gs instanceof ParameterizedType) {
@@ -187,6 +190,7 @@ public class ClassInfo {
 			}
 		}
 	}
+
 	/**
 	 * When this metadata is against a CGLIB proxy, this method finds the underlying "real" class.
 	 *
@@ -199,12 +203,10 @@ public class ClassInfo {
 		if (s.indexOf('$') == -1 || ! s.contains("$$EnhancerBySpringCGLIB$$"))
 			return null;
 		Value<Class<?>> v = Value.empty();
-		ClassInfo.of(c).forEachPublicMethod(
-			m -> m.hasName("getTargetClass") && m.hasNoParams() && m.hasReturnType(Class.class),
-			m -> safe(() -> v.set(m.invoke(o)))
-		);
+		ClassInfo.of(c).forEachPublicMethod(m -> m.hasName("getTargetClass") && m.hasNoParams() && m.hasReturnType(Class.class), m -> safe(() -> v.set(m.invoke(o))));
 		return v.orElse(null);
 	}
+
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
 		if (od instanceof Class && id instanceof Class) {
 			Class<?> oc = (Class<?>)od;
@@ -215,6 +217,7 @@ public class ClassInfo {
 		}
 		return false;
 	}
+
 	/*
 	 * If the annotation is an array of other annotations, returns the inner annotations.
 	 *
@@ -230,8 +233,9 @@ public class ClassInfo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Annotation[]{a};
+		return new Annotation[] { a };
 	}
+
 	private final Type t;
 	final Class<?> c;
 	private final boolean isParameterizedType;
@@ -308,6 +312,7 @@ public class ClassInfo {
 			sb.append('[').append(']');
 		return sb;
 	}
+
 	/**
 	 * Same as {@link #getShortName()} but appends to an existing string builder.
 	 *
@@ -363,7 +368,7 @@ public class ClassInfo {
 
 	@Override
 	public boolean equals(Object o) {
-		return (o instanceof ClassInfo) && Utils.eq(this, (ClassInfo)o, (x,y)->Utils.eq(x.t, y.t));
+		return (o instanceof ClassInfo) && Utils.eq(this, (ClassInfo)o, (x, y) -> Utils.eq(x.t, y.t));
 	}
 
 	/**
@@ -392,13 +397,13 @@ public class ClassInfo {
 		if (x != null && test(filter, x))
 			return x;
 		ClassInfo[] interfaces = _getInterfaces();
-		for (int i = interfaces.length-1; i >= 0; i--) {
+		for (int i = interfaces.length - 1; i >= 0; i--) {
 			x = annotationProvider.firstAnnotation(type, interfaces[i].inner(), filter);
 			if (x != null)
 				return x;
 		}
 		ClassInfo[] parents = _getParents();
-		for (int i = parents.length-1; i >= 0; i--) {
+		for (int i = parents.length - 1; i >= 0; i--) {
 			x = annotationProvider.firstAnnotation(type, parents[i].inner(), filter);
 			if (x != null)
 				return x;
@@ -482,10 +487,10 @@ public class ClassInfo {
 		if (t2 != null)
 			consume(filter, action, t2);
 		ClassInfo[] interfaces = _getInterfaces();
-		for (int i = interfaces.length-1; i >= 0; i--)
+		for (int i = interfaces.length - 1; i >= 0; i--)
 			annotationProvider.forEachDeclaredAnnotation(type, interfaces[i].inner(), filter, action);
 		ClassInfo[] parents = _getParents();
-		for (int i = parents.length-1; i >= 0; i--)
+		for (int i = parents.length - 1; i >= 0; i--)
 			annotationProvider.forEachDeclaredAnnotation(type, parents[i].inner(), filter, action);
 		return this;
 	}
@@ -526,17 +531,18 @@ public class ClassInfo {
 				for (Annotation a2 : splitRepeated(a))
 					AnnotationInfo.of(p, a2).accept(filter, action);
 		ClassInfo[] interfaces = _getInterfaces();
-		for (int i = interfaces.length-1; i >= 0; i--)
+		for (int i = interfaces.length - 1; i >= 0; i--)
 			for (Annotation a : interfaces[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
 					AnnotationInfo.of(interfaces[i], a2).accept(filter, action);
 		ClassInfo[] parents = _getParents();
-		for (int i = parents.length-1; i >= 0; i--)
+		for (int i = parents.length - 1; i >= 0; i--)
 			for (Annotation a : parents[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
 					AnnotationInfo.of(parents[i], a2).accept(filter, action);
 		return this;
 	}
+
 	/**
 	 * Performs an action on all matching declared constructors on this class.
 	 *
@@ -638,9 +644,7 @@ public class ClassInfo {
 	 * 	All declared fields on this class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<FieldInfo> getAllFields() {
-		return u(alist(_getAllFields()));
-	}
+	public List<FieldInfo> getAllFields() { return u(alist(_getAllFields())); }
 
 	/**
 	 * Returns all declared methods on this class and all parent classes.
@@ -650,9 +654,7 @@ public class ClassInfo {
 	 * 	<br>Results are ordered parent-to-child, and then alphabetically per class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<MethodInfo> getAllMethodsParentFirst() {
-		return u(alist(_getAllMethodsParentFirst()));
-	}
+	public List<MethodInfo> getAllMethodsParentFirst() { return u(alist(_getAllMethodsParentFirst())); }
 
 	/**
 	 * Returns a list including this class and all parent classes and interfaces.
@@ -663,9 +665,7 @@ public class ClassInfo {
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are ordered child-to-parent order with classes listed before interfaces.
 	 */
-	public List<ClassInfo> getAllParents() {
-		return u(alist(_getAllParents()));
-	}
+	public List<ClassInfo> getAllParents() { return u(alist(_getAllParents())); }
 
 	/**
 	 * Finds the annotation of the specified type defined on this class or parent class/interface.
@@ -725,9 +725,7 @@ public class ClassInfo {
 	 *
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList() {
-		return getAnnotationList(x -> true);
-	}
+	public AnnotationList getAnnotationList() { return getAnnotationList(x -> true); }
 
 	/**
 	 * Constructs an {@link AnnotationList} of all matching annotations on this class.
@@ -763,9 +761,10 @@ public class ClassInfo {
 	 */
 	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider annotationProvider, Class<A> type) {
 		List<A> l = list();
-		forEachAnnotation(annotationProvider, type, x-> true, x -> l.add(x));
+		forEachAnnotation(annotationProvider, type, x -> true, x -> l.add(x));
 		return l;
 	}
+
 	/**
 	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
@@ -828,9 +827,7 @@ public class ClassInfo {
 	 * 	All constructors defined on this class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<ConstructorInfo> getDeclaredConstructors() {
-		return u(alist(_getDeclaredConstructors()));
-	}
+	public List<ConstructorInfo> getDeclaredConstructors() { return u(alist(_getDeclaredConstructors())); }
 
 	/**
 	 * Returns the first matching declared field on this class.
@@ -853,9 +850,7 @@ public class ClassInfo {
 	 * 	<br>Results are in alphabetical order.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<FieldInfo> getDeclaredFields() {
-		return u(alist(_getDeclaredFields()));
-	}
+	public List<FieldInfo> getDeclaredFields() { return u(alist(_getDeclaredFields())); }
 
 	/**
 	 * Returns a list of interfaces declared on this class.
@@ -870,9 +865,8 @@ public class ClassInfo {
 	 * 	An unmodifiable list of interfaces declared on this class.
 	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
 	 */
-	public List<ClassInfo> getDeclaredInterfaces() {
-		return u(alist(_getDeclaredInterfaces()));
-	}
+	public List<ClassInfo> getDeclaredInterfaces() { return u(alist(_getDeclaredInterfaces())); }
+
 	/**
 	 * Returns the first matching declared method on this class.
 	 *
@@ -885,6 +879,7 @@ public class ClassInfo {
 				return mi;
 		return null;
 	}
+
 	/**
 	 * Returns all methods declared on this class.
 	 *
@@ -893,9 +888,7 @@ public class ClassInfo {
 	 * 	<br>Results are ordered alphabetically.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<MethodInfo> getDeclaredMethods() {
-		return u(alist(_getDeclaredMethods()));
-	}
+	public List<MethodInfo> getDeclaredMethods() { return u(alist(_getDeclaredMethods())); }
 
 	/**
 	 * Returns the number of dimensions if this is an array type.
@@ -954,9 +947,7 @@ public class ClassInfo {
 	 * 	An unmodifiable list of interfaces defined on this class and superclasses.
 	 * 	<br>Results are in child-to-parent order.
 	 */
-	public List<ClassInfo> getInterfaces() {
-		return u(alist(_getInterfaces()));
-	}
+	public List<ClassInfo> getInterfaces() { return u(alist(_getInterfaces())); }
 
 	/**
 	 * Returns the first matching method on this class.
@@ -979,18 +970,14 @@ public class ClassInfo {
 	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<MethodInfo> getMethods() {
-		return u(alist(_getAllMethods()));
-	}
+	public List<MethodInfo> getMethods() { return u(alist(_getAllMethods())); }
 
 	/**
 	 * Returns the name of the underlying class.
 	 *
 	 * @return The name of the underlying class.
 	 */
-	public String getName() {
-		return c != null ? c.getName() : t.getTypeName();
-	}
+	public String getName() { return c != null ? c.getName() : t.getTypeName(); }
 
 	/**
 	 * Returns all possible names for this class.
@@ -1004,9 +991,7 @@ public class ClassInfo {
 	 * 		<li>{@link #getSimpleName()}
 	 * 	</ul>
 	 */
-	public String[] getNames() {
-		return new String[]{ getFullName(), c.getName(), getShortName(), getSimpleName() };
-	}
+	public String[] getNames() { return new String[] { getFullName(), c.getName(), getShortName(), getSimpleName() }; }
 
 	/**
 	 * Locates the no-arg constructor for this class.
@@ -1034,9 +1019,7 @@ public class ClassInfo {
 	 *
 	 * @return The package of this class.
 	 */
-	public Package getPackage() {
-		return c == null ? null : c.getPackage();
-	}
+	public Package getPackage() { return c == null ? null : c.getPackage(); }
 
 	/**
 	 * Returns the specified annotation only if it's been declared on the package of this class.
@@ -1049,6 +1032,7 @@ public class ClassInfo {
 		Package p = c == null ? null : c.getPackage();
 		return (p == null ? null : p.getAnnotation(type));
 	}
+
 	/**
 	 * Finds the real parameter type of this class.
 	 *
@@ -1111,7 +1095,7 @@ public class ClassInfo {
 		} else if (actualType instanceof ParameterizedType) {
 			return (Class<?>)((ParameterizedType)actualType).getRawType();
 		}
-		throw new IllegalArgumentException("Could not resolve variable '"+actualType.getTypeName()+"' to a type.");
+		throw new IllegalArgumentException("Could not resolve variable '" + actualType.getTypeName() + "' to a type.");
 	}
 
 	/**
@@ -1126,18 +1110,14 @@ public class ClassInfo {
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are in child-to-parent order.
 	 */
-	public List<ClassInfo> getParents() {
-		return u(alist(_getParents()));
-	}
+	public List<ClassInfo> getParents() { return u(alist(_getParents())); }
 
 	/**
 	 * Returns the default value for this primitive class.
 	 *
 	 * @return The default value, or <jk>null</jk> if this is not a primitive class.
 	 */
-	public Object getPrimitiveDefault() {
-		return primitiveDefaultMap.get(c);
-	}
+	public Object getPrimitiveDefault() { return primitiveDefaultMap.get(c); }
 
 	/**
 	 * If this class is a primitive wrapper (e.g. <code><jk>Integer</jk>.<jk>class</jk></code>) returns it's
@@ -1145,9 +1125,7 @@ public class ClassInfo {
 	 *
 	 * @return The primitive class, or <jk>null</jk> if class is not a primitive wrapper.
 	 */
-	public Class<?> getPrimitiveForWrapper() {
-		return pmap2.get(c);
-	}
+	public Class<?> getPrimitiveForWrapper() { return pmap2.get(c); }
 
 	/**
 	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
@@ -1155,9 +1133,7 @@ public class ClassInfo {
 	 *
 	 * @return The wrapper class, or <jk>null</jk> if class is not a primitive.
 	 */
-	public Class<?> getPrimitiveWrapper() {
-		return pmap1.get(c);
-	}
+	public Class<?> getPrimitiveWrapper() { return pmap1.get(c); }
 
 	/**
 	 * Returns the first matching public constructor on this class.
@@ -1177,9 +1153,7 @@ public class ClassInfo {
 	 *
 	 * @return All public constructors defined on this class.
 	 */
-	public List<ConstructorInfo> getPublicConstructors() {
-		return u(alist(_getPublicConstructors()));
-	}
+	public List<ConstructorInfo> getPublicConstructors() { return u(alist(_getPublicConstructors())); }
 
 	/**
 	 * Returns the first matching public field on this class.
@@ -1205,9 +1179,7 @@ public class ClassInfo {
 	 * 	<br>Results are in alphabetical order.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<FieldInfo> getPublicFields() {
-		return u(alist(_getPublicFields()));
-	}
+	public List<FieldInfo> getPublicFields() { return u(alist(_getPublicFields())); }
 
 	/**
 	 * Returns the first matching public method on this class.
@@ -1232,9 +1204,7 @@ public class ClassInfo {
 	 * 	All public methods on this class.
 	 * 	<br>Results are ordered alphabetically.
 	 */
-	public List<MethodInfo> getPublicMethods() {
-		return u(alist(_getPublicMethods()));
-	}
+	public List<MethodInfo> getPublicMethods() { return u(alist(_getPublicMethods())); }
 
 	/**
 	 * Same as {@link #getSimpleName()} but uses <js>"Array"</js> instead of <js>"[]"</js>.
@@ -1268,7 +1238,7 @@ public class ClassInfo {
 	public MethodInfo getRepeatedAnnotationMethod() {
 		if (isRepeatedAnnotation()) {
 			if (repeatedAnnotationMethod == null) {
-				synchronized(this) {
+				synchronized (this) {
 					repeatedAnnotationMethod = getPublicMethod(x -> x.hasName("value"));
 				}
 			}
@@ -1304,9 +1274,7 @@ public class ClassInfo {
 	 *
 	 * @return The simple name of the underlying class;
 	 */
-	public String getSimpleName() {
-		return c != null ? c.getSimpleName() : t.getTypeName();
-	}
+	public String getSimpleName() { return c != null ? c.getSimpleName() : t.getTypeName(); }
 
 	/**
 	 * Returns the parent class.
@@ -1314,9 +1282,7 @@ public class ClassInfo {
 	 * @return
 	 * 	The parent class, or <jk>null</jk> if the class has no parent.
 	 */
-	public ClassInfo getSuperclass() {
-		return c == null ? null : of(c.getSuperclass());
-	}
+	public ClassInfo getSuperclass() { return c == null ? null : of(c.getSuperclass()); }
 
 	/**
 	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
@@ -1381,6 +1347,7 @@ public class ClassInfo {
 	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
 		return ! hasAnnotation(type);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this class is not in the root package.
 	 *
@@ -1459,9 +1426,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is abstract.
 	 */
-	public boolean isAbstract() {
-		return c != null && Modifier.isAbstract(c.getModifiers());
-	}
+	public boolean isAbstract() { return c != null && Modifier.isAbstract(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this class.
@@ -1533,9 +1498,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is an annotation.
 	 */
-	public boolean isAnnotation() {
-		return c != null && c.isAnnotation();
-	}
+	public boolean isAnnotation() { return c != null && c.isAnnotation(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is any of the specified types.
@@ -1619,9 +1582,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is an array.
 	 */
-	public boolean isArray() {
-		return c != null && c.isArray();
-	}
+	public boolean isArray() { return c != null && c.isArray(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a child or the same as <c>parent</c>.
@@ -1673,36 +1634,28 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is not an interface.
 	 */
-	public boolean isClass() {
-		return c != null && ! c.isInterface();
-	}
+	public boolean isClass() { return c != null && ! c.isInterface(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Collection} or an array.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Collection} or an array.
 	 */
-	public boolean isCollectionOrArray() {
-		return c != null && (Collection.class.isAssignableFrom(c) || c.isArray());
-	}
+	public boolean isCollectionOrArray() { return c != null && (Collection.class.isAssignableFrom(c) || c.isArray()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public boolean isDeprecated() {
-		return c != null && c.isAnnotationPresent(Deprecated.class);
-	}
+	public boolean isDeprecated() { return c != null && c.isAnnotationPresent(Deprecated.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is an enum.
 	 *
 	 * @return <jk>true</jk> if this class is an enum.
 	 */
-	public boolean isEnum() {
-		return c != null && c.isEnum();
-	}
+	public boolean isEnum() { return c != null && c.isEnum(); }
 
 	/**
 	 * Returns <jk>true</jk> if the specified value is an instance of this class.
@@ -1715,41 +1668,34 @@ public class ClassInfo {
 			return c.isInstance(value);
 		return false;
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this class is an interface.
 	 *
 	 * @return <jk>true</jk> if this class is an interface.
 	 */
-	public boolean isInterface() {
-		return c != null && c.isInterface();
-	}
+	public boolean isInterface() { return c != null && c.isInterface(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a local class.
 	 *
 	 * @return <jk>true</jk> if this class is a local class.
 	 */
-	public boolean isLocalClass() {
-		return c != null && c.isLocalClass();
-	}
+	public boolean isLocalClass() { return c != null && c.isLocalClass(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a member class.
 	 *
 	 * @return <jk>true</jk> if this class is a member class.
 	 */
-	public boolean isMemberClass() {
-		return c != null && c.isMemberClass();
-	}
+	public boolean isMemberClass() { return c != null && c.isMemberClass(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a member class and not static.
 	 *
 	 * @return <jk>true</jk> if this class is a member class and not static.
 	 */
-	public boolean isNonStaticMemberClass() {
-		return c != null && c.isMemberClass() && ! isStatic();
-	}
+	public boolean isNonStaticMemberClass() { return c != null && c.isMemberClass() && ! isStatic(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is not abstract.
@@ -1759,61 +1705,49 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is not abstract.
 	 */
-	public boolean isNotAbstract() {
-		return c == null || ! Modifier.isAbstract(c.getModifiers());
-	}
+	public boolean isNotAbstract() { return c == null || ! Modifier.isAbstract(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this class doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public boolean isNotDeprecated() {
-		return c == null || ! c.isAnnotationPresent(Deprecated.class);
-	}
+	public boolean isNotDeprecated() { return c == null || ! c.isAnnotationPresent(Deprecated.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a local class.
 	 *
 	 * @return <jk>true</jk> if this class is a local class.
 	 */
-	public boolean isNotLocalClass() {
-		return c == null || ! c.isLocalClass();
-	}
+	public boolean isNotLocalClass() { return c == null || ! c.isLocalClass(); }
+
 	/**
 	 * Returns <jk>true</jk> if this class is a member class.
 	 *
 	 * @return <jk>true</jk> if this class is a member class.
 	 */
-	public boolean isNotMemberClass() {
-		return c == null || ! c.isMemberClass();
-	}
+	public boolean isNotMemberClass() { return c == null || ! c.isMemberClass(); }
 
 	/**
 	 * Returns <jk>false</jk> if this class is a member class and not static.
 	 *
 	 * @return <jk>false</jk> if this class is a member class and not static.
 	 */
-	public boolean isNotNonStaticMemberClass() {
-		return ! isNonStaticMemberClass();
-	}
+	public boolean isNotNonStaticMemberClass() { return ! isNonStaticMemberClass(); }
+
 	/**
 	 * Returns <jk>true</jk> if this is not a primitive class.
 	 *
 	 * @return <jk>true</jk> if this is not a primitive class.
 	 */
-	public boolean isNotPrimitive() {
-		return c == null || ! c.isPrimitive();
-	}
+	public boolean isNotPrimitive() { return c == null || ! c.isPrimitive(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is not public.
 	 *
 	 * @return <jk>true</jk> if this class is not public.
 	 */
-	public boolean isNotPublic() {
-		return c == null || ! Modifier.isPublic(c.getModifiers());
-	}
+	public boolean isNotPublic() { return c == null || ! Modifier.isPublic(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is not static.
@@ -1823,9 +1757,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is not static.
 	 */
-	public boolean isNotStatic() {
-		return c == null || ! Modifier.isStatic(c.getModifiers());
-	}
+	public boolean isNotStatic() { return c == null || ! Modifier.isStatic(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
@@ -1909,23 +1841,20 @@ public class ClassInfo {
 			return isParentOfFuzzyPrimitives((Class<?>)child);
 		return false;
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this is a primitive class.
 	 *
 	 * @return <jk>true</jk> if this is a primitive class.
 	 */
-	public boolean isPrimitive() {
-		return c != null && c.isPrimitive();
-	}
+	public boolean isPrimitive() { return c != null && c.isPrimitive(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is public.
 	 *
 	 * @return <jk>true</jk> if this class is public.
 	 */
-	public boolean isPublic() {
-		return c != null && Modifier.isPublic(c.getModifiers());
-	}
+	public boolean isPublic() { return c != null && Modifier.isPublic(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this is a repeated annotation class.
@@ -1939,7 +1868,7 @@ public class ClassInfo {
 	 */
 	public boolean isRepeatedAnnotation() {
 		if (isRepeatedAnnotation == null) {
-			synchronized(this) {
+			synchronized (this) {
 				boolean b = false;
 				repeatedAnnotationMethod = getPublicMethod(x -> x.hasName("value"));
 				if (repeatedAnnotationMethod != null) {
@@ -1963,9 +1892,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is a {@link RuntimeException}.
 	 */
-	public boolean isRuntimeException() {
-		return isChildOf(RuntimeException.class);
-	}
+	public boolean isRuntimeException() { return isChildOf(RuntimeException.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is public.
@@ -1975,9 +1902,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is public.
 	 */
-	public boolean isStatic() {
-		return c != null && Modifier.isStatic(c.getModifiers());
-	}
+	public boolean isStatic() { return c != null && Modifier.isStatic(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a child of <c>parent</c>.
@@ -2143,13 +2068,13 @@ public class ClassInfo {
 		if (t2 != null && filter.test(t2))
 			return t2;
 		ClassInfo[] interfaces = _getInterfaces();
-		for (int i = interfaces.length-1; i >= 0; i--) {
+		for (int i = interfaces.length - 1; i >= 0; i--) {
 			A o = ap.firstDeclaredAnnotation(a, interfaces[i].inner(), filter);
 			if (o != null)
 				return o;
 		}
 		ClassInfo[] parents = _getParents();
-		for (int i = parents.length-1; i >= 0; i--) {
+		for (int i = parents.length - 1; i >= 0; i--) {
 			A o = ap.firstDeclaredAnnotation(a, parents[i].inner(), filter);
 			if (o != null)
 				return o;
@@ -2172,17 +2097,15 @@ public class ClassInfo {
 	}
 
 	private boolean isParameterizedTypeOf(Class<?> c) {
-		return
-			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == c)
-			|| (t instanceof Class && c.isAssignableFrom((Class<?>)t));
+		return (t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == c) || (t instanceof Class && c.isAssignableFrom((Class<?>)t));
 	}
 
 	FieldInfo[] _getAllFields() {
 		if (allFields == null) {
-			synchronized(this) {
+			synchronized (this) {
 				List<FieldInfo> l = list();
 				ClassInfo[] parents = _getAllParents();
-				for (int i = parents.length-1; i >=0; i--)
+				for (int i = parents.length - 1; i >= 0; i--)
 					for (FieldInfo f : parents[i]._getDeclaredFields())
 						l.add(f);
 				allFields = l.toArray(new FieldInfo[l.size()]);
@@ -2193,7 +2116,7 @@ public class ClassInfo {
 
 	MethodInfo[] _getAllMethods() {
 		if (allMethods == null) {
-			synchronized(this) {
+			synchronized (this) {
 				List<MethodInfo> l = list();
 				for (ClassInfo c : _getAllParents())
 					c._appendDeclaredMethods(l);
@@ -2205,10 +2128,10 @@ public class ClassInfo {
 
 	MethodInfo[] _getAllMethodsParentFirst() {
 		if (allMethodsParentFirst == null) {
-			synchronized(this) {
+			synchronized (this) {
 				List<MethodInfo> l = list();
 				ClassInfo[] parents = _getAllParents();
-				for (int i = parents.length-1; i >=0; i--)
+				for (int i = parents.length - 1; i >= 0; i--)
 					parents[i]._appendDeclaredMethods(l);
 				allMethodsParentFirst = l.toArray(new MethodInfo[l.size()]);
 			}
@@ -2219,13 +2142,13 @@ public class ClassInfo {
 	/** Results are classes-before-interfaces, then child-to-parent order. */
 	ClassInfo[] _getAllParents() {
 		if (allParents == null) {
-			synchronized(this) {
+			synchronized (this) {
 				ClassInfo[] a1 = _getParents(), a2 = _getInterfaces();
 				ClassInfo[] l = new ClassInfo[a1.length + a2.length];
 				for (int i = 0; i < a1.length; i++)
 					l[i] = a1[i];
 				for (int i = 0; i < a2.length; i++)
-					l[i+a1.length] = a2[i];
+					l[i + a1.length] = a2[i];
 				allParents = l;
 			}
 		}
@@ -2234,7 +2157,7 @@ public class ClassInfo {
 
 	Annotation[] _getDeclaredAnnotations() {
 		if (declaredAnnotations == null) {
-			synchronized(this) {
+			synchronized (this) {
 				declaredAnnotations = c.getDeclaredAnnotations();
 			}
 		}
@@ -2243,7 +2166,7 @@ public class ClassInfo {
 
 	ConstructorInfo[] _getDeclaredConstructors() {
 		if (declaredConstructors == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
 				List<ConstructorInfo> l = Utils.listOfSize(cc.length);
 				for (Constructor<?> ccc : cc)
@@ -2257,7 +2180,7 @@ public class ClassInfo {
 
 	FieldInfo[] _getDeclaredFields() {
 		if (declaredFields == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
 				List<FieldInfo> l = Utils.listOfSize(ff.length);
 				for (Field f : ff)
@@ -2273,7 +2196,7 @@ public class ClassInfo {
 	/** Results are in the same order as Class.getInterfaces(). */
 	ClassInfo[] _getDeclaredInterfaces() {
 		if (declaredInterfaces == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Class<?>[] ii = c == null ? new Class[0] : c.getInterfaces();
 				ClassInfo[] l = new ClassInfo[ii.length];
 				for (int i = 0; i < ii.length; i++)
@@ -2283,9 +2206,10 @@ public class ClassInfo {
 		}
 		return declaredInterfaces;
 	}
+
 	MethodInfo[] _getDeclaredMethods() {
 		if (declaredMethods == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
 				List<MethodInfo> l = Utils.listOfSize(mm.length);
 				for (Method m : mm)
@@ -2297,10 +2221,11 @@ public class ClassInfo {
 		}
 		return declaredMethods;
 	}
+
 	/** Results are in child-to-parent order. */
 	ClassInfo[] _getInterfaces() {
 		if (interfaces == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Set<ClassInfo> s = set();
 				for (ClassInfo ci : _getParents())
 					for (ClassInfo ci2 : ci._getDeclaredInterfaces()) {
@@ -2317,7 +2242,7 @@ public class ClassInfo {
 	/** Results are in child-to-parent order. */
 	ClassInfo[] _getParents() {
 		if (parents == null) {
-			synchronized(this) {
+			synchronized (this) {
 				List<ClassInfo> l = list();
 				Class<?> pc = c;
 				while (pc != null && pc != Object.class) {
@@ -2332,7 +2257,7 @@ public class ClassInfo {
 
 	ConstructorInfo[] _getPublicConstructors() {
 		if (publicConstructors == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
 				List<ConstructorInfo> l = Utils.listOfSize(cc.length);
 				for (Constructor<?> ccc : cc)
@@ -2343,9 +2268,10 @@ public class ClassInfo {
 		}
 		return publicConstructors;
 	}
+
 	FieldInfo[] _getPublicFields() {
 		if (publicFields == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Map<String,FieldInfo> m = map();
 				for (ClassInfo c : _getParents()) {
 					for (FieldInfo f : c._getDeclaredFields()) {
@@ -2364,7 +2290,7 @@ public class ClassInfo {
 
 	MethodInfo[] _getPublicMethods() {
 		if (publicMethods == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Method[] mm = c == null ? new Method[0] : c.getMethods();
 				List<MethodInfo> l = Utils.listOfSize(mm.length);
 				for (Method m : mm)

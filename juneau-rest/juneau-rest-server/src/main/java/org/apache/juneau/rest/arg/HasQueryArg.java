@@ -60,6 +60,7 @@ public class HasQueryArg implements RestOpArg {
 			return new HasQueryArg(paramInfo);
 		return null;
 	}
+
 	private static String getName(HasQuery x) {
 		return firstNonEmpty(x.name(), x.value());
 	}

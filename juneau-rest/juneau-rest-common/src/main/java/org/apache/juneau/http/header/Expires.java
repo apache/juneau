@@ -131,6 +131,7 @@ public class Expires extends BasicDateHeader {
 	public static Expires of(ZonedDateTime value) {
 		return value == null ? null : new Expires(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

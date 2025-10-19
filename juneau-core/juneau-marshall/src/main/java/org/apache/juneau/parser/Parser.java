@@ -209,6 +209,7 @@ public class Parser extends BeanContextable {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -306,6 +307,7 @@ public class Parser extends BeanContextable {
 			super.beanMethodVisibility(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanProperties(Class<?> beanClass, String properties) {
 			super.beanProperties(beanClass, properties);
@@ -534,12 +536,11 @@ public class Parser extends BeanContextable {
 		 *
 		 * @return The current value for the 'consumes' property.
 		 */
-		public String getConsumes() {
-			return consumes;
-		}
+		public String getConsumes() { return consumes; }
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				autoCloseStreams,
@@ -550,6 +551,7 @@ public class Parser extends BeanContextable {
 				listener,
 				consumes
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -780,13 +782,13 @@ public class Parser extends BeanContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -946,6 +948,7 @@ public class Parser extends BeanContextable {
 			return this;
 		}
 	}
+
 	/**
 	 * Represents no Parser.
 	 */
@@ -963,6 +966,7 @@ public class Parser extends BeanContextable {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a builder of the specified parser class.
 	 *
@@ -976,6 +980,7 @@ public class Parser extends BeanContextable {
 	public static Builder createParserBuilder(Class<? extends Parser> c) {
 		return (Builder)Context.createBuilder(c);
 	}
+
 	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
 	final int debugOutputLines;
 	final String consumes;
@@ -1020,10 +1025,12 @@ public class Parser extends BeanContextable {
 					return true;
 		return false;
 	}
+
 	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
+
 	@Override /* Overridden from Context */
 	public ParserSession.Builder createSession() {
 		return ParserSession.create(this);
@@ -1057,32 +1064,24 @@ public class Parser extends BeanContextable {
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public final List<MediaType> getMediaTypes() {
-		return Utils.alist(consumesArray);
-	}
+	public final List<MediaType> getMediaTypes() { return Utils.alist(consumesArray); }
 
 	/**
 	 * Returns the first media type handled based on the values passed to the <c>consumes</c> constructor parameter.
 	 *
 	 * @return The media type.
 	 */
-	public final MediaType getPrimaryMediaType() {
-		return consumesArray == null || consumesArray.length == 0 ? null : consumesArray[0];
-	}
+	public final MediaType getPrimaryMediaType() { return consumesArray == null || consumesArray.length == 0 ? null : consumesArray[0]; }
 
 	@Override /* Overridden from Context */
-	public ParserSession getSession() {
-		return createSession().build();
-	}
+	public ParserSession getSession() { return createSession().build(); }
 
 	/**
 	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 *
 	 * @return <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 */
-	public boolean isReaderParser() {
-		return true;
-	}
+	public boolean isReaderParser() { return true; }
 
 	/**
 	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
@@ -1221,6 +1220,7 @@ public class Parser extends BeanContextable {
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
 		return getSession().parse(input, type, args);
 	}
+
 	/**
 	 * Same as {@link #parse(Object, Class)} but since it's a {@link String} input doesn't throw an {@link IOException}.
 	 *
@@ -1271,6 +1271,7 @@ public class Parser extends BeanContextable {
 	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
 		return getSession().parse(input, type, args);
 	}
+
 	/**
 	 * Parses the specified array input with each entry in the object defined by the {@code argTypes}
 	 * argument.
@@ -1347,6 +1348,7 @@ public class Parser extends BeanContextable {
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
 		return getSession().parseIntoMap(input, m, keyType, valueType);
 	}
+
 	/**
 	 * Debug output lines.
 	 *
@@ -1354,9 +1356,7 @@ public class Parser extends BeanContextable {
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
-	protected final int getDebugOutputLines() {
-		return debugOutputLines;
-	}
+	protected final int getDebugOutputLines() { return debugOutputLines; }
 
 	/**
 	 * Parser listener.
@@ -1365,9 +1365,7 @@ public class Parser extends BeanContextable {
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */
-	protected final Class<? extends ParserListener> getListener() {
-		return listener;
-	}
+	protected final Class<? extends ParserListener> getListener() { return listener; }
 
 	/**
 	 * Auto-close streams.
@@ -1377,9 +1375,7 @@ public class Parser extends BeanContextable {
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
 	 */
-	protected final boolean isAutoCloseStreams() {
-		return autoCloseStreams;
-	}
+	protected final boolean isAutoCloseStreams() { return autoCloseStreams; }
 
 	/**
 	 * Strict mode.
@@ -1388,9 +1384,7 @@ public class Parser extends BeanContextable {
 	 * @return
 	 * 	<jk>true</jk> if strict mode for the parser is enabled.
 	 */
-	protected final boolean isStrict() {
-		return strict;
-	}
+	protected final boolean isStrict() { return strict; }
 
 	/**
 	 * Trim parsed strings.
@@ -1400,9 +1394,7 @@ public class Parser extends BeanContextable {
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
 	 */
-	protected final boolean isTrimStrings() {
-		return trimStrings;
-	}
+	protected final boolean isTrimStrings() { return trimStrings; }
 
 	/**
 	 * Unbuffered.
@@ -1411,11 +1403,11 @@ public class Parser extends BeanContextable {
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */
-	protected final boolean isUnbuffered() {
-		return unbuffered;
-	}
+	protected final boolean isUnbuffered() { return unbuffered; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("autoCloseStreams", autoCloseStreams)
 			.append("debugOutputLines", debugOutputLines)
@@ -1423,5 +1415,6 @@ public class Parser extends BeanContextable {
 			.append("strict", strict)
 			.append("trimStrings", trimStrings)
 			.append("unbuffered", unbuffered);
+		// @formatter:on
 	}
 }

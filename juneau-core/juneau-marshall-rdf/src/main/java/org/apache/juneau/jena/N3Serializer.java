@@ -39,6 +39,7 @@ public class N3Serializer extends RdfSerializer {
 	public static RdfSerializer.Builder create() {
 		return RdfSerializer.create().n3();
 	}
+
 	/**
 	 * Constructor.
 	 *

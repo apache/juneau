@@ -86,7 +86,7 @@ import org.apache.juneau.svl.*;
  * @param <A> The annotation that this applier reads from.
  * @param <B> The builder class to apply the annotation to.
  */
-public abstract class AnnotationApplier<A extends Annotation, B> {
+public abstract class AnnotationApplier<A extends Annotation,B> {
 
 	/**
 	 * Represents a no-op configuration apply.
@@ -105,6 +105,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 		@Override /* Overridden from ConfigApply */
 		public void apply(AnnotationInfo<Annotation> ai, Object b) { /* no-op */ }
 	}
+
 	private final VarResolverSession vr;
 	private final Class<A> ca;
 
@@ -156,9 +157,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 *
 	 * @return The builder class that this applier applies to.
 	 */
-	public Class<?> getBuilderClass() {
-		return cb;
-	}
+	public Class<?> getBuilderClass() { return cb; }
 
 	private Character toCharacter(String in, String loc) {
 		if (in.length() != 1)

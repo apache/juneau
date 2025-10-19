@@ -110,6 +110,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -133,6 +134,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			super.beanClassVisibility(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanConstructorVisibility(Visibility value) {
 			super.beanConstructorVisibility(value);
@@ -415,11 +417,13 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				decoding,
 				validateEnd
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -555,13 +559,13 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -699,6 +703,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	public static final UonParser DEFAULT = new UonParser(create());
 	/** Reusable instance of {@link UonParser} with decodeChars set to true. */
 	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -707,6 +712,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final boolean decoding, validateEnd;
 
 	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
@@ -739,19 +745,15 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	}
 
 	@Override
-	public <T> ClassMeta<T> getClassMeta(Type t, Type... args) {
+	public <T> ClassMeta<T> getClassMeta(Type t, Type...args) {
 		return getBeanContext().getClassMeta(t, args);
 	}
 
 	@Override /* Overridden from HttpPartParser */
-	public UonParserSession getPartSession() {
-		return UonParserSession.create(this).build();
-	}
+	public UonParserSession getPartSession() { return UonParserSession.create(this).build(); }
 
 	@Override /* Overridden from Context */
-	public UonParserSession getSession() {
-		return createSession().build();
-	}
+	public UonParserSession getSession() { return createSession().build(); }
 
 	@Override /* Overridden from UonMetaProvider */
 	public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {
@@ -764,6 +766,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 		return m;
 	}
+
 	@Override /* Overridden from UonMetaProvider */
 	public UonClassMeta getUonClassMeta(ClassMeta<?> cm) {
 		UonClassMeta m = uonClassMetas.get(cm);
@@ -792,6 +795,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
 		return getPartSession().parse(partType, schema, in, getClassMeta(toType));
 	}
+
 	/**
 	 * Converts the specified input to the specified class type.
 	 *
@@ -830,6 +834,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
 		return getPartSession().parse(partType, schema, in, getClassMeta(toType, toTypeArgs));
 	}
+
 	/**
 	 * Decode <js>"%xx"</js> sequences enabled
 	 *
@@ -838,9 +843,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
 	 * 	before being passed to this parser.
 	 */
-	protected final boolean isDecoding() {
-		return decoding;
-	}
+	protected final boolean isDecoding() { return decoding; }
 
 	/**
 	 * Validate end enabled.
@@ -850,9 +853,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.
 	 */
-	protected final boolean isValidateEnd() {
-		return validateEnd;
-	}
+	protected final boolean isValidateEnd() { return validateEnd; }
 
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {

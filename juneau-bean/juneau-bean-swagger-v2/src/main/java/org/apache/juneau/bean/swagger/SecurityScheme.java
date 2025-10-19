@@ -85,16 +85,9 @@ import org.apache.juneau.marshaller.*;
  */
 public class SecurityScheme extends SwaggerElement {
 
-	private static final String[] VALID_TYPES = {"basic", "apiKey", "oauth2"};
+	private static final String[] VALID_TYPES = { "basic", "apiKey", "oauth2" };
 
-	private String
-		type,
-		description,
-		name,
-		in,
-		flow,
-		authorizationUrl,
-		tokenUrl;
+	private String type, description, name, in, flow, authorizationUrl, tokenUrl;
 	private Map<String,String> scopes;
 
 	/**
@@ -161,6 +154,7 @@ public class SecurityScheme extends SwaggerElement {
 			default -> super.get(property, type);
 		};
 	}
+
 	/**
 	 * Bean property getter:  <property>authorizationUrl</property>.
 	 *
@@ -169,9 +163,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getAuthorizationUrl() {
-		return authorizationUrl;
-	}
+	public String getAuthorizationUrl() { return authorizationUrl; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -181,9 +173,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>flow</property>.
@@ -193,9 +183,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getFlow() {
-		return flow;
-	}
+	public String getFlow() { return flow; }
 
 	/**
 	 * Bean property getter:  <property>in</property>.
@@ -205,9 +193,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getIn() {
-		return in;
-	}
+	public String getIn() { return in; }
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -217,9 +203,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Bean property getter:  <property>scopes</property>.
@@ -229,9 +213,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getScopes() {
-		return scopes;
-	}
+	public Map<String,String> getScopes() { return scopes; }
 
 	/**
 	 * Bean property getter:  <property>tokenUrl</property>.
@@ -241,9 +223,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getTokenUrl() {
-		return tokenUrl;
-	}
+	public String getTokenUrl() { return tokenUrl; }
 
 	/**
 	 * Bean property getter:  <property>type</property>.
@@ -253,12 +233,11 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getType() {
-		return type;
-	}
+	public String getType() { return type; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(authorizationUrl != null, "authorizationUrl")
 			.addIf(description != null, "description")
@@ -269,6 +248,7 @@ public class SecurityScheme extends SwaggerElement {
 			.addIf(tokenUrl != null, "tokenUrl")
 			.addIf(type != null, "type")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -281,7 +261,7 @@ public class SecurityScheme extends SwaggerElement {
 			case "flow" -> setFlow(Utils.s(value));
 			case "in" -> setIn(Utils.s(value));
 			case "name" -> setName(Utils.s(value));
-			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "scopes" -> setScopes(mapBuilder(String.class, String.class).sparse().addAny(value).build());
 			case "tokenUrl" -> setTokenUrl(Utils.s(value));
 			case "type" -> setType(Utils.s(value));
 			default -> {
@@ -437,10 +417,7 @@ public class SecurityScheme extends SwaggerElement {
 	 */
 	public SecurityScheme setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_TYPES)
-			);
+			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
 		type = value;
 		return this;
 	}

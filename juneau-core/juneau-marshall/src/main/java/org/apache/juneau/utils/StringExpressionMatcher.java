@@ -79,6 +79,7 @@ public class StringExpressionMatcher {
 			return true;
 		}
 	}
+
 	static class Eq extends Exp {
 		final String operand;
 
@@ -104,6 +105,7 @@ public class StringExpressionMatcher {
 
 	abstract static class Exp {
 		void appendTokens(Set<String> set) {}
+
 		abstract boolean matches(String input);
 	}
 
@@ -171,10 +173,12 @@ public class StringExpressionMatcher {
 		}
 	}
 
+	// @formatter:off
 	private static final AsciiSet
 		WS = AsciiSet.of(" \t"),
 		OP = AsciiSet.of(",|&"),
 		META = AsciiSet.of("*?");
+	// @formatter:on
 
 	private static Exp parseOperand(String operand) {
 		boolean hasMeta = false;
@@ -184,6 +188,7 @@ public class StringExpressionMatcher {
 		}
 		return hasMeta ? new Match(operand) : new Eq(operand);
 	}
+
 	private final Exp exp;
 
 	/**
@@ -246,7 +251,7 @@ public class StringExpressionMatcher {
 					if (c == '(') {
 						state = S02;
 						pDepth = 0;
-						mark = i+1;
+						mark = i + 1;
 					} else if (OP.contains(c)) {
 						error = true;
 						break;
@@ -297,17 +302,17 @@ public class StringExpressionMatcher {
 					//ands.add(operand);
 					state = S06;
 				} else /* (c == '|' || c == ',') */ {
-					 if (ands.size() == 1) {
-						 ors.add(ands.get(0));
-					 } else {
-						 ors.add(new And(ands));
-					 }
-					 ands.clear();
-					 if (c == '|') {
-						 state = S07;
-					 } else {
-						 state = S01;
-					 }
+					if (ands.size() == 1) {
+						ors.add(ands.get(0));
+					} else {
+						ors.add(new And(ands));
+					}
+					ands.clear();
+					if (c == '|') {
+						state = S07;
+					} else {
+						state = S01;
+					}
 				}
 			} else if (state == S06) {
 				// S06 = Found &, looking for & or other
@@ -327,14 +332,14 @@ public class StringExpressionMatcher {
 		}
 
 		if (error)
-			throw new ParseException("Invalid character in expression '"+expression+"' at position " + i + ". state=" + state, i);
+			throw new ParseException("Invalid character in expression '" + expression + "' at position " + i + ". state=" + state, i);
 
 		if (state == S01)
-			throw new ParseException("Could not find beginning of clause in '"+expression+"'", i);
+			throw new ParseException("Could not find beginning of clause in '" + expression + "'", i);
 		if (state == S02)
-			throw new ParseException("Could not find matching parenthesis in expression '"+expression+"'", i);
+			throw new ParseException("Could not find matching parenthesis in expression '" + expression + "'", i);
 		if (state == S05 || state == S06 || state == S07)
-			throw new ParseException("Dangling clause in expression '"+expression+"'", i);
+			throw new ParseException("Dangling clause in expression '" + expression + "'", i);
 
 		if (mark != -1)
 			ands.add(parseOperand(expression.substring(mark, expression.length())));

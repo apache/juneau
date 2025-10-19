@@ -102,7 +102,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="footer")
+@Bean(typeName = "footer")
 public class Footer extends HtmlElementMixed {
 
 	/**
@@ -118,8 +118,9 @@ public class Footer extends HtmlElementMixed {
 	public Footer(Object...children) {
 		children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Footer _class(String value) {  // NOSONAR - Intentional naming.
+	public Footer _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

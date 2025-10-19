@@ -49,7 +49,6 @@ public class JsonSchemaRef extends JsonSchema {
 		this.setRef(uri);
 	}
 
-
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaRef setName(String name) {
 		super.setName(name);
@@ -298,9 +297,7 @@ public class JsonSchemaRef extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchema getNot() {
-		return super.getNot();
-	}
+	public JsonSchema getNot() { return super.getNot(); }
 
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaRef setNot(JsonSchema not) {
@@ -369,9 +366,7 @@ public class JsonSchemaRef extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchema getUnevaluatedItems() {
-		return super.getUnevaluatedItems();
-	}
+	public JsonSchema getUnevaluatedItems() { return super.getUnevaluatedItems(); }
 
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaRef setUnevaluatedItems(JsonSchema unevaluatedItems) {

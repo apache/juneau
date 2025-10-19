@@ -64,6 +64,7 @@ public class ExceptionBuilder<T extends Throwable> {
 		causedBy = value;
 		return this;
 	}
+
 	/**
 	 * Specifies the exception message.
 	 *

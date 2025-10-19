@@ -80,9 +80,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @return The widget key.
 	 */
 	@Override
-	public String getName() {
-		return getClass().getSimpleName();
-	}
+	public String getName() { return getClass().getSimpleName(); }
 
 	/**
 	 * Resolves any Javascript that should be added to the <xt>&lt;head&gt;/&lt;script&gt;</xt> element.

@@ -325,6 +325,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			super.apply(work);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
@@ -915,7 +916,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder interceptors(java.lang.Class<?>...values) throws Exception{
+		public Builder interceptors(java.lang.Class<?>...values) throws Exception {
 			super.interceptors(values);
 			return this;
 		}
@@ -1222,7 +1223,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * @return This object.
 		 */
 		public Builder pathVars(String...pairs) {
-			return pathVars(CollectionUtils.mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
+			return pathVars(CollectionUtils.mapBuilder(String.class, String.class).addPairs((Object[])pairs).build());
 		}
 
 		@Override /* Overridden from Builder */
@@ -1512,13 +1513,13 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1798,6 +1799,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public static Builder create(Object impl) {
 		return new Builder().restBean(impl);
 	}
+
 	/**
 	 * Creates a new {@link org.apache.juneau.rest.client.RestClient.Builder} configured with the specified REST implementation bean or bean class.
 	 *
@@ -1812,6 +1814,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public static Builder createLax(Object impl) {
 		return new Builder().restBean(impl).ignoreErrors().noTrace();
 	}
+
 	private static Builder preInit(Builder builder) {
 		try {
 			Object restBean = builder.restBean;
@@ -1825,6 +1828,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			if (! REST_CONTEXTS.containsKey(c)) {
 				boolean isClass = restBean instanceof Class;
 				Object o = isClass ? ((Class<?>)restBean).getDeclaredConstructor().newInstance() : restBean;
+				// @formatter:off
 				RestContext rc = RestContext
 					.create(o.getClass(), null, null)
 					.defaultClasses(BasicTestCallLogger.class)
@@ -1833,6 +1837,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 					.build()
 					.postInit()
 					.postInitChildFirst();
+				// @formatter:on
 				REST_CONTEXTS.put(c, rc);
 			}
 			RestContext restBeanCtx = REST_CONTEXTS.get(c);
@@ -1850,6 +1855,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			throw new ConfigException(e, "Could not initialize MockRestClient");
 		}
 	}
+
 	private final RestContext restContext;
 	private final Object restObject;
 	private final String contextPath, servletPath;
@@ -1879,6 +1885,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		if (ccm instanceof MockHttpClientConnectionManager)
 			((MockHttpClientConnectionManager)ccm).init(this);
 	}
+
 	@Override /* Overridden from RestClient */
 	public MockRestRequest callback(String callString) throws RestCallException {
 		return (MockRestRequest)super.callback(callString);
@@ -1935,9 +1942,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * @return The current client-side REST request, or <jk>null</jk> if not set.
 	 */
-	public HttpRequest getCurrentClientRequest() {
-		return rreq.get();
-	}
+	public HttpRequest getCurrentClientRequest() { return rreq.get(); }
 
 	/**
 	 * Returns the current client-side REST response.
@@ -1948,9 +1953,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * @return The current client-side REST response, or <jk>null</jk> if not set.
 	 */
-	public MockRestResponse getCurrentClientResponse() {
-		return rres.get();
-	}
+	public MockRestResponse getCurrentClientResponse() { return rres.get(); }
 
 	/**
 	 * Returns the current server-side REST request.
@@ -1961,9 +1964,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * @return The current server-side REST request, or <jk>null</jk> if not set.
 	 */
-	public MockServletRequest getCurrentServerRequest() {
-		return sreq.get();
-	}
+	public MockServletRequest getCurrentServerRequest() { return sreq.get(); }
 
 	/**
 	 * Returns the current server-side REST response.
@@ -1974,19 +1975,13 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * @return The current server-side REST response, or <jk>null</jk> if not set.
 	 */
-	public MockServletResponse getCurrentServerResponse() {
-		return sres.get();
-	}
+	public MockServletResponse getCurrentServerResponse() { return sres.get(); }
 
 	@Override /* Overridden from HttpClientConnection */
-	public HttpConnectionMetrics getMetrics() {
-		return null;
-	}
+	public HttpConnectionMetrics getMetrics() { return null; }
 
 	@Override /* Overridden from HttpClientConnection */
-	public int getSocketTimeout() {
-		return Integer.MAX_VALUE;
-	}
+	public int getSocketTimeout() { return Integer.MAX_VALUE; }
 
 	@Override /* Overridden from RestClient */
 	public MockRestRequest head(Object url) throws RestCallException {
@@ -1994,9 +1989,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* Overridden from HttpClientConnection */
-	public boolean isOpen() {
-		return true;
-	}
+	public boolean isOpen() { return true; }
 
 	@Override /* Overridden from HttpClientConnection */
 	public boolean isResponseAvailable(int timeout) throws IOException {
@@ -2004,9 +1997,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* Overridden from HttpClientConnection */
-	public boolean isStale() {
-		return false;
-	}
+	public boolean isStale() { return false; }
 
 	@Override /* Overridden from RestClient */
 	public MockRestRequest options(Object url) throws RestCallException {
@@ -2022,6 +2013,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public MockRestRequest patch(Object url, Object body) throws RestCallException {
 		return (MockRestRequest)super.patch(url, body);
 	}
+
 	@Override /* Overridden from RestClient */
 	public MockRestRequest patch(Object url, String body, ContentType contentType) throws RestCallException {
 		return (MockRestRequest)super.patch(url, body, contentType);
@@ -2046,6 +2038,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public MockRestRequest put(Object url) throws RestCallException {
 		return (MockRestRequest)super.put(url);
 	}
+
 	@Override /* Overridden from RestClient */
 	public MockRestRequest put(Object url, Object body) throws RestCallException {
 		return (MockRestRequest)super.put(url, body);
@@ -2055,6 +2048,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public MockRestRequest put(Object url, String body, ContentType contentType) throws RestCallException {
 		return (MockRestRequest)super.put(url, body, contentType);
 	}
+
 	@Override /* Overridden from HttpClientConnection */
 	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
 		InputStream is = new ByteArrayInputStream(sres.get().getContent());
@@ -2082,7 +2076,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			sres.set(res);
 
 			HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
-			res.getHeaders().forEach((k,v) -> {
+			res.getHeaders().forEach((k, v) -> {
 				for (String hv : v)
 					response.addHeader(k, hv);
 			});
@@ -2148,11 +2142,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			if (pr.getError() != null)
 				throw new IllegalStateException(pr.getError());
 
-			MockServletRequest r = MockServletRequest
-				.create(request.getRequestLine().getMethod(), pr.getURI())
-				.contextPath(pr.getContextPath())
-				.servletPath(pr.getServletPath())
-				.pathVars(pathVars)
+			MockServletRequest r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
 				.debug(isDebug());
 
 			for (Header h : request.getAllHeaders())
@@ -2179,7 +2169,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		if (req instanceof RestRequestCreated)
 			return ((RestRequestCreated)req).getRestRequest();
 		if (req instanceof HttpRequestWrapper)
-			return findRestRequest(((HttpRequestWrapper) req).getOriginal());
+			return findRestRequest(((HttpRequestWrapper)req).getOriginal());
 		return req;
 	}
 

@@ -128,6 +128,7 @@ public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<Request
 	public FluentRequestLineAssertion(RequestLine value, R returns) {
 		this(null, value, returns);
 	}
+
 	/**
 	 * Returns the request line method string as a new assertion.
 	 *
@@ -154,6 +155,7 @@ public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<Request
 	public FluentStringAssertion<R> asUri() {
 		return new FluentStringAssertion<>(value().getUri(), returns());
 	}
+
 	@Override /* Overridden from Assertion */
 	public FluentRequestLineAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

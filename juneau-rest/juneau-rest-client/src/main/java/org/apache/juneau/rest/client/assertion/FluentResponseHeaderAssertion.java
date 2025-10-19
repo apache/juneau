@@ -133,6 +133,7 @@ import org.apache.juneau.serializer.*;
 public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 
 	private final ResponseHeader value;
+
 	/**
 	 * Chained constructor.
 	 *
@@ -170,6 +171,7 @@ public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 	public FluentResponseHeaderAssertion(ResponseHeader value, R returns) {
 		this(null, value, returns);
 	}
+
 	/**
 	 * Converts the parameter value to a type using {@link ResponseHeader#as(Class)} and then returns the value as an any-object assertion.
 	 *
@@ -232,6 +234,7 @@ public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 	public FluentLongAssertion<R> asLong() {
 		return new FluentLongAssertion<>(this, value.asLong().orElse(null), returns());
 	}
+
 	/**
 	 * Converts this object assertion into a zoned-datetime assertion.
 	 *

@@ -36,10 +36,10 @@ import org.apache.juneau.urlencoding.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics">UON Basics</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({UonConfigAnnotation.SerializerApply.class,UonConfigAnnotation.ParserApply.class})
+@ContextApply({ UonConfigAnnotation.SerializerApply.class, UonConfigAnnotation.ParserApply.class })
 public @interface UonConfig {
 
 	/**
@@ -124,6 +124,7 @@ public @interface UonConfig {
 	 * @return The annotation value.
 	 */
 	String encoding() default "";
+
 	/**
 	 * Format to use for query/form-data/header values.
 	 *
@@ -174,7 +175,7 @@ public @interface UonConfig {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
-
+	
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#validateEnd()}
 	 * </ul>

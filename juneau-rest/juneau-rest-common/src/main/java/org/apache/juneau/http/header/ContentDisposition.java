@@ -72,7 +72,7 @@ public class ContentDisposition extends BasicStringRangesHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentDisposition of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new ContentDisposition(value));
+		return value == null ? null : CACHE.get(value, () -> new ContentDisposition(value));
 	}
 
 	/**
@@ -101,6 +101,7 @@ public class ContentDisposition extends BasicStringRangesHeader {
 	public static ContentDisposition of(Supplier<StringRanges> value) {
 		return value == null ? null : new ContentDisposition(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

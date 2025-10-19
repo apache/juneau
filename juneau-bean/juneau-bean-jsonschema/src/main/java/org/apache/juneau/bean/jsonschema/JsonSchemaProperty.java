@@ -48,7 +48,6 @@ public class JsonSchemaProperty extends JsonSchema {
 		setType(type);
 	}
 
-
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setName(String name) {
 		super.setName(name);
@@ -297,9 +296,7 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchema getNot() {
-		return super.getNot();
-	}
+	public JsonSchema getNot() { return super.getNot(); }
 
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setNot(JsonSchema not) {
@@ -368,9 +365,7 @@ public class JsonSchemaProperty extends JsonSchema {
 	}
 
 	@Override /* Overridden from JsonSchema */
-	public JsonSchema getUnevaluatedItems() {
-		return super.getUnevaluatedItems();
-	}
+	public JsonSchema getUnevaluatedItems() { return super.getUnevaluatedItems(); }
 
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setUnevaluatedItems(JsonSchema unevaluatedItems) {

@@ -83,7 +83,7 @@ public class RestOpInvoker extends MethodInvoker {
 				if (output != null || ! res.getOutputStreamCalled())
 					res.setContent(output);
 
-		} catch (IllegalAccessException|IllegalArgumentException e) {
+		} catch (IllegalAccessException | IllegalArgumentException e) {
 			throw new InternalServerError(e, "Error occurred invoking method ''{0}''.", inner().getFullName());
 		} catch (InvocationTargetException e) {
 			RestResponse res = opSession.getResponse();

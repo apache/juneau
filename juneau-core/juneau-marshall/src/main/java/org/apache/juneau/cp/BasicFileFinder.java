@@ -94,15 +94,18 @@ public class BasicFileFinder implements FileFinder {
 		this.excludePatterns = new String[0];
 		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
 	}
+
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof BasicFileFinder && Utils.eq(this, (BasicFileFinder)o, (x,y)->Utils.eq(x.hashCode, y.hashCode) && Utils.eq(x.getClass(), y.getClass()) && Utils.eq(x.roots, y.roots) && Utils.eq(x.cachingLimit, y.cachingLimit) && Utils.eq(x.includePatterns, y.includePatterns) && Utils.eq(x.excludePatterns, y.excludePatterns));
+		return o instanceof BasicFileFinder && Utils.eq(this, (BasicFileFinder)o, (x, y) -> Utils.eq(x.hashCode, y.hashCode) && Utils.eq(x.getClass(), y.getClass()) && Utils.eq(x.roots, y.roots)
+			&& Utils.eq(x.cachingLimit, y.cachingLimit) && Utils.eq(x.includePatterns, y.includePatterns) && Utils.eq(x.excludePatterns, y.excludePatterns));
 	}
 
 	@Override /* Overridden from FileFinder */
 	public final Optional<InputStream> getStream(String name, Locale locale) throws IOException {
 		return find(name, locale);
 	}
+
 	@Override /* Overridden from FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
 		return Utils.opt(read(find(name, locale).orElse(null)));
@@ -115,6 +118,7 @@ public class BasicFileFinder implements FileFinder {
 
 	@Override /* Overridden from Object */
 	public String toString() {
+		// @formatter:off
 		return filteredMap()
 			.append("class", getClass().getSimpleName())
 			.append("roots", roots)
@@ -123,6 +127,7 @@ public class BasicFileFinder implements FileFinder {
 			.append("exclude", excludePatterns)
 			.append("hashCode", hashCode)
 			.asReadableString();
+		// @formatter:on
 	}
 
 	/**

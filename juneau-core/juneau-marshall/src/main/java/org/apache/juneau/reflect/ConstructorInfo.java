@@ -56,6 +56,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 			return null;
 		return ClassInfo.of(c.getDeclaringClass()).getConstructorInfo(c);
 	}
+
 	private final Constructor<?> c;
 
 	/**
@@ -81,6 +82,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 			action.accept(this);
 		return this;
 	}
+
 	@Override /* Overridden from ExecutableInfo */
 	public ConstructorInfo accessible() {
 		super.accessible();
@@ -140,6 +142,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		super.forEachParam(filter, action);
 		return this;
 	}
+
 	/**
 	 * Finds the annotation of the specified type defined on this constructor.
 	 *
@@ -229,6 +232,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 			throw new ExecutableException(e);
 		}
 	}
+
 	/**
 	 * Shortcut for calling the new-instance method on the underlying constructor.
 	 *

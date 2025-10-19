@@ -50,12 +50,14 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		}
 	}
 
+	// @formatter:off
 	static final FileFinder RESOURCES = FileFinder
 		.create(BeanStore.INSTANCE)
 		.cp(SwaggerUI.class, null, true)
 		.dir(",")
 		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)
 		.build();
+	// @formatter:on
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options");
 
@@ -82,12 +84,12 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	 */
 	@Override
 	public MediaType[] forMediaTypes() {
-		return new MediaType[] {MediaType.HTML};
+		return new MediaType[] { MediaType.HTML };
 	}
 
 	@Override
 	public Div swap(BeanSession beanSession, Swagger swagger) throws Exception {
-
+		// @formatter:off
 		var s = new Session(swagger);
 
 		var css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css", null).orElse(null);
@@ -122,9 +124,11 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		}
 
 		return outer;
+		// @formatter:on
 	}
 
 	private static Div examples(Session s, ParameterInfo pi) {
+		// @formatter:off
 		var isBody = "body".equals(pi.getIn());
 
 		var m = new JsonMap();
@@ -151,6 +155,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			return null;
 
 		return examplesDiv(m);
+		// @formatter:on
 	}
 
 	private static Div examples(Session s, ResponseInfo ri) {
@@ -188,11 +193,11 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		var div = div(select)._class("examples");
 
 		if (select != null)
-			select.child(option("model","model"));
+			select.child(option("model", "model"));
 		div.child(div(m.remove("model"))._class("model active").attr("data-name", "model"));
 
 		var select2 = select;
-		m.forEach((k,v) -> {
+		m.forEach((k, v) -> {
 			if (select2 != null)
 				select2.child(option(k, k));
 			div.child(div(v.toString().replace("\\n", "\n"))._class("example").attr("data-name", k));
@@ -209,43 +214,43 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		if (info != null) {
 
 			if (info.getDescription() != null)
-				table.child(tr(th("Description:"),td(toBRL(info.getDescription()))));
+				table.child(tr(th("Description:"), td(toBRL(info.getDescription()))));
 
 			if (info.getVersion() != null)
-				table.child(tr(th("Version:"),td(info.getVersion())));
+				table.child(tr(th("Version:"), td(info.getVersion())));
 
 			var c = info.getContact();
 			if (c != null) {
 				var t2 = table();
 
 				if (c.getName() != null)
-					t2.child(tr(th("Name:"),td(c.getName())));
+					t2.child(tr(th("Name:"), td(c.getName())));
 				if (c.getUrl() != null)
-					t2.child(tr(th("URL:"),td(a(c.getUrl(), c.getUrl()))));
+					t2.child(tr(th("URL:"), td(a(c.getUrl(), c.getUrl()))));
 				if (c.getEmail() != null)
-					t2.child(tr(th("Email:"),td(a("mailto:"+ c.getEmail(), c.getEmail()))));
+					t2.child(tr(th("Email:"), td(a("mailto:" + c.getEmail(), c.getEmail()))));
 
-				table.child(tr(th("Contact:"),td(t2)));
+				table.child(tr(th("Contact:"), td(t2)));
 			}
 
 			var l = info.getLicense();
 			if (l != null) {
 				var content = l.getName() != null ? l.getName() : l.getUrl();
 				var child = l.getUrl() != null ? a(l.getUrl(), content) : l.getName();
-				table.child(tr(th("License:"),td(child)));
+				table.child(tr(th("License:"), td(child)));
 			}
 
 			ExternalDocumentation ed = s.swagger.getExternalDocs();
 			if (ed != null) {
 				var content = ed.getDescription() != null ? ed.getDescription() : ed.getUrl();
 				var child = ed.getUrl() != null ? a(ed.getUrl(), content) : ed.getDescription();
-				table.child(tr(th("Docs:"),td(child)));
+				table.child(tr(th("Docs:"), td(child)));
 			}
 
 			if (info.getTermsOfService() != null) {
 				var tos = info.getTermsOfService();
 				var child = StringUtils.isUri(tos) ? a(tos, tos) : tos;
-				table.child(tr(th("Terms of Service:"),td(child)));
+				table.child(tr(th("Terms of Service:"), td(child)));
 			}
 		}
 
@@ -253,10 +258,11 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	private static Div headers(ResponseInfo ri) {
+		// @formatter:off
 		if (ri.getHeaders() == null)
 			return null;
 
-		var sectionTable = table(tr(th("Name"),th("Description"),th("Schema")))._class("section-table");
+		var sectionTable = table(tr(th("Name"), th("Description"), th("Schema")))._class("section-table");
 
 		var headers = div(
 			div("Headers:")._class("section-name"),
@@ -274,32 +280,37 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		);
 
 		return headers;
+		// @formatter:on
 	}
 
 	private static Div modelBlock(String modelName, JsonMap model) {
+		// @formatter:off
 		return div()._class("op-block op-block-closed model").children(
 			modelBlockSummary(modelName, model),
 			div(model)._class("op-block-contents")
 		);
+		// @formatter:on
 	}
 
 	private static HtmlElement modelBlockSummary(String modelName, JsonMap model) {
-		return div()._class("op-block-summary").children(
+		// @formatter:off
+		return div()._class("op-block-summary").onclick("toggleOpBlock(this)").children(
 			span(modelName)._class("method-button"),
 			model.containsKey("description") ? span(toBRL(model.remove("description").toString()))._class("summary") : null
-		).onclick("toggleOpBlock(this)");
+		);
+		// @formatter:on
 	}
 
 	// Creates the contents under the "Model" header.
 	private static Div modelsBlockContents(Session s) {
 		var modelBlockContents = div()._class("tag-block-contents");
-		s.swagger.getDefinitions().forEach((k,v) -> modelBlockContents.child(modelBlock(k,v)));
+		s.swagger.getDefinitions().forEach((k, v) -> modelBlockContents.child(modelBlock(k, v)));
 		return modelBlockContents;
 	}
 
 	// Creates the "Model" header.
 	private static HtmlElement modelsBlockSummary() {
-		return div()._class("tag-block-summary").children(span("Models")._class("name")).onclick("toggleTagBlock(this)");
+		return div()._class("tag-block-summary").onclick("toggleTagBlock(this)").children(span("Models")._class("name"));
 	}
 
 	private static Div opBlock(Session s, String path, String opName, Operation op) {
@@ -308,21 +319,26 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		if (! op.isDeprecated() && ! STANDARD_METHODS.contains(opClass))
 			opClass = "other";
 
+		// @formatter:off
 		return div()._class("op-block op-block-closed " + opClass).children(
 			opBlockSummary(path, opName, op),
 			div(tableContainer(s, op))._class("op-block-contents")
 		);
+		// @formatter:on
 	}
 
 	private static HtmlElement opBlockSummary(String path, String opName, Operation op) {
-		return div()._class("op-block-summary").children(
+		// @formatter:off
+		return div()._class("op-block-summary").onclick("toggleOpBlock(this)").children(
 			span(opName.toUpperCase())._class("method-button"),
 			span(path)._class("path"),
 			op.getSummary() != null ? span(op.getSummary())._class("summary") : null
-		).onclick("toggleOpBlock(this)");
+		);
+		// @formatter:on
 	}
 
 	private static Div tableContainer(Session s, Operation op) {
+		// @formatter:off
 		var tableContainer = div()._class("table-container");
 
 		if (op.getDescription() != null)
@@ -361,7 +377,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			var responses = table(tr(th("Code")._class("response-key"), th("Description")._class("response-key")))._class("responses");
 			tableContainer.child(responses);
 
-			op.getResponses().forEach((k,v) -> {
+			op.getResponses().forEach((k, v) -> {
 				var code = td(k)._class("response-key");
 
 				var codeValue = td(
@@ -375,10 +391,12 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		}
 
 		return tableContainer;
+		// @formatter:on
 	}
 
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
 	private static Div tagBlockContents(Session s, Tag t) {
+		// @formatter:off
 		var tagBlockContents = div()._class("tag-block-contents");
 
 		if (s.swagger.getPaths() != null) {
@@ -391,6 +409,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		}
 
 		return tagBlockContents;
+		// @formatter:on
 	}
 
 	// Creates the "pet  Everything about your Pets  ext-link" header.
@@ -406,6 +425,6 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			children.add(span(a(ed.getUrl(), content))._class("extdocs"));
 		}
 
-		return div()._class("tag-block-summary").children(children).onclick("toggleTagBlock(this)");
+		return div()._class("tag-block-summary").onclick("toggleTagBlock(this)").children(children);
 	}
 }

@@ -77,7 +77,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-@Bean(typeName="category")
+@Bean(typeName = "category")
 public class Category extends Common {
 
 	private String term;
@@ -95,6 +95,7 @@ public class Category extends Common {
 	public Category(String term) {
 		setTerm(term);
 	}
+
 	/**
 	 * Bean property getter:  <property>label</property>.
 	 *
@@ -103,10 +104,8 @@ public class Category extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public String getLabel() {
-		return label;
-	}
+	@Xml(format = ATTR)
+	public String getLabel() { return label; }
 
 	/**
 	 * Bean property getter:  <property>scheme</property>.
@@ -116,10 +115,8 @@ public class Category extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public URI getScheme() {
-		return scheme;
-	}
+	@Xml(format = ATTR)
+	public URI getScheme() { return scheme; }
 
 	/**
 	 * Bean property getter:  <property>term</property>.
@@ -129,10 +126,8 @@ public class Category extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public String getTerm() {
-		return term;
-	}
+	@Xml(format = ATTR)
+	public String getTerm() { return term; }
 
 	@Override /* Overridden from Common */
 	public Category setBase(Object value) {
@@ -161,6 +156,7 @@ public class Category extends Common {
 		super.setLang(value);
 		return this;
 	}
+
 	/**
 	 * Bean property setter:  <property>scheme</property>.
 	 *
@@ -192,7 +188,7 @@ public class Category extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	@Xml(format=ATTR)
+	@Xml(format = ATTR)
 	public Category setTerm(String value) {
 		this.term = value;
 		return this;

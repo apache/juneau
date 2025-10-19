@@ -48,6 +48,7 @@ public class RemoteMeta {
 	private static String resolve(String s) {
 		return VarResolver.DEFAULT.resolve(s);
 	}
+
 	private final Map<Method,RemoteOperationMeta> operations;
 
 	private final HeaderList headers;
@@ -89,10 +90,7 @@ public class RemoteMeta {
 
 		Map<Method,RemoteOperationMeta> operations = map();
 		String path2 = path;
-		ci.forEachPublicMethod(
-			x -> true,
-			x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET"))
-		);
+		ci.forEachPublicMethod(x -> true, x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));
 
 		this.operations = u(operations);
 		this.headers = headers;
@@ -103,9 +101,8 @@ public class RemoteMeta {
 	 *
 	 * @return The headers to set on all requests.
 	 */
-	public HeaderList getHeaders() {
-		return headers;
-	}
+	public HeaderList getHeaders() { return headers; }
+
 	/**
 	 * Returns the metadata about the specified operation on this resource proxy.
 	 *

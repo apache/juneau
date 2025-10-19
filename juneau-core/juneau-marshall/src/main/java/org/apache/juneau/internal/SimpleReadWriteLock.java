@@ -31,19 +31,20 @@ public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public SimpleLock read(){
+		public SimpleLock read() {
 			return SimpleLock.NO_OP;
 		}
+
 		@Override
 		public SimpleLock write() {
 			return SimpleLock.NO_OP;
 		}
 	};
+
 	/**
 	 * Constructor.
 	 */
-	public SimpleReadWriteLock() {
-	}
+	public SimpleReadWriteLock() {}
 
 	/**
 	 * Constructor
@@ -59,7 +60,7 @@ public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 	 *
 	 * @return A new closeable read lock.
 	 */
-	public SimpleLock read(){
+	public SimpleLock read() {
 		return new SimpleLock(readLock());
 	}
 
@@ -68,7 +69,7 @@ public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 	 *
 	 * @return A new closeable write lock.
 	 */
-	public SimpleLock write(){
+	public SimpleLock write() {
 		return new SimpleLock(writeLock());
 	}
 }

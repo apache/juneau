@@ -74,6 +74,7 @@ public class XmlParserSession extends ReaderParserSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public XmlParserSession build() {
 			return new XmlParserSession(this);
@@ -176,7 +177,8 @@ public class XmlParserSession extends ReaderParserSession {
 		}
 	}
 
-	private static final int UNKNOWN=0, OBJECT=1, ARRAY=2, STRING=3, NUMBER=4, BOOLEAN=5, NULL=6;
+	private static final int UNKNOWN = 0, OBJECT = 1, ARRAY = 2, STRING = 3, NUMBER = 4, BOOLEAN = 5, NULL = 6;
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -186,26 +188,36 @@ public class XmlParserSession extends ReaderParserSession {
 	public static Builder create(XmlParser ctx) {
 		return new Builder(ctx);
 	}
+
 	private static int getJsonType(String s) {
 		if (s == null)
 			return UNKNOWN;
 		char c = s.charAt(0);
-		switch(c) {
-			case 'o': return (s.equals("object") ? OBJECT : UNKNOWN);
-			case 'a': return (s.equals("array") ? ARRAY : UNKNOWN);
-			case 's': return (s.equals("string") ? STRING : UNKNOWN);
-			case 'b': return (s.equals("boolean") ? BOOLEAN : UNKNOWN);
+		switch (c) {
+			case 'o':
+				return (s.equals("object") ? OBJECT : UNKNOWN);
+			case 'a':
+				return (s.equals("array") ? ARRAY : UNKNOWN);
+			case 's':
+				return (s.equals("string") ? STRING : UNKNOWN);
+			case 'b':
+				return (s.equals("boolean") ? BOOLEAN : UNKNOWN);
 			case 'n': {
 				c = s.charAt(2);
-				switch(c) {
-					case 'm': return (s.equals("number") ? NUMBER : UNKNOWN);
-					case 'l': return (s.equals("null") ? NULL : UNKNOWN);
-					default: return NUMBER;
+				switch (c) {
+					case 'm':
+						return (s.equals("number") ? NUMBER : UNKNOWN);
+					case 'l':
+						return (s.equals("null") ? NULL : UNKNOWN);
+					default:
+						return NUMBER;
 				}
 			}
-			default: return UNKNOWN;
+			default:
+				return UNKNOWN;
 		}
 	}
+
 	private final XmlParser ctx;
 
 	private final StringBuilder rsb = new StringBuilder();  // Reusable string builder used in this class.
@@ -478,7 +490,7 @@ public class XmlParserSession extends ReaderParserSession {
 							Object value = parseAnything(et, currAttr, r, m.getBean(false), false, pMeta);
 							setName(et, value, currAttr);
 							pMeta.add(m, currAttr, value);
-						} else if (xf == ATTR)  {
+						} else if (xf == ATTR) {
 							pMeta.set(m, currAttr, getAttributeValue(r, 0));
 							r.nextTag();
 						} else {
@@ -496,8 +508,7 @@ public class XmlParserSession extends ReaderParserSession {
 						if (sb == null)
 							sb = getStringBuilder();
 						sb.append(getElementAsString(r));
-					}
-					else
+					} else
 						throw new ParseException("End element found where one was not expected.  {0}", XmlUtils.toReadableEvent(r));
 				}
 				depth--;
@@ -524,8 +535,7 @@ public class XmlParserSession extends ReaderParserSession {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l,
-			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
+	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
 		int argIndex = 0;
 		do {
@@ -543,8 +553,8 @@ public class XmlParserSession extends ReaderParserSession {
 		return l;
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType,
-			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
+	private <K,V> Map<K,V> parseIntoMap(XmlReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta)
+		throws IOException, ParseException, ExecutableException, XMLStreamException {
 		int depth = 0;
 		for (int i = 0; i < r.getAttributeCount(); i++) {
 			String a = r.getAttributeLocalName(i);
@@ -650,9 +660,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @return
 	 * 	The {@link XMLEventAllocator} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	protected final XMLEventAllocator getEventAllocator() {
-		return ctx.getEventAllocator();
-	}
+	protected final XMLEventAllocator getEventAllocator() { return ctx.getEventAllocator(); }
 
 	/**
 	 * XML reporter.
@@ -661,9 +669,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @return
 	 * 	The {@link XMLReporter} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	protected final XMLReporter getReporter() {
-		return ctx.getReporter();
-	}
+	protected final XMLReporter getReporter() { return ctx.getReporter(); }
 
 	/**
 	 * XML resolver.
@@ -672,9 +678,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @return
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
-	protected final XMLResolver getResolver() {
-		return ctx.getResolver();
-	}
+	protected final XMLResolver getResolver() { return ctx.getResolver(); }
 
 	/**
 	 * Returns the language-specific metadata on the specified bean.
@@ -695,6 +699,7 @@ public class XmlParserSession extends ReaderParserSession {
 	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getXmlBeanPropertyMeta(bpm);
 	}
+
 	/**
 	 * Returns the language-specific metadata on the specified class.
 	 *
@@ -725,9 +730,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * 	<jk>true</jk> if when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
 	 */
-	protected final boolean isPreserveRootElement() {
-		return ctx.isPreserveRootElement();
-	}
+	protected final boolean isPreserveRootElement() { return ctx.isPreserveRootElement(); }
 
 	/**
 	 * Enable validation.
@@ -736,9 +739,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @return
 	 * 	<jk>true</jk> if XML document will be validated.
 	 */
-	protected final boolean isValidating() {
-		return ctx.isValidating();
-	}
+	protected final boolean isValidating() { return ctx.isValidating(); }
 
 	/**
 	 * Returns <jk>true</jk> if the current element is a whitespace element.
@@ -753,6 +754,7 @@ public class XmlParserSession extends ReaderParserSession {
 	protected boolean isWhitespaceElement(XmlReader r) {
 		return false;
 	}
+
 	/**
 	 * Workhorse method.
 	 *
@@ -769,8 +771,8 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 * @throws XMLStreamException Malformed XML encountered.
 	 */
-	protected <T> T parseAnything(ClassMeta<T> eType, String currAttr, XmlReader r,
-			Object outer, boolean isRoot, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
+	protected <T> T parseAnything(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
+		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
@@ -829,8 +831,7 @@ public class XmlParserSession extends ReaderParserSession {
 				o = getElementText(r);
 				if (sType.isChar())
 					o = parseCharacter(o);
-			}
-			else if (jsonType == NUMBER)
+			} else if (jsonType == NUMBER)
 				o = parseNumber(getElementText(r), null);
 			else if (jsonType == BOOLEAN)
 				o = Boolean.parseBoolean(getElementText(r));
@@ -879,9 +880,8 @@ public class XmlParserSession extends ReaderParserSession {
 				m = new JsonMap(this).append(wrapperAttr, m);
 			o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 		} else {
-			throw new ParseException(this,
-				"Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''",
-				sType.getInnerClass().getName(), sType.getNotABeanReason(), pMeta == null ? null : pMeta.getName());
+			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", sType.getInnerClass().getName(), sType.getNotABeanReason(),
+				pMeta == null ? null : pMeta.getName());
 		}
 
 		if (swap != null && o != null)

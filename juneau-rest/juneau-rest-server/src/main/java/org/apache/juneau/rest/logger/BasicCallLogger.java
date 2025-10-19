@@ -58,6 +58,7 @@ public class BasicCallLogger extends CallLogger {
 
 	@Override
 	protected Builder init(BeanStore beanStore) {
+		// @formatter:off
 		return super.init(beanStore)
 			.normalRules(  // Rules when debugging is not enabled.
 				CallLoggerRule.create(beanStore)  // Log 500+ errors with status-line and header information.
@@ -81,5 +82,6 @@ public class BasicCallLogger extends CallLogger {
 					.build()
 			)
 		;
+		// @formatter:on
 	}
 }

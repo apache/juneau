@@ -42,7 +42,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class TemporaryRedirect extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -95,6 +95,7 @@ public class TemporaryRedirect extends BasicHttpResponse {
 	public TemporaryRedirect copy() {
 		return new TemporaryRedirect(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public TemporaryRedirect setContent(HttpEntity value) {
 		super.setContent(value);

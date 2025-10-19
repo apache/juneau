@@ -62,6 +62,7 @@ public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public HtmlSchemaSerializerSession build() {
 			return new HtmlSchemaSerializerSession(this);
@@ -175,6 +176,7 @@ public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -184,6 +186,7 @@ public class HtmlSchemaSerializerSession extends HtmlSerializerSession {
 	public static Builder create(HtmlSchemaSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final JsonSchemaGeneratorSession genSession;
 
 	/**

@@ -116,6 +116,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addBeanTypesHtml() {
 			super.addBeanTypesHtml();
@@ -188,6 +189,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			generatorBuilder.addExamplesTo(values);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addKeyValueTableHeaders() {
 			super.addKeyValueTableHeaders();
@@ -612,10 +614,12 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				generatorBuilder.hashKey()
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -847,13 +851,13 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1059,6 +1063,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
 	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -1067,6 +1072,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final JsonSchemaGenerator generator;
 
 	/**
@@ -1091,15 +1097,12 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	}
 
 	@Override /* Overridden from Context */
-	public HtmlSchemaSerializerSession getSession() {
-		return createSession().build();
-	}
+	public HtmlSchemaSerializerSession getSession() { return createSession().build(); }
 
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("generator", generator);
 	}
-	JsonSchemaGenerator getGenerator() {
-		return generator;
-	}
+
+	JsonSchemaGenerator getGenerator() { return generator; }
 }

@@ -74,24 +74,29 @@ public class BasicSwaggerProviderSession {
 			codes.add(def);
 		return codes;
 	}
+
 	private static JsonMap newMap(JsonMap om) {
 		if (om == null)
 			return new JsonMap();
 		return om.modifiable();
 	}
+
 	private static JsonList nullIfEmpty(JsonList l) {
 		return (l == null || l.isEmpty() ? null : l);
 	}
+
 	private static JsonMap nullIfEmpty(JsonMap m) {
 		return (m == null || m.isEmpty() ? null : m);
 	}
+
 	static String joinnl(String[]...s) {
 		for (String[] ss : s) {
 			if (ss.length != 0)
-			return Utils.joinnl(ss).trim();
+				return Utils.joinnl(ss).trim();
 		}
 		return "";
 	}
+
 	private final RestContext context;
 	private final Class<?> c;
 	private final ClassInfo rci;
@@ -134,6 +139,7 @@ public class BasicSwaggerProviderSession {
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
 	public Swagger getSwagger() throws Exception {
+		// @formatter:off
 
 		InputStream is = ff.getStream(rci.getSimpleName() + ".json", locale).orElse(null);
 
@@ -244,7 +250,7 @@ public class BasicSwaggerProviderSession {
 			for (JsonMap m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(JsonMap.class)) {
 				String name = m.getString("name");
 				if (name == null)
-					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class {0}", c) ;
+					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class {0}", c);
 				if (tagMap.containsKey(name))
 					tagMap.get(name).putAll(m);
 				else
@@ -273,7 +279,7 @@ public class BasicSwaggerProviderSession {
 			// Add @RestOp(swagger)
 			Value<OpSwagger> _ms = Value.empty();
 			al.forEachValue(OpSwagger.class, "swagger", OpSwaggerAnnotation::notEmpty, x -> _ms.set(x));
-			OpSwagger ms = _ms.orElseGet(()->OpSwaggerAnnotation.create().build());
+			OpSwagger ms = _ms.orElseGet(() -> OpSwaggerAnnotation.create().build());
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
 			op.appendIf(ne, "operationId",
@@ -296,7 +302,7 @@ public class BasicSwaggerProviderSession {
 			);
 
 			Value<String[]> _description = Value.empty();
-			al.forEachValue(String[].class, "description",x -> x.length > 0, x -> _description.set(x));
+			al.forEachValue(String[].class, "description", x -> x.length > 0, x -> _description.set(x));
 			op.appendIf(ne, "description",
 				firstNonEmpty(
 					resolve(ms.description()),
@@ -437,25 +443,25 @@ public class BasicSwaggerProviderSession {
 						}
 					}
 					List<MethodInfo> methods = eci.getMethods();
-					for (int i = methods.size()-1; i>=0; i--) {
+					for (int i = methods.size() - 1; i >= 0; i--) {
 						MethodInfo ecmi = methods.get(i);
 						Header a = ecmi.getAnnotation(Header.class);
 						if (a == null)
-							a = ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotation(Header.class);
+							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotation(Header.class);
 						if (a != null && ! isMulti(a)) {
 							String ha = a.name();
 							for (Integer code : codes) {
 								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-								ecmi.forEachAnnotation(context, Schema.class, x-> true, x -> merge(header, x));
-								ecmi.getReturnType().unwrap(Value.class,Optional.class).forEachAnnotation(Schema.class, x -> true, x -> merge(header, x));
-								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Value.class,Optional.class).innerType(), bs));
+								ecmi.forEachAnnotation(context, Schema.class, x -> true, x -> merge(header, x));
+								ecmi.getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(Schema.class, x -> true, x -> merge(header, x));
+								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Value.class, Optional.class).innerType(), bs));
 							}
 						}
 					}
 				}
 			}
 
-			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class,Optional.class).hasAnnotation(Response.class)) {
+			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class, Optional.class).hasAnnotation(Response.class)) {
 				List<Response> la = list();
 				mi.forEachAnnotation(context, Response.class, x -> true, x -> la.add(x));
 				List<StatusCode> la2 = list();
@@ -474,7 +480,7 @@ public class BasicSwaggerProviderSession {
 				}
 				if (mi.getReturnType().hasAnnotation(Response.class)) {
 					List<MethodInfo> methods = mi.getReturnType().getMethods();
-					for (int i = methods.size()-1; i>=0; i--) {
+					for (int i = methods.size() - 1; i >= 0; i--) {
 						MethodInfo ecmi = methods.get(i);
 						if (ecmi.hasAnnotation(Header.class)) {
 							Header a = ecmi.getAnnotation(Header.class);
@@ -483,7 +489,7 @@ public class BasicSwaggerProviderSession {
 								for (Integer code : codes) {
 									JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
 									ecmi.forEachAnnotation(context, Schema.class, x -> true, x -> merge(header, x));
-									ecmi.getReturnType().unwrap(Value.class,Optional.class).forEachAnnotation(Schema.class, x -> true, x -> merge(header, x));
+									ecmi.getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(Schema.class, x -> true, x -> merge(header, x));
 									merge(header, a.schema());
 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 								}
@@ -590,21 +596,13 @@ public class BasicSwaggerProviderSession {
 		if (produces.isEmpty())
 			omSwagger.remove("produces");
 
-//		try {
-//			if (! omSwagger.isEmpty())
-//				assertNoEmpties(omSwagger);
-//		} catch (SwaggerException e1) {
-//			System.err.println(omSwagger.toString(Json5Serializer.DEFAULT_READABLE));
-//			throw e1;
-//		}
-
 		try {
 			String swaggerJson = Json5Serializer.DEFAULT_READABLE.toString(omSwagger);
-//			System.err.println(swaggerJson);
 			return jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
 			throw new ServletException("Error detected in swagger.", e);
 		}
+		// @formatter:on
 	}
 
 	private void addBodyExamples(RestOpContext sm, JsonMap piri, boolean response, Type type, Locale locale) throws Exception {
@@ -643,6 +641,7 @@ public class BasicSwaggerProviderSession {
 				Serializer s2 = sm.getSerializers().getSerializer(mt);
 				if (s2 != null) {
 					try {
+						// @formatter:off
 						String eVal = s2
 							.createSession()
 							.locale(locale)
@@ -650,9 +649,10 @@ public class BasicSwaggerProviderSession {
 							.apply(WriterSerializerSession.Builder.class, x -> x.useWhitespace(true))
 							.build()
 							.serializeToString(example);
+						// @formatter:on
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);
 					} catch (Exception e) {
-						System.err.println("Could not serialize to media type ["+mt+"]: " + e.getLocalizedMessage());  // NOT DEBUG
+						System.err.println("Could not serialize to media type [" + mt + "]: " + e.getLocalizedMessage());  // NOT DEBUG
 					}
 				}
 			}
@@ -682,7 +682,7 @@ public class BasicSwaggerProviderSession {
 		else if (in == HEADER)
 			s = paramName + ": " + s;
 		else if (in == PATH)
-			s = sm.getPathPattern().replace("{"+paramName+"}", urlEncodeLax(s));
+			s = sm.getPathPattern().replace("{" + paramName + "}", urlEncodeLax(s));
 
 		examples.put("example", s);
 
@@ -703,12 +703,14 @@ public class BasicSwaggerProviderSession {
 	 */
 	private static JsonMap fixSwaggerExtensions(JsonMap om) {
 		Predicate<Object> nn = Utils::isNotNull;
+		// @formatter:off
 		om
 			.appendIf(nn, "discriminator", om.remove("x-discriminator"))
 			.appendIf(nn, "readOnly", om.remove("x-readOnly"))
 			.appendIf(nn, "xml", om.remove("x-xml"))
 			.appendIf(nn, "externalDocs", om.remove("x-externalDocs"))
 			.appendIf(nn, "example", om.remove("x-example"));
+		// @formatter:on
 		return nullIfEmpty(om);
 	}
 
@@ -779,10 +781,12 @@ public class BasicSwaggerProviderSession {
 			return om;
 		om = newMap(om);
 		Predicate<String> ne = Utils::isNotEmpty;
+		// @formatter:off
 		return om
 			.appendIf(ne, "description", resolve(a.description()))
 			.appendIf(ne, "url", a.url())
 		;
+		// @formatter:on
 	}
 
 	private JsonMap merge(JsonMap om, Header[] a) {
@@ -807,6 +811,7 @@ public class BasicSwaggerProviderSession {
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		// @formatter:off
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
 			.appendIf(ne, "default", joinnl(a._default(), a.df()))
@@ -827,6 +832,7 @@ public class BasicSwaggerProviderSession {
 			.appendFirst(ne, "type", a.type(), a.t())
 			.appendIf(ne, "$ref", a.$ref())
 		;
+		// @formatter:on
 	}
 
 	private JsonMap merge(JsonMap om, Response a) throws ParseException {
@@ -836,11 +842,13 @@ public class BasicSwaggerProviderSession {
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
+		// @formatter:off
 		return om
 			.appendIf(nem, "examples", parseMap(a.examples()))
 			.appendIf(nem, "headers", merge(om.getMap("headers"), a.headers()))
 			.appendIf(nem, "schema", merge(om.getMap("schema"), a.schema()))
 		;
+		// @formatter:on
 	}
 
 	@SuppressWarnings("deprecation")
@@ -854,6 +862,7 @@ public class BasicSwaggerProviderSession {
 			Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 			Predicate<Boolean> nf = Utils::isTrue;
 			Predicate<Long> nm1 = Utils::isNotMinusOne;
+			// @formatter:off
 			return om
 				.appendIf(nem, "additionalProperties", toJsonMap(a.additionalProperties()))
 				.appendIf(ne, "allOf", joinnl(a.allOf()))
@@ -887,6 +896,7 @@ public class BasicSwaggerProviderSession {
 				.appendIf(ne, "xml", joinnl(a.xml()))
 				.appendIf(ne, "$ref", a.$ref())
 			;
+			// @formatter:on
 		} catch (ParseException e) {
 			throw new IllegalArgumentException(e);
 		}
@@ -901,6 +911,7 @@ public class BasicSwaggerProviderSession {
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		// @formatter:off
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
 			.appendIf(ne, "default", joinnl(a._default(), a.df()))
@@ -921,6 +932,7 @@ public class BasicSwaggerProviderSession {
 			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
 			.appendIf(ne, "$ref", a.$ref())
 		;
+		// @formatter:on
 	}
 
 	private JsonList parseList(Object o, String location, Object...locationArgs) throws ParseException {
@@ -935,7 +947,7 @@ public class BasicSwaggerProviderSession {
 				s = "[" + s + "]";
 			return JsonList.ofJson(s);
 		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
+			throw new SwaggerException(e, "Malformed swagger JSON array encountered in " + location + ".", locationArgs);
 		}
 	}
 
@@ -949,7 +961,7 @@ public class BasicSwaggerProviderSession {
 			s = resolve(s);
 			return JsonList.ofJsonOrCdl(s);
 		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
+			throw new SwaggerException(e, "Malformed swagger JSON array encountered in " + location + ".", locationArgs);
 		}
 	}
 
@@ -993,6 +1005,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private static JsonMap pushupSchemaFields(RestPartType type, JsonMap param, JsonMap schema) {
+		// @formatter:off
 		Predicate<Object> ne = Utils::isNotEmpty;
 		if (schema != null && ! schema.isEmpty()) {
 			if (type == BODY || type == RESPONSE) {
@@ -1021,12 +1034,13 @@ public class BasicSwaggerProviderSession {
 					.appendIfAbsentIf(ne, "type", schema.remove("type"))
 					.appendIfAbsentIf(ne, "uniqueItems", schema.remove("uniqueItems"));
 
-			if ("object".equals(param.getString("type")) && ! schema.isEmpty())
-				param.put("schema", schema);
+				if ("object".equals(param.getString("type")) && ! schema.isEmpty())
+					param.put("schema", schema);
 			}
 		}
 
 		return param;
+		// @formatter:on
 	}
 
 	private JsonList resolve(JsonList om) throws ParseException {
@@ -1035,7 +1049,7 @@ public class BasicSwaggerProviderSession {
 			if (val instanceof JsonMap) {
 				val = resolve((JsonMap)val);
 			} else if (val instanceof JsonList) {
-				val = resolve((JsonList) val);
+				val = resolve((JsonList)val);
 			} else if (val instanceof String) {
 				val = resolve(val.toString());
 			}
@@ -1057,7 +1071,7 @@ public class BasicSwaggerProviderSession {
 			if (val instanceof JsonMap) {
 				val = resolve((JsonMap)val);
 			} else if (val instanceof JsonList) {
-				val = resolve((JsonList) val);
+				val = resolve((JsonList)val);
 			} else if (val instanceof String) {
 				val = resolve(val.toString());
 			}
@@ -1116,10 +1130,12 @@ public class BasicSwaggerProviderSession {
 		if (ContactAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::isNotEmpty;
+		// @formatter:off
 		JsonMap om = JsonMap.create()
 			.appendIf(ne, "name", resolve(a.name()))
 			.appendIf(ne, "url", resolve(a.url()))
 			.appendIf(ne, "email", resolve(a.email()));
+		// @formatter:on
 		return nullIfEmpty(om);
 	}
 
@@ -1127,9 +1143,11 @@ public class BasicSwaggerProviderSession {
 		if (ExternalDocsAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::isNotEmpty;
+		// @formatter:off
 		JsonMap om = JsonMap.create()
 			.appendIf(ne, "description", resolve(joinnl(a.description())))
 			.appendIf(ne, "url", resolve(a.url()));
+		// @formatter:on
 		return nullIfEmpty(om);
 	}
 
@@ -1137,9 +1155,11 @@ public class BasicSwaggerProviderSession {
 		if (LicenseAnnotation.empty(a))
 			return null;
 		Predicate<String> ne = Utils::isNotEmpty;
+		// @formatter:off
 		JsonMap om = JsonMap.create()
 			.appendIf(ne, "name", resolve(a.name()))
 			.appendIf(ne, "url", resolve(a.url()));
+		// @formatter:on
 		return nullIfEmpty(om);
 	}
 
@@ -1147,10 +1167,12 @@ public class BasicSwaggerProviderSession {
 		JsonMap om = JsonMap.create();
 		Predicate<String> ne = Utils::isNotEmpty;
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		// @formatter:off
 		om
 			.appendIf(ne, "name", resolve(a.name()))
 			.appendIf(ne, "description", resolve(joinnl(a.description())))
 			.appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs(), location, locationArgs)));
+		// @formatter:on
 		return nullIfEmpty(om);
 	}
 

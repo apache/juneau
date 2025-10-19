@@ -41,7 +41,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @Documented
-@Target({METHOD,TYPE})
+@Target({ METHOD, TYPE })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeanAnnotation.Array.class)

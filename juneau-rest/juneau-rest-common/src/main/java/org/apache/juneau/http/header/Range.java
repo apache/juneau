@@ -179,6 +179,7 @@ public class Range extends BasicStringHeader {
 	public static Range of(Supplier<String> value) {
 		return value == null ? null : new Range(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

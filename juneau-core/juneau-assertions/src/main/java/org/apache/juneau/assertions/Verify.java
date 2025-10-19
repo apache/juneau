@@ -42,11 +42,12 @@ import org.apache.juneau.cp.*;
  */
 public class Verify {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(Verify.class, "Messages");
 	static final String
 		MSG_unexpectedType = MESSAGES.getString("unexpectedType"),
 		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue");
+	// @formatter:on
 
 	/**
 	 * Create a new verifier object.
@@ -57,7 +58,6 @@ public class Verify {
 	public static Verify verify(Object o) {
 		return new Verify(o);
 	}
-
 
 	private final Object o;
 	private Supplier<String> msg;
@@ -71,7 +71,6 @@ public class Verify {
 		this.o = o;
 	}
 
-
 	/**
 	 * Verifies that this object is equal to the specified object.
 	 *
@@ -81,29 +80,24 @@ public class Verify {
 	public String is(Object expected) {
 		if (expected == o)
 			return null;
-		if (expected == null || o == null || ! expected.equals(o))
+		if (expected == null || o == null || !expected.equals(o))
 			return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
 		return null;
 	}
-
 
 	/**
 	 * Verifies that this object is equal to {@link Boolean#FALSE}.
 	 *
 	 * @return An error message if the object is not false, otherwise <jk>null</jk>.
 	 */
-	public String isFalse() {
-		return is(false);
-	}
+	public String isFalse() { return is(false); }
 
 	/**
 	 * Verifies that this object is equal to {@link Boolean#TRUE}.
 	 *
 	 * @return An error message if the object is not true, otherwise <jk>null</jk>.
 	 */
-	public String isTrue() {
-		return is(true);
-	}
+	public String isTrue() { return is(true); }
 
 	/**
 	 * Verifies that this object is of the specified type.

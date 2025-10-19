@@ -37,7 +37,7 @@ public class UonExample {
 	public static void main(String[] args) throws Exception {
 
 		// Fill some data to a Pojo bean
-		Pojo pojo = new Pojo("id","name");
+		Pojo pojo = new Pojo("id", "name");
 
 		/**
 		 * Produces

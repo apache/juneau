@@ -53,6 +53,7 @@ public class UrlEncoding extends CharMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final UrlEncoding DEFAULT = new UrlEncoding();
+
 	/**
 	 * Serializes a Java object to a URL-Encoded string.
 	 *

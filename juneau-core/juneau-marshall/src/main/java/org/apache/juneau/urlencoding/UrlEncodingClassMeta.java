@@ -49,7 +49,5 @@ public class UrlEncodingClassMeta extends ExtendedClassMeta {
 	 *
 	 * @return The value of the {@link UrlEncoding#expandedParams()} annotation.
 	 */
-	protected boolean isExpandedParams() {
-		return expandedParams;
-	}
+	protected boolean isExpandedParams() { return expandedParams; }
 }

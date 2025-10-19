@@ -65,6 +65,6 @@ public class BasicBeanDefMapper implements BeanDefMapper {
 
 	@Override /* Overridden from BeanDefMapper */
 	public URI getURI(String id) {
-		return URI.create(format.format(new Object[]{id}));
+		return URI.create(format.format(new Object[] { id }));
 	}
 }

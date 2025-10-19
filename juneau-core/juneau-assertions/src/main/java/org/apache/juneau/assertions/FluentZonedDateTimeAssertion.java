@@ -115,13 +115,13 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<ZonedDateTime,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentZonedDateTimeAssertion.class, "Messages");
 	private static final String
 		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue"),
 		MSG_valueWasNotAfterExpected = MESSAGES.getString("valueWasNotAfterExpected"),
 		MSG_valueWasNotBeforeExpected = MESSAGES.getString("valueWasNotBeforeExpected");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -159,7 +159,6 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 		this(null, value, returns);
 	}
 
-
 	/**
 	 * Asserts that the value equals the specified value at the specified precision.
 	 *
@@ -190,7 +189,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public R isAfter(ZonedDateTime value) throws AssertionError {
 		Utils.assertArgNotNull("value", value);
-		if (! (value().isAfter(value)))
+		if (!(value().isAfter(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
 	}
@@ -201,9 +200,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isAfterNow() throws AssertionError {
-		return isAfter(ZonedDateTime.now());
-	}
+	public R isAfterNow() throws AssertionError { return isAfter(ZonedDateTime.now()); }
 
 	/**
 	 * Asserts that the value is before the specified value.
@@ -214,7 +211,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public R isBefore(ZonedDateTime value) throws AssertionError {
 		Utils.assertArgNotNull("value", value);
-		if (! (value().isBefore(value)))
+		if (!(value().isBefore(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
 	}
@@ -225,9 +222,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isBeforeNow() throws AssertionError {
-		return isBefore(ZonedDateTime.now());
-	}
+	public R isBeforeNow() throws AssertionError { return isBefore(ZonedDateTime.now()); }
 
 	/**
 	 * Asserts that the value is between (inclusive) the specified upper and lower values.

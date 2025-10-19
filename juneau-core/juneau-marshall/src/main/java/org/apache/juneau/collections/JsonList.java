@@ -127,9 +127,7 @@ public class JsonList extends LinkedList<Object> {
 		}
 
 		@Override
-		public boolean isUnmodifiable() {
-			return true;
-		}
+		public boolean isUnmodifiable() { return true; }
 
 		@Override /* Overridden from List */
 		public Object remove(int location) {
@@ -176,6 +174,7 @@ public class JsonList extends LinkedList<Object> {
 			return Collections.emptyList().subList(start, end);
 		}
 	};
+
 	/**
 	 * Construct an empty list.
 	 *
@@ -196,13 +195,14 @@ public class JsonList extends LinkedList<Object> {
 	public static JsonList of(Collection<?> values) {
 		return values == null ? null : new JsonList(values);
 	}
+
 	/**
 	 * Construct a list initialized with the specified values.
 	 *
 	 * @param values The values to add to this list.
 	 * @return A new list, never <jk>null</jk>.
 	 */
-	public static JsonList of(Object... values) {
+	public static JsonList of(Object...values) {
 		return new JsonList(values);
 	}
 
@@ -307,6 +307,7 @@ public class JsonList extends LinkedList<Object> {
 	public static JsonList ofText(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new JsonList(in);
 	}
+
 	transient BeanSession session = null;
 
 	private transient ObjectRest objectRest;
@@ -372,7 +373,7 @@ public class JsonList extends LinkedList<Object> {
 	 *
 	 * @param entries The entries to add to this list.
 	 */
-	public JsonList(Object... entries) {
+	public JsonList(Object...entries) {
 		Collections.addAll(this, entries);
 	}
 
@@ -387,6 +388,7 @@ public class JsonList extends LinkedList<Object> {
 	public JsonList(Reader json) throws ParseException {
 		parse(json, JsonParser.DEFAULT);
 	}
+
 	/**
 	 * Construct a list initialized with the specified string.
 	 *
@@ -402,6 +404,7 @@ public class JsonList extends LinkedList<Object> {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		parse(in, p);
 	}
+
 	/**
 	 * Adds all the values in the specified collection to this list.
 	 *
@@ -457,7 +460,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @param value The value to add if the predicate matches.
 	 * @return This object.
 	 */
-	public  <T> JsonList appendIf(Predicate<T> test, T value) {
+	public <T> JsonList appendIf(Predicate<T> test, T value) {
 		return appendIf(test(test, value), value);
 	}
 
@@ -487,6 +490,7 @@ public class JsonList extends LinkedList<Object> {
 			add(values[i]);
 		return this;
 	}
+
 	/**
 	 * A synonym for {@link #toString()}
 	 *
@@ -751,14 +755,13 @@ public class JsonList extends LinkedList<Object> {
 	public <T> T getAt(String path, Type type, Type...args) {
 		return getObjectRest().get(path, type, args);
 	}
+
 	/**
 	 * Returns the {@link BeanSession} currently associated with this list.
 	 *
 	 * @return The {@link BeanSession} currently associated with this list.
 	 */
-	public BeanSession getBeanSession() {
-		return session;
-	}
+	public BeanSession getBeanSession() { return session; }
 
 	/**
 	 * Shortcut for calling <code>get(index, Boolean.<jk>class</jk>)</code>.
@@ -802,6 +805,7 @@ public class JsonList extends LinkedList<Object> {
 	public JsonList getList(int index) {
 		return get(index, JsonList.class);
 	}
+
 	/**
 	 * Same as {@link #getList(int)} except converts the elements to the specified types.
 	 *
@@ -867,9 +871,7 @@ public class JsonList extends LinkedList<Object> {
 	 *
 	 * @return <jk>true</jk> if this list is unmodifiable.
 	 */
-	public boolean isUnmodifiable() {
-		return false;
-	}
+	public boolean isUnmodifiable() { return false; }
 
 	/**
 	 * Returns a modifiable copy of this list if it's unmodifiable.
@@ -966,6 +968,7 @@ public class JsonList extends LinkedList<Object> {
 		this.session = value;
 		return this;
 	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return Json5.of(this);
@@ -1001,6 +1004,7 @@ public class JsonList extends LinkedList<Object> {
 			objectRest = new ObjectRest(this);
 		return objectRest;
 	}
+
 	private void parse(Reader r, Parser p) throws ParseException {
 		if (p == null)
 			p = JsonParser.DEFAULT;

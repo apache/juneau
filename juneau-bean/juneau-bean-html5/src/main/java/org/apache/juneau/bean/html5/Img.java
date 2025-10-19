@@ -76,7 +76,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="img")
+@Bean(typeName = "img")
 public class Img extends HtmlElementVoid {
 
 	/**
@@ -94,7 +94,7 @@ public class Img extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Img _class(String value) {  // NOSONAR - Intentional naming.
+	public Img _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -162,6 +162,7 @@ public class Img extends HtmlElementVoid {
 		attr("crossorigin", value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Img dir(String value) {
 		super.dir(value);

@@ -52,6 +52,7 @@ public class MsgPack extends StreamMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final MsgPack DEFAULT = new MsgPack();
+
 	/**
 	 * Serializes a Java object to a JSON string.
 	 *

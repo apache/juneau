@@ -77,15 +77,8 @@ import org.apache.juneau.internal.*;
  */
 public class HeaderInfo extends OpenApiElement {
 
-	private String
-		description,
-		ref;
-	private Boolean
-		required,
-		explode,
-		deprecated,
-		allowEmptyValue,
-		allowReserved;
+	private String description, ref;
+	private Boolean required, explode, deprecated, allowEmptyValue, allowReserved;
 	private SchemaInfo schema;
 	private Object example;
 	private Map<String,Example> examples;
@@ -164,9 +157,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getAllowEmptyValue() {
-		return allowEmptyValue;
-	}
+	public Boolean getAllowEmptyValue() { return allowEmptyValue; }
 
 	/**
 	 * Bean property getter:  <property>allowReserved</property>.
@@ -176,9 +167,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getAllowReserved() {
-		return allowReserved;
-	}
+	public Boolean getAllowReserved() { return allowReserved; }
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -188,9 +177,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
+	public Boolean getDeprecated() { return deprecated; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -200,9 +187,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>x-example</property>.
@@ -210,9 +195,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("x-example")
-	public Object getExample() {
-		return example;
-	}
+	public Object getExample() { return example; }
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -222,9 +205,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Example> getExamples() {
-		return examples;
-	}
+	public Map<String,Example> getExamples() { return examples; }
 
 	/**
 	 * Bean property getter:  <property>required</property>.
@@ -234,9 +215,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getExplode() {
-		return explode;
-	}
+	public Boolean getExplode() { return explode; }
 
 	/**
 	 * Bean property getter:  <property>$ref</property>.
@@ -244,9 +223,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("$ref")
-	public String getRef() {
-		return ref;
-	}
+	public String getRef() { return ref; }
 
 	/**
 	 * Bean property getter:  <property>required</property>.
@@ -256,18 +233,14 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getRequired() {
-		return required;
-	}
+	public Boolean getRequired() { return required; }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
+	public SchemaInfo getSchema() { return schema; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
@@ -323,7 +296,7 @@ public class HeaderInfo extends OpenApiElement {
 			case "allowReserved" -> setAllowReserved(toBoolean(value));
 			case "deprecated" -> setDeprecated(toBoolean(value));
 			case "description" -> setDescription(Utils.s(value));
-			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
+			case "examples" -> setExamples(mapBuilder(String.class, Example.class).sparse().addAny(value).build());
 			case "explode" -> setExplode(toBoolean(value));
 			case "required" -> setRequired(toBoolean(value));
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));

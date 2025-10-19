@@ -86,7 +86,7 @@ import java.util.*;
  * @see BasicBeanConverter.Builder#addStringifier(Class, Stringifier)
  * @see BasicBeanConverter.Builder#defaultSettings()
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("rawtypes")
 public class Stringifiers {
 
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
@@ -225,18 +225,17 @@ public class Stringifiers {
 	 * @see Constructor
 	 */
 	public static Stringifier<Constructor> constructorStringifier() {
-		return (bc, constructor) ->
-			new StringBuilder()
-				.append(stringifyClass(bc, ((Constructor<?>) constructor).getDeclaringClass()))
-				.append('(')
-				.append(
-					Arrays.stream((constructor)
-						.getParameterTypes())
-						.map(x -> stringifyClass(bc, x))
-						.collect(joining(","))
-				)
-				.append(')')
-				.toString();
+		return (bc, constructor) -> new StringBuilder()
+			.append(stringifyClass(bc, ((Constructor<?>) constructor).getDeclaringClass()))
+			.append('(')
+			.append(
+				Arrays.stream((constructor)
+					.getParameterTypes())
+					.map(x -> stringifyClass(bc, x))
+					.collect(joining(","))
+			)
+			.append(')')
+			.toString();
 	}
 
 	/**
@@ -535,17 +534,16 @@ public class Stringifiers {
 	 * @see Method
 	 */
 	public static Stringifier<Method> methodStringifier() {
-		return (bc, method) ->
-			new StringBuilder()
-				.append(method.getName())
-				.append('(')
-				.append(
-					Arrays.stream(method.getParameterTypes())
-						.map(x -> stringifyClass(bc, x))
-						.collect(joining(","))
-				)
-				.append(')')
-				.toString();
+		return (bc, method) -> new StringBuilder()
+			.append(method.getName())
+			.append('(')
+			.append(
+				Arrays.stream(method.getParameterTypes())
+					.map(x -> stringifyClass(bc, x))
+					.collect(joining(","))
+			)
+			.append(')')
+			.toString();
 	}
 
 	/**
@@ -594,12 +592,13 @@ public class Stringifiers {
 	 * @return String representation of the class
 	 */
 	private static String stringifyClass(BeanConverter bc, Class<?> clazz) {
-		return switch(bc.getSetting("classNameFormat", "default")) {
+		return switch (bc.getSetting("classNameFormat", "default")) {
 			case "simple" -> clazz.getSimpleName();
 			case "canonical" -> clazz.getCanonicalName();
 			default -> clazz.getName();
 		};
 	}
+
 	/**
 	 * Converts an InputStream to a hexadecimal string representation.
 	 *

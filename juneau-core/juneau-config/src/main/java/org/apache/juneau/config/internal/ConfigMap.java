@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.config.internal;
 
+import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -58,9 +59,8 @@ public class ConfigMap implements ConfigStoreListener {
 
 			String name2 = null, rawLine2 = null;
 
-			final int
-				S1 = 1, // Looking for section.
-				S2 = 2; // Found section, looking for end.
+			// S1: Looking for section.
+			// S2: Found section, looking for end.
 
 			var state = S1;
 			var start = 0;
@@ -72,10 +72,10 @@ public class ConfigMap implements ConfigStoreListener {
 					if (c == '[') {
 						var i1 = l.indexOf('[');
 						var i2 = l.indexOf(']');
-						name2 = l.substring(i1+1, i2).trim();
+						name2 = l.substring(i1 + 1, i2).trim();
 						rawLine2 = l;
 						state = S2;
-						start = i+1;
+						start = i + 1;
 					} else {
 						preLines.add(l);
 					}
@@ -85,7 +85,7 @@ public class ConfigMap implements ConfigStoreListener {
 						if (entries.containsKey(e.key))
 							throw new ConfigException("Duplicate entry found in section [{0}] of configuration:  {1}", name2, e.key);
 						entries.put(e.key, e);
-						start = i+1;
+						start = i + 1;
 					}
 				}
 			}
@@ -133,6 +133,7 @@ public class ConfigMap implements ConfigStoreListener {
 			return w;
 		}
 	}
+
 	class Import {
 
 		private final ConfigMap configMap;
@@ -152,13 +153,9 @@ public class ConfigMap implements ConfigStoreListener {
 			return getConfigName().hashCode();
 		}
 
-		ConfigMap getConfigMap() {
-			return configMap;
-		}
+		ConfigMap getConfigMap() { return configMap; }
 
-		String getConfigName() {
-			return configMap.name;
-		}
+		String getConfigName() { return configMap.name; }
 
 		synchronized Import register(Collection<ConfigEventListener> listeners) {
 			listeners.forEach(this::register);
@@ -166,9 +163,9 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		synchronized Import register(final ConfigEventListener listener) {
-			var l2 = (ConfigEventListener) events -> {
+			var l2 = (ConfigEventListener)events -> {
 				var events2 = events.stream().filter(x -> ! hasEntry(x.getSection(), x.getKey())).collect(Collectors.toCollection(ConfigEvents::new));
-				if (!events2.isEmpty())
+				if (! events2.isEmpty())
 					listener.onConfigChange(events2);
 			};
 			listenerMap.put(listener, l2);
@@ -187,6 +184,7 @@ public class ConfigMap implements ConfigStoreListener {
 			return this;
 		}
 	}
+
 	private final ConfigStore store;         // The store that created this object.
 
 	private volatile String contents;        // The original contents of this object.
@@ -222,6 +220,7 @@ public class ConfigMap implements ConfigStoreListener {
 		this.name = name;
 		load(store.read(name));
 	}
+
 	ConfigMap(ConfigStore store, String name, String contents) throws IOException {
 		this.store = store;
 		this.name = name;
@@ -332,14 +331,13 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 		return u(s);
 	}
+
 	/**
 	 * Returns the listeners currently associated with this config map.
 	 *
 	 * @return The listeners currently associated with this config map.
 	 */
-	public Set<ConfigEventListener> getListeners() {
-		return u(listeners);
-	}
+	public Set<ConfigEventListener> getListeners() { return u(listeners); }
 
 	/**
 	 * Returns the pre-lines on the specified section.
@@ -404,7 +402,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		if (synchronous) {
 			final var latch = new CountDownLatch(1);
-			var listener = (ConfigStoreListener) x -> latch.countDown();
+			var listener = (ConfigStoreListener)x -> latch.countDown();
 			store.register(name, listener);
 			store.write(name, null, contents);
 			if (latch.await(30, TimeUnit.SECONDS)) {
@@ -465,6 +463,7 @@ public class ConfigMap implements ConfigStoreListener {
 		checkKeyName(key);
 		return applyChange(true, ConfigEvent.removeEntry(name, section, key));
 	}
+
 	/**
 	 * Not implemented.
 	 *
@@ -480,6 +479,7 @@ public class ConfigMap implements ConfigStoreListener {
 	public ConfigMap removeImport(String section, String importName) {
 		throw new UnsupportedOperationException("Not implemented.");
 	}
+
 	/**
 	 * Removes a section.
 	 *
@@ -503,7 +503,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return This object.
 	 */
 	public ConfigMap rollback() {
-		if (!changes.isEmpty()) {
+		if (! changes.isEmpty()) {
 			try (var x = lock.write()) {
 				changes.clear();
 				load(contents);
@@ -628,6 +628,7 @@ public class ConfigMap implements ConfigStoreListener {
 				var oe = cs.entries.get(ce.getKey());
 				if (oe == null)
 					oe = ConfigMapEntry.NULL;
+				// @formatter:off
 				cs.addEntry(
 					ce.getKey(),
 					ce.getValue() == null ? oe.value : ce.getValue(),
@@ -635,6 +636,7 @@ public class ConfigMap implements ConfigStoreListener {
 					ce.getComment() == null ? oe.comment : ce.getComment(),
 					ce.getPreLines() == null ? oe.preLines : ce.getPreLines()
 				);
+				// @formatter:on
 			} else if (ce.getType() == SET_SECTION) {
 				if (cs == null) {
 					cs = new ConfigSection(section);
@@ -654,6 +656,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 		return this;
 	}
+
 	// This method should only be called from behind a lock.
 	private String asString() {
 		try {
@@ -668,12 +671,12 @@ public class ConfigMap implements ConfigStoreListener {
 
 	private static void checkKeyName(String s) {
 		if (! isValidKeyName(s))
-			throw new IllegalArgumentException("Invalid key name: '"+s+"'");
+			throw new IllegalArgumentException("Invalid key name: '" + s + "'");
 	}
 
 	private static void checkSectionName(String s) {
 		if (! ("".equals(s) || isValidNewSectionName(s)))
-			throw new IllegalArgumentException("Invalid section name: '"+s+"'");
+			throw new IllegalArgumentException("Invalid section name: '" + s + "'");
 	}
 
 	private ConfigEvents findDiffs(String updatedContents) throws IOException {
@@ -806,7 +809,7 @@ public class ConfigMap implements ConfigStoreListener {
 				var c2 = StringUtils.lastNonWhitespaceChar(line);
 				if (c == '[') {
 					var l = line.trim();
-					if (c2 != ']' || ! isValidNewSectionName(l.substring(1, l.length()-1)))
+					if (c2 != ']' || ! isValidNewSectionName(l.substring(1, l.length() - 1)))
 						throw new ConfigException("Invalid section name found in configuration:  {0}", line);
 				} else if (c == '<') {
 					var l = line.trim();
@@ -815,7 +818,7 @@ public class ConfigMap implements ConfigStoreListener {
 						var l2 = l.substring(1, i);
 						if (! isValidConfigName(l2))
 							throw new ConfigException("Invalid import config name found in configuration:  {0}", line);
-						var l3 = l.substring(i+1);
+						var l3 = l.substring(i + 1);
 						if (! (Utils.isEmpty(l3) || firstChar(l3) == '#'))
 							throw new ConfigException("Invalid import config name found in configuration:  {0}", line);
 						var importName = l2.trim();
@@ -823,7 +826,7 @@ public class ConfigMap implements ConfigStoreListener {
 							if (! imports2.containsKey(importName))
 								imports2.put(importName, store.getMap(importName));
 						} catch (@SuppressWarnings("unused") StackOverflowError e) {
-							throw new IOException("Import loop detected in configuration '"+name+"'->'"+importName+"'");
+							throw new IOException("Import loop detected in configuration '" + name + "'->'" + importName + "'");
 						}
 					}
 				}
@@ -875,11 +878,10 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		lines = copyOf(lines);
-		var last = lines.size()-1;
+		var last = lines.size() - 1;
 
-		final int
-			S1 = 1, // Looking for section.
-			S2 = 2; // Found section, looking for start.
+		// S1: Looking for section.
+		// S2: Found section, looking for start.
 
 		var state = S1;
 
@@ -895,29 +897,31 @@ public class ConfigMap implements ConfigStoreListener {
 				}
 			} else {
 				if (c != '#' && (c == '[' || l.indexOf('=') != -1)) {
-					sections.add(new ConfigSection(lines.subList(i+1, last+1)));
+					sections.add(new ConfigSection(lines.subList(i + 1, last + 1)));
 					last = i + 1;
 					state = (c == '[' ? S2 : S1);
 				}
 			}
 		}
 
-		sections.add(new ConfigSection(lines.subList(0, last+1)));
+		sections.add(new ConfigSection(lines.subList(0, last + 1)));
 
 		for (var i = sections.size() - 1; i >= 0; i--) {
 			var cs = sections.get(i);
 			if (entries.containsKey(cs.name))
 				throw new ConfigException("Duplicate section found in configuration:  [{0}]", cs.name);
 			entries.put(cs.name, cs);
-		 }
+		}
 
 		oentries.putAll(entries);
 		return this;
 	}
+
 	private void signal(ConfigEvents changes) {
 		if (Utils.isNotEmpty(changes))
 			listeners.forEach(x -> x.onConfigChange(changes));
 	}
+
 	boolean hasEntry(String section, String key) {
 		var cs = entries.get(section);
 		var ce = cs == null ? null : cs.entries.get(key);

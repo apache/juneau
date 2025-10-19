@@ -42,8 +42,7 @@ public class ReaderEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 */
-	public ReaderEntity() {
-	}
+	public ReaderEntity() {}
 
 	/**
 	 * Constructor.
@@ -72,6 +71,7 @@ public class ReaderEntity extends BasicHttpEntity {
 			return byteCache;
 		return readBytes(content());
 	}
+
 	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		if (isCached() && stringCache == null)
@@ -101,17 +101,13 @@ public class ReaderEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return isCached();
-	}
+	public boolean isRepeatable() { return isCached(); }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isStreaming() {
-		return ! isCached();
-	}
+	public boolean isStreaming() { return ! isCached(); }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ReaderEntity setCached() throws IOException{
+	public ReaderEntity setCached() throws IOException {
 		super.setCached();
 		return this;
 	}
@@ -121,6 +117,7 @@ public class ReaderEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public ReaderEntity setChunked() {
 		super.setChunked();
@@ -208,6 +205,6 @@ public class ReaderEntity extends BasicHttpEntity {
 	}
 
 	private Reader content() {
-		return Objects.requireNonNull(contentOrElse((Reader) null), "Reader is null.");
+		return Objects.requireNonNull(contentOrElse((Reader)null), "Reader is null.");
 	}
 }

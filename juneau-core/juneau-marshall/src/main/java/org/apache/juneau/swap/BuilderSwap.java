@@ -78,6 +78,7 @@ public class BuilderSwap<T,B> {
 
 		return new BuilderSwap(objectClass, builderClass, objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createObjectMethod);
 	}
+
 	/**
 	 * Creates a BuilderSwap from the specified object class if it has one.
 	 *
@@ -104,11 +105,13 @@ public class BuilderSwap<T,B> {
 			builderClass.set(builderCreateMethod.getReturnType().inner());
 
 		if (builderClass.isEmpty()) {
+			// @formatter:off
 			ConstructorInfo cc = pci.getPublicConstructor(
 				x -> x.isVisible(cVis)
 				&& x.hasNumParams(1)
 				&& x.getParamType(0).isChildOf(Builder.class)
 			);
+			// @formatter:on
 			if (cc != null) {
 				objectConstructor = cc;
 				builderClass.set(cc.getParamType(0).inner());
@@ -131,30 +134,41 @@ public class BuilderSwap<T,B> {
 		if (objectConstructor == null && objectCreateMethod == null)
 			return null;
 
-		return new BuilderSwap(objectClass, builderClass.get(), objectConstructor == null ? null : objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, objectCreateMethod);
+		return new BuilderSwap(objectClass, builderClass.get(), objectConstructor == null ? null : objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(),
+			builderCreateMethod, objectCreateMethod);
 	}
+
 	private static MethodInfo getBuilderBuildMethod(ClassInfo c) {
+		// @formatter:off
 		return c.getDeclaredMethod(
 			x -> x.isNotStatic()
 			&& x.hasNoParams()
 			&& (!x.hasReturnType(void.class))
 			&& x.hasName("build")
 		);
+		// @formatter:on
 	}
+
 	private static MethodInfo getBuilderCreateMethod(ClassInfo c) {
+		// @formatter:off
 		return c.getPublicMethod(
 			x -> x.isStatic()
 			&& (x.hasName("create") || x.hasName("builder"))
 			&& ! x.hasReturnType(c)
 			&& hasConstructorThatTakesType(c, x.getReturnType())
 		);
+		// @formatter:on
 	}
+
 	private static boolean hasConstructorThatTakesType(ClassInfo c, ClassInfo argType) {
+		// @formatter:off
 		return c.getPublicConstructor(
 			x -> x.hasNumParams(1)
 			&& x.hasParamTypes(argType)
 		) != null;
+		// @formatter:on
 	}
+
 	private final Class<T> objectClass;
 	private final Class<B> builderClass;
 
@@ -178,7 +192,8 @@ public class BuilderSwap<T,B> {
 	 * @param createBuilderMethod The static create() method on the object class.
 	 * @param createObjectMethod The build() method on the builder class.
 	 */
-	protected BuilderSwap(Class<T> objectClass, Class<B> builderClass, Constructor<T> objectConstructor, Constructor<B> builderConstructor, MethodInfo createBuilderMethod, MethodInfo createObjectMethod) {
+	protected BuilderSwap(Class<T> objectClass, Class<B> builderClass, Constructor<T> objectConstructor, Constructor<B> builderConstructor, MethodInfo createBuilderMethod,
+		MethodInfo createObjectMethod) {
 		this.objectClass = objectClass;
 		this.builderClass = builderClass;
 		this.objectConstructor = objectConstructor;
@@ -229,9 +244,7 @@ public class BuilderSwap<T,B> {
 	 *
 	 * @return The builder class.
 	 */
-	public Class<B> getBuilderClass() {
-		return builderClass;
-	}
+	public Class<B> getBuilderClass() { return builderClass; }
 
 	/**
 	 * Returns the {@link ClassMeta} of the transformed class type.
@@ -255,7 +268,5 @@ public class BuilderSwap<T,B> {
 	 *
 	 * @return The object class.
 	 */
-	public Class<T> getObjectClass() {
-		return objectClass;
-	}
+	public Class<T> getObjectClass() { return objectClass; }
 }

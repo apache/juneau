@@ -58,7 +58,7 @@ public class ParseException extends BasicRuntimeException {
 		return new ParseException(e);
 	}
 
-	private static String getMessage(ParserSession session, String msg, Object... args) {
+	private static String getMessage(ParserSession session, String msg, Object...args) {
 		if (args.length != 0)
 			msg = format(msg, args);
 
@@ -71,7 +71,7 @@ public class ParseException extends BasicRuntimeException {
 			JsonMap lastLocation = session.getLastLocation();
 			if (lastLocation != null) {
 				sb.append("\n\tWhile parsing into: ");
-				lastLocation.forEach((k,v) -> sb.append("\n\t\t").append(k).append(": ").append(v));
+				lastLocation.forEach((k, v) -> sb.append("\n\t\t").append(k).append(": ").append(v));
 			}
 
 			String lines = session.getInputAsString();

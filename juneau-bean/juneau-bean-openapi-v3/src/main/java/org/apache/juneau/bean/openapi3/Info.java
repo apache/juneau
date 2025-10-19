@@ -100,11 +100,7 @@ import org.apache.juneau.internal.*;
  */
 public class Info extends OpenApiElement {
 
-	private String
-		title,
-		description,
-		termsOfService,
-		version;
+	private String title, description, termsOfService, version;
 	private Contact contact;
 	private License license;
 
@@ -160,9 +156,7 @@ public class Info extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Contact getContact() {
-		return contact;
-	}
+	public Contact getContact() { return contact; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -172,9 +166,7 @@ public class Info extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>license</property>.
@@ -184,9 +176,7 @@ public class Info extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public License getLicense() {
-		return license;
-	}
+	public License getLicense() { return license; }
 
 	/**
 	 * Bean property getter:  <property>termsOfService</property>.
@@ -196,9 +186,7 @@ public class Info extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getTermsOfService() {
-		return termsOfService;
-	}
+	public String getTermsOfService() { return termsOfService; }
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -208,9 +196,7 @@ public class Info extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getTitle() {
-		return title;
-	}
+	public String getTitle() { return title; }
 
 	/**
 	 * Bean property getter:  <property>version</property>.
@@ -220,9 +206,7 @@ public class Info extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getVersion() {
-		return version;
-	}
+	public String getVersion() { return version; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

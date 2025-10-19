@@ -63,6 +63,7 @@ public class Json5 extends CharMarshaller {
 	 * Default reusable instance, readable format.
 	 */
 	public static final Json5 DEFAULT_READABLE = new Json5(Json5Serializer.DEFAULT_READABLE, Json5Parser.DEFAULT);
+
 	/**
 	 * Serializes a Java object to a JSON 5 string.
 	 *

@@ -65,7 +65,7 @@ public class ConsumerUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
-
+	
 	 * @param <T> The type being tested.
 	 * @param predicate The predicate.
 	 * @param value The value to test.

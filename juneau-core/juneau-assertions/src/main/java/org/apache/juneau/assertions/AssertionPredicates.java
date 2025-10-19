@@ -54,8 +54,8 @@ public class AssertionPredicates {
 
 	private static final Function<Object,String> TYPENAME = x -> x == null ? null : x.getClass().getName();
 
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(AssertionPredicates.class, "Messages");
-
 	private static final String
 		MSG_valueWasNull = MESSAGES.getString("valueWasNull"),
 		MSG_valueWasNotNull = MESSAGES.getString("valueWasNotNull"),
@@ -64,6 +64,8 @@ public class AssertionPredicates {
 		MSG_valueUnexpectedlyMatched = MESSAGES.getString("valueUnexpectedlyMatched"),
 		MSG_valueWasNotExpectedType = MESSAGES.getString("valueWasNotExpectedType"),
 		MSG_valueDidNotMatchPattern = MESSAGES.getString("valueDidNotMatchPattern");
+	// @formatter:on
+
 	/**
 	 * Combines the specified predicates into a singled AND'ed predicate.
 	 *
@@ -176,9 +178,7 @@ public class AssertionPredicates {
 	 * @param <T> The object type being tested.
 	 * @return A new predicate.
 	 */
-	public static final <T> AssertionPredicate<T> isNull() {
-		return test(x -> x == null, MSG_valueWasNotNull);
-	}
+	public static final <T> AssertionPredicate<T> isNull() { return test(x -> x == null, MSG_valueWasNotNull); }
 
 	/**
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string matches the specified match pattern.
@@ -210,7 +210,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> ne(Object value) {
-		return test(x -> ! Objects.equals(x, value), MSG_valueUnexpectedlyMatched, VALUE);
+		return test(x -> !Objects.equals(x, value), MSG_valueUnexpectedlyMatched, VALUE);
 	}
 
 	/**
@@ -224,7 +224,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> ne(String value) {
-		return test(x -> ! Objects.equals(Utils.s(x), value), MSG_valueUnexpectedlyMatched, VALUE);
+		return test(x -> !Objects.equals(Utils.s(x), value), MSG_valueUnexpectedlyMatched, VALUE);
 	}
 
 	/**

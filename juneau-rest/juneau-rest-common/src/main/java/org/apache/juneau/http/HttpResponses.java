@@ -500,6 +500,7 @@ public class HttpResponses {
 	public static final MisdirectedRequest misdirectedRequest() {
 		return new MisdirectedRequest();
 	}
+
 	/**
 	 * A shortcut for calling {@link MovedPermanently#MovedPermanently()}.
 	 *

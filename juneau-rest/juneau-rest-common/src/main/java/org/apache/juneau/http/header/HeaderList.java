@@ -65,6 +65,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	public static final class Void extends HeaderList {
 		private static final long serialVersionUID = 1L;
 	}
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -115,16 +116,17 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @throws RuntimeException If odd number of parameters were specified.
 	 * @return A new instance.
 	 */
-	public static HeaderList ofPairs(String... pairs) {
+	public static HeaderList ofPairs(String...pairs) {
 		HeaderList x = new HeaderList();
 		if (pairs == null)
 			pairs = new String[0];
 		if (pairs.length % 2 != 0)
 			throw new IllegalArgumentException("Odd number of parameters passed into HeaderList.ofPairs()");
-		for (int i = 0; i < pairs.length; i+=2)
-			x.add(BasicHeader.of(pairs[i], pairs[i+1]));
+		for (int i = 0; i < pairs.length; i += 2)
+			x.add(BasicHeader.of(pairs[i], pairs[i + 1]));
 		return x;
 	}
+
 	private VarResolver varResolver;
 	boolean caseSensitive;
 
@@ -213,6 +215,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	public HeaderList append(String name, Supplier<?> value) {
 		return append(createPart(name, value));
 	}
+
 	/**
 	 * Specifies that the headers in this list should be treated as case-sensitive.
 	 *
@@ -441,9 +444,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 *
 	 * @return An array containing all headers, never <jk>null</jk>.
 	 */
-	public Header[] getAll() {
-		return stream().toArray(Header[]::new);
-	}
+	public Header[] getAll() { return stream().toArray(Header[]::new); }
 
 	/**
 	 * Gets all of the headers with the given name.
@@ -875,6 +876,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		super.setUnmodifiable();
 		return this;
 	}
+
 	/**
 	 * Returns a stream of the headers in this list with the specified name.
 	 *
@@ -885,7 +887,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public Stream<Header> stream(String name) {
-		return stream().filter(x->eq(name, x.getName()));
+		return stream().filter(x -> eq(name, x.getName()));
 	}
 
 	@Override /* Overridden from Object */
@@ -915,8 +917,9 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	private Supplier<Object> resolver(Object input) {
-		return ()->varResolver.resolve(Utils.s(unwrap(input)));
+		return () -> varResolver.resolve(Utils.s(unwrap(input)));
 	}
+
 	private static Object unwrap(Object o) {
 		while (o instanceof Supplier)
 			o = ((Supplier<?>)o).get();

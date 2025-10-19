@@ -43,7 +43,7 @@ public class Tuple3<A,B,C> {
 	 * @return A new tuple object.
 	 */
 	public static <A,B,C> Tuple3<A,B,C> of(A a, B b, C c) {
-		return new Tuple3<>(a,b,c);
+		return new Tuple3<>(a, b, c);
 	}
 
 	private final A a;
@@ -65,7 +65,7 @@ public class Tuple3<A,B,C> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple3 && Utils.eq(this, (Tuple3<?,?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b) && Utils.eq(x.c,y.c));
+		return o instanceof Tuple3 && Utils.eq(this, (Tuple3<?,?,?>)o, (x, y) -> Utils.eq(x.a, y.a) && Utils.eq(x.b, y.b) && Utils.eq(x.c, y.c));
 	}
 
 	/**
@@ -73,30 +73,24 @@ public class Tuple3<A,B,C> {
 	 *
 	 * @return The first object in this tuple.
 	 */
-	public A getA() {
-		return a;
-	}
+	public A getA() { return a; }
 
 	/**
 	 * Returns the second object in this tuple.
 	 *
 	 * @return The second object in this tuple.
 	 */
-	public B getB() {
-		return b;
-	}
+	public B getB() { return b; }
 
 	/**
 	 * Returns the third object in this tuple.
 	 *
 	 * @return The third object in this tuple.
 	 */
-	public C getC() {
-		return c;
-	}
+	public C getC() { return c; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return HashCode.of(a,b,c);
+		return HashCode.of(a, b, c);
 	}
 }

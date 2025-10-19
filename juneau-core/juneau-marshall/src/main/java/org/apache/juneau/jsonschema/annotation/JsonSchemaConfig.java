@@ -38,7 +38,7 @@ import org.apache.juneau.parser.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @ContextApply(JsonSchemaConfigAnnotation.Apply.class)
@@ -78,6 +78,7 @@ public @interface JsonSchemaConfig {
 	 * @return The annotation value.
 	 */
 	String addDescriptionsTo() default "";
+
 	/**
 	 * Add examples.
 	 *
@@ -279,6 +280,7 @@ public @interface JsonSchemaConfig {
 	 * @return The annotation value.
 	 */
 	String ignoreTypes() default "";
+
 	/**
 	 * Initial depth.
 	 *

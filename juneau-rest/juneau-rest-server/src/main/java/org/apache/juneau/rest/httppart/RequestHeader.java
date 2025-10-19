@@ -211,9 +211,7 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 * @throws BasicHttpException In case of a parsing error.
 	 */
 	@Override /* Overridden from Header */
-	public HeaderElement[] getElements() throws BasicHttpException {
-		return new HeaderElement[0];
-	}
+	public HeaderElement[] getElements() throws BasicHttpException { return new HeaderElement[0]; }
 
 	@Override /* Overridden from RequestHttpPart */
 	public RequestHeader parser(HttpPartParserSession value) {

@@ -39,6 +39,7 @@ public class TurtleSerializer extends RdfSerializer {
 	public static RdfSerializer.Builder create() {
 		return RdfSerializer.create().turtle();
 	}
+
 	/**
 	 * Constructor.
 	 *

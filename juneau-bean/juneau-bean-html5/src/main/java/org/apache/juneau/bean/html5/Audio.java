@@ -61,7 +61,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="audio")
+@Bean(typeName = "audio")
 public class Audio extends HtmlElementMixed {
 
 	/**
@@ -79,7 +79,7 @@ public class Audio extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Audio _class(String value) {  // NOSONAR - Intentional naming.
+	public Audio _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -144,6 +144,7 @@ public class Audio extends HtmlElementMixed {
 		super.contenteditable(value);
 		return this;
 	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-controls">controls</a>
 	 * attribute.

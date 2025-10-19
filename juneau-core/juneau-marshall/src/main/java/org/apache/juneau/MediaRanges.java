@@ -83,6 +83,7 @@ public class MediaRanges {
 		// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
 		return o2.toString().compareTo(o1.toString());
 	};
+
 	/**
 	 * Returns a parsed <c>Accept</c> header value.
 	 *
@@ -90,12 +91,13 @@ public class MediaRanges {
 	 * @return A parsed <c>Accept</c> header value.
 	 */
 	public static MediaRanges of(String value) {
-		return isEmpty(value) ? EMPTY : CACHE.get(value, ()->new MediaRanges(value));
+		return isEmpty(value) ? EMPTY : CACHE.get(value, () -> new MediaRanges(value));
 	}
 
 	private static HeaderElement[] parse(String value) {
 		return BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 	}
+
 	private final MediaRange[] ranges;
 
 	private final String string;

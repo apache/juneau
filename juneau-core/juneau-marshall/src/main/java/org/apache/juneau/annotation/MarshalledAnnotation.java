@@ -60,7 +60,7 @@ public class MarshalledAnnotation {
 	 * A collection of {@link Marshalled @Marshalled annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -82,8 +82,8 @@ public class MarshalledAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
 
-		Class<?> implClass=void.class;
-		String example="";
+		Class<?> implClass = void.class;
+		String example = "";
 
 		/**
 		 * Constructor.
@@ -150,6 +150,7 @@ public class MarshalledAnnotation {
 
 	/** Default value */
 	public static final Marshalled DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -158,6 +159,7 @@ public class MarshalledAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static Marshalled copy(Marshalled a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.example(r.resolve(a.example()))
@@ -165,7 +167,9 @@ public class MarshalledAnnotation {
 			.on(r.resolve(a.on()))
 			.onClass(a.onClass())
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -174,6 +178,7 @@ public class MarshalledAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -183,6 +188,7 @@ public class MarshalledAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

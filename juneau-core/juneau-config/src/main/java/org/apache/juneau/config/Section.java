@@ -184,10 +184,10 @@ public class Section {
 	public <T> Optional<T> asInterface(final Class<T> c) {
 		Utils.assertArgNotNull("c", c);
 
-		if (!c.isInterface())
+		if (! c.isInterface())
 			throw new IllegalArgumentException("Class '" + c.getName() + "' passed to toInterface() is not an interface.");
 
-		return Utils.opt((T) Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
+		return Utils.opt((T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
 			var bi = Introspector.getBeanInfo(c, null);
 			for (var pd : bi.getPropertyDescriptors()) {
 				var rm = pd.getReadMethod();
@@ -223,9 +223,7 @@ public class Section {
 	 *
 	 * @return <jk>true</jk> if this section exists.
 	 */
-	public boolean isPresent() {
-		return configMap.hasSection(name);
-	}
+	public boolean isPresent() { return configMap.hasSection(name); }
 
 	/**
 	 * Copies the entries in this section to the specified bean by calling the public setters on that bean.
@@ -240,7 +238,8 @@ public class Section {
 	 */
 	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
 		Utils.assertArgNotNull("bean", bean);
-		if (! isPresent()) throw new IllegalArgumentException("Section '"+name+"' not found in configuration.");
+		if (! isPresent())
+			throw new IllegalArgumentException("Section '" + name + "' not found in configuration.");
 
 		var keys = configMap.getKeys(name);
 

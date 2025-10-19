@@ -98,6 +98,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -534,13 +535,13 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -638,6 +639,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 
 	/** Default parser, all default settings.*/
 	public static final HtmlParser DEFAULT = new HtmlParser(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -646,6 +648,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private final Map<ClassMeta<?>,HtmlClassMeta> htmlClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,HtmlBeanPropertyMeta> htmlBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -679,6 +682,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		}
 		return m;
 	}
+
 	@Override /* Overridden from HtmlMetaProvider */
 	public HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
 		HtmlClassMeta m = htmlClassMetas.get(cm);
@@ -690,7 +694,5 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 	}
 
 	@Override /* Overridden from Context */
-	public HtmlParserSession getSession() {
-		return createSession().build();
-	}
+	public HtmlParserSession getSession() { return createSession().build(); }
 }

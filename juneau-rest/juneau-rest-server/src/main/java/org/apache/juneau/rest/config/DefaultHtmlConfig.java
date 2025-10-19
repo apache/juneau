@@ -21,6 +21,7 @@ import org.apache.juneau.html.annotation.*;
 /**
  * Predefined REST configuration that defines common default values for HTML Doc serializers.
  */
+// @formatter:off
 @HtmlDocConfig(
 
 	// Default page header contents.

@@ -95,6 +95,7 @@ public class RdfXml extends CharMarshaller {
 		DEFAULT.write(object, output);
 		return output;
 	}
+
 	/**
 	 * Parses an RDF/XML input object to the specified Java type.
 	 *

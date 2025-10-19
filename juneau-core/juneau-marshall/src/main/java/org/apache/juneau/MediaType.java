@@ -38,7 +38,7 @@ import org.apache.juneau.json.*;
  * </ul>
  */
 @BeanIgnore
-public class MediaType implements Comparable<MediaType>  {
+public class MediaType implements Comparable<MediaType> {
 	/** Represents an empty media type object. */
 	public static final MediaType EMPTY = new MediaType("/*");
 
@@ -46,6 +46,7 @@ public class MediaType implements Comparable<MediaType>  {
 
 	/** Reusable predefined media type */
 	@SuppressWarnings("javadoc")
+	// @formatter:off
 	public static final MediaType
 		CSV = of("text/csv"),
 		HTML = of("text/html"),
@@ -63,6 +64,7 @@ public class MediaType implements Comparable<MediaType>  {
 		TURTLE = of("text/turtle"),
 		N3 = of("text/n3")
 	;
+	// @formatter:on
 
 	/**
 	 * Returns the media type for the specified string.
@@ -86,7 +88,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return A cached media type object.
 	 */
 	public static MediaType of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new MediaType(value));
+		return value == null ? null : CACHE.get(value, () -> new MediaType(value));
 	}
 
 	/**
@@ -122,10 +124,12 @@ public class MediaType implements Comparable<MediaType>  {
 			mt[i] = of(values[i]);
 		return mt;
 	}
+
 	private static HeaderElement parse(String value) {
 		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));
 	}
+
 	private final String string;                          // The entire unparsed value.
 	private final String mediaType;                      // The "type/subtype" portion of the media type..
 	private final String type;                           // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
@@ -171,7 +175,7 @@ public class MediaType implements Comparable<MediaType>  {
 		String x = mediaType.replace(' ', '+');
 		int i = x.indexOf('/');
 		type = (i == -1 ? x : x.substring(0, i));
-		subType = (i == -1 ? "*" : x.substring(i+1));
+		subType = (i == -1 ? "*" : x.substring(i + 1));
 
 		subTypes = Utils.splita(subType, '+');
 		subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
@@ -211,7 +215,7 @@ public class MediaType implements Comparable<MediaType>  {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof MediaType) && eq(this, (MediaType)o, (x,y)->eq(x.string, y.string));
+		return (o instanceof MediaType) && eq(this, (MediaType)o, (x, y) -> eq(x.string, y.string));
 	}
 
 	/**
@@ -260,18 +264,14 @@ public class MediaType implements Comparable<MediaType>  {
 	 *
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
-	public List<NameValuePair> getParameters() {
-		return alist(parameters);
-	}
+	public List<NameValuePair> getParameters() { return alist(parameters); }
 
 	/**
 	 * Returns the <js>'subType'</js> fragment of the <js>'type/subType'</js> string.
 	 *
 	 * @return The media subtype.
 	 */
-	public final String getSubType() {
-		return subType;
-	}
+	public final String getSubType() { return subType; }
 
 	/**
 	 * Returns the subtypes broken down by fragments delimited by <js>"'"</js>.
@@ -282,18 +282,14 @@ public class MediaType implements Comparable<MediaType>  {
 	 *
 	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
-	public final List<String> getSubTypes() {
-		return alist(subTypes);
-	}
+	public final List<String> getSubTypes() { return alist(subTypes); }
 
 	/**
 	 * Returns the <js>'type'</js> fragment of the <js>'type/subType'</js> string.
 	 *
 	 * @return The media type.
 	 */
-	public final String getType() {
-		return type;
-	}
+	public final String getType() { return type; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
@@ -321,9 +317,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 *
 	 * @return <jk>true</jk> if this media type subtype contains the <js>'*'</js> meta character.
 	 */
-	public final boolean isMetaSubtype() {
-		return hasSubtypeMeta;
-	}
+	public final boolean isMetaSubtype() { return hasSubtypeMeta; }
 
 	/**
 	 * Given a list of media types, returns the best match for this <c>Content-Type</c> header.

@@ -52,7 +52,7 @@ public class HelloWorldResource extends BasicRestObject {
 	 *
 	 * @return A simple Hello-World message.
 	 */
-	@RestGet(path="/*", summary="Responds with injected message")
+	@RestGet(path = "/*", summary = "Responds with injected message")
 	public String sayHello() {
 		return messageProvider.get();
 	}

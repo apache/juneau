@@ -132,7 +132,7 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentStringAssertion.class, "Messages");
 	private static final String
 		MSG_stringDifferedAtPosition = MESSAGES.getString("stringDifferedAtPosition"),
@@ -147,7 +147,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		MSG_stringDidNotMatchExpectedPattern = MESSAGES.getString("stringDidNotMatchExpectedPattern"),
 		MSG_stringDidNotStartWithExpected = MESSAGES.getString("stringDidNotStartWithExpected"),
 		MSG_stringDidNotEndWithExpected = MESSAGES.getString("stringDidNotEndWithExpected");
-
+	// @formatter:on
 
 	private boolean javaStrings;
 
@@ -187,7 +187,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		this(null, value, returns);
 	}
 
-
 	/**
 	 * When enabled, text in the message is converted to valid Java strings.
 	 *
@@ -202,14 +201,13 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		return this;
 	}
 
-
 	/**
 	 * Converts the text to lowercase.
 	 *
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asLc() {
-		return asTransformed(x->x == null ? null : x.toLowerCase());
+		return asTransformed(x -> x == null ? null : x.toLowerCase());
 	}
 
 	/**
@@ -236,7 +234,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asOneLine() {
-		return asTransformed(x->x == null ? null : x.replaceAll("\\s*[\r\n]+\\s*","  "));
+		return asTransformed(x -> x == null ? null : x.replaceAll("\\s*[\r\n]+\\s*", "  "));
 	}
 
 	/**
@@ -277,7 +275,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentStringAssertion<R> asTransformed(Function<String,String> function) {  // NOSONAR - Intentional.
+	public FluentStringAssertion<R> asTransformed(Function<String,String> function) { // NOSONAR - Intentional.
 		return new FluentStringAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -296,7 +294,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asUc() {
-		return asTransformed(x->x == null ? null : x.toUpperCase());
+		return asTransformed(x -> x == null ? null : x.toUpperCase());
 	}
 
 	/**
@@ -307,7 +305,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	public FluentStringAssertion<R> asUrlDecode() {
 		return asTransformed(StringUtils::urlDecode);
 	}
-
 
 	/**
 	 * Asserts that the text equals the specified value.
@@ -349,7 +346,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		Utils.assertArgNotNull("values", values);
 		var s = orElse(null);
 		for (var substring : values)
-			if (substring != null && ! StringUtils.contains(s, substring))
+			if (substring != null && !StringUtils.contains(s, substring))
 				throw error(MSG_stringDidNotContainExpectedSubstring, fix(substring), fix(s));
 		return returns();
 	}
@@ -362,7 +359,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isEmpty() throws AssertionError {
 		var s = orElse(null);
-		if (s != null && ! s.isEmpty())
+		if (s != null && !s.isEmpty())
 			throw error(MSG_stringWasNotEmpty, fix(s));
 		return returns();
 	}
@@ -377,7 +374,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	public R isEndsWith(String string) {
 		Utils.assertArgNotNull("string", string);
 		var s = value();
-		if (! s.endsWith(string))
+		if (!s.endsWith(string))
 			throw error(MSG_stringDidNotEndWithExpected, fix(string), fix(s));
 		return returns();
 	}
@@ -512,7 +509,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	public R isPattern(Pattern pattern) throws AssertionError {
 		Utils.assertArgNotNull("pattern", pattern);
 		var s = value();
-		if (! pattern.matcher(s).matches())
+		if (!pattern.matcher(s).matches())
 			throw error(MSG_stringDidNotMatchExpectedPattern, fix(pattern.pattern()), fix(s));
 		return returns();
 	}
@@ -540,7 +537,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		Utils.assertArgNotNull("regex", regex);
 		var p = Pattern.compile(regex, flags);
 		var s = value();
-		if (! p.matcher(s).matches())
+		if (!p.matcher(s).matches())
 			throw error(MSG_stringDidNotMatchExpectedPattern, fix(regex), fix(s));
 		return returns();
 	}
@@ -581,8 +578,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		Arrays.sort(a);
 
 		for (var i = 0; i < e.length; i++)
-			if (! e[i].equals(a[i]))
-				throw error(MSG_expectedStringHadDifferentValuesAtLine, i+1, e[i], a[i]);
+			if (!e[i].equals(a[i]))
+				throw error(MSG_expectedStringHadDifferentValuesAtLine, i + 1, e[i], a[i]);
 
 		return returns();
 	}
@@ -597,7 +594,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	public R isStartsWith(String string) {
 		Utils.assertArgNotNull("string", string);
 		var s = value();
-		if (! s.startsWith(string))
+		if (!s.startsWith(string))
 			throw error(MSG_stringDidNotStartWithExpected, fix(string), fix(s));
 		return returns();
 	}

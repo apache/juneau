@@ -75,12 +75,12 @@ public class AnnotationImpl implements Annotation {
 	 * @since 9.2.0
 	 */
 	public String[] description() {
-	    return description;
+		return description;
 	}
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		if (!annotationType.isInstance(o))
+		if (! annotationType.isInstance(o))
 			return false;
 		return AnnotationUtils.equals(this, (Annotation)o);
 	}
@@ -102,10 +102,12 @@ public class AnnotationImpl implements Annotation {
 	 */
 	public JsonMap toMap() {
 		JsonMap m = create();
+		// @formatter:off
 		stream(annotationType().getDeclaredMethods())
 			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
 			.sorted(Comparator.comparing(Method::getName))
 			.forEach(x -> m.append(x.getName(), Utils.safeSupplier(()->x.invoke(this))));
+		// @formatter:on
 		return m;
 	}
 

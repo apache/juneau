@@ -117,6 +117,7 @@ public class Allow extends BasicCsvHeader {
 	public static Allow of(Supplier<String[]> value) {
 		return value == null ? null : new Allow(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

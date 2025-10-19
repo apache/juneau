@@ -87,6 +87,7 @@ public class EncoderSet {
 				return "class:" + ((Class<?>)o).getSimpleName();
 			return "object:" + o.getClass().getSimpleName();
 		}
+
 		List<Object> entries;
 
 		Builder inheritFrom;
@@ -136,6 +137,7 @@ public class EncoderSet {
 			entries.addAll(0, l);
 			return this;
 		}
+
 		/**
 		 * Registers the specified encoders with this group.
 		 *
@@ -196,9 +198,8 @@ public class EncoderSet {
 		 *
 		 * @return <jk>true</jk> if this builder is empty.
 		 */
-		public boolean isEmpty() {
-			return entries.isEmpty();
-		}
+		public boolean isEmpty() { return entries.isEmpty(); }
+
 		/**
 		 * Sets the encoders in this group.
 		 *
@@ -230,8 +231,9 @@ public class EncoderSet {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return entries.stream().map(Builder::toString).collect(joining(",","[","]"));
+			return entries.stream().map(Builder::toString).collect(joining(",", "[", "]"));
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -266,6 +268,7 @@ public class EncoderSet {
 	public static Builder create() {
 		return new Builder(BeanStore.INSTANCE);
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -275,6 +278,7 @@ public class EncoderSet {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private static Encoder instantiate(BeanStore bs, Object o) {
 		if (o instanceof Encoder)
 			return (Encoder)o;
@@ -303,7 +307,7 @@ public class EncoderSet {
 		List<String> lc = Utils.list();
 		List<Encoder> l = Utils.list();
 		for (Encoder e : entries) {
-			for (String c: e.getCodings()) {
+			for (String c : e.getCodings()) {
 				lc.add(c);
 				l.add(e);
 			}
@@ -358,7 +362,5 @@ public class EncoderSet {
 	 *
 	 * @return An unmodifiable list of codings supported by all encoders in this group.  Never <jk>null</jk>.
 	 */
-	public List<String> getSupportedEncodings() {
-		return encodings;
-	}
+	public List<String> getSupportedEncodings() { return encodings; }
 }

@@ -67,6 +67,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public JsonSchemaGeneratorSession build() {
 			return new JsonSchemaGeneratorSession(this);
@@ -132,6 +133,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -141,6 +143,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	public static Builder create(JsonSchemaGenerator ctx) {
 		return new Builder(ctx);
 	}
+
 	private final JsonSchemaGenerator ctx;
 	private final Map<String,JsonMap> defs;
 	private JsonSerializerSession jsSession;
@@ -189,9 +192,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaGenerator.Builder#useBeanDefs()} was not enabled.
 	 */
-	public Map<String,JsonMap> getBeanDefs() {
-		return defs;
-	}
+	public Map<String,JsonMap> getBeanDefs() { return defs; }
 
 	/**
 	 * Returns the definition URI for the specified class.
@@ -302,7 +303,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private JsonMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm) throws BeanRecursionException, SerializeException {
+	private JsonMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
+		throws BeanRecursionException, SerializeException {
 
 		if (ctx.isIgnoredType(eType))
 			return null;
@@ -461,6 +463,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		return out;
 	}
+
 	private JsonParserSession jpSession() {
 		if (jpSession == null)
 			jpSession = ctx.getJsonParser().getSession();
@@ -486,9 +489,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
 	 */
-	protected final Set<TypeCategory> getAddDescriptionsTo() {
-		return ctx.getAddDescriptionsTo();
-	}
+	protected final Set<TypeCategory> getAddDescriptionsTo() { return ctx.getAddDescriptionsTo(); }
 
 	/**
 	 * Add examples.
@@ -497,9 +498,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	Set of categories of types that examples should be automatically added to generated schemas.
 	 */
-	protected final Set<TypeCategory> getAddExamplesTo() {
-		return ctx.getAddExamplesTo();
-	}
+	protected final Set<TypeCategory> getAddExamplesTo() { return ctx.getAddExamplesTo(); }
 
 	/**
 	 * Bean schema definition mapper.
@@ -508,9 +507,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
 	 */
-	protected final BeanDefMapper getBeanDefMapper() {
-		return ctx.getBeanDefMapper();
-	}
+	protected final BeanDefMapper getBeanDefMapper() { return ctx.getBeanDefMapper(); }
 
 	/**
 	 * Ignore types from schema definitions.
@@ -519,9 +516,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */
-	protected final List<Pattern> getIgnoreTypes() {
-		return ctx.getIgnoreTypes();
-	}
+	protected final List<Pattern> getIgnoreTypes() { return ctx.getIgnoreTypes(); }
+
 	/**
 	 * Allow nested descriptions.
 	 *
@@ -529,9 +525,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
 	 */
-	protected final boolean isAllowNestedDescriptions() {
-		return ctx.isAllowNestedDescriptions();
-	}
+	protected final boolean isAllowNestedDescriptions() { return ctx.isAllowNestedDescriptions(); }
 
 	/**
 	 * Allow nested examples.
@@ -540,9 +534,8 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
 	 */
-	protected final boolean isAllowNestedExamples() {
-		return ctx.isAllowNestedExamples();
-	}
+	protected final boolean isAllowNestedExamples() { return ctx.isAllowNestedExamples(); }
+
 	/**
 	 * Use bean definitions.
 	 *
@@ -550,7 +543,5 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
 	 */
-	protected final boolean isUseBeanDefs() {
-		return ctx.isUseBeanDefs();
-	}
+	protected final boolean isUseBeanDefs() { return ctx.isUseBeanDefs(); }
 }

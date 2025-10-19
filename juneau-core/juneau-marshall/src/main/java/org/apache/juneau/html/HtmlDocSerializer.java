@@ -92,12 +92,15 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		private static final Cache<HashKey,HtmlDocSerializer> CACHE = Cache.of(HashKey.class, HtmlDocSerializer.class).build();
 
 		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
+
 		private static <T> List<T> copy(List<T> s) {
 			return s == null || s.isEmpty() ? null : copyOf(s);
 		}
+
 		private static <T> List<T> copy(T[] s) {
 			return s.length == 0 ? null : list(s);
 		}
+
 		List<String> aside, footer, head, header, nav, navlinks, script, style, stylesheet;
 		AsideFloat asideFloat;
 		String noResultsMessage;
@@ -166,6 +169,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			template = copyFrom.template;
 			widgets = copy(copyFrom.widgets);
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder accept(String value) {
 			super.accept(value);
@@ -410,6 +414,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			super.beanInterceptor(on, value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanMapPutReturnsOldValue() {
 			super.beanMapPutReturnsOldValue();
@@ -717,6 +722,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				aside,
@@ -735,6 +741,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 				template,
 				widgets
 			);
+			// @formatter:on
 		}
 
 		/**
@@ -1328,13 +1335,13 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1491,6 +1498,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			super.useWhitespace(value);
 			return this;
 		}
+
 		/**
 		 * Returns the list of page widgets.
 		 *
@@ -1611,6 +1619,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 	/** Default serializer, all default settings. */
 	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -1619,6 +1628,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final String[] style, stylesheet, script, navlinks, head, header, nav, aside, footer;
 	final AsideFloat asideFloat;
 	final String noResultsMessage;
@@ -1679,9 +1689,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	@Override /* Overridden from Context */
-	public HtmlDocSerializerSession getSession() {
-		return createSession().build();
-	}
+	public HtmlDocSerializerSession getSession() { return createSession().build(); }
 
 	<T> T newInstance(Class<T> c) {
 		try {
@@ -1714,9 +1722,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	The overridden contents of the aside section on the HTML page.
 	 */
-	protected final String[] getAside() {
-		return aside;
-	}
+	protected final String[] getAside() { return aside; }
 
 	/**
 	 * Float side section contents.
@@ -1725,9 +1731,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	How to float the aside contents on the page.
 	 */
-	protected final AsideFloat getAsideFloat() {
-		return asideFloat;
-	}
+	protected final AsideFloat getAsideFloat() { return asideFloat; }
 
 	/**
 	 * Footer section contents.
@@ -1736,9 +1740,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	The overridden contents of the footer section on the HTML page.
 	 */
-	protected final String[] getFooter() {
-		return footer;
-	}
+	protected final String[] getFooter() { return footer; }
 
 	/**
 	 * Additional head section content.
@@ -1747,9 +1749,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	HTML content to add to the head section of the HTML page.
 	 */
-	protected final String[] getHead() {
-		return head;
-	}
+	protected final String[] getHead() { return head; }
 
 	/**
 	 * Header section contents.
@@ -1758,9 +1758,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	The overridden contents of the header section on the HTML page.
 	 */
-	protected final String[] getHeader() {
-		return header;
-	}
+	protected final String[] getHeader() { return header; }
 
 	/**
 	 * Nav section contents.
@@ -1769,9 +1767,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	The overridden contents of the nav section on the HTML page.
 	 */
-	protected final String[] getNav() {
-		return nav;
-	}
+	protected final String[] getNav() { return nav; }
 
 	/**
 	 * Page navigation links.
@@ -1780,9 +1776,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
-	protected final String[] getNavlinks() {
-		return navlinks;
-	}
+	protected final String[] getNavlinks() { return navlinks; }
 
 	/**
 	 * No-results message.
@@ -1791,9 +1785,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	The message used when serializing an empty array or empty list.
 	 */
-	protected final String getNoResultsMessage() {
-		return noResultsMessage;
-	}
+	protected final String getNoResultsMessage() { return noResultsMessage; }
 
 	/**
 	 * Javascript code.
@@ -1802,9 +1794,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	Arbitrary Javascript to add to the HTML page.
 	 */
-	protected final String[] getScript() {
-		return script;
-	}
+	protected final String[] getScript() { return script; }
 
 	/**
 	 * CSS style code.
@@ -1813,9 +1803,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	The CSS instructions to add to the HTML page.
 	 */
-	protected final String[] getStyle() {
-		return style;
-	}
+	protected final String[] getStyle() { return style; }
 
 	/**
 	 * Stylesheet import URLs.
@@ -1824,9 +1812,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	The link to the stylesheet of the HTML page.
 	 */
-	protected final String[] getStylesheet() {
-		return stylesheet;
-	}
+	protected final String[] getStylesheet() { return stylesheet; }
 
 	/**
 	 * HTML document template.
@@ -1835,9 +1821,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	The template to use for serializing the page.
 	 */
-	protected final HtmlDocTemplate getTemplate() {
-		return templateBean;
-	}
+	protected final HtmlDocTemplate getTemplate() { return templateBean; }
+
 	/**
 	 * HTML widgets.
 	 *
@@ -1845,9 +1830,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	Widgets defined on this serializers.
 	 */
-	protected final HtmlWidgetMap getWidgets() {
-		return widgetMap;
-	}
+	protected final HtmlWidgetMap getWidgets() { return widgetMap; }
 
 	/**
 	 * Prevent word wrap on page.
@@ -1856,12 +1839,11 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return
 	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> shoudl be added to the CSS instructions on the page to prevent word wrapping.
 	 */
-	protected final boolean isNowrap() {
-		return nowrap;
-	}
+	protected final boolean isNowrap() { return nowrap; }
 
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("header", header)
 			.append("nav", nav)
@@ -1876,5 +1858,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			.append("template", template)
 			.append("noResultsMessage", noResultsMessage)
 			.append("widgets", widgets);
+		// @formatter:on
 	}
 }

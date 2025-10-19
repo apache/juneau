@@ -71,6 +71,7 @@ public class PathRemainderArg implements RestOpArg {
 			return new PathRemainderArg(paramInfo, annotations);
 		return null;
 	}
+
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
 	private final String def;

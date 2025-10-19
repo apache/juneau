@@ -32,7 +32,7 @@ public class HtmlElementRawText extends HtmlElement {
 	private Object text;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementRawText _class(String value) {  // NOSONAR - Intentional naming.
+	public HtmlElementRawText _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -48,6 +48,7 @@ public class HtmlElementRawText extends HtmlElement {
 		super.attr(key, val);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementRawText attrUri(String key, Object val) {
 		super.attrUri(key, val);
@@ -71,11 +72,9 @@ public class HtmlElementRawText extends HtmlElement {
 	 *
 	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
 	 */
-	@Xml(format=XmlFormat.TEXT_PWS)
+	@Xml(format = XmlFormat.TEXT_PWS)
 	@Beanp("c")
-	public Object getText() {
-		return text;
-	}
+	public Object getText() { return text; }
 
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementRawText hidden(Object value) {
@@ -431,7 +430,7 @@ public class HtmlElementRawText extends HtmlElement {
 	 * @param value The text node to add to this element.
 	 * @return This object.
 	 */
-	public HtmlElement text(Object value) {  // NOSONAR - Intentional naming.
+	public HtmlElement text(Object value) { // NOSONAR - Intentional naming.
 		this.text = value;
 		return this;
 	}

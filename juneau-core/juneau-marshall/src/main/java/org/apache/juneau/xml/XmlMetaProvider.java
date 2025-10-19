@@ -25,7 +25,7 @@ import org.apache.juneau.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
-public interface XmlMetaProvider extends AnnotationProvider  {
+public interface XmlMetaProvider extends AnnotationProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified bean.

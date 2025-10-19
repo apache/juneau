@@ -158,9 +158,7 @@ public class ServerVariable extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDefault() {
-		return _default;
-	}
+	public String getDefault() { return _default; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -178,26 +176,24 @@ public class ServerVariable extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() {
-		return _enum;
-	}
+	public List<Object> getEnum() { return _enum; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(_default != null,"default" )
 			.addIf(description != null, "description")
 			.addIf(_enum != null, "enum")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

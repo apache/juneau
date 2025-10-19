@@ -31,7 +31,7 @@ public class HtmlElementText extends HtmlElement {
 	private Object text;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementText _class(String value) {  // NOSONAR - Intentional naming.
+	public HtmlElementText _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -47,6 +47,7 @@ public class HtmlElementText extends HtmlElement {
 		super.attr(key, val);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementText attrUri(String key, Object val) {
 		super.attrUri(key, val);
@@ -70,11 +71,9 @@ public class HtmlElementText extends HtmlElement {
 	 *
 	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
 	 */
-	@Xml(format=XmlFormat.TEXT)
+	@Xml(format = XmlFormat.TEXT)
 	@Beanp("c")
-	public Object getText() {
-		return text;
-	}
+	public Object getText() { return text; }
 
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementText hidden(Object value) {
@@ -430,7 +429,7 @@ public class HtmlElementText extends HtmlElement {
 	 * @param value The text node to add to this element.
 	 * @return This object.
 	 */
-	public HtmlElement text(Object value) {  // NOSONAR - Intentional naming.
+	public HtmlElement text(Object value) { // NOSONAR - Intentional naming.
 		this.text = value;
 		return this;
 	}

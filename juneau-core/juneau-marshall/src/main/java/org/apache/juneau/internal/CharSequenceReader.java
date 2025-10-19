@@ -83,7 +83,7 @@ public class CharSequenceReader extends BufferedReader {
 			sb2.getChars(next, next + n, cbuf, off);
 		else {
 			for (int i = 0; i < n; i++)
-				cbuf[off+i] = cs.charAt(next+i);
+				cbuf[off + i] = cs.charAt(next + i);
 		}
 		next += n;
 		return n;

@@ -59,10 +59,12 @@ public class RestOpAnnotation {
 		Class<? extends RestMatcher>[] matchers = new Class[0];
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends Serializer>[] serializers = new Class[0];
-		Class<?>[] parsers={};
+		Class<?>[] parsers = {};
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
-		String clientVersion="", debug="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", method="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] consumes={}, defaultRequestFormData={}, defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, path={}, produces={};
+		String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", defaultContentType = "", maxInput = "", method = "", rolesDeclared = "", roleGuard = "", summary = "",
+			value = "";
+		String[] consumes = {}, defaultRequestFormData = {}, defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {},
+			produces = {};
 
 		/**
 		 * Constructor.
@@ -602,12 +604,14 @@ public class RestOpAnnotation {
 			return value;
 		}
 	}
+
 	/** Default value */
 	public static final RestOp DEFAULT = create().build();
 	/**
 	 * Predicate that can be used with the {@link ClassInfo#getAnnotationList(Predicate)} and {@link MethodInfo#getAnnotationList(Predicate)}
 	 */
 	public static final Predicate<AnnotationInfo<?>> REST_OP_GROUP = x -> x.isInGroup(RestOp.class);
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

@@ -53,7 +53,5 @@ public class JsonClassMeta extends ExtendedClassMeta {
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
-	protected String getWrapperAttr() {
-		return wrapperAttr;
-	}
+	protected String getWrapperAttr() { return wrapperAttr; }
 }

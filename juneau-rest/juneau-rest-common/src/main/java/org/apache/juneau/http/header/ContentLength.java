@@ -111,6 +111,7 @@ public class ContentLength extends BasicLongHeader {
 	public static ContentLength of(Supplier<Long> value) {
 		return value == null ? null : new ContentLength(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

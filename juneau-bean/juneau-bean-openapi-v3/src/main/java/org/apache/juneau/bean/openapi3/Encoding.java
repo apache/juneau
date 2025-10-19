@@ -74,18 +74,16 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-public class Encoding extends OpenApiElement{
+public class Encoding extends OpenApiElement {
 
-	private String contentType,
-			style;
+	private String contentType, style;
 	private Map<String,HeaderInfo> headers;
-	private Boolean explode,
-			allowReserved;
+	private Boolean explode, allowReserved;
 
 	/**
 	 * Default constructor.
 	 */
-	public Encoding() { }
+	public Encoding() {}
 
 	/**
 	 * Copy constructor.
@@ -148,9 +146,7 @@ public class Encoding extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getAllowReserved() {
-		return allowReserved;
-	}
+	public Boolean getAllowReserved() { return allowReserved; }
 
 	/**
 	 * Bean property getter:  <property>contentType</property>.
@@ -160,9 +156,7 @@ public class Encoding extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getContentType() {
-		return contentType;
-	}
+	public String getContentType() { return contentType; }
 
 	/**
 	 * Bean property getter:  <property>required</property>.
@@ -172,27 +166,21 @@ public class Encoding extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getExplode() {
-		return explode;
-	}
+	public Boolean getExplode() { return explode; }
 
 	/**
 	 * Bean property getter:  <property>variables</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, HeaderInfo> getHeaders() {
-		return headers;
-	}
+	public Map<String,HeaderInfo> getHeaders() { return headers; }
 
 	/**
 	 * Bean property getter:  <property>style</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getStyle() {
-		return style;
-	}
+	public String getStyle() { return style; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -284,7 +272,7 @@ public class Encoding extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Encoding setHeaders(Map<String, HeaderInfo> value) {
+	public Encoding setHeaders(Map<String,HeaderInfo> value) {
 		headers = copyOf(value);
 		return this;
 	}

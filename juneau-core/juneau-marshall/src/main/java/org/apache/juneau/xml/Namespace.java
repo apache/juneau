@@ -36,7 +36,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
-@Bean(sort=true)
+@Bean(sort = true)
 public class Namespace {
 
 	private static final ConcurrentHashMap<String,Namespace> CACHE = new ConcurrentHashMap<>();
@@ -104,7 +104,7 @@ public class Namespace {
 			Collection c = (Collection)o;
 			Namespace[] n = new Namespace[c.size()];
 			int i = 0;
-			for (Object o2 : c){
+			for (Object o2 : c) {
 				if (o2 instanceof Namespace)
 					n[i++] = (Namespace)o2;
 				else if (o2 instanceof CharSequence)
@@ -133,7 +133,7 @@ public class Namespace {
 			return of(key, null);
 		if (key.startsWith("http://") || key.startsWith("https://"))
 			return of(null, key);
-		return of(key.substring(0, i).trim(), key.substring(i+1).trim());
+		return of(key.substring(0, i).trim(), key.substring(i + 1).trim());
 	}
 
 	/**
@@ -176,18 +176,14 @@ public class Namespace {
 	 *
 	 * @return The namespace name.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Returns the namespace URI.
 	 *
 	 * @return The namespace URI.
 	 */
-	public String getUri() {
-		return uri;
-	}
+	public String getUri() { return uri; }
 
 	@Override /* Overridden from Object */
 	public String toString() {

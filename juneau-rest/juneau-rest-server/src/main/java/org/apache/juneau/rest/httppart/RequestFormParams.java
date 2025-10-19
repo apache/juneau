@@ -119,7 +119,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	private final RestRequest req;
 	private boolean caseSensitive;
 	private HttpPartParserSession parser;
-	private final VarResolverSession vs ;
+	private final VarResolverSession vs;
 
 	/**
 	 * Constructor.
@@ -160,7 +160,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 					values[0] = "";
 
 				if (values.length == 0)
-					values = new String[]{null};
+					values = new String[] { null };
 
 				for (String value : values)
 					add(new RequestFormParam(req, name, value));
@@ -226,6 +226,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		add(new RequestFormParam(req, part).parser(parser));
 		return this;
 	}
+
 	/**
 	 * Adds a parameter value.
 	 *
@@ -368,9 +369,10 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(()->new BasicRuntimeException("@FormData(name) not found on class {0}", className(type)));
+		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(() -> new BasicRuntimeException("@FormData(name) not found on class {0}", className(type)));
 		return get(name).as(type);
 	}
+
 	/**
 	 * Returns the last parameter with the specified name.
 	 *
@@ -417,7 +419,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public RequestFormParam getFirst(String name) {
 		Utils.assertArgNotNull("name", name);
-		return stream(name).findFirst().orElseGet(()->new RequestFormParam(req, name, null).parser(parser));
+		return stream(name).findFirst().orElseGet(() -> new RequestFormParam(req, name, null).parser(parser));
 	}
 
 	/**
@@ -441,9 +443,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * Returns all the unique header names in this list.
 	 * @return The list of all unique header names in this list.
 	 */
-	public List<String> getNames() {
-		return stream().map(RequestFormParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
-	}
+	public List<String> getNames() { return stream().map(RequestFormParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList()); }
 
 	/**
 	 * Returns all headers in sorted order.
@@ -455,7 +455,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		if (caseSensitive)
 			x = Comparator.comparing(RequestFormParam::getName);
 		else
-			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+			x = (x1, x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
 		return stream().sorted(x);
 	}
 
@@ -521,6 +521,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		set(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
+
 	/**
 	 * Returns all headers with the specified name.
 	 *

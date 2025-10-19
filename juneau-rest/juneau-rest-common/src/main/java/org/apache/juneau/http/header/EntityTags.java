@@ -52,8 +52,9 @@ public class EntityTags {
 	 * @return A parsed header value.
 	 */
 	public static EntityTags of(String value) {
-		return Utils.isEmpty(value) ? EMPTY : CACHE.get(value, ()->new EntityTags(value));
+		return Utils.isEmpty(value) ? EMPTY : CACHE.get(value, () -> new EntityTags(value));
 	}
+
 	private final EntityTag[] value;
 	private final String string;
 

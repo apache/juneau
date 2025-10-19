@@ -36,7 +36,7 @@ public class HasQueryAnnotation {
 	 */
 	public static class Builder extends AnnotationBuilder<Builder> {
 
-		String name="", value="";
+		String name = "", value = "";
 
 		/**
 		 * Constructor.
@@ -99,8 +99,10 @@ public class HasQueryAnnotation {
 			return value;
 		}
 	}
+
 	/** Default value */
 	public static final HasQuery DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

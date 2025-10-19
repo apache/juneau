@@ -80,7 +80,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="source")
+@Bean(typeName = "source")
 public class Source extends HtmlElementVoid {
 
 	/**
@@ -100,7 +100,7 @@ public class Source extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Source _class(String value) {  // NOSONAR - Intentional naming.
+	public Source _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -110,6 +110,7 @@ public class Source extends HtmlElementVoid {
 		super.accesskey(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Source attr(String key, Object val) {
 		super.attr(key, val);

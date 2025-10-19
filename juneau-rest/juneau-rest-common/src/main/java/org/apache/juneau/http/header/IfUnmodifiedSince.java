@@ -114,6 +114,7 @@ public class IfUnmodifiedSince extends BasicDateHeader {
 	public static IfUnmodifiedSince of(ZonedDateTime value) {
 		return value == null ? null : new IfUnmodifiedSince(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

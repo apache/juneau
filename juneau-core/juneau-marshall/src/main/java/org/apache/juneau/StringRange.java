@@ -50,6 +50,7 @@ public class StringRange {
 		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("*", ""));
 	}
+
 	private final NameValuePair[] extensions;
 	private final Float qValue;
 	private final String name;
@@ -114,7 +115,7 @@ public class StringRange {
 	 */
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof StringRange) && eq(this, (StringRange)o, (x,y)->eq(x.string, y.string));
+		return (o instanceof StringRange) && eq(this, (StringRange)o, (x, y) -> eq(x.string, y.string));
 	}
 
 	/**
@@ -137,9 +138,7 @@ public class StringRange {
 	 *
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
-	public List<NameValuePair> getExtensions() {
-		return alist(extensions);
-	}
+	public List<NameValuePair> getExtensions() { return alist(extensions); }
 
 	/**
 	 * Returns the name of this string range.
@@ -149,9 +148,7 @@ public class StringRange {
 	 *
 	 * @return The name of this string range.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.
@@ -165,9 +162,7 @@ public class StringRange {
 	 *
 	 * @return The 'q' value for this type, never <jk>null</jk>.
 	 */
-	public Float getQValue() {
-		return qValue;
-	}
+	public Float getQValue() { return qValue; }
 
 	/**
 	 * Returns a hash based on this instance's <c>media-type</c>.

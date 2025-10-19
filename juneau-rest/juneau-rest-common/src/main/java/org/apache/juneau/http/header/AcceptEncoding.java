@@ -115,7 +115,7 @@ public class AcceptEncoding extends BasicStringRangesHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptEncoding of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new AcceptEncoding(value));
+		return value == null ? null : CACHE.get(value, () -> new AcceptEncoding(value));
 	}
 
 	/**
@@ -144,6 +144,7 @@ public class AcceptEncoding extends BasicStringRangesHeader {
 	public static AcceptEncoding of(Supplier<StringRanges> value) {
 		return value == null ? null : new AcceptEncoding(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

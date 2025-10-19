@@ -193,11 +193,13 @@ public class BeanMeta<T> {
 			ClassInfo ci = classMeta.getInfo();
 
 			try {
+				// @formatter:off
 				Visibility
 					conVis = ctx.getBeanConstructorVisibility(),
 					cVis = ctx.getBeanClassVisibility(),
 					mVis = ctx.getBeanMethodVisibility(),
 					fVis = ctx.getBeanFieldVisibility();
+				// @formatter:on
 
 				List<Class<?>> bdClasses = list();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
@@ -211,7 +213,7 @@ public class BeanMeta<T> {
 
 				Value<String> typePropertyName = Value.empty();
 				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typePropertyName()), x -> typePropertyName.set(x.typePropertyName()));
-				this.typePropertyName = typePropertyName.orElseGet(()->ctx.getBeanTypePropertyName());
+				this.typePropertyName = typePropertyName.orElseGet(() -> ctx.getBeanTypePropertyName());
 
 				fluentSetters = (ctx.isFindFluentSetters() || (beanFilter != null && beanFilter.isFluentSetters()));
 
@@ -434,7 +436,8 @@ public class BeanMeta<T> {
 				// Check for missing properties.
 				fixedBeanProps.forEach(x -> {
 					if (! normalProps.containsKey(x))
-						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getSimpleName());
+						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x,
+							ci.getSimpleName());
 				});
 
 				// Mark constructor arg properties.
@@ -458,7 +461,7 @@ public class BeanMeta<T> {
 				if (dictionaryName == null)
 					dictionaryName = findDictionaryName(this.classMeta);
 
-				normalProps.forEach((k,v) -> {
+				normalProps.forEach((k, v) -> {
 					BeanPropertyMeta pMeta = v.build();
 					if (pMeta.isDyna())
 						dynaProperty = pMeta;
@@ -525,10 +528,7 @@ public class BeanMeta<T> {
 	 * Possible property method types.
 	 */
 	enum MethodType {
-		UNKNOWN,
-		GETTER,
-		SETTER,
-		EXTRAKEYS;
+		UNKNOWN, GETTER, SETTER, EXTRAKEYS;
 	}
 
 	private static final BeanPropertyMeta[] EMPTY_PROPERTIES = {};
@@ -562,6 +562,7 @@ public class BeanMeta<T> {
 		List<Field> l = new LinkedList<>();
 		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
+			// @formatter:off
 			c2.forEachDeclaredField(
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
@@ -570,6 +571,7 @@ public class BeanMeta<T> {
 				&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx, Beanp.class)),
 				x -> l.add(x.inner())
 			);
+			// @formatter:on
 		});
 		return l;
 	}
@@ -696,6 +698,7 @@ public class BeanMeta<T> {
 		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 		Value<Field> value = Value.empty();
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
+			// @formatter:off
 			FieldInfo f = c2.getDeclaredField(
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
@@ -703,6 +706,7 @@ public class BeanMeta<T> {
 				&& x.hasNoAnnotation(ctx, BeanIgnore.class)
 				&& x.hasName(name)
 			);
+			// @formatter:on
 			if (f != null)
 				value.set(f.inner());
 		});
@@ -798,8 +802,7 @@ public class BeanMeta<T> {
 		while (sc != null && ! sc.is(stopClass) && ! sc.is(Object.class)) {
 			// Look for a method with the same signature in the parent class
 			for (MethodInfo parentMethod : sc.getDeclaredMethods()) {
-				if (parentMethod.getSimpleName().equals(methodName) &&
-				    paramTypes.size() == parentMethod.getParamTypes().size()) {
+				if (parentMethod.getSimpleName().equals(methodName) && paramTypes.size() == parentMethod.getParamTypes().size()) {
 
 					// Check if parameter types match
 					boolean paramsMatch = true;
@@ -874,11 +877,11 @@ public class BeanMeta<T> {
 
 	final boolean fluentSetters;
 
-//	private static List<ClassInfo> findClasses(Class<?> c, Class<?> stopClass) {
-//		LinkedList<ClassInfo> l = new LinkedList<>();
-//		forEachClass(ClassInfo.of(c), stopClass, x -> l.add(x));
-//		return l;
-//	}
+	//	private static List<ClassInfo> findClasses(Class<?> c, Class<?> stopClass) {
+	//		LinkedList<ClassInfo> l = new LinkedList<>();
+	//		forEachClass(ClassInfo.of(c), stopClass, x -> l.add(x));
+	//		return l;
+	//	}
 
 	/**
 	 * Constructor.
@@ -920,7 +923,7 @@ public class BeanMeta<T> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof BeanMeta) && Utils.eq(this, (BeanMeta<?>)o, (x,y)->Utils.eq(x.classMeta, y.classMeta));
+		return (o instanceof BeanMeta) && Utils.eq(this, (BeanMeta<?>)o, (x, y) -> Utils.eq(x.classMeta, y.classMeta));
 	}
 
 	/**
@@ -955,18 +958,14 @@ public class BeanMeta<T> {
 	 *
 	 * @return The {@link ClassMeta} of this bean.
 	 */
-	public final ClassMeta<T> getClassMeta() {
-		return classMeta;
-	}
+	public final ClassMeta<T> getClassMeta() { return classMeta; }
 
 	/**
 	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean(typeName)} annotation.
 	 *
 	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
 	 */
-	public final String getDictionaryName() {
-		return dictionaryName;
-	}
+	public final String getDictionaryName() { return dictionaryName; }
 
 	/**
 	 * Returns metadata about the specified property.
@@ -988,9 +987,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return Metadata on all properties associated with this bean.
 	 */
-	public Collection<BeanPropertyMeta> getPropertyMetas() {
-		return u(alist(propertyArray));
-	}
+	public Collection<BeanPropertyMeta> getPropertyMetas() { return u(alist(propertyArray)); }
 
 	/**
 	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the
@@ -998,9 +995,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return The type name property.
 	 */
-	public final BeanPropertyMeta getTypeProperty() {
-		return typeProperty;
-	}
+	public final BeanPropertyMeta getTypeProperty() { return typeProperty; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {

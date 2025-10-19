@@ -99,7 +99,6 @@ import org.apache.juneau.serializer.*;
  */
 public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -112,7 +111,6 @@ public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 	public static <T> BeanAssertion<T> create(T value) {
 		return new BeanAssertion<>(value);
 	}
-
 
 	/**
 	 * Constructor.

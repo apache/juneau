@@ -89,7 +89,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="cite")
+@Bean(typeName = "cite")
 public class Cite extends HtmlElementMixed {
 
 	/**
@@ -105,8 +105,9 @@ public class Cite extends HtmlElementMixed {
 	public Cite(Object...children) {
 		children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Cite _class(String value) {  // NOSONAR - Intentional naming.
+	public Cite _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

@@ -37,10 +37,10 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({SerializerConfigAnnotation.SerializerApply.class,SerializerConfigAnnotation.OutputStreamSerializerApply.class,SerializerConfigAnnotation.WriterSerializerApply.class})
+@ContextApply({ SerializerConfigAnnotation.SerializerApply.class, SerializerConfigAnnotation.OutputStreamSerializerApply.class, SerializerConfigAnnotation.WriterSerializerApply.class })
 public @interface SerializerConfig {
 
 	/**
@@ -79,6 +79,7 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
+
 	/**
 	 * Add type attribute to root nodes.
 	 *
@@ -114,6 +115,7 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String addRootType() default "";
+
 	/**
 	 * Binary output format.
 	 *
@@ -418,6 +420,7 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String sortCollections() default "";
+
 	/**
 	 * Sort maps alphabetically.
 	 *
@@ -560,6 +563,7 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String trimStrings() default "";
+
 	/**
 	 * URI context bean.
 	 *

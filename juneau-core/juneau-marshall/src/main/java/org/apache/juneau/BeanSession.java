@@ -54,7 +54,7 @@ import jakarta.xml.bind.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class BeanSession extends ContextSession {
 	/**
 	 * Builder class.
@@ -178,6 +178,7 @@ public class BeanSession extends ContextSession {
 				mediaType = value;
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder properties(Map<String,Object> value) {
 			super.properties(value);
@@ -237,6 +238,7 @@ public class BeanSession extends ContextSession {
 	}
 
 	private static Logger LOG = Logger.getLogger(BeanSession.class.getName());
+
 	/**
 	 * Creates a builder of this object.
 	 *
@@ -246,21 +248,25 @@ public class BeanSession extends ContextSession {
 	public static Builder create(BeanContext ctx) {
 		return new Builder(ctx);
 	}
+
 	private static int getMultiplier(String s) {
 		if (s.endsWith("G"))
-			return 1024*1024*1024;
+			return 1024 * 1024 * 1024;
 		if (s.endsWith("M"))
-			return 1024*1024;
+			return 1024 * 1024;
 		if (s.endsWith("K"))
 			return 1024;
 		return 1;
 	}
+
 	private static boolean hasMutater(ClassMeta<?> from, ClassMeta<?> to) {
 		return to.hasMutaterFrom(from) || from.hasMutaterTo(to);
 	}
+
 	private static final boolean isNullOrEmpty(Object o) {
 		return o == null || o.toString().isEmpty() || o.toString().equals("null");
 	}
+
 	private final BeanContext ctx;
 
 	private final Locale locale;
@@ -305,9 +311,9 @@ public class BeanSession extends ContextSession {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	@Override
-	public void addWarning(String msg, Object... args) {
+	public void addWarning(String msg, Object...args) {
 		if (isDebug())
-			LOG.log(Level.WARNING, ()->args.length == 0 ? msg : MessageFormat.format(msg, args));
+			LOG.log(Level.WARNING, () -> args.length == 0 ? msg : MessageFormat.format(msg, args));
 		super.addWarning(msg, args);
 	}
 
@@ -507,9 +513,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
-	public final Visibility getBeanClassVisibility() {
-		return ctx.getBeanClassVisibility();
-	}
+	public final Visibility getBeanClassVisibility() { return ctx.getBeanClassVisibility(); }
 
 	/**
 	 * Minimum bean constructor visibility.
@@ -518,9 +522,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	Only look for constructors with this specified minimum visibility.
 	 */
-	public final Visibility getBeanConstructorVisibility() {
-		return ctx.getBeanConstructorVisibility();
-	}
+	public final Visibility getBeanConstructorVisibility() { return ctx.getBeanConstructorVisibility(); }
 
 	/**
 	 * Bean dictionary.
@@ -529,9 +531,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	The list of classes that make up the bean dictionary in this bean context.
 	 */
-	public final List<Class<?>> getBeanDictionary() {
-		return ctx.getBeanDictionary();
-	}
+	public final List<Class<?>> getBeanDictionary() { return ctx.getBeanDictionary(); }
 
 	/**
 	 * Minimum bean field visibility.
@@ -541,9 +541,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	Only look for bean fields with this specified minimum visibility.
 	 */
-	public final Visibility getBeanFieldVisibility() {
-		return ctx.getBeanFieldVisibility();
-	}
+	public final Visibility getBeanFieldVisibility() { return ctx.getBeanFieldVisibility(); }
 
 	/**
 	 * Returns the {@link BeanMeta} class for the specified class.
@@ -567,18 +565,14 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	Only look for bean methods with this specified minimum visibility.
 	 */
-	public final Visibility getBeanMethodVisibility() {
-		return ctx.getBeanMethodVisibility();
-	}
+	public final Visibility getBeanMethodVisibility() { return ctx.getBeanMethodVisibility(); }
 
 	/**
 	 * Returns the bean registry defined in this bean context defined by {@link BeanContext.Builder#beanDictionary(Class...)}.
 	 *
 	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
 	 */
-	public final BeanRegistry getBeanRegistry() {
-		return ctx.getBeanRegistry();
-	}
+	public final BeanRegistry getBeanRegistry() { return ctx.getBeanRegistry(); }
 
 	/**
 	 * Bean type property name.
@@ -587,9 +581,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
 	 */
-	public final String getBeanTypePropertyName() {
-		return ctx.getBeanTypePropertyName();
-	}
+	public final String getBeanTypePropertyName() { return ctx.getBeanTypePropertyName(); }
 
 	/**
 	 * Returns the type property name as defined by {@link BeanContext.Builder#typePropertyName(String)}.
@@ -686,9 +678,7 @@ public class BeanSession extends ContextSession {
 	 * @see BeanContext.Builder#locale(Locale)
 	 * @return The session locale.
 	 */
-	public Locale getLocale() {
-		return locale;
-	}
+	public Locale getLocale() { return locale; }
 
 	/**
 	 * Media type.
@@ -699,9 +689,7 @@ public class BeanSession extends ContextSession {
 	 * @see BeanContext.Builder#mediaType(MediaType)
 	 * @return The media type for this session, or <jk>null</jk> if not specified.
 	 */
-	public final MediaType getMediaType() {
-		return mediaType;
-	}
+	public final MediaType getMediaType() { return mediaType; }
 
 	/**
 	 * Returns the name property name.
@@ -711,9 +699,7 @@ public class BeanSession extends ContextSession {
 	 *
 	 * @return The name property name.  Never <jk>null</jk>.
 	 */
-	public final static String getNamePropertyName() {
-		return "_name";
-	}
+	public final static String getNamePropertyName() { return "_name"; }
 
 	/**
 	 * Bean class exclusions.
@@ -722,9 +708,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	The list of classes that are explicitly not beans.
 	 */
-	public final Class<?>[] getNotBeanClasses() {
-		return ctx.getNotBeanClasses();
-	}
+	public final Class<?>[] getNotBeanClasses() { return ctx.getNotBeanClasses(); }
 
 	/**
 	 * Bean package exclusions.
@@ -733,9 +717,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	The list of fully-qualified package names to exclude from being classified as beans.
 	 */
-	public final String[] getNotBeanPackagesNames() {
-		return ctx.getNotBeanPackagesNames();
-	}
+	public final String[] getNotBeanPackagesNames() { return ctx.getNotBeanPackagesNames(); }
 
 	/**
 	 * Bean property namer.
@@ -744,9 +726,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	The interface used to calculate bean property names.
 	 */
-	public final PropertyNamer getPropertyNamer() {
-		return ctx.getPropertyNamer();
-	}
+	public final PropertyNamer getPropertyNamer() { return ctx.getPropertyNamer(); }
 
 	/**
 	 * Java object swaps.
@@ -755,9 +735,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	The list POJO swaps defined.
 	 */
-	public final ObjectSwap<?,?>[] getSwaps() {
-		return ctx.getSwaps();
-	}
+	public final ObjectSwap<?,?>[] getSwaps() { return ctx.getSwaps(); }
 
 	/**
 	 * Time zone.
@@ -772,9 +750,7 @@ public class BeanSession extends ContextSession {
 	 * @see BeanContext.Builder#timeZone(TimeZone)
 	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
 	 */
-	public final TimeZone getTimeZone() {
-		return timeZone;
-	}
+	public final TimeZone getTimeZone() { return timeZone; }
 
 	/**
 	 * Time zone.
@@ -789,9 +765,7 @@ public class BeanSession extends ContextSession {
 	 * @see BeanContext.Builder#timeZone(TimeZone)
 	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
 	 */
-	public final ZoneId getTimeZoneId() {
-		return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
-	}
+	public final ZoneId getTimeZoneId() { return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId(); }
 
 	/**
 	 * Determines whether the specified class matches the requirements on this context of being a bean.
@@ -823,9 +797,7 @@ public class BeanSession extends ContextSession {
 	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
 	 * 	<br>Otherwise, it returns <jk>null</jk>.
 	 */
-	public final boolean isBeanMapPutReturnsOldValue() {
-		return ctx.isBeanMapPutReturnsOldValue();
-	}
+	public final boolean isBeanMapPutReturnsOldValue() { return ctx.isBeanMapPutReturnsOldValue(); }
 
 	/**
 	 * Beans require no-arg constructors.
@@ -835,9 +807,8 @@ public class BeanSession extends ContextSession {
 	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 */
-	public final boolean isBeansRequireDefaultConstructor() {
-		return ctx.isBeansRequireDefaultConstructor();
-	}
+	public final boolean isBeansRequireDefaultConstructor() { return ctx.isBeansRequireDefaultConstructor(); }
+
 	/**
 	 * Beans require Serializable interface.
 	 *
@@ -846,9 +817,7 @@ public class BeanSession extends ContextSession {
 	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 */
-	public final boolean isBeansRequireSerializable() {
-		return ctx.isBeansRequireSerializable();
-	}
+	public final boolean isBeansRequireSerializable() { return ctx.isBeansRequireSerializable(); }
 
 	/**
 	 * Beans require setters for getters.
@@ -858,9 +827,7 @@ public class BeanSession extends ContextSession {
 	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
 	 * 	<br>Otherwise, they are ignored.
 	 */
-	public final boolean isBeansRequireSettersForGetters() {
-		return ctx.isBeansRequireSettersForGetters();
-	}
+	public final boolean isBeansRequireSettersForGetters() { return ctx.isBeansRequireSettersForGetters(); }
 
 	/**
 	 * Beans require at least one property.
@@ -870,9 +837,7 @@ public class BeanSession extends ContextSession {
 	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
 	 */
-	public final boolean isBeansRequireSomeProperties() {
-		return ctx.isBeansRequireSomeProperties();
-	}
+	public final boolean isBeansRequireSomeProperties() { return ctx.isBeansRequireSomeProperties(); }
 
 	/**
 	 * Find fluent setters.
@@ -884,9 +849,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	<jk>true</jk> if fluent setters are detected on beans.
 	 */
-	public final boolean isFindFluentSetters() {
-		return ctx.isFindFluentSetters();
-	}
+	public final boolean isFindFluentSetters() { return ctx.isFindFluentSetters(); }
 
 	/**
 	 * Ignore invocation errors on getters.
@@ -895,9 +858,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
 	 */
-	public final boolean isIgnoreInvocationExceptionsOnGetters() {
-		return ctx.isIgnoreInvocationExceptionsOnGetters();
-	}
+	public final boolean isIgnoreInvocationExceptionsOnGetters() { return ctx.isIgnoreInvocationExceptionsOnGetters(); }
 
 	/**
 	 * Ignore invocation errors on setters.
@@ -906,9 +867,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
 	 */
-	public final boolean isIgnoreInvocationExceptionsOnSetters() {
-		return ctx.isIgnoreInvocationExceptionsOnSetters();
-	}
+	public final boolean isIgnoreInvocationExceptionsOnSetters() { return ctx.isIgnoreInvocationExceptionsOnSetters(); }
 
 	/**
 	 * Silently ignore missing setters.
@@ -917,9 +876,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
 	 */
-	public final boolean isIgnoreMissingSetters() {
-		return ctx.isIgnoreMissingSetters();
-	}
+	public final boolean isIgnoreMissingSetters() { return ctx.isIgnoreMissingSetters(); }
 
 	/**
 	 * Ignore unknown properties.
@@ -929,9 +886,7 @@ public class BeanSession extends ContextSession {
 	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
 	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
 	 */
-	public final boolean isIgnoreUnknownBeanProperties() {
-		return ctx.isIgnoreUnknownBeanProperties();
-	}
+	public final boolean isIgnoreUnknownBeanProperties() { return ctx.isIgnoreUnknownBeanProperties(); }
 
 	/**
 	 * Ignore unknown properties with null values.
@@ -940,9 +895,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should not throw a {@link BeanRuntimeException}.
 	 */
-	public final boolean isIgnoreUnknownNullBeanProperties() {
-		return ctx.isIgnoreUnknownNullBeanProperties();
-	}
+	public final boolean isIgnoreUnknownNullBeanProperties() { return ctx.isIgnoreUnknownNullBeanProperties(); }
 
 	/**
 	 * Sort bean properties.
@@ -951,9 +904,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
 	 */
-	public final boolean isSortProperties() {
-		return ctx.isSortProperties();
-	}
+	public final boolean isSortProperties() { return ctx.isSortProperties(); }
 
 	/**
 	 * Use enum names.
@@ -962,9 +913,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
 	 */
-	public final boolean isUseEnumNames() {
-		return ctx.isUseEnumNames();
-	}
+	public final boolean isUseEnumNames() { return ctx.isUseEnumNames(); }
 
 	/**
 	 * Use interface proxies.
@@ -974,9 +923,7 @@ public class BeanSession extends ContextSession {
 	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
 	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
 	 */
-	public final boolean isUseInterfaceProxies() {
-		return ctx.isUseInterfaceProxies();
-	}
+	public final boolean isUseInterfaceProxies() { return ctx.isUseInterfaceProxies(); }
 
 	/**
 	 * Use Java Introspector.
@@ -985,9 +932,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
 	 */
-	public final boolean isUseJavaBeanIntrospector() {
-		return ctx.isUseJavaBeanIntrospector();
-	}
+	public final boolean isUseJavaBeanIntrospector() { return ctx.isUseJavaBeanIntrospector(); }
 
 	/**
 	 * Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
@@ -1228,7 +1173,7 @@ public class BeanSession extends ContextSession {
 			}
 
 			if (to.isOptional() && (! (value instanceof Optional)))
-				return (T) Utils.opt(convertToMemberType(outer, value, to.getElementType()));
+				return (T)Utils.opt(convertToMemberType(outer, value, to.getElementType()));
 
 			Class<T> tc = to.getInnerClass();
 
@@ -1294,7 +1239,7 @@ public class BeanSession extends ContextSession {
 						String s = value.toString();
 						int multiplier = (tc == Integer.TYPE || tc == Short.TYPE || tc == Long.TYPE) ? getMultiplier(s) : 1;
 						if (multiplier != 1) {
-							s = s.substring(0, s.length()-1).trim();
+							s = s.substring(0, s.length() - 1).trim();
 							Long l = Long.valueOf(s) * multiplier;
 							if (tc == Integer.TYPE)
 								return (T)Integer.valueOf(l.intValue());
@@ -1377,7 +1322,7 @@ public class BeanSession extends ContextSession {
 
 					int multiplier = (tc == Integer.class || tc == Short.class || tc == Long.class) ? getMultiplier(s) : 1;
 					if (multiplier != 1) {
-						s = s.substring(0, s.length()-1).trim();
+						s = s.substring(0, s.length() - 1).trim();
 						Long l = Long.valueOf(s) * multiplier;
 						if (tc == Integer.TYPE)
 							return (T)Integer.valueOf(l.intValue());
@@ -1425,7 +1370,7 @@ public class BeanSession extends ContextSession {
 					return to.mutateFrom(value);
 				if (from.hasMutaterTo(to))
 					return from.mutateTo(value, to);
-				return (T) value.toString().getBytes(Charset.forName("UTF-8"));
+				return (T)value.toString().getBytes(Charset.forName("UTF-8"));
 			}
 
 			// Handle setting of array properties
@@ -1450,7 +1395,7 @@ public class BeanSession extends ContextSession {
 					if (from.isMap()) {
 						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
 						ClassMeta keyType = to.getKeyType(), valueType = to.getValueType();
-						((Map<?,?>)value).forEach((k,v) -> {
+						((Map<?,?>)value).forEach((k, v) -> {
 							Object k2 = k;
 							if (keyType.isNotObject()) {
 								if (keyType.isString() && k.getClass() != Class.class)
@@ -1464,7 +1409,7 @@ public class BeanSession extends ContextSession {
 							m.put(k2, v2);
 						});
 						return (T)m;
-					} else if (!to.canCreateNewInstanceFromString(outer)) {
+					} else if (! to.canCreateNewInstanceFromString(outer)) {
 						JsonMap m = JsonMap.ofJson(value.toString());
 						m.setBeanSession(this);
 						return convertToMemberType(outer, m, to);
@@ -1485,8 +1430,7 @@ public class BeanSession extends ContextSession {
 							Object o = Array.get(value, i);
 							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
 						}
-					}
-					else if (from.isCollection())
+					} else if (from.isCollection())
 						((Collection)value).forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
 					else if (from.isMap())
 						l.add(elementType.isObject() ? value : convertToMemberType(l, value, elementType));
@@ -1501,8 +1445,7 @@ public class BeanSession extends ContextSession {
 						} else {
 							throw new InvalidDataConversionException(value.getClass(), to, null);
 						}
-					}
-					else
+					} else
 						throw new InvalidDataConversionException(value.getClass(), to, null);
 					return (T)l;
 				} catch (InvalidDataConversionException e) {
@@ -1518,7 +1461,7 @@ public class BeanSession extends ContextSession {
 
 			if (to.isString()) {
 				if (from.isByteArray()) {
-					return (T) new String((byte[])value);
+					return (T)new String((byte[])value);
 				} else if (from.isMapOrBean() || from.isCollectionOrArrayOrOptional()) {
 					WriterSerializer ws = ctx.getBeanToStringSerializer();
 					if (ws != null)
@@ -1569,16 +1512,16 @@ public class BeanSession extends ContextSession {
 				}
 				if (builder != null) {
 					BeanMap m = toBeanMap(builder.create(this, to));
-					m.load((Map<?,?>) value);
+					m.load((Map<?,?>)value);
 					return builder.build(this, m.getBean(), to);
 				}
-				return newBeanMap(tc).load((Map<?,?>) value).getBean();
+				return newBeanMap(tc).load((Map<?,?>)value).getBean();
 			}
 
 			if (to.isInputStream()) {
 				if (from.isByteArray()) {
 					byte[] b = (byte[])value;
-					return (T) new ByteArrayInputStream(b, 0, b.length);
+					return (T)new ByteArrayInputStream(b, 0, b.length);
 				}
 				byte[] b = value.toString().getBytes();
 				return (T)new ByteArrayInputStream(b, 0, b.length);
@@ -1587,7 +1530,7 @@ public class BeanSession extends ContextSession {
 			if (to.isReader()) {
 				if (from.isByteArray()) {
 					byte[] b = (byte[])value;
-					return (T) new StringReader(new String(b));
+					return (T)new StringReader(new String(b));
 				}
 				return (T)new StringReader(value.toString());
 			}
@@ -1674,9 +1617,7 @@ public class BeanSession extends ContextSession {
 	 * @return
 	 * 	The list of package name prefixes to exclude from being classified as beans.
 	 */
-	protected final String[] getNotBeanPackagesPrefixes() {
-		return ctx.getNotBeanPackagesPrefixes();
-	}
+	protected final String[] getNotBeanPackagesPrefixes() { return ctx.getNotBeanPackagesPrefixes(); }
 
 	/**
 	 * Creates either an {@link JsonMap} or {@link LinkedHashMap} depending on whether the key type is

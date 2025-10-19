@@ -64,7 +64,5 @@ public class RrpcRestOpContext extends RestOpContext {
 	 *
 	 * @return The metadata about the RRPC Java method.
 	 */
-	protected RrpcInterfaceMeta getMeta() {
-		return meta;
-	}
+	protected RrpcInterfaceMeta getMeta() { return meta; }
 }

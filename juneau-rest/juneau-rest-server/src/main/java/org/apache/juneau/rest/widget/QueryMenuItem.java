@@ -46,8 +46,6 @@ public class QueryMenuItem extends MenuItemWidget {
 	 */
 	@Override
 	public String getStyle(RestRequest req, RestResponse res) {
-		return super.getStyle(req, res)
-			+ "\n"
-			+ loadStyle(req, "styles/QueryMenuItem.css");
+		return super.getStyle(req, res) + "\n" + loadStyle(req, "styles/QueryMenuItem.css");
 	}
 }

@@ -36,12 +36,8 @@ class BasicHttpEntityRequestBase extends HttpEntityEnclosingRequestBase implemen
 	}
 
 	@Override /* Overridden from HttpRequestBase */
-	public String getMethod() {
-		return method;
-	}
+	public String getMethod() { return method; }
 
 	@Override /* Overridden from RestRequestCreated */
-	public RestRequest getRestRequest() {
-		return this.restRequest;
-	}
+	public RestRequest getRestRequest() { return this.restRequest; }
 }

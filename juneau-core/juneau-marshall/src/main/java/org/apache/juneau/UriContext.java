@@ -129,8 +129,7 @@ public class UriContext {
 		this.contextRoot = Utils.nullIfEmpty3(trimSlashes(m.getString("contextRoot")));
 		this.servletPath = Utils.nullIfEmpty3(trimSlashes(m.getString("servletPath")));
 		this.pathInfo = Utils.nullIfEmpty3(trimSlashes(m.getString("pathInfo")));
-		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null
-			: this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
+		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}
 
 	/**
@@ -157,8 +156,7 @@ public class UriContext {
 		this.contextRoot = Utils.nullIfEmpty3(trimSlashes(contextRoot));
 		this.servletPath = Utils.nullIfEmpty3(trimSlashes(servletPath));
 		this.pathInfo = Utils.nullIfEmpty3(trimSlashes(pathInfo));
-		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null
-			: this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
+		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}
 
 	/**
@@ -174,9 +172,7 @@ public class UriContext {
 	 * 	The absolute URI of just the authority portion of this URI context.
 	 * 	Never <jk>null</jk>.
 	 */
-	public String getAbsoluteAuthority() {
-		return authority == null ? "/" : authority;
-	}
+	public String getAbsoluteAuthority() { return authority == null ? "/" : authority; }
 
 	/**
 	 * Returns the absolute URI of the context-root portion of this URI context.
@@ -193,11 +189,13 @@ public class UriContext {
 			if (authority == null)
 				aContextRoot = getRootRelativeContextRoot();
 			else
+				// @formatter:off
 				aContextRoot = (
 					contextRoot == null
 					? authority
 					: (authority + '/' + contextRoot)
 				);
+			// @formatter:on
 		}
 		return aContextRoot;
 	}
@@ -213,6 +211,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getAbsolutePathInfo() {
+		// @formatter:off
 		if (aPathInfo == null) {
 			if (authority == null)
 				aPathInfo = getRootRelativePathInfo();
@@ -246,6 +245,7 @@ public class UriContext {
 			}
 		}
 		return aPathInfo;
+		// @formatter:on
 	}
 
 	/**
@@ -253,9 +253,7 @@ public class UriContext {
 	 *
 	 * @return The parent of the URL returned by {@link #getAbsolutePathInfo()}.
 	 */
-	public String getAbsolutePathInfoParent() {
-		return getParent(getAbsolutePathInfo());
-	}
+	public String getAbsolutePathInfoParent() { return getParent(getAbsolutePathInfo()); }
 
 	/**
 	 * Returns the absolute URI of the resource portion of this URI context.
@@ -268,6 +266,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getAbsoluteServletPath() {
+		// @formatter:off
 		if (aServletPath == null) {
 			if (authority == null)
 				aServletPath = getRootRelativeServletPath();
@@ -287,6 +286,7 @@ public class UriContext {
 			}
 		}
 		return aServletPath;
+		// @formatter:on
 	}
 
 	/**
@@ -294,9 +294,7 @@ public class UriContext {
 	 *
 	 * @return The parent of the URL returned by {@link #getAbsoluteServletPath()}.
 	 */
-	public String getAbsoluteServletPathParent() {
-		return getParent(getAbsoluteServletPath());
-	}
+	public String getAbsoluteServletPathParent() { return getParent(getAbsoluteServletPath()); }
 
 	/**
 	 * Returns the root-relative URI of the context portion of this URI context.
@@ -325,6 +323,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getRootRelativePathInfo() {
+		// @formatter:off
 		if (rPath == null) {
 			if (contextRoot == null) {
 				if (servletPath == null)
@@ -355,6 +354,7 @@ public class UriContext {
 			}
 		}
 		return rPath;
+		// @formatter:on
 	}
 
 	/**
@@ -362,9 +362,7 @@ public class UriContext {
 	 *
 	 * @return The parent of the URL returned by {@link #getRootRelativePathInfo()}.
 	 */
-	public String getRootRelativePathInfoParent() {
-		return getParent(getRootRelativePathInfo());
-	}
+	public String getRootRelativePathInfoParent() { return getParent(getRootRelativePathInfo()); }
 
 	/**
 	 * Returns the root-relative URI of the resource portion of this URI context.
@@ -377,6 +375,7 @@ public class UriContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public String getRootRelativeServletPath() {
+		// @formatter:off
 		if (rResource == null) {
 			if (contextRoot == null)
 				rResource = (
@@ -392,6 +391,7 @@ public class UriContext {
 				);
 		}
 		return rResource;
+		// @formatter:on
 	}
 
 	/**
@@ -399,9 +399,7 @@ public class UriContext {
 	 *
 	 * @return The parent of the URL returned by {@link #getRootRelativeServletPath()}.
 	 */
-	public String getRootRelativeServletPathParent() {
-		return getParent(getRootRelativeServletPath());
-	}
+	public String getRootRelativeServletPathParent() { return getParent(getRootRelativeServletPath()); }
 
 	@Override /* Overridden from Object */
 	public String toString() {

@@ -74,16 +74,18 @@ public class UriResolver {
 	public static UriResolver of(UriResolution resolution, UriRelativity relativity, UriContext uriContext) {
 		return new UriResolver(resolution, relativity, uriContext);
 	}
+
 	private static boolean hasDotSegments(String s) {
 		if (s == null)
 			return false;
-		for (int i = 0; i < s.length()-1; i++) {
+		for (int i = 0; i < s.length() - 1; i++) {
 			char c = s.charAt(i);
-			if ((i == 0 && c == '/') || (c == '/' && s.charAt(i+1) == '.'))
+			if ((i == 0 && c == '/') || (c == '/' && s.charAt(i + 1) == '.'))
 				return true;
 		}
 		return false;
 	}
+
 	private static boolean isSpecialUri(String s) {
 		if (s == null || s.isEmpty())
 			return false;
@@ -95,8 +97,8 @@ public class UriResolver {
 
 	private static String normalize(String s) {
 		s = URI.create(s).normalize().toString();
-		if (s.length() > 1 && s.charAt(s.length()-1) == '/')
-			s = s.substring(0, s.length()-1);
+		if (s.length() > 1 && s.charAt(s.length() - 1) == '/')
+			s = s.substring(0, s.length() - 1);
 		return s;
 	}
 
@@ -157,77 +159,77 @@ public class UriResolver {
 					a2.append('/');
 			}
 
-		// Context-relative path
-		else if (uri != null && uri.startsWith("context:")) {
-			if (resolution == ABSOLUTE && authority != null)
-				a2.append(authority);
-			boolean hasContext = contextRoot != null && ! contextRoot.isEmpty();
-			if (hasContext)
-				a2.append('/').append(contextRoot);
-			if (uri.length() > 8) {
-				String remainder = uri.substring(8);
-				// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
-				if (remainder.equals("/") && (hasContext || (resolution == ABSOLUTE && authority != null))) {
-					// Do nothing
-				} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
-					a2.append('/').append(remainder);
-				} else {
-					a2.append(remainder);
-				}
-			} else if (! hasContext && (authority == null || resolution != ABSOLUTE))
-				a2.append('/');
-		}
+			// Context-relative path
+			else if (uri != null && uri.startsWith("context:")) {
+				if (resolution == ABSOLUTE && authority != null)
+					a2.append(authority);
+				boolean hasContext = contextRoot != null && ! contextRoot.isEmpty();
+				if (hasContext)
+					a2.append('/').append(contextRoot);
+				if (uri.length() > 8) {
+					String remainder = uri.substring(8);
+					// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
+					if (remainder.equals("/") && (hasContext || (resolution == ABSOLUTE && authority != null))) {
+						// Do nothing
+					} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
+						a2.append('/').append(remainder);
+					} else {
+						a2.append(remainder);
+					}
+				} else if (! hasContext && (authority == null || resolution != ABSOLUTE))
+					a2.append('/');
+			}
 
-		// Resource-relative path
-		else if (uri != null && uri.startsWith("servlet:")) {
-			if (resolution == ABSOLUTE && authority != null)
-				a2.append(authority);
-			boolean hasContext = contextRoot != null && ! contextRoot.isEmpty();
-			boolean hasServlet = servletPath != null && ! servletPath.isEmpty();
-			if (hasContext)
-				a2.append('/').append(contextRoot);
-			if (hasServlet)
-				a2.append('/').append(servletPath);
-			if (uri.length() > 8) {
-				String remainder = uri.substring(8);
-				// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
-				if (remainder.equals("/") && (hasContext || hasServlet || (resolution == ABSOLUTE && authority != null))) {
-					// Do nothing
-				} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
-					a2.append('/').append(remainder);
-				} else {
-					a2.append(remainder);
-				}
-			} else if (! hasServlet && ! hasContext && (authority == null || resolution != ABSOLUTE))
-				a2.append('/');
-		}
+			// Resource-relative path
+			else if (uri != null && uri.startsWith("servlet:")) {
+				if (resolution == ABSOLUTE && authority != null)
+					a2.append(authority);
+				boolean hasContext = contextRoot != null && ! contextRoot.isEmpty();
+				boolean hasServlet = servletPath != null && ! servletPath.isEmpty();
+				if (hasContext)
+					a2.append('/').append(contextRoot);
+				if (hasServlet)
+					a2.append('/').append(servletPath);
+				if (uri.length() > 8) {
+					String remainder = uri.substring(8);
+					// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
+					if (remainder.equals("/") && (hasContext || hasServlet || (resolution == ABSOLUTE && authority != null))) {
+						// Do nothing
+					} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
+						a2.append('/').append(remainder);
+					} else {
+						a2.append(remainder);
+					}
+				} else if (! hasServlet && ! hasContext && (authority == null || resolution != ABSOLUTE))
+					a2.append('/');
+			}
 
-		// Request-relative path
-		else if (uri != null && uri.startsWith("request:")) {
-			if (resolution == ABSOLUTE && authority != null)
-				a2.append(authority);
-			boolean hasContext = contextRoot != null && ! contextRoot.isEmpty();
-			boolean hasServlet = servletPath != null && ! servletPath.isEmpty();
-			boolean hasPath = pathInfo != null && ! pathInfo.isEmpty();
-			if (hasContext)
-				a2.append('/').append(contextRoot);
-			if (hasServlet)
-				a2.append('/').append(servletPath);
-			if (hasPath)
-				a2.append('/').append(pathInfo);
-			if (uri.length() > 8) {
-				String remainder = uri.substring(8);
-				// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
-				if (remainder.equals("/") && (hasContext || hasServlet || hasPath || (resolution == ABSOLUTE && authority != null))) {
-					// Do nothing
-				} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
-					a2.append('/').append(remainder);
-				} else {
-					a2.append(remainder);
-				}
-			} else if (! hasServlet && ! hasContext && ! hasPath && (authority == null || resolution != ABSOLUTE))
-				a2.append('/');
-		}
+			// Request-relative path
+			else if (uri != null && uri.startsWith("request:")) {
+				if (resolution == ABSOLUTE && authority != null)
+					a2.append(authority);
+				boolean hasContext = contextRoot != null && ! contextRoot.isEmpty();
+				boolean hasServlet = servletPath != null && ! servletPath.isEmpty();
+				boolean hasPath = pathInfo != null && ! pathInfo.isEmpty();
+				if (hasContext)
+					a2.append('/').append(contextRoot);
+				if (hasServlet)
+					a2.append('/').append(servletPath);
+				if (hasPath)
+					a2.append('/').append(pathInfo);
+				if (uri.length() > 8) {
+					String remainder = uri.substring(8);
+					// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
+					if (remainder.equals("/") && (hasContext || hasServlet || hasPath || (resolution == ABSOLUTE && authority != null))) {
+						// Do nothing
+					} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
+						a2.append('/').append(remainder);
+					} else {
+						a2.append(remainder);
+					}
+				} else if (! hasServlet && ! hasContext && ! hasPath && (authority == null || resolution != ABSOLUTE))
+					a2.append('/');
+			}
 
 			// Relative path
 			else {
@@ -248,8 +250,7 @@ public class UriResolver {
 							a2.append('/').append(parentPath);
 						a2.append('/').append(uri);
 					}
-				}
-				else if (uri == null && contextRoot == null && servletPath == null && (authority == null || resolution != ABSOLUTE))
+				} else if (uri == null && contextRoot == null && servletPath == null && (authority == null || resolution != ABSOLUTE))
 					a2.append('/');
 			}
 

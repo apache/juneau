@@ -58,7 +58,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="area")
+@Bean(typeName = "area")
 public class Area extends HtmlElementVoid {
 
 	/**
@@ -79,7 +79,7 @@ public class Area extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Area _class(String value) {  // NOSONAR - Intentional naming.
+	public Area _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -171,6 +171,7 @@ public class Area extends HtmlElementVoid {
 		attr("download", value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Area hidden(Object value) {
 		super.hidden(value);

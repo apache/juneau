@@ -98,7 +98,7 @@ class NestedTokenizer {
 
 		@Override
 		public boolean equals(Object o) {
-			return (o instanceof Token o2) && eq(this, o2, (x,y)->eq(x.value, y.value) && eq(x.nested, y.nested));
+			return (o instanceof Token o2) && eq(this, o2, (x, y) -> eq(x.value, y.value) && eq(x.nested, y.nested));
 		}
 
 		/**
@@ -106,18 +106,14 @@ class NestedTokenizer {
 		 *
 		 * @return unmodifiable list of nested tokens, or empty list if none
 		 */
-		public List<Token> getNested() {
-			return nested != null ? unmodifiableList(nested) : emptyList();
-		}
+		public List<Token> getNested() { return nested != null ? unmodifiableList(nested) : emptyList(); }
 
 		/**
 		 * Returns the main value of this token.
 		 *
 		 * @return The token value
 		 */
-		public String getValue() {
-			return value;
-		}
+		public String getValue() { return value; }
 
 		@Override
 		public int hashCode() {
@@ -135,7 +131,7 @@ class NestedTokenizer {
 
 		@Override
 		public String toString() {
-			return hasNested() ? nested.stream().map(Object::toString).collect(joining(",",value + "{","}")) : value;
+			return hasNested() ? nested.stream().map(Object::toString).collect(joining(",", value + "{", "}")) : value;
 		}
 
 		/**
@@ -143,9 +139,7 @@ class NestedTokenizer {
 		 *
 		 * @param nested The list of nested tokens
 		 */
-		void setNested(List<Token> nested) {
-			this.nested = nested;
-		}
+		void setNested(List<Token> nested) { this.nested = nested; }
 	}
 
 	/**
@@ -161,8 +155,10 @@ class NestedTokenizer {
 	}
 
 	public static List<Token> tokenize(String in) {
-		if (in == null) throw new IllegalArgumentException("Input was null.");
-		if (in.isBlank()) throw new IllegalArgumentException("Input was empty.");
+		if (in == null)
+			throw new IllegalArgumentException("Input was null.");
+		if (in.isBlank())
+			throw new IllegalArgumentException("Input was empty.");
 
 		var length = in.length();
 		var pos = 0;
@@ -217,8 +213,8 @@ class NestedTokenizer {
 						tokens.add(token);
 						currentValue.setLength(0);
 						nestedStart = -1;
-						lastWasComma = false;  // Reset since we've completed a token
-						justCompletedNested = true;  // Flag that we just completed a nested token
+						lastWasComma = false; // Reset since we've completed a token
+						justCompletedNested = true; // Flag that we just completed a nested token
 						pos = skipWhitespace(in, pos);
 						state = PARSING_VALUE;
 					}

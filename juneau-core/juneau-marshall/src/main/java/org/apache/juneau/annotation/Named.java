@@ -35,7 +35,7 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER})
+@Target({ PARAMETER })
 @Retention(RUNTIME)
 @Inherited
 public @interface Named {

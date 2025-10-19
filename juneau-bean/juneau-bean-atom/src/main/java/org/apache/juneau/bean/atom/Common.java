@@ -77,6 +77,7 @@ public abstract class Common {
 
 	private URI base;
 	private String lang;
+
 	/**
 	 * Bean property getter:  <property>base</property>.
 	 *
@@ -90,10 +91,8 @@ public abstract class Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(prefix="xml", format=ATTR)
-	public URI getBase() {
-		return base;
-	}
+	@Xml(prefix = "xml", format = ATTR)
+	public URI getBase() { return base; }
 
 	/**
 	 * Bean property getter:  <property>lang</property>.
@@ -108,10 +107,8 @@ public abstract class Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(prefix="xml", format=ATTR)
-	public String getLang() {
-		return lang;
-	}
+	@Xml(prefix = "xml", format = ATTR)
+	public String getLang() { return lang; }
 
 	/**
 	 * Bean property setter:  <property>base</property>.

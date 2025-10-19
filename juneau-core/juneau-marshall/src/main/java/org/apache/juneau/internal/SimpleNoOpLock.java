@@ -28,8 +28,7 @@ public class SimpleNoOpLock extends ReentrantReadWriteLock {
 	/**
 	 * Constructor.
 	 */
-	public SimpleNoOpLock() {
-	}
+	public SimpleNoOpLock() {}
 
 	/**
 	 * Constructor
@@ -45,7 +44,7 @@ public class SimpleNoOpLock extends ReentrantReadWriteLock {
 	 *
 	 * @return A new closeable read lock.
 	 */
-	public SimpleLock read(){
+	public SimpleLock read() {
 		return new SimpleLock(readLock());
 	}
 
@@ -54,7 +53,7 @@ public class SimpleNoOpLock extends ReentrantReadWriteLock {
 	 *
 	 * @return A new closeable write lock.
 	 */
-	public SimpleLock write(){
+	public SimpleLock write() {
 		return new SimpleLock(writeLock());
 	}
 }

@@ -34,8 +34,7 @@ public class XorEncodeMod extends Mod {
 	/** Reusable XOR-ConfigEncoder instance. */
 	public static final XorEncodeMod INSTANCE = new XorEncodeMod();
 
-	private static final String KEY = System.getProperty("org.apache.juneau.config.XorEncoder.key",
-		"nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
+	private static final String KEY = System.getProperty("org.apache.juneau.config.XorEncoder.key", "nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
 
 	/**
 	 * Constructor.
@@ -62,7 +61,7 @@ public class XorEncodeMod extends Mod {
 	@Override
 	public String remove(String value) {
 		value = value.trim();
-		value = value.substring(1, value.length()-1);
+		value = value.substring(1, value.length() - 1);
 		var b = base64Decode(value);
 		for (var i = 0; i < b.length; i++) {
 			var j = i % KEY.length();

@@ -189,6 +189,7 @@ public class SerializerSet {
 		public Builder apply(AnnotationWorkList work) {
 			return forEach(x -> x.apply(work));
 		}
+
 		/**
 		 * Associates an existing bean context builder with all serializer builders in this group.
 		 *
@@ -353,7 +354,7 @@ public class SerializerSet {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return entries.stream().map(this::toString).collect(joining(",","[","]"));
+			return entries.stream().map(this::toString).collect(joining(",", "[", "]"));
 		}
 
 		@Override /* Overridden from BeanBuilder */
@@ -365,6 +366,7 @@ public class SerializerSet {
 		private <T extends Serializer.Builder> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
 		}
+
 		private Object copyBuilder(Object o) {
 			if (o instanceof Serializer.Builder) {
 				Serializer.Builder x = (Serializer.Builder)o;
@@ -396,6 +398,7 @@ public class SerializerSet {
 			}
 			return o;
 		}
+
 		private String toString(Object o) {
 			if (o == null)
 				return "null";
@@ -442,6 +445,7 @@ public class SerializerSet {
 	public static Builder create() {
 		return new Builder(BeanStore.INSTANCE);
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -451,6 +455,7 @@ public class SerializerSet {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	// Maps Accept headers to matching serializers.
 	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
 
@@ -578,9 +583,7 @@ public class SerializerSet {
 	 *
 	 * @return An unmodifiable list of serializers in this group.
 	 */
-	public List<Serializer> getSerializers() {
-		return entriesList;
-	}
+	public List<Serializer> getSerializers() { return entriesList; }
 
 	/**
 	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link OutputStreamSerializer}.
@@ -610,9 +613,7 @@ public class SerializerSet {
 	 *
 	 * @return An unmodifiable list of media types.
 	 */
-	public List<MediaType> getSupportedMediaTypes() {
-		return mediaTypesList;
-	}
+	public List<MediaType> getSupportedMediaTypes() { return mediaTypesList; }
 
 	/**
 	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link WriterSerializer}.
@@ -639,9 +640,7 @@ public class SerializerSet {
 	 *
 	 * @return <jk>true</jk> if this group contains no serializers.
 	 */
-	public boolean isEmpty() {
-		return entries.length == 0;
-	}
+	public boolean isEmpty() { return entries.length == 0; }
 
 	private Serializer build(Object o) {
 		if (o instanceof Serializer)

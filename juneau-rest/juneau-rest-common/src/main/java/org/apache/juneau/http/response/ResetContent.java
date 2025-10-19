@@ -41,7 +41,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class ResetContent extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -94,6 +94,7 @@ public class ResetContent extends BasicHttpResponse {
 	public ResetContent copy() {
 		return new ResetContent(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public ResetContent setContent(HttpEntity value) {
 		super.setContent(value);

@@ -54,8 +54,8 @@ public class RestDeleteAnnotation {
 		Class<? extends RestMatcher>[] matchers = new Class[0];
 		Class<? extends Encoder>[] encoders = new Class[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
-		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, path={};
+		String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", rolesDeclared = "", roleGuard = "", summary = "", value = "";
+		String[] defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {};
 
 		/**
 		 * Constructor.
@@ -302,6 +302,7 @@ public class RestDeleteAnnotation {
 			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 		}
 	}
+
 	private static class Impl extends TargetedAnnotationImpl implements RestDelete {
 
 		private final Class<? extends RestGuard>[] guards;
@@ -418,8 +419,10 @@ public class RestDeleteAnnotation {
 			return value;
 		}
 	}
+
 	/** Default value */
 	public static final RestDelete DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

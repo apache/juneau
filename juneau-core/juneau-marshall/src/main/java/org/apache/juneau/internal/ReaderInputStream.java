@@ -112,11 +112,14 @@ public class ReaderInputStream extends InputStream {
 	 * @param bufferSize the size of the input buffer in number of characters
 	 */
 	public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
+		// @formatter:off
 		this(reader,
 			 charset.newEncoder()
 					.onMalformedInput(CodingErrorAction.REPLACE)
 					.onUnmappableCharacter(CodingErrorAction.REPLACE),
-			 bufferSize);
+			 bufferSize
+		);
+		// @formatter:on
 	}
 
 	/**
@@ -192,7 +195,7 @@ public class ReaderInputStream extends InputStream {
 				return encoderOut.get() & 0xFF;
 			}
 			fillBuffer();
-			if (endOfInput && !encoderOut.hasRemaining()) {
+			if (endOfInput && ! encoderOut.hasRemaining()) {
 				return -1;
 			}
 		}
@@ -225,8 +228,7 @@ public class ReaderInputStream extends InputStream {
 	public int read(final byte[] array, int off, int len) throws IOException {
 		Objects.requireNonNull(array, "array");
 		if (len < 0 || off < 0 || (off + len) > array.length) {
-			throw new IndexOutOfBoundsException("Array Size=" + array.length +
-					", offset=" + off + ", length=" + len);
+			throw new IndexOutOfBoundsException("Array Size=" + array.length + ", offset=" + off + ", length=" + len);
 		}
 		int read = 0;
 		if (len == 0) {
@@ -241,7 +243,7 @@ public class ReaderInputStream extends InputStream {
 				read += c;
 			} else {
 				fillBuffer();
-				if (endOfInput && !encoderOut.hasRemaining()) {
+				if (endOfInput && ! encoderOut.hasRemaining()) {
 					break;
 				}
 			}
@@ -256,7 +258,7 @@ public class ReaderInputStream extends InputStream {
 	 *			 If an I/O error occurs
 	 */
 	private void fillBuffer() throws IOException {
-		if (!endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
+		if (! endOfInput && (lastCoderResult == null || lastCoderResult.isUnderflow())) {
 			encoderIn.compact();
 			final int position = encoderIn.position();
 			// We don't use Reader#read(CharBuffer) here because it is more efficient
@@ -266,7 +268,7 @@ public class ReaderInputStream extends InputStream {
 			if (c == -1) {
 				endOfInput = true;
 			} else {
-				encoderIn.position(position+c);
+				encoderIn.position(position + c);
 			}
 			encoderIn.flip();
 		}

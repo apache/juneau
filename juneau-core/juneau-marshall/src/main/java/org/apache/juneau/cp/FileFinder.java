@@ -106,7 +106,7 @@ public interface FileFinder {
 			super(BasicFileFinder.class, beanStore);
 			roots = Utils.set();
 			cachingLimit = -1;
-			include = new Pattern[]{Pattern.compile(".*")};
+			include = new Pattern[] { Pattern.compile(".*") };
 			exclude = new Pattern[0];
 		}
 
@@ -120,6 +120,7 @@ public interface FileFinder {
 			this.cachingLimit = cachingLimit;
 			return this;
 		}
+
 		/**
 		 * Adds a class subpackage to the lookup paths.
 		 *
@@ -190,6 +191,7 @@ public interface FileFinder {
 			roots.add(new LocalDir(path));
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -213,6 +215,7 @@ public interface FileFinder {
 	static Builder create() {
 		return new Builder(BeanStore.INSTANCE);
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -222,6 +225,7 @@ public interface FileFinder {
 	static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	/**
 	 * Returns the contents of the resource with the specified name.
 	 *

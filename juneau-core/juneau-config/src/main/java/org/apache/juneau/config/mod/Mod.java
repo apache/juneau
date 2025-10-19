@@ -87,9 +87,7 @@ public class Mod {
 	 *
 	 * @return The modifier identifier character.
 	 */
-	public char getId() {
-		return id;
-	}
+	public char getId() { return id; }
 
 	/**
 	 * Detects whether this modification has been applied.

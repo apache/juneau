@@ -100,6 +100,7 @@ public class ETag extends BasicEntityTagHeader {
 	public static ETag of(Supplier<EntityTag> value) {
 		return value == null ? null : new ETag(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

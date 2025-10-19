@@ -109,7 +109,9 @@ public class StreamMarshaller extends Marshaller {
 	public final <T> T read(byte[] input, Type type, Type...args) throws ParseException {
 		try {
 			return p.parse(input, type, args);
-		} catch (IOException e) { throw new ParseException(e); }
+		} catch (IOException e) {
+			throw new ParseException(e);
+		}
 	}
 
 	/**

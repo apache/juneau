@@ -90,7 +90,7 @@ import org.apache.juneau.oapi.*;
  * <p>
  */
 @Documented
-@Target({PARAMETER,METHOD,TYPE,FIELD})
+@Target({ PARAMETER, METHOD, TYPE, FIELD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(QueryAnnotation.Array.class)

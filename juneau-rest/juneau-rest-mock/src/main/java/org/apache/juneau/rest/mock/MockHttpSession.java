@@ -52,6 +52,7 @@ public class MockHttpSession implements HttpSession {
 	private ServletContext servletContext;
 
 	private boolean isNew;
+
 	/**
 	 * Sets the creation time on this session.
 	 *
@@ -72,33 +73,22 @@ public class MockHttpSession implements HttpSession {
 	}
 
 	@Override /* Overridden from HttpSession */
-	public Enumeration<String> getAttributeNames() {
-		return Collections.enumeration(attributes.keySet());
-	}
+	public Enumeration<String> getAttributeNames() { return Collections.enumeration(attributes.keySet()); }
 
 	@Override /* Overridden from HttpSession */
-	public long getCreationTime() {
-		return creationTime;
-	}
+	public long getCreationTime() { return creationTime; }
 
 	@Override /* Overridden from HttpSession */
-	public String getId() {
-		return id;
-	}
+	public String getId() { return id; }
 
 	@Override /* Overridden from HttpSession */
-	public long getLastAccessedTime() {
-		return lastAccessedTime;
-	}
-	@Override /* Overridden from HttpSession */
-	public int getMaxInactiveInterval() {
-		return maxInactiveInterval;
-	}
+	public long getLastAccessedTime() { return lastAccessedTime; }
 
 	@Override /* Overridden from HttpSession */
-	public ServletContext getServletContext() {
-		return servletContext;
-	}
+	public int getMaxInactiveInterval() { return maxInactiveInterval; }
+
+	@Override /* Overridden from HttpSession */
+	public ServletContext getServletContext() { return servletContext; }
 
 	/**
 	 * Sets the id on this session.
@@ -115,13 +105,10 @@ public class MockHttpSession implements HttpSession {
 	}
 
 	@Override /* Overridden from HttpSession */
-	public void invalidate() {
-	}
+	public void invalidate() {}
 
 	@Override /* Overridden from HttpSession */
-	public boolean isNew() {
-		return isNew;
-	}
+	public boolean isNew() { return isNew; }
 
 	/**
 	 * Sets the is-new value on this session.
@@ -169,6 +156,7 @@ public class MockHttpSession implements HttpSession {
 	public void removeAttribute(String name) {
 		attributes.remove(name);
 	}
+
 	/**
 	 * Sets the servlet context on this session.
 	 *
@@ -189,7 +177,5 @@ public class MockHttpSession implements HttpSession {
 	}
 
 	@Override /* Overridden from HttpSession */
-	public void setMaxInactiveInterval(int value) {
-		this.maxInactiveInterval = value;
-	}
+	public void setMaxInactiveInterval(int value) { this.maxInactiveInterval = value; }
 }

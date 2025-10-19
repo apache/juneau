@@ -91,7 +91,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<T>> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -104,7 +103,6 @@ public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<
 	public static <T> ObjectAssertion<T> create(T value) {
 		return new ObjectAssertion<>(value);
 	}
-
 
 	/**
 	 * Constructor.

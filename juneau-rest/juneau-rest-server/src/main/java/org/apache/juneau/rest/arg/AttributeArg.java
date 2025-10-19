@@ -54,6 +54,7 @@ public class AttributeArg implements RestOpArg {
 			return new AttributeArg(paramInfo);
 		return null;
 	}
+
 	private final String name;
 
 	private final Class<?> type;

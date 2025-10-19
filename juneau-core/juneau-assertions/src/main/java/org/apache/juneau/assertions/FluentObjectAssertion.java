@@ -95,7 +95,7 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentObjectAssertion.class, "Messages");
 	private static final String
 		MSG_unexpectedType = MESSAGES.getString("unexpectedType"),
@@ -108,18 +108,11 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		MSG_expectedValueNotFound = MESSAGES.getString("expectedValueNotFound"),
 		MSG_unexpectedValueFound = MESSAGES.getString("unexpectedValueFound"),
 		MSG_unexpectedValue2 = MESSAGES.getString("unexpectedValue2");
+	// @formatter:on
 
-	private static final JsonSerializer JSON = JsonSerializer.create()
-		.json5()
-		.build();
+	private static final JsonSerializer JSON = JsonSerializer.create().json5().build();
 
-	private static final JsonSerializer JSON_SORTED = JsonSerializer.create()
-		.json5()
-		.sortProperties()
-		.sortCollections()
-		.sortMaps()
-		.build();
-
+	private static final JsonSerializer JSON_SORTED = JsonSerializer.create().json5().sortProperties().sortCollections().sortMaps().build();
 
 	private final T value;
 
@@ -159,7 +152,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public FluentObjectAssertion(T value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Converts this assertion into an {@link FluentAnyAssertion} so that it can be converted to other assertion types.
@@ -267,7 +259,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @param function The function to apply.
 	 * @return This object.
 	 */
-	public FluentObjectAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
+	public FluentObjectAssertion<T,R> asTransformed(Function<T,T> function) { // NOSONAR - Intentional.
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -282,7 +274,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-
 	/**
 	 * Asserts that the value passes the specified predicate test.
 	 *
@@ -291,7 +282,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Predicate<T> test) throws AssertionError {
-		if (test != null && ! test.test(value))
+		if (test != null && !test.test(value))
 			throw error(getFailureMessage(test, value));
 		return returns();
 	}
@@ -306,7 +297,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R is(T value) throws AssertionError {
 		if (this.value == value)
 			return returns();
-		if (! equals(orElse(null), value))
+		if (!equals(orElse(null), value))
 			throw error(MSG_unexpectedValue, value, this.value);
 		return returns();
 	}
@@ -355,9 +346,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isExists() throws AssertionError {
-		return isNotNull();
-	}
+	public R isExists() throws AssertionError { return isNotNull(); }
 
 	/**
 	 * Converts this object to simplified JSON and runs the {@link FluentStringAssertion#is(String)} on the result.
@@ -515,7 +504,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
 		Utils.assertArgNotNull("parent", parent);
-		if (! ClassInfo.of(value()).isChildOf(parent))
+		if (!ClassInfo.of(value()).isChildOf(parent))
 			throw error(MSG_unexpectedType, className(parent), className(value));
 		return returns();
 	}
@@ -602,7 +591,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @param mapper The function to run against the value.
 	 * @return The result, never <jk>null</jk>.
 	 */
-	protected <T2> Optional<T2> map(Function<? super T, ? extends T2> mapper) {
+	protected <T2> Optional<T2> map(Function<? super T,? extends T2> mapper) {
 		return opt().map(mapper);
 	}
 

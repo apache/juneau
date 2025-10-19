@@ -106,6 +106,7 @@ public class Host extends BasicStringHeader {
 	public static Host of(Supplier<String> value) {
 		return value == null ? null : new Host(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

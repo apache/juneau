@@ -45,6 +45,7 @@ public class ConfigEvent {
 	public static ConfigEvent removeEntry(String config, String section, String key) {
 		return new ConfigEvent(REMOVE_ENTRY, config, section, key, null, null, null, null);
 	}
+
 	/**
 	 * Removes a section from the config.
 	 *
@@ -58,6 +59,7 @@ public class ConfigEvent {
 	public static ConfigEvent removeSection(String config, String section) {
 		return new ConfigEvent(REMOVE_SECTION, config, section, null, null, null, null, null);
 	}
+
 	/**
 	 * Sets or replaces a value in a configuration.
 	 *
@@ -85,6 +87,7 @@ public class ConfigEvent {
 	public static ConfigEvent setEntry(String config, String section, String key, String value, String modifiers, String comment, List<String> prelines) {
 		return new ConfigEvent(SET_ENTRY, config, section, key, value, modifiers, comment, prelines);
 	}
+
 	/**
 	 * Adds a new empty section to the config.
 	 *
@@ -130,32 +133,27 @@ public class ConfigEvent {
 		this.preLines = preLines;
 		this.modifiers = modifiers;
 	}
+
 	/**
 	 * Returns the entry comment.
 	 *
 	 * @return The entry comment.
 	 */
-	public String getComment() {
-		return comment;
-	}
+	public String getComment() { return comment; }
 
 	/**
 	 * Returns the configuration name.
 	 *
 	 * @return The configuration name.
 	 */
-	public String getConfig() {
-		return config;
-	}
+	public String getConfig() { return config; }
 
 	/**
 	 * Returns the entry name.
 	 *
 	 * @return The entry name.
 	 */
-	public String getKey() {
-		return key;
-	}
+	public String getKey() { return key; }
 
 	/**
 	 * Returns the modifiers on this entry.
@@ -164,45 +162,35 @@ public class ConfigEvent {
 	 * 	The modifier characters.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public String getModifiers() {
-		return modifiers;
-	}
+	public String getModifiers() { return modifiers; }
 
 	/**
 	 * Returns the section or entry lines.
 	 *
 	 * @return The section or entry lines.
 	 */
-	public List<String> getPreLines() {
-		return preLines;
-	}
+	public List<String> getPreLines() { return preLines; }
 
 	/**
 	 * Returns the section name.
 	 *
 	 * @return The section name.
 	 */
-	public String getSection() {
-		return section;
-	}
+	public String getSection() { return section; }
 
 	/**
 	 * Returns the event type.
 	 *
 	 * @return The event type.
 	 */
-	public ConfigEventType getType() {
-		return type;
-	}
+	public ConfigEventType getType() { return type; }
 
 	/**
 	 * Returns the entry value.
 	 *
 	 * @return The entry value.
 	 */
-	public String getValue() {
-		return value;
-	}
+	public String getValue() { return value; }
 
 	@Override /* Overridden from Object */
 	public String toString() {

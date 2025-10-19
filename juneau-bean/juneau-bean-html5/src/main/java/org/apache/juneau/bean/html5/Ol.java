@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -81,7 +82,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="ol")
+@Bean(typeName = "ol")
 public class Ol extends HtmlElementContainer {
 
 	/**
@@ -99,7 +100,7 @@ public class Ol extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Ol _class(String value) {  // NOSONAR - Intentional naming.
+	public Ol _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -115,6 +116,7 @@ public class Ol extends HtmlElementContainer {
 		super.attr(key, val);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Ol attrUri(String key, Object val) {
 		super.attrUri(key, val);

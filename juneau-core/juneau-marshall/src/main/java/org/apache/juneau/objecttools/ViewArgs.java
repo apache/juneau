@@ -36,7 +36,8 @@ public class ViewArgs {
 	 * @return A new {@link ViewArgs} object.
 	 */
 	public static ViewArgs create(List<String> args) {
-		if (args == null) return null;
+		if (args == null)
+			return null;
 		return new ViewArgs(args);
 	}
 
@@ -47,9 +48,11 @@ public class ViewArgs {
 	 * @return A new {@link ViewArgs} object.
 	 */
 	public static ViewArgs create(String args) {
-		if (args == null) return null;
+		if (args == null)
+			return null;
 		return new ViewArgs(args);
 	}
+
 	private final List<String> view;
 
 	/**
@@ -83,7 +86,5 @@ public class ViewArgs {
 	 *
 	 * @return An unmodifiable list of columns to view.
 	 */
-	public List<String> getView() {
-		return view;
-	}
+	public List<String> getView() { return view; }
 }

@@ -108,6 +108,7 @@ public abstract class BeanContextable extends Context {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		/**
 		 * Minimum bean class visibility.
 		 *
@@ -1803,11 +1804,13 @@ public abstract class BeanContextable extends Context {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				bcBuilder.hashKey(),
 				bc == null ? 0 : bc.hashKey
 			);
+			// @formatter:on
 		}
 
 		/**
@@ -1965,7 +1968,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-
+		
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -2004,7 +2007,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-
+		
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -2719,6 +2722,7 @@ public abstract class BeanContextable extends Context {
 			bcBuilder.timeZone(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
@@ -2946,6 +2950,7 @@ public abstract class BeanContextable extends Context {
 			return this;
 		}
 	}
+
 	final BeanContext beanContext;
 
 	/**
@@ -2963,9 +2968,8 @@ public abstract class BeanContextable extends Context {
 	 *
 	 * @return The bean context for this object.
 	 */
-	public BeanContext getBeanContext() {
-		return beanContext;
-	}
+	public BeanContext getBeanContext() { return beanContext; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("beanContext", beanContext.properties());

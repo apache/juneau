@@ -56,7 +56,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="label")
+@Bean(typeName = "label")
 public class Label extends HtmlElementMixed {
 
 	/**
@@ -74,7 +74,7 @@ public class Label extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Label _class(String value) {  // NOSONAR - Intentional naming.
+	public Label _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -92,10 +92,11 @@ public class Label extends HtmlElementMixed {
 	 * @param value The ID of the form control to associate with this label.
 	 * @return This object.
 	 */
-	public Label _for(String value) {  // NOSONAR - Intentional naming.
+	public Label _for(String value) { // NOSONAR - Intentional naming.
 		attr("for", value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Label accesskey(String value) {
 		super.accesskey(value);

@@ -50,6 +50,7 @@ public class BasicStatusLine implements StatusLine {
 	public static BasicStatusLine create(int statusCode, String reasonPhrase) {
 		return new BasicStatusLine().setStatusCode(statusCode).setReasonPhrase(reasonPhrase);
 	}
+
 	private ProtocolVersion DEFAULT_PROTOCOL_VERSION = new ProtocolVersion("HTTP", 1, 1);
 
 	private ProtocolVersion protocolVersion = DEFAULT_PROTOCOL_VERSION;
@@ -62,8 +63,7 @@ public class BasicStatusLine implements StatusLine {
 	/**
 	 * Constructor.
 	 */
-	public BasicStatusLine() {
-	}
+	public BasicStatusLine() {}
 
 	/**
 	 * Copy constructor.
@@ -85,19 +85,16 @@ public class BasicStatusLine implements StatusLine {
 	public BasicStatusLine copy() {
 		return new BasicStatusLine(this);
 	}
+
 	/**
 	 * Returns the locale of this status line.
 	 *
 	 * @return The locale of this status line.
 	 */
-	public Locale getLocale() {
-		return locale;
-	}
+	public Locale getLocale() { return locale; }
 
 	@Override /* Overridden from StatusLine */
-	public ProtocolVersion getProtocolVersion() {
-		return protocolVersion;
-	}
+	public ProtocolVersion getProtocolVersion() { return protocolVersion; }
 
 	@Override /* Overridden from StatusLine */
 	public String getReasonPhrase() {
@@ -109,9 +106,7 @@ public class BasicStatusLine implements StatusLine {
 	}
 
 	@Override /* Overridden from StatusLine */
-	public int getStatusCode() {
-		return statusCode;
-	}
+	public int getStatusCode() { return statusCode; }
 
 	/**
 	 * Sets the locale used to retrieve reason phrases.

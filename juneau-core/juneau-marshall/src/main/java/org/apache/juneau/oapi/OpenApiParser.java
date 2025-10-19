@@ -99,6 +99,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -110,6 +111,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 			super.autoCloseStreams();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder autoCloseStreams(boolean value) {
 			super.autoCloseStreams(value);
@@ -479,11 +481,13 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				format,
 				collectionFormat
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -619,13 +623,13 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -723,6 +727,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 
 	/** Reusable instance of {@link OpenApiParser}. */
 	public static final OpenApiParser DEFAULT = new OpenApiParser(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -731,6 +736,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final HttpPartFormat format;
 	final HttpPartCollectionFormat collectionFormat;
 
@@ -779,30 +785,24 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 		return m;
 	}
+
 	@Override /* Overridden from HttpPartParser */
-	public OpenApiParserSession getPartSession() {
-		return OpenApiParserSession.create(this).build();
-	}
+	public OpenApiParserSession getPartSession() { return OpenApiParserSession.create(this).build(); }
 
 	@Override /* Overridden from Context */
-	public OpenApiParserSession getSession() {
-		return createSession().build();
-	}
+	public OpenApiParserSession getSession() { return createSession().build(); }
+
 	/**
 	 * Returns the default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
 	 *
 	 * @return The default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
 	 */
-	protected final HttpPartCollectionFormat getCollectionFormat() {
-		return collectionFormat;
-	}
+	protected final HttpPartCollectionFormat getCollectionFormat() { return collectionFormat; }
 
 	/**
 	 * Returns the default format to use when not otherwise specified via {@link Schema#format()}
 	 *
 	 * @return The default format to use when not otherwise specified via {@link Schema#format()}
 	 */
-	protected final HttpPartFormat getFormat() {
-		return format;
-	}
+	protected final HttpPartFormat getFormat() { return format; }
 }

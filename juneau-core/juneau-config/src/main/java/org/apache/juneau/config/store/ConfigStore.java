@@ -53,8 +53,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 		/**
 		 * Constructor, default settings.
 		 */
-		protected Builder() {
-		}
+		protected Builder() {}
 
 		/**
 		 * Copy constructor.
@@ -79,6 +78,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 			super.annotations(values);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
@@ -130,6 +130,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 			return this;
 		}
 	}
+
 	private final ConcurrentHashMap<String,Set<ConfigStoreListener>> listeners = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String,ConfigMap> configMaps = new ConcurrentHashMap<>();
 
@@ -193,10 +194,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 */
 	public synchronized ConfigStore register(String name, ConfigStoreListener l) {
 		name = resolveName(name);
-		var s = listeners.computeIfAbsent(
-			name,
-			k -> synced(newSetFromMap(new IdentityHashMap<>()))
-		);
+		var s = listeners.computeIfAbsent(name, k -> synced(newSetFromMap(new IdentityHashMap<>())));
 		s.add(l);
 		return this;
 	}

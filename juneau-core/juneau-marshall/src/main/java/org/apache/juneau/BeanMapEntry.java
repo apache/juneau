@@ -72,23 +72,17 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 *
 	 * @return The bean map that contains this property.
 	 */
-	public BeanMap<?> getBeanMap() {
-		return this.beanMap;
-	}
+	public BeanMap<?> getBeanMap() { return this.beanMap; }
 
 	@Override /* Overridden from Map.Entry */
-	public String getKey() {
-		return meta.getName();
-	}
+	public String getKey() { return meta.getName(); }
 
 	/**
 	 * Returns the metadata about this bean property.
 	 *
 	 * @return Metadata about this bean property.
 	 */
-	public BeanPropertyMeta getMeta() {
-		return this.meta;
-	}
+	public BeanPropertyMeta getMeta() { return this.meta; }
 
 	/**
 	 * Returns the value of this property.
@@ -102,9 +96,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * ISO8601 date-time string value.
 	 */
 	@Override /* Overridden from Map.Entry */
-	public Object getValue() {
-		return meta.get(this.beanMap, pName);
-	}
+	public Object getValue() { return meta.get(this.beanMap, pName); }
 
 	/**
 	 * Sets the value of this property.

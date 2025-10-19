@@ -43,7 +43,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class UnsupportedMediaType extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -128,6 +128,7 @@ public class UnsupportedMediaType extends BasicHttpException {
 	public UnsupportedMediaType copy() {
 		return new UnsupportedMediaType(this);
 	}
+
 	@Override /* Overridden from BasicHttpException */
 	public UnsupportedMediaType setContent(HttpEntity value) {
 		super.setContent(value);
@@ -193,8 +194,9 @@ public class UnsupportedMediaType extends BasicHttpException {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpException */
-	public UnsupportedMediaType setStatusCode2(int code) throws IllegalStateException{
+	public UnsupportedMediaType setStatusCode2(int code) throws IllegalStateException {
 		super.setStatusCode2(code);
 		return this;
 	}

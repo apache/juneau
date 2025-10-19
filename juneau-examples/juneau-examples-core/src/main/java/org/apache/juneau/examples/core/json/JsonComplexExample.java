@@ -36,7 +36,7 @@ public class JsonComplexExample {
 	 * @param args Unused.
 	 * @throws Exception Unused.
 	 */
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception {
 		// Juneau provides static constants with the most commonly used configurations
 		// Get a reference to a serializer - converting POJO to flat format
 		/**
@@ -50,7 +50,7 @@ public class JsonComplexExample {
 		JsonParser jsonParser = JsonParser.DEFAULT;
 
 		// Fill some data to a PojoComplex bean
-		HashMap<String, List<Pojo>> values = new HashMap<>();
+		HashMap<String,List<Pojo>> values = new HashMap<>();
 		ArrayList<Pojo> setOne = new ArrayList<>();
 		setOne.add(new Pojo("1.1", "name1"));
 		setOne.add(new Pojo("1.1", "name2"));

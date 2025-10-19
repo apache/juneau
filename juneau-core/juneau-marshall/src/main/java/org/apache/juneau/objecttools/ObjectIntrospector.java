@@ -68,6 +68,7 @@ public class ObjectIntrospector {
 	public static ObjectIntrospector create(Object o, ReaderParser parser) {
 		return new ObjectIntrospector(o, parser);
 	}
+
 	private final Object object;
 	private final ReaderParser parser;
 
@@ -164,7 +165,8 @@ public class ObjectIntrospector {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public <T> T invokeMethod(Class<T> returnType, String method, String args) throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
+	public <T> T invokeMethod(Class<T> returnType, String method, String args)
+		throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
 		return returnType.cast(invokeMethod(method, args));
 	}
 

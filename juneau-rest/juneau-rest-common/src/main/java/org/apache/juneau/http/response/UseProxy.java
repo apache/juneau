@@ -41,7 +41,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class UseProxy extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -93,6 +93,7 @@ public class UseProxy extends BasicHttpResponse {
 	public UseProxy copy() {
 		return new UseProxy(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public UseProxy setContent(HttpEntity value) {
 		super.setContent(value);

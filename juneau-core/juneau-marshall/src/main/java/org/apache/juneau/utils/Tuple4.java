@@ -46,7 +46,7 @@ public class Tuple4<A,B,C,D> {
 	 * @return A new tuple object.
 	 */
 	public static <A,B,C,D> Tuple4<A,B,C,D> of(A a, B b, C c, D d) {
-		return new Tuple4<>(a,b,c,d);
+		return new Tuple4<>(a, b, c, d);
 	}
 
 	private final A a;
@@ -71,7 +71,7 @@ public class Tuple4<A,B,C,D> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple4 && Utils.eq(this, (Tuple4<?,?,?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b) && Utils.eq(x.c,y.c) && Utils.eq(x.d,y.d));
+		return o instanceof Tuple4 && Utils.eq(this, (Tuple4<?,?,?,?>)o, (x, y) -> Utils.eq(x.a, y.a) && Utils.eq(x.b, y.b) && Utils.eq(x.c, y.c) && Utils.eq(x.d, y.d));
 	}
 
 	/**
@@ -79,39 +79,31 @@ public class Tuple4<A,B,C,D> {
 	 *
 	 * @return The first object in this tuple.
 	 */
-	public A getA() {
-		return a;
-	}
+	public A getA() { return a; }
 
 	/**
 	 * Returns the second object in this tuple.
 	 *
 	 * @return The second object in this tuple.
 	 */
-	public B getB() {
-		return b;
-	}
+	public B getB() { return b; }
 
 	/**
 	 * Returns the third object in this tuple.
 	 *
 	 * @return The third object in this tuple.
 	 */
-	public C getC() {
-		return c;
-	}
+	public C getC() { return c; }
 
 	/**
 	 * Returns the fourth object in this tuple.
 	 *
 	 * @return The fourth object in this tuple.
 	 */
-	public D getD() {
-		return d;
-	}
+	public D getD() { return d; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return HashCode.of(a,b,c,d);
+		return HashCode.of(a, b, c, d);
 	}
 }

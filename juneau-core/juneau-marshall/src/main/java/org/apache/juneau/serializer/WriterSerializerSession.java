@@ -111,6 +111,7 @@ public class WriterSerializerSession extends SerializerSession {
 				fileCharset = value;
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder javaMethod(Method value) {
 			super.javaMethod(value);
@@ -235,6 +236,7 @@ public class WriterSerializerSession extends SerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -244,6 +246,7 @@ public class WriterSerializerSession extends SerializerSession {
 	public static Builder create(WriterSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final WriterSerializer ctx;
 	private final boolean useWhitespace;
 	private final Charset streamCharset, fileCharset;
@@ -266,23 +269,17 @@ public class WriterSerializerSession extends SerializerSession {
 	 *
 	 * @return the file charset defined on this session.
 	 */
-	public Charset getFileCharset() {
-		return fileCharset;
-	}
+	public Charset getFileCharset() { return fileCharset; }
 
 	/**
 	 * Returns the stream charset defined on this session.
 	 *
 	 * @return the stream charset defined on this session.
 	 */
-	public Charset getStreamCharset() {
-		return streamCharset;
-	}
+	public Charset getStreamCharset() { return streamCharset; }
 
 	@Override /* Overridden from SerializerSession */
-	public final boolean isWriterSerializer() {
-		return true;
-	}
+	public final boolean isWriterSerializer() { return true; }
 
 	/**
 	 * Convenience method for serializing an object to a <c>String</c>.
@@ -301,6 +298,7 @@ public class WriterSerializerSession extends SerializerSession {
 		}
 		return w.toString();
 	}
+
 	@Override /* Overridden from SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
 		return serialize(o);
@@ -318,9 +316,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 * @return
 	 * 	The maximum indentation level in the serialized document.
 	 */
-	protected final int getMaxIndent() {
-		return ctx.getMaxIndent();
-	}
+	protected final int getMaxIndent() { return ctx.getMaxIndent(); }
 
 	/**
 	 * Quote character.
@@ -329,9 +325,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
-	protected char getQuoteChar() {
-		return ctx.getQuoteChar();
-	}
+	protected char getQuoteChar() { return ctx.getQuoteChar(); }
 
 	/**
 	 * Use whitespace.
@@ -340,9 +334,8 @@ public class WriterSerializerSession extends SerializerSession {
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
-	protected final boolean isUseWhitespace() {
-		return useWhitespace;
-	}
+	protected final boolean isUseWhitespace() { return useWhitespace; }
+
 	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset, "useWhitespace", useWhitespace);

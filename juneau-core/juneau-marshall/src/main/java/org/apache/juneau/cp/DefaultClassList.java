@@ -52,6 +52,7 @@ public class DefaultClassList {
 	public static DefaultClassList of(Class<?>...values) {
 		return new DefaultClassList().add(values);
 	}
+
 	private final List<Class<?>> entries;
 
 	/**

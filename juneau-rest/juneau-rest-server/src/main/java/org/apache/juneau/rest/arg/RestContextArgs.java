@@ -79,7 +79,7 @@ public class RestContextArgs extends SimpleRestOperationArg {
 		if (paramInfo.isType(RestChildren.class))
 			return new RestContextArgs(RestContext::getRestChildren);
 		if (paramInfo.isType(RestContext.class))
-			return new RestContextArgs(x->x);
+			return new RestContextArgs(x -> x);
 		if (paramInfo.isType(RestContextStats.class))
 			return new RestContextArgs(RestContext::getStats);
 		if (paramInfo.isType(CallLogger.class))

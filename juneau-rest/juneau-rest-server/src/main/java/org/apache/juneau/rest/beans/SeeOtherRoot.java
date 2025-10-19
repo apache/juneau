@@ -34,7 +34,8 @@ import org.apache.juneau.http.response.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>
  * </ul>
  */
-@Response @Schema(description="Redirect to servlet root")
+@Response
+@Schema(description = "Redirect to servlet root")
 public class SeeOtherRoot extends SeeOther {
 
 	/**

@@ -39,7 +39,7 @@ public class WeightedAverage {
 				double w1 = weight, w2 = w;
 				weight = Math.addExact(weight, w);
 				if (weight != 0) {
-					value = (value * (w1/weight)) + (v.floatValue() * (w2/weight));
+					value = (value * (w1 / weight)) + (v.floatValue() * (w2 / weight));
 				}
 			} catch (@SuppressWarnings("unused") ArithmeticException ae) {
 				throw new ArithmeticException("Weight overflow.");
@@ -53,7 +53,5 @@ public class WeightedAverage {
 	 *
 	 * @return The weighted average of all numbers.
 	 */
-	public double getValue() {
-		return value;
-	}
+	public double getValue() { return value; }
 }

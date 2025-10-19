@@ -112,6 +112,7 @@ public class RequestBeanMeta {
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(c).build();
 	}
+
 	/**
 	 * Create metadata from specified parameter.
 	 *
@@ -124,6 +125,7 @@ public class RequestBeanMeta {
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(mpi).build();
 	}
+
 	private final ClassMeta<?> cm;
 	private final Map<String,RequestBeanPropertyMeta> properties;
 	private final HttpPartSerializer serializer;
@@ -135,7 +137,7 @@ public class RequestBeanMeta {
 		this.serializer = b.serializer.orElse(null);
 		this.parser = b.parser.orElse(null);
 		Map<String,RequestBeanPropertyMeta> properties = map();
-		b.properties.forEach((k,v) -> properties.put(k, v.build(serializer, parser)));
+		b.properties.forEach((k, v) -> properties.put(k, v.build(serializer, parser)));
 		this.properties = u(properties);
 	}
 
@@ -144,18 +146,14 @@ public class RequestBeanMeta {
 	 *
 	 * @return Metadata about the class.
 	 */
-	public ClassMeta<?> getClassMeta() {
-		return cm;
-	}
+	public ClassMeta<?> getClassMeta() { return cm; }
 
 	/**
 	 * Returns all the annotated methods on this bean.
 	 *
 	 * @return All the annotated methods on this bean.
 	 */
-	public Collection<RequestBeanPropertyMeta> getProperties() {
-		return properties.values();
-	}
+	public Collection<RequestBeanPropertyMeta> getProperties() { return properties.values(); }
 
 	/**
 	 * Returns metadata about the bean property with the specified property name.

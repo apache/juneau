@@ -98,6 +98,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	public ExternalDocumentation copy() {
 		return new ExternalDocumentation(this);
 	}
+
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
@@ -116,9 +117,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>url</property>.
@@ -128,16 +127,16 @@ public class ExternalDocumentation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public URI getUrl() {
-		return url;
-	}
+	public URI getUrl() { return url; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
 			.addIf(url != null, "url")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

@@ -88,7 +88,7 @@ public class BeanCreateMethodFinder<T> {
 	private MethodInfo method;
 	private Object[] args;
 
-	private Supplier<T> def = ()->null;
+	private Supplier<T> def = () -> null;
 
 	BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BeanStore beanStore) {
 		this.beanType = Utils.assertArgNotNull("beanType", beanType);
@@ -142,6 +142,7 @@ public class BeanCreateMethodFinder<T> {
 	 * @return This object.
 	 */
 	public BeanCreateMethodFinder<T> find(Predicate<MethodInfo> filter) {
+		// @formatter:off
 		if (method == null) {
 			method = ClassInfo.of(resourceClass).getPublicMethod(
 				x -> x.isNotDeprecated()
@@ -155,6 +156,7 @@ public class BeanCreateMethodFinder<T> {
 				args = beanStore.getParams(method);
 		}
 		return this;
+		// @formatter:on
 	}
 
 	/**
@@ -233,6 +235,6 @@ public class BeanCreateMethodFinder<T> {
 	 * @return This object.
 	 */
 	public BeanCreateMethodFinder<T> withDefault(T def) {
-		return withDefault(()->def);
+		return withDefault(() -> def);
 	}
 }

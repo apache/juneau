@@ -1071,13 +1071,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		private boolean pooled;
 
 		String rootUrl;
-		boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose, ignoreErrors, keepHttpClientOpen, detectLeaks,
-			logToConsole;
+		boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose, ignoreErrors, keepHttpClientOpen, detectLeaks, logToConsole;
 		Logger logger;
 		DetailLevel logRequests;
 		Level logRequestsLevel;
 		BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
-		Predicate<Integer> errorCodes = x ->  x<=0 || x>=400;
+		Predicate<Integer> errorCodes = x -> x <= 0 || x >= 400;
 		HttpClientConnectionManager connectionManager;
 		PrintStream console;
 		ExecutorService executorService;
@@ -1086,8 +1085,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		/**
 		 * Constructor.
 		 */
-		protected Builder() {
-		}
+		protected Builder() {}
 
 		/**
 		 * Appends an <c>Accept</c> header on this request.
@@ -1117,6 +1115,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		public Builder acceptCharset(String value) {
 			return headers(AcceptCharset.of(value));
 		}
+
 		/**
 		 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add <js>"_type"</js> properties when needed.
 		 *
@@ -1349,6 +1348,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			defaultCredentialsProvider(p);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanClassVisibility(Visibility value) {
 			super.beanClassVisibility(value);
@@ -1366,6 +1366,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.beanContext(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanContext(BeanContext.Builder value) {
 			super.beanContext(value);
@@ -1383,6 +1384,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.beanFieldVisibility(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
 			super.beanInterceptor(on, value);
@@ -1418,6 +1420,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
 			super.beanPropertiesExcludes(values);
@@ -1453,6 +1456,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
 			super.beanPropertiesWriteOnly(values);
@@ -1476,6 +1480,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.beansRequireSerializable();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
@@ -1538,6 +1543,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				callHandler = createCallHandler();
 			return callHandler;
 		}
+
 		/**
 		 * REST call handler class.
 		 *
@@ -1570,6 +1576,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		public Builder clientVersion(String value) {
 			return headers(ClientVersion.of(value));
 		}
+
 		/**
 		 * Assigns {@link ConnectionBackoffStrategy} instance.
 		 *
@@ -1786,6 +1793,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			httpClientBuilder().setDefaultCookieSpecRegistry(cookieSpecRegistry);
 			return this;
 		}
+
 		/**
 		 * Assigns default {@link CookieStore} instance which will be used for request execution if not explicitly set in the client execution context.
 		 *
@@ -1922,6 +1930,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::detectRecursions);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
 			super.dictionaryOn(on, values);
@@ -1985,6 +1994,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			httpClientBuilder().disableContentCompression();
 			return this;
 		}
+
 		/**
 		 * Disables state (cookie) management.
 		 *
@@ -2034,6 +2044,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			httpClientBuilder().disableRedirectHandling();
 			return this;
 		}
+
 		/**
 		 * Errors codes predicate.
 		 *
@@ -2094,6 +2105,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			httpClientBuilder().evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
 			return this;
 		}
+
 		/**
 		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Executor service.
 		 *
@@ -2149,6 +2161,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			this.executorServiceShutdownOnClose = shutdownOnClose;
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder findFluentSetters() {
 			super.findFluentSetters();
@@ -2192,6 +2205,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				formData = createFormData();
 			return formData;
 		}
+
 		/**
 		 * Appends multiple form-data parameters to the request bodies of all URL-encoded form posts.
 		 *
@@ -2304,9 +2318,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return The root URI defined for this client.
 		 */
-		public String getRootUri() {
-			return rootUrl;
-		}
+		public String getRootUri() { return rootUrl; }
+
 		/**
 		 * Appends a header to all requests.
 		 *
@@ -2751,6 +2764,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.ignoreUnknownBeanProperties();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownEnumValues() {
 			super.ignoreUnknownEnumValues();
@@ -2774,6 +2788,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.implClasses(values);
 			return this;
 		}
+
 		/**
 		 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Initial depth.
 		 *
@@ -3136,6 +3151,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.locale(value);
 			return this;
 		}
+
 		/**
 		 * Logger.
 		 *
@@ -3372,6 +3388,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			serializers().forEach(x -> x.maxDepth(value));
 			return this;
 		}
+
 		/**
 		 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Maximum indentation.
 		 *
@@ -3425,6 +3442,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.mediaType(value);
 			return headers(Accept.of(value), ContentType.of(value));
 		}
+
 		/**
 		 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
 		 *
@@ -3487,6 +3505,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		public Builder msgPack() {
 			return serializer(MsgPackSerializer.class).parser(MsgPackParser.class);
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder notBeanClasses(java.lang.Class<?>...values) {
 			super.notBeanClasses(values);
@@ -5066,6 +5085,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.stopClass(on, value);
 			return this;
 		}
+
 		/**
 		 * <i><l>Parser</l> configuration property:&emsp;</i>  Strict mode.
 		 *
@@ -5132,13 +5152,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -5392,6 +5412,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder universal() {
+			// @formatter:off
 			return
 				serializers(
 					JsonSerializer.class,
@@ -5415,6 +5436,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					MsgPackParser.class,
 					PlainTextParser.class
 				);
+			// @formatter:on
 		}
 
 		/**
@@ -6014,15 +6036,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return UrlEncodingSerializer.create().beanContext(beanContext());
 		}
 
-		final CloseableHttpClient getHttpClient() {
-			return httpClient != null ? httpClient : createHttpClient();
-		}
+		final CloseableHttpClient getHttpClient() { return httpClient != null ? httpClient : createHttpClient(); }
 	}
 
 	private static final RestCallInterceptor[] EMPTY_REST_CALL_INTERCEPTORS = {};
 	private static final ConcurrentHashMap<Class<?>,Context> requestContexts = new ConcurrentHashMap<>();
-	private static final
-		BiPredicate<RestRequest,RestResponse> LOG_REQUESTS_PREDICATE_DEFAULT = (req,res) -> true;
+	private static final BiPredicate<RestRequest,RestResponse> LOG_REQUESTS_PREDICATE_DEFAULT = (req, res) -> true;
+
 	/**
 	 * Instantiates a new clean-slate {@link Builder} object.
 	 *
@@ -6031,6 +6051,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final HeaderList headerData;
 
 	final PartList queryData, formData, pathData;
@@ -6061,9 +6082,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	Predicate<Integer> errorCodes;
 
 	final RestCallInterceptor[] interceptors;
-	private final Map<Class<?>, HttpPartParser> partParsers = new ConcurrentHashMap<>();
+	private final Map<Class<?>,HttpPartParser> partParsers = new ConcurrentHashMap<>();
 
-	private final Map<Class<?>, HttpPartSerializer> partSerializers = new ConcurrentHashMap<>();
+	private final Map<Class<?>,HttpPartSerializer> partSerializers = new ConcurrentHashMap<>();
 	// This is lazy-created.
 	private volatile ExecutorService executorService;
 
@@ -6079,8 +6100,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public RestClient(Builder builder) {
 		super(builder);
 
-		beanStore = builder.beanStore
-			.addBean(RestClient.class, this);
+		beanStore = builder.beanStore.addBean(RestClient.class, this);
 
 		httpClient = builder.getHttpClient();
 		headerData = builder.headers().copy();
@@ -6172,7 +6192,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				}
 			} else if (state == S03) {
 				if (c == '}') {
-					headers = callString.substring(mark, i+1);
+					headers = callString.substring(mark, i + 1);
 					state = S04;
 				}
 			} else if (state == S04) {
@@ -6195,7 +6215,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		try {
 			RestRequest req = request(method, uri, isNotEmpty(content));
 			if (headers != null)
-				JsonMap.ofJson(headers).forEach((k,v) -> req.header(stringHeader(k, s(v))));
+				JsonMap.ofJson(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
 			if (isNotEmpty(content))
 				req.contentString(content);
 			return req;
@@ -6475,7 +6495,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	/**
 	 * Executes HTTP request using the default context and processes the response using the given response handler.
 	 *
- 	 * <p>
+	 * <p>
 	 * The content entity associated with the response is fully consumed and the underlying connection is released back
 	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
 	 * from having to manage resource deallocation internally.
@@ -6584,7 +6604,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (body instanceof PartList)
 				return req.content(new UrlEncodedFormEntity(((PartList)body)));
 			if (body instanceof HttpResource)
-				((HttpResource)body).getHeaders().forEach(x-> req.header(x));
+				((HttpResource)body).getHeaders().forEach(x -> req.header(x));
 			if (body instanceof HttpEntity) {
 				HttpEntity e = (HttpEntity)body;
 				if (e.getContentType() == null)
@@ -6668,18 +6688,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	@Deprecated
 	@Override /* Overridden from HttpClient */
-	public ClientConnectionManager getConnectionManager() {
-		return httpClient.getConnectionManager();
-	}
+	public ClientConnectionManager getConnectionManager() { return httpClient.getConnectionManager(); }
 
 	/**
 	 * Returns the connection manager if one was specified in the client builder.
 	 *
 	 * @return The connection manager.  May be <jk>null</jk>.
 	 */
-	public HttpClientConnectionManager getHttpClientConnectionManager() {
-		return connectionManager;
-	}
+	public HttpClientConnectionManager getHttpClientConnectionManager() { return connectionManager; }
 
 	/**
 	 * Obtains the parameters for this client.
@@ -6691,9 +6707,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	@Deprecated
 	@Override /* Overridden from HttpClient */
-	public HttpParams getParams() {
-		return httpClient.getParams();
-	}
+	public HttpParams getParams() { return httpClient.getParams(); }
 
 	/**
 	 * Create a new proxy interface against a 3rd-party REST interface.
@@ -6791,7 +6805,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
 	 * </ul>
-
+	
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param rootUrl The URI of the REST interface.
@@ -6807,156 +6821,153 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		final String restUrl2 = StringUtils.trimSlashes(emptyIfNull(rootUrl));
 
-		return (T)Proxy.newProxyInstance(
-			interfaceClass.getClassLoader(),
-			new Class[] { interfaceClass },
-			new InvocationHandler() {
+		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new InvocationHandler() {
 
-				final RemoteMeta rm = new RemoteMeta(interfaceClass);
+			final RemoteMeta rm = new RemoteMeta(interfaceClass);
 
-				@Override /* Overridden from InvocationHandler */
-				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-					RemoteOperationMeta rom = rm.getOperationMeta(method);
+			@Override /* Overridden from InvocationHandler */
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+				RemoteOperationMeta rom = rm.getOperationMeta(method);
 
-					String uri = rom.getFullPath();
-					if (uri.indexOf("://") == -1)
-						uri = restUrl2 + '/' + uri;
-					if (uri.indexOf("://") == -1)
-						throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
+				String uri = rom.getFullPath();
+				if (uri.indexOf("://") == -1)
+					uri = restUrl2 + '/' + uri;
+				if (uri.indexOf("://") == -1)
+					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
 
-					String httpMethod = rom.getHttpMethod();
-					RestRequest rc = request(httpMethod, uri, hasContent(httpMethod));
+				String httpMethod = rom.getHttpMethod();
+				RestRequest rc = request(httpMethod, uri, hasContent(httpMethod));
 
-						rc.serializer(serializer);
-					rc.parser(parser);
+				rc.serializer(serializer);
+				rc.parser(parser);
 
-					rm.getHeaders().forEach(x -> rc.header(x));
+				rm.getHeaders().forEach(x -> rc.header(x));
 
-					// Apply method-level defaults if parameter values are not provided (9.2.0)
-					rom.forEachPathArg(a -> {
-						Object val = args[a.getIndex()];
-						if (val == null) {
-							// Check parameter-level default first (9.2.0)
-							String def = a.getSchema().getDefault();
-							// Fall back to method-level default if parameter-level not set
-							if (def == null)
-								def = rom.getPathDefault(a.getName());
-							if (def != null)
-								val = def;
-						}
-						rc.pathArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer));
-					});
-					rom.forEachQueryArg(a -> {
-						Object val = args[a.getIndex()];
-						if (val == null) {
-							// Check parameter-level default first (9.2.0)
-							String def = a.getSchema().getDefault();
-							// Fall back to method-level default if parameter-level not set
-							if (def == null)
-								def = rom.getQueryDefault(a.getName());
-							if (def != null)
-								val = def;
-						}
-						rc.queryArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
-					});
-					rom.forEachFormDataArg(a -> {
-						Object val = args[a.getIndex()];
-						if (val == null) {
-							// Check parameter-level default first (9.2.0)
-							String def = a.getSchema().getDefault();
-							// Fall back to method-level default if parameter-level not set
-							if (def == null)
-								def = rom.getFormDataDefault(a.getName());
-							if (def != null)
-								val = def;
-						}
-						rc.formDataArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
-					});
-					rom.forEachHeaderArg(a -> {
-						Object val = args[a.getIndex()];
-						if (val == null) {
-							// Check parameter-level default first (9.2.0)
-							String def = a.getSchema().getDefault();
-							// Fall back to method-level default if parameter-level not set
-							if (def == null)
-								def = rom.getHeaderDefault(a.getName());
-							if (def != null)
-								val = def;
-						}
-						rc.headerArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
-					});
-
-					RemoteOperationArg ba = rom.getContentArg();
-					if (ba != null) {
-						Object val = args[ba.getIndex()];
-						if (val == null) {
-							// Check parameter-level default first (9.2.0)
-							String def = ba.getSchema().getDefault();
-							// Fall back to method-level default if parameter-level not set
-							if (def == null)
-								def = rom.getContentDefault();
-							if (def != null)
-								val = def;
-						}
-						rc.content(val, ba.getSchema());
-					} else {
-						// Apply Content default if no parameter is present
-						String contentDef = rom.getContentDefault();
-						if (contentDef != null)
-							rc.content(contentDef);
+				// Apply method-level defaults if parameter values are not provided (9.2.0)
+				rom.forEachPathArg(a -> {
+					Object val = args[a.getIndex()];
+					if (val == null) {
+						// Check parameter-level default first (9.2.0)
+						String def = a.getSchema().getDefault();
+						// Fall back to method-level default if parameter-level not set
+						if (def == null)
+							def = rom.getPathDefault(a.getName());
+						if (def != null)
+							val = def;
 					}
-
-					rom.forEachRequestArg(rmba -> {
-							RequestBeanMeta rbm = rmba.getMeta();
-							Object bean = args[rmba.getIndex()];
-							if (bean != null) {
-								for (RequestBeanPropertyMeta p : rbm.getProperties()) {
-									Object val = Utils.safeSupplier(()->p.getGetter().invoke(bean));
-									HttpPartType pt = p.getPartType();
-									String pn = p.getPartName();
-									HttpPartSchema schema = p.getSchema();
-									if (pt == PATH)
-										rc.pathArg(pn, val, schema, p.getSerializer().orElse(partSerializer));
-									else if (val != null) {
-										if (pt == QUERY)
-											rc.queryArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
-										else if (pt == FORMDATA)
-											rc.formDataArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
-										else if (pt == HEADER)
-											rc.headerArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
-										else /* (pt == HttpPartType.BODY) */
-											rc.content(val, schema);
-									}
-								}
-							}
-					});
-
-					RemoteOperationReturn ror = rom.getReturns();
-					if (ror.isFuture()) {
-						return getExecutorService().submit(() -> {
-							try {
-								return executeRemote(interfaceClass, rc, method, rom);
-							} catch (Exception e) {
-								throw e;
-							} catch (Throwable e) {
-								throw asRuntimeException(e);
-							}
-						});
-					} else if (ror.isCompletableFuture()) {
-						CompletableFuture<Object> cf = new CompletableFuture<>();
-						getExecutorService().submit(() -> {
-							try {
-								cf.complete(executeRemote(interfaceClass, rc, method, rom));
-							} catch (Throwable e) {
-								cf.completeExceptionally(e);
-							}
-							return null;
-						});
-						return cf;
+					rc.pathArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer));
+				});
+				rom.forEachQueryArg(a -> {
+					Object val = args[a.getIndex()];
+					if (val == null) {
+						// Check parameter-level default first (9.2.0)
+						String def = a.getSchema().getDefault();
+						// Fall back to method-level default if parameter-level not set
+						if (def == null)
+							def = rom.getQueryDefault(a.getName());
+						if (def != null)
+							val = def;
 					}
+					rc.queryArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+				});
+				rom.forEachFormDataArg(a -> {
+					Object val = args[a.getIndex()];
+					if (val == null) {
+						// Check parameter-level default first (9.2.0)
+						String def = a.getSchema().getDefault();
+						// Fall back to method-level default if parameter-level not set
+						if (def == null)
+							def = rom.getFormDataDefault(a.getName());
+						if (def != null)
+							val = def;
+					}
+					rc.formDataArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+				});
+				rom.forEachHeaderArg(a -> {
+					Object val = args[a.getIndex()];
+					if (val == null) {
+						// Check parameter-level default first (9.2.0)
+						String def = a.getSchema().getDefault();
+						// Fall back to method-level default if parameter-level not set
+						if (def == null)
+							def = rom.getHeaderDefault(a.getName());
+						if (def != null)
+							val = def;
+					}
+					rc.headerArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+				});
 
-					return executeRemote(interfaceClass, rc, method, rom);
+				RemoteOperationArg ba = rom.getContentArg();
+				if (ba != null) {
+					Object val = args[ba.getIndex()];
+					if (val == null) {
+						// Check parameter-level default first (9.2.0)
+						String def = ba.getSchema().getDefault();
+						// Fall back to method-level default if parameter-level not set
+						if (def == null)
+							def = rom.getContentDefault();
+						if (def != null)
+							val = def;
+					}
+					rc.content(val, ba.getSchema());
+				} else {
+					// Apply Content default if no parameter is present
+					String contentDef = rom.getContentDefault();
+					if (contentDef != null)
+						rc.content(contentDef);
 				}
+
+				rom.forEachRequestArg(rmba -> {
+					RequestBeanMeta rbm = rmba.getMeta();
+					Object bean = args[rmba.getIndex()];
+					if (bean != null) {
+						for (RequestBeanPropertyMeta p : rbm.getProperties()) {
+							Object val = Utils.safeSupplier(() -> p.getGetter().invoke(bean));
+							HttpPartType pt = p.getPartType();
+							String pn = p.getPartName();
+							HttpPartSchema schema = p.getSchema();
+							if (pt == PATH)
+								rc.pathArg(pn, val, schema, p.getSerializer().orElse(partSerializer));
+							else if (val != null) {
+								if (pt == QUERY)
+									rc.queryArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
+								else if (pt == FORMDATA)
+									rc.formDataArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
+								else if (pt == HEADER)
+									rc.headerArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
+								else /* (pt == HttpPartType.BODY) */
+									rc.content(val, schema);
+							}
+						}
+					}
+				});
+
+				RemoteOperationReturn ror = rom.getReturns();
+				if (ror.isFuture()) {
+					return getExecutorService().submit(() -> {
+						try {
+							return executeRemote(interfaceClass, rc, method, rom);
+						} catch (Exception e) {
+							throw e;
+						} catch (Throwable e) {
+							throw asRuntimeException(e);
+						}
+					});
+				} else if (ror.isCompletableFuture()) {
+					CompletableFuture<Object> cf = new CompletableFuture<>();
+					getExecutorService().submit(() -> {
+						try {
+							cf.complete(executeRemote(interfaceClass, rc, method, rom));
+						} catch (Throwable e) {
+							cf.completeExceptionally(e);
+						}
+						return null;
+					});
+					return cf;
+				}
+
+				return executeRemote(interfaceClass, rc, method, rom);
+			}
 		});
 	}
 
@@ -7051,48 +7062,47 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		final String restUrl2 = s(uri);
 
-		return (T)Proxy.newProxyInstance(
-			interfaceClass.getClassLoader(),
-			new Class[] { interfaceClass },
-			new InvocationHandler() {
+		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new InvocationHandler() {
 
-				final RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, restUrl2);
+			final RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, restUrl2);
 
-				@Override /* Overridden from InvocationHandler */
-				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-					RrpcInterfaceMethodMeta rim = rm.getMethodMeta(method);
+			@Override /* Overridden from InvocationHandler */
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+				RrpcInterfaceMethodMeta rim = rm.getMethodMeta(method);
 
-					String uri = rim.getUri();
-					RestResponse res = null;
+				String uri = rim.getUri();
+				RestResponse res = null;
 
-					try {
-						RestRequest rc = request("POST", uri, true)
-							.serializer(serializer)
-							.content(args)
-							.rethrow(RuntimeException.class)
-							.rethrow(method.getExceptionTypes());
+				try {
+					// @formatter:off
+					RestRequest rc = request("POST", uri, true)
+						.serializer(serializer)
+						.content(args)
+						.rethrow(RuntimeException.class)
+						.rethrow(method.getExceptionTypes());
+					// @formatter:on
 
-						res = rc.run();
+					res = rc.run();
 
-						Object v = res.getContent().as(method.getGenericReturnType());
-						if (v == null && method.getReturnType().isPrimitive())
-							v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
-						return v;
+					Object v = res.getContent().as(method.getGenericReturnType());
+					if (v == null && method.getReturnType().isPrimitive())
+						v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
+					return v;
 
-					} catch (Throwable e) {
-						if (e instanceof RestCallException) {
-							Throwable t = e.getCause();
-							if (t != null)
-								e = t;
-						}
-						if (e instanceof RuntimeException)
-							throw e;
-						for (Class<?> t2 : method.getExceptionTypes())
-							if (t2.isInstance(e))
-								throw e;
-						throw asRuntimeException(e);
+				} catch (Throwable e) {
+					if (e instanceof RestCallException) {
+						Throwable t = e.getCause();
+						if (t != null)
+							e = t;
 					}
+					if (e instanceof RuntimeException)
+						throw e;
+					for (Class<?> t2 : method.getExceptionTypes())
+						if (t2.isInstance(e))
+							throw e;
+					throw asRuntimeException(e);
 				}
+			}
 		});
 	}
 
@@ -7520,12 +7530,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	private static Supplier<String> msg(String msg, Object...args) {
-		return ()->args.length == 0 ? msg : MessageFormat.format(msg, args);
+		return () -> args.length == 0 ? msg : MessageFormat.format(msg, args);
 	}
 
 	private static RestOperation op(String method, Object url, Object body) {
 		return RestOperation.of(method, url, body);
 	}
+
 	private static Reader stringBody(String body) {
 		return body == null ? null : new StringReader(s(body));
 	}
@@ -7575,14 +7586,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			log(WARNING, sb.toString());
 		}
 	}
+
 	/**
 	 * Returns the part parser associated with this client.
 	 *
 	 * @return The part parser associated with this client.
 	 */
-	protected HttpPartParser getPartParser() {
-		return partParser;
-	}
+	protected HttpPartParser getPartParser() { return partParser; }
 
 	/**
 	 * Returns the part parser instance of the specified type.
@@ -7608,9 +7618,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return The part serializer associated with this client.
 	 */
-	protected HttpPartSerializer getPartSerializer() {
-		return partSerializer;
-	}
+	protected HttpPartSerializer getPartSerializer() { return partSerializer; }
+
 	/**
 	 * Returns the part serializer instance of the specified type.
 	 *
@@ -7633,8 +7642,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	/**
 	 * Gets called add the end of the constructor call to perform any post-initialization.
 	 */
-	protected void init() {
-	}
+	protected void init() {}
 
 	/**
 	 * Perform optional initialization on builder before it is used.
@@ -7651,27 +7659,21 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return <jk>true</jk> if empty request form-data parameter values should be ignored.
 	 */
-	protected boolean isSkipEmptyFormData() {
-		return skipEmptyFormData;
-	}
+	protected boolean isSkipEmptyFormData() { return skipEmptyFormData; }
 
 	/**
 	 * Returns <jk>true</jk> if empty request header values should be ignored.
 	 *
 	 * @return <jk>true</jk> if empty request header values should be ignored.
 	 */
-	protected boolean isSkipEmptyHeaderData() {
-		return skipEmptyHeaderData;
-	}
+	protected boolean isSkipEmptyHeaderData() { return skipEmptyHeaderData; }
 
 	/**
 	 * Returns <jk>true</jk> if empty request query parameter values should be ignored.
 	 *
 	 * @return <jk>true</jk> if empty request query parameter values should be ignored.
 	 */
-	protected boolean isSkipEmptyQueryData() {
-		return skipEmptyQueryData;
-	}
+	protected boolean isSkipEmptyQueryData() { return skipEmptyQueryData; }
 
 	/**
 	 * Logs a message.
@@ -7776,8 +7778,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			throw new RestCallException(null, e, "Interceptor threw an exception on init.");
 		}
 	}
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("errorCodes", errorCodes)
 			.append("executorService", executorService)
@@ -7789,6 +7793,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			.append("partSerializer", partSerializer)
 			.append("queryData", queryData)
 			.append("rootUrl", rootUrl);
+		// @formatter:on
 	}
 
 	/**
@@ -7812,7 +7817,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				e2.setStackTrace(closedStack);
 				throw new RestCallException(null, e2, "RestClient.close() has already been called.  This client cannot be reused.");
 			}
-			throw new RestCallException(null, null, "RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
+			throw new RestCallException(null, null,
+				"RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
 		RestRequest req = createRequest(toURI(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
@@ -7903,7 +7909,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	ExecutorService getExecutorService() {
 		if (executorService != null)
 			return executorService;
-		synchronized(this) {
+		synchronized (this) {
 			executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10));
 			return executorService;
 		}

@@ -50,10 +50,12 @@ public class NumberMatcherFactory extends MatcherFactory {
 	 * A construct representing a single search pattern.
 	 */
 	private static class NumberMatcher extends AbstractMatcher {
+		// @formatter:off
 		private static final AsciiSet
 			SNUM = AsciiSet.of("-0123456789."),
 			NUM = AsciiSet.of("0123456789."),
 			WS = AsciiSet.of(" \t");
+		// @formatter:on
 		NumberRange[] numberRanges;
 		String pattern;
 
@@ -184,7 +186,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 					} else {
 						break;
 					}
-				} else if (state == S09)  {
+				} else if (state == S09) {
 					if (WS.contains(c)) {
 						state = S10;
 					} else if (NUM.contains(c)) {
@@ -193,7 +195,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 						eq = Equality.NONE;
 						n1 = null;
 						isNot = false;
-						mark = i-1;
+						mark = i - 1;
 					} else {
 						break;
 					}
@@ -278,14 +280,14 @@ public class NumberMatcherFactory extends MatcherFactory {
 				this.start = start;
 				this.end = this.start;
 			} else if (eq == Equality.GT) {
-				this.start = start+1;
+				this.start = start + 1;
 				this.end = Integer.MAX_VALUE;
 			} else if (eq == Equality.GTE) {
 				this.start = start;
 				this.end = Integer.MAX_VALUE;
 			} else if (eq == Equality.LT) {
 				this.start = Integer.MIN_VALUE;
-				this.end = start-1;
+				this.end = start - 1;
 			} else if (eq == Equality.LTE) {
 				this.start = Integer.MIN_VALUE;
 				this.end = start;
@@ -297,9 +299,9 @@ public class NumberMatcherFactory extends MatcherFactory {
 
 		public boolean matches(Number n) {
 			long i = n.longValue();
-			boolean b = (i>=start && i<=end);
+			boolean b = (i >= start && i <= end);
 			if (isNot)
-				b = !b;
+				b = ! b;
 			return b;
 		}
 	}

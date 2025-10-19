@@ -104,6 +104,7 @@ public class Pragma extends BasicStringHeader {
 	public static Pragma of(Supplier<String> value) {
 		return value == null ? null : new Pragma(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

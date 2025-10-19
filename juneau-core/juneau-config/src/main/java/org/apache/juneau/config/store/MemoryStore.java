@@ -46,8 +46,7 @@ public class MemoryStore extends ConfigStore {
 		/**
 		 * Constructor, default settings.
 		 */
-		protected Builder() {
-		}
+		protected Builder() {}
 
 		/**
 		 * Copy constructor.
@@ -79,6 +78,7 @@ public class MemoryStore extends ConfigStore {
 			super.apply(work);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
@@ -134,6 +134,7 @@ public class MemoryStore extends ConfigStore {
 
 	/** Default memory store, all default values.*/
 	public static final MemoryStore DEFAULT = MemoryStore.create().build();
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -142,6 +143,7 @@ public class MemoryStore extends ConfigStore {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
 
 	/**

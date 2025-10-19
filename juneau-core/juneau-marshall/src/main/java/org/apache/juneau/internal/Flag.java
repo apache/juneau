@@ -115,18 +115,14 @@ public class Flag {
 	 *
 	 * @return <jk>true</jk> if the boolean value is <jk>true</jk>.
 	 */
-	public boolean isSet() {
-		return value;
-	}
+	public boolean isSet() { return value; }
 
 	/**
 	 * Returns <jk>true</jk> if the boolean value is <jk>false</jk>.
 	 *
 	 * @return <jk>true</jk> if the boolean value is <jk>false</jk>.
 	 */
-	public boolean isUnset() {
-		return ! value;
-	}
+	public boolean isUnset() { return ! value; }
 
 	/**
 	 * Sets the boolean value to <jk>true</jk>.

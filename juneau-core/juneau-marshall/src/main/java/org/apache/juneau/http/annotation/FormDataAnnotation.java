@@ -63,7 +63,7 @@ public class FormDataAnnotation {
 	 * A collection of {@link FormData @FormData annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -88,7 +88,7 @@ public class FormDataAnnotation {
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String def="", name="", value="";
+		String def = "", name = "", value = "";
 
 		/**
 		 * Constructor.
@@ -244,6 +244,7 @@ public class FormDataAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -253,6 +254,7 @@ public class FormDataAnnotation {
 	public static Builder create(String...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
@@ -262,6 +264,7 @@ public class FormDataAnnotation {
 	public static boolean empty(FormData a) {
 		return a == null || DEFAULT.equals(a);
 	}
+
 	/**
 	 * Finds the default value from the specified list of annotations.
 	 *
@@ -273,6 +276,7 @@ public class FormDataAnnotation {
 		pi.forEachAnnotation(FormData.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
 		return n;
 	}
+
 	/**
 	 * Finds the name from the specified lists of annotations.
 	 *

@@ -104,6 +104,7 @@ public class From extends BasicStringHeader {
 	public static From of(Supplier<String> value) {
 		return value == null ? null : new From(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

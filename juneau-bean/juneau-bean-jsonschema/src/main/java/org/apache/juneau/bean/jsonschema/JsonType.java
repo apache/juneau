@@ -56,7 +56,7 @@ public enum JsonType {
 	/** JSON type {@code any}. */
 	ANY("any");
 
-	private final String value;	// The serialized format of the enum.
+	private final String value; // The serialized format of the enum.
 
 	JsonType(String value) {
 		this.value = value;

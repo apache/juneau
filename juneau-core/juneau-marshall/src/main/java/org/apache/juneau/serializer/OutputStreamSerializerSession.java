@@ -68,6 +68,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public OutputStreamSerializerSession build() {
 			return new OutputStreamSerializerSession(this);
@@ -163,6 +164,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -172,6 +174,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	public static Builder create(OutputStreamSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final OutputStreamSerializer ctx;
 
 	/**
@@ -185,9 +188,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	}
 
 	@Override /* Overridden from SerializerSession */
-	public final boolean isWriterSerializer() {
-		return false;
-	}
+	public final boolean isWriterSerializer() { return false; }
 
 	/**
 	 * Convenience method for serializing an object to a <code><jk>byte</jk></code>.
@@ -211,11 +212,15 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	@Override /* Overridden from SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
 		byte[] b = serialize(o);
-		switch(getBinaryFormat()) {
-			case SPACED_HEX:  return StringUtils.toSpacedHex(b);
-			case HEX:  return StringUtils.toHex(b);
-			case BASE64:  return StringUtils.base64Encode(b);
-			default: return null;
+		switch (getBinaryFormat()) {
+			case SPACED_HEX:
+				return StringUtils.toSpacedHex(b);
+			case HEX:
+				return StringUtils.toHex(b);
+			case BASE64:
+				return StringUtils.base64Encode(b);
+			default:
+				return null;
 		}
 	}
 
@@ -223,6 +228,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	protected SerializerPipe createPipe(Object output) {
 		return new SerializerPipe(output);
 	}
+
 	/**
 	 * Binary output format.
 	 *
@@ -230,7 +236,5 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 * @return
 	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
 	 */
-	protected final BinaryFormat getBinaryFormat() {
-		return ctx.getBinaryFormat();
-	}
+	protected final BinaryFormat getBinaryFormat() { return ctx.getBinaryFormat(); }
 }

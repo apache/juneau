@@ -63,7 +63,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ClientVersion of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new ClientVersion(value));
+		return value == null ? null : CACHE.get(value, () -> new ClientVersion(value));
 	}
 
 	/**
@@ -92,6 +92,7 @@ public class ClientVersion extends BasicStringHeader {
 	public static ClientVersion of(Version value) {
 		return value == null ? null : new ClientVersion(value);
 	}
+
 	private final Version value;
 	private final Supplier<Version> supplier;
 

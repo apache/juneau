@@ -116,30 +116,28 @@ public abstract class RestServlet extends HttpServlet {
 		ci.forEachAnnotation(Rest.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
 		return path.orElse("");
 	}
+
 	/**
 	 * Returns the current thread-local HTTP request.
 	 *
 	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
 	 */
-	public synchronized RestRequest getRequest() {
-		return getContext().getLocalSession().getOpSession().getRequest();
-	}
+	public synchronized RestRequest getRequest() { return getContext().getLocalSession().getOpSession().getRequest(); }
 
 	/**
 	 * Returns the current thread-local HTTP response.
 	 *
 	 * @return The current thread-local HTTP response, or <jk>null</jk> if it wasn't created.
 	 */
-	public synchronized RestResponse getResponse() {
-		return getContext().getLocalSession().getOpSession().getResponse();
-	}
+	public synchronized RestResponse getResponse() { return getContext().getLocalSession().getOpSession().getResponse(); }
+
 	@Override /* Overridden from Servlet */
 	public synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
 			if (context.get() != null)
 				return;
 			super.init(servletConfig);
-			context.set(RestContext.create(this.getClass(), null, servletConfig).init(()->this).build());
+			context.set(RestContext.create(this.getClass(), null, servletConfig).init(() -> this).build());
 			context.get().postInit();
 			context.get().postInitChildFirst();
 		} catch (ServletException e) {
@@ -154,6 +152,7 @@ public abstract class RestServlet extends HttpServlet {
 			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
 		}
 	}
+
 	/**
 	 * Log a message.
 	 *
@@ -195,13 +194,15 @@ public abstract class RestServlet extends HttpServlet {
 			if (initException.get() != null)
 				throw initException.get();
 			if (context.get() == null)
-				throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", className(this));
+				throw new InternalServerError(
+					"Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", className(this));
 			getContext().execute(this, r1, r2);
 
 		} catch (Throwable e) {
 			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
 		}
 	}
+
 	/**
 	 * Main logger method.
 	 *

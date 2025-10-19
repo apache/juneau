@@ -106,6 +106,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -512,13 +513,13 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -604,6 +605,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 
 	/** Default parser, all default settings.*/
 	public static final PlainTextParser DEFAULT = new PlainTextParser(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -612,6 +614,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private final Map<ClassMeta<?>,PlainTextClassMeta> plainTextClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,PlainTextBeanPropertyMeta> plainTextBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -645,6 +648,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		}
 		return m;
 	}
+
 	@Override /* Overridden from PlainTextMetaProvider */
 	public PlainTextClassMeta getPlainTextClassMeta(ClassMeta<?> cm) {
 		PlainTextClassMeta m = plainTextClassMetas.get(cm);
@@ -656,7 +660,5 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	}
 
 	@Override /* Overridden from Context */
-	public PlainTextParserSession getSession() {
-		return createSession().build();
-	}
+	public PlainTextParserSession getSession() { return createSession().build(); }
 }

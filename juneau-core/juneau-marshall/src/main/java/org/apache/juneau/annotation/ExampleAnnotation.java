@@ -60,7 +60,7 @@ public class ExampleAnnotation {
 	 * A collection of {@link Example @Example annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -82,7 +82,7 @@ public class ExampleAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
-		String value="";
+		String value = "";
 
 		/**
 		 * Constructor.
@@ -131,6 +131,7 @@ public class ExampleAnnotation {
 
 	/** Default value */
 	public static final Example DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -139,13 +140,16 @@ public class ExampleAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static Example copy(Example a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.on(r.resolve(a.on()))
 			.onClass(a.onClass())
 			.value(r.resolve(a.value()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -154,6 +158,7 @@ public class ExampleAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -163,6 +168,7 @@ public class ExampleAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

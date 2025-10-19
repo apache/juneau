@@ -62,6 +62,7 @@ public class ReaderResource extends BasicResource {
 		super.addHeader(name, value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicResource */
 	public ReaderResource addHeaders(Header...values) {
 		super.addHeaders(values);
@@ -74,7 +75,7 @@ public class ReaderResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ReaderResource setCached() throws IOException{
+	public ReaderResource setCached() throws IOException {
 		super.setCached();
 		return this;
 	}

@@ -112,8 +112,10 @@ public class PropertyExtractors {
 				}
 				return l.get(index);
 			}
-			if ("length".equals(name)) return l.size();
-			if ("size".equals(name)) return l.size();
+			if ("length".equals(name))
+				return l.size();
+			if ("size".equals(name))
+				return l.size();
 			return super.extract(converter, o, name);
 		}
 	}
@@ -168,9 +170,12 @@ public class PropertyExtractors {
 		@Override
 		public Object extract(BeanConverter converter, Object o, String name) {
 			var m = (Map<?,?>)o;
-			if (eq(name, converter.getSetting(BasicBeanConverter.SETTING_nullValue, "<null>"))) name = null;
-			if (m.containsKey(name)) return m.get(name);
-			if ("size".equals(name)) return m.size();
+			if (eq(name, converter.getSetting(BasicBeanConverter.SETTING_nullValue, "<null>")))
+				name = null;
+			if (m.containsKey(name))
+				return m.get(name);
+			if ("size".equals(name))
+				return m.size();
 			return super.extract(converter, o, name);
 		}
 	}
@@ -217,49 +222,50 @@ public class PropertyExtractors {
 
 		@Override
 		public Object extract(BeanConverter converter, Object o, String name) {
-			return
-				safe(() -> {
-					if (o == null)
-						return null;
-					var f = (Field)null;
-					var c = o.getClass();
-					var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
-					var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is"+n) && x.getParameterCount() == 0).findFirst().orElse(null);
-					if (m != null) {
-						m.setAccessible(true);
-						return m.invoke(o);
-					}
-					if (o instanceof Map.Entry<?,?> me) {
-						// Reflection to classes inside java.util are restricted in Java 9+.
-						if ("key".equals(name)) return me.getKey();
-						if ("value".equals(name)) return me.getValue();
-					}
-					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get"+n) && x.getParameterCount() == 0).findFirst().orElse(null);
-					if (m != null) {
-						m.setAccessible(true);
-						return m.invoke(o);
-					}
-					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class).findFirst().orElse(null);
-					if (m != null) {
-						m.setAccessible(true);
-						return m.invoke(o, name);
-					}
-					var c2 = c;
-					while (f == null && c2 != null) {
-						f = Arrays.stream(c2.getDeclaredFields()).filter(x -> x.getName().equals(name)).findFirst().orElse(null);
-						c2 = c2.getSuperclass();
-					}
-					if (f != null) {
-						f.setAccessible(true);
-						return f.get(o);
-					}
-					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals(name) && x.getParameterCount() == 0).findFirst().orElse(null);
-					if (m != null) {
-						m.setAccessible(true);
-						return m.invoke(o);
-					}
-					throw new PropertyNotFoundException(name, o.getClass());
-				});
+			return safe(() -> {
+				if (o == null)
+					return null;
+				var f = (Field)null;
+				var c = o.getClass();
+				var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+				var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is" + n) && x.getParameterCount() == 0).findFirst().orElse(null);
+				if (m != null) {
+					m.setAccessible(true);
+					return m.invoke(o);
+				}
+				if (o instanceof Map.Entry<?,?> me) {
+					// Reflection to classes inside java.util are restricted in Java 9+.
+					if ("key".equals(name))
+						return me.getKey();
+					if ("value".equals(name))
+						return me.getValue();
+				}
+				m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get" + n) && x.getParameterCount() == 0).findFirst().orElse(null);
+				if (m != null) {
+					m.setAccessible(true);
+					return m.invoke(o);
+				}
+				m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class).findFirst().orElse(null);
+				if (m != null) {
+					m.setAccessible(true);
+					return m.invoke(o, name);
+				}
+				var c2 = c;
+				while (f == null && c2 != null) {
+					f = Arrays.stream(c2.getDeclaredFields()).filter(x -> x.getName().equals(name)).findFirst().orElse(null);
+					c2 = c2.getSuperclass();
+				}
+				if (f != null) {
+					f.setAccessible(true);
+					return f.get(o);
+				}
+				m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals(name) && x.getParameterCount() == 0).findFirst().orElse(null);
+				if (m != null) {
+					m.setAccessible(true);
+					return m.invoke(o);
+				}
+				throw new PropertyNotFoundException(name, o.getClass());
+			});
 		}
 	}
 

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -83,7 +84,7 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="select")
+@Bean(typeName = "select")
 public class Select extends HtmlElementContainer {
 
 	/**
@@ -102,7 +103,7 @@ public class Select extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Select _class(String value) {  // NOSONAR - Intentional naming.
+	public Select _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -168,6 +169,7 @@ public class Select extends HtmlElementContainer {
 		}
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Select contenteditable(Object value) {
 		super.contenteditable(value);

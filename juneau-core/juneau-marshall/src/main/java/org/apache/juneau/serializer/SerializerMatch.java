@@ -46,16 +46,12 @@ public class SerializerMatch {
 	 *
 	 * @return The media type of the match.
 	 */
-	public MediaType getMediaType() {
-		return mediaType;
-	}
+	public MediaType getMediaType() { return mediaType; }
 
 	/**
 	 * Returns the serializer that matched the HTTP <c>Accept</c> header value.
 	 *
 	 * @return The serializer of the match.
 	 */
-	public Serializer getSerializer() {
-		return serializer;
-	}
+	public Serializer getSerializer() { return serializer; }
 }

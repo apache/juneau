@@ -33,11 +33,11 @@ import org.apache.juneau.http.header.*;
 @SuppressWarnings("resource")
 public class ByteArrayEntity extends BasicHttpEntity {
 	private static final byte[] EMPTY = {};
+
 	/**
 	 * Constructor.
 	 */
-	public ByteArrayEntity() {
-	}
+	public ByteArrayEntity() {}
 
 	/**
 	 * Constructor.
@@ -62,6 +62,7 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	public byte[] asBytes() throws IOException {
 		return content();
 	}
+
 	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		return new String(content(), getCharset());
@@ -73,22 +74,16 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException {
-		return new ByteArrayInputStream(content());
-	}
+	public InputStream getContent() throws IOException { return new ByteArrayInputStream(content()); }
 
 	@Override /* Overridden from HttpEntity */
-	public long getContentLength() {
-		return isSupplied() ? super.getContentLength() : content().length;
-	}
+	public long getContentLength() { return isSupplied() ? super.getContentLength() : content().length; }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return true;
-	}
+	public boolean isRepeatable() { return true; }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setCached() throws IOException{
+	public ByteArrayEntity setCached() throws IOException {
 		super.setCached();
 		return this;
 	}
@@ -98,6 +93,7 @@ public class ByteArrayEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public ByteArrayEntity setChunked() {
 		super.setChunked();

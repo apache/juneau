@@ -62,7 +62,7 @@ public class StatusCodeAnnotation {
 	 * A collection of {@link StatusCode @StatusCode annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -130,8 +130,10 @@ public class StatusCodeAnnotation {
 			return value;
 		}
 	}
+
 	/** Default value */
 	public static final StatusCode DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -140,6 +142,7 @@ public class StatusCodeAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -149,6 +152,7 @@ public class StatusCodeAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

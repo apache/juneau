@@ -105,7 +105,6 @@ import org.apache.juneau.serializer.*;
  */
 public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -117,7 +116,6 @@ public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 	public static VersionAssertion create(Version value) {
 		return new VersionAssertion(value);
 	}
-
 
 	/**
 	 * Constructor.

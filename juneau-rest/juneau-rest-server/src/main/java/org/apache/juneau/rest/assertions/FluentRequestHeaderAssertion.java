@@ -128,9 +128,10 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-public class FluentRequestHeaderAssertion <R> extends FluentStringAssertion<R> {
+public class FluentRequestHeaderAssertion<R> extends FluentStringAssertion<R> {
 
 	private final RequestHeader value;
+
 	/**
 	 * Chained constructor.
 	 *
@@ -168,6 +169,7 @@ public class FluentRequestHeaderAssertion <R> extends FluentStringAssertion<R> {
 	public FluentRequestHeaderAssertion(RequestHeader value, R returns) {
 		this(null, value, returns);
 	}
+
 	/**
 	 * Converts the parameter value to a type using {@link RequestHeader#as(Class)} and then returns the value as an any-object assertion.
 	 *
@@ -228,6 +230,7 @@ public class FluentRequestHeaderAssertion <R> extends FluentStringAssertion<R> {
 	public FluentLongAssertion<R> asLong() {
 		return new FluentLongAssertion<>(this, value.asLong().orElse(null), returns());
 	}
+
 	/**
 	 * Converts this object assertion into a zoned-datetime assertion.
 	 *

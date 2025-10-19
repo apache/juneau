@@ -69,6 +69,7 @@ public interface StaticFiles extends FileFinder {
 			this.mimeTypes.addMimeTypes(mimeTypes);
 			return this;
 		}
+
 		/**
 		 * Enables in-memory caching of files for quicker retrieval.
 		 *
@@ -171,6 +172,7 @@ public interface StaticFiles extends FileFinder {
 			fileFinder.path(path);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -185,6 +187,7 @@ public interface StaticFiles extends FileFinder {
 
 	/** Represents no static files */
 	public abstract class Void implements StaticFiles {}
+
 	/**
 	 * Static creator.
 	 *
@@ -194,6 +197,7 @@ public interface StaticFiles extends FileFinder {
 	static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	/**
 	 * Resolve the specified path.
 	 *

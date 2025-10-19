@@ -88,6 +88,7 @@ public class BasicHttpResponse implements HttpResponse {
 		setContent(response.getEntity());
 		setStatusLine(response.getStatusLine());
 	}
+
 	@Override /* Overridden from HttpMessage */
 	public void addHeader(Header value) {
 		headers.append(value);
@@ -102,10 +103,9 @@ public class BasicHttpResponse implements HttpResponse {
 	public boolean containsHeader(String name) {
 		return headers.contains(name);
 	}
+
 	@Override /* Overridden from HttpMessage */
-	public Header[] getAllHeaders() {
-		return headers.getAll();
-	}
+	public Header[] getAllHeaders() { return headers.getAll(); }
 
 	@Override /* Overridden from HttpMessage */
 	public HttpEntity getEntity() {
@@ -125,9 +125,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 *
 	 * @return The underlying builder for the headers.
 	 */
-	public HeaderList getHeaders() {
-		return headers;
-	}
+	public HeaderList getHeaders() { return headers; }
 
 	@Override /* Overridden from HttpMessage */
 	public Header[] getHeaders(String name) {
@@ -138,26 +136,19 @@ public class BasicHttpResponse implements HttpResponse {
 	public Header getLastHeader(String name) {
 		return headers.getLast(name).orElse(null);
 	}
+
 	@Override /* Overridden from HttpMessage */
-	public Locale getLocale() {
-		return statusLine.getLocale();
-	}
+	public Locale getLocale() { return statusLine.getLocale(); }
 
 	@SuppressWarnings("deprecation")
 	@Override /* Overridden from HttpMessage */
-	public HttpParams getParams() {
-		return null;
-	}
+	public HttpParams getParams() { return null; }
 
 	@Override /* Overridden from HttpMessage */
-	public ProtocolVersion getProtocolVersion() {
-		return statusLine.getProtocolVersion();
-	}
+	public ProtocolVersion getProtocolVersion() { return statusLine.getProtocolVersion(); }
 
 	@Override /* Overridden from HttpMessage */
-	public StatusLine getStatusLine() {
-		return statusLine;
-	}
+	public StatusLine getStatusLine() { return statusLine; }
 
 	@Override /* Overridden from HttpMessage */
 	public HeaderIterator headerIterator() {
@@ -174,14 +165,13 @@ public class BasicHttpResponse implements HttpResponse {
 	 *
 	 * @return <jk>true</jk> if this bean is unmodifiable.
 	 */
-	public boolean isUnmodifiable() {
-		return unmodifiable;
-	}
+	public boolean isUnmodifiable() { return unmodifiable; }
 
 	@Override /* Overridden from HttpMessage */
 	public void removeHeader(Header value) {
 		headers.remove(value);
 	}
+
 	@Override /* Overridden from HttpMessage */
 	public void removeHeaders(String name) {
 		headers.remove(name);
@@ -330,8 +320,7 @@ public class BasicHttpResponse implements HttpResponse {
 
 	@SuppressWarnings("deprecation")
 	@Override /* Overridden from HttpMessage */
-	public void setParams(HttpParams params) {
-	}
+	public void setParams(HttpParams params) {}
 
 	/**
 	 * Sets the protocol version on the status line.

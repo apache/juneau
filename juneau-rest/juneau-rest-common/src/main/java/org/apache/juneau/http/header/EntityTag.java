@@ -48,9 +48,11 @@ public class EntityTag {
 		Object o = unwrap(value);
 		return o == null ? null : new EntityTag(o.toString());
 	}
+
 	private final String value;
 
 	private final boolean isWeak, isAny;
+
 	/**
 	 * Constructor.
 	 *
@@ -67,10 +69,10 @@ public class EntityTag {
 		if (! isAny) {
 			if (isWeak)
 				value = value.substring(2);
-			if (value.length() > 1 && value.charAt(0) == '"' && value.charAt(value.length()-1) == '"')
-				value = value.substring(1, value.length()-1);
+			if (value.length() > 1 && value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"')
+				value = value.substring(1, value.length() - 1);
 			else
-				throw new IllegalArgumentException("Invalid value for entity-tag: ["+(isWeak ? ("W/"+value) : value)+"]");
+				throw new IllegalArgumentException("Invalid value for entity-tag: [" + (isWeak ? ("W/" + value) : value) + "]");
 		}
 		this.value = value;
 
@@ -81,27 +83,21 @@ public class EntityTag {
 	 *
 	 * @return The validator value.
 	 */
-	public String getEntityValue() {
-		return value;
-	}
+	public String getEntityValue() { return value; }
 
 	/**
 	 * Returns <jk>true</jk> if the validator string value is <c>*</c>.
 	 *
 	 * @return <jk>true</jk> if the validator string value is <c>*</c>.
 	 */
-	public boolean isAny() {
-		return isAny;
-	}
+	public boolean isAny() { return isAny; }
 
 	/**
 	 * Returns <jk>true</jk> if the weak flag is present in the value.
 	 *
 	 * @return <jk>true</jk> if the weak flag is present in the value.
 	 */
-	public boolean isWeak() {
-		return isWeak;
-	}
+	public boolean isWeak() { return isWeak; }
 
 	@Override
 	public String toString() {

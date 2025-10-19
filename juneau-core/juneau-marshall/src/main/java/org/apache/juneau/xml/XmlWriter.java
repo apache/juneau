@@ -54,8 +54,7 @@ public class XmlWriter extends SerializerWriter {
 	 * @param enableNs Flag to indicate if XML namespaces are enabled.
 	 * @param defaultNamespace The default namespace if XML namespaces are enabled.
 	 */
-	public XmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar,
-			UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
+	public XmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.enableNs = enableNs;
 		this.defaultNsPrefix = defaultNamespace == null ? null : defaultNamespace.name;
@@ -477,21 +476,25 @@ public class XmlWriter extends SerializerWriter {
 			append(name);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public XmlWriter q() {
 		super.q();
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public XmlWriter s() {
 		super.s();
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public XmlWriter sIf(boolean flag) {
 		super.sIf(flag);
 		return this;
 	}
+
 	/**
 	 * Shortcut for <code>i(indent).sTag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
@@ -502,6 +505,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter sTag(int indent, String name) {
 		return i(indent).sTag(null, name, false);
 	}
+
 	/**
 	 * Shortcut for <code>i(indent).sTag(ns, name, <jk>false</jk>);</code>
 	 *
@@ -513,6 +517,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter sTag(int indent, String ns, String name) {
 		return i(indent).sTag(ns, name, false);
 	}
+
 	/**
 	 * Shortcut for <c>i(indent).sTag(ns, name, needsEncoding);</c>
 	 *
@@ -525,6 +530,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter sTag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).sTag(ns, name, needsEncoding);
 	}
+
 	/**
 	 * Shortcut for <code>sTag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
@@ -534,6 +540,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter sTag(String name) {
 		return sTag(null, name);
 	}
+
 	/**
 	 * Shortcut for <code>sTag(ns, name, <jk>false</jk>);</code>
 	 *
@@ -544,6 +551,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter sTag(String ns, String name) {
 		return sTag(ns, name, false);
 	}
+
 	/**
 	 * Writes a start tag to the output:  <code><xt>&lt;ns:name&gt;</xt></code>
 	 *
@@ -556,6 +564,7 @@ public class XmlWriter extends SerializerWriter {
 		oTag(ns, name, needsEncoding).w('>');
 		return this;
 	}
+
 	/**
 	 * Shortcut for <code>i(indent).tag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
@@ -566,6 +575,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter tag(int indent, String name) {
 		return i(indent).tag(name);
 	}
+
 	/**
 	 * Shortcut for <code>i(indent).tag(ns, name, <jk>false</jk>);</code>
 	 *
@@ -577,6 +587,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter tag(int indent, String ns, String name) {
 		return i(indent).tag(ns, name);
 	}
+
 	/**
 	 * Shortcut for <c>i(indent).tag(ns, name, needsEncoding);</c>
 	 *
@@ -589,6 +600,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter tag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).tag(ns, name, needsEncoding);
 	}
+
 	/**
 	 * Shortcut for <code>tag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
@@ -598,6 +610,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter tag(String name) {
 		return tag(null, name, false);
 	}
+
 	/**
 	 * Shortcut for <code>tag(ns, name, <jk>false</jk>);</code>
 	 *
@@ -608,6 +621,7 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter tag(String ns, String name) {
 		return tag(ns, name, false);
 	}
+
 	/**
 	 * Writes a closed tag to the output:  <code><xt>&lt;ns:name/&gt;</xt></code>
 	 *

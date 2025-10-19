@@ -107,6 +107,7 @@ public class Location extends BasicUriHeader {
 	public static Location of(URI value) {
 		return value == null ? null : new Location(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

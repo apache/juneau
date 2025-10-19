@@ -30,10 +30,10 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Xml(format=VOID)
+@Xml(format = VOID)
 public class HtmlElementVoid extends HtmlElement {
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementVoid _class(String value) {  // NOSONAR - Intentional naming.
+	public HtmlElementVoid _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

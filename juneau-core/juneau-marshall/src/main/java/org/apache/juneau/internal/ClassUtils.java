@@ -71,7 +71,7 @@ public class ClassUtils {
 	 * @return
 	 * 	An array of parameters.
 	 */
-	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object... args) {
+	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object...args) {
 		boolean needsShuffle = paramTypes.length != args.length;
 		if (! needsShuffle) {
 			for (int i = 0; i < paramTypes.length; i++) {

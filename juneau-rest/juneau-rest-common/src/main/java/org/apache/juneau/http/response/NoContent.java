@@ -40,7 +40,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class NoContent extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -93,6 +93,7 @@ public class NoContent extends BasicHttpResponse {
 	public NoContent copy() {
 		return new NoContent(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public NoContent setContent(HttpEntity value) {
 		super.setContent(value);

@@ -53,6 +53,7 @@ public class Entry {
 		this.config = config;
 		this.value = configEntry == null ? null : config.removeMods(configEntry.getModifiers(), configEntry.getValue());
 	}
+
 	/**
 	 * Returns this entry converted to the specified type.
 	 *
@@ -98,13 +99,20 @@ public class Entry {
 
 		try {
 			var v = toString();
-			if (type == String.class) return (Optional<T>)asString();
-			if (type == String[].class) return (Optional<T>)asStringArray();
-			if (type == byte[].class) return (Optional<T>)asBytes();
-			if (type == int.class || type == Integer.class) return (Optional<T>)asInteger();
-			if (type == long.class || type == Long.class) return (Optional<T>)asLong();
-			if (type == JsonMap.class) return (Optional<T>)asMap();
-			if (type == JsonList.class) return (Optional<T>)asList();
+			if (type == String.class)
+				return (Optional<T>)asString();
+			if (type == String[].class)
+				return (Optional<T>)asStringArray();
+			if (type == byte[].class)
+				return (Optional<T>)asBytes();
+			if (type == int.class || type == Integer.class)
+				return (Optional<T>)asInteger();
+			if (type == long.class || type == Long.class)
+				return (Optional<T>)asLong();
+			if (type == JsonMap.class)
+				return (Optional<T>)asMap();
+			if (type == JsonList.class)
+				return (Optional<T>)asList();
 			if (isEmpty())
 				return Utils.opte();
 			if (isSimpleType(type))
@@ -408,7 +416,7 @@ public class Entry {
 	 * @return This entry as a string, or {@link Optional#empty()} if the entry does not exist.
 	 */
 	public Optional<String> asString() {
- 		return Utils.opt(isPresent() ? config.varSession.resolve(value) : null);
+		return Utils.opt(isPresent() ? config.varSession.resolve(value) : null);
 	}
 
 	/**
@@ -452,62 +460,49 @@ public class Entry {
 	 *
 	 * @return The same-line comment of this entry.
 	 */
-	public String getComment() {
-		return configEntry.getComment();
-	}
+	public String getComment() { return configEntry.getComment(); }
 
 	/**
 	 * Returns the name of this entry.
 	 *
 	 * @return The name of this entry.
 	 */
-	public String getKey() {
-		return configEntry.getKey();
-	}
+	public String getKey() { return configEntry.getKey(); }
 
 	/**
 	 * Returns the modifiers for this entry.
 	 *
 	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
 	 */
-	public String getModifiers() {
-		return configEntry.getModifiers();
-	}
+	public String getModifiers() { return configEntry.getModifiers(); }
 
 	/**
 	 * Returns the pre-lines of this entry.
 	 *
 	 * @return The pre-lines of this entry as an unmodifiable list.
 	 */
-	public List<String> getPreLines() {
-		return configEntry.getPreLines();
-	}
+	public List<String> getPreLines() { return configEntry.getPreLines(); }
 
 	/**
 	 * Returns the raw value of this entry.
 	 *
 	 * @return The raw value of this entry.
 	 */
-	public String getValue() {
-		return configEntry.getValue();
-	}
+	public String getValue() { return configEntry.getValue(); }
+
 	/**
 	 * Returns <jk>true</jk> if this entry exists in the config and is not empty.
 	 *
 	 * @return <jk>true</jk> if this entry exists in the config and is not empty.
 	 */
-	public boolean isNotEmpty() {
-		return ! isEmpty();
-	}
+	public boolean isNotEmpty() { return ! isEmpty(); }
 
 	/**
 	 * Returns <jk>true</jk> if this entry exists in the config.
 	 *
 	 * @return <jk>true</jk> if this entry exists in the config.
 	 */
-	public boolean isPresent() {
-		return ! isNull();
-	}
+	public boolean isPresent() { return ! isNull(); }
 
 	/**
 	 * Returns this entry converted to the specified type or returns the default value.
@@ -542,10 +537,11 @@ public class Entry {
 	 *
 	 * @return This entry as a string, or <jk>null</jk> if the entry does not exist.
 	 */
- 	@Override
+	@Override
 	public String toString() {
- 		return isPresent() ? config.varSession.resolve(value) : null;
+		return isPresent() ? config.varSession.resolve(value) : null;
 	}
+
 	private static boolean isArray(Type t) {
 		if (! (t instanceof Class))
 			return false;
@@ -553,13 +549,9 @@ public class Entry {
 		return (c.isArray());
 	}
 
-	private boolean isEmpty() {
-		return Utils.isEmpty(value);
-	}
+	private boolean isEmpty() { return Utils.isEmpty(value); }
 
-	private boolean isNull() {
-		return value == null;
-	}
+	private boolean isNull() { return value == null; }
 
 	private static boolean isSimpleType(Type t) {
 		if (! (t instanceof Class))

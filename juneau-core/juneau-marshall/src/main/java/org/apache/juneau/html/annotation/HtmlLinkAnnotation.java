@@ -62,7 +62,7 @@ public class HtmlLinkAnnotation {
 	 * A collection of {@link HtmlLink @HtmlLink annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -84,7 +84,7 @@ public class HtmlLinkAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTBuilder<Builder> {
 
-		String nameProperty="", uriProperty="";
+		String nameProperty = "", uriProperty = "";
 
 		/**
 		 * Constructor.
@@ -150,6 +150,7 @@ public class HtmlLinkAnnotation {
 
 	/** Default value */
 	public static final HtmlLink DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -158,6 +159,7 @@ public class HtmlLinkAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static HtmlLink copy(HtmlLink a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.nameProperty(r.resolve(a.nameProperty()))
@@ -165,7 +167,9 @@ public class HtmlLinkAnnotation {
 			.onClass(a.onClass())
 			.uriProperty(r.resolve(a.uriProperty()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -174,6 +178,7 @@ public class HtmlLinkAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -183,6 +188,7 @@ public class HtmlLinkAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

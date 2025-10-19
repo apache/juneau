@@ -77,7 +77,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="iframe")
+@Bean(typeName = "iframe")
 public class Iframe extends HtmlElementMixed {
 
 	/**
@@ -95,7 +95,7 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Iframe _class(String value) {  // NOSONAR - Intentional naming.
+	public Iframe _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -129,6 +129,7 @@ public class Iframe extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Iframe contenteditable(Object value) {
 		super.contenteditable(value);

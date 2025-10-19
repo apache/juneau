@@ -163,6 +163,7 @@ public class Warning extends BasicStringHeader {
 	public static Warning of(Supplier<String> value) {
 		return value == null ? null : new Warning(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

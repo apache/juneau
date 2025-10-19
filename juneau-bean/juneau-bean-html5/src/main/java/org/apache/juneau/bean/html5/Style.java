@@ -76,7 +76,7 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="style")
+@Bean(typeName = "style")
 public class Style extends HtmlElementRawText {
 
 	/**
@@ -105,7 +105,7 @@ public class Style extends HtmlElementRawText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Style _class(String value) {  // NOSONAR - Intentional naming.
+	public Style _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -115,6 +115,7 @@ public class Style extends HtmlElementRawText {
 		super.accesskey(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Style attr(String key, Object val) {
 		super.attr(key, val);

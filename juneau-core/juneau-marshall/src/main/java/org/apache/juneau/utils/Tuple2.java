@@ -40,7 +40,7 @@ public class Tuple2<A,B> {
 	 * @return A new tuple object.
 	 */
 	public static <A,B> Tuple2<A,B> of(A a, B b) {
-		return new Tuple2<>(a,b);
+		return new Tuple2<>(a, b);
 	}
 
 	private final A a;
@@ -59,7 +59,7 @@ public class Tuple2<A,B> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple2 && Utils.eq(this, (Tuple2<?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b));
+		return o instanceof Tuple2 && Utils.eq(this, (Tuple2<?,?>)o, (x, y) -> Utils.eq(x.a, y.a) && Utils.eq(x.b, y.b));
 	}
 
 	/**
@@ -67,21 +67,17 @@ public class Tuple2<A,B> {
 	 *
 	 * @return The first object in this tuple.
 	 */
-	public A getA() {
-		return a;
-	}
+	public A getA() { return a; }
 
 	/**
 	 * Returns the second object in this tuple.
 	 *
 	 * @return The second object in this tuple.
 	 */
-	public B getB() {
-		return b;
-	}
+	public B getB() { return b; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return HashCode.of(a,b);
+		return HashCode.of(a, b);
 	}
 }

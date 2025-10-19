@@ -50,8 +50,7 @@ public class DateUtils {
 	 * {@link SimpleDateFormat its javadoc}.
 	 */
 	static class DateFormatHolder {
-		private static final ThreadLocal<SoftReference<Map<String,SimpleDateFormat>>> THREADLOCAL_FORMATS =
-				new ThreadLocal<>() {
+		private static final ThreadLocal<SoftReference<Map<String,SimpleDateFormat>>> THREADLOCAL_FORMATS = new ThreadLocal<>() {
 			@Override
 			protected SoftReference<Map<String,SimpleDateFormat>> initialValue() {
 				Map<String,SimpleDateFormat> m = new HashMap<>();
@@ -188,8 +187,7 @@ public class DateUtils {
 	public static String toValidISO8601DT(String in) {
 
 		// "2001-07-04T15:30:45Z"
-		final int
-			S1 = 1, // Looking for -
+		final int S1 = 1, // Looking for -
 			S2 = 2, // Found -, looking for -
 			S3 = 3, // Found -, looking for T
 			S4 = 4, // Found T, looking for :
@@ -224,6 +222,8 @@ public class DateUtils {
 
 		if (needsT)
 			in = in.replace(' ', 'T');
+
+		// @formatter:off
 		switch(state) {
 			case S1: return in + "-01-01T00:00:00";
 			case S2: return in + "-01T00:00:00";
@@ -232,5 +232,6 @@ public class DateUtils {
 			case S5: return in + ":00";
 			default: return in;
 		}
+		// @formatter:on
 	}
 }

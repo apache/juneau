@@ -59,7 +59,7 @@ import org.apache.juneau.serializer.*;
 @Target(TYPE)
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({RestAnnotation.RestContextApply.class,RestAnnotation.RestOpContextApply.class})
+@ContextApply({ RestAnnotation.RestContextApply.class, RestAnnotation.RestOpContextApply.class })
 @AnnotationGroup(Rest.class)
 public @interface Rest {
 

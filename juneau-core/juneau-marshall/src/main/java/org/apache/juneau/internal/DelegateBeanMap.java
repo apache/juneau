@@ -49,10 +49,9 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		}
 
 		@Override /* Overridden from Map.Entry */
-		public Object getValue() {
-			return value;
-		}
+		public Object getValue() { return value; }
 	}
+
 	private Set<String> keys = set();
 
 	private JsonMap overrideValues = new JsonMap();
@@ -64,8 +63,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	 * @param session The bean session that created this bean map.
 	 */
 	@SuppressWarnings("unchecked")
-	public
-	DelegateBeanMap(T bean, BeanSession session) {
+	public DelegateBeanMap(T bean, BeanSession session) {
 		super(session, bean, session.getBeanMeta((Class<T>)bean.getClass()));
 	}
 
@@ -126,9 +124,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	}
 
 	@Override /* Overridden from BeanMap */
-	public BeanMeta<T> getMeta() {
-		return new BeanMetaFiltered<>(super.getMeta(), keys);
-	}
+	public BeanMeta<T> getMeta() { return new BeanMetaFiltered<>(super.getMeta(), keys); }
 
 	@Override /* Overridden from BeanMap */
 	public Collection<BeanPropertyMeta> getProperties() {

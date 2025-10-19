@@ -80,7 +80,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="input")
+@Bean(typeName = "input")
 public class Input extends HtmlElementVoid {
 
 	/**
@@ -98,7 +98,7 @@ public class Input extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Input _class(String value) {  // NOSONAR - Intentional naming.
+	public Input _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -562,6 +562,7 @@ public class Input extends HtmlElementVoid {
 		super.onblur(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Input oncancel(String value) {
 		super.oncancel(value);

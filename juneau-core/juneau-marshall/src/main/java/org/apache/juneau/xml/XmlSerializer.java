@@ -168,34 +168,34 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param copyFrom The builder to copy from.
 		 */
-	protected Builder(Builder copyFrom) {
-		super(copyFrom);
-		addBeanTypesXml = copyFrom.addBeanTypesXml;
-		addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
-		disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
-		disableJsonTags = copyFrom.disableJsonTags;
-		enableNamespaces = copyFrom.enableNamespaces;
-		defaultNamespace = copyFrom.defaultNamespace;
-		namespaces = copyOf(copyFrom.namespaces);
-		textNodeDelimiter = copyFrom.textNodeDelimiter;
-	}
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			addBeanTypesXml = copyFrom.addBeanTypesXml;
+			addNamespaceUrisToRoot = copyFrom.addNamespaceUrisToRoot;
+			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
+			disableJsonTags = copyFrom.disableJsonTags;
+			enableNamespaces = copyFrom.enableNamespaces;
+			defaultNamespace = copyFrom.defaultNamespace;
+			namespaces = copyOf(copyFrom.namespaces);
+			textNodeDelimiter = copyFrom.textNodeDelimiter;
+		}
 
 		/**
 		 * Copy constructor.
 		 *
 		 * @param copyFrom The bean to copy from.
 		 */
-	protected Builder(XmlSerializer copyFrom) {
-		super(copyFrom);
-		addBeanTypesXml = copyFrom.addBeanTypesXml;
-		addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
-		disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
-		disableJsonTags = ! copyFrom.addJsonTags;
-		enableNamespaces = copyFrom.enableNamespaces;
-		defaultNamespace = copyFrom.defaultNamespace;
-		namespaces = copyFrom.namespaces.length == 0 ? null : Utils.list(copyFrom.namespaces);
-		textNodeDelimiter = copyFrom.textNodeDelimiter;
-	}
+		protected Builder(XmlSerializer copyFrom) {
+			super(copyFrom);
+			addBeanTypesXml = copyFrom.addBeanTypesXml;
+			addNamespaceUrisToRoot = copyFrom.addNamespaceUrlsToRoot;
+			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
+			disableJsonTags = ! copyFrom.addJsonTags;
+			enableNamespaces = copyFrom.enableNamespaces;
+			defaultNamespace = copyFrom.defaultNamespace;
+			namespaces = copyFrom.namespaces.length == 0 ? null : Utils.list(copyFrom.namespaces);
+			textNodeDelimiter = copyFrom.textNodeDelimiter;
+		}
 
 		@Override /* Overridden from Builder */
 		public Builder accept(String value) {
@@ -209,11 +209,12 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			return this;
 		}
 
-	@Override /* Overridden from Builder */
-	public Builder addBeanTypes(boolean value) {
-		super.addBeanTypes(value);
-		return this;
-	}
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes(boolean value) {
+			super.addBeanTypes(value);
+			return this;
+		}
+
 		/**
 		 * Add <js>"_type"</js> properties when needed.
 		 *
@@ -326,11 +327,12 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			return this;
 		}
 
-	@Override /* Overridden from Builder */
-	public Builder beanContext(BeanContext.Builder value) {
-		super.beanContext(value);
-		return this;
-	}
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext.Builder value) {
+			super.beanContext(value);
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanDictionary(java.lang.Class<?>...values) {
 			super.beanDictionary(values);
@@ -676,6 +678,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				addBeanTypesXml,
@@ -687,6 +690,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 				namespaces,
 				textNodeDelimiter
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -812,10 +816,10 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * @param values The new value for this property.
 		 * @return This object.
 		 */
-	public Builder namespaces(Namespace...values) {
-		namespaces = addAll(namespaces, values);
-		return this;
-	}
+		public Builder namespaces(Namespace...values) {
+			namespaces = addAll(namespaces, values);
+			return this;
+		}
 
 		@Override /* Overridden from Builder */
 		public Builder notBeanClasses(java.lang.Class<?>...values) {
@@ -926,13 +930,13 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1185,9 +1189,9 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/** Default serializer, single quotes, whitespace added. */
 	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(create());
 
-	protected static final Namespace
-		DEFAULT_JUNEAU_NAMESPACE = Namespace.of("juneau", "http://www.apache.org/2013/Juneau"),
+	protected static final Namespace DEFAULT_JUNEAU_NAMESPACE = Namespace.of("juneau", "http://www.apache.org/2013/Juneau"),
 		DEFAULT_XS_NAMESPACE = Namespace.of("xs", "http://www.w3.org/2001/XMLSchema");
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -1196,12 +1200,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	public static Builder create() {
 		return new Builder();
 	}
-	final boolean
-		autoDetectNamespaces,
-		enableNamespaces,
-		addNamespaceUrlsToRoot,
-		addBeanTypesXml,
-		addJsonTags;
+
+	final boolean autoDetectNamespaces, enableNamespaces, addNamespaceUrlsToRoot, addBeanTypesXml, addJsonTags;
 
 	final Namespace defaultNamespace;
 	final Namespace[] namespaces;
@@ -1242,9 +1242,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	}
 
 	@Override /* Overridden from Context */
-	public XmlSerializerSession getSession() {
-		return createSession().build();
-	}
+	public XmlSerializerSession getSession() { return createSession().build(); }
+
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
 		XmlBeanMeta m = xmlBeanMetas.get(bm);
@@ -1274,6 +1273,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		}
 		return m;
 	}
+
 	/**
 	 * Default namespace.
 	 *
@@ -1281,9 +1281,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * @return
 	 * 	The default namespace URI for this document.
 	 */
-	protected final Namespace getDefaultNamespace() {
-		return defaultNamespace;
-	}
+	protected final Namespace getDefaultNamespace() { return defaultNamespace; }
 
 	/**
 	 * Default namespaces.
@@ -1292,9 +1290,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */
-	protected final Namespace[] getNamespaces() {
-		return namespaces;
-	}
+	protected final Namespace[] getNamespaces() { return namespaces; }
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -1305,9 +1301,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * 	through reflection.
 	 */
 	@Override
-	protected boolean isAddBeanTypes() {
-		return addBeanTypes;
-	}
+	protected boolean isAddBeanTypes() { return addBeanTypes; }
 
 	/**
 	 * Add namespace URLs to the root element.
@@ -1316,9 +1310,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * @return
 	 * 	<jk>true</jk> if {@code xmlns:x} attributes are added to the root element for the default and all mapped namespaces.
 	 */
-	protected final boolean isAddNamespaceUrlsToRoot() {
-		return addNamespaceUrlsToRoot;
-	}
+	protected final boolean isAddNamespaceUrlsToRoot() { return addNamespaceUrlsToRoot; }
 
 	/**
 	 * Auto-detect namespace usage.
@@ -1327,9 +1319,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * @return
 	 * 	<jk>true</jk> if namespace usage is detected before serialization.
 	 */
-	protected final boolean isAutoDetectNamespaces() {
-		return autoDetectNamespaces;
-	}
+	protected final boolean isAutoDetectNamespaces() { return autoDetectNamespaces; }
 
 	/**
 	 * Enable support for XML namespaces.
@@ -1338,11 +1328,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * @return
 	 * 	<jk>false</jk> if XML output will not contain any namespaces regardless of any other settings.
 	 */
-	protected final boolean isEnableNamespaces() {
-		return enableNamespaces;
-	}
+	protected final boolean isEnableNamespaces() { return enableNamespaces; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("autoDetectNamespaces", autoDetectNamespaces)
 			.append("enableNamespaces", enableNamespaces)
@@ -1350,5 +1340,6 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			.append("defaultNamespace", defaultNamespace)
 			.append("namespaces", namespaces)
 			.append("addBeanTypes", addBeanTypes);
+		// @formatter:on
 	}
 }

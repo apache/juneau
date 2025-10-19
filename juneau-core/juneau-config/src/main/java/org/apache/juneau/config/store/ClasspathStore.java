@@ -50,8 +50,7 @@ public class ClasspathStore extends ConfigStore {
 		/**
 		 * Constructor, default settings.
 		 */
-		protected Builder() {
-		}
+		protected Builder() {}
 
 		/**
 		 * Copy constructor.
@@ -83,6 +82,7 @@ public class ClasspathStore extends ConfigStore {
 			super.apply(work);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
@@ -138,6 +138,7 @@ public class ClasspathStore extends ConfigStore {
 
 	/** Default memory store, all default values.*/
 	public static final ClasspathStore DEFAULT = ClasspathStore.create().build();
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -146,6 +147,7 @@ public class ClasspathStore extends ConfigStore {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
 
 	/**

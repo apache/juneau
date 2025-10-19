@@ -42,7 +42,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header
-@Schema(type="integer",format="int32")
+@Schema(type = "integer", format = "int32")
 public class BasicIntegerHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
@@ -91,6 +91,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	public static BasicIntegerHeader of(String name, Supplier<Integer> value) {
 		return value == null ? null : new BasicIntegerHeader(name, value);
 	}
+
 	private final Integer value;
 	private final Supplier<Integer> supplier;
 
@@ -172,9 +173,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
+	public String getValue() { return Utils.s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

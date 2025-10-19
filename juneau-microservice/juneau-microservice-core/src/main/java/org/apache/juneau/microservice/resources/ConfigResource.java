@@ -55,7 +55,8 @@ import org.apache.juneau.rest.servlet.*;
 )
 @SuppressWarnings("javadoc")
 public class ConfigResource extends BasicRestServlet {
-	@Response @Schema(description="Section not found.")
+	@Response
+	@Schema(description = "Section not found.")
 	private class SectionNotFound extends NotFound {
 		private static final long serialVersionUID = 1L;
 
@@ -207,6 +208,7 @@ public class ConfigResource extends BasicRestServlet {
 		getContext().getConfig().set(section + '/' + key, value);
 		return getSection(section).getString(key);
 	}
+
 	private JsonMap getSection(String name) throws SectionNotFound {
 		return getContext().getConfig().getSection(name).asMap().orElseThrow(SectionNotFound::new);
 	}

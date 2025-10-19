@@ -98,12 +98,12 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentBooleanAssertion.class, "Messages");
 	private static final String
 		MSG_valueWasFalse = MESSAGES.getString("valueWasFalse"),
 		MSG_valueWasTrue = MESSAGES.getString("valueWasTrue");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -140,7 +140,6 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	public FluentBooleanAssertion(Boolean value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Asserts that the value is false.

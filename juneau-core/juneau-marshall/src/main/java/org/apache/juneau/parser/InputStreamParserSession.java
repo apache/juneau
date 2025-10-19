@@ -58,6 +58,7 @@ public class InputStreamParserSession extends ParserSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public InputStreamParserSession build() {
 			return new InputStreamParserSession(this);
@@ -147,6 +148,7 @@ public class InputStreamParserSession extends ParserSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -156,6 +158,7 @@ public class InputStreamParserSession extends ParserSession {
 	public static Builder create(InputStreamParser ctx) {
 		return new Builder(ctx);
 	}
+
 	private final InputStreamParser ctx;
 
 	/**
@@ -192,9 +195,8 @@ public class InputStreamParserSession extends ParserSession {
 	}
 
 	@Override /* Overridden from ParserSession */
-	public final boolean isReaderParser() {
-		return false;
-	}
+	public final boolean isReaderParser() { return false; }
+
 	/**
 	 * Binary input format.
 	 *
@@ -202,7 +204,5 @@ public class InputStreamParserSession extends ParserSession {
 	 * @return
 	 * 	The format to use when converting strings to byte arrays.
 	 */
-	protected final BinaryFormat getBinaryFormat() {
-		return ctx.getBinaryFormat();
-	}
+	protected final BinaryFormat getBinaryFormat() { return ctx.getBinaryFormat(); }
 }

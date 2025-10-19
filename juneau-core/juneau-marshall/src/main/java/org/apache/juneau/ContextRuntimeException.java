@@ -57,7 +57,7 @@ public class ContextRuntimeException extends BasicRuntimeException {
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public ContextRuntimeException(Throwable cause, String message, Object... args) {
+	public ContextRuntimeException(Throwable cause, String message, Object...args) {
 		super(cause, message, args);
 	}
 

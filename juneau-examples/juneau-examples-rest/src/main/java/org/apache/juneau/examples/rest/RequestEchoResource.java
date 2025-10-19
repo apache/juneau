@@ -90,7 +90,7 @@ public class RequestEchoResource extends BasicRestObject {
 	 * @param req The HTTP servlet request.
 	 * @return The same request to serialize as the response.
 	 */
-	@RestOp(method="*", path="/*", converters={Traversable.class,Queryable.class}, summary="Serializes the incoming HttpServletRequest object.")
+	@RestOp(method = "*", path = "/*", converters = { Traversable.class, Queryable.class }, summary = "Serializes the incoming HttpServletRequest object.")
 	public HttpServletRequest doGet(RestRequest req) {
 		// Just echo the request back as the response.
 		return req.getHttpServletRequest();

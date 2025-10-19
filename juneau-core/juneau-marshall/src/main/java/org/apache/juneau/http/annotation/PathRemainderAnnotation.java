@@ -67,7 +67,7 @@ public class PathRemainderAnnotation {
 	 * A collection of {@link PathRemainder @PathRemainder annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -92,7 +92,7 @@ public class PathRemainderAnnotation {
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String def="";
+		String def = "";
 		String[] description = {};
 
 		/**
@@ -223,6 +223,7 @@ public class PathRemainderAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -232,6 +233,7 @@ public class PathRemainderAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -241,6 +243,7 @@ public class PathRemainderAnnotation {
 	public static Builder create(String...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
@@ -250,6 +253,7 @@ public class PathRemainderAnnotation {
 	public static boolean empty(PathRemainder a) {
 		return a == null || DEFAULT.equals(a);
 	}
+
 	/**
 	 * Finds the default value from the specified list of annotations.
 	 *

@@ -71,7 +71,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
-public class Server extends OpenApiElement{
+public class Server extends OpenApiElement {
 	private URI url;
 	private String description;
 	private Map<String,ServerVariable> variables;
@@ -79,7 +79,7 @@ public class Server extends OpenApiElement{
 	/**
 	 * Default constructor.
 	 */
-	public Server() { }
+	public Server() {}
 
 	/**
 	 * Copy constructor.
@@ -136,9 +136,7 @@ public class Server extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>url</property>.
@@ -148,26 +146,24 @@ public class Server extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public URI getUrl() {
-		return url;
-	}
+	public URI getUrl() { return url; }
 
 	/**
 	 * Bean property getter:  <property>variables</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, ServerVariable> getVariables() {
-		return variables;
-	}
+	public Map<String,ServerVariable> getVariables() { return variables; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
 			.addIf(url != null, "url")
 			.addIf(variables != null, "variables")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -177,7 +173,7 @@ public class Server extends OpenApiElement{
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
 			case "url" -> setUrl(toURI(value));
-			case "variables" -> setVariables(mapBuilder(String.class,ServerVariable.class).sparse().addAny(value).build());
+			case "variables" -> setVariables(mapBuilder(String.class, ServerVariable.class).sparse().addAny(value).build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -226,7 +222,7 @@ public class Server extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Server setVariables(Map<String, ServerVariable> value) {
+	public Server setVariables(Map<String,ServerVariable> value) {
 		variables = copyOf(value);
 		return this;
 	}

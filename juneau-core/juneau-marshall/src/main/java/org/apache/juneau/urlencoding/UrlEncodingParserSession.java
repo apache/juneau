@@ -66,6 +66,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public UrlEncodingParserSession build() {
 			return new UrlEncodingParserSession(this);
@@ -173,6 +174,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -182,6 +184,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	public static Builder create(UrlEncodingParser ctx) {
 		return new Builder(ctx);
 	}
+
 	private final UrlEncodingParser ctx;
 
 	/**
@@ -294,10 +297,10 @@ public class UrlEncodingParserSession extends UonParserSession {
 		if (c == -1)
 			return m;
 
-		final int S1=1; // Looking for attrName start.
-		final int S2=2; // Found attrName end, looking for =.
-		final int S3=3; // Found =, looking for valStart.
-		final int S4=4; // Looking for , or }
+		final int S1 = 1; // Looking for attrName start.
+		final int S2 = 2; // Found attrName end, looking for =.
+		final int S3 = 3; // Found =, looking for valStart.
+		final int S4 = 4; // Looking for , or }
 		boolean isInEscape = false;
 
 		int state = S1;
@@ -421,10 +424,10 @@ public class UrlEncodingParserSession extends UonParserSession {
 		if (c == -1)
 			return m;
 
-		final int S1=1; // Looking for attrName start.
-		final int S2=2; // Found attrName end, looking for =.
-		final int S3=3; // Found =, looking for valStart.
-		final int S4=4; // Looking for & or end.
+		final int S1 = 1; // Looking for attrName start.
+		final int S2 = 2; // Found attrName end, looking for =.
+		final int S3 = 3; // Found =, looking for valStart.
+		final int S4 = 4; // Looking for & or end.
 		boolean isInEscape = false;
 
 		int state = S1;
@@ -458,7 +461,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 						if (c == -1)
 							return m;
 						state = S1;
-					} else  {
+					} else {
 						// For performance, we bypass parseAnything for string values.
 						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
 						V value = (V)(valueType.isString() ? super.parseString(r.unread(), true) : super.parseAnything(valueType, r.unread(), outer, true, null));
@@ -515,6 +518,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			return m;
 		}
 	}
+
 	/**
 	 * Returns the language-specific metadata on the specified class.
 	 *
@@ -524,6 +528,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
 		return ctx.getUrlEncodingClassMeta(cm);
 	}
+
 	/**
 	 * Parser bean property collections/arrays as separate key/value pairs.
 	 *
@@ -532,7 +537,5 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 * <jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 	 * <br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 */
-	protected final boolean isExpandedParams() {
-		return ctx.isExpandedParams();
-	}
+	protected final boolean isExpandedParams() { return ctx.isExpandedParams(); }
 }

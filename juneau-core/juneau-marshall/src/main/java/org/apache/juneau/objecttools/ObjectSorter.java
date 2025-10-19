@@ -56,7 +56,7 @@ import org.apache.juneau.common.utils.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ObjectSorter implements ObjectTool<SortArgs> {
 	private static class SortEntry implements Comparable {
 		Object o;
@@ -97,6 +97,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	 * Default reusable searcher.
 	 */
 	public static final ObjectSorter DEFAULT = new ObjectSorter();
+
 	/**
 	 * Static creator.
 	 *

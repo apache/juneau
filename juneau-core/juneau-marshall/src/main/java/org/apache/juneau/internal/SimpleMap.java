@@ -53,14 +53,10 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 		}
 
 		@Override /* Overridden from Map.Entry */
-		public K getKey() {
-			return keys[index];
-		}
+		public K getKey() { return keys[index]; }
 
 		@Override /* Overridden from Map.Entry */
-		public V getValue() {
-			return values[index];
-		}
+		public V getValue() { return values[index]; }
 
 		@Override /* Overridden from Map.Entry */
 		public V setValue(V val) {
@@ -69,6 +65,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 			return v;
 		}
 	}
+
 	final K[] keys;
 	final V[] values;
 
@@ -88,11 +85,11 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 		this.keys = keys;
 		this.values = values;
-		entries = (SimpleMapEntry[]) Array.newInstance(SimpleMapEntry.class, keys.length);
+		entries = (SimpleMapEntry[])Array.newInstance(SimpleMapEntry.class, keys.length);
 		for (int i = 0; i < keys.length; i++) {
 			Utils.assertArg(keys[i] != null, "Keys array cannot contain a null value.");
 			entries[i] = new SimpleMapEntry(i);
-	}
+		}
 	}
 
 	@Override /* Overridden from Map */
@@ -122,6 +119,6 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 				return v;
 			}
 		}
-		throw new IllegalArgumentException("No key '"+key+"' defined in map");
+		throw new IllegalArgumentException("No key '" + key + "' defined in map");
 	}
 }

@@ -86,7 +86,7 @@ public class ArgsVar extends DefaultingVar {
 			String s = System.getProperty("sun.java.command");
 			if (isNotEmpty(s)) {
 				int i = s.indexOf(' ');
-				args = new Args(i == -1 ? "" : s.substring(i+1));
+				args = new Args(i == -1 ? "" : s.substring(i + 1));
 			} else {
 				args = new Args(System.getProperty("juneau.args", ""));
 			}

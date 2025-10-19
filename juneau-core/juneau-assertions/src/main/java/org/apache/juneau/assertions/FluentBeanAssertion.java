@@ -95,7 +95,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 
-
 	/**
 	 * Chained constructor.
 	 *
@@ -132,7 +131,6 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		this(null, value, returns);
 	}
 
-
 	/**
 	 * Extracts the specified property as an {@link FluentListAssertion}.
 	 *
@@ -166,7 +164,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentBeanAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
+	public FluentBeanAssertion<T,R> asTransformed(Function<T,T> function) { // NOSONAR - Intentional.
 		return new FluentBeanAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 

@@ -73,7 +73,7 @@ public class PropertyNotFoundException extends RuntimeException {
 	 * @param cause The underlying cause of the exception
 	 */
 	public PropertyNotFoundException(String propertyName, Class<?> objectType, Throwable cause) {
-		super(f("Property ''{0}'' not found on object of type {1}", propertyName, objectType.getSimpleName()) ,cause);
+		super(f("Property ''{0}'' not found on object of type {1}", propertyName, objectType.getSimpleName()), cause);
 	}
 
 	/**

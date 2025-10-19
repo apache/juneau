@@ -51,7 +51,7 @@ public class RestResponseArgs extends SimpleRestOperationArg {
 		if (paramInfo.isType(OutputStream.class))
 			return new RestResponseArgs(RestResponse::getOutputStream);
 		if (paramInfo.isType(RestResponse.class))
-			return new RestResponseArgs(x->x);
+			return new RestResponseArgs(x -> x);
 		if (paramInfo.isType(ServletOutputStream.class))
 			return new RestResponseArgs(RestResponse::getOutputStream);
 		if (paramInfo.isType(Writer.class))

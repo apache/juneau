@@ -89,6 +89,7 @@ public class ProxyAuthorization extends BasicStringHeader {
 	public static ProxyAuthorization of(Supplier<String> value) {
 		return value == null ? null : new ProxyAuthorization(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

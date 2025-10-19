@@ -61,11 +61,13 @@ public class RestOpArgList {
 			prependAll(entries, Utils.assertClassArrayArgIsType("values", RestOpArg.class, values));
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -77,6 +79,7 @@ public class RestOpArgList {
 			return new RestOpArgList(this);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -86,6 +89,7 @@ public class RestOpArgList {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final Class<? extends RestOpArg>[] entries;
 
 	/**
@@ -95,11 +99,7 @@ public class RestOpArgList {
 	 */
 	@SuppressWarnings("unchecked")
 	protected RestOpArgList(Builder builder) {
-		entries =
-			builder
-				.entries
-				.stream()
-				.toArray(Class[]::new);
+		entries = builder.entries.stream().toArray(Class[]::new);
 	}
 
 	/**

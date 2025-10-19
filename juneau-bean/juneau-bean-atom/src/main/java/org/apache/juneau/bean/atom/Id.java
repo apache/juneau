@@ -76,7 +76,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://www.ietf.org/rfc/rfc4151.txt">RFC 4151 - Tag URI Scheme</a>
  * </ul>
  */
-@Bean(typeName="id")
+@Bean(typeName = "id")
 public class Id extends Common {
 
 	private String text;
@@ -92,6 +92,7 @@ public class Id extends Common {
 	public Id(String text) {
 		setText(text);
 	}
+
 	/**
 	 * Bean property getter:  <property>text</property>.
 	 *
@@ -100,16 +101,15 @@ public class Id extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=TEXT)
-	public String getText() {
-		return text;
-	}
+	@Xml(format = TEXT)
+	public String getText() { return text; }
 
 	@Override /* Overridden from Common */
 	public Id setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
+
 	@Override /* Overridden from Common */
 	public Id setLang(String value) {
 		super.setLang(value);

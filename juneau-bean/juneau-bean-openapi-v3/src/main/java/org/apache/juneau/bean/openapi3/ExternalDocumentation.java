@@ -107,9 +107,7 @@ public class ExternalDocumentation extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>url</property>.
@@ -119,9 +117,7 @@ public class ExternalDocumentation extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public URI getUrl() {
-		return url;
-	}
+	public URI getUrl() { return url; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

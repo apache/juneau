@@ -55,7 +55,7 @@ import org.apache.juneau.rest.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  * </ul>
  */
-@SuppressWarnings({"serial","javadoc"})
+@SuppressWarnings({ "serial", "javadoc" })
 public abstract class RrpcServlet extends BasicRestServlet {
 
 	private final Map<String,RrpcInterfaceMeta> serviceMap = new ConcurrentHashMap<>();
@@ -172,22 +172,15 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		if (types.length == 0) {
 			t.child(tr(td("No arguments").colspan(3).style("text-align:center")));
 		} else {
-			t.child(tr(th("Index"),th("Type"),th("Value")));
+			t.child(tr(th("Index"), th("Type"), th("Value")));
 			for (int i = 0; i < types.length; i++) {
 				String type = Mutaters.toString(types[i]);
 				t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type("text"))));
 			}
 		}
 
-		t.child(
-			tr(
-				td().colspan(3).style("text-align:right").children(
-					types.length == 0 ? null : button("reset", "Reset"),
-					button("button","Cancel").onclick("window.location.href='/'"),
-					button("submit", "Submit")
-				)
-			)
-		);
+		t.child(tr(td().colspan(3).style("text-align:right").children(types.length == 0 ? null : button("reset", "Reset"), button("button", "Cancel").onclick("window.location.href='/'"),
+			button("submit", "Submit"))));
 
 		return div(form().id("form").action("request:/").method(POST).children(t));
 	}
@@ -209,6 +202,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		}
 		return rm;
 	}
+
 	private Map<String,RrpcInterfaceMethodMeta> getMethods(String javaInterface) throws Exception {
 		return getInterfaceClass(javaInterface).getMethodsByPath();
 	}

@@ -41,7 +41,7 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,FIELD,METHOD})
+@Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(UrlEncodingAnnotation.Array.class)

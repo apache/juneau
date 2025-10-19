@@ -133,6 +133,7 @@ public class CacheControl extends BasicStringHeader {
 	public static CacheControl of(Supplier<String> value) {
 		return value == null ? null : new CacheControl(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

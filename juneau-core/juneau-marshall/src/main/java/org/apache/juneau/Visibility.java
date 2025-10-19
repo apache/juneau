@@ -101,12 +101,17 @@ public enum Visibility {
 	 * @return <jk>true</jk> if this visibility matches the specified modifier attribute.
 	 */
 	public boolean isVisible(int mod) {
-		switch(this) {
-			case NONE: return false;
-			case PRIVATE: return true;
-			case DEFAULT: return ! Modifier.isPrivate(mod);
-			case PROTECTED: return Modifier.isProtected(mod) || Modifier.isPublic(mod);
-			default: return Modifier.isPublic(mod);
+		switch (this) {
+			case NONE:
+				return false;
+			case PRIVATE:
+				return true;
+			case DEFAULT:
+				return ! Modifier.isPrivate(mod);
+			case PROTECTED:
+				return Modifier.isProtected(mod) || Modifier.isPublic(mod);
+			default:
+				return Modifier.isPublic(mod);
 		}
 	}
 

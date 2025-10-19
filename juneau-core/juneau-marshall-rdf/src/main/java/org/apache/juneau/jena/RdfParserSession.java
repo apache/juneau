@@ -50,7 +50,7 @@ import com.hp.hpl.jena.util.iterator.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class RdfParserSession extends ReaderParserSession {
 	/**
 	 * Builder class.
@@ -74,6 +74,7 @@ public class RdfParserSession extends ReaderParserSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public RdfParserSession build() {
 			return new RdfParserSession(this);
@@ -175,6 +176,7 @@ public class RdfParserSession extends ReaderParserSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -184,6 +186,7 @@ public class RdfParserSession extends ReaderParserSession {
 	public static Builder create(RdfParser ctx) {
 		return new Builder(ctx);
 	}
+
 	private final RdfParser ctx;
 	private final Property pRoot, pValue, pType, pRdfType;
 	private final Model model;
@@ -209,7 +212,7 @@ public class RdfParserSession extends ReaderParserSession {
 
 		// Note: NTripleReader throws an exception if you try to set any properties on it.
 		if (! ctx.getLanguage().equals(LANG_NTRIPLE))
-			ctx.getJenaSettings().forEach((k,v) -> rdfReader.setProperty(k, v));
+			ctx.getJenaSettings().forEach((k, v) -> rdfReader.setProperty(k, v));
 	}
 
 	private final void addModelPrefix(Namespace ns) {
@@ -244,7 +247,7 @@ public class RdfParserSession extends ReaderParserSession {
 
 		// First try to find the root using the "http://www.apache.org/juneau/root" property.
 		Property root = m.createProperty(getJuneauNs().getUri(), RDF_juneauNs_ROOT);
-		for (ResIterator i  = m.listResourcesWithProperty(root); i.hasNext();)
+		for (ResIterator i = m.listResourcesWithProperty(root); i.hasNext();)
 			l.add(i.next());
 
 		if (! l.isEmpty())
@@ -351,8 +354,7 @@ public class RdfParserSession extends ReaderParserSession {
 				if (o instanceof String) {
 					o = decodeString(o);
 				}
-			}
-			else if (n.isResource()) {
+			} else if (n.isResource()) {
 				Resource r = n.asResource();
 				if (! urisVisited.add(r))
 					o = r.getURI();
@@ -555,11 +557,7 @@ public class RdfParserSession extends ReaderParserSession {
 			if (type.isArray() || type.isArgs())
 				c = list();
 			else
-				c = (
-					type.canCreateNewInstance(getOuter())
-					? (Collection<?>)type.newInstance(getOuter())
-					: new JsonList(this)
-				);
+				c = (type.canCreateNewInstance(getOuter()) ? (Collection<?>)type.newInstance(getOuter()) : new JsonList(this));
 
 			AtomicInteger argIndex = new AtomicInteger(0);
 			Collection c2 = c;
@@ -579,6 +577,7 @@ public class RdfParserSession extends ReaderParserSession {
 
 		return parseAnything(type, resource, getOuter(), null);
 	}
+
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
@@ -586,9 +585,7 @@ public class RdfParserSession extends ReaderParserSession {
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
-	protected final RdfCollectionFormat getCollectionFormat() {
-		return ctx.getCollectionFormat();
-	}
+	protected final RdfCollectionFormat getCollectionFormat() { return ctx.getCollectionFormat(); }
 
 	/**
 	 * All Jena-related configuration properties.
@@ -596,9 +593,7 @@ public class RdfParserSession extends ReaderParserSession {
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
 	 */
-	protected final Map<String,Object> getJenaSettings() {
-		return ctx.getJenaSettings();
-	}
+	protected final Map<String,Object> getJenaSettings() { return ctx.getJenaSettings(); }
 
 	/**
 	 * Default XML namespace for bean properties.
@@ -607,9 +602,7 @@ public class RdfParserSession extends ReaderParserSession {
 	 * @return
 	 * 	Default XML namespace for bean properties.
 	 */
-	protected final Namespace getJuneauBpNs() {
-		return ctx.getJuneauBpNs();
-	}
+	protected final Namespace getJuneauBpNs() { return ctx.getJuneauBpNs(); }
 
 	/**
 	 * XML namespace for Juneau properties.
@@ -618,9 +611,7 @@ public class RdfParserSession extends ReaderParserSession {
 	 * @return
 	 * 	XML namespace for Juneau properties.
 	 */
-	protected final Namespace getJuneauNs() {
-		return ctx.getJuneauNs();
-	}
+	protected final Namespace getJuneauNs() { return ctx.getJuneauNs(); }
 
 	/**
 	 * RDF language.
@@ -629,9 +620,8 @@ public class RdfParserSession extends ReaderParserSession {
 	 * @return
 	 * 	The RDF language to use.
 	 */
-	protected final String getLanguage() {
-		return ctx.getLanguage();
-	}
+	protected final String getLanguage() { return ctx.getLanguage(); }
+
 	/**
 	 * Returns the language-specific metadata on the specified bean.
 	 *
@@ -641,6 +631,7 @@ public class RdfParserSession extends ReaderParserSession {
 	protected RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
 		return ctx.getRdfBeanMeta(bm);
 	}
+
 	/**
 	 * Returns the language-specific metadata on the specified bean property.
 	 *
@@ -650,6 +641,7 @@ public class RdfParserSession extends ReaderParserSession {
 	protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
 		return ctx.getRdfBeanPropertyMeta(bpm);
 	}
+
 	/**
 	 * Returns the language-specific metadata on the specified class.
 	 *
@@ -678,9 +670,7 @@ public class RdfParserSession extends ReaderParserSession {
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 */
-	protected final boolean isLooseCollections() {
-		return ctx.isLooseCollections();
-	}
+	protected final boolean isLooseCollections() { return ctx.isLooseCollections(); }
 
 	/**
 	 * Trim whitespace from text elements.
@@ -689,7 +679,5 @@ public class RdfParserSession extends ReaderParserSession {
 	 * @return
 	 * 	<jk>true</jk> if whitespace in text elements will be automatically trimmed.
 	 */
-	protected final boolean isTrimWhitespace() {
-		return ctx.isTrimWhitespace();
-	}
+	protected final boolean isTrimWhitespace() { return ctx.isTrimWhitespace(); }
 }

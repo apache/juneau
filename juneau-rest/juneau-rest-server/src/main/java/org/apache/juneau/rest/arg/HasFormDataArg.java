@@ -60,6 +60,7 @@ public class HasFormDataArg implements RestOpArg {
 			return new HasFormDataArg(paramInfo);
 		return null;
 	}
+
 	private static String getName(HasFormData x) {
 		return firstNonEmpty(x.name(), x.value());
 	}

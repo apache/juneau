@@ -43,9 +43,7 @@ public class GzipEncoder extends Encoder {
 	 * Returns <code>[<js>"gzip"</js>]</code>.
 	 */
 	@Override /* Overridden from Encoder */
-	public String[] getCodings() {
-		return new String[]{"gzip"};
-	}
+	public String[] getCodings() { return new String[] { "gzip" }; }
 
 	@Override /* Overridden from Encoder */
 	public InputStream getInputStream(InputStream is) throws IOException {

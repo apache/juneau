@@ -73,8 +73,7 @@ public class Serializer extends BeanTraverseContext {
 	 */
 	public static class Builder extends BeanTraverseContext.Builder {
 
-		boolean addBeanTypes, addRootType, keepNullProperties, sortCollections, sortMaps, trimEmptyCollections,
-			trimEmptyMaps, trimStrings;
+		boolean addBeanTypes, addRootType, keepNullProperties, sortCollections, sortMaps, trimEmptyCollections, trimEmptyMaps, trimStrings;
 		String produces, accept;
 		UriContext uriContext;
 		UriRelativity uriRelativity;
@@ -226,6 +225,7 @@ public class Serializer extends BeanTraverseContext {
 			addBeanTypes = value;
 			return this;
 		}
+
 		/**
 		 * Add type attribute to root nodes.
 		 *
@@ -413,6 +413,7 @@ public class Serializer extends BeanTraverseContext {
 			super.beanPropertiesReadOnly(beanClassName, properties);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
 			super.beanPropertiesWriteOnly(beanClass, properties);
@@ -554,21 +555,18 @@ public class Serializer extends BeanTraverseContext {
 		 *
 		 * @return The current value for the 'accept' property.
 		 */
-		public String getAccept() {
-			return accept;
-		}
+		public String getAccept() { return accept; }
 
 		/**
 		 * Returns the current value for the 'produces' property.
 		 *
 		 * @return The current value for the 'produces' property.
 		 */
-		public String getProduces() {
-			return produces;
-		}
+		public String getProduces() { return produces; }
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				produces,
@@ -586,6 +584,7 @@ public class Serializer extends BeanTraverseContext {
 				uriResolution,
 				listener
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -909,13 +908,13 @@ public class Serializer extends BeanTraverseContext {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1242,6 +1241,7 @@ public class Serializer extends BeanTraverseContext {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a builder of the specified serializer class.
 	 *
@@ -1255,16 +1255,9 @@ public class Serializer extends BeanTraverseContext {
 	public static Builder createSerializerBuilder(Class<? extends Serializer> c) {
 		return (Builder)Context.createBuilder(c);
 	}
+
 	final String produces, accept;
-	final boolean
-		addBeanTypes,
-		keepNullProperties,
-		trimEmptyCollections,
-		trimEmptyMaps,
-		trimStrings,
-		sortCollections,
-		sortMaps,
-		addRootType;
+	final boolean addBeanTypes, keepNullProperties, trimEmptyCollections, trimEmptyMaps, trimStrings, sortCollections, sortMaps, addRootType;
 	final UriContext uriContext;
 	final UriResolution uriResolution;
 	final UriRelativity uriRelativity;
@@ -1299,7 +1292,7 @@ public class Serializer extends BeanTraverseContext {
 
 		this.producesMediaType = MediaType.of(produces);
 		this.acceptRanges = accept != null ? MediaRanges.of(accept) : MediaRanges.of(produces);
-		this.acceptMediaTypes = builder.accept != null ? MediaType.ofAll(splita(builder.accept)) : new MediaType[] {this.producesMediaType};
+		this.acceptMediaTypes = builder.accept != null ? MediaType.ofAll(splita(builder.accept)) : new MediaType[] { this.producesMediaType };
 	}
 
 	@Override /* Overridden from Context */
@@ -1335,9 +1328,8 @@ public class Serializer extends BeanTraverseContext {
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public final MediaRanges getMediaTypeRanges() {
-		return acceptRanges;
-	}
+	public final MediaRanges getMediaTypeRanges() { return acceptRanges; }
+
 	/**
 	 * Returns the first entry in the <c>accept</c> parameter passed into the constructor.
 	 *
@@ -1346,9 +1338,7 @@ public class Serializer extends BeanTraverseContext {
 	 *
 	 * @return The media type.  Never <jk>null</jk>.
 	 */
-	public final MediaType getPrimaryMediaType() {
-		return acceptMediaTypes[0];
-	}
+	public final MediaType getPrimaryMediaType() { return acceptMediaTypes[0]; }
 
 	/**
 	 * Optional method that returns the response <c>Content-Type</c> for this serializer if it is different from
@@ -1366,9 +1356,7 @@ public class Serializer extends BeanTraverseContext {
 	 *
 	 * @return The response content type.  If <jk>null</jk>, then the matched media type is used.
 	 */
-	public final MediaType getResponseContentType() {
-		return producesMediaType;
-	}
+	public final MediaType getResponseContentType() { return producesMediaType; }
 
 	/**
 	 * Optional method that specifies HTTP request headers for this serializer.
@@ -1388,19 +1376,16 @@ public class Serializer extends BeanTraverseContext {
 	public Map<String,String> getResponseHeaders(SerializerSession session) {
 		return Collections.emptyMap();
 	}
+
 	@Override /* Overridden from Context */
-	public SerializerSession getSession() {
-		return createSession().build();
-	}
+	public SerializerSession getSession() { return createSession().build(); }
 
 	/**
 	 * Returns <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
 	 *
 	 * @return <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
 	 */
-	public boolean isWriterSerializer() {
-		return false;
-	}
+	public boolean isWriterSerializer() { return false; }
 
 	/**
 	 * Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
@@ -1473,6 +1458,7 @@ public class Serializer extends BeanTraverseContext {
 	protected void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		throw new UnsupportedOperationException();
 	}
+
 	/**
 	 * Serializer listener.
 	 *
@@ -1480,9 +1466,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during serialization.
 	 */
-	protected final Class<? extends SerializerListener> getListener() {
-		return listener;
-	}
+	protected final Class<? extends SerializerListener> getListener() { return listener; }
 
 	/**
 	 * URI context bean.
@@ -1491,9 +1475,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	Bean used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected final UriContext getUriContext() {
-		return uriContext;
-	}
+	protected final UriContext getUriContext() { return uriContext; }
 
 	/**
 	 * URI relativity.
@@ -1502,9 +1484,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	Defines what relative URIs are relative to when serializing any of the following:
 	 */
-	protected final UriRelativity getUriRelativity() {
-		return uriRelativity;
-	}
+	protected final UriRelativity getUriRelativity() { return uriRelativity; }
 
 	/**
 	 * URI resolution.
@@ -1513,9 +1493,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	Defines the resolution level for URIs when serializing URIs.
 	 */
-	protected final UriResolution getUriResolution() {
-		return uriResolution;
-	}
+	protected final UriResolution getUriResolution() { return uriResolution; }
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -1525,9 +1503,7 @@ public class Serializer extends BeanTraverseContext {
 	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
 	 * 	through reflection.
 	 */
-	protected boolean isAddBeanTypes() {
-		return addBeanTypes;
-	}
+	protected boolean isAddBeanTypes() { return addBeanTypes; }
 
 	/**
 	 * Add type attribute to root nodes.
@@ -1536,9 +1512,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
-	protected final boolean isAddRootType() {
-		return addRootType;
-	}
+	protected final boolean isAddRootType() { return addRootType; }
 
 	/**
 	 * Don't trim null bean property values.
@@ -1547,9 +1521,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
-	protected final boolean isKeepNullProperties() {
-		return keepNullProperties;
-	}
+	protected final boolean isKeepNullProperties() { return keepNullProperties; }
 
 	/**
 	 * Sort arrays and collections alphabetically.
@@ -1558,9 +1530,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
 	 */
-	protected final boolean isSortCollections() {
-		return sortCollections;
-	}
+	protected final boolean isSortCollections() { return sortCollections; }
 
 	/**
 	 * Sort maps alphabetically.
@@ -1569,9 +1539,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
 	 */
-	protected final boolean isSortMaps() {
-		return sortMaps;
-	}
+	protected final boolean isSortMaps() { return sortMaps; }
 
 	/**
 	 * Trim empty lists and arrays.
@@ -1580,9 +1548,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
-	protected final boolean isTrimEmptyCollections() {
-		return trimEmptyCollections;
-	}
+	protected final boolean isTrimEmptyCollections() { return trimEmptyCollections; }
 
 	/**
 	 * Trim empty maps.
@@ -1591,9 +1557,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	<jk>true</jk> if empty map values are not serialized to the output.
 	 */
-	protected final boolean isTrimEmptyMaps() {
-		return trimEmptyMaps;
-	}
+	protected final boolean isTrimEmptyMaps() { return trimEmptyMaps; }
 
 	/**
 	 * Trim strings.
@@ -1602,11 +1566,11 @@ public class Serializer extends BeanTraverseContext {
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
-	protected final boolean isTrimStrings() {
-		return trimStrings;
-	}
+	protected final boolean isTrimStrings() { return trimStrings; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("addBeanTypes", addBeanTypes)
 			.append("keepNullProperties", keepNullProperties)
@@ -1620,5 +1584,6 @@ public class Serializer extends BeanTraverseContext {
 			.append("uriResolution", uriResolution)
 			.append("uriRelativity", uriRelativity)
 			.append("listener", listener);
+		// @formatter:on
 	}
 }

@@ -120,8 +120,7 @@ public class Content extends Text {
 	/**
 	 * Normal content.
 	 */
-	public Content() {
-	}
+	public Content() {}
 
 	/**
 	 * Normal content.
@@ -131,6 +130,7 @@ public class Content extends Text {
 	public Content(String type) {
 		super(type);
 	}
+
 	/**
 	 * Bean property getter:  <property>src</property>.
 	 *
@@ -143,16 +143,15 @@ public class Content extends Text {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=ATTR)
-	public URI getSrc() {
-		return src;
-	}
+	@Xml(format = ATTR)
+	public URI getSrc() { return src; }
 
 	@Override /* Overridden from Common */
 	public Content setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
+
 	@Override /* Overridden from Common */
 	public Content setLang(String value) {
 		super.setLang(value);

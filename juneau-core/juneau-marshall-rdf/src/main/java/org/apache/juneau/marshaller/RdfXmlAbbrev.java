@@ -96,6 +96,7 @@ public class RdfXmlAbbrev extends CharMarshaller {
 		DEFAULT.write(object, output);
 		return output;
 	}
+
 	/**
 	 * Parses an Abbreviated RDF/XML input object to the specified Java type.
 	 *

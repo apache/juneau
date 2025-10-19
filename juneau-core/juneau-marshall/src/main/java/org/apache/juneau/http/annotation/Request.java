@@ -146,7 +146,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,TYPE,METHOD})
+@Target({ PARAMETER, TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(RequestAnnotation.Array.class)

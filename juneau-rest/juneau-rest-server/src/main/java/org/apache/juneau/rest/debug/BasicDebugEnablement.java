@@ -70,6 +70,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		ClassInfo ci = ClassInfo.ofProxy(resource.get());
 
 		// Gather @Rest(debug) settings.
+		// @formatter:off
 		ci.forEachAnnotation(
 			Rest.class,
 			x -> true,
@@ -79,8 +80,10 @@ public class BasicDebugEnablement extends DebugEnablement {
 					b.enable(Enablement.fromString(x2), ci.getFullName());
 			}
 		);
+		// @formatter:on
 
 		// Gather @RestOp(debug) settings.
+		// @formatter:off
 		ci.forEachPublicMethod(
 			x -> true,
 			x -> {
@@ -96,8 +99,10 @@ public class BasicDebugEnablement extends DebugEnablement {
 				);
 			}
 		);
+		// @formatter:on
 
 		// Gather @Rest(debugOn) settings.
+		// @formatter:off
 		ci.forEachAnnotation(
 			Rest.class,
 			x -> true,
@@ -112,6 +117,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 				}
 			}
 		);
+		// @formatter:on
 
 		return b;
 	}

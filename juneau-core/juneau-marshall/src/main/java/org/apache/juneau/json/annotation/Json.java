@@ -46,7 +46,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,METHOD,FIELD})
+@Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(JsonAnnotation.Array.class)

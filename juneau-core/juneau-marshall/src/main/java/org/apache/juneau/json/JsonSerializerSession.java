@@ -66,6 +66,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public JsonSerializerSession build() {
 			return new JsonSerializerSession(this);
@@ -179,6 +180,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -188,6 +190,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	public static Builder create(JsonSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final JsonSerializer ctx;
 
 	/**
@@ -213,7 +216,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			addComma.set();
 		}
 
-		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			ClassMeta<?> cMeta = pMeta.getClassMeta();
 			if (thrown != null)
 				onBeanGetterException(pMeta, thrown);
@@ -221,18 +224,18 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			if (canIgnoreValue(cMeta, key, value))
 				return;
 
-			addComma.ifSet(()->out.append(',').smi(i)).set();
+			addComma.ifSet(() -> out.append(',').smi(i)).set();
 
 			out.cr(i).attr(key).w(':').s(i);
 
 			serializeAnything(out, value, cMeta, key, pMeta);
 		});
 
-		out.cre(i-1).w('}');
+		out.cre(i - 1).w('}');
 		return out;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		ClassMeta<?> elementType = type.getElementType();
@@ -240,12 +243,12 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		out.w('[');
 		Flag addComma = Flag.create();
 		forEachEntry(c, x -> {
-			addComma.ifSet(()->out.w(',').smi(indent)).set();
+			addComma.ifSet(() -> out.w(',').smi(indent)).set();
 			out.cr(indent);
 			serializeAnything(out, x, elementType, "<iterator>", null);
 		});
 
-		out.cre(indent-1).w(']');
+		out.cre(indent - 1).w(']');
 		return out;
 	}
 
@@ -259,14 +262,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 		Flag addComma = Flag.create();
 		forEachEntry(m, x -> {
-			addComma.ifSet(()->out.w(',').smi(i)).set();
+			addComma.ifSet(() -> out.w(',').smi(i)).set();
 			Object value = x.getValue();
 			Object key = generalize(x.getKey(), keyType);
 			out.cr(i).attr(toString(key)).w(':').s(i);
 			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
 		});
 
-		out.cre(i-1).w('}');
+		out.cre(i - 1).w('}');
 
 		return out;
 	}
@@ -297,8 +300,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof JsonWriter)
 			return (JsonWriter)output;
-		JsonWriter w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(),
-			isSimpleAttrs(), isTrimStrings(), getUriResolver());
+		JsonWriter w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), isSimpleAttrs(), isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
@@ -312,9 +314,8 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
+	protected final boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
+
 	/**
 	 * Prefix solidus <js>'/'</js> characters with escapes.
 	 *
@@ -322,9 +323,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */
-	protected final boolean isEscapeSolidus() {
-		return ctx.isEscapeSolidus();
-	}
+	protected final boolean isEscapeSolidus() { return ctx.isEscapeSolidus(); }
 
 	/**
 	 * Simple JSON attributes.
@@ -334,9 +333,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
 	 * 	<br>Otherwise, they are always quoted.
 	 */
-	protected final boolean isSimpleAttrs() {
-		return ctx.isSimpleAttrs();
-	}
+	protected final boolean isSimpleAttrs() { return ctx.isSimpleAttrs(); }
 
 	/**
 	 * Workhorse method.
@@ -416,7 +413,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			else
 				serializeMap(out, (Map)o, eType);
 		} else if (sType.isCollection()) {
-			serializeCollection(out, (Collection) o, eType);
+			serializeCollection(out, (Collection)o, eType);
 		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
 		} else if (sType.isReader()) {
@@ -429,13 +426,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 		if (wrapperAttr != null) {
 			indent--;
-			out.cre(indent-1).w('}');
+			out.cre(indent - 1).w('}');
 		}
 
 		if (! isRecursion)
 			pop();
 		return out;
 	}
+
 	/**
 	 * Method that can be called from subclasses to serialize an object to JSON.
 	 *

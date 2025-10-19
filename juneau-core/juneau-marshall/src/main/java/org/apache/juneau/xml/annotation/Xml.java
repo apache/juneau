@@ -46,7 +46,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,FIELD,METHOD})
+@Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(XmlAnnotation.Array.class)

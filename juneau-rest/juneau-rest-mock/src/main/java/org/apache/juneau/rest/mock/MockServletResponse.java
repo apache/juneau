@@ -45,6 +45,7 @@ public class MockServletResponse implements HttpServletResponse {
 	public static MockServletResponse create() {
 		return new MockServletResponse();
 	}
+
 	private String characterEncoding = "UTF-8";
 	private ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	private int bufferSize;
@@ -55,22 +56,21 @@ public class MockServletResponse implements HttpServletResponse {
 	private Map<String,String[]> headerMap = map();
 
 	@Override /* Overridden from HttpServletResponse */
-	public void addCookie(Cookie cookie) {
-	}
+	public void addCookie(Cookie cookie) {}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addDateHeader(String name, long date) {
-		headerMap.put(name, new String[] {DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123)});
+		headerMap.put(name, new String[] { DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123) });
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addHeader(String name, String value) {
-		headerMap.put(name, new String[] {value});
+		headerMap.put(name, new String[] { value });
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addIntHeader(String name, int value) {
-		headerMap.put(name, new String[] {String.valueOf(value)});
+		headerMap.put(name, new String[] { String.valueOf(value) });
 	}
 
 	@Override /* Overridden from HttpServletResponse */
@@ -89,23 +89,16 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	@Override /* Overridden from HttpServletResponse */
-	public void flushBuffer() throws IOException {
-	}
+	public void flushBuffer() throws IOException {}
 
 	@Override /* Overridden from HttpServletResponse */
-	public int getBufferSize() {
-		return bufferSize;
-	}
+	public int getBufferSize() { return bufferSize; }
 
 	@Override /* Overridden from HttpServletResponse */
-	public String getCharacterEncoding() {
-		return characterEncoding ;
-	}
+	public String getCharacterEncoding() { return characterEncoding; }
 
 	@Override /* Overridden from HttpServletResponse */
-	public String getContentType() {
-		return getHeader("Content-Type");
-	}
+	public String getContentType() { return getHeader("Content-Type"); }
 
 	@Override /* Overridden from HttpServletResponse */
 	public String getHeader(String name) {
@@ -114,9 +107,7 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	@Override /* Overridden from HttpServletResponse */
-	public Collection<String> getHeaderNames() {
-		return headerMap.keySet();
-	}
+	public Collection<String> getHeaderNames() { return headerMap.keySet(); }
 
 	@Override /* Overridden from HttpServletResponse */
 	public Collection<String> getHeaders(String name) {
@@ -125,33 +116,23 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	@Override /* Overridden from HttpServletResponse */
-	public Locale getLocale() {
-		return locale;
-	}
+	public Locale getLocale() { return locale; }
 
 	/**
 	 * Returns the response message.
 	 *
 	 * @return The response message.
 	 */
-	public String getMessage() {
-		return msg;
-	}
+	public String getMessage() { return msg; }
 
 	@Override /* Overridden from HttpServletResponse */
-	public ServletOutputStream getOutputStream() throws IOException {
-		return new FinishableServletOutputStream(baos);
-	}
+	public ServletOutputStream getOutputStream() throws IOException { return new FinishableServletOutputStream(baos); }
 
 	@Override /* Overridden from HttpServletResponse */
-	public int getStatus() {
-		return sc;
-	}
+	public int getStatus() { return sc; }
 
 	@Override /* Overridden from HttpServletResponse */
-	public PrintWriter getWriter() throws IOException {
-		return new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding));
-	}
+	public PrintWriter getWriter() throws IOException { return new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding)); }
 
 	/**
 	 * Fluent setter for {@link #setHeader(String,String)}.
@@ -166,17 +147,13 @@ public class MockServletResponse implements HttpServletResponse {
 	}
 
 	@Override /* Overridden from HttpServletResponse */
-	public boolean isCommitted() {
-		return false;
-	}
+	public boolean isCommitted() { return false; }
 
 	@Override /* Overridden from HttpServletResponse */
-	public void reset() {
-	}
+	public void reset() {}
 
 	@Override /* Overridden from HttpServletResponse */
-	public void resetBuffer() {
-	}
+	public void resetBuffer() {}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void sendError(int sc) throws IOException {
@@ -192,19 +169,17 @@ public class MockServletResponse implements HttpServletResponse {
 	@Override /* Overridden from HttpServletResponse */
 	public void sendRedirect(String location) throws IOException {
 		this.sc = 302;
-		headerMap.put("Location", new String[] {location});
+		headerMap.put("Location", new String[] { location });
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void sendRedirect(String location, int sc, boolean clearBuffer) throws IOException {
 		this.sc = sc;
-		headerMap.put("Location", new String[] {location});
+		headerMap.put("Location", new String[] { location });
 	}
 
 	@Override /* Overridden from HttpServletResponse */
-	public void setBufferSize(int size) {
-		this.bufferSize = size;
-	}
+	public void setBufferSize(int size) { this.bufferSize = size; }
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setCharacterEncoding(String charset) {
@@ -230,28 +205,24 @@ public class MockServletResponse implements HttpServletResponse {
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setDateHeader(String name, long date) {
-		headerMap.put(name, new String[] {DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123)});
+		headerMap.put(name, new String[] { DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123) });
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setHeader(String name, String value) {
-		headerMap.put(name, new String[] {value});
+		headerMap.put(name, new String[] { value });
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setIntHeader(String name, int value) {
-		headerMap.put(name, new String[] {String.valueOf(value)});
+		headerMap.put(name, new String[] { String.valueOf(value) });
 	}
 
 	@Override /* Overridden from HttpServletResponse */
-	public void setLocale(Locale loc) {
-		this.locale = loc;
-	}
+	public void setLocale(Locale loc) { this.locale = loc; }
 
 	@Override /* Overridden from HttpServletResponse */
-	public void setStatus(int sc) {
-		this.sc = sc;
-	}
+	public void setStatus(int sc) { this.sc = sc; }
 
 	/**
 	 * Fluent setter for {@link #setStatus(int)}.
@@ -281,7 +252,5 @@ public class MockServletResponse implements HttpServletResponse {
 		return baos.toByteArray();
 	}
 
-	Map<String,String[]> getHeaders() {
-		return headerMap;
-	}
+	Map<String,String[]> getHeaders() { return headerMap; }
 }

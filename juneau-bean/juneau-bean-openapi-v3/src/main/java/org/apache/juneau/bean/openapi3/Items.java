@@ -82,28 +82,13 @@ import org.apache.juneau.json.*;
  */
 public class Items extends OpenApiElement {
 
-	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
-	private static final String[] VALID_COLLECTION_FORMATS = {"csv","ssv","tsv","pipes","multi"};
+	private static final String[] VALID_TYPES = { "string", "number", "integer", "boolean", "array" };
+	private static final String[] VALID_COLLECTION_FORMATS = { "csv", "ssv", "tsv", "pipes", "multi" };
 
-	private String
-		type,
-		format,
-		collectionFormat,
-		pattern,
-		ref;
-	private Number
-		maximum,
-		minimum,
-		multipleOf;
-	private Integer
-		maxLength,
-		minLength,
-		maxItems,
-		minItems;
-	private Boolean
-		exclusiveMaximum,
-		exclusiveMinimum,
-		uniqueItems;
+	private String type, format, collectionFormat, pattern, ref;
+	private Number maximum, minimum, multipleOf;
+	private Integer maxLength, minLength, maxItems, minItems;
+	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems;
 	private Items items;  // NOSONAR - Intentional naming.
 	private Object _default;  // NOSONAR - Intentional naming.
 	private List<Object> _enum;  // NOSONAR - Intentional naming.
@@ -197,9 +182,7 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getCollectionFormat() {
-		return collectionFormat;
-	}
+	public String getCollectionFormat() { return collectionFormat; }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -217,36 +200,28 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getDefault() {
-		return _default;
-	}
+	public Object getDefault() { return _default; }
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() {
-		return _enum;
-	}
+	public List<Object> getEnum() { return _enum; }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
+	public Boolean getExclusiveMaximum() { return exclusiveMaximum; }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
+	public Boolean getExclusiveMinimum() { return exclusiveMinimum; }
 
 	/**
 	 * Bean property getter:  <property>format</property>.
@@ -256,9 +231,7 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getFormat() {
-		return format;
-	}
+	public String getFormat() { return format; }
 
 	/**
 	 * Bean property getter:  <property>items</property>.
@@ -268,81 +241,63 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Items getItems() {
-		return items;
-	}
+	public Items getItems() { return items; }
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMaximum() {
-		return maximum;
-	}
+	public Number getMaximum() { return maximum; }
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxItems() {
-		return maxItems;
-	}
+	public Integer getMaxItems() { return maxItems; }
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
+	public Integer getMaxLength() { return maxLength; }
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMinimum() {
-		return minimum;
-	}
+	public Number getMinimum() { return minimum; }
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinItems() {
-		return minItems;
-	}
+	public Integer getMinItems() { return minItems; }
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinLength() {
-		return minLength;
-	}
+	public Integer getMinLength() { return minLength; }
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
+	public Number getMultipleOf() { return multipleOf; }
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getPattern() {
-		return pattern;
-	}
+	public String getPattern() { return pattern; }
 
 	/**
 	 * Bean property getter:  <property>$ref</property>.
@@ -350,9 +305,7 @@ public class Items extends OpenApiElement {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("$ref")
-	public String getRef() {
-		return ref;
-	}
+	public String getRef() { return ref; }
 
 	/**
 	 * Bean property getter:  <property>type</property>.
@@ -362,18 +315,14 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getType() {
-		return type;
-	}
+	public String getType() { return type; }
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
-	}
+	public Boolean getUniqueItems() { return uniqueItems; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
@@ -484,10 +433,7 @@ public class Items extends OpenApiElement {
 	 */
 	public Items setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
-				value, VALID_COLLECTION_FORMATS
-			);
+			throw new BasicRuntimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, VALID_COLLECTION_FORMATS);
 		collectionFormat = value;
 		return this;
 	}
@@ -759,9 +705,7 @@ public class Items extends OpenApiElement {
 	 */
 	public Items setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new IllegalArgumentException(
-				"Invalid value passed in to setType(String).  Value='"+value+"', valid values="
-				+ Json5Serializer.DEFAULT.toString(VALID_TYPES));
+			throw new IllegalArgumentException("Invalid value passed in to setType(String).  Value='" + value + "', valid values=" + Json5Serializer.DEFAULT.toString(VALID_TYPES));
 		type = value;
 		return this;
 	}

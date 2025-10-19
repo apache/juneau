@@ -147,108 +147,84 @@ public class PathItem extends OpenApiElement {
 	 *
 	 * @return The DELETE operation.
 	 */
-	public Operation getDelete() {
-		return delete;
-	}
+	public Operation getDelete() { return delete; }
 
 	/**
 	 * Returns the description.
 	 *
 	 * @return The description.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Returns the GET operation.
 	 *
 	 * @return The GET operation.
 	 */
-	public Operation getGet() {
-		return get;
-	}
+	public Operation getGet() { return get; }
 
 	/**
 	 * Returns the HEAD operation.
 	 *
 	 * @return The HEAD operation.
 	 */
-	public Operation getHead() {
-		return head;
-	}
+	public Operation getHead() { return head; }
 
 	/**
 	 * Returns the OPTIONS operation.
 	 *
 	 * @return The OPTIONS operation.
 	 */
-	public Operation getOptions() {
-		return options;
-	}
+	public Operation getOptions() { return options; }
 
 	/**
 	 * Returns the parameters list.
 	 *
 	 * @return The parameters list.
 	 */
-	public List<Parameter> getParameters() {
-		return parameters;
-	}
+	public List<Parameter> getParameters() { return parameters; }
 
 	/**
 	 * Returns the PATCH operation.
 	 *
 	 * @return The PATCH operation.
 	 */
-	public Operation getPatch() {
-		return patch;
-	}
+	public Operation getPatch() { return patch; }
 
 	/**
 	 * Returns the POST operation.
 	 *
 	 * @return The POST operation.
 	 */
-	public Operation getPost() {
-		return post;
-	}
+	public Operation getPost() { return post; }
 
 	/**
 	 * Returns the PUT operation.
 	 *
 	 * @return The PUT operation.
 	 */
-	public Operation getPut() {
-		return put;
-	}
+	public Operation getPut() { return put; }
 
 	/**
 	 * Returns the servers list.
 	 *
 	 * @return The servers list.
 	 */
-	public List<Server> getServers() {
-		return servers;
-	}
+	public List<Server> getServers() { return servers; }
 
 	/**
 	 * Returns the summary.
 	 *
 	 * @return The summary.
 	 */
-	public String getSummary() {
-		return summary;
-	}
+	public String getSummary() { return summary; }
 
 	/**
 	 * Returns the TRACE operation.
 	 *
 	 * @return The TRACE operation.
 	 */
-	public Operation getTrace() {
-		return trace;
-	}
+	public Operation getTrace() { return trace; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

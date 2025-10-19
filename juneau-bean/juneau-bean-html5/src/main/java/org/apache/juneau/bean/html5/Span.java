@@ -64,7 +64,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="span")
+@Bean(typeName = "span")
 public class Span extends HtmlElementMixed {
 
 	/**
@@ -80,8 +80,9 @@ public class Span extends HtmlElementMixed {
 	public Span(Object...children) {
 		children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Span _class(String value) {  // NOSONAR - Intentional naming.
+	public Span _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

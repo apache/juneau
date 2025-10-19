@@ -55,6 +55,7 @@ public class RemoteOperationArg {
 		}
 		return null;
 	}
+
 	private final int index;
 	private final HttpPartType partType;
 	private final Optional<HttpPartSerializer> serializer;
@@ -81,52 +82,40 @@ public class RemoteOperationArg {
 	 *
 	 * @return The method argument index.
 	 */
-	public int getIndex() {
-		return index;
-	}
+	public int getIndex() { return index; }
 
 	/**
 	 * Returns the name of the HTTP part.
 	 *
 	 * @return The name of the HTTP part.
 	 */
-	public String getName() {
-		return schema.getName();
-	}
+	public String getName() { return schema.getName(); }
 
 	/**
 	 * Returns the HTTP part type.
 	 *
 	 * @return The HTTP part type.  Never <jk>null</jk>.
 	 */
-	public HttpPartType getPartType() {
-		return partType;
-	}
+	public HttpPartType getPartType() { return partType; }
 
 	/**
 	 * Returns the HTTP part schema information about this part.
 	 *
 	 * @return The HTTP part schema information, or <jk>null</jk> if not found.
 	 */
-	public HttpPartSchema getSchema() {
-		return schema;
-	}
+	public HttpPartSchema getSchema() { return schema; }
 
 	/**
 	 * Returns the HTTP part serializer to use for serializing this part.
 	 *
 	 * @return The HTTP part serializer, or the default if not specified.
 	 */
-	public Optional<HttpPartSerializer> getSerializer() {
-		return serializer;
-	}
+	public Optional<HttpPartSerializer> getSerializer() { return serializer; }
 
 	/**
 	 * Returns whether the <c>skipIfEmpty</c> flag was found in the schema.
 	 *
 	 * @return <jk>true</jk> if the <c>skipIfEmpty</c> flag was found in the schema.
 	 */
-	public boolean isSkipIfEmpty() {
-		return schema.isSkipIfEmpty();
-	}
+	public boolean isSkipIfEmpty() { return schema.isSkipIfEmpty(); }
 }

@@ -104,6 +104,7 @@ public class ParserSession extends BeanSession {
 			super.locale(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder localeDefault(Locale value) {
 			super.localeDefault(value);
@@ -196,6 +197,7 @@ public class ParserSession extends BeanSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -205,6 +207,7 @@ public class ParserSession extends BeanSession {
 	public static Builder create(Parser ctx) {
 		return new Builder(ctx);
 	}
+
 	/**
 	 * Convenience method for calling the {@link NameProperty @NameProperty} method on the specified object if it exists.
 	 *
@@ -220,6 +223,7 @@ public class ParserSession extends BeanSession {
 				m.set(o, name);
 		}
 	}
+
 	/**
 	 * Convenience method for calling the {@link ParentProperty @ParentProperty} method on the specified object if it
 	 * exists.
@@ -234,6 +238,7 @@ public class ParserSession extends BeanSession {
 		if (m != null)
 			m.set(o, parent);
 	}
+
 	private final Parser ctx;
 	private final Method javaMethod;
 	private final Object outer;
@@ -264,6 +269,7 @@ public class ParserSession extends BeanSession {
 		listener = BeanCreator.of(ParserListener.class).type(ctx.getListener()).orElse(null);
 		sbStack = new Stack<>();
 	}
+
 	/**
 	 * Returns the input as a string.
 	 *
@@ -274,9 +280,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return The input as a string, or <jk>null</jk> if no pipe has been created or we're reading from an uncached reader or input stream source.
 	 */
-	public String getInputAsString() {
-		return pipe == null ? null : pipe.getInputAsString();
-	}
+	public String getInputAsString() { return pipe == null ? null : pipe.getInputAsString(); }
 
 	/**
 	 * Returns information used to determine at what location in the parse a failure occurred.
@@ -297,9 +301,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
-	public ParserListener getListener() {
-		return listener;
-	}
+	public ParserListener getListener() { return listener; }
 
 	/**
 	 * Returns the listener associated with this session.
@@ -333,18 +335,14 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return HTTP part schema of object being parsed, or <jk>null</jk> if not specified.
 	 */
-	public final HttpPartSchema getSchema() {
-		return schema;
-	}
+	public final HttpPartSchema getSchema() { return schema; }
 
 	/**
 	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 *
 	 * @return <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 */
-	public boolean isReaderParser() {
-		return false;
-	}
+	public boolean isReaderParser() { return false; }
 
 	/**
 	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
@@ -627,11 +625,9 @@ public class ParserSession extends BeanSession {
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} finally {
 			checkForWarnings();
 		}
@@ -664,11 +660,9 @@ public class ParserSession extends BeanSession {
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} finally {
 			checkForWarnings();
 		}
@@ -734,8 +728,7 @@ public class ParserSession extends BeanSession {
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.",
-				e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
 		} finally {
 			checkForWarnings();
 		}
@@ -765,7 +758,7 @@ public class ParserSession extends BeanSession {
 			BeanMap<?> bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
 
 			// Iterate through all the entries in the map and set the individual field values.
-			m.forEach((k,v) -> {
+			m.forEach((k, v) -> {
 				if (! k.equals(btpn)) {
 					// Attempt to recursively cast child maps.
 					if (v instanceof JsonMap)
@@ -894,7 +887,7 @@ public class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		throw new UnsupportedOperationException("Parser '"+className(getClass())+"' does not support this method.");
+		throw new UnsupportedOperationException("Parser '" + className(getClass()) + "' does not support this method.");
 	}
 
 	/**
@@ -913,7 +906,7 @@ public class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		throw new UnsupportedOperationException("Parser '"+className(getClass())+"' does not support this method.");
+		throw new UnsupportedOperationException("Parser '" + className(getClass()) + "' does not support this method.");
 	}
 
 	/**
@@ -953,9 +946,7 @@ public class ParserSession extends BeanSession {
 	 * @return
 	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.
 	 */
-	protected final int getDebugOutputLines() {
-		return ctx.getDebugOutputLines();
-	}
+	protected final int getDebugOutputLines() { return ctx.getDebugOutputLines(); }
 
 	/**
 	 * Returns the Java method that invoked this parser.
@@ -966,9 +957,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return The Java method that invoked this parser.
 	*/
-	protected final Method getJavaMethod() {
-		return javaMethod;
-	}
+	protected final Method getJavaMethod() { return javaMethod; }
 
 	/**
 	 * Parser listener.
@@ -977,9 +966,7 @@ public class ParserSession extends BeanSession {
 	 * @return
 	 * 	Class used to listen for errors and warnings that occur during parsing.
 	 */
-	protected final Class<? extends ParserListener> getListenerClass() {
-		return ctx.getListener();
-	}
+	protected final Class<? extends ParserListener> getListenerClass() { return ctx.getListener(); }
 
 	/**
 	 * Returns the outer object used for instantiating top-level non-static member classes.
@@ -989,9 +976,7 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @return The outer object.
 	*/
-	protected final Object getOuter() {
-		return outer;
-	}
+	protected final Object getOuter() { return outer; }
 
 	/**
 	 * Creates a reusable {@link StringBuilder} object from an internal pool.
@@ -1015,9 +1000,7 @@ public class ParserSession extends BeanSession {
 	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 	 * 	after parsing is complete.
 	 */
-	protected final boolean isAutoCloseStreams() {
-		return ctx.isAutoCloseStreams();
-	}
+	protected final boolean isAutoCloseStreams() { return ctx.isAutoCloseStreams(); }
 
 	/**
 	 * Strict mode.
@@ -1026,9 +1009,7 @@ public class ParserSession extends BeanSession {
 	 * @return
 	 * 	<jk>true</jk> if strict mode for the parser is enabled.
 	 */
-	protected final boolean isStrict() {
-		return ctx.isStrict();
-	}
+	protected final boolean isStrict() { return ctx.isStrict(); }
 
 	/**
 	 * Trim parsed strings.
@@ -1038,9 +1019,7 @@ public class ParserSession extends BeanSession {
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being added to
 	 * 	the POJO.
 	 */
-	protected final boolean isTrimStrings() {
-		return ctx.isTrimStrings();
-	}
+	protected final boolean isTrimStrings() { return ctx.isTrimStrings(); }
 
 	/**
 	 * Unbuffered.
@@ -1049,9 +1028,7 @@ public class ParserSession extends BeanSession {
 	 * @return
 	 * 	<jk>true</jk> if parsers don't use internal buffering during parsing.
 	 */
-	protected final boolean isUnbuffered() {
-		return ctx.isUnbuffered();
-	}
+	protected final boolean isUnbuffered() { return ctx.isUnbuffered(); }
 
 	/**
 	 * Marks the current position.
@@ -1075,8 +1052,7 @@ public class ParserSession extends BeanSession {
 		if (listener != null)
 			listener.onBeanSetterException(this, t, p);
 		String prefix = "";
-		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix,
-			p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
 	}
 
 	/**
@@ -1095,12 +1071,11 @@ public class ParserSession extends BeanSession {
 			return;
 		if (! isIgnoreUnknownBeanProperties())
 			if (value != null || ! isIgnoreUnknownNullBeanProperties())
-				throw new ParseException(this,
-					"Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName,
-					beanMap.getClassMeta());
+				throw new ParseException(this, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
 		if (listener != null)
 			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean());
 	}
+
 	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("javaMethod", javaMethod, "listener", listener, "outer", outer);
@@ -1123,18 +1098,14 @@ public class ParserSession extends BeanSession {
 	 *
 	 * @param currentClass The current class being parsed.
 	 */
-	protected final void setCurrentClass(ClassMeta<?> currentClass) {
-		this.currentClass = currentClass;
-	}
+	protected final void setCurrentClass(ClassMeta<?> currentClass) { this.currentClass = currentClass; }
 
 	/**
 	 * Sets the current bean property being parsed for proper error messages.
 	 *
 	 * @param currentProperty The current property being parsed.
 	 */
-	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) {
-		this.currentProperty = currentProperty;
-	}
+	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) { this.currentProperty = currentProperty; }
 
 	/**
 	 * The {@link #createPipe(Object)} method should call this method to set the pipe for debugging purposes.
@@ -1173,6 +1144,7 @@ public class ParserSession extends BeanSession {
 			return s.trim();
 		return s;
 	}
+
 	/**
 	 * Unmarks the current position.
 	 */

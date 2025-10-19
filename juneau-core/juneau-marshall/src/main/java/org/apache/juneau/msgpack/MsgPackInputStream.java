@@ -39,6 +39,7 @@ import org.apache.juneau.parser.*;
 public class MsgPackInputStream extends ParserInputStream {
 
 	// Data type quick-lookup table.
+	// @formatter:off
 	private static final DataType[] TYPES = {
 		/*0x0?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,
 		/*0x1?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,
@@ -57,6 +58,7 @@ public class MsgPackInputStream extends ParserInputStream {
 		/*0xE?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,
 		/*0xF?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT
 	};
+	// @formatter:on
 	private DataType currentDataType;
 	private long length;
 	private int lastByte;
@@ -92,7 +94,13 @@ public class MsgPackInputStream extends ParserInputStream {
 	 * Read four bytes from the stream.
 	 */
 	private long readUInt4() throws IOException {
-		long l = read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read();
+		long l = read();
+		l <<= 8;
+		l |= read();
+		l <<= 8;
+		l |= read();
+		l <<= 8;
+		l |= read();
 		return l;
 	}
 
@@ -100,9 +108,7 @@ public class MsgPackInputStream extends ParserInputStream {
 	 * Return the extended-format type.
 	 * Currently not used.
 	 */
-	int getExtType() {
-		return extType;
-	}
+	int getExtType() { return extType; }
 
 	/**
 	 * Read a binary field from the stream.
@@ -129,7 +135,7 @@ public class MsgPackInputStream extends ParserInputStream {
 	DataType readDataType() throws IOException {
 		int i = read();
 		if (i == -1)
-			throw new IOException("Unexpected end of file found at position "+pos);
+			throw new IOException("Unexpected end of file found at position " + pos);
 		currentDataType = TYPES[i];
 		switch (currentDataType) {
 			case NULL:
@@ -222,7 +228,7 @@ public class MsgPackInputStream extends ParserInputStream {
 					length = 0;
 				break;
 			}
-			case STRING:{
+			case STRING: {
 				// fixstr stores a byte array whose length is up to 31 bytes:
 				// +--------+========+
 				// |101XXXXX|  data  |
@@ -288,7 +294,7 @@ public class MsgPackInputStream extends ParserInputStream {
 					length = readUInt4();
 				break;
 			}
-			case BIN:{
+			case BIN: {
 				//	bin 8 stores a byte array whose length is up to (2^8)-1 bytes:
 				//	+--------+--------+========+
 				//	|  0xc4  |XXXXXXXX|  data  |
@@ -317,7 +323,7 @@ public class MsgPackInputStream extends ParserInputStream {
 					length = readUInt4();
 				break;
 			}
-			case EXT:{
+			case EXT: {
 				//	fixext 1 stores an integer and a byte array whose length is 1 byte
 				//	+--------+--------+--------+
 				//	|  0xd4  |  type  |  data  |
@@ -381,14 +387,14 @@ public class MsgPackInputStream extends ParserInputStream {
 				else if (i == EXT8)
 					length = readUInt1();
 				else if (i == EXT16)
-						length = readUInt2();
+					length = readUInt2();
 				else if (i == EXT32)
 					length = readUInt4();
 				extType = read();
 
 				break;
 			}
-			case MAP:{
+			case MAP: {
 				//	fixmap stores a map whose length is up to 15 elements
 				//	+--------+~~~~~~~~~~~~~~~~~+
 				//	|1000XXXX|   N*2 objects   |
@@ -449,7 +455,13 @@ public class MsgPackInputStream extends ParserInputStream {
 			return read();
 		if (length == 2)
 			return (read() << 8) | read();
-		int i = read(); i <<= 8; i |= read(); i <<= 8; i |= read(); i <<= 8; i |= read();
+		int i = read();
+		i <<= 8;
+		i |= read();
+		i <<= 8;
+		i |= read();
+		i <<= 8;
+		i |= read();
 		return i;
 	}
 
@@ -471,7 +483,21 @@ public class MsgPackInputStream extends ParserInputStream {
 	long readLong() throws IOException {
 		if (length == 4)
 			return readUInt4();
-		long l = read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read();
+		long l = read();
+		l <<= 8;
+		l |= read();
+		l <<= 8;
+		l |= read();
+		l <<= 8;
+		l |= read();
+		l <<= 8;
+		l |= read();
+		l <<= 8;
+		l |= read();
+		l <<= 8;
+		l |= read();
+		l <<= 8;
+		l |= read();
 		return l;
 	}
 

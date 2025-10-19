@@ -59,6 +59,7 @@ public class MockServletRequest implements HttpServletRequest {
 		MockServletRequest r = new MockServletRequest();
 		return r;
 	}
+
 	/**
 	 * Creates a new servlet request with the specified method name and request path.
 	 *
@@ -75,10 +76,9 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return A new request.
 	 */
 	public static MockServletRequest create(String method, String uri, Object...pathArgs) {
-		return create()
-			.method(method)
-			.uri(StringUtils.format(uri, pathArgs));
+		return create().method(method).uri(StringUtils.format(uri, pathArgs));
 	}
+
 	private String method = "GET";
 	private Map<String,String[]> queryDataMap = map();
 	private Map<String,String[]> formDataMap;
@@ -299,9 +299,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public AsyncContext getAsyncContext() {
-		return null;
-	}
+	public AsyncContext getAsyncContext() { return null; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public Object getAttribute(String name) {
@@ -309,44 +307,28 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public Enumeration<String> getAttributeNames() {
-		return Collections.enumeration(attributeMap.keySet());
-	}
+	public Enumeration<String> getAttributeNames() { return Collections.enumeration(attributeMap.keySet()); }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getAuthType() {
-		return authType;
-	}
+	public String getAuthType() { return authType; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getCharacterEncoding() {
-		return characterEncoding;
-	}
+	public String getCharacterEncoding() { return characterEncoding; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public int getContentLength() {
-		return content == null ? 0 : content.length;
-	}
+	public int getContentLength() { return content == null ? 0 : content.length; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public long getContentLengthLong() {
-		return content == null ? 0 : content.length;
-	}
+	public long getContentLengthLong() { return content == null ? 0 : content.length; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getContentType() {
-		return getHeader("Content-Type");
-	}
+	public String getContentType() { return getHeader("Content-Type"); }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getContextPath() {
-		return contextPath;
-	}
+	public String getContextPath() { return contextPath; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public Cookie[] getCookies() {
-		return cookies;
-	}
+	public Cookie[] getCookies() { return cookies; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public long getDateHeader(String name) {
@@ -355,9 +337,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public DispatcherType getDispatcherType() {
-		return dispatcherType;
-	}
+	public DispatcherType getDispatcherType() { return dispatcherType; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String getHeader(String name) {
@@ -366,9 +346,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public Enumeration<String> getHeaderNames() {
-		return Collections.enumeration(headerMap.keySet());
-	}
+	public Enumeration<String> getHeaderNames() { return Collections.enumeration(headerMap.keySet()); }
 
 	@Override /* Overridden from HttpServletRequest */
 	public Enumeration<String> getHeaders(String name) {
@@ -390,34 +368,22 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getLocalAddr() {
-		return localAddr;
-	}
+	public String getLocalAddr() { return localAddr; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public Locale getLocale() {
-		return locale;
-	}
+	public Locale getLocale() { return locale; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public Enumeration<Locale> getLocales() {
-		return Collections.enumeration(alist(locale));
-	}
+	public Enumeration<Locale> getLocales() { return Collections.enumeration(alist(locale)); }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getLocalName() {
-		return localName;
-	}
+	public String getLocalName() { return localName; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public int getLocalPort() {
-		return localPort;
-	}
+	public int getLocalPort() { return localPort; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getMethod() {
-		return method;
-	}
+	public String getMethod() { return method; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String getParameter(String name) {
@@ -436,9 +402,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public Enumeration<String> getParameterNames() {
-		return enumeration(CollectionUtils.listFrom(getParameterMap().keySet()));
-	}
+	public Enumeration<String> getParameterNames() { return enumeration(CollectionUtils.listFrom(getParameterMap().keySet())); }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String[] getParameterValues(String name) {
@@ -451,9 +415,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public Collection<Part> getParts() throws IOException, ServletException {
-		return null;
-	}
+	public Collection<Part> getParts() throws IOException, ServletException { return null; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String getPathInfo() {
@@ -475,14 +437,10 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getProtocol() {
-		return protocol;
-	}
+	public String getProtocol() { return protocol; }
 
 	@Override
-	public String getProtocolRequestId() {
-		return null;
-	}
+	public String getProtocolRequestId() { return null; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String getQueryString() {
@@ -491,11 +449,12 @@ public class MockServletRequest implements HttpServletRequest {
 				queryString = "";
 			else {
 				StringBuilder sb = new StringBuilder();
-				queryDataMap.forEach((k,v) -> {
+				queryDataMap.forEach((k, v) -> {
 					if (v == null)
 						sb.append(sb.length() == 0 ? "" : "&").append(StringUtils.urlEncode(k));
-					else for (String v2 : v)
-						sb.append(sb.length() == 0 ? "" : "&").append(StringUtils.urlEncode(k)).append('=').append(StringUtils.urlEncode(v2));
+					else
+						for (String v2 : v)
+							sb.append(sb.length() == 0 ? "" : "&").append(StringUtils.urlEncode(k)).append('=').append(StringUtils.urlEncode(v2));
 				});
 				queryString = sb.toString();
 			}
@@ -504,29 +463,19 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public BufferedReader getReader() throws IOException {
-		return new BufferedReader(new InputStreamReader(getInputStream(), characterEncoding));
-	}
+	public BufferedReader getReader() throws IOException { return new BufferedReader(new InputStreamReader(getInputStream(), characterEncoding)); }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getRemoteAddr() {
-		return remoteAddr;
-	}
+	public String getRemoteAddr() { return remoteAddr; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getRemoteHost() {
-		return remoteHost;
-	}
+	public String getRemoteHost() { return remoteHost; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public int getRemotePort() {
-		return remotePort;
-	}
+	public int getRemotePort() { return remotePort; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getRemoteUser() {
-		return remoteUser;
-	}
+	public String getRemoteUser() { return remoteUser; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public RequestDispatcher getRequestDispatcher(String path) {
@@ -534,14 +483,10 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getRequestedSessionId() {
-		return requestedSessionId;
-	}
+	public String getRequestedSessionId() { return requestedSessionId; }
 
 	@Override
-	public String getRequestId() {
-		return null;
-	}
+	public String getRequestId() { return null; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String getRequestURI() {
@@ -553,44 +498,28 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public StringBuffer getRequestURL() {
-		return new StringBuffer(uri.replaceAll("\\?.*$", ""));
-	}
+	public StringBuffer getRequestURL() { return new StringBuffer(uri.replaceAll("\\?.*$", "")); }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getScheme() {
-		return scheme;
-	}
+	public String getScheme() { return scheme; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getServerName() {
-		return serverName;
-	}
+	public String getServerName() { return serverName; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public int getServerPort() {
-		return serverPort;
-	}
+	public int getServerPort() { return serverPort; }
 
 	@Override
-	public ServletConnection getServletConnection() {
-		return null;
-	}
+	public ServletConnection getServletConnection() { return null; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public ServletContext getServletContext() {
-		return servletContext;
-	}
+	public ServletContext getServletContext() { return servletContext; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public String getServletPath() {
-		return servletPath;
-	}
+	public String getServletPath() { return servletPath; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public HttpSession getSession() {
-		return httpSession;
-	}
+	public HttpSession getSession() { return httpSession; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public HttpSession getSession(boolean create) {
@@ -598,9 +527,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public Principal getUserPrincipal() {
-		return userPrincipal;
-	}
+	public Principal getUserPrincipal() { return userPrincipal; }
 
 	/**
 	 * Fluent setter.
@@ -613,7 +540,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest header(String name, Object value) {
 		if (value != null) {
-			String[] v1 = (value instanceof String[]) ? (String[])value : new String[]{value.toString()};
+			String[] v1 = (value instanceof String[]) ? (String[])value : new String[] { value.toString() };
 			String[] v2 = headerMap.get(name);
 			String[] v3 = ArrayUtils.combine(v2, v1);
 			headerMap.put(name, v3);
@@ -633,34 +560,22 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public boolean isAsyncStarted() {
-		return false;
-	}
+	public boolean isAsyncStarted() { return false; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public boolean isAsyncSupported() {
-		return false;
-	}
+	public boolean isAsyncSupported() { return false; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public boolean isRequestedSessionIdFromCookie() {
-		return false;
-	}
+	public boolean isRequestedSessionIdFromCookie() { return false; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public boolean isRequestedSessionIdFromURL() {
-		return false;
-	}
+	public boolean isRequestedSessionIdFromURL() { return false; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public boolean isRequestedSessionIdValid() {
-		return false;
-	}
+	public boolean isRequestedSessionIdValid() { return false; }
 
 	@Override /* Overridden from HttpServletRequest */
-	public boolean isSecure() {
-		return false;
-	}
+	public boolean isSecure() { return false; }
 
 	@Override /* Overridden from HttpServletRequest */
 	public boolean isUserInRole(String role) {
@@ -712,12 +627,10 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public void login(String username, String password) throws ServletException {
-	}
+	public void login(String username, String password) throws ServletException {}
 
 	@Override /* Overridden from HttpServletRequest */
-	public void logout() throws ServletException {
-	}
+	public void logout() throws ServletException {}
 
 	/**
 	 * Fluent setter.
@@ -793,7 +706,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest pathVars(String...pairs) {
-		return pathVars(CollectionUtils.mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
+		return pathVars(CollectionUtils.mapBuilder(String.class, String.class).addPairs((Object[])pairs).build());
 	}
 
 	/**
@@ -966,6 +879,7 @@ public class MockServletRequest implements HttpServletRequest {
 		this.servletContext = value;
 		return this;
 	}
+
 	/**
 	 * Fluent setter.
 	 *
@@ -983,9 +897,8 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public void setCharacterEncoding(String characterEncoding) throws UnsupportedEncodingException {
-		this.characterEncoding = characterEncoding;
-	}
+	public void setCharacterEncoding(String characterEncoding) throws UnsupportedEncodingException { this.characterEncoding = characterEncoding; }
+
 	@Override /* Overridden from HttpServletRequest */
 	public AsyncContext startAsync() throws IllegalStateException {
 		return null;

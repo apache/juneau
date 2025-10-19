@@ -90,6 +90,7 @@ public class BasicDateHeader extends BasicHeader {
 	public static BasicDateHeader of(String name, ZonedDateTime value) {
 		return value == null ? null : new BasicDateHeader(name, value);
 	}
+
 	private final ZonedDateTime value;
 	private final Supplier<ZonedDateTime> supplier;
 

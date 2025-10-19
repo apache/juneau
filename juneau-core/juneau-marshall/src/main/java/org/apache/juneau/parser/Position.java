@@ -63,27 +63,21 @@ public class Position {
 	 *
 	 * @return The current column, or <c>-1</c> if not specified.
 	 */
-	public int getColumn() {
-		return column;
-	}
+	public int getColumn() { return column; }
 
 	/**
 	 * Returns the current line.
 	 *
 	 * @return The current line, or <c>-1</c> if not specified.
 	 */
-	public int getLine() {
-		return line;
-	}
+	public int getLine() { return line; }
 
 	/**
 	 * Returns the current byte position.
 	 *
 	 * @return The current byte position, or <c>-1</c> if not specified.
 	 */
-	public int getPosition() {
-		return position;
-	}
+	public int getPosition() { return position; }
 
 	@Override /* Overridden from Object */
 	public String toString() {

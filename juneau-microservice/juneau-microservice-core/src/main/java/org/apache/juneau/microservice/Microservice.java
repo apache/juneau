@@ -528,15 +528,17 @@ public class Microservice implements ConfigEventListener {
 	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
 	 */
 	public static Microservice getInstance() {
-		synchronized(Microservice.class) {
+		synchronized (Microservice.class) {
 			return INSTANCE;
 		}
 	}
+
 	private static void setInstance(Microservice m) {
-		synchronized(Microservice.class) {
+		synchronized (Microservice.class) {
 			INSTANCE = m;
 		}
 	}
+
 	final Messages messages = Messages.of(Microservice.class);
 
 	private final Builder builder;
@@ -584,7 +586,7 @@ public class Microservice implements ConfigEventListener {
 				try (FileInputStream fis = new FileInputStream(f)) {
 					m.read(fis);
 				} catch (IOException e) {
-					throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(f), e);
+					throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f), e);
 				}
 			} else {
 				// Otherwise, read from manifest file in the jar file containing the main class.
@@ -593,7 +595,7 @@ public class Microservice implements ConfigEventListener {
 					try {
 						m.read(url.openStream());
 					} catch (IOException e) {
-						throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(url.openStream()), e);
+						throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(url.openStream()), e);
 					}
 				}
 			}
@@ -611,21 +613,21 @@ public class Microservice implements ConfigEventListener {
 			ConfigStore store = builder.configStore;
 			FileStore cfs = workingDir == null ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
 			for (String name : getCandidateConfigNames()) {
-				 if (store != null) {
-					 if (store.exists(name)) {
-						 configBuilder.store(store).name(name);
-						 break;
-					 }
-				 } else {
-					 if (cfs.exists(name)) {
-						 configBuilder.store(cfs).name(name);
-						 break;
-					 }
-					 if (ClasspathStore.DEFAULT.exists(name)) {
-						 configBuilder.store(ClasspathStore.DEFAULT).name(name);
-						 break;
-					 }
-				 }
+				if (store != null) {
+					if (store.exists(name)) {
+						configBuilder.store(store).name(name);
+						break;
+					}
+				} else {
+					if (cfs.exists(name)) {
+						configBuilder.store(cfs).name(name);
+						break;
+					}
+					if (ClasspathStore.DEFAULT.exists(name)) {
+						configBuilder.store(ClasspathStore.DEFAULT).name(name);
+						break;
+					}
+				}
 			}
 			config = configBuilder.build();
 		}
@@ -652,7 +654,7 @@ public class Microservice implements ConfigEventListener {
 					cc = (ConsoleCommand)Class.forName(s).getDeclaredConstructor().newInstance();
 					consoleCommandMap.put(cc.getName(), cc);
 				} catch (Exception e) {
-					getConsoleWriter().println("Could not create console command '"+s+"', " + e.getLocalizedMessage());
+					getConsoleWriter().println("Could not create console command '" + s + "', " + e.getLocalizedMessage());
 				}
 			}
 			consoleThread = new Thread("ConsoleThread") {
@@ -727,6 +729,7 @@ public class Microservice implements ConfigEventListener {
 		}
 		return false;
 	}
+
 	/**
 	 * Convenience method for executing a console command directly.
 	 *
@@ -776,9 +779,7 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * @return The command-line arguments passed into the application.
 	 */
-	public Args getArgs() {
-		return args;
-	}
+	public Args getArgs() { return args; }
 
 	/**
 	 * Returns the external INI-style configuration file that can be used to configure your microservice.
@@ -877,27 +878,21 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * @return The config file for this application, or <jk>null</jk> if no config file is configured.
 	 */
-	public Config getConfig() {
-		return config;
-	}
+	public Config getConfig() { return config; }
 
 	/**
 	 * Returns the console commands associated with this microservice.
 	 *
 	 * @return The console commands associated with this microservice as an unmodifiable map.
 	 */
-	public final Map<String,ConsoleCommand> getConsoleCommands() {
-		return consoleCommandMap;
-	}
+	public final Map<String,ConsoleCommand> getConsoleCommands() { return consoleCommandMap; }
 
 	/**
 	 * Returns the logger for this microservice.
 	 *
 	 * @return The logger for this microservice.
 	 */
-	public Logger getLogger() {
-		return logger;
-	}
+	public Logger getLogger() { return logger; }
 
 	/**
 	 * Returns the main jar manifest file contents as a simple {@link JsonMap}.
@@ -919,9 +914,7 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * @return The manifest file from the main jar, or <jk>null</jk> if the manifest file could not be retrieved.
 	 */
-	public ManifestFile getManifest() {
-		return manifest;
-	}
+	public ManifestFile getManifest() { return manifest; }
 
 	/**
 	 * Returns the variable resolver for resolving variables in strings and files.
@@ -935,9 +928,7 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * @return The VarResolver used by this Microservice, or <jk>null</jk> if it was never created.
 	 */
-	public VarResolver getVarResolver() {
-		return varResolver;
-	}
+	public VarResolver getVarResolver() { return varResolver; }
 
 	/**
 	 * Initializes this microservice.
@@ -960,7 +951,7 @@ public class Microservice implements ConfigEventListener {
 		Set<String> spKeys = config.getKeys("SystemProperties");
 		if (spKeys != null)
 			for (String key : spKeys)
-				System.setProperty(key, config.get("SystemProperties/"+key).orElse(null));
+				System.setProperty(key, config.get("SystemProperties/" + key).orElse(null));
 
 		// --------------------------------------------------------------------------------
 		// Initialize logging.
@@ -980,7 +971,7 @@ public class Microservice implements ConfigEventListener {
 				System.setProperty("juneau.logDir", logDir);
 
 				boolean append = Utils.firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
-				int limit = Utils.firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024*1024));
+				int limit = Utils.firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024 * 1024));
 				int count = Utils.firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
 
 				FileHandler fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
@@ -1072,19 +1063,17 @@ public class Microservice implements ConfigEventListener {
 		else
 			out(messages, "RunningClassWithConfig", getClass().getSimpleName(), config.getName());
 
-		Runtime.getRuntime().addShutdownHook(
-			new Thread("ShutdownHookThread") {
-				@Override /* Overridden from Thread */
-				public void run() {
-					try {
-						Microservice.this.stop();
-						Microservice.this.stopConsole();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+		Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHookThread") {
+			@Override /* Overridden from Thread */
+			public void run() {
+				try {
+					Microservice.this.stop();
+					Microservice.this.stopConsole();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
-		);
+		});
 
 		listener.onStart(this);
 
@@ -1102,6 +1091,7 @@ public class Microservice implements ConfigEventListener {
 			consoleThread.start();
 		return this;
 	}
+
 	/**
 	 * Stop this application.
 	 *
@@ -1151,9 +1141,7 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * @return The console reader.  Never <jk>null</jk>.
 	 */
-	protected Scanner getConsoleReader() {
-		return consoleReader;
-	}
+	protected Scanner getConsoleReader() { return consoleReader; }
 
 	/**
 	 * Returns the console writer.
@@ -1163,9 +1151,7 @@ public class Microservice implements ConfigEventListener {
 	 *
 	 * @return The console writer.  Never <jk>null</jk>.
 	 */
-	protected PrintWriter getConsoleWriter() {
-		return consoleWriter;
-	}
+	protected PrintWriter getConsoleWriter() { return consoleWriter; }
 
 	/**
 	 * Logs a message to the log file.

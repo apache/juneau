@@ -37,6 +37,7 @@ public class Csv extends CharMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final Csv DEFAULT = new Csv();
+
 	/**
 	 * Serializes a Java object to a JSON string.
 	 *

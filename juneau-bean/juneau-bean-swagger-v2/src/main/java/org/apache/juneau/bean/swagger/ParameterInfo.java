@@ -124,33 +124,14 @@ import org.apache.juneau.marshaller.*;
  */
 public class ParameterInfo extends SwaggerElement {
 
-	private static final String[] VALID_IN = {"query", "header", "path", "formData", "body"};
-	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array", "file"};
-	private static final String[] VALID_COLLECTION_FORMATS = {"csv", "ssv", "tsv", "pipes", "multi"};
+	private static final String[] VALID_IN = { "query", "header", "path", "formData", "body" };
+	private static final String[] VALID_TYPES = { "string", "number", "integer", "boolean", "array", "file" };
+	private static final String[] VALID_COLLECTION_FORMATS = { "csv", "ssv", "tsv", "pipes", "multi" };
 
-	private String
-		name,
-		in,
-		description,
-		type,
-		format,
-		pattern,
-		collectionFormat;
-	private Number
-		maximum,
-		minimum,
-		multipleOf;
-	private Integer
-		maxLength,
-		minLength,
-		maxItems,
-		minItems;
-	private Boolean
-		required,
-		allowEmptyValue,
-		exclusiveMaximum,
-		exclusiveMinimum,
-		uniqueItems;
+	private String name, in, description, type, format, pattern, collectionFormat;
+	private Number maximum, minimum, multipleOf;
+	private Integer maxLength, minLength, maxItems, minItems;
+	private Boolean required, allowEmptyValue, exclusiveMaximum, exclusiveMinimum, uniqueItems;
 	private SchemaInfo schema;
 	private Items items;
 	private Object _default;  // NOSONAR - Intentional naming.
@@ -317,6 +298,7 @@ public class ParameterInfo extends SwaggerElement {
 			default -> super.get(property, type);
 		};
 	}
+
 	/**
 	 * Bean property getter:  <property>allowEmptyValue</property>.
 	 *
@@ -329,9 +311,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getAllowEmptyValue() {
-		return allowEmptyValue;
-	}
+	public Boolean getAllowEmptyValue() { return allowEmptyValue; }
 
 	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
@@ -341,9 +321,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getCollectionFormat() {
-		return collectionFormat;
-	}
+	public String getCollectionFormat() { return collectionFormat; }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -357,9 +335,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getDefault() {
-		return _default;
-	}
+	public Object getDefault() { return _default; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -369,18 +345,14 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() {
-		return _enum;
-	}
+	public Set<Object> getEnum() { return _enum; }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -390,9 +362,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getExample() {
-		return example;
-	}
+	public Object getExample() { return example; }
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -402,27 +372,21 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getExamples() {
-		return examples;
-	}
+	public Map<String,String> getExamples() { return examples; }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
+	public Boolean getExclusiveMaximum() { return exclusiveMaximum; }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
+	public Boolean getExclusiveMinimum() { return exclusiveMinimum; }
 
 	/**
 	 * Bean property getter:  <property>format</property>.
@@ -432,9 +396,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getFormat() {
-		return format;
-	}
+	public String getFormat() { return format; }
 
 	/**
 	 * Bean property getter:  <property>in</property>.
@@ -444,9 +406,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getIn() {
-		return in;
-	}
+	public String getIn() { return in; }
 
 	/**
 	 * Bean property getter:  <property>items</property>.
@@ -456,72 +416,56 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Items getItems() {
-		return items;
-	}
+	public Items getItems() { return items; }
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMaximum() {
-		return maximum;
-	}
+	public Number getMaximum() { return maximum; }
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxItems() {
-		return maxItems;
-	}
+	public Integer getMaxItems() { return maxItems; }
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
+	public Integer getMaxLength() { return maxLength; }
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMinimum() {
-		return minimum;
-	}
+	public Number getMinimum() { return minimum; }
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinItems() {
-		return minItems;
-	}
+	public Integer getMinItems() { return minItems; }
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinLength() {
-		return minLength;
-	}
+	public Integer getMinLength() { return minLength; }
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
+	public Number getMultipleOf() { return multipleOf; }
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -541,18 +485,14 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getPattern() {
-		return pattern;
-	}
+	public String getPattern() { return pattern; }
 
 	/**
 	 * Bean property getter:  <property>required</property>.
@@ -562,9 +502,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getRequired() {
-		return required;
-	}
+	public Boolean getRequired() { return required; }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
@@ -574,9 +512,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
+	public SchemaInfo getSchema() { return schema; }
 
 	/**
 	 * Bean property getter:  <property>type</property>.
@@ -586,9 +522,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getType() {
-		return type;
-	}
+	public String getType() { return type; }
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
@@ -596,12 +530,11 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
-	}
+	public Boolean getUniqueItems() { return uniqueItems; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(allowEmptyValue != null, "allowEmptyValue")
 			.addIf(collectionFormat != null, "collectionFormat")
@@ -629,6 +562,7 @@ public class ParameterInfo extends SwaggerElement {
 			.addIf(type != null, "type")
 			.addIf(uniqueItems != null, "uniqueItems")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -733,10 +667,7 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_COLLECTION_FORMATS)
-			);
+			throw new BasicRuntimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_COLLECTION_FORMATS));
 		collectionFormat = value;
 		return this;
 	}
@@ -895,10 +826,7 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_IN)
-			);
+			throw new BasicRuntimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_IN));
 		in = value;
 		if ("path".equals(value))
 			required = true;
@@ -1099,10 +1027,7 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_TYPES)
-			);
+			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
 		type = value;
 		return this;
 	}

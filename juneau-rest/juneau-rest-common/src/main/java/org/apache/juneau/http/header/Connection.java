@@ -100,7 +100,7 @@ public class Connection extends BasicStringHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Connection of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new Connection(value));
+		return value == null ? null : CACHE.get(value, () -> new Connection(value));
 	}
 
 	/**
@@ -117,6 +117,7 @@ public class Connection extends BasicStringHeader {
 	public static Connection of(Supplier<String> value) {
 		return value == null ? null : new Connection(value);
 	}
+
 	/**
 	 * Constructor.
 	 *
@@ -147,25 +148,19 @@ public class Connection extends BasicStringHeader {
 	 *
 	 * @return <jk>true</jk> if the header value is <c>close</c>.
 	 */
-	public boolean isClose() {
-		return equalsIgnoreCase("close");
-	}
+	public boolean isClose() { return equalsIgnoreCase("close"); }
 
 	/**
 	 * Returns <jk>true</jk> if the header value is <c>keep-alive</c>.
 	 *
 	 * @return <jk>true</jk> if the header value is <c>keep-alive</c>.
 	 */
-	public boolean isKeepAlive() {
-		return equalsIgnoreCase("keep-alive");
-	}
+	public boolean isKeepAlive() { return equalsIgnoreCase("keep-alive"); }
 
 	/**
 	 * Returns <jk>true</jk> if the header value is <c>upgrade</c>.
 	 *
 	 * @return <jk>true</jk> if the header value is <c>upgrade</c>.
 	 */
-	public boolean isUpgrade() {
-		return equalsIgnoreCase("upgrade");
-	}
+	public boolean isUpgrade() { return equalsIgnoreCase("upgrade"); }
 }

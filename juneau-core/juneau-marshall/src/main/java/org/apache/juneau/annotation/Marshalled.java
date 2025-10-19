@@ -41,7 +41,7 @@ import org.apache.juneau.*;
  * </ul>
  */
 @Documented
-@Target({METHOD,TYPE})
+@Target({ METHOD, TYPE })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(MarshalledAnnotation.Array.class)

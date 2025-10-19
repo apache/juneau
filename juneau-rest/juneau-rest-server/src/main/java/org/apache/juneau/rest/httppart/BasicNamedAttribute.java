@@ -74,8 +74,9 @@ public class BasicNamedAttribute implements NamedAttribute {
 			i = pair.indexOf('=');
 		if (i == -1)
 			return of(pair, "");
-		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
+		return of(pair.substring(0, i).trim(), pair.substring(i + 1).trim());
 	}
+
 	private final String name;
 	private final Object value;
 
@@ -134,14 +135,10 @@ public class BasicNamedAttribute implements NamedAttribute {
 	}
 
 	@Override /* Overridden from NameValuePair */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	@Override /* Overridden from NameValuePair */
-	public Object getValue() {
-		return unwrap(value);
-	}
+	public Object getValue() { return unwrap(value); }
 
 	/**
 	 * Returns <jk>true</jk> if the value exists.
@@ -151,9 +148,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 *
 	 * @return <jk>true</jk> if the value exists.
 	 */
-	public boolean isPresent() {
-		return getValue() != null;
-	}
+	public boolean isPresent() { return getValue() != null; }
 
 	/**
 	 * If a value is present, returns the value, otherwise returns other.

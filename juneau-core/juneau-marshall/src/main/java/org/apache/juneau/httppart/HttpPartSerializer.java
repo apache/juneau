@@ -101,6 +101,7 @@ public interface HttpPartSerializer {
 	 * Used to represent the absence of a part serializer in annotations.
 	 */
 	public interface Void extends HttpPartSerializer {}
+
 	/**
 	 * Instantiates a creator for a part serializer.
 	 * @return A new creator.
@@ -108,6 +109,7 @@ public interface HttpPartSerializer {
 	static Creator creator() {
 		return new Creator();
 	}
+
 	/**
 	 * Creates a new serializer session.
 	 *

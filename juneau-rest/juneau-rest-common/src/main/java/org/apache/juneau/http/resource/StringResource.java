@@ -62,6 +62,7 @@ public class StringResource extends BasicResource {
 		super.addHeader(name, value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicResource */
 	public StringResource addHeaders(Header...values) {
 		super.addHeaders(values);
@@ -74,7 +75,7 @@ public class StringResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public StringResource setCached() throws IOException{
+	public StringResource setCached() throws IOException {
 		super.setCached();
 		return this;
 	}

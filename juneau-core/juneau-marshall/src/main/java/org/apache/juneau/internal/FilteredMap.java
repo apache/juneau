@@ -54,6 +54,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 			return entries.size();
 		}
 	}
+
 	final Map<K,V> innerMap;
 	final Set<Map.Entry<K,V>> entries;
 
@@ -72,12 +73,12 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 
 		this.classMeta = classMeta;
 		this.innerMap = innerMap;
-			List<Map.Entry<K,V>> l = new ArrayList<>(keys.length);
-			for (K k : keys)
-				if (innerMap.containsKey(k))
-					l.add(createEntry(k));
-			entries = new ListSet<>(l);
-		}
+		List<Map.Entry<K,V>> l = new ArrayList<>(keys.length);
+		for (K k : keys)
+			if (innerMap.containsKey(k))
+				l.add(createEntry(k));
+		entries = new ListSet<>(l);
+	}
 
 	@Override /* Overridden from Map */
 	public Set<Map.Entry<K,V>> entrySet() {
@@ -85,22 +86,16 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 	}
 
 	@Override /* Overridden from Delegate */
-	public ClassMeta<Map<K,V>> getClassMeta() {
-		return classMeta;
-	}
+	public ClassMeta<Map<K,V>> getClassMeta() { return classMeta; }
 
 	private Map.Entry<K,V> createEntry(final K key) {
 		return new Map.Entry<>() {
 
 			@Override /* Overridden from Map.Entry */
-			public K getKey() {
-				return key;
-			}
+			public K getKey() { return key; }
 
 			@Override /* Overridden from Map.Entry */
-			public V getValue() {
-				return innerMap.get(key);
-			}
+			public V getValue() { return innerMap.get(key); }
 
 			@Override /* Overridden from Map.Entry */
 			public V setValue(V v) {

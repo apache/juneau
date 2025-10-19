@@ -52,8 +52,7 @@ public class AnnotationUtils {
 		if (! t1.equals(t2))
 			return false;
 
-		boolean b= getAnnotationMethods(t1)
-			.anyMatch(x -> ! memberEquals(x.getReturnType(), Utils.safeSupplier(()->x.invoke(a1)), Utils.safeSupplier(()->x.invoke(a2))));
+		boolean b = getAnnotationMethods(t1).anyMatch(x -> ! memberEquals(x.getReturnType(), Utils.safeSupplier(() -> x.invoke(a1)), Utils.safeSupplier(() -> x.invoke(a2))));
 		if (b)
 			return false;
 
@@ -69,9 +68,7 @@ public class AnnotationUtils {
 	 * @throws IllegalStateException if an annotation method invocation returns {@code null}
 	 */
 	public static int hashCode(Annotation a) {
-		return getAnnotationMethods(a.annotationType())
-			.mapToInt(x -> hashMember(x.getName(), Utils.safeSupplier(()->x.invoke(a))))
-			.sum();
+		return getAnnotationMethods(a.annotationType()).mapToInt(x -> hashMember(x.getName(), Utils.safeSupplier(() -> x.invoke(a)))).sum();
 	}
 
 	private static boolean annotationArrayMemberEquals(Annotation[] a1, Annotation[] a2) {
@@ -85,51 +82,48 @@ public class AnnotationUtils {
 
 	private static boolean arrayMemberEquals(Class<?> componentType, Object o1, Object o2) {
 		if (componentType.isAnnotation())
-			return annotationArrayMemberEquals((Annotation[]) o1, (Annotation[]) o2);
+			return annotationArrayMemberEquals((Annotation[])o1, (Annotation[])o2);
 		if (componentType.equals(Byte.TYPE))
-			return Arrays.equals((byte[]) o1, (byte[]) o2);
+			return Arrays.equals((byte[])o1, (byte[])o2);
 		if (componentType.equals(Short.TYPE))
-			return Arrays.equals((short[]) o1, (short[]) o2);
+			return Arrays.equals((short[])o1, (short[])o2);
 		if (componentType.equals(Integer.TYPE))
-			return Arrays.equals((int[]) o1, (int[]) o2);
+			return Arrays.equals((int[])o1, (int[])o2);
 		if (componentType.equals(Character.TYPE))
-			return Arrays.equals((char[]) o1, (char[]) o2);
+			return Arrays.equals((char[])o1, (char[])o2);
 		if (componentType.equals(Long.TYPE))
-			return Arrays.equals((long[]) o1, (long[]) o2);
+			return Arrays.equals((long[])o1, (long[])o2);
 		if (componentType.equals(Float.TYPE))
-			return Arrays.equals((float[]) o1, (float[]) o2);
+			return Arrays.equals((float[])o1, (float[])o2);
 		if (componentType.equals(Double.TYPE))
-			return Arrays.equals((double[]) o1, (double[]) o2);
+			return Arrays.equals((double[])o1, (double[])o2);
 		if (componentType.equals(Boolean.TYPE))
-			return Arrays.equals((boolean[]) o1, (boolean[]) o2);
-		return Arrays.equals((Object[]) o1, (Object[]) o2);
+			return Arrays.equals((boolean[])o1, (boolean[])o2);
+		return Arrays.equals((Object[])o1, (Object[])o2);
 	}
 
 	private static int arrayMemberHash(Class<?> componentType, Object o) {
 		if (componentType.equals(Byte.TYPE))
-			return Arrays.hashCode((byte[]) o);
+			return Arrays.hashCode((byte[])o);
 		if (componentType.equals(Short.TYPE))
-			return Arrays.hashCode((short[]) o);
+			return Arrays.hashCode((short[])o);
 		if (componentType.equals(Integer.TYPE))
-			return Arrays.hashCode((int[]) o);
+			return Arrays.hashCode((int[])o);
 		if (componentType.equals(Character.TYPE))
-			return Arrays.hashCode((char[]) o);
+			return Arrays.hashCode((char[])o);
 		if (componentType.equals(Long.TYPE))
-			return Arrays.hashCode((long[]) o);
+			return Arrays.hashCode((long[])o);
 		if (componentType.equals(Float.TYPE))
-			return Arrays.hashCode((float[]) o);
+			return Arrays.hashCode((float[])o);
 		if (componentType.equals(Double.TYPE))
-			return Arrays.hashCode((double[]) o);
+			return Arrays.hashCode((double[])o);
 		if (componentType.equals(Boolean.TYPE))
-			return Arrays.hashCode((boolean[]) o);
-		return Arrays.hashCode((Object[]) o);
+			return Arrays.hashCode((boolean[])o);
+		return Arrays.hashCode((Object[])o);
 	}
 
 	private static Stream<Method> getAnnotationMethods(Class<? extends Annotation> type) {
-		return alist(type.getDeclaredMethods())
-			.stream()
-			.filter(x -> x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
-		;
+		return alist(type.getDeclaredMethods()).stream().filter(x -> x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation());
 	}
 
 	private static int hashMember(String name, Object value) {
@@ -139,7 +133,7 @@ public class AnnotationUtils {
 		if (isArray(value))
 			return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);
 		if (value instanceof Annotation)
-			return part1 ^ hashCode((Annotation) value);
+			return part1 ^ hashCode((Annotation)value);
 		return part1 ^ value.hashCode();
 	}
 
@@ -151,7 +145,7 @@ public class AnnotationUtils {
 		if (type.isArray())
 			return arrayMemberEquals(type.getComponentType(), o1, o2);
 		if (type.isAnnotation())
-			return equals((Annotation) o1, (Annotation) o2);
+			return equals((Annotation)o1, (Annotation)o2);
 		return o1.equals(o2);
 	}
 }

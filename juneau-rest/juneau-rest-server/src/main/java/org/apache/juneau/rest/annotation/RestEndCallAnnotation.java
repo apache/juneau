@@ -35,7 +35,7 @@ public class RestEndCallAnnotation {
 	 * A collection of {@link RestEndCall @RestEndCall annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -74,6 +74,7 @@ public class RestEndCallAnnotation {
 		}
 
 	}
+
 	private static class Impl extends TargetedAnnotationImpl implements RestEndCall {
 
 		Impl(Builder b) {
@@ -81,8 +82,10 @@ public class RestEndCallAnnotation {
 			postConstruct();
 		}
 	}
+
 	/** Default value */
 	public static final RestEndCall DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

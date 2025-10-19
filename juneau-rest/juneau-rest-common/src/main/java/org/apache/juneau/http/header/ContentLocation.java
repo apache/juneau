@@ -118,6 +118,7 @@ public class ContentLocation extends BasicUriHeader {
 	public static ContentLocation of(URI value) {
 		return value == null ? null : new ContentLocation(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

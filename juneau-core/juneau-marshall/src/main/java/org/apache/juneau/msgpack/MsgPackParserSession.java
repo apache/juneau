@@ -66,6 +66,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public MsgPackParserSession build() {
 			return new MsgPackParserSession(this);
@@ -155,6 +156,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -164,6 +166,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 	public static Builder create(MsgPackParser ctx) {
 		return new Builder(ctx);
 	}
+
 	/**
 	 * Constructor.
 	 *
@@ -280,11 +283,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
-					Collection l = (
-						sType.canCreateNewInstance(outer)
-						? (Collection)sType.newInstance()
-						: new JsonList(this)
-					);
+					Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
 					for (int i = 0; i < length; i++)
 						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
 					o = l;
@@ -298,11 +297,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
 				} else if (dt == ARRAY) {
-					Collection l = (
-						sType.isCollection() && sType.canCreateNewInstance(outer)
-						? (Collection)sType.newInstance()
-						: new JsonList(this)
-					);
+					Collection l = (sType.isCollection() && sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
 					for (int i = 0; i < length; i++)
 						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
 					o = toArray(sType, l);
@@ -318,8 +313,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				else if (sType.getProxyInvocationHandler() != null)
 					o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 				else
-					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
-						sType.getInnerClass().getName(), sType.getNotABeanReason());
+					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 			} else {
 				throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 			}

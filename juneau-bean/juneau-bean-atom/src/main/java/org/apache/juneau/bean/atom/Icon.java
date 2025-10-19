@@ -67,7 +67,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
  */
-@Bean(typeName="icon")
+@Bean(typeName = "icon")
 public class Icon extends Common {
 
 	private URI uri;
@@ -90,6 +90,7 @@ public class Icon extends Common {
 	public Icon(Object uri) {
 		setUri(uri);
 	}
+
 	/**
 	 * Bean property getter:  <property>uri</property>.
 	 *
@@ -98,16 +99,15 @@ public class Icon extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=TEXT)
-	public URI getUri() {
-		return uri;
-	}
+	@Xml(format = TEXT)
+	public URI getUri() { return uri; }
 
 	@Override /* Overridden from Common */
 	public Icon setBase(Object value) {
 		super.setBase(value);
 		return this;
 	}
+
 	@Override /* Overridden from Common */
 	public Icon setLang(String value) {
 		super.setLang(value);

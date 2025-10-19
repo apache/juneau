@@ -46,11 +46,11 @@ import org.apache.juneau.jena.*;
  * </ul>
  */
 @Documented
-@Target({PACKAGE,TYPE,FIELD,METHOD})
+@Target({ PACKAGE, TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(RdfAnnotation.Array.class)
-@ContextApply({RdfAnnotation.SerializerApplier.class,RdfAnnotation.ParserApplier.class})
+@ContextApply({ RdfAnnotation.SerializerApplier.class, RdfAnnotation.ParserApplier.class })
 public @interface Rdf {
 
 	/**

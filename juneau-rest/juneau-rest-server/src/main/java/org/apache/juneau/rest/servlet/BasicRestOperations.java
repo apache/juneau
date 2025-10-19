@@ -69,6 +69,7 @@ import org.apache.juneau.rest.stats.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
  * </ul>
  */
+// @formatter:off
 @HtmlDocConfig(
 	// Basic page navigation links.
 	navlinks={
@@ -146,13 +147,11 @@ public interface BasicRestOperations {
 		// Should override config annotations defined on class.
 		rank=10,
 		// Override the nav links for the swagger page.
-		navlinks={
-			"back: servlet:/",
-			"json: servlet:/stats?Accept=text/json&plainText=true"
-		},
+		navlinks = { "back: servlet:/", "json: servlet:/stats?Accept=text/json&plainText=true" },
 		// Never show aside contents of page inherited from class.
 		aside="NONE"
-	) RestContextStats getStats(RestRequest req);
+	)
+	RestContextStats getStats(RestRequest req);
 
 	/**
 	 * [GET /api] - Show resource options.
@@ -183,5 +182,6 @@ public interface BasicRestOperations {
 			// This is a per-media-type swap that only applies to text/html requests.
 			SwaggerUI.class
 		}
-	) Swagger getSwagger(RestRequest req);
+	)
+	Swagger getSwagger(RestRequest req);
 }

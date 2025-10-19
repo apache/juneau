@@ -100,7 +100,7 @@ import org.apache.juneau.serializer.*;
  * @param <T> The normal form of the class.
  * @param <S> The swapped form of the class.
  */
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class ObjectSwap<T,S> {
 
 	/**
@@ -184,9 +184,7 @@ public abstract class ObjectSwap<T,S> {
 	 *
 	 * @return The normal form of this class.
 	 */
-	public ClassInfo getNormalClass() {
-		return normalClassInfo;
-	}
+	public ClassInfo getNormalClass() { return normalClassInfo; }
 
 	/**
 	 * Returns the G class, the generalized form of the class.
@@ -197,9 +195,7 @@ public abstract class ObjectSwap<T,S> {
 	 *
 	 * @return The transformed form of this class.
 	 */
-	public ClassInfo getSwapClass() {
-		return swapClassInfo;
-	}
+	public ClassInfo getSwapClass() { return swapClassInfo; }
 
 	/**
 	 * Returns the {@link ClassMeta} of the transformed class type.
@@ -396,6 +392,7 @@ public abstract class ObjectSwap<T,S> {
 	public String withTemplate() {
 		return null;
 	}
+
 	/**
 	 * Sets the template string on this swap.
 	 *

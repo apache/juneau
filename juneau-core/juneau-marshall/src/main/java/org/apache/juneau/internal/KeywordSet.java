@@ -33,7 +33,7 @@ public class KeywordSet {
 	 *
 	 * @param keywords The list of keywords.
 	 */
-	public KeywordSet(String... keywords) {
+	public KeywordSet(String...keywords) {
 		this.store = keywords;
 		Arrays.sort(store);
 	}

@@ -53,6 +53,7 @@ public class Uon extends CharMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final Uon DEFAULT = new Uon();
+
 	/**
 	 * Serializes a Java object to a UON string.
 	 *

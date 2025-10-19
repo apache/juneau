@@ -37,7 +37,7 @@ public class HtmlElementContainer extends HtmlElement {
 	private List<Object> children;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer _class(String value) {  // NOSONAR - Intentional naming.
+	public HtmlElementContainer _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -94,6 +94,7 @@ public class HtmlElementContainer extends HtmlElement {
 		super.contenteditable(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementContainer dir(String value) {
 		super.dir(value);
@@ -110,10 +111,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @throws InvalidDataConversionException If node is not the expected type.
 	 */
 	public <T> T getChild(Class<T> type, int index) {
-		return (children == null || children.size() <= index || index < 0
-			? null
-			: ConverterUtils.toType(children.get(index), type)
-		);
+		return (children == null || children.size() <= index || index < 0 ? null : ConverterUtils.toType(children.get(index), type));
 	}
 
 	/**
@@ -160,11 +158,9 @@ public class HtmlElementContainer extends HtmlElement {
 	 *
 	 * @return The children of this element.
 	 */
-	@Xml(format=ELEMENTS)
-	@Beanp(dictionary=HtmlBeanDictionary.class, name="c")
-	public List<Object> getChildren() {
-		return children;
-	}
+	@Xml(format = ELEMENTS)
+	@Beanp(dictionary = HtmlBeanDictionary.class, name = "c")
+	public List<Object> getChildren() { return children; }
 
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementContainer hidden(Object value) {

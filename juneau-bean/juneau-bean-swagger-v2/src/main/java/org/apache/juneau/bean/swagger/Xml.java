@@ -73,13 +73,8 @@ import org.apache.juneau.internal.*;
  */
 public class Xml extends SwaggerElement {
 
-	private String
-		name,
-		namespace,
-		prefix;
-	private Boolean
-		attribute,
-		wrapped;
+	private String name, namespace, prefix;
+	private Boolean attribute, wrapped;
 
 	/**
 	 * Default constructor.
@@ -109,6 +104,7 @@ public class Xml extends SwaggerElement {
 	public Xml copy() {
 		return new Xml(this);
 	}
+
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
@@ -130,9 +126,7 @@ public class Xml extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getAttribute() {
-		return attribute;
-	}
+	public Boolean getAttribute() { return attribute; }
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -142,9 +136,7 @@ public class Xml extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Bean property getter:  <property>namespace</property>.
@@ -154,9 +146,7 @@ public class Xml extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getNamespace() {
-		return namespace;
-	}
+	public String getNamespace() { return namespace; }
 
 	/**
 	 * Bean property getter:  <property>prefix</property>.
@@ -166,9 +156,7 @@ public class Xml extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getPrefix() {
-		return prefix;
-	}
+	public String getPrefix() { return prefix; }
 
 	/**
 	 * Bean property getter:  <property>wrapped</property>.
@@ -182,12 +170,11 @@ public class Xml extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getWrapped() {
-		return wrapped;
-	}
+	public Boolean getWrapped() { return wrapped; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(attribute != null, "attribute")
 			.addIf(name != null, "name")
@@ -195,6 +182,7 @@ public class Xml extends SwaggerElement {
 			.addIf(prefix != null, "prefix")
 			.addIf(wrapped != null, "wrapped")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

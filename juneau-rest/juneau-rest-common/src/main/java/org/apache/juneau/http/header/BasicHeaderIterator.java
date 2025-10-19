@@ -87,7 +87,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(!caseSensitive, s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);
 	}
 
 	private boolean filter(int index) {
@@ -100,7 +100,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 
 		int to = entries.length - 1;
 		boolean found = false;
-		while (!found && (from < to)) {
+		while (! found && (from < to)) {
 			from++;
 			found = filter(from);
 		}

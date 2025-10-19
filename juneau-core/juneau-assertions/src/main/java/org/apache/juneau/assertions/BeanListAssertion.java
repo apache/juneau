@@ -129,7 +129,6 @@ import org.apache.juneau.serializer.*;
  */
 public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAssertion<E>> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -142,7 +141,6 @@ public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAsse
 	public static <E> BeanListAssertion<E> create(List<E> value) {
 		return new BeanListAssertion<>(value);
 	}
-
 
 	/**
 	 * Constructor.

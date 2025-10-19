@@ -131,9 +131,11 @@ public class IfRange extends BasicDateHeader {
 	public static IfRange of(ZonedDateTime value) {
 		return value == null ? null : new IfRange(value);
 	}
+
 	private static boolean isEtag(String s) {
 		return s.startsWith("\"") || s.startsWith("W/");
 	}
+
 	private final EntityTag value;
 
 	private final Supplier<?> supplier;

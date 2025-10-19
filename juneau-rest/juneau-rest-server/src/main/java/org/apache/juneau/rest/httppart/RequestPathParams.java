@@ -199,6 +199,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		add(new RequestPathParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
+
 	/**
 	 * Adds default entries to these parameters.
 	 *
@@ -307,7 +308,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(PATH, cm).orElseThrow(()->new BasicRuntimeException("@Path(name) not found on class {0}", className(type)));
+		String name = HttpParts.getName(PATH, cm).orElseThrow(() -> new BasicRuntimeException("@Path(name) not found on class {0}", className(type)));
 		return get(name).as(type);
 	}
 
@@ -334,6 +335,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		}
 		return new RequestPathParam(req, name, sb.toString()).parser(parser);
 	}
+
 	/**
 	 * Returns all the parameters with the specified name.
 	 *
@@ -357,7 +359,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public RequestPathParam getFirst(String name) {
 		Utils.assertArgNotNull("name", name);
-		return stream(name).findFirst().orElseGet(()->new RequestPathParam(req, name, null).parser(parser));
+		return stream(name).findFirst().orElseGet(() -> new RequestPathParam(req, name, null).parser(parser));
 	}
 
 	/**
@@ -381,9 +383,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * Returns all the unique header names in this list.
 	 * @return The list of all unique header names in this list.
 	 */
-	public List<String> getNames() {
-		return stream().map(RequestPathParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
-	}
+	public List<String> getNames() { return stream().map(RequestPathParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList()); }
 
 	/**
 	 * Returns the decoded remainder of the URL following any path pattern matches.
@@ -452,9 +452,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 *
 	 * @return The un-decoded path remainder.
 	 */
-	public RequestPathParam getRemainderUndecoded() {
-		return get("/**");
-	}
+	public RequestPathParam getRemainderUndecoded() { return get("/**"); }
 
 	/**
 	 * Returns all headers in sorted order.
@@ -466,7 +464,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		if (caseSensitive)
 			x = Comparator.comparing(RequestPathParam::getName);
 		else
-			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+			x = (x1, x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
 		return stream().sorted(x);
 	}
 
@@ -512,6 +510,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 			add(p);
 		return this;
 	}
+
 	/**
 	 * Sets a parameter value.
 	 *

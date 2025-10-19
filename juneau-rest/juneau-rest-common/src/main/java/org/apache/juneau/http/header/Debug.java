@@ -88,6 +88,7 @@ public class Debug extends BasicBooleanHeader {
 	public static Debug of(Supplier<Boolean> value) {
 		return value == null ? null : new Debug(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

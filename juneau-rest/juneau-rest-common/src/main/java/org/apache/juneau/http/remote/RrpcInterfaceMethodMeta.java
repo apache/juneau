@@ -56,6 +56,7 @@ public class RrpcInterfaceMethodMeta {
 		sb.append(')');
 		return sb.toString();
 	}
+
 	private final String url, path;
 
 	private final Method method;
@@ -68,7 +69,7 @@ public class RrpcInterfaceMethodMeta {
 	 */
 	public RrpcInterfaceMethodMeta(final String restUrl, Method m) {
 		this.method = m;
-		this.path =  m.getName() + '/' + getMethodArgsSignature(m);
+		this.path = m.getName() + '/' + getMethodArgsSignature(m);
 		this.url = trimSlashes(restUrl) + '/' + urlEncode(path);
 	}
 
@@ -79,9 +80,7 @@ public class RrpcInterfaceMethodMeta {
 	 * 	The underlying Java method that this metadata is about.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Method getJavaMethod() {
-		return method;
-	}
+	public Method getJavaMethod() { return method; }
 
 	/**
 	 * Returns the HTTP path of this method.
@@ -91,16 +90,12 @@ public class RrpcInterfaceMethodMeta {
 	 * 	<br>Never <jk>null</jk>.
 	 * 	<br>Never has leading or trailing slashes.
 	 */
-	public String getPath() {
-		return path;
-	}
+	public String getPath() { return path; }
 
 	/**
 	 * Returns the absolute URL of the REST interface invoked by this Java method.
 	 *
 	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
 	 */
-	public String getUri() {
-		return url;
-	}
+	public String getUri() { return url; }
 }

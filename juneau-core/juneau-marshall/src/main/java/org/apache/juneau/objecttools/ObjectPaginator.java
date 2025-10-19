@@ -59,6 +59,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 	public static ObjectPaginator create() {
 		return new ObjectPaginator();
 	}
+
 	@Override /* Overridden from ObjectTool */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object run(BeanSession session, Object input, PageArgs args) {
@@ -76,7 +77,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 
 		if (type.isArray()) {
 			int size = Array.getLength(input);
-			int end = (limit+pos >= size) ? size : limit + pos;
+			int end = (limit + pos >= size) ? size : limit + pos;
 			pos = Math.min(pos, size);
 			ClassMeta<?> et = type.getElementType();
 			if (! et.isPrimitive())
@@ -99,7 +100,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 		}
 
 		List l = type.isList() ? (List)input : new ArrayList((Collection)input);
-		int end = (limit+pos >= l.size()) ? l.size() : limit + pos;
+		int end = (limit + pos >= l.size()) ? l.size() : limit + pos;
 		pos = Math.min(pos, l.size());
 		return l.subList(pos, end);
 	}

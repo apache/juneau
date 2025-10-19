@@ -40,7 +40,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class EarlyHints extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -93,6 +93,7 @@ public class EarlyHints extends BasicHttpResponse {
 	public EarlyHints copy() {
 		return new EarlyHints(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public EarlyHints setContent(HttpEntity value) {
 		super.setContent(value);

@@ -106,10 +106,11 @@ public class HeaderArg implements RestOpArg {
 	 * @return A new {@link HeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
 	public static HeaderArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
-		if ((!paramInfo.getParameterType().is(Value.class)) && (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class)))
+		if ((! paramInfo.getParameterType().is(Value.class)) && (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class)))
 			return new HeaderArg(paramInfo, annotations);
 		return null;
 	}
+
 	/**
 	 * Gets the merged @Header annotation combining class-level and parameter-level values.
 	 *
@@ -154,6 +155,7 @@ public class HeaderArg implements RestOpArg {
 		// Merge the two annotations: parameter-level takes precedence
 		return mergeAnnotations(classLevelHeader, paramHeader);
 	}
+
 	/**
 	 * Merges two @Header annotations, with param-level taking precedence over class-level.
 	 *
@@ -162,6 +164,7 @@ public class HeaderArg implements RestOpArg {
 	 * @return Merged annotation.
 	 */
 	private static Header mergeAnnotations(Header classLevel, Header paramLevel) {
+		// @formatter:off
 		return HeaderAnnotation.create()
 			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
 			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
@@ -171,7 +174,9 @@ public class HeaderArg implements RestOpArg {
 			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
 			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Merges two @Schema annotations, with param-level taking precedence.
 	 *
@@ -181,10 +186,11 @@ public class HeaderArg implements RestOpArg {
 	 */
 	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
 		// If parameter has a non-default schema, use it; otherwise use class-level
-		if (!SchemaAnnotation.empty(paramLevel))
+		if (! SchemaAnnotation.empty(paramLevel))
 			return paramLevel;
 		return classLevel;
 	}
+
 	private final HttpPartParser partParser;
 
 	private final HttpPartSchema schema;
@@ -209,7 +215,7 @@ public class HeaderArg implements RestOpArg {
 		Header mergedHeader = getMergedHeader(pi, name);
 
 		// Use merged header annotation for all lookups
-		this.def = mergedHeader != null && !mergedHeader.def().isEmpty() ? mergedHeader.def() : findDef(pi).orElse(null);
+		this.def = mergedHeader != null && ! mergedHeader.def().isEmpty() ? mergedHeader.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
 		this.schema = mergedHeader != null ? HttpPartSchema.create(mergedHeader) : HttpPartSchema.create(Header.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();

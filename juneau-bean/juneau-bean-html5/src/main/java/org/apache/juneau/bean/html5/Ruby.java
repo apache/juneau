@@ -91,7 +91,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="ruby")
+@Bean(typeName = "ruby")
 public class Ruby extends HtmlElementMixed {
 
 	/**
@@ -107,8 +107,9 @@ public class Ruby extends HtmlElementMixed {
 	public Ruby(Object...children) {
 		children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Ruby _class(String value) {  // NOSONAR - Intentional naming.
+	public Ruby _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

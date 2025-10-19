@@ -38,6 +38,7 @@ public class App {
 	 * @throws Exception Error occurred.
 	 */
 	public static void main(String[] args) throws Exception {
+		// @formatter:off
 		JettyMicroservice
 			.create()
 			.args(args)
@@ -46,5 +47,6 @@ public class App {
 			.start()
 			.startConsole()
 			.join();
+		// @formatter:on
 	}
 }

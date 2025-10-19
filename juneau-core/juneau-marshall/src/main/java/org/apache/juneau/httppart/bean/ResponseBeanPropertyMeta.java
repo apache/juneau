@@ -68,9 +68,11 @@ public class ResponseBeanPropertyMeta {
 	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, HttpPartSchema schema, MethodInfo m) {
 		return new Builder().partType(partType).schema(schema).getter(m.inner());
 	}
+
 	static ResponseBeanPropertyMeta.Builder create(HttpPartType partType, MethodInfo m) {
 		return new Builder().partType(partType).getter(m.inner());
 	}
+
 	private final Method getter;
 	private final HttpPartType partType;
 	private final Optional<HttpPartSerializer> serializer;
@@ -93,27 +95,21 @@ public class ResponseBeanPropertyMeta {
 	 * 	The name of the Java method getter that defines this property.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Method getGetter() {
-		return getter;
-	}
+	public Method getGetter() { return getter; }
 
 	/**
 	 * Returns the parser to use for parsing the bean property value.
 	 *
 	 * @return The parser to use for parsing the bean property value.
 	 */
-	public Optional<HttpPartParser> getParser() {
-		return parser;
-	}
+	public Optional<HttpPartParser> getParser() { return parser; }
 
 	/**
 	 * Returns the HTTP part name for this property (the query parameter name for example).
 	 *
 	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
 	 */
-	public Optional<String> getPartName() {
-		return Utils.opt(schema == null ? null : schema.getName());
-	}
+	public Optional<String> getPartName() { return Utils.opt(schema == null ? null : schema.getName()); }
 
 	/**
 	 * Returns the HTTP part type for this property (query parameter for example).
@@ -122,9 +118,7 @@ public class ResponseBeanPropertyMeta {
 	 * 	The HTTP part type for this property.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartType getPartType() {
-		return partType;
-	}
+	public HttpPartType getPartType() { return partType; }
 
 	/**
 	 * Returns the schema information gathered from annotations on the method and return type.
@@ -133,16 +127,12 @@ public class ResponseBeanPropertyMeta {
 	 * 	The schema information gathered from annotations on the method and return type.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartSchema getSchema() {
-		return schema;
-	}
+	public HttpPartSchema getSchema() { return schema; }
 
 	/**
 	 * Returns the serializer to use for serializing the bean property value.
 	 *
 	 * @return The serializer to use for serializing the bean property value.
 	 */
-	public Optional<HttpPartSerializer> getSerializer() {
-		return serializer;
-	}
+	public Optional<HttpPartSerializer> getSerializer() { return serializer; }
 }

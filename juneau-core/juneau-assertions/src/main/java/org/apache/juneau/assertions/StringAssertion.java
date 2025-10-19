@@ -122,7 +122,6 @@ import org.apache.juneau.serializer.*;
  */
 public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -134,7 +133,6 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	public static StringAssertion create(Object value) {
 		return new StringAssertion(value);
 	}
-
 
 	/**
 	 * Constructor.

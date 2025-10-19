@@ -61,18 +61,13 @@ public class ResponseStatusLine implements StatusLine {
 	}
 
 	@Override /* Overridden from StatusLine */
-	public ProtocolVersion getProtocolVersion() {
-		return inner.getProtocolVersion();
-	}
+	public ProtocolVersion getProtocolVersion() { return inner.getProtocolVersion(); }
 
 	@Override /* Overridden from StatusLine */
-	public String getReasonPhrase() {
-		return inner.getReasonPhrase();
-	}
+	public String getReasonPhrase() { return inner.getReasonPhrase(); }
+
 	@Override /* Overridden from StatusLine */
-	public int getStatusCode() {
-		return inner.getStatusCode();
-	}
+	public int getStatusCode() { return inner.getStatusCode(); }
 
 	/**
 	 * Returns the response that created this object.
@@ -82,6 +77,7 @@ public class ResponseStatusLine implements StatusLine {
 	public RestResponse response() {
 		return response;
 	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return inner.toString();

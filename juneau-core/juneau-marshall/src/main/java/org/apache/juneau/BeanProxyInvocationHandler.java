@@ -38,7 +38,7 @@ import org.apache.juneau.reflect.*;
 public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 
 	private final BeanMeta<T> meta;						// The BeanMeta for this instance
-	private Map<String, Object> beanProps;		// The map of property names to bean property values.
+	private Map<String,Object> beanProps;		// The map of property names to bean property values.
 
 	/**
 	 * Constructs with the specified {@link BeanMeta}.
@@ -88,6 +88,6 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return null;
 		}
 
-		throw new UnsupportedOperationException("Unsupported bean method.  method='"+method+"'");
+		throw new UnsupportedOperationException("Unsupported bean method.  method='" + method + "'");
 	}
 }

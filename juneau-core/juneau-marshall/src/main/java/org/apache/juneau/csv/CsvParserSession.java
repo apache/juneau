@@ -60,6 +60,7 @@ public class CsvParserSession extends ReaderParserSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public CsvParserSession build() {
 			return new CsvParserSession(this);
@@ -161,6 +162,7 @@ public class CsvParserSession extends ReaderParserSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -170,6 +172,7 @@ public class CsvParserSession extends ReaderParserSession {
 	public static Builder create(CsvParser ctx) {
 		return new Builder(ctx);
 	}
+
 	/**
 	 * Constructor.
 	 *

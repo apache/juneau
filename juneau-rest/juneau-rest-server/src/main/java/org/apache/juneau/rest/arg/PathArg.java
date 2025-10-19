@@ -67,6 +67,7 @@ public class PathArg implements RestOpArg {
 			return new PathArg(paramInfo, annotations, pathMatcher);
 		return null;
 	}
+
 	/**
 	 * Gets the merged @Path annotation combining class-level and parameter-level values.
 	 *
@@ -111,6 +112,7 @@ public class PathArg implements RestOpArg {
 		// Merge the two annotations: parameter-level takes precedence
 		return mergeAnnotations(classLevelPath, paramPath);
 	}
+
 	/**
 	 * Merges two @Path annotations, with param-level taking precedence over class-level.
 	 *
@@ -119,6 +121,7 @@ public class PathArg implements RestOpArg {
 	 * @return Merged annotation.
 	 */
 	private static Path mergeAnnotations(Path classLevel, Path paramLevel) {
+		// @formatter:off
 		return PathAnnotation.create()
 			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
 			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
@@ -128,7 +131,9 @@ public class PathArg implements RestOpArg {
 			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
 			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Merges two @Schema annotations, with param-level taking precedence.
 	 *
@@ -138,7 +143,7 @@ public class PathArg implements RestOpArg {
 	 */
 	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
 		// If parameter has a non-default schema, use it; otherwise use class-level
-		if (!SchemaAnnotation.empty(paramLevel))
+		if (! SchemaAnnotation.empty(paramLevel))
 			return paramLevel;
 		return classLevel;
 	}
@@ -166,7 +171,7 @@ public class PathArg implements RestOpArg {
 		Path mergedPath = getMergedPath(paramInfo, name);
 
 		// Use merged path annotation for all lookups
-		this.def = mergedPath != null && !mergedPath.def().isEmpty() ? mergedPath.def() : findDef(paramInfo).orElse(null);
+		this.def = mergedPath != null && ! mergedPath.def().isEmpty() ? mergedPath.def() : findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = mergedPath != null ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
 		Class<? extends HttpPartParser> pp = schema.getParser();

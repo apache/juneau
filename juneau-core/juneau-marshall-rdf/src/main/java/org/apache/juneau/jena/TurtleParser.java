@@ -39,6 +39,7 @@ public class TurtleParser extends RdfParser {
 	public static RdfParser.Builder create() {
 		return RdfParser.create().turtle();
 	}
+
 	/**
 	 * Constructor.
 	 *

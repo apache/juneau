@@ -135,7 +135,7 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ObjectRest {
 	class JsonNode {
 		Object o;
@@ -158,7 +158,7 @@ public class ObjectRest {
 	}
 
 	/** The list of possible request types. */
-	private static final int GET=1, PUT=2, POST=3, DELETE=4;
+	private static final int GET = 1, PUT = 2, POST = 3, DELETE = 4;
 
 	/**
 	 * Static creator.
@@ -168,6 +168,7 @@ public class ObjectRest {
 	public static ObjectRest create(Object o) {
 		return new ObjectRest(o);
 	}
+
 	/**
 	 * Static creator.
 	 * @param o The object being wrapped.
@@ -177,6 +178,7 @@ public class ObjectRest {
 	public static ObjectRest create(Object o, ReaderParser parser) {
 		return new ObjectRest(o, parser);
 	}
+
 	/** Handle nulls and strip off leading '/' char. */
 	private static String normalizeUrl(String url) {
 
@@ -195,18 +197,16 @@ public class ObjectRest {
 		try {
 			return Integer.parseInt(key);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw new ObjectRestException(HTTP_BAD_REQUEST,
-				"Cannot address an item in an array with a non-integer key ''{0}''", key
-			);
+			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot address an item in an array with a non-integer key ''{0}''", key);
 		}
 	}
 
 	private static Object[] removeArrayEntry(Object o, int index) {
 		Object[] a = (Object[])o;
 		// Shrink the array.
-		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length-1);
+		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length - 1);
 		System.arraycopy(a, 0, a2, 0, index);
-		System.arraycopy(a, index+1, a2, index, a.length-index-1);
+		System.arraycopy(a, index + 1, a2, index, a.length - index - 1);
 		return a2;
 	}
 
@@ -605,9 +605,7 @@ public class ObjectRest {
 	 *
 	 * @return The root object.
 	 */
-	public Object getRootObject() {
-		return root.o;
-	}
+	public Object getRootObject() { return root.o; }
 
 	/**
 	 * Returns the specified entry value converted to a {@link String}.
@@ -790,7 +788,7 @@ public class ObjectRest {
 	private Object[] addArrayEntry(Object o, Object val, ClassMeta componentType) {
 		Object[] a = (Object[])o;
 		// Expand out the array.
-		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length+1);
+		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length + 1);
 		System.arraycopy(a, 0, a2, 0, a.length);
 		a2[a.length] = convert(val, componentType);
 		return a2;
@@ -866,12 +864,12 @@ public class ObjectRest {
 				if (cm.isCollection()) {
 					Collection c = (Collection)o;
 					c.add(convert(val, cm.getElementType()));
-					return (c instanceof List ? url + "/" + (c.size()-1) : null);
+					return (c instanceof List ? url + "/" + (c.size() - 1) : null);
 				}
 				if (cm.isArray()) {
 					Object[] o2 = addArrayEntry(o, val, cm.getElementType());
 					root = new JsonNode(null, null, o2, null);
-					return url + "/" + (o2.length-1);
+					return url + "/" + (o2.length - 1);
 				}
 				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
 			}
@@ -886,19 +884,19 @@ public class ObjectRest {
 				Object po = n.parent.o;
 				if (pct.isMap()) {
 					((Map)po).put(childKey, o2);
-					return url + "/" + (o2.length-1);
+					return url + "/" + (o2.length - 1);
 				}
 				if (pct.isBean()) {
 					BeanMap m = session.toBeanMap(po);
 					m.put(childKey, o2);
-					return url + "/" + (o2.length-1);
+					return url + "/" + (o2.length - 1);
 				}
 				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isCollection()) {
 				Collection c = (Collection)o;
 				c.add(convert(val, cm.getElementType()));
-				return (c instanceof List ? url + "/" + (c.size()-1) : null);
+				return (c instanceof List ? url + "/" + (c.size() - 1) : null);
 			}
 			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
 		}
@@ -947,7 +945,7 @@ public class ObjectRest {
 		Object[] a = (Object[])o;
 		if (a.length <= index) {
 			// Expand out the array.
-			Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index+1);
+			Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);
 			System.arraycopy(a, 0, a2, 0, a.length);
 			a = a2;
 		}
@@ -995,10 +993,7 @@ public class ObjectRest {
 			o2 = m.get(parentKey);
 			BeanPropertyMeta pMeta = m.getPropertyMeta(parentKey);
 			if (pMeta == null)
-				throw new ObjectRestException(HTTP_BAD_REQUEST,
-					"Unknown property ''{0}'' encountered while trying to parse into class ''{1}''",
-					parentKey, m.getClassMeta()
-				);
+				throw new ObjectRestException(HTTP_BAD_REQUEST, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", parentKey, m.getClassMeta());
 			ct2 = pMeta.getClassMeta();
 		}
 

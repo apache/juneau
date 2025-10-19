@@ -46,11 +46,12 @@ import org.apache.juneau.rest.servlet.*;
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings("javadoc")
 public class LogsResource extends BasicRestServlet {
-	@Response(schema=@Schema(description="File action"))
+	@Response(schema = @Schema(description = "File action"))
 	public static class Action extends LinkString {
 		public Action(String name, String uri, Object...uriArgs) {
 			super(name, uri, uriArgs);
 		}
+
 		@Override /* Overridden from LinkString */
 		public Action setName(String value) {
 			super.setName(value);
@@ -75,8 +76,9 @@ public class LogsResource extends BasicRestServlet {
 			return this;
 		}
 	}
-	@Response(schema=@Schema(description="File or directory details"))
-	@Bean(properties="type,name,size,lastModified,actions,files")
+
+	@Response(schema = @Schema(description = "File or directory details"))
+	@Bean(properties = "type,name,size,lastModified,actions,files")
 	public static class FileResource {
 		static final FileFilter FILE_FILTER = f -> f.isDirectory() || f.getName().endsWith(".log");
 		static final Comparator<FileResource> FILE_COMPARATOR = (o1, o2) -> {
@@ -93,12 +95,12 @@ public class LogsResource extends BasicRestServlet {
 		public FileResource(File f, String path, boolean allowDeletes, boolean includeChildren) {
 			this.f = f;
 			this.path = path;
-			this.uri = "servlet:/"+(path == null ? "" : path);
+			this.uri = "servlet:/" + (path == null ? "" : path);
 			this.includeChildren = includeChildren;
 			this.allowDeletes = allowDeletes;
 		}
 
-		@Html(format=HtmlFormat.HTML_CDC)
+		@Html(format = HtmlFormat.HTML_CDC)
 		public List<Action> getActions() throws Exception {
 			List<Action> l = new ArrayList<>();
 			if (f.canRead() && ! f.isDirectory()) {
@@ -121,29 +123,23 @@ public class LogsResource extends BasicRestServlet {
 			return s;
 		}
 
-		public Date getLastModified() {
-			return new Date(f.lastModified());
-		}
+		public Date getLastModified() { return new Date(f.lastModified()); }
 
-		public LinkString getName() {
-			return new LinkString(f.getName(), uri);
-		}
+		public LinkString getName() { return new LinkString(f.getName(), uri); }
 
-		public long getSize() {
-			return f.isDirectory() ? f.listFiles().length : f.length();
-		}
+		public long getSize() { return f.isDirectory() ? f.listFiles().length : f.length(); }
 
-		public String getType() {
-			return (f.isDirectory() ? "dir" : "file");
-		}
+		public String getType() { return (f.isDirectory() ? "dir" : "file"); }
 	}
-	@Response(schema=@Schema(type="string",format="binary",description="Contents of file"))
+
+	@Response(schema = @Schema(type = "string", format = "binary", description = "Contents of file"))
 	static class FileContents extends FileInputStream {
 		public FileContents(File file) throws FileNotFoundException {
 			super(file);
 		}
 	}
-	@Response(schema=@Schema(description="Redirect to root page on success"))
+
+	@Response(schema = @Schema(description = "Redirect to root page on success"))
 	static class RedirectToRoot extends SeeOtherRoot {}
 
 	private static final long serialVersionUID = 1L;
@@ -250,21 +246,22 @@ public class LogsResource extends BasicRestServlet {
 			try (LogParser lp = getLogParser(f, startDate, endDate, thread, loggers, severity)) {
 				if (! lp.hasNext())
 					w.append("<span style='color:gray'>[EMPTY]</span>");
-				else for (LogParser.Entry le : lp) {
-					char s = le.severity.charAt(0);
-					String color = "black";
-					//SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST
-					if (s == 'I')
-						color = "#006400";
-					else if (s == 'W')
-						color = "#CC8400";
-					else if (s == 'E' || s == 'S')
-						color = "#DD0000";
-					else if (s == 'D' || s == 'F' || s == 'T')
-						color = "#000064";
-					w.append("<span style='color:").append(color).append("'>");
-					le.appendHtml(w).append("</span>");
-				}
+				else
+					for (LogParser.Entry le : lp) {
+						char s = le.severity.charAt(0);
+						String color = "black";
+						//SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST
+						if (s == 'I')
+							color = "#006400";
+						else if (s == 'W')
+							color = "#CC8400";
+						else if (s == 'E' || s == 'S')
+							color = "#DD0000";
+						else if (s == 'D' || s == 'F' || s == 'T')
+							color = "#000064";
+						w.append("<span style='color:").append(color).append("'>");
+						le.appendHtml(w).append("</span>");
+					}
 				w.append("</body></html>");
 			}
 		}
@@ -313,7 +310,7 @@ public class LogsResource extends BasicRestServlet {
 			}
 		}
 		if (! f.delete())
-			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath()) ;
+			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath());
 	}
 
 	private File getFile(String path) throws NotFound {

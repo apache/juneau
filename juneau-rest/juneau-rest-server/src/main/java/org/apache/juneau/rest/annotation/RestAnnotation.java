@@ -75,10 +75,12 @@ public class RestAnnotation {
 		Class<? extends RestOperations> restOperationsClass = RestOperations.Void.class;
 		Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
 		Class<? extends Serializer>[] serializers = new Class[0];
-		Class<?>[] children={}, parsers={};
+		Class<?>[] children = {}, parsers = {};
 		Swagger swagger = SwaggerAnnotation.DEFAULT;
-		String disableContentParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
-		String[] consumes={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, produces={}, title={};
+		String disableContentParam = "", allowedHeaderParams = "", allowedMethodHeaders = "", allowedMethodParams = "", clientVersionHeader = "", config = "", debug = "", debugOn = "",
+			defaultAccept = "", defaultCharset = "", defaultContentType = "", maxInput = "", messages = "", path = "", renderResponseStackTraces = "", roleGuard = "", rolesDeclared = "",
+			siteName = "", uriAuthority = "", uriContext = "", uriRelativity = "", uriResolution = "";
+		String[] consumes = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, produces = {}, title = {};
 		Query[] queryParams = new Query[0];
 		Header[] headerParams = new Header[0];
 		Path[] pathParams = new Path[0];
@@ -716,7 +718,8 @@ public class RestAnnotation {
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children, parsers;
 		private final Swagger swagger;
-		private final String disableContentParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
+		private final String disableContentParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset,
+			defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
 		private final String[] consumes, produces, defaultRequestAttributes, defaultRequestHeaders, defaultResponserHeaders, title;
 		private final Query[] queryParams;
 		private final Header[] headerParams;
@@ -1028,8 +1031,10 @@ public class RestAnnotation {
 			return uriResolution;
 		}
 	}
+
 	/** Default value */
 	public static final Rest DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -1038,6 +1043,7 @@ public class RestAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

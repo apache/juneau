@@ -35,7 +35,7 @@ public class RestPostInitAnnotation {
 	 * A collection of {@link RestPostInit @RestPostInit annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -86,6 +86,7 @@ public class RestPostInitAnnotation {
 		}
 
 	}
+
 	private static class Impl extends TargetedAnnotationImpl implements RestPostInit {
 
 		private final boolean childFirst;
@@ -101,8 +102,10 @@ public class RestPostInitAnnotation {
 			return childFirst;
 		}
 	}
+
 	/** Default value */
 	public static final RestPostInit DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

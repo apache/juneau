@@ -83,9 +83,11 @@ import org.apache.juneau.serializer.*;
  */
 public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 
+	// @formatter:off
 	private static final Set<String>
 		SWAP_METHOD_NAMES = u(set("toMap", "toJsonMap")),
 		UNSWAP_METHOD_NAMES = u(set("fromMap", "fromJsonMap", "create", "valueOf"));
+	// @formatter:on
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.
@@ -122,6 +124,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 	}
 
 	private static boolean isSwapMethod(BeanContext bc, MethodInfo mi) {
+		// @formatter:off
 		return
 			mi.isNotDeprecated()
 			&& mi.isNotStatic()
@@ -130,17 +133,21 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.hasReturnTypeParent(Map.class)
 			&& mi.hasFuzzyParamTypes(BeanSession.class)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
+		// @formatter:on
 	}
 
 	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
+		// @formatter:off
 		return
 			cs.isNotDeprecated()
 			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasMatchingParamTypes(rt)
 			&& cs.hasNoAnnotation(bc, BeanIgnore.class);
+		// @formatter:on
 	}
 
 	private static boolean isUnswapMethod(BeanContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
+		// @formatter:off
 		return
 			mi.isNotDeprecated()
 			&& mi.isStatic()
@@ -149,12 +156,11 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
+		// @formatter:on
 	}
 
 	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
-		return
-			ci.hasAnnotation(bc, BeanIgnore.class)
-			|| ci.isNonStaticMemberClass();
+		return ci.hasAnnotation(bc, BeanIgnore.class) || ci.isNonStaticMemberClass();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -144,11 +144,13 @@ public abstract class MenuItemWidget extends Widget {
 			}
 			sb.append("\n\t</script>");
 		}
+		// @formatter:off
 		String onclick = (pre == null ? "" : "onPreShow"+id+"();") + "menuClick(this);" + (post == null ? "" : "onPostShow"+id+"();");
 		sb.append(""
 			+ "\n\t<a onclick='"+onclick+"'>"+getLabel(req, res)+"</a>"
 			+ "\n<div class='popup-content'>"
 		);
+		// @formatter:on
 		Object o = getContent(req, res);
 		if (o instanceof Reader) {
 			try (Reader r = (Reader)o; Writer w = new StringBuilderWriter(sb)) {
@@ -159,6 +161,7 @@ public abstract class MenuItemWidget extends Widget {
 		} else if (o instanceof CharSequence) {
 			sb.append((CharSequence)o);
 		} else {
+			// @formatter:off
 			WriterSerializerSession session = HtmlSerializer.DEFAULT
 				.createSession()
 				.properties(req.getAttributes().asMap())
@@ -167,6 +170,7 @@ public abstract class MenuItemWidget extends Widget {
 				.useWhitespace(req.isPlainText() ? true : null)
 				.resolver(req.getVarResolverSession())
 				.build();
+			// @formatter:on
 			session.indent = 2;
 			try {
 				session.serialize(o, sb);
@@ -174,10 +178,12 @@ public abstract class MenuItemWidget extends Widget {
 				throw asRuntimeException(e);
 			}
 		}
+		// @formatter:off
 		sb.append(""
 			+ "\n\t</div>"
 			+ "\n</div>"
 		);
+		// @formatter:on
 		return sb.toString();
 	}
 

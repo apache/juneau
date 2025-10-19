@@ -76,6 +76,7 @@ public class NoTrace extends BasicBooleanHeader {
 	public static NoTrace of(Supplier<Boolean> value) {
 		return value == null ? null : new NoTrace(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

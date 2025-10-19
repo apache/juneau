@@ -77,7 +77,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="noscript")
+@Bean(typeName = "noscript")
 public class Noscript extends HtmlElementMixed {
 
 	/**
@@ -93,8 +93,9 @@ public class Noscript extends HtmlElementMixed {
 	public Noscript(Object...children) {
 		children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Noscript _class(String value) {  // NOSONAR - Intentional naming.
+	public Noscript _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

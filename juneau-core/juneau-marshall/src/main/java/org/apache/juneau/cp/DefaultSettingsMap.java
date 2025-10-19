@@ -44,6 +44,7 @@ public class DefaultSettingsMap {
 	public static DefaultSettingsMap create() {
 		return new DefaultSettingsMap();
 	}
+
 	private final Map<String,Object> entries;
 
 	/**

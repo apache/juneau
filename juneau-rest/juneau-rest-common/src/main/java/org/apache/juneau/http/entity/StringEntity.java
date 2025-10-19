@@ -41,8 +41,7 @@ public class StringEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 */
-	public StringEntity() {
-	}
+	public StringEntity() {}
 
 	/**
 	 * Constructor.
@@ -71,6 +70,7 @@ public class StringEntity extends BasicHttpEntity {
 			return byteCache;
 		return content().getBytes(getCharset());
 	}
+
 	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		return content();
@@ -104,17 +104,13 @@ public class StringEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return true;
-	}
+	public boolean isRepeatable() { return true; }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isStreaming() {
-		return false;
-	}
+	public boolean isStreaming() { return false; }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setCached() throws IOException{
+	public StringEntity setCached() throws IOException {
 		super.setCached();
 		return this;
 	}
@@ -124,6 +120,7 @@ public class StringEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setChunked() {
 		super.setChunked();

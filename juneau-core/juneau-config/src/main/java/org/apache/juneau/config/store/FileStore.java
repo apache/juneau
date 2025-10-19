@@ -112,6 +112,7 @@ public class FileStore extends ConfigStore {
 			super.apply(work);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
@@ -166,6 +167,7 @@ public class FileStore extends ConfigStore {
 			super.debug();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder debug(boolean value) {
 			super.debug(value);
@@ -328,7 +330,7 @@ public class FileStore extends ConfigStore {
 
 		WatcherThread(File dir, WatcherSensitivity s) throws Exception {
 			watchService = FileSystems.getDefault().newWatchService();
-			var kinds = new WatchEvent.Kind[]{ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY};
+			var kinds = new WatchEvent.Kind[] { ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY };
 			var modifier = lookupModifier(s);
 			dir.toPath().register(watchService, kinds, modifier);
 		}
@@ -366,9 +368,9 @@ public class FileStore extends ConfigStore {
 		private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {
 			try {
 				return switch (s) {
-					case LOW    -> com.sun.nio.file.SensitivityWatchEventModifier.LOW;
+					case LOW -> com.sun.nio.file.SensitivityWatchEventModifier.LOW;
 					case MEDIUM -> com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
-					case HIGH   -> com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
+					case HIGH -> com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
 				};
 			} catch (@SuppressWarnings("unused") Exception e) {
 				/* Ignore */
@@ -376,8 +378,10 @@ public class FileStore extends ConfigStore {
 			return null;
 		}
 	}
+
 	/** Default file store, all default values.*/
 	public static final FileStore DEFAULT = FileStore.create().build();
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -457,7 +461,7 @@ public class FileStore extends ConfigStore {
 			return "";
 
 		var isWritable = isWritable(p);
-		var oo = isWritable ? new OpenOption[]{READ,WRITE,CREATE} : new OpenOption[]{READ};
+		var oo = isWritable ? new OpenOption[] { READ, WRITE, CREATE } : new OpenOption[] { READ };
 
 		try (var fc = FileChannel.open(p, oo)) {
 			try (var lock = isWritable ? fc.lock() : null) {
@@ -498,7 +502,7 @@ public class FileStore extends ConfigStore {
 		var exists = Files.exists(p);
 
 		// Don't create the file if we're not going to match.
-		if ((!exists) && Utils.isNotEmpty(expectedContents))
+		if ((! exists) && Utils.isNotEmpty(expectedContents))
 			return "";
 
 		if (isWritable(p)) {
@@ -556,6 +560,7 @@ public class FileStore extends ConfigStore {
 	private Path resolveFile(String name) {
 		return dir.toPath().resolve(resolveName(name));
 	}
+
 	/**
 	 * Gets called when the watcher service on this store is triggered with a file system change.
 	 *
@@ -578,6 +583,7 @@ public class FileStore extends ConfigStore {
 	protected JsonMap properties() {
 		return filteredMap("charset", charset, "extensions", extensions, "updateOnWrite", updateOnWrite);
 	}
+
 	@Override
 	protected String resolveName(String name) {
 		if (! nameCache.containsKey(name)) {

@@ -88,6 +88,7 @@ public class RestOpSession extends ContextSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -98,6 +99,7 @@ public class RestOpSession extends ContextSession {
 	public static Builder create(RestOpContext ctx, RestSession session) {
 		return new Builder(ctx, session);
 	}
+
 	private final RestOpContext ctx;
 	private final RestSession session;
 	private final RestRequest req;
@@ -142,50 +144,38 @@ public class RestOpSession extends ContextSession {
 	 *
 	 * @return The bean store for this session.
 	 */
-	public BeanStore getBeanStore() {
-		return session.getBeanStore();
-	}
+	public BeanStore getBeanStore() { return session.getBeanStore(); }
 
 	@Override /* Overridden from ContextSession */
-	public RestOpContext getContext() {
-		return ctx;
-	}
+	public RestOpContext getContext() { return ctx; }
 
 	/**
 	 * Returns the REST request object for this session.
 	 *
 	 * @return The REST request object for this session.
 	 */
-	public RestRequest getRequest() {
-		return req;
-	}
+	public RestRequest getRequest() { return req; }
 
 	/**
 	 * Returns the REST response object for this session.
 	 *
 	 * @return The REST response object for this session.
 	 */
-	public RestResponse getResponse() {
-		return res;
-	}
+	public RestResponse getResponse() { return res; }
 
 	/**
 	 * Returns the context of the parent class of this Java method.
 	 *
 	 * @return The context of the parent class of this Java method.
 	 */
-	public RestContext getRestContext() {
-		return session.getContext();
-	}
+	public RestContext getRestContext() { return session.getContext(); }
 
 	/**
 	 * Returns the session of the parent class of this Java method.
 	 *
 	 * @return The session of the parent class of this Java method.
 	 */
-	public RestSession getRestSession() {
-		return session;
-	}
+	public RestSession getRestSession() { return session; }
 
 	/**
 	 * Runs this session.

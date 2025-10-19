@@ -73,6 +73,7 @@ class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 			public boolean cancel() {
 				return false;
 			}
+
 			@Override
 			public HttpClientConnection get(long timeout, TimeUnit tunit) throws InterruptedException, ExecutionException, ConnectionPoolTimeoutException {
 				return mockRestClient;

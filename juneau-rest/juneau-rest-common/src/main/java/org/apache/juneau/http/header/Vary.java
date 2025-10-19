@@ -109,6 +109,7 @@ public class Vary extends BasicStringHeader {
 	public static Vary of(Supplier<String> value) {
 		return value == null ? null : new Vary(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

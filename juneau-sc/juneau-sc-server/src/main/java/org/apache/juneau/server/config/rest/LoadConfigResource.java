@@ -22,13 +22,13 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.server.config.repository.GetConfiguration;
 
-@Rest(path="/configs/*")
+@Rest(path = "/configs/*")
 @SuppressWarnings("javadoc")
 public class LoadConfigResource extends RestServlet {
 
 	private static final long serialVersionUID = 8247663789227304097L;
 
-	@RestGet(path="/{project}/{branch}/*", produces="application/json")
+	@RestGet(path = "/{project}/{branch}/*", produces = "application/json")
 	public String gets(@Path("project") String project, @Path("branch") String branch) throws Exception {
 		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 

@@ -51,6 +51,7 @@ public class BeanStoreEntry<T> {
 	public static <T> BeanStoreEntry<T> create(Class<T> type, Supplier<T> bean, String name) {
 		return new BeanStoreEntry<>(type, bean, name);
 	}
+
 	final Supplier<T> bean;
 	final Class<T> type;
 	final String name;
@@ -82,18 +83,14 @@ public class BeanStoreEntry<T> {
 	 *
 	 * @return the name associated with this entry.  <jk>null</jk> if no name is associated.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Returns the type this bean is associated with.
 	 *
 	 * @return The type this bean is associated with.
 	 */
-	public Class<T> getType() {
-		return type;
-	}
+	public Class<T> getType() { return type; }
 
 	/**
 	 * Returns <jk>true</jk> if this bean is exactly of the specified type.
@@ -123,9 +120,11 @@ public class BeanStoreEntry<T> {
 	 * @return The properties in this object as a simple map.
 	 */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("type", simpleClassName(getType()))
 			.append("bean", Utils2.identity(get()))
 			.append("name", getName());
+		// @formatter:on
 	}
 }

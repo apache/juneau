@@ -84,22 +84,14 @@ public class ConfigCommand extends ConsoleCommand {
 	}
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getDescription() {
-		return mb.getString("description");
-	}
+	public String getDescription() { return mb.getString("description"); }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getInfo() {
-		return mb.getString("info");
-	}
+	public String getInfo() { return mb.getString("info"); }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getName() {
-		return "config";
-	}
+	public String getName() { return "config"; }
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getSynopsis() {
-		return "config [get|set]";
-	}
+	public String getSynopsis() { return "config [get|set]"; }
 }

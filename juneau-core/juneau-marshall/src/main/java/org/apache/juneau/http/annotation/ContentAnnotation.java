@@ -61,7 +61,7 @@ public class ContentAnnotation {
 	 * A collection of {@link Content @Content annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -75,7 +75,7 @@ public class ContentAnnotation {
 	}
 
 	/**
- 	 * Builder class.
+	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#annotations(Annotation...)}
@@ -171,6 +171,7 @@ public class ContentAnnotation {
 
 	/** Default value */
 	public static final Content DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -179,6 +180,7 @@ public class ContentAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -188,6 +190,7 @@ public class ContentAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -197,6 +200,7 @@ public class ContentAnnotation {
 	public static Builder create(String...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *

@@ -35,7 +35,7 @@ public class RestStartCallAnnotation {
 	 * A collection of {@link RestStartCall @RestStartCall annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -74,6 +74,7 @@ public class RestStartCallAnnotation {
 		}
 
 	}
+
 	private static class Impl extends TargetedAnnotationImpl implements RestStartCall {
 
 		Impl(Builder b) {
@@ -81,8 +82,10 @@ public class RestStartCallAnnotation {
 			postConstruct();
 		}
 	}
+
 	/** Default value */
 	public static final RestStartCall DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

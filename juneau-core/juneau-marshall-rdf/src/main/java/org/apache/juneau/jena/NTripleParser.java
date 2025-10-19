@@ -39,6 +39,7 @@ public class NTripleParser extends RdfParser {
 	public static RdfParser.Builder create() {
 		return RdfParser.create().ntriple();
 	}
+
 	/**
 	 * Constructor.
 	 *

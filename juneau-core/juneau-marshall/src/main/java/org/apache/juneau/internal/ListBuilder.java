@@ -48,6 +48,7 @@ public class ListBuilder<E> {
 	public static <E> ListBuilder<E> create(Class<E> elementType, Type...elementTypeArgs) {
 		return new ListBuilder<>(elementType, elementTypeArgs);
 	}
+
 	private List<E> list;
 	private boolean unmodifiable = false, sparse = false;
 	private Comparator<E> comparator;
@@ -134,7 +135,7 @@ public class ListBuilder<E> {
 	 * @param values The values to add.
 	 * @return This object.
 	 */
-	public ListBuilder<E> addAny(Object... values) {
+	public ListBuilder<E> addAny(Object...values) {
 		if (elementType == null)
 			throw new IllegalStateException("Unknown element type. Cannot use this method.");
 		try {
@@ -204,7 +205,7 @@ public class ListBuilder<E> {
 			if (unmodifiable)
 				list = unmodifiableList(list);
 		}
- 		return list;
+		return list;
 	}
 
 	/**

@@ -43,8 +43,7 @@ public class ParserListener {
 	 * @param p The bean property we had an issue on.
 	 */
 	public void onBeanSetterException(ParserSession session, Throwable t, BeanPropertyMeta p) {
-		onError(session, t, format("Could not call setValue() on property ''{0}'' of class ''{1}'', exception = {2}",
-			p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage()));
+		onError(session, t, format("Could not call setValue() on property ''{0}'' of class ''{1}'', exception = {2}", p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage()));
 	}
 
 	/**
@@ -72,9 +71,6 @@ public class ParserListener {
 	 * @param bean The bean.
 	 */
 	public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean) {
-		onError(session, null,
-			format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at location {2}",
-				propertyName, beanClass, session.getPosition())
-		);
+		onError(session, null, format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at location {2}", propertyName, beanClass, session.getPosition()));
 	}
 }

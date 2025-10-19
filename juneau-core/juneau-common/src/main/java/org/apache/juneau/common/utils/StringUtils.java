@@ -18,6 +18,7 @@ package org.apache.juneau.common.utils;
 
 import static java.lang.Character.*;
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -626,13 +627,12 @@ public class StringUtils {
 
 		// Use a state machine for maximum performance.
 
-		final int
-			S1 = 1,  // Looking for http
-			S2 = 2,  // Found http, looking for :
-			S3 = 3,  // Found :, looking for /
-			S4 = 4,  // Found /, looking for /
-			S5 = 5,  // Found /, looking for x
-			S6 = 6;  // Found x, looking for /
+		// S1: Looking for http
+		// S2: Found http, looking for :
+		// S3: Found :, looking for /
+		// S4: Found /, looking for /
+		// S5: Found /, looking for x
+		// S6: Found x, looking for /
 
 		var state = S1;
 
@@ -803,12 +803,11 @@ public class StringUtils {
 
 		// Use a state machine for maximum performance.
 
-		final int
-			S1 = 1,  // Looking for http
-			S2 = 2,  // Found http, looking for :
-			S3 = 3,  // Found :, looking for /
-			S4 = 4,  // Found /, looking for /
-			S5 = 5;  // Found /, looking for x
+		// S1: Looking for http
+		// S2: Found http, looking for :
+		// S3: Found :, looking for /
+		// S4: Found /, looking for /
+		// S5: Found /, looking for x
 
 		var state = S1;
 
@@ -1049,11 +1048,10 @@ public class StringUtils {
 
 		// Use a state machine for maximum performance.
 
-		final int
-			S1 = 1,  // Looking for protocol char 1
-			S2 = 2,  // Found protocol char 1, looking for protocol char 2
-			S3 = 3,  // Found protocol char 2, looking for :
-			S4 = 4;  // Found :, looking for /
+		// S1: Looking for protocol char 1
+		// S2: Found protocol char 1, looking for protocol char 2
+		// S3: Found protocol char 2, looking for :
+		// S4: Found :, looking for /
 
 		var state = S1;
 

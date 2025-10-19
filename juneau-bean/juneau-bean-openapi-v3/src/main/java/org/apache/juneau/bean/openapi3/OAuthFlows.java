@@ -74,10 +74,7 @@ import org.apache.juneau.internal.*;
  */
 public class OAuthFlows extends OpenApiElement {
 
-	private OAuthFlow implicit,
-			password,
-			clientCredentials,
-			authorizationCode;
+	private OAuthFlow implicit, password, clientCredentials, authorizationCode;
 
 	/**
 	 * Default constructor.
@@ -127,9 +124,7 @@ public class OAuthFlows extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public OAuthFlow getAuthorizationCode() {
-		return authorizationCode;
-	}
+	public OAuthFlow getAuthorizationCode() { return authorizationCode; }
 
 	/**
 	 * Bean property getter:  <property>clientCredentials</property>.
@@ -139,9 +134,7 @@ public class OAuthFlows extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public OAuthFlow getClientCredentials() {
-		return clientCredentials;
-	}
+	public OAuthFlow getClientCredentials() { return clientCredentials; }
 
 	/**
 	 * Bean property getter:  <property>implicit</property>.
@@ -151,9 +144,7 @@ public class OAuthFlows extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public OAuthFlow getImplicit() {
-		return implicit;
-	}
+	public OAuthFlow getImplicit() { return implicit; }
 
 	/**
 	 * Bean property getter:  <property>password</property>.
@@ -163,9 +154,7 @@ public class OAuthFlows extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public OAuthFlow getPassword() {
-		return password;
-	}
+	public OAuthFlow getPassword() { return password; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {

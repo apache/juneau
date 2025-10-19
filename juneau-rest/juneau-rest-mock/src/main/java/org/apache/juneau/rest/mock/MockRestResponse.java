@@ -42,6 +42,7 @@ public class MockRestResponse extends org.apache.juneau.rest.client.RestResponse
 		super(client, request, response, parser);
 		((MockRestClient)client).currentResponse(this);
 	}
+
 	@Override /* Overridden from RestResponse */
 	public MockRestResponse cacheContent() {
 		super.cacheContent();

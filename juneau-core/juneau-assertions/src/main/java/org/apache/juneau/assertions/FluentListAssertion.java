@@ -121,11 +121,11 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentListAssertion.class, "Messages");
 	private static final String
 		MSG_listDidNotContainExpectedValueAt = MESSAGES.getString("listDidNotContainExpectedValueAt");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -163,14 +163,13 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		this(null, value, returns);
 	}
 
-
 	/**
 	 * Applies a transform on the inner object and returns a new inner object.
 	 *
 	 * @param function The transform to apply.
 	 * @return A new assertion.
 	 */
-	public FluentListAssertion<E,R> asApplied2(Function<List<E>,List<E>> function) {  // NOSONAR - Intentional.
+	public FluentListAssertion<E,R> asApplied2(Function<List<E>,List<E>> function) { // NOSONAR - Intentional.
 		return new FluentListAssertion<>(this, function.apply((List<E>)orElse(null)), returns());
 	}
 
@@ -233,7 +232,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return A new list assertion.
 	 */
 	public FluentAnyAssertion<E,R> asLast() {
-		return asItem(getSize()-1);
+		return asItem(getSize() - 1);
 	}
 
 	/**
@@ -243,7 +242,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @return A new list assertion.  The contents of the original list remain unchanged.
 	 */
 	public FluentListAssertion<E,R> asLast(int count) {
-		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(getSize()-count, getSize()), returns());
+		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(getSize() - count, getSize()), returns());
 	}
 
 	/**
@@ -287,7 +286,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(start, end), returns());
 	}
 
-
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
 	 *
@@ -302,7 +300,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		isSize(tests.length);
 		for (int i = 0, j = getSize(); i < j; i++) {
 			var t = tests[i];
-			if (t != null && ! t.test(at(i)))
+			if (t != null && !t.test(at(i)))
 				throw error(MSG_listDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
@@ -318,7 +316,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	@SuppressWarnings("unchecked")
 	public R isHas(E...entries) throws AssertionError {
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return isEach(p);
+		return isEach(p);
 	}
 
 	@Override /* Overridden from Assertion */

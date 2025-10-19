@@ -54,25 +54,19 @@ public class ResponsePartMeta {
 	 *
 	 * @return The part type.
 	 */
-	public HttpPartType getPartType() {
-		return partType;
-	}
+	public HttpPartType getPartType() { return partType; }
 
 	/**
 	 * Returns the part schema.
 	 *
 	 * @return The part schema.
 	 */
-	public HttpPartSchema getSchema() {
-		return schema;
-	}
+	public HttpPartSchema getSchema() { return schema; }
 
 	/**
 	 * Returns the part serializer.
 	 *
 	 * @return The part serializer.
 	 */
-	public HttpPartSerializer getSerializer() {
-		return serializer;
-	}
+	public HttpPartSerializer getSerializer() { return serializer; }
 }

@@ -156,7 +156,7 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LifecycleHooks">Lifecycle Hooks</a>
  * </ul>
  */
-@Target({METHOD,TYPE})
+@Target({ METHOD, TYPE })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(RestPreCallAnnotation.Array.class)

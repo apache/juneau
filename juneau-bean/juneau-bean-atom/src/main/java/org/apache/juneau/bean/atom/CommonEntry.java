@@ -87,6 +87,7 @@ public class CommonEntry extends Common {
 	public CommonEntry(String id, String title, String updated) {
 		setId(id).setTitle(title).setUpdated(updated);
 	}
+
 	/**
 	 * Bean property getter:  <property>authors</property>.
 	 *
@@ -95,10 +96,8 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=COLLAPSED, childName="author")
-	public Person[] getAuthors() {
-		return authors;
-	}
+	@Xml(format = COLLAPSED, childName = "author")
+	public Person[] getAuthors() { return authors; }
 
 	/**
 	 * Bean property getter:  <property>categories</property>.
@@ -108,10 +107,8 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=COLLAPSED, childName="category")
-	public Category[] getCategories() {
-		return categories;
-	}
+	@Xml(format = COLLAPSED, childName = "category")
+	public Category[] getCategories() { return categories; }
 
 	/**
 	 * Bean property getter:  <property>contributors</property>.
@@ -121,10 +118,8 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=COLLAPSED, childName="contributor")
-	public Person[] getContributors() {
-		return contributors;
-	}
+	@Xml(format = COLLAPSED, childName = "contributor")
+	public Person[] getContributors() { return contributors; }
 
 	/**
 	 * Bean property getter:  <property>id</property>.
@@ -134,9 +129,7 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Id getId() {
-		return id;
-	}
+	public Id getId() { return id; }
 
 	/**
 	 * Bean property getter:  <property>links</property>.
@@ -146,10 +139,8 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@Xml(format=COLLAPSED)
-	public Link[] getLinks() {
-		return links;
-	}
+	@Xml(format = COLLAPSED)
+	public Link[] getLinks() { return links; }
 
 	/**
 	 * Bean property getter:  <property>rights</property>.
@@ -159,9 +150,7 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Text getRights() {
-		return rights;
-	}
+	public Text getRights() { return rights; }
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -171,9 +160,7 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Text getTitle() {
-		return title;
-	}
+	public Text getTitle() { return title; }
 
 	/**
 	 * Bean property getter:  <property>updated</property>.
@@ -183,9 +170,7 @@ public class CommonEntry extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Calendar getUpdated() {
-		return updated;
-	}
+	public Calendar getUpdated() { return updated; }
 
 	/**
 	 * Bean property setter:  <property>authors</property>.

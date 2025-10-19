@@ -46,7 +46,7 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
-@BeanIgnore  /* Use toString() to serialize */
+@BeanIgnore /* Use toString() to serialize */
 @SuppressWarnings("resource")
 public class BasicResource implements HttpResource {
 	BasicHttpEntity entity;
@@ -127,6 +127,7 @@ public class BasicResource implements HttpResource {
 		}
 		return this;
 	}
+
 	/**
 	 * Converts the contents of the entity of this resource as a byte array.
 	 *
@@ -208,61 +209,42 @@ public class BasicResource implements HttpResource {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException, UnsupportedOperationException {
-		return entity.getContent();
-	}
+	public InputStream getContent() throws IOException, UnsupportedOperationException { return entity.getContent(); }
 
 	@Override /* Overridden from HttpEntity */
-	public Header getContentEncoding() {
-		return entity.getContentEncoding();
-	}
+	public Header getContentEncoding() { return entity.getContentEncoding(); }
 
 	@Override /* Overridden from HttpEntity */
-	public long getContentLength() {
-		return entity.getContentLength();
-	}
+	public long getContentLength() { return entity.getContentLength(); }
 
 	@Override /* Overridden from HttpEntity */
-	public Header getContentType() {
-		return entity.getContentType();
-	}
+	public Header getContentType() { return entity.getContentType(); }
 
 	/**
 	 * Returns access to the underlying builder for the HTTP entity.
 	 *
 	 * @return The underlying builder for the HTTP entity.
 	 */
-	public HttpEntity getEntity() {
-		return entity;
-	}
+	public HttpEntity getEntity() { return entity; }
 
 	@Override /* Overridden from HttpResource */
-	public HeaderList getHeaders() {
-		return headers;
-	}
+	public HeaderList getHeaders() { return headers; }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isChunked() {
-		return entity.isChunked();
-	}
-	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return entity.isRepeatable();
-	}
+	public boolean isChunked() { return entity.isChunked(); }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isStreaming() {
-		return entity.isStreaming();
-	}
+	public boolean isRepeatable() { return entity.isRepeatable(); }
+
+	@Override /* Overridden from HttpEntity */
+	public boolean isStreaming() { return entity.isStreaming(); }
 
 	/**
 	 * Returns <jk>true</jk> if this bean is unmodifiable.
 	 *
 	 * @return <jk>true</jk> if this bean is unmodifiable.
 	 */
-	public boolean isUnmodifiable() {
-		return unmodifiable;
-	}
+	public boolean isUnmodifiable() { return unmodifiable; }
 
 	/**
 	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
@@ -290,6 +272,7 @@ public class BasicResource implements HttpResource {
 		entity.setChunked();
 		return this;
 	}
+
 	/**
 	 * Sets the 'chunked' flag value.
 	 *
@@ -342,6 +325,7 @@ public class BasicResource implements HttpResource {
 		entity.setContentEncoding(value);
 		return this;
 	}
+
 	/**
 	 * Sets the content encoding header on this entity bean.
 	 *

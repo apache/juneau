@@ -62,7 +62,7 @@ public class OpenApiAnnotation {
 	 * A collection of {@link OpenApi @OpenApi annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -112,6 +112,7 @@ public class OpenApiAnnotation {
 
 	/** Default value */
 	public static final OpenApi DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -120,12 +121,9 @@ public class OpenApiAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static OpenApi copy(OpenApi a, VarResolverSession r) {
-		return
-			create()
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.build();
+		return create().on(r.resolve(a.on())).onClass(a.onClass()).build();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -134,6 +132,7 @@ public class OpenApiAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -143,6 +142,7 @@ public class OpenApiAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

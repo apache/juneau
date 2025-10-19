@@ -60,6 +60,7 @@ public class RestGuardList {
 				entries.add(beanStore().createBean(RestGuard.class).type(v));
 			return this;
 		}
+
 		/**
 		 * Appends the specified rest matcher objects to the list.
 		 *
@@ -77,6 +78,7 @@ public class RestGuardList {
 			super.impl(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -88,6 +90,7 @@ public class RestGuardList {
 			return new RestGuardList(this);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -97,6 +100,7 @@ public class RestGuardList {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private RestGuard[] entries;
 
 	/**
@@ -105,12 +109,7 @@ public class RestGuardList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestGuardList(Builder builder) {
-		entries =
-			builder
-				.entries
-				.stream()
-				.map(BeanCreator::run)
-				.toArray(RestGuard[]::new);
+		entries = builder.entries.stream().map(BeanCreator::run).toArray(RestGuard[]::new);
 	}
 
 	/**

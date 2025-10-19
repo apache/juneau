@@ -60,9 +60,7 @@ public class HttpPart implements NameValuePair {
 	}
 
 	@Override /* Overridden from NameValuePair */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	@Override /* Overridden from NameValuePair */
 	public String getValue() {

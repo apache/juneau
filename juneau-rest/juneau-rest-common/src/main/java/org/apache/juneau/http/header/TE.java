@@ -112,7 +112,7 @@ public class TE extends BasicStringRangesHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static TE of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new TE(value));
+		return value == null ? null : CACHE.get(value, () -> new TE(value));
 	}
 
 	/**
@@ -141,6 +141,7 @@ public class TE extends BasicStringRangesHeader {
 	public static TE of(Supplier<StringRanges> value) {
 		return value == null ? null : new TE(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

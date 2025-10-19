@@ -48,7 +48,7 @@ public class HelloWorldResource extends BasicRestObject {
 	 *
 	 * @return A simple Hello-World message.
 	 */
-	@RestGet(path="/*", summary="Responds with \"Hello world!\"")
+	@RestGet(path = "/*", summary = "Responds with \"Hello world!\"")
 	public String sayHello() {
 		return "Hello world!";
 	}

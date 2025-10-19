@@ -61,7 +61,7 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target({TYPE})
+@Target({ TYPE })
 @Retention(RUNTIME)
 @Inherited
 public @interface Builder {

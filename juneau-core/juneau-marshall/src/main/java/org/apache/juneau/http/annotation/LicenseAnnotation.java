@@ -36,7 +36,7 @@ public class LicenseAnnotation {
 	 */
 	public static class Builder extends AnnotationBuilder<Builder> {
 
-		String name="", url="";
+		String name = "", url = "";
 
 		/**
 		 * Constructor.
@@ -102,6 +102,7 @@ public class LicenseAnnotation {
 
 	/** Default value */
 	public static final License DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -110,6 +111,7 @@ public class LicenseAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *

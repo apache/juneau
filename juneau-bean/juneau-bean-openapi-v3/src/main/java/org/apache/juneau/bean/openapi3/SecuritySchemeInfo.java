@@ -87,17 +87,10 @@ import org.apache.juneau.internal.*;
  */
 public class SecuritySchemeInfo extends OpenApiElement {
 
-	private static final String[] VALID_IN = {"query", "header", "cookie"};
-	private static final String[] VALID_TYPES = {"apiKey", "http", "oauth2", "openIdConnect"};
+	private static final String[] VALID_IN = { "query", "header", "cookie" };
+	private static final String[] VALID_TYPES = { "apiKey", "http", "oauth2", "openIdConnect" };
 
-	private String
-		type,
-		description,
-		name,
-		in,
-		scheme,
-		bearerFormat,
-		openIdConnectUrl;
+	private String type, description, name, in, scheme, bearerFormat, openIdConnectUrl;
 
 	private OAuthFlow flows;
 
@@ -157,9 +150,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getBearerFormat() {
-		return bearerFormat;
-	}
+	public String getBearerFormat() { return bearerFormat; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -170,9 +161,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>items</property>.
@@ -182,9 +171,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public OAuthFlow getFlows() {
-		return flows;
-	}
+	public OAuthFlow getFlows() { return flows; }
 
 	/**
 	 * Bean property getter:  <property>in</property>.
@@ -194,9 +181,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getIn() {
-		return in;
-	}
+	public String getIn() { return in; }
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -217,9 +202,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
@@ -229,9 +212,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getOpenIdConnectUrl() {
-		return openIdConnectUrl;
-	}
+	public String getOpenIdConnectUrl() { return openIdConnectUrl; }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
@@ -241,9 +222,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getScheme() {
-		return scheme;
-	}
+	public String getScheme() { return scheme; }
 
 	/**
 	 * Bean property getter:  <property>type</property>.
@@ -253,12 +232,11 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getType() {
-		return type;
-	}
+	public String getType() { return type; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(bearerFormat != null, "bearerFormat")
 			.addIf(description != null, "description")
@@ -269,6 +247,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 			.addIf(scheme != null, "scheme")
 			.addIf(type != null, "type")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -362,10 +341,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 */
 	public SecuritySchemeInfo setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
-				value, VALID_IN
-			);
+			throw new BasicRuntimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, VALID_IN);
 		in = value;
 		return this;
 	}
@@ -455,10 +431,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 */
 	public SecuritySchemeInfo setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, VALID_TYPES
-			);
+			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, VALID_TYPES);
 		type = value;
 		return this;
 	}

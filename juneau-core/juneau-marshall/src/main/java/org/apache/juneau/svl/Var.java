@@ -175,7 +175,5 @@ public abstract class Var {
 	 *
 	 * @return The name of this variable.
 	 */
-	protected String getName() {
-		return name;
-	}
+	protected String getName() { return name; }
 }

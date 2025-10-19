@@ -46,6 +46,7 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
 	public BasicSwaggerProvider(BeanStore beanStore) {
+		// @formatter:off
 		this(
 			SwaggerProvider
 				.create(beanStore)
@@ -54,6 +55,7 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 				.messages(()->beanStore.getBean(Messages.class).get())
 				.jsonSchemaGenerator(()->beanStore.getBean(JsonSchemaGenerator.class).get())
 		);
+		// @formatter:on
 	}
 
 	/**
@@ -84,7 +86,7 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	public Swagger getSwagger(RestContext context, Locale locale) throws Exception {
 
 		Class<?> c = context.getResourceClass();
-		FileFinder ff = fileFinder != null ? fileFinder : FileFinder.create(beanStore).cp(c,null,false).build();
+		FileFinder ff = fileFinder != null ? fileFinder : FileFinder.create(beanStore).cp(c, null, false).build();
 		Messages mb = messages != null ? messages.forLocale(locale) : Messages.create(c).build().forLocale(locale);
 		VarResolverSession vrs = vr.createSession().bean(Messages.class, mb);
 		BasicSwaggerProviderSession session = new BasicSwaggerProviderSession(context, locale, ff, messages, vrs, js.getSession());

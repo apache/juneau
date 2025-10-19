@@ -37,17 +37,11 @@ public class EchoCommand extends ConsoleCommand {
 	}
 
 	@Override /* ConsoleCommand */
-	public String getDescription() {
-		return "Simple prints the args of the command as a serialized JsonMap.";
-	}
+	public String getDescription() { return "Simple prints the args of the command as a serialized JsonMap."; }
 
 	@Override /* ConsoleCommand */
-	public String getInfo() {
-		return "Echo command";
-	}
+	public String getInfo() { return "Echo command"; }
 
 	@Override /* ConsoleCommand */
-	public String getName() {
-		return "echo";
-	}
+	public String getName() { return "echo"; }
 }

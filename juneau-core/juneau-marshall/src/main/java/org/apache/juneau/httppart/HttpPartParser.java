@@ -88,6 +88,7 @@ public interface HttpPartParser {
 	 * Used to represent the absence of a part parser in annotations.
 	 */
 	public interface Void extends HttpPartParser {}
+
 	/**
 	 * Instantiates a creator for a part parser.
 	 * @return A new creator.
@@ -95,6 +96,7 @@ public interface HttpPartParser {
 	static Creator creator() {
 		return new Creator();
 	}
+
 	/**
 	 * Returns metadata about the specified class.
 	 *

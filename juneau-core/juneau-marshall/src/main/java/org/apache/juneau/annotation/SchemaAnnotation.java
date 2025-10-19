@@ -66,7 +66,7 @@ public class SchemaAnnotation {
 	 * A collection of {@link Schema @Schema annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -89,15 +89,17 @@ public class SchemaAnnotation {
 	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
 		boolean aev, allowEmptyValue, emax, emin, exclusiveMaximum, exclusiveMinimum, ignore, r, readOnly, required, ro, sie, skipIfEmpty, ui, uniqueItems;
-		ExternalDocs externalDocs=ExternalDocsAnnotation.DEFAULT;
-		Items items=ItemsAnnotation.DEFAULT;
-		long maxi=-1, maxItems=-1, maxl=-1, maxLength=-1, maxp=-1, maxProperties=-1, mini=-1, minItems=-1, minl=-1, minLength=-1, minp=-1, minProperties=-1;
-		String $ref="", cf="", collectionFormat="", discriminator="", f="", format="", max="", maximum="", min="", minimum="", mo="", multipleOf="", p="", pattern="", t="", title="", type="";
-		String[] _default={}, _enum={}, additionalProperties={}, allOf={}, d={}, description={}, df={}, e={}, properties={}, value={}, xml={};
+		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
+		Items items = ItemsAnnotation.DEFAULT;
+		long maxi = -1, maxItems = -1, maxl = -1, maxLength = -1, maxp = -1, maxProperties = -1, mini = -1, minItems = -1, minl = -1, minLength = -1, minp = -1, minProperties = -1;
+		String $ref = "", cf = "", collectionFormat = "", discriminator = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "",
+			t = "", title = "", type = "";
+		String[] _default = {}, _enum = {}, additionalProperties = {}, allOf = {}, d = {}, description = {}, df = {}, e = {}, properties = {}, value = {}, xml = {};
 		// JSON Schema Draft 2020-12 properties
 		boolean deprecatedProperty;
-		String $id="", contentMediaType="", contentEncoding="", exclusiveMaximumValue="", exclusiveMinimumValue="";
-		String[] _const={}, examples={}, $comment={}, prefixItems={}, unevaluatedItems={}, unevaluatedProperties={}, dependentSchemas={}, dependentRequired={}, _if={}, _then={}, _else={}, $defs={};
+		String $id = "", contentMediaType = "", contentEncoding = "", exclusiveMaximumValue = "", exclusiveMinimumValue = "";
+		String[] _const = {}, examples = {}, $comment = {}, prefixItems = {}, unevaluatedItems = {}, unevaluatedProperties = {}, dependentSchemas = {}, dependentRequired = {}, _if = {}, _then = {},
+			_else = {}, $defs = {};
 
 		/**
 		 * Constructor.
@@ -1408,6 +1410,7 @@ public class SchemaAnnotation {
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		// @formatter:off
 		return m
 			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
 			.appendIf(ne, "allOf", joinnl(a.allOf()))
@@ -1464,6 +1467,7 @@ public class SchemaAnnotation {
 			.appendIf(ne, "$defs", joinnl(a.$defs()))
 			.appendIf(ne, "$id", a.$id())
 		;
+		// @formatter:on
 	}
 
 	/**
@@ -1474,6 +1478,7 @@ public class SchemaAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -1483,6 +1488,7 @@ public class SchemaAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -1492,6 +1498,7 @@ public class SchemaAnnotation {
 	public static Builder create(String...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
@@ -1501,6 +1508,7 @@ public class SchemaAnnotation {
 	public static boolean empty(Schema a) {
 		return a == null || DEFAULT.equals(a);
 	}
+
 	private static JsonMap merge(JsonMap m, Items a) throws ParseException {
 		if (ItemsAnnotation.empty(a))
 			return m;
@@ -1509,25 +1517,11 @@ public class SchemaAnnotation {
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
-		return m
-			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
-			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
-			.appendFirst(ne, "format", a.format(), a.f())
-			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendIf(nem, "items", SubItemsAnnotation.merge(m.getMap("items"), a.items()))
-			.appendFirst(ne, "maximum", a.maximum(), a.max())
-			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
-			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
-			.appendFirst(ne, "minimum", a.minimum(), a.min())
-			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
-			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
-			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
-			.appendFirst(ne, "pattern", a.pattern(), a.p())
-			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
-			.appendFirst(ne, "type", a.type(), a.t())
-			.appendIf(ne, "$ref", a.$ref())
-		;
+		return m.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf()).appendIf(ne, "default", joinnl(a._default(), a.df())).appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
+			.appendFirst(ne, "format", a.format(), a.f()).appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax()).appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendIf(nem, "items", SubItemsAnnotation.merge(m.getMap("items"), a.items())).appendFirst(ne, "maximum", a.maximum(), a.max()).appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl()).appendFirst(ne, "minimum", a.minimum(), a.min()).appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl()).appendFirst(ne, "multipleOf", a.multipleOf(), a.mo()).appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui()).appendFirst(ne, "type", a.type(), a.t()).appendIf(ne, "$ref", a.$ref());
 	}
 }

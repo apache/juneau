@@ -69,7 +69,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="param")
+@Bean(typeName = "param")
 public class Param extends HtmlElementVoid {
 
 	/**
@@ -89,7 +89,7 @@ public class Param extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Param _class(String value) {  // NOSONAR - Intentional naming.
+	public Param _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -99,6 +99,7 @@ public class Param extends HtmlElementVoid {
 		super.accesskey(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Param attr(String key, Object val) {
 		super.attr(key, val);

@@ -62,6 +62,7 @@ public class StreamResource extends BasicResource {
 		super.addHeader(name, value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicResource */
 	public StreamResource addHeaders(Header...values) {
 		super.addHeaders(values);
@@ -74,7 +75,7 @@ public class StreamResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public StreamResource setCached() throws IOException{
+	public StreamResource setCached() throws IOException {
 		super.setCached();
 		return this;
 	}

@@ -113,6 +113,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		/**
 		 * Add <js>"_type"</js> properties when needed.
 		 *
@@ -140,6 +141,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 			addBeanTypesMsgPack = value;
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addRootType() {
 			super.addRootType();
@@ -428,10 +430,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				addBeanTypesMsgPack
-			);
+			return HashKey.of(super.hashKey(), addBeanTypesMsgPack);
 		}
 
 		@Override /* Overridden from Builder */
@@ -615,13 +614,13 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -755,6 +754,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 	/** Default serializer, all default settings, spaced-hex string output.*/
 	public static final MsgPackSerializer DEFAULT_BASE64 = new Base64(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -763,8 +763,8 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	public static Builder create() {
 		return new Builder();
 	}
-	final boolean
-		addBeanTypesMsgPack;
+
+	final boolean addBeanTypesMsgPack;
 
 	private final Map<ClassMeta<?>,MsgPackClassMeta> msgPackClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,MsgPackBeanPropertyMeta> msgPackBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -800,6 +800,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 		return m;
 	}
+
 	@Override /* Overridden from MsgPackMetaProvider */
 	public MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm) {
 		MsgPackClassMeta m = msgPackClassMetas.get(cm);
@@ -811,13 +812,11 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	}
 
 	@Override /* Overridden from Context */
-	public MsgPackSerializerSession getSession() {
-		return createSession().build();
-	}
+	public MsgPackSerializerSession getSession() { return createSession().build(); }
+
 	@Override
-	protected final boolean isAddBeanTypes() {
-		return addBeanTypesMsgPack || super.isAddBeanTypes();
-	}
+	protected final boolean isAddBeanTypes() { return addBeanTypesMsgPack || super.isAddBeanTypes(); }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("addBeanTypesMsgPack", addBeanTypesMsgPack);

@@ -41,7 +41,5 @@ public class ExtendedBeanPropertyMeta extends ExtendedMeta {
 	 *
 	 * @return The bean property metadata that was passed into the constructor.
 	 */
-	protected BeanPropertyMeta getBeanPropertyMeta() {
-		return bpm;
-	}
+	protected BeanPropertyMeta getBeanPropertyMeta() { return bpm; }
 }

@@ -43,7 +43,7 @@ public class HttpSessionArgs extends SimpleRestOperationArg {
 	 */
 	public static HttpSessionArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(HttpSession.class))
-			return new HttpSessionArgs(x->x);
+			return new HttpSessionArgs(x -> x);
 		return null;
 	}
 

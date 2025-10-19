@@ -85,7 +85,7 @@ import org.apache.juneau.oapi.*;
  * @since 9.2.0
  */
 @Documented
-@Target({PARAMETER,METHOD,TYPE,FIELD})
+@Target({ PARAMETER, METHOD, TYPE, FIELD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(PathRemainderAnnotation.Array.class)

@@ -25,6 +25,7 @@ package org.apache.juneau.http.annotation;
 public class CollectionFormatType {
 
 	@SuppressWarnings("javadoc")
+	// @formatter:off
 	public static final String
 		CSV = "csv",
 		SSV = "ssv",
@@ -32,4 +33,5 @@ public class CollectionFormatType {
 		PIPES = "pipes",
 		MULTI = "multi",
 		UON = "uon";
+	// @formatter:on
 }

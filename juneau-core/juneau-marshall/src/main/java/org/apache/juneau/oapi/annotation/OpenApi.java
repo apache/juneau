@@ -40,7 +40,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,FIELD,METHOD})
+@Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(OpenApiAnnotation.Array.class)

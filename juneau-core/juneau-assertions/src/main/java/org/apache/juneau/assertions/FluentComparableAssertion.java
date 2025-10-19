@@ -96,14 +96,14 @@ import org.apache.juneau.serializer.*;
 @SuppressWarnings("rawtypes")
 public class FluentComparableAssertion<T extends Comparable,R> extends FluentObjectAssertion<T,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentComparableAssertion.class, "Messages");
 	private static final String
 		MSG_valueWasNotGreaterThanExpected = MESSAGES.getString("valueWasNotGreaterThanExpected"),
 		MSG_valueWasNotGreaterOrEqualsToExpected = MESSAGES.getString("valueWasNotGreaterOrEqualsToExpected"),
 		MSG_valueWasNotLessThanExpected = MESSAGES.getString("valueWasNotLessThanExpected"),
 		MSG_valueWasNotLessOrEqualsToExpected = MESSAGES.getString("valueWasNotLessOrEqualsToExpected");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -141,12 +141,10 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 		this(null, value, returns);
 	}
 
-
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentComparableAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
+	public FluentComparableAssertion<T,R> asTransformed(Function<T,T> function) { // NOSONAR - Intentional.
 		return new FluentComparableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
-
 
 	/**
 	 * Asserts that the value is between (inclusive) the specified upper and lower values.
@@ -191,7 +189,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	public R isGte(Comparable value) throws AssertionError {
 		Utils.assertArgNotNull("value", value);
 		if (value().compareTo(value) < 0)
-				throw error(MSG_valueWasNotGreaterOrEqualsToExpected, value, value());
+			throw error(MSG_valueWasNotGreaterOrEqualsToExpected, value, value());
 		return returns();
 	}
 
@@ -206,7 +204,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	public R isLt(Comparable value) throws AssertionError {
 		Utils.assertArgNotNull("value", value);
 		if (value().compareTo(value) >= 0)
-				throw error(MSG_valueWasNotLessThanExpected, value, value());
+			throw error(MSG_valueWasNotLessThanExpected, value, value());
 		return returns();
 	}
 
@@ -221,7 +219,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	public R isLte(Comparable value) throws AssertionError {
 		Utils.assertArgNotNull("value", value);
 		if (value().compareTo(value) > 0)
-				throw error(MSG_valueWasNotLessOrEqualsToExpected, value, value());
+			throw error(MSG_valueWasNotLessOrEqualsToExpected, value, value());
 		return returns();
 	}
 

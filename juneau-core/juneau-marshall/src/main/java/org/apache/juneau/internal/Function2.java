@@ -33,7 +33,7 @@ import java.util.function.*;
 @FunctionalInterface
 public interface Function2<A,B,R> {
 
-	default <V> Function2<A, B, V> andThen(Function<? super R, ? extends V> after) {
+	default <V> Function2<A,B,V> andThen(Function<? super R,? extends V> after) {
 		Objects.requireNonNull(after);
 		return (A a, B b) -> after.apply(apply(a, b));
 	}

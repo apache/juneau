@@ -38,16 +38,12 @@ public class EncoderMatch {
 	 *
 	 * @return The encoder of the match.
 	 */
-	public Encoder getEncoder() {
-		return encoder;
-	}
+	public Encoder getEncoder() { return encoder; }
 
 	/**
 	 * Returns the encoding of the encoder that matched the HTTP <c>Accept-Encoding</c> header value.
 	 *
 	 * @return The encoding of the match.
 	 */
-	public String getEncoding() {
-		return encoding;
-	}
+	public String getEncoding() { return encoding; }
 }

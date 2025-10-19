@@ -75,6 +75,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public RdfSerializerSession build() {
 			return new RdfSerializerSession(this);
@@ -188,12 +189,13 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.
 	 */
-	static final Map<String,String> LANG_PROP_MAP = mapBuilder(String.class,String.class)
-		.add("RDF/XML","rdfXml.").add("RDF/XML-ABBREV","rdfXml.").add("N3","n3.").add("N3-PP","n3.").add("N3-PLAIN","n3.").add("N3-TRIPLES","n3.").add("TURTLE","n3.").add("N-TRIPLE","ntriple.")
-		.build();
+	static final Map<String,String> LANG_PROP_MAP = mapBuilder(String.class, String.class).add("RDF/XML", "rdfXml.").add("RDF/XML-ABBREV", "rdfXml.").add("N3", "n3.").add("N3-PP", "n3.")
+		.add("N3-PLAIN", "n3.").add("N3-TRIPLES", "n3.").add("TURTLE", "n3.").add("N-TRIPLE", "ntriple.").build();
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -203,6 +205,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	public static Builder create(RdfSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final RdfSerializer ctx;
 	private final Property pRoot, pValue;
 	private final Model model;
@@ -239,7 +242,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			writer.setProperty("attributeQuoteChar", Character.toString(getQuoteChar()));
 		}
 
-		ctx.getJenaSettings().forEach((k,v) -> {
+		ctx.getJenaSettings().forEach((k, v) -> {
 			if (k.startsWith(propPrefix, 5))
 				writer.setProperty(k.substring(5 + propPrefix.length()), v);
 		});
@@ -398,10 +401,17 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				f = bpRdf.getCollectionFormat();
 
 			switch (f) {
-				case BAG: n = serializeToContainer(c, eType, m.createBag()); break;
-				case LIST: n = serializeToList(c, eType); break;
-				case MULTI_VALUED: serializeToMultiProperties(c, eType, bpm, attrName, parentResource); break;
-				default: n = serializeToContainer(c, eType, m.createSeq());
+				case BAG:
+					n = serializeToContainer(c, eType, m.createBag());
+					break;
+				case LIST:
+					n = serializeToList(c, eType);
+					break;
+				case MULTI_VALUED:
+					serializeToMultiProperties(c, eType, bpm, attrName, parentResource);
+					break;
+				default:
+					n = serializeToContainer(c, eType, m.createSeq());
 			}
 
 		} else if (sType.isReader()) {
@@ -427,7 +437,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		}
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
-		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			l.add(new BeanPropertyValue(pMeta, key, value, thrown));
 		});
 
@@ -497,8 +507,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		return model.createList(l.iterator());
 	}
 
-	private void serializeToMultiProperties(Collection c, ClassMeta<?> sType,
-			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
+	private void serializeToMultiProperties(Collection c, ClassMeta<?> sType, BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
 
 		ClassMeta<?> elementType = sType.getElementType();
 		RdfBeanPropertyMeta bpRdf = getRdfBeanPropertyMeta(bpm);
@@ -543,6 +552,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 		writer.write(model, out.getWriter(), "http://unknown/");
 	}
+
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
@@ -550,9 +560,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	RDF format for representing collections and arrays.
 	 */
-	protected final RdfCollectionFormat getCollectionFormat() {
-		return ctx.getCollectionFormat();
-	}
+	protected final RdfCollectionFormat getCollectionFormat() { return ctx.getCollectionFormat(); }
 
 	/**
 	 * All Jena-related configuration properties.
@@ -560,9 +568,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
 	 */
-	protected final Map<String,Object> getJenaSettings() {
-		return ctx.getJenaSettings();
-	}
+	protected final Map<String,Object> getJenaSettings() { return ctx.getJenaSettings(); }
 
 	/**
 	 * Default XML namespace for bean properties.
@@ -571,9 +577,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	The XML namespace to use for bean properties.
 	 */
-	protected final Namespace getJuneauBpNs() {
-		return ctx.getJuneauBpNs();
-	}
+	protected final Namespace getJuneauBpNs() { return ctx.getJuneauBpNs(); }
 
 	/**
 	 * XML namespace for Juneau properties.
@@ -582,9 +586,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	The XML namespace to use for Juneau properties.
 	 */
-	protected final Namespace getJuneauNs() {
-		return ctx.getJuneauNs();
-	}
+	protected final Namespace getJuneauNs() { return ctx.getJuneauNs(); }
 
 	/**
 	 * RDF language.
@@ -593,9 +595,8 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	The RDF language to use.
 	 */
-	protected final String getLanguage() {
-		return ctx.getLanguage();
-	}
+	protected final String getLanguage() { return ctx.getLanguage(); }
+
 	/**
 	 * Default namespaces.
 	 *
@@ -603,9 +604,8 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	The default list of namespaces associated with this serializer.
 	 */
-	protected final Namespace[] getNamespaces() {
-		return ctx.getNamespaces();
-	}
+	protected final Namespace[] getNamespaces() { return ctx.getNamespaces(); }
+
 	/**
 	 * Returns the language-specific metadata on the specified bean.
 	 *
@@ -655,9 +655,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
+	protected final boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
 
 	/**
 	 * Add XSI data types to non-<c>String</c> literals.
@@ -666,9 +664,8 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if XSI data types should be added to string literals.
 	 */
-	protected final boolean isAddLiteralTypes() {
-		return ctx.isAddLiteralTypes();
-	}
+	protected final boolean isAddLiteralTypes() { return ctx.isAddLiteralTypes(); }
+
 	/**
 	 * Add RDF root identifier property to root node.
 	 *
@@ -677,9 +674,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
 	 * 	to identify the root node in the graph.
 	 */
-	protected final boolean isAddRootProp() {
-		return ctx.isAddRootProp();
-	}
+	protected final boolean isAddRootProp() { return ctx.isAddRootProp(); }
 
 	/**
 	 * Auto-detect namespace usage.
@@ -688,9 +683,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if namespaces usage should be detected before serialization.
 	 */
-	protected final boolean isAutoDetectNamespaces() {
-		return ctx.isAutoDetectNamespaces();
-	}
+	protected final boolean isAutoDetectNamespaces() { return ctx.isAutoDetectNamespaces(); }
 
 	/**
 	 * Collections should be serialized and parsed as loose collections.
@@ -700,9 +693,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
 	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 */
-	protected final boolean isLooseCollections() {
-		return ctx.isLooseCollections();
-	}
+	protected final boolean isLooseCollections() { return ctx.isLooseCollections(); }
 
 	/**
 	 * Reuse XML namespaces when RDF namespaces not specified.
@@ -712,7 +703,5 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml @Xml} will be inherited by the RDF serializers.
 	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 */
-	protected final boolean isUseXmlNamespaces() {
-		return ctx.isUseXmlNamespaces();
-	}
+	protected final boolean isUseXmlNamespaces() { return ctx.isUseXmlNamespaces(); }
 }

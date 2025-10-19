@@ -120,7 +120,6 @@ import org.apache.juneau.serializer.*;
  */
 public class StringListAssertion extends FluentStringListAssertion<StringListAssertion> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -132,7 +131,6 @@ public class StringListAssertion extends FluentStringListAssertion<StringListAss
 	public static StringListAssertion create(List<String> value) {
 		return new StringListAssertion(value);
 	}
-
 
 	/**
 	 * Constructor.

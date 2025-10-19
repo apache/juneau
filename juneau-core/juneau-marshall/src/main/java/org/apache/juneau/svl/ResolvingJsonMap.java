@@ -41,7 +41,7 @@ import org.apache.juneau.collections.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
  * </ul>
  */
-@SuppressWarnings({"serial"})
+@SuppressWarnings({ "serial" })
 public class ResolvingJsonMap extends JsonMap {
 
 	private final VarResolverSession varResolver;
@@ -60,6 +60,7 @@ public class ResolvingJsonMap extends JsonMap {
 		super.append(values);
 		return this;
 	}
+
 	@Override /* Overridden from JsonMap */
 	public ResolvingJsonMap append(String key, Object value) {
 		super.append(key, value);

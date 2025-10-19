@@ -61,6 +61,7 @@ public class Forwarded extends BasicStringHeader {
 	public static Forwarded of(Supplier<String> value) {
 		return value == null ? null : new Forwarded(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

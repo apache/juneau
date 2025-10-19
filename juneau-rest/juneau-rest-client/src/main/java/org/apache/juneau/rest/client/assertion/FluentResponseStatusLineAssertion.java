@@ -141,6 +141,7 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	public FluentResponseStatusLineAssertion(StatusLine value, R returns) {
 		this(null, value, returns);
 	}
+
 	/**
 	 * Returns an assertion against the status code on the response status object.
 	 *
@@ -185,6 +186,7 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	public FluentStringAssertion<R> asReason() {
 		return new FluentStringAssertion<>(this, value().getReasonPhrase(), returns());
 	}
+
 	@Override /* Overridden from Assertion */
 	public FluentResponseStatusLineAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

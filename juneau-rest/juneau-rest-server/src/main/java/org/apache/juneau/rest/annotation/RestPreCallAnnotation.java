@@ -35,7 +35,7 @@ public class RestPreCallAnnotation {
 	 * A collection of {@link RestPreCall @RestPreCall annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -74,6 +74,7 @@ public class RestPreCallAnnotation {
 		}
 
 	}
+
 	private static class Impl extends TargetedAnnotationImpl implements RestPreCall {
 
 		Impl(Builder b) {
@@ -81,8 +82,10 @@ public class RestPreCallAnnotation {
 			postConstruct();
 		}
 	}
+
 	/** Default value */
 	public static final RestPreCall DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

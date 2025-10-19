@@ -64,6 +64,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public SoapXmlSerializerSession build() {
 			return new SoapXmlSerializerSession(this);
@@ -177,6 +178,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -186,6 +188,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	public static Builder create(SoapXmlSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final SoapXmlSerializer ctx;
 
 	/**
@@ -198,10 +201,9 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 		ctx = builder.ctx;
 	}
+
 	@Override /* Overridden from Serializer */
-	public Map<String,String> getResponseHeaders() {
-		return map("SOAPAction",getSoapAction());
-	}
+	public Map<String,String> getResponseHeaders() { return map("SOAPAction", getSoapAction()); }
 
 	/**
 	 * The SOAPAction HTTP header value to set on responses.
@@ -210,12 +212,12 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	 * @return
 	 * 	The SOAPAction HTTP header value to set on responses.
 	 */
-	public String getSoapAction() {
-		return ctx.getSoapAction();
-	}
+	public String getSoapAction() { return ctx.getSoapAction(); }
+
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (XmlWriter w = getXmlWriter(out)) {
+			// @formatter:off
 			w.append("<?xml")
 				.attr("version", "1.0")
 				.attr("encoding", "UTF-8")
@@ -229,6 +231,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 			super.doSerialize(out, o);
 			w.ie(1).eTag("soap", "Body").nl(1);
 			w.eTag("soap", "Envelope").nl(0);
+			// @formatter:on
 		}
 	}
 }

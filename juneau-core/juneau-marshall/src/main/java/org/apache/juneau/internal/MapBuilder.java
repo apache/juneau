@@ -123,9 +123,9 @@ public class MapBuilder<K,V> {
 			for (Object o : values) {
 				if (o != null) {
 					if (o instanceof Map) {
-						((Map<Object,Object>)o).forEach((k,v) -> add(toType(k, keyType), toType(v, valueType, valueTypeArgs)));
+						((Map<Object,Object>)o).forEach((k, v) -> add(toType(k, keyType), toType(v, valueType, valueTypeArgs)));
 					} else if (isJsonObject(o, false)) {
-						JsonMap.ofJson(o.toString()).forEach((k,v) -> add(toType(k, keyType), toType(v, valueType, valueTypeArgs)));
+						JsonMap.ofJson(o.toString()).forEach((k, v) -> add(toType(k, keyType), toType(v, valueType, valueTypeArgs)));
 					} else {
 						throw new BasicRuntimeException("Invalid object type {0} passed to addAny()", className(o));
 					}
@@ -157,8 +157,8 @@ public class MapBuilder<K,V> {
 	public MapBuilder<K,V> addPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new IllegalArgumentException("Odd number of parameters passed into AMap.ofPairs()");
-		for (int i = 0; i < pairs.length; i+=2)
-			add((K)pairs[i], (V)pairs[i+1]);
+		for (int i = 0; i < pairs.length; i += 2)
+			add((K)pairs[i], (V)pairs[i + 1]);
 		return this;
 	}
 

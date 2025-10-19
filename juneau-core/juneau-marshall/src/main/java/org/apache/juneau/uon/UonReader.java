@@ -48,8 +48,9 @@ public class UonReader extends ParserReader {
 			return 10 + c - 'a';
 		if (c >= 'A' && c <= 'F')
 			return 10 + c - 'A';
-		throw new IOException("Invalid hex character '"+c+"' found in escape pattern.");
+		throw new IOException("Invalid hex character '" + c + "' found in escape pattern.");
 	}
+
 	private final boolean decodeChars;
 
 	private final char[] buff;
@@ -109,11 +110,11 @@ public class UonReader extends ParserReader {
 			} else if (c != '%') {
 				cbuf[off + i++] = c;
 			} else {
-				int iMark = iCurrent-1;  // Keep track of current position.
+				int iMark = iCurrent - 1;  // Keep track of current position.
 
 				// Stop if there aren't at least two more characters following '%' in the buffer,
 				// or there aren't at least two more positions open in cbuf to handle double-char chars.
-				if (iMark+2 >= iEnd || i+2 > len) {
+				if (iMark + 2 >= iEnd || i + 2 > len) {
 					iCurrent--;
 					return i;
 				}
@@ -125,39 +126,39 @@ public class UonReader extends ParserReader {
 				if (b0 < 128) {
 					cx = b0;
 
-				// 10xxxxxx
 				} else if (b0 < 192) {
-					throw new IOException("Invalid hex value for first escape pattern in UTF-8 sequence:  "+b0);
+					// 10xxxxxx
+					throw new IOException("Invalid hex value for first escape pattern in UTF-8 sequence:  " + b0);
 
-				// 110xxxxx	10xxxxxx
-				// 11000000(192) - 11011111(223)
 				} else if (b0 < 224) {
-					cx = readUTF8(b0-192, 1);
+					// 110xxxxx	10xxxxxx
+					// 11000000(192) - 11011111(223)
+					cx = readUTF8(b0 - 192, 1);
 					if (cx == -1) {
 						iCurrent = iMark;
 						return i;
 					}
 
-				// 1110xxxx	10xxxxxx	10xxxxxx
-				// 11100000(224) - 11101111(239)
 				} else if (b0 < 240) {
-					cx = readUTF8(b0-224, 2);
+					// 1110xxxx	10xxxxxx	10xxxxxx
+					// 11100000(224) - 11101111(239)
+					cx = readUTF8(b0 - 224, 2);
 					if (cx == -1) {
 						iCurrent = iMark;
 						return i;
 					}
 
-				// 11110xxx	10xxxxxx	10xxxxxx	10xxxxxx
-				// 11110000(240) - 11110111(247)
 				} else if (b0 < 248) {
-					cx = readUTF8(b0-240, 3);
+					// 11110xxx	10xxxxxx	10xxxxxx	10xxxxxx
+					// 11110000(240) - 11110111(247)
+					cx = readUTF8(b0 - 240, 3);
 					if (cx == -1) {
 						iCurrent = iMark;
 						return i;
 					}
 
 				} else
-					throw new IOException("Invalid hex value for first escape pattern in UTF-8 sequence:  "+b0);
+					throw new IOException("Invalid hex value for first escape pattern in UTF-8 sequence:  " + b0);
 
 				if (cx < 0x10000)
 					cbuf[off + i++] = (char)cx;
@@ -195,11 +196,11 @@ public class UonReader extends ParserReader {
 	}
 
 	private int readUTF8(int n, final int numBytes) throws IOException {
-		if (iCurrent + numBytes*3 > iEnd)
+		if (iCurrent + numBytes * 3 > iEnd)
 			return -1;
 		for (int i = 0; i < numBytes; i++) {
 			n <<= 6;
-			n += readHex()-128;
+			n += readHex() - 128;
 		}
 		return n;
 	}

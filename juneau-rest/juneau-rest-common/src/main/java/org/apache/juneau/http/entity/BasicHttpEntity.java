@@ -66,8 +66,7 @@ public class BasicHttpEntity implements HttpEntity {
 	/**
 	 * Constructor.
 	 */
-	public BasicHttpEntity() {
-	}
+	public BasicHttpEntity() {}
 
 	/**
 	 * Copy constructor.
@@ -110,6 +109,7 @@ public class BasicHttpEntity implements HttpEntity {
 	public byte[] asBytes() throws IOException {
 		return readBytes(getContent());
 	}
+
 	/**
 	 * Returns an assertion on the contents of this entity.
 	 *
@@ -169,71 +169,49 @@ public class BasicHttpEntity implements HttpEntity {
 	 *
 	 * @return The charset to use when converting to and from stream-based resources.
 	 */
-	public Charset getCharset() {
-		return charset == null ? UTF8 : charset;
-	}
+	public Charset getCharset() { return charset == null ? UTF8 : charset; }
 
 	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException, UnsupportedOperationException {
-		return IOUtils.EMPTY_INPUT_STREAM;
-	}
+	public InputStream getContent() throws IOException, UnsupportedOperationException { return IOUtils.EMPTY_INPUT_STREAM; }
 
 	@Override /* Overridden from HttpEntity */
-	public Header getContentEncoding() {
-		return contentEncoding;
-	}
+	public Header getContentEncoding() { return contentEncoding; }
 
 	@Override /* Overridden from HttpEntity */
-	public long getContentLength() {
-		return contentLength;
-	}
+	public long getContentLength() { return contentLength; }
 
 	@Override /* Overridden from HttpEntity */
-	public Header getContentType() {
-		return contentType;
-	}
+	public Header getContentType() { return contentType; }
 
 	/**
 	 * Returns the maximum number of bytes to read or write to and from stream-based resources.
 	 *
 	 * @return The maximum number of bytes to read or write to and from stream-based resources.
 	 */
-	public int getMaxLength() {
-		return maxLength;
-	}
+	public int getMaxLength() { return maxLength; }
 
 	/**
 	 * Returns <jk>true</jk> if this entity is cached in-memory.
 	 *
 	 * @return <jk>true</jk> if this entity is cached in-memory.
 	 */
-	public boolean isCached() {
-		return cached;
-	}
+	public boolean isCached() { return cached; }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isChunked() {
-		return chunked;
-	}
+	public boolean isChunked() { return chunked; }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return false;
-	}
+	public boolean isRepeatable() { return false; }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isStreaming() {
-		return false;
-	}
+	public boolean isStreaming() { return false; }
 
 	/**
 	 * Returns <jk>true</jk> if this bean is unmodifiable.
 	 *
 	 * @return <jk>true</jk> if this bean is unmodifiable.
 	 */
-	public boolean isUnmodifiable() {
-		return unmodifiable;
-	}
+	public boolean isUnmodifiable() { return unmodifiable; }
 
 	/**
 	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
@@ -259,6 +237,7 @@ public class BasicHttpEntity implements HttpEntity {
 		this.charset = value;
 		return this;
 	}
+
 	/**
 	 * Sets the 'chunked' flag value to <jk>true</jk>.
 	 *
@@ -314,7 +293,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 */
 	public BasicHttpEntity setContent(Supplier<?> value) {
 		assertModifiable();
-		this.contentSupplier = value == null ? ()->null : value;
+		this.contentSupplier = value == null ? () -> null : value;
 		return this;
 	}
 
@@ -449,7 +428,5 @@ public class BasicHttpEntity implements HttpEntity {
 	 *
 	 * @return <jk>true</jk> if the contents of this entity are provided through an external supplier.
 	 */
-	protected boolean isSupplied() {
-		return contentSupplier != null;
-	}
+	protected boolean isSupplied() { return contentSupplier != null; }
 }

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -59,7 +60,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="map")
+@Bean(typeName = "map")
 public class Map extends HtmlElementContainer {
 
 	/**
@@ -77,10 +78,11 @@ public class Map extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Map _class(String value) {  // NOSONAR - Intentional naming.
+	public Map _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Map accesskey(String value) {
 		super.accesskey(value);

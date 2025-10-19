@@ -71,18 +71,14 @@ public abstract class Marshaller {
 	 *
 	 * @return The parser associated with this marshaller.
 	 */
-	public Parser getParser() {
-		return p;
-	}
+	public Parser getParser() { return p; }
 
 	/**
 	 * Returns the serializer associated with this marshaller.
 	 *
 	 * @return The serializer associated with this marshaller.
 	 */
-	public Serializer getSerializer() {
-		return s;
-	}
+	public Serializer getSerializer() { return s; }
 
 	/**
 	 * Same as {@link #read(Object, Type, Type...)} except optimized for a non-parameterized class.

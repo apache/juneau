@@ -54,7 +54,5 @@ public class ResourceSupplier implements Supplier<Object> {
 	 *
 	 * @return The resource class.
 	 */
-	public Class<?> getResourceClass() {
-		return resourceClass;
-	}
+	public Class<?> getResourceClass() { return resourceClass; }
 }

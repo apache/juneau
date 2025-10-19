@@ -203,6 +203,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		/**
 		 * Add <js>"_type"</js> properties when needed.
 		 *
@@ -260,6 +261,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -568,6 +570,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				addBeanTypesUon,
@@ -575,6 +578,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 				paramFormat,
 				quoteCharUon
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -875,13 +879,13 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1059,19 +1063,17 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	public static Builder create() {
 		return new Builder();
 	}
-	final boolean
-		encoding,
-		addBeanTypesUon;
-	final ParamFormat
-		paramFormat;
-	final Character
-		quoteCharUon;
+
+	final boolean encoding, addBeanTypesUon;
+	final ParamFormat paramFormat;
+	final Character quoteCharUon;
 	private final boolean addBeanTypes;
 
 	private final char quoteChar;
 	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
 
 	private final Map<BeanPropertyMeta,UonBeanPropertyMeta> uonBeanPropertyMetas = new ConcurrentHashMap<>();
+
 	/**
 	 * Constructor.
 	 *
@@ -1096,19 +1098,15 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	}
 
 	@Override /* Overridden from Context */
-	public  UonSerializerSession.Builder createSession() {
+	public UonSerializerSession.Builder createSession() {
 		return UonSerializerSession.create(this);
 	}
 
 	@Override /* Overridden from HttpPartSerializer */
-	public UonSerializerSession getPartSession() {
-		return UonSerializerSession.create(this).build();
-	}
+	public UonSerializerSession getPartSession() { return UonSerializerSession.create(this).build(); }
 
 	@Override /* Overridden from Context */
-	public UonSerializerSession getSession() {
-		return createSession().build();
-	}
+	public UonSerializerSession getSession() { return createSession().build(); }
 
 	@Override /* Overridden from UonMetaProvider */
 	public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {
@@ -1121,6 +1119,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		}
 		return m;
 	}
+
 	@Override /* Overridden from UonMetaProvider */
 	public UonClassMeta getUonClassMeta(ClassMeta<?> cm) {
 		UonClassMeta m = uonClassMetas.get(cm);
@@ -1151,6 +1150,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
 		return getPartSession().serialize(partType, schema, value);
 	}
+
 	/**
 	 * Format to use for query/form-data/header values.
 	 *
@@ -1158,9 +1158,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * @return
 	 * 	Specifies the format to use for URL GET parameter keys and values.
 	 */
-	protected final ParamFormat getParamFormat() {
-		return paramFormat;
-	}
+	protected final ParamFormat getParamFormat() { return paramFormat; }
 
 	/**
 	 * Quote character.
@@ -1170,9 +1168,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 	The character used for quoting attributes and values.
 	 */
 	@Override
-	protected final char getQuoteChar() {
-		return quoteChar;
-	}
+	protected final char getQuoteChar() { return quoteChar; }
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -1183,9 +1179,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() {
-		return addBeanTypes;
-	}
+	protected final boolean isAddBeanTypes() { return addBeanTypes; }
 
 	/**
 	 * Encode non-valid URI characters.
@@ -1194,9 +1188,8 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * @return
 	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
 	 */
-	protected final boolean isEncoding() {
-		return encoding;
-	}
+	protected final boolean isEncoding() { return encoding; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("encoding", encoding, "addBeanTypes", addBeanTypes, "paramFormat", paramFormat);

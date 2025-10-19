@@ -193,6 +193,7 @@ public class ParserSet {
 		public Builder apply(AnnotationWorkList work) {
 			return forEach(x -> x.apply(work));
 		}
+
 		/**
 		 * Associates an existing bean context builder with all parser builders in this group.
 		 *
@@ -357,7 +358,7 @@ public class ParserSet {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return entries.stream().map(this::toString).collect(joining(",","[","]"));
+			return entries.stream().map(this::toString).collect(joining(",", "[", "]"));
 		}
 
 		@Override /* Overridden from BeanBuilder */
@@ -369,6 +370,7 @@ public class ParserSet {
 		private <T extends Parser.Builder> Stream<T> builders(Class<T> type) {
 			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
 		}
+
 		private Object copyBuilder(Object o) {
 			if (o instanceof Parser.Builder) {
 				Parser.Builder x = (Parser.Builder)o;
@@ -400,6 +402,7 @@ public class ParserSet {
 			}
 			return o;
 		}
+
 		private String toString(Object o) {
 			if (o == null)
 				return "null";
@@ -444,6 +447,7 @@ public class ParserSet {
 	public static Builder create() {
 		return new Builder(BeanStore.INSTANCE);
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -453,6 +457,7 @@ public class ParserSet {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	// Maps Content-Type headers to matches.
 	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
 
@@ -554,9 +559,7 @@ public class ParserSet {
 	 *
 	 * @return An unmodifiable list of parsers in this group.
 	 */
-	public List<Parser> getParsers() {
-		return u(alist(entries));
-	}
+	public List<Parser> getParsers() { return u(alist(entries)); }
 
 	/**
 	 * Returns the media types that all parsers in this group can handle
@@ -566,18 +569,14 @@ public class ParserSet {
 	 *
 	 * @return An unmodifiable list of media types.
 	 */
-	public List<MediaType> getSupportedMediaTypes() {
-		return u(alist(mediaTypes));
-	}
+	public List<MediaType> getSupportedMediaTypes() { return u(alist(mediaTypes)); }
 
 	/**
 	 * Returns <jk>true</jk> if this group contains no parsers.
 	 *
 	 * @return <jk>true</jk> if this group contains no parsers.
 	 */
-	public boolean isEmpty() {
-		return entries.length == 0;
-	}
+	public boolean isEmpty() { return entries.length == 0; }
 
 	private Parser build(Object o) {
 		if (o instanceof Parser)

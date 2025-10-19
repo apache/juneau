@@ -61,6 +61,7 @@ public class RestMatcherList {
 				entries.add(beanStore().createBean(RestMatcher.class).type(v));
 			return this;
 		}
+
 		/**
 		 * Appends the specified rest matcher objects to the list.
 		 *
@@ -78,6 +79,7 @@ public class RestMatcherList {
 			super.impl(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -89,6 +91,7 @@ public class RestMatcherList {
 			return new RestMatcherList(this);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -98,6 +101,7 @@ public class RestMatcherList {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final RestMatcher[] optionalEntries;
 	private final RestMatcher[] requiredEntries;
 
@@ -107,12 +111,7 @@ public class RestMatcherList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestMatcherList(Builder builder) {
-		List<RestMatcher> l =
-			builder
-				.entries
-				.stream()
-				.map(BeanCreator::run)
-				.collect(toList());
+		List<RestMatcher> l = builder.entries.stream().map(BeanCreator::run).collect(toList());
 		optionalEntries = l.stream().filter(x -> ! x.required()).toArray(RestMatcher[]::new);
 		requiredEntries = l.stream().filter(RestMatcher::required).toArray(RestMatcher[]::new);
 	}
@@ -122,16 +121,12 @@ public class RestMatcherList {
 	 *
 	 * @return An unmodifiable list of entries in this list that are specified as optional.
 	 */
-	public RestMatcher[] getOptionalEntries() {
-		return optionalEntries;
-	}
+	public RestMatcher[] getOptionalEntries() { return optionalEntries; }
 
 	/**
 	 * Returns the entries in this list that are specified as required.
 	 *
 	 * @return An unmodifiable list of entries in this list that are specified as required.
 	 */
-	public RestMatcher[] getRequiredEntries() {
-		return requiredEntries;
-	}
+	public RestMatcher[] getRequiredEntries() { return requiredEntries; }
 }

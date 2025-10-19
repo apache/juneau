@@ -143,7 +143,7 @@ public class CollectionUtils {
 	 * @param <E> The entry type.
 	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
 	 */
-	public static <E> List<E> copyOf(List<E> l, Function<? super E, ? extends E> valueMapper) {
+	public static <E> List<E> copyOf(List<E> l, Function<? super E,? extends E> valueMapper) {
 		return copyOf(l, valueMapper, LinkedList::new);
 	}
 
@@ -156,7 +156,7 @@ public class CollectionUtils {
 	 * @param listFactory The factory for creating the list.
 	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
 	 */
-	public static <E> List<E> copyOf(List<E> l, Function<? super E, ? extends E> valueMapper, Supplier<List<E>> listFactory) {
+	public static <E> List<E> copyOf(List<E> l, Function<? super E,? extends E> valueMapper, Supplier<List<E>> listFactory) {
 		if (l == null)
 			return null;  // NOSONAR - Intentional.
 		return l.stream().map(valueMapper).collect(toCollection(listFactory));
@@ -183,7 +183,7 @@ public class CollectionUtils {
 	 * @param valueMapper The function to apply to each value in the map.
 	 * @return A new map with the same keys as the specified map, but with values transformed by the specified function.  Null if the map being copied was null.
 	 */
-	public static <K,V> Map<K,V> copyOf(Map<K,V> m, Function<? super V, ? extends V> valueMapper) {
+	public static <K,V> Map<K,V> copyOf(Map<K,V> m, Function<? super V,? extends V> valueMapper) {
 		return copyOf(m, valueMapper, LinkedHashMap::new);
 	}
 
@@ -197,26 +197,26 @@ public class CollectionUtils {
 	 * @param mapFactory The factory for creating the map.
 	 * @return A new map with the same keys as the specified map, but with values transformed by the specified function.  Null if the map being copied was null.
 	 */
-	public static <K,V> Map<K,V> copyOf(Map<K,V> m, Function<? super V, ? extends V> valueMapper, Supplier<Map<K,V>> mapFactory) {
+	public static <K,V> Map<K,V> copyOf(Map<K,V> m, Function<? super V,? extends V> valueMapper, Supplier<Map<K,V>> mapFactory) {
 		if (m == null)
 			return null;  // NOSONAR - Intentional.
 		return m.entrySet().stream().collect(toMap(Map.Entry::getKey, e -> valueMapper.apply(e.getValue()), (a, b) -> b, mapFactory));
 	}
 
-//	/**
-//	 * Convenience method for creating an {@link ArrayList}.
-//	 *
-//	 * @param <E> The element type.
-//	 * @param values The values to initialize the list with.
-//	 * @return A new modifiable list.
-//	 */
-//	@SafeVarargs
-//	public static <E> List<E> list2(E...values) {
-//		ArrayList<E> l = new ArrayList<>(values.length);
-//		for (E v : values)
-//			l.add(v);
-//		return l;
-//	}
+	//	/**
+	//	 * Convenience method for creating an {@link ArrayList}.
+	//	 *
+	//	 * @param <E> The element type.
+	//	 * @param values The values to initialize the list with.
+	//	 * @return A new modifiable list.
+	//	 */
+	//	@SafeVarargs
+	//	public static <E> List<E> list2(E...values) {
+	//		ArrayList<E> l = new ArrayList<>(values.length);
+	//		for (E v : values)
+	//			l.add(v);
+	//		return l;
+	//	}
 
 	/**
 	 * Creates a new set from the specified collection.
@@ -237,7 +237,7 @@ public class CollectionUtils {
 	 * @param <E> The entry type.
 	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
 	 */
-	public static <E> Set<E> copyOf(Set<E> l, Function<? super E, ? extends E> valueMapper) {
+	public static <E> Set<E> copyOf(Set<E> l, Function<? super E,? extends E> valueMapper) {
 		return copyOf(l, valueMapper, LinkedHashSet::new);
 	}
 
@@ -250,7 +250,7 @@ public class CollectionUtils {
 	 * @param setFactory The factory for creating sets.
 	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.
 	 */
-	public static <E> Set<E> copyOf(Set<E> l, Function<? super E, ? extends E> valueMapper, Supplier<Set<E>> setFactory) {
+	public static <E> Set<E> copyOf(Set<E> l, Function<? super E,? extends E> valueMapper, Supplier<Set<E>> setFactory) {
 		if (l == null)
 			return null;  // NOSONAR - Intentional.
 		return l.stream().map(valueMapper).collect(toCollection(setFactory));
@@ -264,7 +264,7 @@ public class CollectionUtils {
 	 * @param action The action to perform.
 	 */
 	public static <E> void forEachReverse(E[] value, Consumer<E> action) {
-		for (int i = value.length-1; i >= 0; i--)
+		for (int i = value.length - 1; i >= 0; i--)
 			action.accept(value[i]);
 	}
 
@@ -277,7 +277,7 @@ public class CollectionUtils {
 	 */
 	public static <E> void forEachReverse(List<E> value, Consumer<E> action) {
 		if (value instanceof ArrayList) {
-			for (int i = value.size()-1; i >= 0; i--)
+			for (int i = value.size() - 1; i >= 0; i--)
 				action.accept(value.get(i));
 		} else {
 			ListIterator<E> i = value.listIterator(value.size());
@@ -296,7 +296,7 @@ public class CollectionUtils {
 	public static <E> E last(E[] l) {
 		if (l == null || l.length == 0)
 			return null;
-		return l[l.length-1];
+		return l[l.length - 1];
 	}
 
 	/**
@@ -309,7 +309,7 @@ public class CollectionUtils {
 	public static <E> E last(List<E> l) {
 		if (l == null || l.isEmpty())
 			return null;
-		return l.get(l.size()-1);
+		return l.get(l.size() - 1);
 	}
 
 	/**
@@ -600,7 +600,7 @@ public class CollectionUtils {
 	@SafeVarargs
 	public static <E> List<E> sortedList(E...values) {
 		List<E> l = list(values);
-		Collections.sort((List<Comparable>) l);
+		Collections.sort((List<Comparable>)l);
 		return l;
 	}
 
@@ -669,7 +669,7 @@ public class CollectionUtils {
 	 * @return The wrapped list.
 	 */
 	public static <E> List<E> synced(List<E> value) {
-		return value == null ? null: Collections.synchronizedList(value);
+		return value == null ? null : Collections.synchronizedList(value);
 	}
 
 	/**
@@ -681,7 +681,7 @@ public class CollectionUtils {
 	 * @return The wrapped map.
 	 */
 	public static <K,V> Map<K,V> synced(Map<K,V> value) {
-		return value == null ? null: Collections.synchronizedMap(value);
+		return value == null ? null : Collections.synchronizedMap(value);
 	}
 
 	/**
@@ -692,7 +692,7 @@ public class CollectionUtils {
 	 * @return The wrapped set.
 	 */
 	public static <E> Set<E> synced(Set<E> value) {
-		return value == null ? null: Collections.synchronizedSet(value);
+		return value == null ? null : Collections.synchronizedSet(value);
 	}
 
 	private CollectionUtils() {}

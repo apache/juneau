@@ -78,14 +78,10 @@ public class BoundedServletInputStream extends ServletInputStream {
 	}
 
 	@Override /* Overridden from ServletInputStream */
-	public boolean isFinished() {
-		return sis == null ? false : sis.isFinished();
-	}
+	public boolean isFinished() { return sis == null ? false : sis.isFinished(); }
 
 	@Override /* Overridden from ServletInputStream */
-	public boolean isReady() {
-		return sis == null ? true : sis.isReady();
-	}
+	public boolean isReady() { return sis == null ? true : sis.isReady(); }
 
 	@Override /* Overridden from InputStream */
 	public synchronized void mark(int limit) {
@@ -111,7 +107,7 @@ public class BoundedServletInputStream extends ServletInputStream {
 	@Override /* Overridden from InputStream */
 	public int read(final byte[] b, final int off, final int len) throws IOException {
 		long numBytes = Math.min(len, remain);
-		int r = is.read(b, off, (int) numBytes);
+		int r = is.read(b, off, (int)numBytes);
 		if (r == -1)
 			return -1;
 		decrement(numBytes);

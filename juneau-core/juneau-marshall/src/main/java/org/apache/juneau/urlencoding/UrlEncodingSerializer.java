@@ -187,6 +187,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addBeanTypesUon() {
 			super.addBeanTypesUon();
@@ -198,6 +199,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 			super.addBeanTypesUon(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addRootType() {
 			super.addRootType();
@@ -547,10 +549,12 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				expandedParams
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -782,13 +786,13 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -975,6 +979,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 
 	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
 	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -983,8 +988,8 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	public static Builder create() {
 		return new Builder();
 	}
-	final boolean
-		expandedParams;
+
+	final boolean expandedParams;
 
 	private final Map<ClassMeta<?>,UrlEncodingClassMeta> urlEncodingClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,UrlEncodingBeanPropertyMeta> urlEncodingBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -1010,9 +1015,8 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	}
 
 	@Override /* Overridden from Context */
-	public UrlEncodingSerializerSession getSession() {
-		return createSession().build();
-	}
+	public UrlEncodingSerializerSession getSession() { return createSession().build(); }
+
 	@Override /* Overridden from UrlEncodingMetaProvider */
 	public UrlEncodingBeanPropertyMeta getUrlEncodingBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
@@ -1034,6 +1038,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 		return m;
 	}
+
 	/**
 	 * Serialize bean property collections/arrays as separate key/value pairs.
 	 *
@@ -1042,9 +1047,8 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 * 	<jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 	 * 	<br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 */
-	protected final boolean isExpandedParams() {
-		return expandedParams;
-	}
+	protected final boolean isExpandedParams() { return expandedParams; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("expandedParams", expandedParams);

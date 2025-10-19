@@ -36,7 +36,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @ContextApply(HtmlDocConfigAnnotation.SerializerApply.class)
@@ -88,6 +88,7 @@ public @interface HtmlDocConfig {
 	 * @return The annotation value.
 	 */
 	String[] aside() default {};
+
 	/**
 	 * Float aside section contents.
 	 *

@@ -105,6 +105,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			super.addBeanTypes();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addBeanTypes(boolean value) {
 			super.addBeanTypes(value);
@@ -156,6 +157,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			generatorBuilder.addDescriptionsTo(values);
 			return this;
 		}
+
 		/**
 		 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Add examples.
 		 *
@@ -912,13 +914,13 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -1087,6 +1089,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -1095,6 +1098,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final JsonSchemaGenerator generator;
 
 	/**
@@ -1120,11 +1124,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	}
 
 	@Override /* Overridden from Context */
-	public HtmlSchemaDocSerializerSession getSession() {
-		return createSession().build();
-	}
+	public HtmlSchemaDocSerializerSession getSession() { return createSession().build(); }
 
-	JsonSchemaGenerator getGenerator() {
-		return generator;
-	}
+	JsonSchemaGenerator getGenerator() { return generator; }
 }

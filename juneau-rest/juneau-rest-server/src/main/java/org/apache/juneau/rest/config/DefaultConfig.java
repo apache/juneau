@@ -33,6 +33,7 @@ import org.apache.juneau.serializer.annotation.*;
 /**
  * Predefined REST configuration that defines common default values for all configurations.
  */
+// @formatter:off
 @Rest(
 	// Configuration file.
 	config="$S{j.configFile,$E{J_CONFIG_FILE,SYSTEM_DEFAULT}}",

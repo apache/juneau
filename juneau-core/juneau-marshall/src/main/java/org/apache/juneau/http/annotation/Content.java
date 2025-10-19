@@ -103,7 +103,7 @@ import org.apache.juneau.json.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,METHOD,TYPE})
+@Target({ PARAMETER, METHOD, TYPE })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ContentAnnotation.Array.class)

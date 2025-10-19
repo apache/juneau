@@ -51,11 +51,7 @@ public class BeanFilter {
 
 		Class<?> beanClass;
 		String typeName, example;
-		Set<String>
-			properties = set(),
-			excludeProperties = set(),
-			readOnlyProperties = set(),
-			writeOnlyProperties = set();
+		Set<String> properties = set(), excludeProperties = set(), readOnlyProperties = set(), writeOnlyProperties = set();
 		Class<?> implClass, interfaceClass, stopClass;
 		boolean sortProperties, fluentSetters;
 		BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
@@ -81,20 +77,34 @@ public class BeanFilter {
 		public Builder applyAnnotations(List<Bean> annotations) {
 
 			annotations.forEach(x -> {
-				if (isNotEmpty(x.properties()) || isNotEmpty(x.p())) properties(x.properties(), x.p());
-				if (x.sort()) sortProperties(true);
-				if (x.findFluentSetters()) findFluentSetters();
-				if (isNotEmpty(x.excludeProperties()) || isNotEmpty(x.xp())) excludeProperties(x.excludeProperties(), x.xp());
-				if (isNotEmpty(x.readOnlyProperties()) || isNotEmpty(x.ro())) readOnlyProperties(x.readOnlyProperties(), x.ro());
-				if (isNotEmpty(x.writeOnlyProperties()) || isNotEmpty(x.wo())) writeOnlyProperties(x.writeOnlyProperties(), x.wo());
-				if (isNotEmpty(x.typeName())) typeName(x.typeName());
-				if (isNotVoid(x.propertyNamer())) propertyNamer(x.propertyNamer());
-				if (isNotVoid(x.interfaceClass())) interfaceClass(x.interfaceClass());
-				if (isNotVoid(x.stopClass())) stopClass(x.stopClass());
-				if (isNotVoid(x.interceptor())) interceptor(x.interceptor());
-				if (isNotVoid(x.implClass())) implClass(x.implClass());
-				if (isNotEmptyArray(x.dictionary())) dictionary(x.dictionary());
-				if (isNotEmpty(x.example())) example(x.example());
+				if (isNotEmpty(x.properties()) || isNotEmpty(x.p()))
+					properties(x.properties(), x.p());
+				if (x.sort())
+					sortProperties(true);
+				if (x.findFluentSetters())
+					findFluentSetters();
+				if (isNotEmpty(x.excludeProperties()) || isNotEmpty(x.xp()))
+					excludeProperties(x.excludeProperties(), x.xp());
+				if (isNotEmpty(x.readOnlyProperties()) || isNotEmpty(x.ro()))
+					readOnlyProperties(x.readOnlyProperties(), x.ro());
+				if (isNotEmpty(x.writeOnlyProperties()) || isNotEmpty(x.wo()))
+					writeOnlyProperties(x.writeOnlyProperties(), x.wo());
+				if (isNotEmpty(x.typeName()))
+					typeName(x.typeName());
+				if (isNotVoid(x.propertyNamer()))
+					propertyNamer(x.propertyNamer());
+				if (isNotVoid(x.interfaceClass()))
+					interfaceClass(x.interfaceClass());
+				if (isNotVoid(x.stopClass()))
+					stopClass(x.stopClass());
+				if (isNotVoid(x.interceptor()))
+					interceptor(x.interceptor());
+				if (isNotVoid(x.implClass()))
+					implClass(x.implClass());
+				if (isNotEmptyArray(x.dictionary()))
+					dictionary(x.dictionary());
+				if (isNotEmpty(x.example()))
+					example(x.example());
 			});
 			return this;
 		}
@@ -146,8 +156,9 @@ public class BeanFilter {
 		public Builder dictionary(Class<?>...values) {
 			if (dictionary == null)
 				dictionary = list(values);
-			else for (Class<?> cc : values)
-				dictionary.add(cc);
+			else
+				for (Class<?> cc : values)
+					dictionary.add(cc);
 			return this;
 		}
 
@@ -680,6 +691,7 @@ public class BeanFilter {
 			return this;
 		}
 	}
+
 	/**
 	 * Create a new builder for this object.
 	 *
@@ -690,6 +702,7 @@ public class BeanFilter {
 	public static <T> Builder create(Class<T> beanClass) {
 		return new Builder(beanClass);
 	}
+
 	private final Class<?> beanClass;
 	private final Set<String> properties, excludeProperties, readOnlyProperties, writeOnlyProperties;
 	private final PropertyNamer propertyNamer;
@@ -717,10 +730,7 @@ public class BeanFilter {
 		this.sortProperties = builder.sortProperties;
 		this.fluentSetters = builder.fluentSetters;
 		this.propertyNamer = builder.propertyNamer.orElse(null);
-		this.beanDictionary =
-			builder.dictionary == null
-			? null
-			: builder.dictionary.toArray(new Class<?>[builder.dictionary.size()]);
+		this.beanDictionary = builder.dictionary == null ? null : builder.dictionary.toArray(new Class<?>[builder.dictionary.size()]);
 		this.interceptor = builder.interceptor.orElse(BeanInterceptor.DEFAULT);
 	}
 
@@ -729,54 +739,42 @@ public class BeanFilter {
 	 *
 	 * @return The bean class that this filter applies to.
 	 */
-	public Class<?> getBeanClass() {
-		return beanClass;
-	}
+	public Class<?> getBeanClass() { return beanClass; }
 
 	/**
 	 * Returns the bean dictionary defined on this bean.
 	 *
 	 * @return The bean dictionary defined on this bean, or <jk>null</jk> if no bean dictionary is defined.
 	 */
-	public Class<?>[] getBeanDictionary() {
-		return beanDictionary;
-	}
+	public Class<?>[] getBeanDictionary() { return beanDictionary; }
 
 	/**
 	 * Returns the example associated with this class.
 	 *
 	 * @return The example associated with this class, or <jk>null</jk> if no example is associated.
 	 */
-	public String getExample() {
-		return example;
-	}
+	public String getExample() { return example; }
 
 	/**
 	 * Returns the list of properties to ignore on a bean.
 	 *
 	 * @return The names of the properties to ignore on a bean, or an empty set to not ignore any properties.
 	 */
-	public Set<String> getExcludeProperties() {
-		return excludeProperties;
-	}
+	public Set<String> getExcludeProperties() { return excludeProperties; }
 
 	/**
 	 * Returns the implementation class associated with this class.
 	 *
 	 * @return The implementation class associated with this class, or <jk>null</jk> if no implementation class is associated.
 	 */
-	public Class<?> getImplClass() {
-		return implClass;
-	}
+	public Class<?> getImplClass() { return implClass; }
 
 	/**
 	 * Returns the interface class associated with this class.
 	 *
 	 * @return The interface class associated with this class, or <jk>null</jk> if no interface class is associated.
 	 */
-	public Class<?> getInterfaceClass() {
-		return interfaceClass;
-	}
+	public Class<?> getInterfaceClass() { return interfaceClass; }
 
 	/**
 	 * Returns the set and order of names of properties associated with a bean class.
@@ -785,63 +783,49 @@ public class BeanFilter {
 	 * 	The names of the properties associated with a bean class, or and empty set if all bean properties should
 	 * 	be used.
 	 */
-	public Set<String> getProperties() {
-		return properties;
-	}
+	public Set<String> getProperties() { return properties; }
 
 	/**
 	 * Returns the {@link PropertyNamer} associated with the bean to tailor the names of bean properties.
 	 *
 	 * @return The property namer class, or <jk>null</jk> if no property namer is associated with this bean property.
 	 */
-	public PropertyNamer getPropertyNamer() {
-		return propertyNamer;
-	}
+	public PropertyNamer getPropertyNamer() { return propertyNamer; }
 
 	/**
 	 * Returns the list of read-only properties on a bean.
 	 *
 	 * @return The names of the read-only properties on a bean, or an empty set to not have any read-only properties.
 	 */
-	public Set<String> getReadOnlyProperties() {
-		return readOnlyProperties;
-	}
+	public Set<String> getReadOnlyProperties() { return readOnlyProperties; }
 
 	/**
 	 * Returns the stop class associated with this class.
 	 *
 	 * @return The stop class associated with this class, or <jk>null</jk> if no stop class is associated.
 	 */
-	public Class<?> getStopClass() {
-		return stopClass;
-	}
+	public Class<?> getStopClass() { return stopClass; }
 
 	/**
 	 * Returns the dictionary name associated with this bean.
 	 *
 	 * @return The dictionary name associated with this bean, or <jk>null</jk> if no name is defined.
 	 */
-	public String getTypeName() {
-		return typeName;
-	}
+	public String getTypeName() { return typeName; }
 
 	/**
 	 * Returns the list of write-only properties on a bean.
 	 *
 	 * @return The names of the write-only properties on a bean, or an empty set to not have any write-only properties.
 	 */
-	public Set<String> getWriteOnlyProperties() {
-		return writeOnlyProperties;
-	}
+	public Set<String> getWriteOnlyProperties() { return writeOnlyProperties; }
 
 	/**
 	 * Returns <jk>true</jk> if we should find fluent setters.
 	 *
 	 * @return <jk>true</jk> if fluent setters should be found.
 	 */
-	public boolean isFluentSetters() {
-		return fluentSetters;
-	}
+	public boolean isFluentSetters() { return fluentSetters; }
 
 	/**
 	 * Returns <jk>true</jk> if the properties defined on this bean class should be ordered alphabetically.
@@ -852,9 +836,7 @@ public class BeanFilter {
 	 *
 	 * @return <jk>true</jk> if bean properties should be sorted.
 	 */
-	public boolean isSortProperties() {
-		return sortProperties;
-	}
+	public boolean isSortProperties() { return sortProperties; }
 
 	/**
 	 * Calls the {@link BeanInterceptor#readProperty(Object, String, Object)} method on the registered property filters.

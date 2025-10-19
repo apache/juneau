@@ -47,6 +47,7 @@ public class SimpleHtmlWriter extends HtmlWriter {
 		super.append(c);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlWriter */
 	public SimpleHtmlWriter append(char[] value) {
 		super.append(value);

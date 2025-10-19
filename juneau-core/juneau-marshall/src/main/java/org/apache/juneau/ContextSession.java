@@ -154,6 +154,7 @@ public abstract class ContextSession {
 			return this;
 		}
 	}
+
 	private final JsonMap properties;
 	private List<String> warnings;	// Any warnings encountered.
 
@@ -182,7 +183,7 @@ public abstract class ContextSession {
 	 * @param msg The warning message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public void addWarning(String msg, Object... args) {
+	public void addWarning(String msg, Object...args) {
 		if (unmodifiable)
 			return;
 		if (warnings == null)
@@ -203,27 +204,22 @@ public abstract class ContextSession {
 	 *
 	 * @return The context that created this session.
 	 */
-	public Context getContext() {
-		return ctx;
-	}
+	public Context getContext() { return ctx; }
 
 	/**
 	 * Returns the session properties on this session.
 	 *
 	 * @return The session properties on this session.  Never <jk>null</jk>.
 	 */
-	public final JsonMap getSessionProperties() {
-		return properties;
-	}
+	public final JsonMap getSessionProperties() { return properties; }
 
 	/**
 	 * Returns the warnings that occurred in this session.
 	 *
 	 * @return The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.
 	 */
-	public final List<String> getWarnings() {
-		return warnings == null ? emptyList() : warnings;
-	}
+	public final List<String> getWarnings() { return warnings == null ? emptyList() : warnings; }
+
 	/**
 	 * Debug mode enabled.
 	 *
@@ -231,9 +227,8 @@ public abstract class ContextSession {
 	 * @return
 	 * 	<jk>true</jk> if debug mode is enabled.
 	 */
-	public boolean isDebug() {
-		return debug;
-	}
+	public boolean isDebug() { return debug; }
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return Utils2.toPropertyMap(this).asReadableString();

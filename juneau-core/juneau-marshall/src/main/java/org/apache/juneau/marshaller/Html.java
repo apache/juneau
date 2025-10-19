@@ -53,6 +53,7 @@ public class Html extends CharMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final Html DEFAULT = new Html();
+
 	/**
 	 * Serializes a Java object to an HTML string.
 	 *

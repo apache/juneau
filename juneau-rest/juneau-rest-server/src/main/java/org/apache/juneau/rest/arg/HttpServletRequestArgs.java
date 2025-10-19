@@ -52,11 +52,11 @@ public class HttpServletRequestArgs extends SimpleRestOperationArg {
 		if (paramInfo.isType(AsyncContext.class))
 			return new HttpServletRequestArgs(HttpServletRequest::getAsyncContext);
 		if (paramInfo.isType(CookieList.class))
-			return new HttpServletRequestArgs(x->CookieList.of(x.getCookies()));
+			return new HttpServletRequestArgs(x -> CookieList.of(x.getCookies()));
 		if (paramInfo.isType(DispatcherType.class))
 			return new HttpServletRequestArgs(HttpServletRequest::getDispatcherType);
 		if (paramInfo.isType(HttpServletRequest.class))
-			return new HttpServletRequestArgs(x->x);
+			return new HttpServletRequestArgs(x -> x);
 		if (paramInfo.isType(Principal.class))
 			return new HttpServletRequestArgs(HttpServletRequest::getUserPrincipal);
 		return null;

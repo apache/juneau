@@ -38,7 +38,7 @@ public class JsonConfigurationExample {
 	 * @throws Exception Unused.
 	 */
 	public static void main(String[] args) throws Exception {
-		Pojo aPojo = new Pojo("a","</pojo>");
+		Pojo aPojo = new Pojo("a", "</pojo>");
 		// Json Serializers can be configured using properties defined in JsonSerializer
 		/**
 		 * Produces

@@ -61,10 +61,7 @@ public class RrpcInterfaceMeta {
 		ci.forEachAnnotation(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(StringUtils.trimSlashes(x.path())));
 
 		Map<Method,RrpcInterfaceMethodMeta> methods = map();
-		ci.forEachPublicMethod(
-			x -> true,
-			x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner()))
-		);
+		ci.forEachPublicMethod(x -> true, x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));
 
 		Map<String,RrpcInterfaceMethodMeta> methodsByPath = map();
 		methods.values().forEach(x -> methodsByPath.put(x.getPath(), x));
@@ -81,9 +78,7 @@ public class RrpcInterfaceMeta {
 	 * 	The Java class of this interface.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Class<?> getJavaClass() {
-		return c;
-	}
+	public Class<?> getJavaClass() { return c; }
 
 	/**
 	 * Returns the metadata about the specified method on this interface proxy.
@@ -113,9 +108,7 @@ public class RrpcInterfaceMeta {
 	 * 	<br>The keys never have leading slashes.
 	 * 	<br>The map is never <jk>null</jk>.
 	 */
-	public Map<String,RrpcInterfaceMethodMeta> getMethodsByPath() {
-		return methodsByPath;
-	}
+	public Map<String,RrpcInterfaceMethodMeta> getMethodsByPath() { return methodsByPath; }
 
 	/**
 	 * Returns the HTTP path of this interface.
@@ -125,7 +118,5 @@ public class RrpcInterfaceMeta {
 	 * 	<br>Never <jk>null</jk>.
 	 * 	<br>Never has leading or trailing slashes.
 	 */
-	public String getPath() {
-		return path;
-	}
+	public String getPath() { return path; }
 }

@@ -39,8 +39,7 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 		/**
 		 * Constructor.
 		 */
-		protected Builder() {
-		}
+		protected Builder() {}
 
 		/**
 		 * Copy constructor.
@@ -50,6 +49,7 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 			super(builder);
 		}
 	}
+
 	/**
 	 * Constructor.
 	 *

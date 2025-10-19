@@ -71,6 +71,7 @@ public class OpenApiParserSession extends UonParserSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public OpenApiParserSession build() {
 			return new OpenApiParserSession(this);
@@ -178,6 +179,7 @@ public class OpenApiParserSession extends UonParserSession {
 			return this;
 		}
 	}
+
 	// Cache these for faster lookup
 	private static final BeanContext BC = BeanContext.DEFAULT;
 	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
@@ -190,6 +192,7 @@ public class OpenApiParserSession extends UonParserSession {
 	private static final ClassMeta<JsonMap> CM_JsonMap = BC.getClassMeta(JsonMap.class);
 
 	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -199,6 +202,7 @@ public class OpenApiParserSession extends UonParserSession {
 	public static Builder create(OpenApiParser ctx) {
 		return new Builder(ctx);
 	}
+
 	private final OpenApiParser ctx;
 
 	/**
@@ -239,7 +243,7 @@ public class OpenApiParserSession extends UonParserSession {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	private<T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
+	private <T> T parseInner(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws SchemaValidationException, ParseException {
 		schema.validateInput(in);
 		if (in == null || "null".equals(in)) {
 			if (schema.getDefault() == null)
@@ -368,7 +372,7 @@ public class OpenApiParserSession extends UonParserSession {
 				String[] ss = {};
 
 				if (cf == MULTI)
-					ss = new String[]{in};
+					ss = new String[] { in };
 				else if (cf == CSV)
 					ss = Utils.splita(in, ',');
 				else if (cf == PIPES)
@@ -413,7 +417,7 @@ public class OpenApiParserSession extends UonParserSession {
 				String[] ss = {};
 
 				if (cf == MULTI)
-					ss = new String[]{in};
+					ss = new String[] { in };
 				else if (cf == CSV)
 					ss = Utils.splita(in, ',');
 				else if (cf == PIPES)

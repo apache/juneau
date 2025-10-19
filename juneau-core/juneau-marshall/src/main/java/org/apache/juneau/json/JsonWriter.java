@@ -40,6 +40,7 @@ import org.apache.juneau.serializer.*;
 public class JsonWriter extends SerializerWriter {
 
 	// Characters that trigger special handling of serializing attribute values.
+	// @formatter:off
 	private static final AsciiSet
 		encodedChars = AsciiSet.of("\n\t\b\f\r'\"\\"),
 		encodedChars2 = AsciiSet.of("\n\t\b\f\r'\"\\/");
@@ -51,14 +52,15 @@ public class JsonWriter extends SerializerWriter {
 		"private","protected","public","return","static","super","switch","this","throw",
 		"true","try","typeof","var","void","while","with","undefined","yield"
 	);
+	// @formatter:on
 
 	// Characters that represent attribute name characters that don't trigger quoting.
 	// These are actually more strict than the actual Javascript specification, but
 	// can be narrowed in the future if necessary.
 	// For example, we quote attributes that start with $ even though we don't need to.
-	private static final AsciiSet validAttrChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars("_").build();
+	private static final AsciiSet validAttrChars = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars("_").build();
 
-	private static final AsciiSet validFirstAttrChars = AsciiSet.create().ranges("a-z","A-Z").chars("_").build();
+	private static final AsciiSet validFirstAttrChars = AsciiSet.create().ranges("a-z", "A-Z").chars("_").build();
 	private final boolean simpleAttrs, escapeSolidus;
 
 	private final AsciiSet ec;
@@ -75,8 +77,7 @@ public class JsonWriter extends SerializerWriter {
 	 * @param trimStrings If <jk>true</jk>, strings will be trimmed before being serialized.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected JsonWriter(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar,
-			boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
+	protected JsonWriter(Writer out, boolean useWhitespace, int maxIndent, boolean escapeSolidus, char quoteChar, boolean simpleAttrs, boolean trimStrings, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.simpleAttrs = simpleAttrs;
 		this.escapeSolidus = escapeSolidus;
@@ -112,36 +113,43 @@ public class JsonWriter extends SerializerWriter {
 		super.append(text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter append(String text) {
 		super.append(text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter appendIf(boolean b, char c) {
 		super.appendIf(b, c);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter appendIf(boolean b, String text) {
 		super.appendIf(b, text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter appendUri(Object value) {
 		super.appendUri(value);
 		return this;
 	}
+
 	/**
 	 * Serializes the specified object as a JSON attribute name.
 	 *
@@ -192,46 +200,55 @@ public class JsonWriter extends SerializerWriter {
 
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter cr(int depth) {
 		super.cr(depth);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter cre(int depth) {
 		super.cre(depth);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter ie(int indent) {
 		super.ie(indent);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter nlIf(boolean flag, int indent) {
 		super.nlIf(flag, indent);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter q() {
 		super.q();
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter s() {
 		super.s();
 		return this;
 	}
+
 	/**
 	 * Adds a space only if the current indentation level is below maxIndent.
 	 *
@@ -243,6 +260,7 @@ public class JsonWriter extends SerializerWriter {
 			super.s();
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter sIf(boolean flag) {
 		super.sIf(flag);

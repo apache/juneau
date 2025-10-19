@@ -73,7 +73,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="bdi")
+@Bean(typeName = "bdi")
 public class Bdi extends HtmlElementText {
 
 	/**
@@ -89,8 +89,9 @@ public class Bdi extends HtmlElementText {
 	public Bdi(Object text) {
 		text(text);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Bdi _class(String value) {  // NOSONAR - Intentional naming.
+	public Bdi _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

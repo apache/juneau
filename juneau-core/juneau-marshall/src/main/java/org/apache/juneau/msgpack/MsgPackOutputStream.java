@@ -43,7 +43,7 @@ public class MsgPackOutputStream extends OutputStream {
 
 	private final OutputStream os;
 
-	final long L2X31 = ((long)(1<<30))*2;
+	final long L2X31 = ((long)(1 << 30)) * 2;
 
 	/**
 	 * Constructor.
@@ -86,24 +86,24 @@ public class MsgPackOutputStream extends OutputStream {
 		for (int i = 0, len = in.length(); i < len; i++) {
 			int c = (in.charAt(i) & 0xFFFF);
 			if (c <= 0x7F) {
-				write((byte) (c & 0xFF));
+				write((byte)(c & 0xFF));
 				count++;
 			} else if (c <= 0x7FF) {
-				write((byte) (0xC0 + ((c>>6) & 0x1F)));
-				write((byte) (0x80 + (c & 0x3F)));
+				write((byte)(0xC0 + ((c >> 6) & 0x1F)));
+				write((byte)(0x80 + (c & 0x3F)));
 				count += 2;
 			} else if (c >= 0xD800 && c <= 0xDFFF) {
 				int jchar2 = in.charAt(++i) & 0xFFFF;
-				int n = (c<<10) + jchar2 + 0xFCA02400;
-				write((byte) (0xF0 + ((n>>18) & 0x07)));
-				write((byte) (0x80 + ((n>>12) & 0x3F)));
-				write((byte) (0x80 + ((n>>6) & 0x3F)));
-				write((byte) (0x80 + (n & 0x3F)));
+				int n = (c << 10) + jchar2 + 0xFCA02400;
+				write((byte)(0xF0 + ((n >> 18) & 0x07)));
+				write((byte)(0x80 + ((n >> 12) & 0x3F)));
+				write((byte)(0x80 + ((n >> 6) & 0x3F)));
+				write((byte)(0x80 + (n & 0x3F)));
 				count += 4;
 			} else {
-				write((byte) (0xE0 + ((c>>12) & 0x0F)));
-				write((byte) (0x80 + ((c>>6) & 0x3F)));
-				write((byte) (0x80 + (c & 0x3F)));
+				write((byte)(0xE0 + ((c >> 12) & 0x0F)));
+				write((byte)(0x80 + ((c >> 6) & 0x3F)));
+				write((byte)(0x80 + (c & 0x3F)));
 				count += 3;
 			}
 		}
@@ -150,21 +150,21 @@ public class MsgPackOutputStream extends OutputStream {
 	 * Appends two bytes to the stream.
 	 */
 	MsgPackOutputStream append2(int i) {
-		return append1(i>>8).append1(i);
+		return append1(i >> 8).append1(i);
 	}
 
 	/**
 	 * Appends four bytes to the stream.
 	 */
 	MsgPackOutputStream append4(int i) {
-		return append1(i>>24).append1(i>>16).append1(i>>8).append1(i);
+		return append1(i >> 24).append1(i >> 16).append1(i >> 8).append1(i);
 	}
 
 	/**
 	 * Appends eight bytes to the stream.
 	 */
 	MsgPackOutputStream append8(long l) {
-		return append1((int)(l>>56)).append1((int)(l>>48)).append1((int)(l>>40)).append1((int)(l>>32)).append1((int)(l>>24)).append1((int)(l>>16)).append1((int)(l>>8)).append1((int)(l));
+		return append1((int)(l >> 56)).append1((int)(l >> 48)).append1((int)(l >> 40)).append1((int)(l >> 32)).append1((int)(l >> 24)).append1((int)(l >> 16)).append1((int)(l >> 8)).append1((int)(l));
 	}
 
 	/**
@@ -192,9 +192,9 @@ public class MsgPackOutputStream extends OutputStream {
 		// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N
 		// * N is the length of data
 
-		if (b.length < (1<<8))
+		if (b.length < (1 << 8))
 			return append1(BIN8).append1(b.length).append(b);
-		if (b.length < (1<<16))
+		if (b.length < (1 << 16))
 			return append1(BIN16).append2(b.length).append(b);
 		return append1(BIN32).append4(b.length).append(b);
 	}
@@ -205,7 +205,9 @@ public class MsgPackOutputStream extends OutputStream {
 	MsgPackOutputStream appendBinary(InputStream is) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		IOUtils.pipe(is, baos, x -> { throw new SerializeException(x); });
+		IOUtils.pipe(is, baos, x -> {
+			throw new SerializeException(x);
+		});
 
 		byte[] b = baos.toByteArray();
 
@@ -230,9 +232,9 @@ public class MsgPackOutputStream extends OutputStream {
 		// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N
 		// * N is the length of data
 
-		if (b.length < (1<<8))
+		if (b.length < (1 << 8))
 			return append1(BIN8).append1(b.length).append(b);
-		if (b.length < (1<<16))
+		if (b.length < (1 << 16))
 			return append1(BIN16).append2(b.length).append(b);
 		return append1(BIN32).append4(b.length).append(b);
 	}
@@ -278,17 +280,17 @@ public class MsgPackOutputStream extends OutputStream {
 		// NEGFIXINT_L  = 0xE0,  //   neg fixint     111xxxxx     0xe0 - 0xff
 		// NEGFIXINT_U  = 0xFF;
 		if (i >= 0) {
-			if (i < (1<<7))
+			if (i < (1 << 7))
 				return append1(i);
-			if (i < (1<<15))
+			if (i < (1 << 15))
 				return append1(INT16).append2(i);
 			return append1(INT32).append4(i);
 		}
-		if (i > -(1<<6))
+		if (i > -(1 << 6))
 			return append((byte)(0xE0 | -i));
-		if (i > -(1<<7))
+		if (i > -(1 << 7))
 			return append1(INT8).append1(i);
-		if (i > -(1<<15))
+		if (i > -(1 << 15))
 			return append1(INT16).append2(i);
 		return append1(INT32).append4(i);
 	}
@@ -363,9 +365,9 @@ public class MsgPackOutputStream extends OutputStream {
 		int length = getUtf8ByteLength(cs);
 		if (length < 32)
 			append1(0xA0 + length);
-		else if (length < (1<<8))
+		else if (length < (1 << 8))
 			append1(STR8).append1(length);
-		else if (length < (1<<16))
+		else if (length < (1 << 16))
 			append1(STR16).append2(length);
 		else
 			append1(STR32).append4(length);
@@ -405,7 +407,7 @@ public class MsgPackOutputStream extends OutputStream {
 
 		if (size < 16)
 			return append1(0x90 + size);
-		if (size < (1<<16))
+		if (size < (1 << 16))
 			return append1(ARRAY16).append2(size);
 		return append1(ARRAY32).append4(size);
 	}
@@ -439,7 +441,7 @@ public class MsgPackOutputStream extends OutputStream {
 
 		if (size < 16)
 			return append1(0x80 + size);
-		if (size < (1<<16))
+		if (size < (1 << 16))
 			return append1(MAP16).append2(size);
 		return append1(MAP32).append4(size);
 	}

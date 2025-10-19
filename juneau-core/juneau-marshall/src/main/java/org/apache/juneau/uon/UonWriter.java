@@ -39,10 +39,10 @@ import org.apache.juneau.serializer.*;
 public class UonWriter extends SerializerWriter {
 
 	// Characters that do not need to be URL-encoded in strings.
-	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars(";/?:@-_.!*'$(),~=").build();
+	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars(";/?:@-_.!*'$(),~=").build();
 	// Characters that do not need to be URL-encoded in attribute names.
 	// Identical to unencodedChars, but excludes '='.
-	private static final AsciiSet unencodedCharsAttrName = AsciiSet.create().ranges("a-z","A-Z","0-9").chars(";/?:@-_.!*'$(),~").build();
+	private static final AsciiSet unencodedCharsAttrName = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars(";/?:@-_.!*'$(),~").build();
 	// Characters that need to be preceded with an escape character.
 	private static final AsciiSet escapedChars = AsciiSet.of("~'");
 
@@ -69,8 +69,8 @@ public class UonWriter extends SerializerWriter {
 	 * @param quoteChar The quote character to use.  If <c>0</c>, defaults to <js>'\''</js>.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, int maxIndent,
-			boolean encodeChars, boolean trimStrings, boolean plainTextParams, char quoteChar, UriResolver uriResolver) {
+	protected UonWriter(UonSerializerSession session, Writer out, boolean useWhitespace, int maxIndent, boolean encodeChars, boolean trimStrings, boolean plainTextParams, char quoteChar,
+		UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver);
 		this.session = session;
 		this.encodeChars = encodeChars;
@@ -107,31 +107,37 @@ public class UonWriter extends SerializerWriter {
 		super.append(text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter append(String text) {
 		super.append(text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter appendIf(boolean b, char c) {
 		super.appendIf(b, c);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter appendIf(boolean b, String text) {
 		super.appendIf(b, text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
+
 	/**
 	 * Serializes the specified simple object as a UON string value.
 	 *
@@ -161,7 +167,7 @@ public class UonWriter extends SerializerWriter {
 			char c = s.charAt(i);
 			if (esc.contains(c))
 				w('~');
-			if ((!encodeChars) || unenc.contains(c))
+			if ((! encodeChars) || unenc.contains(c))
 				w(c);
 			else {
 				if (c == ' ')
@@ -171,15 +177,15 @@ public class UonWriter extends SerializerWriter {
 					if (p < 0x0080)
 						appendHex(p);
 					else if (p < 0x0800) {
-						int p1=p>>>6;
-						appendHex(p1+192).appendHex((p&63)+128);
+						int p1 = p >>> 6;
+						appendHex(p1 + 192).appendHex((p & 63) + 128);
 					} else if (p < 0x10000) {
-						int p1=p>>>6, p2=p1>>>6;
-						appendHex(p2+224).appendHex((p1&63)+128).appendHex((p&63)+128);
+						int p1 = p >>> 6, p2 = p1 >>> 6;
+						appendHex(p2 + 224).appendHex((p1 & 63) + 128).appendHex((p & 63) + 128);
 					} else {
 						i++;  // Two-byte codepoint...skip past surrogate pair lower byte.
-						int p1=p>>>6, p2=p1>>>6, p3=p2>>>6;
-						appendHex(p3+240).appendHex((p2&63)+128).appendHex((p1&63)+128).appendHex((p&63)+128);
+						int p1 = p >>> 6, p2 = p1 >>> 6, p3 = p2 >>> 6;
+						appendHex(p3 + 240).appendHex((p2 & 63) + 128).appendHex((p1 & 63) + 128).appendHex((p & 63) + 128);
 					}
 				}
 			}
@@ -189,6 +195,7 @@ public class UonWriter extends SerializerWriter {
 
 		return this;
 	}
+
 	/**
 	 * Appends a URI to the output.
 	 *
@@ -199,36 +206,43 @@ public class UonWriter extends SerializerWriter {
 	public UonWriter appendUri(Object uri) {
 		return appendObject(uriResolver.resolve(uri), false);
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter cr(int depth) {
 		super.cr(depth);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter cre(int depth) {
 		super.cre(depth);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter ie(int indent) {
 		super.ie(indent);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter nlIf(boolean flag, int indent) {
 		super.nlIf(flag, indent);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public UonWriter q() {
 		super.q();
@@ -265,7 +279,7 @@ public class UonWriter extends SerializerWriter {
 	private UonWriter appendHex(int b) {
 		if (b > 255)
 			throw new BasicRuntimeException("Invalid value passed to appendHex.  Must be in the range 0-255.  Value={0}", b);
-		w('%').w(hexArray[b>>>4]).w(hexArray[b&0x0F]);
+		w('%').w(hexArray[b >>> 4]).w(hexArray[b & 0x0F]);
 		return this;
 	}
 

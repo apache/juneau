@@ -50,7 +50,7 @@ public class ArrayUtils {
 		for (int i = 0; i < array.length; i++)
 			a[i] = array[i];
 		for (int i = 0; i < newElements.length; i++)
-			a[i+array.length] = newElements[i];
+			a[i + array.length] = newElements[i];
 		return a;
 	}
 
@@ -164,7 +164,7 @@ public class ArrayUtils {
 	 * @param list The list to copy the values into.
 	 * @return The same list passed in.
 	 */
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List copyToList(Object array, List list) {
 		if (array != null) {
 			int length = Array.getLength(array);

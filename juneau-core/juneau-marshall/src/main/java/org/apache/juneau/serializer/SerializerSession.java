@@ -128,6 +128,7 @@ public class SerializerSession extends BeanTraverseSession {
 			super.localeDefault(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
@@ -238,6 +239,7 @@ public class SerializerSession extends BeanTraverseSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -247,6 +249,7 @@ public class SerializerSession extends BeanTraverseSession {
 	public static Builder create(Serializer ctx) {
 		return new Builder(ctx);
 	}
+
 	/**
 	 * Create a "_type" property that contains the dictionary name of the bean.
 	 *
@@ -258,6 +261,7 @@ public class SerializerSession extends BeanTraverseSession {
 		BeanMeta<?> bm = m.getMeta();
 		return new BeanPropertyValue(bm.getTypeProperty(), bm.getTypeProperty().getName(), typeName, null);
 	}
+
 	/**
 	 * Converts the specified throwable to either a {@link RuntimeException} or {@link SerializeException}.
 	 *
@@ -270,11 +274,13 @@ public class SerializerSession extends BeanTraverseSession {
 		if (causedBy instanceof RuntimeException)
 			throw (RuntimeException)causedBy;
 		if (causedBy instanceof StackOverflowError)
-			throw new SerializeException("Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+			throw new SerializeException(
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		if (causedBy instanceof SerializeException)
 			throw (SerializeException)causedBy;
 		throw new SerializeException(causedBy);
 	}
+
 	/**
 	 * Converts the contents of the specified object array to a list.
 	 *
@@ -301,6 +307,7 @@ public class SerializerSession extends BeanTraverseSession {
 		}
 		return alist((Object[])array);
 	}
+
 	private final Serializer ctx;
 
 	private final UriResolver uriResolver;
@@ -342,6 +349,7 @@ public class SerializerSession extends BeanTraverseSession {
 		getVarResolver().bean(c, value);
 		return this;
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified value should not be serialized.
 	 *
@@ -419,7 +427,7 @@ public class SerializerSession extends BeanTraverseSession {
 		if (m == null || m.isEmpty())
 			return;
 		if (isSortMaps() && ! SortedMap.class.isInstance(m) && isSortable(m.keySet()))
-			((Map)m).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(x -> consumer.accept((Map.Entry<K,V>) x));
+			((Map)m).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(x -> consumer.accept((Map.Entry<K,V>)x));
 		else
 			m.entrySet().forEach(consumer);
 	}
@@ -429,9 +437,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 *
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
-	public SerializerListener getListener() {
-		return listener;
-	}
+	public SerializerListener getListener() { return listener; }
 
 	/**
 	 * Returns the listener associated with this session.
@@ -444,6 +450,7 @@ public class SerializerSession extends BeanTraverseSession {
 	public <T extends SerializerListener> T getListener(Class<T> c) {
 		return (T)listener;
 	}
+
 	/**
 	 * Optional method that specifies HTTP request headers for this serializer.
 	 *
@@ -461,18 +468,14 @@ public class SerializerSession extends BeanTraverseSession {
 	 * 	The HTTP headers to set on HTTP requests.
 	 * 	Never <jk>null</jk>.
 	 */
-	public Map<String,String> getResponseHeaders() {
-		return ctx.getResponseHeaders(this);
-	}
+	public Map<String,String> getResponseHeaders() { return ctx.getResponseHeaders(this); }
 
 	/**
 	 * HTTP part schema of object being serialized.
 	 *
 	 * @return HTTP part schema of object being serialized, or <jk>null</jk> if not specified.
 	 */
-	public final HttpPartSchema getSchema() {
-		return schema;
-	}
+	public final HttpPartSchema getSchema() { return schema; }
 
 	/**
 	 * Returns the variable resolver session.
@@ -490,9 +493,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 *
 	 * @return <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
 	 */
-	public boolean isWriterSerializer() {
-		return false;
-	}
+	public boolean isWriterSerializer() { return false; }
 
 	/**
 	 * Resolves any variables in the specified string.
@@ -839,9 +840,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 *
 	 * @return The Java method that invoked this serializer.
 	*/
-	protected final Method getJavaMethod() {
-		return javaMethod;
-	}
+	protected final Method getJavaMethod() { return javaMethod; }
 
 	/**
 	 * URI context bean.
@@ -850,9 +849,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	Bean used for resolution of URIs to absolute or root-relative form.
 	 */
-	protected final UriContext getUriContext() {
-		return ctx.getUriContext();
-	}
+	protected final UriContext getUriContext() { return ctx.getUriContext(); }
 
 	/**
 	 * URI relativity.
@@ -861,9 +858,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	Defines what relative URIs are relative to when serializing any of the following:
 	 */
-	protected final UriRelativity getUriRelativity() {
-		return ctx.getUriRelativity();
-	}
+	protected final UriRelativity getUriRelativity() { return ctx.getUriRelativity(); }
 
 	/**
 	 * URI resolution.
@@ -872,18 +867,15 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	Defines the resolution level for URIs when serializing URIs.
 	 */
-	protected final UriResolution getUriResolution() {
-		return ctx.getUriResolution();
-	}
+	protected final UriResolution getUriResolution() { return ctx.getUriResolution(); }
 
 	/**
 	 * Returns the URI resolver.
 	 *
 	 * @return The URI resolver.
 	 */
-	protected final UriResolver getUriResolver() {
-		return uriResolver;
-	}
+	protected final UriResolver getUriResolver() { return uriResolver; }
+
 	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
@@ -892,9 +884,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
 	 * 	through reflection.
 	 */
-	protected boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
+	protected boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
 
 	/**
 	 * Add type attribute to root nodes.
@@ -903,9 +893,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if type property should be added to root node.
 	 */
-	protected final boolean isAddRootType() {
-		return ctx.isAddRootType();
-	}
+	protected final boolean isAddRootType() { return ctx.isAddRootType(); }
 
 	/**
 	 * Don't trim null bean property values.
@@ -914,9 +902,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
-	protected final boolean isKeepNullProperties() {
-		return ctx.isKeepNullProperties();
-	}
+	protected final boolean isKeepNullProperties() { return ctx.isKeepNullProperties(); }
 
 	/**
 	 * Sort arrays and collections alphabetically.
@@ -925,9 +911,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
 	 */
-	protected final boolean isSortCollections() {
-		return ctx.isSortCollections();
-	}
+	protected final boolean isSortCollections() { return ctx.isSortCollections(); }
 
 	/**
 	 * Sort maps alphabetically.
@@ -936,9 +920,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
 	 */
-	protected final boolean isSortMaps() {
-		return ctx.isSortMaps();
-	}
+	protected final boolean isSortMaps() { return ctx.isSortMaps(); }
 
 	/**
 	 * Trim empty lists and arrays.
@@ -947,9 +929,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
 	 */
-	protected final boolean isTrimEmptyCollections() {
-		return ctx.isTrimEmptyCollections();
-	}
+	protected final boolean isTrimEmptyCollections() { return ctx.isTrimEmptyCollections(); }
 
 	/**
 	 * Trim empty maps.
@@ -958,9 +938,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if empty map values are not serialized to the output.
 	 */
-	protected final boolean isTrimEmptyMaps() {
-		return ctx.isTrimEmptyMaps();
-	}
+	protected final boolean isTrimEmptyMaps() { return ctx.isTrimEmptyMaps(); }
 
 	/**
 	 * Trim strings.
@@ -969,9 +947,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 */
-	protected boolean isTrimStrings() {
-		return ctx.isTrimStrings();
-	}
+	protected boolean isTrimStrings() { return ctx.isTrimStrings(); }
 
 	/**
 	 * Specialized warning when an exception is thrown while executing a bean getter.
@@ -984,11 +960,10 @@ public class SerializerSession extends BeanTraverseSession {
 		if (listener != null)
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
-		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix,
-			p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
 		if (! isIgnoreInvocationExceptionsOnGetters())
-			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix,
-				p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage()).initCause(t);
+			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(),
+				t.getLocalizedMessage()).initCause(t);
 	}
 
 	/**
@@ -999,7 +974,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	@Override
-	protected void onError(Throwable t, String msg, Object... args) {
+	protected void onError(Throwable t, String msg, Object...args) {
 		if (listener != null)
 			listener.onError(this, t, format(msg, args));
 		super.onError(t, msg, args);
@@ -1066,6 +1041,7 @@ public class SerializerSession extends BeanTraverseSession {
 	protected final String relativizeUri(Object relativeTo, Object uri) {
 		return uriResolver.relativize(relativeTo, uri);
 	}
+
 	/**
 	 * Invokes the specified swap on the specified object if the swap is not null.
 	 *

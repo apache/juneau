@@ -49,9 +49,7 @@ public class ParserInputStream extends InputStream implements Positionable {
 	}
 
 	@Override /* Overridden from Positionable */
-	public Position getPosition() {
-		return new Position(pos);
-	}
+	public Position getPosition() { return new Position(pos); }
 
 	@Override /* Overridden from InputStream */
 	public int read() throws IOException {

@@ -60,6 +60,7 @@ public class RestConverterList {
 				entries.add(beanStore().createBean(RestConverter.class).type(v));
 			return this;
 		}
+
 		/**
 		 * Appends the specified rest matcher objects to the list.
 		 *
@@ -77,6 +78,7 @@ public class RestConverterList {
 			super.impl(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -88,6 +90,7 @@ public class RestConverterList {
 			return new RestConverterList(this);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -97,6 +100,7 @@ public class RestConverterList {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final RestConverter[] entries;
 
 	/**
@@ -105,12 +109,14 @@ public class RestConverterList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestConverterList(Builder builder) {
+		// @formatter:off
 		entries =
 			builder
 				.entries
 				.stream()
 				.map(BeanCreator::run)
 				.toArray(RestConverter[]::new);
+		// @formatter:on
 	}
 
 	/**

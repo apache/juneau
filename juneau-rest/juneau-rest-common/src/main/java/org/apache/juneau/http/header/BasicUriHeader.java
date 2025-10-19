@@ -86,6 +86,7 @@ public class BasicUriHeader extends BasicHeader {
 	public static BasicUriHeader of(String name, URI value) {
 		return value == null ? null : new BasicUriHeader(name, value);
 	}
+
 	private final URI value;
 	private final Supplier<URI> supplier;
 
@@ -101,7 +102,7 @@ public class BasicUriHeader extends BasicHeader {
 	 */
 	public BasicUriHeader(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty(value) ? null :  URI.create(value);
+		this.value = Utils.isEmpty(value) ? null : URI.create(value);
 		this.supplier = null;
 	}
 
@@ -148,9 +149,7 @@ public class BasicUriHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
+	public String getValue() { return Utils.s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

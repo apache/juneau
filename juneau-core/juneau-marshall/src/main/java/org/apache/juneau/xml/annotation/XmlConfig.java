@@ -39,10 +39,10 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({XmlConfigAnnotation.SerializerApply.class,XmlConfigAnnotation.ParserApply.class})
+@ContextApply({ XmlConfigAnnotation.SerializerApply.class, XmlConfigAnnotation.ParserApply.class })
 public @interface XmlConfig {
 
 	/**
@@ -199,6 +199,7 @@ public @interface XmlConfig {
 	 * @return The annotation value.
 	 */
 	Class<? extends XMLEventAllocator> eventAllocator() default XmlEventAllocator.Void.class;
+
 	/**
 	 * Default namespaces.
 	 *

@@ -98,47 +98,19 @@ import org.apache.juneau.internal.*;
  */
 public class SchemaInfo extends OpenApiElement {
 
-	private String
-		format,
-		title,
-		description,
-		pattern,
-		ref,
-		type;
-	private Number
-		multipleOf,
-		maximum,
-		minimum;
-	private Integer
-		maxLength,
-		minLength,
-		maxItems,
-		minItems,
-		maxProperties,
-		minProperties;
-	private Boolean
-		exclusiveMaximum,
-		exclusiveMinimum,
-		uniqueItems,
-		nullable,
-		writeOnly,
-		readOnly,
-		deprecated;
-	private Object
-		_default,  // NOSONAR - Intentional naming.
+	private String format, title, description, pattern, ref, type;
+	private Number multipleOf, maximum, minimum;
+	private Integer maxLength, minLength, maxItems, minItems, maxProperties, minProperties;
+	private Boolean exclusiveMaximum, exclusiveMinimum, uniqueItems, nullable, writeOnly, readOnly, deprecated;
+	private Object _default,  // NOSONAR - Intentional naming.
 		example;
 	private Items items;
 	private Xml xml;
 	private ExternalDocumentation externalDocs;
-	private List<Object>
-			allOf,
-			oneOf,
-			anyOf,
-			_enum;  // NOSONAR - Intentional naming.
-	private List<String>
-		required;
+	private List<Object> allOf, oneOf, anyOf, _enum;  // NOSONAR - Intentional naming.
+	private List<String> required;
 	private Discriminator discriminator;
-	private Map<String, SchemaInfo> properties;
+	private Map<String,SchemaInfo> properties;
 	private SchemaInfo additionalProperties;
 	private SchemaInfo not;
 
@@ -389,27 +361,21 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public SchemaInfo getAdditionalProperties() {
-		return additionalProperties;
-	}
+	public SchemaInfo getAdditionalProperties() { return additionalProperties; }
 
 	/**
 	 * Bean property getter:  <property>allOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getAllOf() {
-		return allOf;
-	}
+	public List<Object> getAllOf() { return allOf; }
 
 	/**
 	 * Bean property getter:  <property>allOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getAnyOf() {
-		return anyOf;
-	}
+	public List<Object> getAnyOf() { return anyOf; }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -419,232 +385,182 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getDefault() {
-		return _default;
-	}
+	public Object getDefault() { return _default; }
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
+	public Boolean getDeprecated() { return deprecated; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>discriminator</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Discriminator getDiscriminator() {
-		return discriminator;
-	}
+	public Discriminator getDiscriminator() { return discriminator; }
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() {
-		return _enum;
-	}
+	public List<Object> getEnum() { return _enum; }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Object getExample() {
-		return example;
-	}
+	public Object getExample() { return example; }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
+	public Boolean getExclusiveMaximum() { return exclusiveMaximum; }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
+	public Boolean getExclusiveMinimum() { return exclusiveMinimum; }
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
+	public ExternalDocumentation getExternalDocs() { return externalDocs; }
 
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getFormat() {
-		return format;
-	}
+	public String getFormat() { return format; }
 
 	/**
 	 * Bean property getter:  <property>items</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Items getItems() {
-		return items;
-	}
+	public Items getItems() { return items; }
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMaximum() {
-		return maximum;
-	}
+	public Number getMaximum() { return maximum; }
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxItems() {
-		return maxItems;
-	}
+	public Integer getMaxItems() { return maxItems; }
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
+	public Integer getMaxLength() { return maxLength; }
 
 	/**
 	 * Bean property getter:  <property>maxProperties</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMaxProperties() {
-		return maxProperties;
-	}
+	public Integer getMaxProperties() { return maxProperties; }
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMinimum() {
-		return minimum;
-	}
+	public Number getMinimum() { return minimum; }
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinItems() {
-		return minItems;
-	}
+	public Integer getMinItems() { return minItems; }
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinLength() {
-		return minLength;
-	}
+	public Integer getMinLength() { return minLength; }
 
 	/**
 	 * Bean property getter:  <property>minProperties</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Integer getMinProperties() {
-		return minProperties;
-	}
+	public Integer getMinProperties() { return minProperties; }
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
+	public Number getMultipleOf() { return multipleOf; }
+
 	/**
 	 * Bean property getter:  <property>not</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public SchemaInfo getNot() {
-		return not;
-	}
+	public SchemaInfo getNot() { return not; }
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getNullable() {
-		return nullable;
-	}
+	public Boolean getNullable() { return nullable; }
+
 	/**
 	 * Bean property getter:  <property>allOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getOneOf() {
-		return oneOf;
-	}
+	public List<Object> getOneOf() { return oneOf; }
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getPattern() {
-		return pattern;
-	}
+	public String getPattern() { return pattern; }
 
 	/**
 	 * Bean property getter:  <property>properties</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, SchemaInfo> getProperties() {
-		return properties;
-	}
+	public Map<String,SchemaInfo> getProperties() { return properties; }
 
 	/**
 	 * Bean property getter:  <property>readOnly</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getReadOnly() {
-		return readOnly;
-	}
+	public Boolean getReadOnly() { return readOnly; }
 
 	/**
 	 * Bean property getter:  <property>$ref</property>.
@@ -652,9 +568,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Beanp("$ref")
-	public String getRef() {
-		return ref;
-	}
+	public String getRef() { return ref; }
 
 	/**
 	 * Bean property getter:  <property>required</property>.
@@ -664,57 +578,46 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getRequired() {
-		return required;
-	}
+	public List<String> getRequired() { return required; }
 
 	/**
 	 * Bean property getter:  <property>title</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getTitle() {
-		return title;
-	}
+	public String getTitle() { return title; }
 
 	/**
 	 * Bean property getter:  <property>type</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getType() {
-		return type;
-	}
+	public String getType() { return type; }
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
-	}
+	public Boolean getUniqueItems() { return uniqueItems; }
 
 	/**
 	 * Bean property getter:  <property>WriteOnly</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getWriteOnly() {
-		return writeOnly;
-	}
+	public Boolean getWriteOnly() { return writeOnly; }
 
 	/**
 	 * Bean property getter:  <property>xml</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Xml getXml() {
-		return xml;
-	}
+	public Xml getXml() { return xml; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(ref != null, "$ref")
 			.addIf(additionalProperties != null, "additionalProperties")
@@ -753,6 +656,7 @@ public class SchemaInfo extends OpenApiElement {
 			.addIf(writeOnly != null, "writeOnly")
 			.addIf(xml != null, "xml")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -1220,7 +1124,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public SchemaInfo setProperties(Map<String, SchemaInfo> value) {
+	public SchemaInfo setProperties(Map<String,SchemaInfo> value) {
 		properties = copyOf(value);
 		return this;
 	}

@@ -60,7 +60,7 @@ public class ParentPropertyAnnotation {
 	 * A collection of {@link ParentProperty @ParentProperty annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -107,8 +107,10 @@ public class ParentPropertyAnnotation {
 			postConstruct();
 		}
 	}
+
 	/** Default value */
 	public static final ParentProperty DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -117,11 +119,9 @@ public class ParentPropertyAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static ParentProperty copy(ParentProperty a, VarResolverSession r) {
-		return
-			create()
-			.on(r.resolve(a.on()))
-			.build();
+		return create().on(r.resolve(a.on())).build();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -130,6 +130,7 @@ public class ParentPropertyAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

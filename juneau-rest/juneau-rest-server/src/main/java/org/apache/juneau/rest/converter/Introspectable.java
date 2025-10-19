@@ -56,13 +56,15 @@ public class Introspectable implements RestConverter {
 	/**
 	 * Swagger parameters for this converter.
 	 */
-	public static final String SWAGGER_PARAMS= ""
+	// @formatter:off
+	public static final String SWAGGER_PARAMS = ""
 		+ "{in:'query',name:'invokeMethod',description:' The Java method name, optionally with arguments if necessary to differentiate between methods.',examples:{example:'toString'}},"
 		+ "{in:'query',name:'invokeArgs',description:'The arguments as an array.',examples:{example:'foo,bar'}}"
 	;
+	// @formatter:on
 
 	@Override /* Overridden from RestConverter */
-	@SuppressWarnings({"unchecked", "rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object convert(RestRequest req, Object o) throws InternalServerError {
 		String method = req.getQueryParam("invokeMethod").orElse(null);
 		String args = req.getQueryParam("invokeArgs").orElse(null);
@@ -75,10 +77,7 @@ public class Introspectable implements RestConverter {
 				o = swap.swap(bs, o);
 			return ObjectIntrospector.create(o, JsonParser.DEFAULT).invokeMethod(method, args);
 		} catch (Exception e) {
-			return new InternalServerError(e,
-				"Error occurred trying to invoke method: {0}",
-				e.getLocalizedMessage()
-			);
+			return new InternalServerError(e, "Error occurred trying to invoke method: {0}", e.getLocalizedMessage());
 		}
 	}
 }

@@ -35,13 +35,13 @@ import org.apache.juneau.rest.*;
  */
 public class ThemeMenuItem extends MenuItemWidget {
 
-	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original", "dark"};
+	private static final String[] BUILT_IN_STYLES = { "devops", "light", "original", "dark" };
 
 	@Override /* Overridden from MenuItemWidget */
 	public Div getContent(RestRequest req, RestResponse res) {
 		Div div = div();
 		for (String s : BUILT_IN_STYLES) {
-			java.net.URI uri = req.getUri(true, CollectionUtils.<String,Object>map("stylesheet","htdocs/themes/"+s+".css"));
+			java.net.URI uri = req.getUri(true, CollectionUtils.<String,Object>map("stylesheet", "htdocs/themes/" + s + ".css"));
 			div.children(a(uri, s), br());
 		}
 		return div;

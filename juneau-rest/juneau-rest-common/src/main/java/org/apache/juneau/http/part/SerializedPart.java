@@ -56,6 +56,7 @@ public class SerializedPart extends BasicPart {
 	public static SerializedPart of(String name, Object value) {
 		return new SerializedPart(name, value, null, null, null, false);
 	}
+
 	/**
 	 * Instantiates a new instance of this object.
 	 *
@@ -68,6 +69,7 @@ public class SerializedPart extends BasicPart {
 	public static SerializedPart of(String name, Supplier<?> value) {
 		return new SerializedPart(name, value, null, null, null, false);
 	}
+
 	private final Object value;
 	private HttpPartType type;
 	private HttpPartSerializerSession serializer;

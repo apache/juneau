@@ -100,13 +100,13 @@ public class RestRequestArgs extends SimpleRestOperationArg {
 		if (paramInfo.isType(ResourceBundle.class))
 			return new RestRequestArgs(RestRequest::getMessages);
 		if (paramInfo.isType(RestRequest.class))
-			return new RestRequestArgs(x->x);
+			return new RestRequestArgs(x -> x);
 		if (paramInfo.isType(ServletInputStream.class))
 			return new RestRequestArgs(RestRequest::getInputStream);
 		if (paramInfo.isType(Swagger.class))
-			return new RestRequestArgs(x->x.getSwagger().orElse(null));
+			return new RestRequestArgs(x -> x.getSwagger().orElse(null));
 		if (paramInfo.isType(TimeZone.class))
-			return new RestRequestArgs(x->x.getTimeZone().orElse(null));
+			return new RestRequestArgs(x -> x.getTimeZone().orElse(null));
 		if (paramInfo.isType(UriContext.class))
 			return new RestRequestArgs(RestRequest::getUriContext);
 		if (paramInfo.isType(UriResolver.class))

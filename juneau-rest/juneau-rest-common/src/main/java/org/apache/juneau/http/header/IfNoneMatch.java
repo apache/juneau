@@ -144,6 +144,7 @@ public class IfNoneMatch extends BasicEntityTagsHeader {
 	public static IfNoneMatch of(Supplier<EntityTags> value) {
 		return value == null ? null : new IfNoneMatch(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

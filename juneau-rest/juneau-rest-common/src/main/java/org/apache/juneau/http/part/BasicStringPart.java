@@ -59,6 +59,7 @@ public class BasicStringPart extends BasicPart {
 			return null;
 		return new BasicStringPart(name, value);
 	}
+
 	private final String value;
 	private final Supplier<String> supplier;
 
@@ -106,9 +107,7 @@ public class BasicStringPart extends BasicPart {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return value();
-	}
+	public String getValue() { return value(); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

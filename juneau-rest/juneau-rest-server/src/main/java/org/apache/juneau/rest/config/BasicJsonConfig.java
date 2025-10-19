@@ -82,6 +82,7 @@ import org.apache.juneau.serializer.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
  * </ul>
  */
+// @formatter:off
 @Rest(
 
 	// Default serializers for all Java methods in the class.

@@ -59,6 +59,7 @@ public class BasicBooleanPart extends BasicPart {
 			return null;
 		return new BasicBooleanPart(name, value);
 	}
+
 	private final Boolean value;
 	private final Supplier<Boolean> supplier;
 
@@ -122,9 +123,7 @@ public class BasicBooleanPart extends BasicPart {
 	}
 
 	@Override /* Overridden from NameValuePair */
-	public String getValue() {
-		return Utils.s(value());
-	}
+	public String getValue() { return Utils.s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

@@ -38,7 +38,7 @@ public class XmlConfigurationExample {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		Pojo aPojo = new Pojo("a","<pojo>");
+		Pojo aPojo = new Pojo("a", "<pojo>");
 
 		/**
 		 * Xml Serializers can be configured using properties defined in XmlSerializer.
@@ -52,7 +52,7 @@ public class XmlConfigurationExample {
 		// the output will be padded with spaces after format characters.
 		System.out.println(withWhitespace);
 
-		HashMap<String, List<Pojo>> values = new HashMap<>();
+		HashMap<String,List<Pojo>> values = new HashMap<>();
 		PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
 		//Produces
@@ -67,7 +67,7 @@ public class XmlConfigurationExample {
 		// the output will add default name space to the xml document root.
 		System.out.println(nspaceToRoot);
 
-		Pojo nPojo = new Pojo("a",null);
+		Pojo nPojo = new Pojo("a", null);
 
 		//Produces
 		//<object><id>a</id></object>
@@ -77,8 +77,7 @@ public class XmlConfigurationExample {
 
 		//Produces
 		//<object xmlns="http://www.pierobon.org/iis/review1.htm.html#one"><name>&lt;pojo&gt;</name><id>a</id></object>
-		String dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace(Namespace.create("http://www.pierobon.org" +
-			"/iis/review1.htm.html#one")).addNamespaceUrisToRoot().build()
+		String dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace(Namespace.create("http://www.pierobon.org" + "/iis/review1.htm.html#one")).addNamespaceUrisToRoot().build()
 			.serialize(aPojo);
 		// the output will have new default namespace added.
 		System.out.println(dNamsSpace);

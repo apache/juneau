@@ -41,7 +41,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class NotModified extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -94,6 +94,7 @@ public class NotModified extends BasicHttpResponse {
 	public NotModified copy() {
 		return new NotModified(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public NotModified setContent(HttpEntity value) {
 		super.setContent(value);

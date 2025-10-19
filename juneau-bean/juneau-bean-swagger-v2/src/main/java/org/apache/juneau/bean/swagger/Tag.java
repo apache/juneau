@@ -71,9 +71,7 @@ import org.apache.juneau.internal.*;
  */
 public class Tag extends SwaggerElement {
 
-	private String
-		name,
-		description;
+	private String name, description;
 	private ExternalDocumentation externalDocs;
 
 	/**
@@ -102,6 +100,7 @@ public class Tag extends SwaggerElement {
 	public Tag copy() {
 		return new Tag(this);
 	}
+
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
@@ -121,9 +120,7 @@ public class Tag extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
@@ -133,9 +130,7 @@ public class Tag extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
+	public ExternalDocumentation getExternalDocs() { return externalDocs; }
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -145,17 +140,17 @@ public class Tag extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(description != null, "description")
 			.addIf(externalDocs != null, "externalDocs")
 			.addIf(name != null, "name")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

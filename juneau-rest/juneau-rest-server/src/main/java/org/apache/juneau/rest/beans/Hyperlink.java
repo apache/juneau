@@ -61,6 +61,7 @@ public class Hyperlink extends A {
 	public static Hyperlink create(Object href, Object...children) {
 		return new Hyperlink(href, children);
 	}
+
 	/**
 	 * Creates an empty {@link A} element.
 	 */

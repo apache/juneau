@@ -123,7 +123,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -149,7 +148,6 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	public static <E> ListAssertion<E> create(Stream<E> value) {
 		return new ListAssertion<>(value == null ? null : value.toList());
 	}
-
 
 	/**
 	 * Constructor.

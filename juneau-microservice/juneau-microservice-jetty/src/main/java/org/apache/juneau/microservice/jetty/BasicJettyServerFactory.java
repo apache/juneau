@@ -36,7 +36,8 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 
 	@Override
 	public Server create(String jettyXml) throws Exception {
-	    Objects.requireNonNull(jettyXml, "jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");
+		Objects.requireNonNull(jettyXml,
+			"jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");
 		File f = FileUtils.createTempFile("jetty.xml");
 		try (Reader r = new StringReader(jettyXml); Writer w = new FileWriter(f)) {
 			IOUtils.pipe(r, w);

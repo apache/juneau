@@ -87,6 +87,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addRootType() {
 			super.addRootType();
@@ -589,13 +590,13 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -729,6 +730,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 	/** Default serializer, all default settings.*/
 	public static final CsvSerializer DEFAULT = new CsvSerializer(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -737,6 +739,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	private final Map<ClassMeta<?>,CsvClassMeta> csvClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,CsvBeanPropertyMeta> csvBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -770,6 +773,7 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 		}
 		return m;
 	}
+
 	@Override /* Overridden from CsvMetaProvider */
 	public CsvClassMeta getCsvClassMeta(ClassMeta<?> cm) {
 		CsvClassMeta m = csvClassMetas.get(cm);
@@ -781,7 +785,5 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 	}
 
 	@Override /* Overridden from Context */
-	public CsvSerializerSession getSession() {
-		return createSession().build();
-	}
+	public CsvSerializerSession getSession() { return createSession().build(); }
 }

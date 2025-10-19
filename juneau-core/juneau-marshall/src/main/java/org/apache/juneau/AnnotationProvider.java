@@ -40,13 +40,16 @@ public interface AnnotationProvider {
 	/**
 	 * Default metadata provider.
 	 */
-	@SuppressWarnings("unchecked") AnnotationProvider DEFAULT = new AnnotationProvider() {
+	@SuppressWarnings("unchecked")
+	AnnotationProvider DEFAULT = new AnnotationProvider() {
 
+		// @formatter:off
 		private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Class::getAnnotationsByType);
 		private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Class::getDeclaredAnnotationsByType);
 		private final TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Method::getAnnotationsByType);
 		private final TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Field::getAnnotationsByType);
 		private final TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Constructor::getAnnotationsByType);
+		// @formatter:on
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {

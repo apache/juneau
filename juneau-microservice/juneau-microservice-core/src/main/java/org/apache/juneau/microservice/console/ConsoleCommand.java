@@ -126,9 +126,7 @@ public abstract class ConsoleCommand {
 	 * 	The localized details of the command.
 	 * 	<br>Can be <jk>null</jk> if there is no additional description.
 	 */
-	public String getDescription() {
-		return null;
-	}
+	public String getDescription() { return null; }
 
 	/**
 	 * Returns localized examples of the command.
@@ -140,9 +138,7 @@ public abstract class ConsoleCommand {
 	 * 	The localized examples of the command.
 	 * 	<br>Can be <jk>null</jk> if there is no examples.
 	 */
-	public String getExamples() {
-		return null;
-	}
+	public String getExamples() { return null; }
 
 	/**
 	 * Returns a one-line localized description of the command.
@@ -154,9 +150,7 @@ public abstract class ConsoleCommand {
 	 * 	The localized description of the command.
 	 * 	<br>Can be <jk>null</jk> if there is no information.
 	 */
-	public String getInfo() {
-		return null;
-	}
+	public String getInfo() { return null; }
 
 	/**
 	 * Returns the name of the command.
@@ -181,7 +175,5 @@ public abstract class ConsoleCommand {
 	 *
 	 * @return The synopsis of the command.
 	 */
-	public String getSynopsis() {
-		return getName();
-	}
+	public String getSynopsis() { return getName(); }
 }

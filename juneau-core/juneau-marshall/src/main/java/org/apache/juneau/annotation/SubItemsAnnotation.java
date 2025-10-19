@@ -43,10 +43,10 @@ public class SubItemsAnnotation {
 	 */
 	public static class Builder extends AnnotationBuilder<Builder> {
 
-		String $ref="", cf="", collectionFormat="", f="", format="", max="", maximum="", min="", minimum="", mo="", multipleOf="", p="", pattern="", t="", type="";
-		long maxItems=-1, maxLength=-1, maxi=-1, maxl=-1, minItems=-1, minLength=-1, mini=-1, minl=-1;
+		String $ref = "", cf = "", collectionFormat = "", f = "", format = "", max = "", maximum = "", min = "", minimum = "", mo = "", multipleOf = "", p = "", pattern = "", t = "", type = "";
+		long maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
 		boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
-		String[] _default={}, _enum={}, df={}, e={}, items={};
+		String[] _default = {}, _enum = {}, df = {}, e = {}, items = {};
 
 		/**
 		 * Constructor.
@@ -668,6 +668,7 @@ public class SubItemsAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
@@ -677,6 +678,7 @@ public class SubItemsAnnotation {
 	public static boolean empty(org.apache.juneau.annotation.SubItems a) {
 		return a == null || DEFAULT.equals(a);
 	}
+
 	/**
 	 * Merges the contents of the specified annotation into the specified generic map.
 	 *
@@ -693,6 +695,7 @@ public class SubItemsAnnotation {
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		Predicate<Boolean> nf = Utils::isTrue;
 		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		// @formatter:off
 		return om
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
 			.appendIf(ne, "default", joinnl(a._default(), a.df()))
@@ -713,5 +716,6 @@ public class SubItemsAnnotation {
 			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
 			.appendIf(ne, "$ref", a.$ref())
 		;
+		// @formatter:on
 	}
 }

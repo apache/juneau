@@ -65,7 +65,7 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target({FIELD,METHOD,TYPE})
+@Target({ FIELD, METHOD, TYPE })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ExampleAnnotation.Array.class)

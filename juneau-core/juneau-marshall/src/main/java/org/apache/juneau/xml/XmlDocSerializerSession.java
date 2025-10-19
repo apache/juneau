@@ -61,6 +61,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public XmlDocSerializerSession build() {
 			return new XmlDocSerializerSession(this);
@@ -174,6 +175,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -183,6 +185,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	public static Builder create(XmlDocSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	/**
 	 * Constructor.
 	 *
@@ -195,10 +198,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws java.io.IOException, SerializeException {
 		try (XmlWriter w = getXmlWriter(out)) {
-			w.append("<?xml")
-				.attr("version", "1.0")
-				.attr("encoding", "UTF-8")
-				.appendln("?>");
+			w.append("<?xml").attr("version", "1.0").attr("encoding", "UTF-8").appendln("?>");
 			w.flush();
 			super.doSerialize(out, o);
 		}

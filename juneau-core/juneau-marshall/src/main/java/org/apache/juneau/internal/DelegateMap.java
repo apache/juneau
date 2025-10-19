@@ -47,7 +47,7 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	@SuppressWarnings("unchecked")
 	public DelegateMap(T m, BeanSession session) {
 		this.classMeta = session.getClassMetaForObject(m);
-		m.forEach((k,v) -> put(Utils.s(k), v));
+		m.forEach((k, v) -> put(Utils.s(k), v));
 	}
 
 	/**
@@ -71,7 +71,5 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	}
 
 	@Override /* Overridden from Delegate */
-	public ClassMeta<T> getClassMeta() {
-		return classMeta;
-	}
+	public ClassMeta<T> getClassMeta() { return classMeta; }
 }

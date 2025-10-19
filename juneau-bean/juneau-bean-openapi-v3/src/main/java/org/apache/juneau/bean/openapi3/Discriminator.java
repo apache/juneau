@@ -135,9 +135,7 @@ public class Discriminator extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getMapping() {
-		return mapping;
-	}
+	public Map<String,String> getMapping() { return mapping; }
 
 	/**
 	 * Bean property getter:  <property>propertyName</property>.
@@ -147,9 +145,7 @@ public class Discriminator extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getPropertyName() {
-		return propertyName;
-	}
+	public String getPropertyName() { return propertyName; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -164,7 +160,7 @@ public class Discriminator extends OpenApiElement {
 	public Discriminator set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "mapping" -> setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "mapping" -> setMapping(mapBuilder(String.class, String.class).sparse().addAny(value).build());
 			case "propertyName" -> setPropertyName(Utils.s(value));
 			default -> {
 				super.set(property, value);

@@ -113,7 +113,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<Byte,byte[],R> {
 
-
 	/**
 	 * Chained constructor.
 	 *
@@ -149,7 +148,6 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	public FluentByteArrayAssertion(byte[] value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Converts this byte array to a base-64 encoded string and returns it as a new assertion.

@@ -64,8 +64,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 		/**
 		 * Constructor.
 		 */
-		protected Builder() {
-		}
+		protected Builder() {}
 
 		/**
 		 * Copy constructor.
@@ -83,14 +82,14 @@ public class SimplePartParser extends BaseHttpPartParser {
 
 		@Override /* Overridden from Context */
 		public Builder cache(Cache<HashKey,? extends Context> value) {
-				super.cache(value);
-				return this;
-			}
+			super.cache(value);
+			return this;
+		}
 
-	@Override
-	public Builder copy() {
-		return new Builder(this);
-	}
+		@Override
+		public Builder copy() {
+			return new Builder(this);
+		}
 	}
 
 	/** Reusable instance of {@link SimplePartParser}, all default settings. */
@@ -98,6 +97,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 
 	/** Reusable instance of {@link SimplePartParser}, all default settings. */
 	public static final SimplePartParserSession DEFAULT_SESSION = DEFAULT.getPartSession();
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -106,6 +106,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Constructor
 	 *
@@ -116,7 +117,5 @@ public class SimplePartParser extends BaseHttpPartParser {
 	}
 
 	@Override
-	public SimplePartParserSession getPartSession() {
-		return new SimplePartParserSession();
-	}
+	public SimplePartParserSession getPartSession() { return new SimplePartParserSession(); }
 }

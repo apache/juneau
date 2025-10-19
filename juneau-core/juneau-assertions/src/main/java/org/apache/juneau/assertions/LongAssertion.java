@@ -101,7 +101,6 @@ import org.apache.juneau.serializer.*;
  */
 public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -113,7 +112,6 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 	public static LongAssertion create(Long value) {
 		return new LongAssertion(value);
 	}
-
 
 	/**
 	 * Constructor.

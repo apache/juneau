@@ -68,6 +68,7 @@ public class JsonParserSession extends ReaderParserSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public JsonParserSession build() {
 			return new JsonParserSession(this);
@@ -171,7 +172,8 @@ public class JsonParserSession extends ReaderParserSession {
 	}
 
 	private static final AsciiSet decChars = AsciiSet.create().ranges("0-9").build();
-	private static final AsciiSet VALID_BARE_CHARS = AsciiSet.create().range('A','Z').range('a','z').range('0','9').chars("$_-.").build();
+	private static final AsciiSet VALID_BARE_CHARS = AsciiSet.create().range('A', 'Z').range('a', 'z').range('0', '9').chars("$_-.").build();
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -296,13 +298,11 @@ public class JsonParserSession extends ReaderParserSession {
 			else if (sType.getProxyInvocationHandler() != null)
 				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 			else
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''",
-						sType.getInnerClass().getName(), sType.getNotABeanReason());
+				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && ! isStrict()) {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else {
-			throw new ParseException(this, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''",
-				sType, (char)c);
+			throw new ParseException(this, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", sType, (char)c);
 		}
 
 		if (wrapperAttr != null)
@@ -359,11 +359,11 @@ public class JsonParserSession extends ReaderParserSession {
 
 	private <T> BeanMap<T> parseIntoBeanMap2(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
-		int S0=0; // Looking for outer {
-		int S1=1; // Looking for attrName start.
-		int S3=3; // Found attrName end, looking for :.
-		int S4=4; // Found :, looking for valStart: { [ " ' LITERAL.
-		int S5=5; // Looking for , or }
+		int S0 = 0; // Looking for outer {
+		int S1 = 1; // Looking for attrName start.
+		int S3 = 3; // Found attrName end, looking for :.
+		int S4 = 4; // Found :, looking for valStart: { [ " ' LITERAL.
+		int S5 = 5; // Looking for , or }
 
 		int state = S0;
 		String currAttr = "";
@@ -447,14 +447,12 @@ public class JsonParserSession extends ReaderParserSession {
 		return null; // Unreachable.
 	}
 
-	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l,
-			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
-		final int
-			S0=0, // Looking for outermost [
-			S1=1, // Looking for starting [ or { or " or ' or LITERAL or ]
-			S2=2, // Looking for , or ]
-			S3=3; // Looking for starting [ or { or " or ' or LITERAL
+		final int S0 = 0, // Looking for outermost [
+			S1 = 1, // Looking for starting [ or { or " or ' or LITERAL or ]
+			S2 = 2, // Looking for , or ]
+			S3 = 3; // Looking for starting [ or { or " or ' or LITERAL
 
 		int argIndex = 0;
 
@@ -511,18 +509,17 @@ public class JsonParserSession extends ReaderParserSession {
 		return null;  // Unreachable.
 	}
 
-	private <K,V> Map<K,V> parseIntoMap2(ParserReader r, Map<K,V> m, ClassMeta<K> keyType,
-			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <K,V> Map<K,V> parseIntoMap2(ParserReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
 
-		int S0=0; // Looking for outer {
-		int S1=1; // Looking for attrName start.
-		int S3=3; // Found attrName end, looking for :.
-		int S4=4; // Found :, looking for valStart: { [ " ' LITERAL.
-		int S5=5; // Looking for , or }
-		int S6=6; // Found , looking for attr start.
+		int S0 = 0; // Looking for outer {
+		int S1 = 1; // Looking for attrName start.
+		int S3 = 3; // Found attrName end, looking for :.
+		int S4 = 4; // Found :, looking for valStart: { [ " ' LITERAL.
+		int S5 = 5; // Looking for , or }
+		int S6 = 6; // Found , looking for attr start.
 
 		skipCommentsAndSpace(r);
 		int state = S0;
@@ -649,7 +646,7 @@ public class JsonParserSession extends ReaderParserSession {
 
 			// JSON doesn't allow '1.' or '0.e1'.
 			int i = s.indexOf('.');
-			if (i != -1 && (s.length() == (i+1) || ! decChars.contains(s.charAt(i+1))))
+			if (i != -1 && (s.length() == (i + 1) || ! decChars.contains(s.charAt(i + 1))))
 				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
 
 		}
@@ -666,11 +663,7 @@ public class JsonParserSession extends ReaderParserSession {
 		r.mark();
 		int qc = r.read();		// The quote character being used (" or ')
 		if (qc != '"' && isStrict()) {
-			String msg = (
-				qc == '\''
-				? "Invalid quote character \"{0}\" being used."
-				: "Did not find quote character marking beginning of string.  Character=\"{0}\""
-			);
+			String msg = (qc == '\'' ? "Invalid quote character \"{0}\" being used." : "Did not find quote character marking beginning of string.  Character=\"{0}\"");
 			throw new ParseException(this, msg, (char)qc);
 		}
 		final boolean isQuoted = (qc == '\'' || qc == '"');
@@ -683,6 +676,7 @@ public class JsonParserSession extends ReaderParserSession {
 			if (isStrict() && c <= 0x1F)
 				throw new ParseException(this, "Unescaped control character encountered: ''0x{0}''", String.format("%04X", c));
 			if (isInEscape) {
+				// @formatter:off
 				switch (c) {
 					case 'n': r.replace('\n'); break;
 					case 'r': r.replace('\r'); break;
@@ -705,6 +699,7 @@ public class JsonParserSession extends ReaderParserSession {
 					default:
 						throw new ParseException(this, "Invalid escape sequence in string.");
 				}
+				// @formatter:on
 				isInEscape = false;
 			} else {
 				if (c == '\\') {
@@ -754,7 +749,7 @@ public class JsonParserSession extends ReaderParserSession {
 				if ((c = r.read()) == '*')
 					if ((c = r.read()) == '/')
 						return;
-		//  "//" style comments
+			//  "//" style comments
 		} else if (c == '/') {
 			while (c != -1) {
 				c = r.read();
@@ -814,11 +809,10 @@ public class JsonParserSession extends ReaderParserSession {
 	 */
 	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws IOException, ParseException {
 
-		final int
-			S0=0, // Looking for outer '{'
-			S1=1, // Looking for attrName start.
-			S3=3, // Found attrName end, looking for :.
-			S4=4; // Found :, looking for valStart: { [ " ' LITERAL.
+		final int S0 = 0, // Looking for outer '{'
+			S1 = 1, // Looking for attrName start.
+			S3 = 3, // Found attrName end, looking for :.
+			S4 = 4; // Found :, looking for valStart: { [ " ' LITERAL.
 
 		int state = S0;
 		String currAttr = null;
@@ -834,8 +828,7 @@ public class JsonParserSession extends ReaderParserSession {
 				} else {
 					currAttr = parseFieldName(r.unread());
 					if (! currAttr.equals(wrapperAttr))
-						throw new ParseException(this,
-							"Expected to find wrapper attribute ''{0}'' but found attribute ''{1}''", wrapperAttr, currAttr);
+						throw new ParseException(this, "Expected to find wrapper attribute ''{0}'' but found attribute ''{1}''", wrapperAttr, currAttr);
 					state = S3;
 				}
 			} else if (state == S3) {
@@ -925,6 +918,7 @@ public class JsonParserSession extends ReaderParserSession {
 			return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
 		return Character.isWhitespace(cp);
 	}
+
 	/**
 	 * Validate end.
 	 *
@@ -933,9 +927,8 @@ public class JsonParserSession extends ReaderParserSession {
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.
 	 */
-	protected boolean isValidateEnd() {
-		return ctx.isValidateEnd();
-	}
+	protected boolean isValidateEnd() { return ctx.isValidateEnd(); }
+
 	/**
 	 * Returns <jk>true</jk> if the specified character is whitespace.
 	 *
@@ -949,7 +942,7 @@ public class JsonParserSession extends ReaderParserSession {
 	 */
 	protected boolean isWhitespace(int cp) {
 		if (isStrict())
-				return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
+			return cp <= 0x20 && (cp == 0x09 || cp == 0x0A || cp == 0x0D || cp == 0x20);
 		return Character.isWhitespace(cp);
 	}
 }

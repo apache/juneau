@@ -66,7 +66,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="body")
+@Bean(typeName = "body")
 public class Body extends HtmlElementMixed {
 
 	/**
@@ -84,7 +84,7 @@ public class Body extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Body _class(String value) {  // NOSONAR - Intentional naming.
+	public Body _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -118,6 +118,7 @@ public class Body extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Body contenteditable(Object value) {
 		super.contenteditable(value);

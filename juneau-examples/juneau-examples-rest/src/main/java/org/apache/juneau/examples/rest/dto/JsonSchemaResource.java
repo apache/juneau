@@ -75,9 +75,7 @@ public class JsonSchemaResource extends BasicRestServlet {
 	 *
 	 * @return The JSON-Schema document.
 	 */
-	@RestGet(
-		summary="Get the JSON-Schema document"
-	)
+	@RestGet(summary = "Get the JSON-Schema document")
 	public JsonSchema get() {
 		return schema;
 	}
@@ -112,10 +110,7 @@ public class JsonSchemaResource extends BasicRestServlet {
 	 * @param schema The new schema document.
 	 * @return The updated schema document.
 	 */
-	@RestPut(
-		summary="Overwrite the JSON-Schema document",
-		description="Replaces the schema document with the specified content, and then mirrors it as the response."
-	)
+	@RestPut(summary = "Overwrite the JSON-Schema document", description = "Replaces the schema document with the specified content, and then mirrors it as the response.")
 	public JsonSchema put(@Content JsonSchema schema) {
 		this.schema = schema;
 		return schema;

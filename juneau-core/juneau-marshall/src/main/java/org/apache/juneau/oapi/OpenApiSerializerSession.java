@@ -74,6 +74,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public OpenApiSerializerSession build() {
 			return new OpenApiSerializerSession(this);
@@ -193,6 +194,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			return this;
 		}
 	}
+
 	private static class OapiStringBuilder {
 		static final AsciiSet EQ = AsciiSet.of("=\\");
 		static final AsciiSet PIPE = AsciiSet.of("|\\");
@@ -250,6 +252,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			return this;
 		}
 	}
+
 	// Cache these for faster lookup
 	private static final BeanContext BC = BeanContext.DEFAULT;
 	private static final ClassMeta<byte[]> CM_ByteArray = BC.getClassMeta(byte[].class);
@@ -263,6 +266,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
 	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -429,7 +433,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 					Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
 					HttpPartSchema schema2 = schema;
 
-					toBeanMap(value).forEachValue(checkNull, (pMeta,key,val,thrown) -> {
+					toBeanMap(value).forEachValue(checkNull, (pMeta, key, val, thrown) -> {
 						if (thrown == null)
 							sb.append(key, serialize(partType, schema2.getProperty(key), val));
 					});
@@ -438,7 +442,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				} else if (type.isMap()) {
 					OapiStringBuilder sb = new OapiStringBuilder(cf);
 					HttpPartSchema schema2 = schema;
-					((Map<?,?>)value).forEach((k,v) -> sb.append(k, serialize(partType, schema2.getProperty(Utils.s(k)), v)));
+					((Map<?,?>)value).forEach((k, v) -> sb.append(k, serialize(partType, schema2.getProperty(Utils.s(k)), v)));
 					out = sb.toString();
 
 				} else {
@@ -488,13 +492,13 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		if (type.isBean()) {
 			Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
 			HttpPartSchema s2 = s;
-			toBeanMap(o).forEachValue(checkNull, (pMeta,key,val,thrown) -> {
+			toBeanMap(o).forEachValue(checkNull, (pMeta, key, val, thrown) -> {
 				if (thrown == null)
 					m.put(key, toObject(partType, val, s2.getProperty(key)));
 			});
 		} else {
 			HttpPartSchema s2 = s;
-			((Map<?,?>)o).forEach((k,v) -> m.put(Utils.s(k), toObject(partType, v, s2.getProperty(Utils.s(k)))));
+			((Map<?,?>)o).forEach((k, v) -> m.put(Utils.s(k), toObject(partType, v, s2.getProperty(Utils.s(k)))));
 		}
 		if (isSortMaps())
 			return sort(m);

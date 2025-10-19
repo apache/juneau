@@ -72,13 +72,13 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 
 		if (field == YEAR) {
 			if (isSupported(INSTANT_SECONDS))
-	    		return zdt().toLocalDate().getYear();
+				return zdt().toLocalDate().getYear();
 			return 1970;
 		}
 
 		if (field == MONTH_OF_YEAR) {
 			if (isSupported(INSTANT_SECONDS))
-	    		return zdt().toLocalDate().getMonthValue();
+				return zdt().toLocalDate().getMonthValue();
 			return 1;
 		}
 

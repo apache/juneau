@@ -95,6 +95,7 @@ public class Cache<K,V> {
 			return this;
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -107,6 +108,7 @@ public class Cache<K,V> {
 	public static <K,V> Builder<K,V> of(Class<K> key, Class<V> type) {
 		return new Builder<>(type);
 	}
+
 	private final int maxSize;
 	private final ConcurrentHashMap<K,V> cache;
 	private final AtomicInteger cacheHits = new AtomicInteger();
@@ -120,9 +122,10 @@ public class Cache<K,V> {
 		cache = builder.disabled ? null : new ConcurrentHashMap<>();
 		maxSize = builder.maxSize;
 		if (builder.logOnExit) {
-			SystemUtils.shutdownMessage(()->builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + cache.size());
+			SystemUtils.shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + cache.size());
 		}
 	}
+
 	/**
 	 * Retrieves the value with the specified key from this cache.
 	 *

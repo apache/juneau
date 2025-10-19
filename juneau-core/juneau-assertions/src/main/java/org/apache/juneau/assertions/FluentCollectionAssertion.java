@@ -105,7 +105,7 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collection<E>,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentCollectionAssertion.class, "Messages");
 	private static final String
 		MSG_collectionWasNotEmpty = MESSAGES.getString("collectionWasNotEmpty"),
@@ -114,7 +114,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		MSG_collectionContainedUnexpectedValue = MESSAGES.getString("collectionContainedUnexpectedValue"),
 		MSG_collectionWasEmpty = MESSAGES.getString("collectionWasEmpty"),
 		MSG_collectionDidNotHaveExpectedSize = MESSAGES.getString("collectionDidNotHaveExpectedSize");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -152,7 +152,6 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		this(null, value, returns);
 	}
 
-
 	/**
 	 * Returns an integer assertion on the size of this collection.
 	 *
@@ -176,10 +175,9 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentCollectionAssertion<E,R> asTransformed(Function<Collection<E>,Collection<E>> function) {  // NOSONAR - Intentional.
+	public FluentCollectionAssertion<E,R> asTransformed(Function<Collection<E>,Collection<E>> function) { // NOSONAR - Intentional.
 		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
 	}
-
 
 	/**
 	 * Asserts that all values in the collection pass the specified test.
@@ -192,7 +190,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		if (test == null)
 			return returns();
 		value().forEach(x -> {
-			if (! test.test(x))
+			if (!test.test(x))
 				throw error(MSG_collectionDidNotContainTestedValue, value());
 		});
 		return returns();
@@ -235,7 +233,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isEmpty() throws AssertionError {
-		if (! value().isEmpty())
+		if (!value().isEmpty())
 			throw error(MSG_collectionWasNotEmpty);
 		return returns();
 	}
@@ -316,7 +314,5 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return the size of this collection if it is not <jk>null</jk>.
 	 * @throws AssertionError If value was <jk>null</jk>.
 	 */
-	protected int getSize() throws AssertionError {
-		return value().size();
-	}
+	protected int getSize() throws AssertionError { return value().size(); }
 }

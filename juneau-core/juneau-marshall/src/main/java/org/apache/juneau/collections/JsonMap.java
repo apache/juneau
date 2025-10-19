@@ -112,9 +112,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		}
 
 		@Override
-		public boolean isUnmodifiable() {
-			return true;
-		}
+		public boolean isUnmodifiable() { return true; }
 
 		@Override
 		public Object put(String key, Object val) {
@@ -196,7 +194,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @param keyValuePairs A list of key/value pairs to add to this map.
 	 * @return A new map, never <jk>null</jk>.
 	 */
-	public static JsonMap filteredMap(Object... keyValuePairs) {
+	public static JsonMap filteredMap(Object...keyValuePairs) {
 		return new JsonMap(keyValuePairs).filtered();
 	}
 
@@ -224,7 +222,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @param keyValuePairs A list of key/value pairs to add to this map.
 	 * @return A new map, never <jk>null</jk>.
 	 */
-	public static JsonMap of(Object... keyValuePairs) {
+	public static JsonMap of(Object...keyValuePairs) {
 		return new JsonMap(keyValuePairs);
 	}
 
@@ -269,6 +267,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public static JsonMap ofText(CharSequence in, Parser p) throws ParseException {
 		return in == null ? null : new JsonMap(in, p);
 	}
+
 	/**
 	 * Construct a map initialized with the specified string.
 	 *
@@ -284,6 +283,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public static JsonMap ofText(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new JsonMap(in);
 	}
+
 	/*
 	 * If c1 is a child of c2 or the same as c2, returns c1.
 	 * Otherwise, returns c2.
@@ -293,6 +293,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			return c1;
 		return c2;
 	}
+
 	private transient BeanSession session;
 	private Map<String,Object> inner;
 
@@ -356,7 +357,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public JsonMap(Map<?,?> in) {
 		this();
 		if (in != null)
-			in.forEach((k,v) -> put(k.toString(), v));
+			in.forEach((k, v) -> put(k.toString(), v));
 	}
 
 	/**
@@ -369,12 +370,13 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param keyValuePairs A list of key/value pairs to add to this map.
 	 */
-	public JsonMap(Object... keyValuePairs) {
+	public JsonMap(Object...keyValuePairs) {
 		if (keyValuePairs.length % 2 != 0)
 			throw new IllegalArgumentException("Odd number of parameters passed into JsonMap(Object...)");
-		for (int i = 0; i < keyValuePairs.length; i+=2)
-			put(Utils.s(keyValuePairs[i]), keyValuePairs[i+1]);
+		for (int i = 0; i < keyValuePairs.length; i += 2)
+			put(Utils.s(keyValuePairs[i]), keyValuePairs[i + 1]);
 	}
+
 	/**
 	 * Construct a map initialized with the specified reader containing JSON.
 	 *
@@ -402,6 +404,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		parse(in, p);
 	}
+
 	/**
 	 * Appends all the entries in the specified map to this map.
 	 *
@@ -516,6 +519,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			return Utils.s(this);
 		return Json5Serializer.DEFAULT_READABLE.toString(this);
 	}
+
 	/**
 	 * Serialize this object to Simplified JSON using {@link Json5Serializer#DEFAULT}.
 	 *
@@ -570,7 +574,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @throws ClassCastException
 	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
 	 */
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings({ "unchecked" })
 	public <T> T cast(ClassMeta<T> cm) {
 		BeanSession bs = bs();
 		ClassMeta<?> c1 = bs.getBeanRegistry().getClassMeta((String)get(bs.getBeanTypePropertyName(cm)));
@@ -669,14 +673,10 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 							String key = keys.next();
 
 							@Override /* Overridden from Map.Entry */
-							public String getKey() {
-								return key;
-							}
+							public String getKey() { return key; }
 
 							@Override /* Overridden from Map.Entry */
-							public Object getValue() {
-								return get(key);
-							}
+							public Object getValue() { return get(key); }
 
 							@Override /* Overridden from Map.Entry */
 							public Object setValue(Object object) {
@@ -707,7 +707,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public JsonMap exclude(String...keys) {
 		JsonMap m2 = new JsonMap();
-		this.forEach((k,v) -> {
+		this.forEach((k, v) -> {
 			boolean exclude = false;
 			for (String kk : keys)
 				if (kk.equals(k))
@@ -732,6 +732,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return This object.
 	 */
 	public JsonMap filtered() {
+		// @formatter:off
 		return filtered(x -> ! (
 			x == null
 			|| (x instanceof Boolean && x.equals(false))
@@ -740,6 +741,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			|| (x instanceof Map && ((Map<?,?>)x).isEmpty())
 			|| (x instanceof Collection && ((Collection<?>)x).isEmpty())
 		));
+		// @formatter:on
 	}
 
 	/**
@@ -802,7 +804,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public Boolean findBoolean(String... keys) {
+	public Boolean findBoolean(String...keys) {
 		return find(Boolean.class, keys);
 	}
 
@@ -818,7 +820,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public Integer findInt(String... keys) {
+	public Integer findInt(String...keys) {
 		return find(Integer.class, keys);
 	}
 
@@ -849,7 +851,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public JsonList findList(String... keys) {
+	public JsonList findList(String...keys) {
 		return find(JsonList.class, keys);
 	}
 
@@ -865,7 +867,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public Long findLong(String... keys) {
+	public Long findLong(String...keys) {
 		return find(Long.class, keys);
 	}
 
@@ -881,7 +883,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * 	contains no mapping for any of the keys.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public JsonMap findMap(String... keys) {
+	public JsonMap findMap(String...keys) {
 		return find(JsonMap.class, keys);
 	}
 
@@ -896,7 +898,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
 	 * 	contains no mapping for any of the keys.
 	 */
-	public String findString(String... keys) {
+	public String findString(String...keys) {
 		return find(String.class, keys);
 	}
 
@@ -1053,9 +1055,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return The {@link BeanSession} currently associated with this map.
 	 */
-	public BeanSession getBeanSession() {
-		return session;
-	}
+	public BeanSession getBeanSession() { return session; }
 
 	/**
 	 * Returns the specified entry value converted to a {@link Boolean}.
@@ -1102,9 +1102,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return The first key in the map, or <jk>null</jk> if the map is empty.
 	 */
-	public String getFirstKey() {
-		return isEmpty() ? null : keySet().iterator().next();
-	}
+	public String getFirstKey() { return isEmpty() ? null : keySet().iterator().next(); }
 
 	/**
 	 * Returns the specified entry value converted to an {@link Integer}.
@@ -1372,7 +1370,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			if (o == null)
 				return null;
 			ObjectSwap swap = objectSwap;
-			return (T) swap.unswap(bs(), o, null);
+			return (T)swap.unswap(bs(), o, null);
 		} catch (ParseException e) {
 			throw e;
 		} catch (Exception e) {
@@ -1422,6 +1420,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		T t = bs().convertToType(o, type, args);
 		return t == null ? def : t;
 	}
+
 	/**
 	 * Returns a copy of this <c>JsonMap</c> with only the specified keys.
 	 *
@@ -1430,7 +1429,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public JsonMap include(String...keys) {
 		JsonMap m2 = new JsonMap();
-		this.forEach((k,v) -> {
+		this.forEach((k, v) -> {
 			for (String kk : keys)
 				if (kk.equals(k))
 					m2.put(kk, v);
@@ -1471,9 +1470,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @return <jk>true</jk> if this map is unmodifiable.
 	 */
-	public boolean isUnmodifiable() {
-		return false;
-	}
+	public boolean isUnmodifiable() { return false; }
 
 	/**
 	 * The opposite of {@link #removeAll(String...)}.
@@ -1509,6 +1506,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		s.addAll(super.keySet());
 		return s;
 	}
+
 	/**
 	 * Returns a modifiable copy of this map if it's unmodifiable.
 	 *
@@ -1612,7 +1610,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 *
 	 * @param keys The list of keys to remove.
 	 */
-	public void removeAll(String... keys) {
+	public void removeAll(String...keys) {
 		for (String k : keys)
 			remove(k);
 	}
@@ -1662,6 +1660,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public Integer removeInt(String key, Integer def) {
 		return removeWithDefault(key, def, Integer.class);
 	}
+
 	/**
 	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,String.<jk>class</jk>)</code>.
 	 *
@@ -1744,6 +1743,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			return this;
 		return new UnmodifiableJsonMap(this);
 	}
+
 	/**
 	 * Convenience method for serializing this map to the specified <c>Writer</c> using the
 	 * {@link JsonSerializer#DEFAULT} serializer.
@@ -1767,7 +1767,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	/*
 	 * Converts this map to the specified class type.
 	 */
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private <T> T cast2(ClassMeta<T> cm) {
 
 		BeanSession bs = bs();
@@ -1777,7 +1777,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			if (cm.isMap()) {
 				Map m2 = (cm.canCreateNewInstance() ? (Map)cm.newInstance() : new JsonMap(bs));
 				ClassMeta<?> kType = cm.getKeyType(), vType = cm.getValueType();
-				forEach((k,v) -> {
+				forEach((k, v) -> {
 					if (! k.equals(bs.getBeanTypePropertyName(cm))) {
 
 						// Attempt to recursively cast child maps.
@@ -1796,7 +1796,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 				BeanMap<? extends T> bm = bs.newBeanMap(cm.getInnerClass());
 
 				// Iterate through all the entries in the map and set the individual field values.
-				forEach((k,v) -> {
+				forEach((k, v) -> {
 					if (! k.equals(bs.getBeanTypePropertyName(cm))) {
 
 						// Attempt to recursively cast child maps.
@@ -1818,13 +1818,10 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			}
 
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e, cm.getInnerClass(),
-				"Error occurred attempting to cast to an object of type ''{0}''", cm.getInnerClass().getName());
+			throw new BeanRuntimeException(e, cm.getInnerClass(), "Error occurred attempting to cast to an object of type ''{0}''", cm.getInnerClass().getName());
 		}
 
-		throw new BeanRuntimeException(cm.getInnerClass(),
-			"Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.",
-			cm.getInnerClass().getName());
+		throw new BeanRuntimeException(cm.getInnerClass(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cm.getInnerClass().getName());
 	}
 
 	private ObjectRest getObjectRest() {

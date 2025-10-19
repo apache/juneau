@@ -41,7 +41,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class PartialContent extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -94,6 +94,7 @@ public class PartialContent extends BasicHttpResponse {
 	public PartialContent copy() {
 		return new PartialContent(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public PartialContent setContent(HttpEntity value) {
 		super.setContent(value);

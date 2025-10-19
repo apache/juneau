@@ -40,7 +40,7 @@ public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConc
 		Key(K1 k1, K2 k2) {
 			this.k1 = k1;
 			this.k2 = k2;
-			this.hashCode = 31*(k1 == null ? 0 : k1.hashCode()) + (k2 == null ? 0 : k2.hashCode());
+			this.hashCode = 31 * (k1 == null ? 0 : k1.hashCode()) + (k2 == null ? 0 : k2.hashCode());
 		}
 
 		@Override /* Overridden from Object */

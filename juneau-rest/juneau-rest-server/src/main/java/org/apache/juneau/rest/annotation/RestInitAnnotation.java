@@ -35,7 +35,7 @@ public class RestInitAnnotation {
 	 * A collection of {@link RestInit @RestInit annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -74,6 +74,7 @@ public class RestInitAnnotation {
 		}
 
 	}
+
 	private static class Impl extends TargetedAnnotationImpl implements RestInit {
 
 		Impl(Builder b) {
@@ -81,8 +82,10 @@ public class RestInitAnnotation {
 			postConstruct();
 		}
 	}
+
 	/** Default value */
 	public static final RestInit DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

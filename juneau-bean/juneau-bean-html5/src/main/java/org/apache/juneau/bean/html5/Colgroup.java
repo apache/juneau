@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -86,7 +87,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="colgroup")
+@Bean(typeName = "colgroup")
 public class Colgroup extends HtmlElementContainer {
 
 	/**
@@ -104,10 +105,11 @@ public class Colgroup extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Colgroup _class(String value) {  // NOSONAR - Intentional naming.
+	public Colgroup _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Colgroup accesskey(String value) {
 		super.accesskey(value);

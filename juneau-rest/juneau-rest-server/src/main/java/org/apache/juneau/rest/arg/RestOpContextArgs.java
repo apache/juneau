@@ -52,7 +52,7 @@ public class RestOpContextArgs extends SimpleRestOperationArg {
 		if (paramInfo.isType(ParserSet.class))
 			return new RestOpContextArgs(RestOpContext::getParsers);
 		if (paramInfo.isType(RestOpContext.class))
-			return new RestOpContextArgs(x->x);
+			return new RestOpContextArgs(x -> x);
 		if (paramInfo.isType(SerializerSet.class))
 			return new RestOpContextArgs(RestOpContext::getSerializers);
 		return null;

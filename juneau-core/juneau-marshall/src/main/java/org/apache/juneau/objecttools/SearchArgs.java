@@ -38,7 +38,8 @@ public class SearchArgs {
 	 * @return A new {@link SearchArgs} object.
 	 */
 	public static SearchArgs create(List<String> args) {
-		if (args == null) return null;
+		if (args == null)
+			return null;
 		return new SearchArgs(args);
 	}
 
@@ -49,9 +50,11 @@ public class SearchArgs {
 	 * @return A new {@link SearchArgs} object.
 	 */
 	public static SearchArgs create(String args) {
-		if (args == null) return null;
+		if (args == null)
+			return null;
 		return new SearchArgs(args);
 	}
+
 	private final Map<String,String> search = map();
 
 	/**
@@ -65,7 +68,7 @@ public class SearchArgs {
 			if (i == -1)
 				throw new PatternException("Invalid search terms: ''{0}''", searchArgs);
 			char c = s.charAt(i);
-			append(s.substring(0, i).trim(), s.substring(c == '=' ? i+1 : i).trim());
+			append(s.substring(0, i).trim(), s.substring(c == '=' ? i + 1 : i).trim());
 		});
 	}
 
@@ -101,7 +104,5 @@ public class SearchArgs {
 	 *
 	 * @return An unmodifiable map of query search terms.
 	 */
-	public Map<String,String> getSearch() {
-		return search;
-	}
+	public Map<String,String> getSearch() { return search; }
 }

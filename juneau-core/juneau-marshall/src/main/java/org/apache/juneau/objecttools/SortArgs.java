@@ -44,7 +44,8 @@ public class SortArgs {
 	 * @return A new {@link SortArgs} object.
 	 */
 	public static SortArgs create(List<String> args) {
-		if (args == null) return null;
+		if (args == null)
+			return null;
 		return new SortArgs(args);
 	}
 
@@ -62,9 +63,11 @@ public class SortArgs {
 	 * @return A new {@link SortArgs} object.
 	 */
 	public static SortArgs create(String args) {
-		if (args == null) return null;
+		if (args == null)
+			return null;
 		return new SortArgs(args);
 	}
+
 	private final Map<String,Boolean> sort;
 
 	/**
@@ -85,7 +88,7 @@ public class SortArgs {
 			boolean isDesc = false;
 			if (endsWith(s, '-', '+')) {
 				isDesc = endsWith(s, '-');
-				s = s.substring(0, s.length()-1);
+				s = s.substring(0, s.length() - 1);
 			}
 			sort.put(s, isDesc);
 		});
@@ -117,7 +120,5 @@ public class SortArgs {
 	 *
 	 * @return An unmodifiable ordered map of sort columns and directions.
 	 */
-	public Map<String,Boolean> getSort() {
-		return sort;
-	}
+	public Map<String,Boolean> getSort() { return sort; }
 }

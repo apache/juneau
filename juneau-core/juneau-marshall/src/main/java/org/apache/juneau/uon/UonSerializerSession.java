@@ -76,6 +76,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		public UonSerializerSession build() {
 			return new UonSerializerSession(this);
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
@@ -195,6 +196,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -204,6 +206,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	public static Builder create(UonSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final UonSerializer ctx;
 	private final boolean plainTextParams;
 
@@ -258,7 +261,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		}
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
-		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			ClassMeta<?> cMeta = pMeta.getClassMeta();
 
 			if (thrown != null)
@@ -275,7 +278,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		});
 
 		if (m.size() > 0)
-			out.cre(indent-1);
+			out.cre(indent - 1);
 		if (! plainTextParams)
 			out.append(')');
 
@@ -292,12 +295,12 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 
 		Flag addComma = Flag.create();
 		forEachEntry(c, x -> {
-			addComma.ifSet(()->out.append(',')).set();
+			addComma.ifSet(() -> out.append(',')).set();
 			out.cr(indent);
 			serializeAnything(out, x, elementType, "<iterator>", null);
 		});
 
-		addComma.ifSet(()->out.cre(indent-1));
+		addComma.ifSet(() -> out.cre(indent - 1));
 		if (! plainTextParams)
 			out.append(')');
 
@@ -314,14 +317,14 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 
 		Flag addComma = Flag.create();
 		forEachEntry(m, x -> {
-			addComma.ifSet(()->out.append(',')).set();
+			addComma.ifSet(() -> out.append(',')).set();
 			Object value = x.getValue();
 			Object key = generalize(x.getKey(), keyType);
 			out.cr(indent).appendObject(key, false).append('=');
 			serializeAnything(out, value, valueType, toString(key), null);
 		});
 
-		addComma.ifSet(()->out.cre(indent-1));
+		addComma.ifSet(() -> out.cre(indent - 1));
 
 		if (! plainTextParams)
 			out.append(')');
@@ -341,9 +344,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @return
 	 * 	Specifies the format to use for URL GET parameter keys and values.
 	 */
-	protected final ParamFormat getParamFormat() {
-		return ctx.getParamFormat();
-	}
+	protected final ParamFormat getParamFormat() { return ctx.getParamFormat(); }
 
 	/**
 	 * Quote character.
@@ -353,9 +354,8 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * 	The character used for quoting attributes and values.
 	 */
 	@Override
-	protected final char getQuoteChar() {
-		return ctx.getQuoteChar();
-	}
+	protected final char getQuoteChar() { return ctx.getQuoteChar(); }
+
 	/**
 	 * Converts the specified output target object to an {@link UonWriter}.
 	 *
@@ -381,9 +381,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * 	through reflection.
 	 */
 	@Override
-	protected final boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
+	protected final boolean isAddBeanTypes() { return ctx.isAddBeanTypes(); }
 
 	/**
 	 * Encode non-valid URI characters.
@@ -392,9 +390,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * @return
 	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
 	 */
-	protected final boolean isEncoding() {
-		return ctx.isEncoding();
-	}
+	protected final boolean isEncoding() { return ctx.isEncoding(); }
 
 	/**
 	 * Workhorse method.
@@ -473,20 +469,15 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 				serializeBeanMap(out, (BeanMap)o, typeName);
 			else
 				serializeMap(out, (Map)o, eType);
-		}
-		else if (sType.isCollection()) {
-			serializeCollection(out, (Collection) o, eType);
-		}
-		else if (sType.isArray()) {
+		} else if (sType.isCollection()) {
+			serializeCollection(out, (Collection)o, eType);
+		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
-		}
-		else if (sType.isReader()) {
+		} else if (sType.isReader()) {
 			pipe((Reader)o, out, SerializerSession::handleThrown);
-		}
-		else if (sType.isInputStream()) {
+		} else if (sType.isInputStream()) {
 			pipe((InputStream)o, out, SerializerSession::handleThrown);
-		}
-		else {
+		} else {
 			out.appendObject(o, false);
 		}
 

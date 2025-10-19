@@ -32,6 +32,7 @@ import org.apache.juneau.svl.*;
  */
 public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Static creator.
 	 *
@@ -71,6 +72,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	public static AnnotationWorkList of(VarResolverSession vrs, AnnotationList annotations) {
 		return create(vrs).add(annotations);
 	}
+
 	private final VarResolverSession vrs;
 
 	private AnnotationWorkList(VarResolverSession vrs) {
@@ -96,7 +98,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 * @return This object.
 	 */
 	public AnnotationWorkList add(AnnotationList annotations) {
-		annotations.sort().forEach(x ->  x.getApplies(vrs, y -> add(x, y)));
+		annotations.sort().forEach(x -> x.getApplies(vrs, y -> add(x, y)));
 		return this;
 	}
 }

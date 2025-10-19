@@ -110,7 +110,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<T,R> {
 
-
 	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = new HashMap<>();
 	static {
 		STRINGIFIERS.put(boolean.class, x -> Arrays.toString((boolean[])x));
@@ -123,6 +122,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		STRINGIFIERS.put(short.class, x -> Arrays.toString((short[])x));
 	}
 
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentPrimitiveArrayAssertion.class, "Messages");
 	static final String
 		MSG_objectWasNotAnArray = MESSAGES.getString("objectWasNotAnArray"),
@@ -134,7 +134,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		MSG_arrayContainedUnexpectedValue = MESSAGES.getString("arrayContainedUnexpectedValue"),
 		MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue"),
 		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -157,7 +157,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		super(creator, value, returns);
 		if (value != null) {
 			var c = value.getClass();
-			if (! (c.isArray() && c.getComponentType().isPrimitive()))
+			if (!(c.isArray() && c.getComponentType().isPrimitive()))
 				throw new BasicAssertionError(MSG_objectWasNotAnArray, value.getClass());
 		}
 	}
@@ -176,7 +176,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public FluentPrimitiveArrayAssertion(T value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Returns an object assertion on the item specified at the specified index.
@@ -211,10 +210,9 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
+	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) { // NOSONAR - Intentional.
 		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
-
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
@@ -228,7 +226,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		isSize(tests.length);
 		for (int i = 0, j = length2(); i < j; i++) {
 			var t = tests[i];
-			if (t != null && ! t.test(at(i)))
+			if (t != null && !t.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
@@ -244,7 +242,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public R isAll(Predicate<E> test) throws AssertionError {
 		Utils.assertArgNotNull("test", test);
 		for (int i = 0, j = length2(); i < j; i++)
-			if (! test.test(at(i)))
+			if (!test.test(at(i)))
 				throw error(MSG_arrayContainedNonMatchingValueAt, i, getFailureMessage(test, at(i)));
 		return returns();
 	}
@@ -301,7 +299,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public R isHas(E...entries) throws AssertionError {
 		Utils.assertArgNotNull("entries", entries);
 		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return is(p);
+		return is(p);
 	}
 
 	/**
@@ -376,7 +374,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	@Override
 	public String toString() {
 		if (valueIsNull())
-			return null;  // NOSONAR - Intentional.
+			return null; // NOSONAR - Intentional.
 		return STRINGIFIERS.get(value().getClass().getComponentType()).apply(value());
 	}
 

@@ -61,7 +61,7 @@ public class SoapXmlAnnotation {
 	 * A collection of {@link SoapXml @SoapXml annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -111,6 +111,7 @@ public class SoapXmlAnnotation {
 
 	/** Default value */
 	public static final SoapXml DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -119,12 +120,15 @@ public class SoapXmlAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static SoapXml copy(SoapXml a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.on(r.resolve(a.on()))
 			.onClass(a.onClass())
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -133,6 +137,7 @@ public class SoapXmlAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -142,6 +147,7 @@ public class SoapXmlAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

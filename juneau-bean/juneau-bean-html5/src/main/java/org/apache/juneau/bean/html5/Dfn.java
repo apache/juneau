@@ -80,7 +80,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="dfn")
+@Bean(typeName = "dfn")
 public class Dfn extends HtmlElementMixed {
 
 	/**
@@ -96,8 +96,9 @@ public class Dfn extends HtmlElementMixed {
 	public Dfn(Object...children) {
 		children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Dfn _class(String value) {  // NOSONAR - Intentional naming.
+	public Dfn _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

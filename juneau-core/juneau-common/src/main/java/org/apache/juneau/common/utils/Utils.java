@@ -17,6 +17,7 @@
 package org.apache.juneau.common.utils;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.io.*;
@@ -1778,13 +1779,13 @@ public class Utils {
 		if (s == null) throw illegalArg("String was null.");
 		if (isEmpty(s)) throw illegalArg("String was empty.");
 
-		final int
-			S1 = 1,  // Looking for '{'
-			S2 = 2;  // Found '{', looking for '}'
+		// S1: Looking for '{'
+		// S2: Found '{', looking for '}'
 
 		var start = -1;
 		var end = -1;
 		var state = S1;
+
 		var depth = 0;
 		var inEscape = false;
 
@@ -1865,11 +1866,10 @@ public class Utils {
 		if (! StringUtils.containsAny(s, ' ', '\t', '\'', '"'))
 			return new String[]{s};
 
-		final int
-			S1 = 1,  // Looking for start of token.
-			S2 = 2,  // Found ', looking for end '
-			S3 = 3,  // Found ", looking for end "
-			S4 = 4;  // Found non-whitespace, looking for end whitespace.
+		// S1: Looking for start of token.
+		// S2: Found ', looking for end '
+		// S3: Found ", looking for end "
+		// S4: Found non-whitespace, looking for end whitespace.
 
 		var state = S1;
 

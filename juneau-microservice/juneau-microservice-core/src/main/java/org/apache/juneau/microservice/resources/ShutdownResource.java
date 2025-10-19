@@ -28,10 +28,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * @serial exclude
  */
-@Rest(
-	path="/shutdown",
-	title="Shut down this resource"
-)
+@Rest(path = "/shutdown", title = "Shut down this resource")
 public class ShutdownResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -41,18 +38,16 @@ public class ShutdownResource extends BasicRestServlet {
 	 *
 	 * @return The string <js>"OK"</js>.
 	 */
-	@RestGet(path="/", description="Show contents of config file.")
+	@RestGet(path = "/", description = "Show contents of config file.")
 	public String shutdown() {
-		new Thread(
-			() -> {
-				try {
-					Thread.sleep(1000);
-					System.exit(0);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+		new Thread(() -> {
+			try {
+				Thread.sleep(1000);
+				System.exit(0);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		).start();
+		}).start();
 		return "OK";
 	}
 }

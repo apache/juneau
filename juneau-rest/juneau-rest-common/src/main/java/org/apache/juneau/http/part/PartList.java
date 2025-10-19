@@ -52,6 +52,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	public static final class Void extends PartList {
 		private static final long serialVersionUID = 1L;
 	}
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -102,16 +103,17 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @throws RuntimeException If odd number of parameters were specified.
 	 * @return A new instance.
 	 */
-	public static PartList ofPairs(String... pairs) {
+	public static PartList ofPairs(String...pairs) {
 		PartList x = new PartList();
 		if (pairs == null)
 			pairs = new String[0];
 		if (pairs.length % 2 != 0)
 			throw new IllegalArgumentException("Odd number of parameters passed into PartList.ofPairs()");
-		for (int i = 0; i < pairs.length; i+=2)
-			x.add(BasicPart.of(pairs[i], pairs[i+1]));
+		for (int i = 0; i < pairs.length; i += 2)
+			x.add(BasicPart.of(pairs[i], pairs[i + 1]));
 		return x;
 	}
+
 	private VarResolver varResolver;
 	boolean caseInsensitive;
 
@@ -199,6 +201,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	public PartList append(String name, Supplier<?> value) {
 		return append(createPart(name, value));
 	}
+
 	/**
 	 * Specifies that the parts in this list should be treated as case-sensitive.
 	 *
@@ -426,9 +429,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 *
 	 * @return An array containing all parts, never <jk>null</jk>.
 	 */
-	public NameValuePair[] getAll() {
-		return stream().toArray(NameValuePair[]::new);
-	}
+	public NameValuePair[] getAll() { return stream().toArray(NameValuePair[]::new); }
 
 	/**
 	 * Gets all of the parts with the given name.
@@ -850,6 +851,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		super.setUnmodifiable();
 		return this;
 	}
+
 	/**
 	 * Returns a stream of the parts in this list with the specified name.
 	 *
@@ -860,7 +862,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public Stream<NameValuePair> stream(String name) {
-		return stream().filter(x->eq(name, x.getName()));
+		return stream().filter(x -> eq(name, x.getName()));
 	}
 
 	/**
@@ -897,8 +899,9 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	private Supplier<Object> resolver(Object input) {
-		return ()->varResolver.resolve(Utils.s(unwrap(input)));
+		return () -> varResolver.resolve(Utils.s(unwrap(input)));
 	}
+
 	private static Object unwrap(Object o) {
 		while (o instanceof Supplier)
 			o = ((Supplier<?>)o).get();

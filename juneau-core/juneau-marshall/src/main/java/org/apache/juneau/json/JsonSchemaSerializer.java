@@ -108,6 +108,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addBeanTypesJson() {
 			super.addBeanTypesJson();
@@ -180,6 +181,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 			super.addRootType(value);
 			return this;
 		}
+
 		/**
 		 * <i><l>JsonSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested descriptions.
 		 *
@@ -526,10 +528,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				generatorBuilder.hashKey()
-			);
+			return HashKey.of(super.hashKey(), generatorBuilder.hashKey());
 		}
 
 		@Override /* Overridden from Builder */
@@ -761,13 +760,13 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -967,6 +966,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 
 	/** Default serializer, single quotes, simple mode, with whitespace. */
 	public static final JsonSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -975,6 +975,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final JsonSchemaGenerator generator;
 
 	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
@@ -1020,16 +1021,14 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		}
 		return m;
 	}
+
 	@Override /* Overridden from Context */
-	public JsonSchemaSerializerSession getSession() {
-		return createSession().build();
-	}
+	public JsonSchemaSerializerSession getSession() { return createSession().build(); }
 
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("generator", generator);
 	}
-	JsonSchemaGenerator getGenerator() {
-		return generator;
-	}
+
+	JsonSchemaGenerator getGenerator() { return generator; }
 }

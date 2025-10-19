@@ -127,7 +127,7 @@ public class SerializerPipe implements Closeable {
 		else if (output instanceof File)
 			outputStream = new BufferedOutputStream(new FileOutputStream((File)output));
 		else
-			throw new IOException("Cannot convert object of type "+className(output)+" to an OutputStream.");
+			throw new IOException("Cannot convert object of type " + className(output) + " to an OutputStream.");
 
 		return new NoCloseOutputStream(outputStream);
 	}
@@ -137,9 +137,7 @@ public class SerializerPipe implements Closeable {
 	 *
 	 * @return The raw output object passed into this session.
 	 */
-	public Object getRawOutput() {
-		return output;
-	}
+	public Object getRawOutput() { return output; }
 
 	/**
 	 * Wraps the specified output object inside a writer.
@@ -175,7 +173,7 @@ public class SerializerPipe implements Closeable {
 			else if (output instanceof StringBuilder)
 				writer = new StringBuilderWriter((StringBuilder)output);
 			else
-				throw new SerializeException("Cannot convert object of type "+className(output)+" to a Writer.");
+				throw new SerializeException("Cannot convert object of type " + className(output) + " to a Writer.");
 		} catch (FileNotFoundException e) {
 			throw cast(SerializeException.class, e);
 		}
@@ -192,9 +190,7 @@ public class SerializerPipe implements Closeable {
 	 *
 	 * @param outputStream The wrapped stream.
 	 */
-	public void setOutputStream(OutputStream outputStream) {
-		this.outputStream = outputStream;
-	}
+	public void setOutputStream(OutputStream outputStream) { this.outputStream = outputStream; }
 
 	/**
 	 * Overwrites the writer in this pipe.
@@ -205,7 +201,5 @@ public class SerializerPipe implements Closeable {
 	 *
 	 * @param writer The wrapped writer.
 	 */
-	public void setWriter(Writer writer) {
-		this.writer = writer;
-	}
+	public void setWriter(Writer writer) { this.writer = writer; }
 }

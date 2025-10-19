@@ -34,6 +34,7 @@ import org.apache.juneau.xml.*;
  */
 enum HtmlTag {
 
+	// @formatter:off
 	TABLE(1,"<table>"),
 	TR(2,"<tr>"),
 	TH(3,"<th>"),
@@ -68,6 +69,7 @@ enum HtmlTag {
 	xSP(-17, "</sp>"),
 	xP(-18, "</p>"),
 	xHTML(-19, "</html>");
+	// @formatter:on
 
 	static HtmlTag forEvent(ParserSession session, XMLStreamReader r) throws ParseException {
 		int et = r.getEventType();
@@ -91,8 +93,7 @@ enum HtmlTag {
 				t = (end ? xSP : SP);
 			else if (c == 't')
 				t = (end ? xSTRING : STRING);
-		}
-		else if (c == 'b') {
+		} else if (c == 'b') {
 			c = tag.charAt(1);
 			if (c == 'o')
 				t = (end ? xBOOLEAN : BOOLEAN);
@@ -100,8 +101,7 @@ enum HtmlTag {
 				t = (end ? xBR : BR);
 			else if (c == 's')
 				t = (end ? xBS : BS);
-		}
-		else if (c == 'a')
+		} else if (c == 'a')
 			t = (end ? xA : A);
 		else if (c == 'n') {
 			c = tag.charAt(2);
@@ -109,8 +109,7 @@ enum HtmlTag {
 				t = (end ? xNUMBER : NUMBER);
 			else if (c == 'l')
 				t = (end ? xNULL : NULL);
-		}
-		else if (c == 't') {
+		} else if (c == 't') {
 			c = tag.charAt(1);
 			if (c == 'a')
 				t = (end ? xTABLE : TABLE);
@@ -120,8 +119,7 @@ enum HtmlTag {
 				t = (end ? xTH : TH);
 			else if (c == 'd')
 				t = (end ? xTD : TD);
-		}
-		else if (c == 'f')
+		} else if (c == 'f')
 			t = (end ? xFF : FF);
 		else if (c == 'p')
 			t = (end ? xP : P);
@@ -129,6 +127,7 @@ enum HtmlTag {
 			t = (end ? xHTML : HTML);
 		return t;
 	}
+
 	private Map<Integer,HtmlTag> cache = new HashMap<>();
 
 	int id;

@@ -79,7 +79,7 @@ public class Thrown extends BasicCsvHeader {
 			this.value = value;
 			int i = value.indexOf(';');
 			this.className = urlDecode(i == -1 ? value.trim() : value.substring(0, i).trim());
-			this.message = urlDecode(i == -1 ? null : value.substring(i+1).trim());
+			this.message = urlDecode(i == -1 ? null : value.substring(i + 1).trim());
 		}
 
 		/**
@@ -98,24 +98,21 @@ public class Thrown extends BasicCsvHeader {
 		 *
 		 * @return The message portion of the header, or <jk>null</jk> if not there.
 		 */
-		public String getClassName() {
-			return className;
-		}
+		public String getClassName() { return className; }
 
 		/**
 		 * Returns the message portion of the header.
 		 *
 		 * @return The message portion of the header, or <jk>null</jk> if not there.
 		 */
-		public String getMessage() {
-			return message;
-		}
+		public String getMessage() { return message; }
 
 		@Override /* Overridden from Object */
 		public String toString() {
 			return value;
 		}
 	}
+
 	private static final long serialVersionUID = 1L;
 
 	private static final String NAME = "Thrown";
@@ -136,6 +133,7 @@ public class Thrown extends BasicCsvHeader {
 	public static Thrown of(String value) {
 		return value == null ? null : new Thrown(value);
 	}
+
 	/**
 	 * Static creator.
 	 *

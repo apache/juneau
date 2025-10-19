@@ -28,5 +28,4 @@ package org.apache.juneau.swap;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
  * </ul>
  */
-public interface Builder {
-}
+public interface Builder {}

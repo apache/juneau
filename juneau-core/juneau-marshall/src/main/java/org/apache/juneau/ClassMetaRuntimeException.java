@@ -46,7 +46,7 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
-	public ClassMetaRuntimeException(Class<?> c, String message, Object... args) {
+	public ClassMetaRuntimeException(Class<?> c, String message, Object...args) {
 		this(null, c, message, args);
 	}
 
@@ -86,7 +86,7 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public ClassMetaRuntimeException(Throwable cause, Class<?> c, String message, Object... args) {
+	public ClassMetaRuntimeException(Throwable cause, Class<?> c, String message, Object...args) {
 		super(cause, getMessage(cause, c, message), args);
 	}
 

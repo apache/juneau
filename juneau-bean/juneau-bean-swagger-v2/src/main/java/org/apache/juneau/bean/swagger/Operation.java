@@ -159,18 +159,11 @@ import org.apache.juneau.internal.*;
  */
 public class Operation extends SwaggerElement {
 
-	private String
-		summary,
-		description,
-		operationId;
+	private String summary, description, operationId;
 	private Boolean deprecated;
 	private ExternalDocumentation externalDocs;
-	private Set<String>
-		tags,
-		schemes;
-	private Set<MediaType>
-		consumes,
-		produces;
+	private Set<String> tags, schemes;
+	private Set<MediaType> consumes, produces;
 	private List<ParameterInfo> parameters;
 	private List<Map<String,List<String>>> security;
 	private Map<String,ResponseInfo> responses;
@@ -209,7 +202,7 @@ public class Operation extends SwaggerElement {
 			this.responses = null;
 		} else {
 			this.responses = map();
-			copyFrom.responses.forEach((k,v) -> this.responses.put(k, v.copy()));
+			copyFrom.responses.forEach((k, v) -> this.responses.put(k, v.copy()));
 		}
 
 		if (copyFrom.security == null) {
@@ -218,7 +211,7 @@ public class Operation extends SwaggerElement {
 			this.security = list();
 			copyFrom.security.forEach(x -> {
 				Map<String,List<String>> m2 = map();
-				x.forEach((k,v) -> m2.put(k, copyOf(v)));
+				x.forEach((k, v) -> m2.put(k, copyOf(v)));
 				this.security.add(m2);
 			});
 		}
@@ -239,6 +232,7 @@ public class Operation extends SwaggerElement {
 		consumes = setBuilder(consumes).sparse().addAll(values).build();
 		return this;
 	}
+
 	/**
 	 * Bean property fluent setter:  <property>consumes</property>.
 	 *
@@ -467,9 +461,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getConsumes() {
-		return consumes;
-	}
+	public Set<MediaType> getConsumes() { return consumes; }
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -479,9 +471,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
+	public Boolean getDeprecated() { return deprecated; }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -491,9 +481,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
@@ -503,9 +491,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
+	public ExternalDocumentation getExternalDocs() { return externalDocs; }
 
 	/**
 	 * Bean property getter:  <property>operationId</property>.
@@ -515,9 +501,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getOperationId() {
-		return operationId;
-	}
+	public String getOperationId() { return operationId; }
 
 	/**
 	 * Returns the parameter with the specified type and name.
@@ -535,6 +519,7 @@ public class Operation extends SwaggerElement {
 					return pi;
 		return null;
 	}
+
 	/**
 	 * Bean property getter:  <property>parameters</property>.
 	 *
@@ -558,9 +543,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<ParameterInfo> getParameters() {
-		return parameters;
-	}
+	public List<ParameterInfo> getParameters() { return parameters; }
 
 	/**
 	 * Bean property getter:  <property>produces</property>.
@@ -570,9 +553,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getProduces() {
-		return produces;
-	}
+	public Set<MediaType> getProduces() { return produces; }
 
 	/**
 	 * Returns the response info with the given status code.
@@ -603,9 +584,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ResponseInfo> getResponses() {
-		return responses;
-	}
+	public Map<String,ResponseInfo> getResponses() { return responses; }
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
@@ -615,9 +594,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getSchemes() {
-		return schemes;
-	}
+	public Set<String> getSchemes() { return schemes; }
 
 	/**
 	 * Bean property getter:  <property>security</property>.
@@ -627,9 +604,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Map<String,List<String>>> getSecurity() {
-		return security;
-	}
+	public List<Map<String,List<String>>> getSecurity() { return security; }
 
 	/**
 	 * Bean property getter:  <property>summary</property>.
@@ -639,9 +614,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getSummary() {
-		return summary;
-	}
+	public String getSummary() { return summary; }
 
 	/**
 	 * Bean property getter:  <property>tags</property>.
@@ -652,9 +625,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getTags() {
-		return tags;
-	}
+	public Set<String> getTags() { return tags; }
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -664,12 +635,11 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>false</jk> if it is not set.
 	 */
-	public boolean isDeprecated() {
-		return deprecated != null && deprecated;
-	}
+	public boolean isDeprecated() { return deprecated != null && deprecated; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
+		// @formatter:off
 		var s = setBuilder(String.class)
 			.addIf(consumes != null, "consumes")
 			.addIf(deprecated != null, "deprecated")
@@ -684,6 +654,7 @@ public class Operation extends SwaggerElement {
 			.addIf(summary != null, "summary")
 			.addIf(tags != null, "tags")
 			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -699,9 +670,9 @@ public class Operation extends SwaggerElement {
 			case "operationId" -> setOperationId(Utils.s(value));
 			case "parameters" -> setParameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
 			case "produces" -> setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "responses" -> setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
+			case "responses" -> setResponses(mapBuilder(String.class, ResponseInfo.class).sparse().addAny(value).build());
 			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
-			case "security" -> setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
+			case "security" -> setSecurity((List)listBuilder(Map.class, String.class, List.class, String.class).sparse().addAny(value).build());
 			case "summary" -> setSummary(Utils.s(value));
 			case "tags" -> setTags(listBuilder(String.class).sparse().addAny(value).build());
 			default -> {

@@ -41,7 +41,7 @@ import java.util.function.*;
 public interface Tuple2Function<A,B,R> {
 
 	@SuppressWarnings("javadoc")
-	default <V> Tuple2Function<A,B,V> andThen(Function<? super R, ? extends V> after) {
+	default <V> Tuple2Function<A,B,V> andThen(Function<? super R,? extends V> after) {
 		return (A a, B b) -> after.apply(apply(a, b));
 	}
 

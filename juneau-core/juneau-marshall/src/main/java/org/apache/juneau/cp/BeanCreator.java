@@ -132,10 +132,9 @@ public class BeanCreator<T> {
 			return executable;
 		}
 
-		boolean isPresent() {
-			return executable != null;
-		}
+		boolean isPresent() { return executable != null; }
 	}
+
 	/**
 	 * Shortcut for calling <c>BeanStore.INSTANCE.createBean(beanType)</c>.
 	 *
@@ -146,6 +145,7 @@ public class BeanCreator<T> {
 	public static <T> BeanCreator<T> of(Class<T> beanType) {
 		return BeanStore.INSTANCE.createBean(beanType);
 	}
+
 	private final BeanStore store;
 	private ClassInfo type;
 	private Object builder;
@@ -196,7 +196,7 @@ public class BeanCreator<T> {
 		do {
 			store.add((Class<T>)t, (T)value);
 			t = t.getSuperclass();
-		} while(t != null && ! t.equals(type));
+		} while (t != null && ! t.equals(type));
 		return this;
 	}
 
@@ -248,6 +248,7 @@ public class BeanCreator<T> {
 
 		// Look for getInstance(Builder).
 		if (builder != null) {
+			// @formatter:off
 			MethodInfo m = type.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
@@ -257,12 +258,14 @@ public class BeanCreator<T> {
 				&& x.hasNoAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
 			);
+			// @formatter:on
 			if (m != null)
 				return m.invoke(null, builder);
 		}
 
 		// Look for getInstance().
 		if (builder == null) {
+			// @formatter:off
 			MethodInfo m = type.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
@@ -271,6 +274,7 @@ public class BeanCreator<T> {
 				&& x.hasNoAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
 			);
+			// @formatter:on
 			if (m != null)
 				return m.invoke(null);
 		}
@@ -346,11 +350,13 @@ public class BeanCreator<T> {
 		if (found.isEmpty()) {
 			msg = "No public/protected constructors found";
 		} else if (found.get().equals("STATIC_CREATOR")) {
-			msg = "Static creator found but could not find prerequisites: " + type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+			msg = "Static creator found but could not find prerequisites: "
+				+ type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
 		} else if (found.get().equals("PUBLIC_CONSTRUCTOR")) {
 			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
 		} else {
-			msg = "Protected constructor found but could not find prerequisites: " + type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+			msg = "Protected constructor found but could not find prerequisites: "
+				+ type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
 		}
 		throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), msg);
 	}
@@ -372,7 +378,7 @@ public class BeanCreator<T> {
 	 * @return A supplier that returns the results of the {@link #run()} method.
 	 */
 	public Supplier<T> supplier() {
-		return ()->run();
+		return () -> run();
 	}
 
 	/**
@@ -399,6 +405,7 @@ public class BeanCreator<T> {
 	private String getMissingParams(ExecutableInfo ei) {
 		return store.getMissingParams(ei);
 	}
+
 	private Object[] getParams(ExecutableInfo ei) {
 		return store.getParams(ei);
 	}
@@ -412,10 +419,12 @@ public class BeanCreator<T> {
 	}
 
 	private static boolean isStaticCreateMethod(MethodInfo m, Class<?> type) {
+		// @formatter:off
 		return m.isStatic()
 			&& m.isNotDeprecated()
 			&& m.hasReturnType(type)
 			&& m.hasNoAnnotation(BeanIgnore.class)
 			&& (m.hasName("create") || m.hasName("builder"));
+		// @formatter:on
 	}
 }

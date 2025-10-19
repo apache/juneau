@@ -37,7 +37,7 @@ public class HtmlElementMixed extends HtmlElement {
 	private List<Object> children;
 
 	@Override /* Overridden from HtmlElement */
-	public HtmlElementMixed _class(String value) {  // NOSONAR - Intentional naming.
+	public HtmlElementMixed _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -100,6 +100,7 @@ public class HtmlElementMixed extends HtmlElement {
 		super.contenteditable(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementMixed dir(String value) {
 		super.dir(value);
@@ -116,11 +117,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * @throws InvalidDataConversionException If node is not the expected type.
 	 */
 	public <T> T getChild(Class<T> type, int index) {
-		return (
-			children == null || children.size() <= index || index < 0
-			? null
-			: ConverterUtils.toType(children.get(index), type)
-		);
+		return (children == null || children.size() <= index || index < 0 ? null : ConverterUtils.toType(children.get(index), type));
 	}
 
 	/**
@@ -167,11 +164,9 @@ public class HtmlElementMixed extends HtmlElement {
 	 *
 	 * @return The children of this element.
 	 */
-	@Xml(format=MIXED)
-	@Beanp(dictionary=HtmlBeanDictionary.class, name="c")
-	public List<Object> getChildren() {
-		return children;
-	}
+	@Xml(format = MIXED)
+	@Beanp(dictionary = HtmlBeanDictionary.class, name = "c")
+	public List<Object> getChildren() { return children; }
 
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementMixed hidden(Object value) {

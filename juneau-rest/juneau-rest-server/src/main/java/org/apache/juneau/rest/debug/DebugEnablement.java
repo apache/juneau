@@ -199,6 +199,7 @@ public abstract class DebugEnablement {
 			super(beanStore);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -208,6 +209,7 @@ public abstract class DebugEnablement {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final Enablement defaultEnablement;
 	private final ReflectionMap<Enablement> enablementMap;
 	private final Predicate<HttpServletRequest> conditionalPredicate;
@@ -274,11 +276,13 @@ public abstract class DebugEnablement {
 
 	@Override /* Overridden from Object */
 	public String toString() {
+		// @formatter:off
 		return filteredMap()
 			.append("defaultEnablement", defaultEnablement)
 			.append("enablementMap", enablementMap)
 			.append("conditionalPredicate", conditionalPredicate)
 			.asString();
+		// @formatter:on
 	}
 
 	/**

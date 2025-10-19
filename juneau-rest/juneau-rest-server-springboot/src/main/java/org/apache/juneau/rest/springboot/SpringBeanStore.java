@@ -84,6 +84,7 @@ public class SpringBeanStore extends BeanStore {
 		}
 		return Utils.opte();
 	}
+
 	@Override /* Overridden from BeanStore */
 	public SpringBeanStore removeBean(Class<?> beanType) {
 		super.removeBean(beanType);
@@ -98,11 +99,11 @@ public class SpringBeanStore extends BeanStore {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> c)  {
+	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> c) {
 		try {
 			Stream<BeanStoreEntry<T>> o = super.stream(c);
 			if (appContext.isPresent())
-				o = Stream.concat(o, appContext.get().getBeansOfType(c).entrySet().stream().map(x -> BeanStoreEntry.create(c, ()->x.getValue(), x.getKey())));
+				o = Stream.concat(o, appContext.get().getBeansOfType(c).entrySet().stream().map(x -> BeanStoreEntry.create(c, () -> x.getValue(), x.getKey())));
 			return o;
 		} catch (Exception e) {
 			e.printStackTrace();

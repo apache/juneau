@@ -68,8 +68,7 @@ public class VarList extends ArrayList<Object> {
 	/**
 	 * Constructor.
 	 */
-	protected VarList() {
-	}
+	protected VarList() {}
 
 	/**
 	 * Copy constructor.
@@ -106,6 +105,7 @@ public class VarList extends ArrayList<Object> {
 	 * @return This object.
 	 */
 	public VarList addDefault() {
+		// @formatter:off
 		return append(
 			SystemPropertiesVar.class,
 			EnvVariablesVar.class,
@@ -123,6 +123,7 @@ public class VarList extends ArrayList<Object> {
 			LenVar.class,
 			SubstringVar.class
 		);
+		// @formatter:on
 	}
 
 	/**

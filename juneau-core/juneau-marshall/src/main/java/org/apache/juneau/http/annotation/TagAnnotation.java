@@ -37,7 +37,7 @@ public class TagAnnotation {
 	public static class Builder extends AnnotationBuilder<Builder> {
 
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
-		String name="";
+		String name = "";
 
 		/**
 		 * Constructor.
@@ -101,8 +101,10 @@ public class TagAnnotation {
 			return name;
 		}
 	}
+
 	/** Default value */
 	public static final Tag DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

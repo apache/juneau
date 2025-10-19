@@ -41,10 +41,10 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({ParserConfigAnnotation.ParserApply.class,ParserConfigAnnotation.InputStreamParserApply.class,ParserConfigAnnotation.ReaderParserApply.class})
+@ContextApply({ ParserConfigAnnotation.ParserApply.class, ParserConfigAnnotation.InputStreamParserApply.class, ParserConfigAnnotation.ReaderParserApply.class })
 public @interface ParserConfig {
 
 	/**
@@ -71,6 +71,7 @@ public @interface ParserConfig {
 	 * @return The annotation value.
 	 */
 	String autoCloseStreams() default "";
+
 	/**
 	 * Binary input format.
 	 *
@@ -96,6 +97,7 @@ public @interface ParserConfig {
 	 * @return The annotation value.
 	 */
 	String binaryFormat() default "";
+
 	/**
 	 * Debug output lines.
 	 *
@@ -243,6 +245,7 @@ public @interface ParserConfig {
 	 * @return The annotation value.
 	 */
 	String strict() default "";
+
 	/**
 	 * Trim parsed strings.
 	 *

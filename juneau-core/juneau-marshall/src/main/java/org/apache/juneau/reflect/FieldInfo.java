@@ -56,6 +56,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 			return null;
 		return ClassInfo.of(f.getDeclaringClass()).getFieldInfo(f);
 	}
+
 	private final Field f;
 	private final ClassInfo declaringClass;
 	private volatile ClassInfo type;
@@ -93,6 +94,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 		setAccessible();
 		return this;
 	}
+
 	@Override
 	public int compareTo(FieldInfo o) {
 		return getName().compareTo(o.getName());
@@ -146,9 +148,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 *
 	 * @return Metadata about the declaring class.
 	 */
-	public ClassInfo getDeclaringClass() {
-		return declaringClass;
-	}
+	public ClassInfo getDeclaringClass() { return declaringClass; }
 
 	/**
 	 * Returns the full name of this field.
@@ -170,14 +170,13 @@ public class FieldInfo implements Comparable<FieldInfo> {
 		sb.append(".").append(getName());
 		return sb.toString();
 	}
+
 	/**
 	 * Returns the name of this field.
 	 *
 	 * @return The name of this field.
 	 */
-	public String getName() {
-		return f.getName();
-	}
+	public String getName() { return f.getName(); }
 
 	/**
 	 * Same as {@link #get(Object)} but wraps the results in an {@link Optional}.
@@ -198,7 +197,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 */
 	public ClassInfo getType() {
 		if (type == null) {
-			synchronized(this) {
+			synchronized (this) {
 				type = ClassInfo.of(f.getType());
 			}
 		}
@@ -375,76 +374,62 @@ public class FieldInfo implements Comparable<FieldInfo> {
 		}
 		return false;
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this field has the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this field has the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public boolean isDeprecated() {
-		return f.isAnnotationPresent(Deprecated.class);
-	}
+	public boolean isDeprecated() { return f.isAnnotationPresent(Deprecated.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this field doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this field doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public boolean isNotDeprecated() {
-		return ! f.isAnnotationPresent(Deprecated.class);
-	}
+	public boolean isNotDeprecated() { return ! f.isAnnotationPresent(Deprecated.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this field is not public.
 	 *
 	 * @return <jk>true</jk> if this field is not public.
 	 */
-	public boolean isNotPublic() {
-		return ! Modifier.isPublic(f.getModifiers());
-	}
+	public boolean isNotPublic() { return ! Modifier.isPublic(f.getModifiers()); }
+
 	/**
 	 * Returns <jk>true</jk> if this field is not static.
 	 *
 	 * @return <jk>true</jk> if this field is not static.
 	 */
-	public boolean isNotStatic() {
-		return ! Modifier.isStatic(f.getModifiers());
-	}
+	public boolean isNotStatic() { return ! Modifier.isStatic(f.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this field is not transient.
 	 *
 	 * @return <jk>true</jk> if this field is not transient.
 	 */
-	public boolean isNotTransient() {
-		return ! Modifier.isTransient(f.getModifiers());
-	}
+	public boolean isNotTransient() { return ! Modifier.isTransient(f.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this field is public.
 	 *
 	 * @return <jk>true</jk> if this field is public.
 	 */
-	public boolean isPublic() {
-		return Modifier.isPublic(f.getModifiers());
-	}
+	public boolean isPublic() { return Modifier.isPublic(f.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this field is static.
 	 *
 	 * @return <jk>true</jk> if this field is static.
 	 */
-	public boolean isStatic() {
-		return Modifier.isStatic(f.getModifiers());
-	}
+	public boolean isStatic() { return Modifier.isStatic(f.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this field is transient.
 	 *
 	 * @return <jk>true</jk> if this field is transient.
 	 */
-	public boolean isTransient() {
-		return Modifier.isTransient(f.getModifiers());
-	}
+	public boolean isTransient() { return Modifier.isTransient(f.getModifiers()); }
 
 	/**
 	 * Identifies if the specified visibility matches this field.

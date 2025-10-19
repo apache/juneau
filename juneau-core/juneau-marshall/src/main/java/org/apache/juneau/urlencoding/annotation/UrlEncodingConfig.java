@@ -34,10 +34,10 @@ import org.apache.juneau.urlencoding.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({UrlEncodingConfigAnnotation.SerializerApply.class,UrlEncodingConfigAnnotation.ParserApply.class})
+@ContextApply({ UrlEncodingConfigAnnotation.SerializerApply.class, UrlEncodingConfigAnnotation.ParserApply.class })
 public @interface UrlEncodingConfig {
 
 	/**

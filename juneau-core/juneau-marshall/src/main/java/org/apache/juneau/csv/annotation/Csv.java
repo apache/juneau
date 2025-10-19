@@ -39,7 +39,7 @@ import org.apache.juneau.csv.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,FIELD,METHOD})
+@Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(CsvAnnotation.Array.class)
@@ -133,7 +133,7 @@ public @interface Csv {
 	 * 	<li>A comma-delimited list of anything on this list.
 	 * </ul>
 	 *
-\	 * <h5 class='section'>See Also:</h5><ul>
+	\	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

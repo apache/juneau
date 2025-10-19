@@ -81,25 +81,19 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	 *
 	 * @return The namespace associated with this class, or <jk>null</jk> if no namespace is associated with it.
 	 */
-	public Namespace getNamespace() {
-		return namespace;
-	}
+	public Namespace getNamespace() { return namespace; }
 
 	/**
 	 * Returns the {@link Xml#childName() @Xml(childName)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
-	protected String getChildName() {
-		return childName;
-	}
+	protected String getChildName() { return childName; }
 
 	/**
 	 * Returns the {@link Xml#format() @Xml(format)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation, or {@link XmlFormat#DEFAULT} if not specified.
 	 */
-	protected XmlFormat getFormat() {
-		return format;
-	}
+	protected XmlFormat getFormat() { return format; }
 }

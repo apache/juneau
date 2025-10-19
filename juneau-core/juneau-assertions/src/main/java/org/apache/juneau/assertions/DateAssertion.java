@@ -112,7 +112,6 @@ import org.apache.juneau.serializer.*;
  */
 public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -124,7 +123,6 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 	public static DateAssertion create(Date value) {
 		return new DateAssertion(value);
 	}
-
 
 	/**
 	 * Constructor.

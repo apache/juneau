@@ -142,6 +142,7 @@ public class IfModifiedSince extends BasicDateHeader {
 	public static IfModifiedSince of(ZonedDateTime value) {
 		return value == null ? null : new IfModifiedSince(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

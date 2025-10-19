@@ -176,6 +176,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -187,6 +188,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 			super.autoCloseStreams();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder autoCloseStreams(boolean value) {
 			super.autoCloseStreams(value);
@@ -445,10 +447,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				validateEnd
-			);
+			return HashKey.of(super.hashKey(), validateEnd);
 		}
 
 		@Override /* Overridden from Builder */
@@ -584,13 +583,13 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -728,6 +727,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	public static final JsonParser DEFAULT = new JsonParser(create());
 	/** Default parser, all default settings.*/
 	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -736,6 +736,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final boolean validateEnd;
 
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
@@ -772,6 +773,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 		return m;
 	}
+
 	@Override /* Overridden from JsonMetaProvider */
 	public JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
 		JsonClassMeta m = jsonClassMetas.get(cm);
@@ -783,9 +785,8 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	}
 
 	@Override /* Overridden from Context */
-	public JsonParserSession getSession() {
-		return createSession().build();
-	}
+	public JsonParserSession getSession() { return createSession().build(); }
+
 	/**
 	 * Validate end.
 	 *
@@ -794,7 +795,5 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
 	 * 	the stream consists of only comments or whitespace.
 	 */
-	protected final boolean isValidateEnd() {
-		return validateEnd;
-	}
+	protected final boolean isValidateEnd() { return validateEnd; }
 }

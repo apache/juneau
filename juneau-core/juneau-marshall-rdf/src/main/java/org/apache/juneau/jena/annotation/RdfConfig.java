@@ -37,10 +37,10 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({RdfConfigAnnotation.SerializerApply.class,RdfConfigAnnotation.ParserApply.class})
+@ContextApply({ RdfConfigAnnotation.SerializerApply.class, RdfConfigAnnotation.ParserApply.class })
 public @interface RdfConfig {
 
 	/**
@@ -65,6 +65,7 @@ public @interface RdfConfig {
 	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
+
 	/**
 	 * Add XSI data types to non-<c>String</c> literals.
 	 *
@@ -669,6 +670,7 @@ public @interface RdfConfig {
 	 * @return The annotation value.
 	 */
 	String rdfxml_errorMode() default "";
+
 	/**
 	 * RDF/XML property: <c>iri_rules</c>.
 	 *
@@ -696,6 +698,7 @@ public @interface RdfConfig {
 	 * @return The annotation value.
 	 */
 	String rdfxml_iriRules() default "";
+
 	/**
 	 * RDF/XML property: <c>longId</c>.
 	 *

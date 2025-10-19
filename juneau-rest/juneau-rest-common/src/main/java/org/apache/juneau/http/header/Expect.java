@@ -106,6 +106,7 @@ public class Expect extends BasicStringHeader {
 	public static Expect of(Supplier<String> value) {
 		return value == null ? null : new Expect(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

@@ -194,7 +194,7 @@ public class AssertionArgs {
 	 * @param args The parameters to substitute into the message template.
 	 * @return This instance for method chaining.
 	 */
-	public AssertionArgs setMessage(String message, Object... args) {
+	public AssertionArgs setMessage(String message, Object...args) {
 		messageSupplier = fs(message, args);
 		return this;
 	}
@@ -235,18 +235,14 @@ public class AssertionArgs {
 	 *
 	 * @return An Optional containing the custom converter, or empty if using default behavior.
 	 */
-	protected Optional<BeanConverter> getBeanConverter() {
-		return ofNullable(beanConverter);
-	}
+	protected Optional<BeanConverter> getBeanConverter() { return ofNullable(beanConverter); }
 
 	/**
 	 * Gets the base message supplier for composition with assertion-specific messages.
 	 *
 	 * @return The configured message supplier, or null if no custom message was set.
 	 */
-	protected Supplier<String> getMessage() {
-		return messageSupplier;
-	}
+	protected Supplier<String> getMessage() { return messageSupplier; }
 
 	/**
 	 * Composes the final error message by combining custom and assertion-specific messages.

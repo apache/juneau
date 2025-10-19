@@ -63,7 +63,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="td")
+@Bean(typeName = "td")
 public class Td extends HtmlElementMixed {
 
 	/**
@@ -81,7 +81,7 @@ public class Td extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Td _class(String value) {  // NOSONAR - Intentional naming.
+	public Td _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -97,6 +97,7 @@ public class Td extends HtmlElementMixed {
 		super.attr(key, val);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Td attrUri(String key, Object val) {
 		super.attrUri(key, val);

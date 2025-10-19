@@ -95,7 +95,6 @@ import org.apache.juneau.serializer.*;
  */
 public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -107,7 +106,6 @@ public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 	public static BooleanAssertion create(Boolean value) {
 		return new BooleanAssertion(value);
 	}
-
 
 	/**
 	 * Constructor.

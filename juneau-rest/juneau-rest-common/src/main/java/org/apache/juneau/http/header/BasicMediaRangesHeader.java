@@ -69,6 +69,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	public static BasicMediaRangesHeader of(String name, String value) {
 		return value == null ? null : new BasicMediaRangesHeader(name, value);
 	}
+
 	private final String stringValue;
 	private final MediaRanges value;
 	private final Supplier<MediaRanges> supplier;
@@ -146,9 +147,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return stringValue != null ? stringValue : Utils.s(value());
-	}
+	public String getValue() { return stringValue != null ? stringValue : Utils.s(value()); }
 
 	/**
 	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the

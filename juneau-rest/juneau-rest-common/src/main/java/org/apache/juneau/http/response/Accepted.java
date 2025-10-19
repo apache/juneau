@@ -41,7 +41,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class Accepted extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -94,6 +94,7 @@ public class Accepted extends BasicHttpResponse {
 	public Accepted copy() {
 		return new Accepted(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public Accepted setContent(HttpEntity value) {
 		super.setContent(value);

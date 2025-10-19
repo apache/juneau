@@ -63,7 +63,7 @@ public class PathAnnotation {
 	 * A collection of {@link Path @Path annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -88,7 +88,7 @@ public class PathAnnotation {
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String name="", value="", def="";
+		String name = "", value = "", def = "";
 
 		/**
 		 * Constructor.
@@ -178,7 +178,7 @@ public class PathAnnotation {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final String  name, value, def;
+		private final String name, value, def;
 		private final Schema schema;
 
 		Impl(Builder b) {
@@ -244,6 +244,7 @@ public class PathAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -253,6 +254,7 @@ public class PathAnnotation {
 	public static Builder create(String...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
@@ -262,6 +264,7 @@ public class PathAnnotation {
 	public static boolean empty(Path a) {
 		return a == null || DEFAULT.equals(a);
 	}
+
 	/**
 	 * Finds the default value from the specified list of annotations.
 	 *
@@ -273,6 +276,7 @@ public class PathAnnotation {
 		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
 		return n;
 	}
+
 	/**
 	 * Finds the name from the specified lists of annotations.
 	 *
@@ -284,8 +288,8 @@ public class PathAnnotation {
 	 */
 	public static Value<String> findName(ParamInfo pi) {
 		Value<String> n = Value.empty();
-		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.value()) , x -> n.set(x.value()));
-		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.name()) , x -> n.set(x.name()));
+		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
+		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
 		return n;
 	}
 }

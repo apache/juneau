@@ -62,39 +62,25 @@ public class ResponseContent implements HttpEntity {
 		public void consumeContent() throws IOException {}
 
 		@Override
-		public InputStream getContent() throws IOException, UnsupportedOperationException {
-			return new ByteArrayInputStream(new byte[0]);
-		}
+		public InputStream getContent() throws IOException, UnsupportedOperationException { return new ByteArrayInputStream(new byte[0]); }
 
 		@Override
-		public Header getContentEncoding() {
-			return ResponseHeader.NULL_HEADER;
-		}
+		public Header getContentEncoding() { return ResponseHeader.NULL_HEADER; }
 
 		@Override
-		public long getContentLength() {
-			return -1;
-		}
+		public long getContentLength() { return -1; }
 
 		@Override
-		public Header getContentType() {
-			return ResponseHeader.NULL_HEADER;
-		}
+		public Header getContentType() { return ResponseHeader.NULL_HEADER; }
 
 		@Override
-		public boolean isChunked() {
-			return false;
-		}
+		public boolean isChunked() { return false; }
 
 		@Override
-		public boolean isRepeatable() {
-			return false;
-		}
+		public boolean isRepeatable() { return false; }
 
 		@Override
-		public boolean isStreaming() {
-			return false;
-		}
+		public boolean isStreaming() { return false; }
 
 		@Override
 		public void writeTo(OutputStream outstream) throws IOException {}
@@ -125,6 +111,7 @@ public class ResponseContent implements HttpEntity {
 		this.parser = parser;
 		this.entity = Utils.firstNonNull(response.asHttpResponse().getEntity(), NULL_ENTITY);
 	}
+
 	/**
 	 * Same as {@link #as(Type,Type...)} except optimized for a non-parameterized class.
 	 *
@@ -269,6 +256,7 @@ public class ResponseContent implements HttpEntity {
 			if (parser != null) {
 				try (Closeable in = parser.isReaderParser() ? asReader() : asInputStream()) {
 
+					// @formatter:off
 					T t = parser
 						.createSession()
 						.properties(JsonMap.create().inner(request.getSessionProperties()))
@@ -277,6 +265,7 @@ public class ResponseContent implements HttpEntity {
 						.schema(schema)
 						.build()
 						.parse(in, type);
+					// @formatter:on
 
 					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
 					if (t == null && ! type.is(String.class)) {
@@ -400,6 +389,7 @@ public class ResponseContent implements HttpEntity {
 	public <T> T as(Type type, Type...args) throws RestCallException {
 		return as(getClassMeta(type, args));
 	}
+
 	/**
 	 * Same as {@link #asString()} but truncates the string to the specified length.
 	 *
@@ -518,7 +508,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
 	 * 	{@link Future Futures}.
 	 */
-	public <T> Future<T> asFuture(final Type type, final Type... args) throws RestCallException {
+	public <T> Future<T> asFuture(final Type type, final Type...args) throws RestCallException {
 		return client.getExecutorService().submit(() -> as(type, args));
 	}
 
@@ -578,11 +568,13 @@ public class ResponseContent implements HttpEntity {
 					response.close();
 					return true;
 				}
+
 				@Override
 				public boolean streamAbort(InputStream wrapped) throws IOException {
 					response.close();
 					return true;
 				}
+
 				@Override
 				public boolean streamClosed(InputStream wrapped) throws IOException {
 					response.close();
@@ -666,6 +658,7 @@ public class ResponseContent implements HttpEntity {
 	public Matcher asMatcher(String regex) throws RestCallException {
 		return asMatcher(regex, 0);
 	}
+
 	/**
 	 * Converts the contents of the response body to a string and then matches the specified pattern against it.
 	 *
@@ -767,7 +760,7 @@ public class ResponseContent implements HttpEntity {
 		// First look for "charset=" in Content-Type header of response.
 		if (ct != null)
 			if (ct.contains("charset="))
-				cs = ct.substring(ct.indexOf("charset=")+8).trim();
+				cs = ct.substring(ct.indexOf("charset=") + 8).trim();
 
 		return asReader(cs == null ? IOUtils.UTF8 : Charset.forName(cs));
 	}
@@ -1026,9 +1019,8 @@ public class ResponseContent implements HttpEntity {
 	 * @return Content stream of the entity.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException, UnsupportedOperationException {
-		return asInputStream();
-	}
+	public InputStream getContent() throws IOException, UnsupportedOperationException { return asInputStream(); }
+
 	/**
 	 * Obtains the Content-Encoding header, if known.
 	 *
@@ -1039,9 +1031,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return The <c>Content-Encoding</c> header for this entity, or <jk>null</jk> if the content encoding is unknown.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public ResponseHeader getContentEncoding() {
-		return new ResponseHeader("Content-Encoding", request, response, entity.getContentEncoding());
-	}
+	public ResponseHeader getContentEncoding() { return new ResponseHeader("Content-Encoding", request, response, entity.getContentEncoding()); }
 
 	/**
 	 * Tells the length of the content, if known.
@@ -1051,9 +1041,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	<br>If the content length is known but exceeds {@link Long#MAX_VALUE}, a negative number is returned.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public long getContentLength() {
-		return body != null ? body.length : entity.getContentLength();
-	}
+	public long getContentLength() { return body != null ? body.length : entity.getContentLength(); }
 
 	/**
 	 * Obtains the <c>Content-Type</c> header, if known.
@@ -1065,9 +1053,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return The <c>Content-Type</c> header for this entity, or <jk>null</jk> if the content type is unknown.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public ResponseHeader getContentType() {
-		return new ResponseHeader("Content-Type", request, response, entity.getContentType());
-	}
+	public ResponseHeader getContentType() { return new ResponseHeader("Content-Type", request, response, entity.getContentType()); }
 
 	/**
 	 * Tells about chunked encoding for this entity.
@@ -1082,9 +1068,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return <jk>true</jk> if chunked encoding is preferred for this entity, or <jk>false</jk> if it is not.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public boolean isChunked() {
-		return entity.isChunked();
-	}
+	public boolean isChunked() { return entity.isChunked(); }
 
 	/**
 	 * Tells if the entity is capable of producing its data more than once.
@@ -1100,9 +1084,7 @@ public class ResponseContent implements HttpEntity {
 	 * @return <jk>true</jk> if the entity is repeatable, <jk>false</jk> otherwise.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return cached || entity.isRepeatable();
-	}
+	public boolean isRepeatable() { return cached || entity.isRepeatable(); }
 
 	/**
 	 * Tells whether this entity depends on an underlying stream.
@@ -1114,9 +1096,8 @@ public class ResponseContent implements HttpEntity {
 	 * @return <jk>true</jk> if the entity content is streamed, <jk>false</jk> otherwise.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public boolean isStreaming() {
-		return cached ? false : entity.isStreaming();
-	}
+	public boolean isStreaming() { return cached ? false : entity.isStreaming(); }
+
 	/**
 	 * Specifies the parser to use for this body.
 	 *
@@ -1295,6 +1276,7 @@ public class ResponseContent implements HttpEntity {
 			return e.getLocalizedMessage();
 		}
 	}
+
 	/**
 	 * Writes the entity content out to the output stream.
 	 *
@@ -1309,9 +1291,7 @@ public class ResponseContent implements HttpEntity {
 		pipeTo(outstream);
 	}
 
-	private BeanContext getBeanContext() {
-		return parser == null ? BeanContext.DEFAULT : parser.getBeanContext();
-	}
+	private BeanContext getBeanContext() { return parser == null ? BeanContext.DEFAULT : parser.getBeanContext(); }
 
 	private <T> ClassMeta<T> getClassMeta(Class<T> c) {
 		return getBeanContext().getClassMeta(c);

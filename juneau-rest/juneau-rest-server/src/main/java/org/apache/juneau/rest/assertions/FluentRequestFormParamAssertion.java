@@ -132,6 +132,7 @@ import org.apache.juneau.serializer.*;
 public class FluentRequestFormParamAssertion<R> extends FluentStringAssertion<R> {
 
 	private final RequestFormParam value;
+
 	/**
 	 * Chained constructor.
 	 *
@@ -169,6 +170,7 @@ public class FluentRequestFormParamAssertion<R> extends FluentStringAssertion<R>
 	public FluentRequestFormParamAssertion(RequestFormParam value, R returns) {
 		this(null, value, returns);
 	}
+
 	/**
 	 * Converts the parameter value to a type using {@link RequestFormParam#as(Class)} and then returns the value as an any-object assertion.
 	 *
@@ -229,6 +231,7 @@ public class FluentRequestFormParamAssertion<R> extends FluentStringAssertion<R>
 	public FluentLongAssertion<R> asLong() {
 		return new FluentLongAssertion<>(this, value.asLong().orElse(null), returns());
 	}
+
 	/**
 	 * Converts this object assertion into a zoned-datetime assertion.
 	 *

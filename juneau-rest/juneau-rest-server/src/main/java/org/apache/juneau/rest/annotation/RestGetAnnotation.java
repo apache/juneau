@@ -58,8 +58,8 @@ public class RestGetAnnotation {
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends Serializer>[] serializers = new Class[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
-		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";
-		String[] defaultRequestQueryData={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, path={}, produces={};
+		String clientVersion = "", debug = "", defaultAccept = "", defaultCharset = "", rolesDeclared = "", roleGuard = "", summary = "", value = "";
+		String[] defaultRequestQueryData = {}, defaultRequestAttributes = {}, defaultRequestHeaders = {}, defaultResponseHeaders = {}, path = {}, produces = {};
 
 		/**
 		 * Constructor.
@@ -344,6 +344,7 @@ public class RestGetAnnotation {
 			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 		}
 	}
+
 	private static class Impl extends TargetedAnnotationImpl implements RestGet {
 
 		private final Class<? extends RestConverter>[] converters;
@@ -480,8 +481,10 @@ public class RestGetAnnotation {
 			return value;
 		}
 	}
+
 	/** Default value */
 	public static final RestGet DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

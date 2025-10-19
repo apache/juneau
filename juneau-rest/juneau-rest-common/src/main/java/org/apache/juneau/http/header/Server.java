@@ -96,6 +96,7 @@ public class Server extends BasicStringHeader {
 	public static Server of(Supplier<String> value) {
 		return value == null ? null : new Server(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

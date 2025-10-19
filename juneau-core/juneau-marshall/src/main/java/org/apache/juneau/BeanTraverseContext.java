@@ -97,6 +97,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 			super.apply(work);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
@@ -132,6 +133,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 			super.beanContext(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanDictionary(java.lang.Class<?>...values) {
 			super.beanDictionary(values);
@@ -387,6 +389,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				detectRecursions,
@@ -394,6 +397,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 				initialDepth,
 				maxDepth
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -627,13 +631,13 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -692,10 +696,9 @@ public abstract class BeanTraverseContext extends BeanContextable {
 			return this;
 		}
 	}
+
 	final int initialDepth, maxDepth;
-	final boolean
-		detectRecursions,
-		ignoreRecursions;
+	final boolean detectRecursions, ignoreRecursions;
 
 	private final boolean actualDetectRecursions;
 
@@ -717,6 +720,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 
 	@Override /* Overridden from Context */
 	public abstract Builder copy();
+
 	/**
 	 * Initial depth.
 	 *
@@ -724,9 +728,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 * @return
 	 * 	The initial indentation level at the root.
 	 */
-	public final int getInitialDepth() {
-		return initialDepth;
-	}
+	public final int getInitialDepth() { return initialDepth; }
 
 	/**
 	 * Max traversal depth.
@@ -736,9 +738,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
 	 *	<br>If this depth is exceeded, an exception is thrown.
 	 */
-	public final int getMaxDepth() {
-		return maxDepth;
-	}
+	public final int getMaxDepth() { return maxDepth; }
 
 	/**
 	 * Automatically detect POJO recursions.
@@ -747,9 +747,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
-	public final boolean isDetectRecursions() {
-		return actualDetectRecursions;
-	}
+	public final boolean isDetectRecursions() { return actualDetectRecursions; }
 
 	/**
 	 * Ignore recursion errors.
@@ -759,9 +757,8 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * 	<br>Otherwise, an exception is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 */
-	public final boolean isIgnoreRecursions() {
-		return ignoreRecursions;
-	}
+	public final boolean isIgnoreRecursions() { return ignoreRecursions; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("detectRecursions", detectRecursions, "maxDepth", maxDepth, "ignoreRecursions", ignoreRecursions, "initialDepth", initialDepth);

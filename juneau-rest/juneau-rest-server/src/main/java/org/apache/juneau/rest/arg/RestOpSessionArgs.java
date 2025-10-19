@@ -46,7 +46,7 @@ public class RestOpSessionArgs extends SimpleRestOperationArg {
 		if (paramInfo.isType(BeanStore.class))
 			return new RestOpSessionArgs(RestOpSession::getBeanStore);
 		if (paramInfo.isType(RestOpSession.class))
-			return new RestOpSessionArgs(x->x);
+			return new RestOpSessionArgs(x -> x);
 		return null;
 	}
 

@@ -96,6 +96,7 @@ public class Trailer extends BasicStringHeader {
 	public static Trailer of(Supplier<String> value) {
 		return value == null ? null : new Trailer(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

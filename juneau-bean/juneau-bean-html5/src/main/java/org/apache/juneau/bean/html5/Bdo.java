@@ -71,7 +71,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="bdo")
+@Bean(typeName = "bdo")
 public class Bdo extends HtmlElementMixed {
 
 	/**
@@ -88,8 +88,9 @@ public class Bdo extends HtmlElementMixed {
 	public Bdo(String dir, Object...children) {
 		dir(dir).children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Bdo _class(String value) {  // NOSONAR - Intentional naming.
+	public Bdo _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

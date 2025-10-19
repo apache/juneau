@@ -122,6 +122,7 @@ public class ContentLanguage extends BasicCsvHeader {
 	public static ContentLanguage of(Supplier<String[]> value) {
 		return value == null ? null : new ContentLanguage(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

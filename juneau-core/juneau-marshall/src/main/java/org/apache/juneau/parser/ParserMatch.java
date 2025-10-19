@@ -46,16 +46,12 @@ public class ParserMatch {
 	 *
 	 * @return The media type of the match.
 	 */
-	public MediaType getMediaType() {
-		return mediaType;
-	}
+	public MediaType getMediaType() { return mediaType; }
 
 	/**
 	 * Returns the parser that matched the HTTP <c>Content-Type</c> header value.
 	 *
 	 * @return The parser of the match.
 	 */
-	public Parser getParser() {
-		return parser;
-	}
+	public Parser getParser() { return parser; }
 }

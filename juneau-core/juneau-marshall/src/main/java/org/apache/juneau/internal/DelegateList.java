@@ -49,7 +49,5 @@ public class DelegateList<T extends Collection<?>> extends JsonList implements D
 	}
 
 	@Override /* Overridden from Delegate */
-	public ClassMeta<T> getClassMeta() {
-		return classMeta;
-	}
+	public ClassMeta<T> getClassMeta() { return classMeta; }
 }

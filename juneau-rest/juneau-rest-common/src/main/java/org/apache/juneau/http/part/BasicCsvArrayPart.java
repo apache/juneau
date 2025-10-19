@@ -64,6 +64,7 @@ public class BasicCsvArrayPart extends BasicPart {
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
+
 	private final String[] value;
 	private final Supplier<String[]> supplier;
 	private String stringValue;

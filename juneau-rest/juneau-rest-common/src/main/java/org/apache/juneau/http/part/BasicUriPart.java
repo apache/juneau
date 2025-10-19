@@ -59,6 +59,7 @@ public class BasicUriPart extends BasicPart {
 			return null;
 		return new BasicUriPart(name, value);
 	}
+
 	private final URI value;
 	private final Supplier<URI> supplier;
 

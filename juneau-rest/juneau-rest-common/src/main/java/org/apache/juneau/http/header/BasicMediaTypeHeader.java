@@ -71,6 +71,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	public static BasicMediaTypeHeader of(String name, String value) {
 		return value == null ? null : new BasicMediaTypeHeader(name, value);
 	}
+
 	private final MediaType value;
 	private final Supplier<MediaType> supplier;
 
@@ -156,18 +157,14 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 *
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
-	public List<NameValuePair> getParameters() {
-		return orElse(MediaType.EMPTY).getParameters();
-	}
+	public List<NameValuePair> getParameters() { return orElse(MediaType.EMPTY).getParameters(); }
 
 	/**
 	 * Returns the <js>'subType'</js> fragment of the <js>'type/subType'</js> string.
 	 *
 	 * @return The media subtype.
 	 */
-	public final String getSubType() {
-		return orElse(MediaType.EMPTY).getSubType();
-	}
+	public final String getSubType() { return orElse(MediaType.EMPTY).getSubType(); }
 
 	/**
 	 * Returns the subtypes broken down by fragments delimited by <js>"'"</js>.
@@ -178,23 +175,17 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 *
 	 * @return An unmodifiable list of subtype fragments.  Can be <jk>null</jk>.
 	 */
-	public final List<String> getSubTypes() {
-		return orElse(MediaType.EMPTY).getSubTypes();
-	}
+	public final List<String> getSubTypes() { return orElse(MediaType.EMPTY).getSubTypes(); }
 
 	/**
 	 * Returns the <js>'type'</js> fragment of the <js>'type/subType'</js> string.
 	 *
 	 * @return The media type.
 	 */
-	public final String getType() {
-		return orElse(MediaType.EMPTY).getType();
-	}
+	public final String getType() { return orElse(MediaType.EMPTY).getType(); }
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
+	public String getValue() { return Utils.s(value()); }
 
 	/**
 	 * Returns <jk>true</jk> if the subtype contains the specified <js>'+'</js> delimited subtype value.
@@ -213,9 +204,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 *
 	 * @return <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
 	 */
-	public final boolean isMetaSubtype() {
-		return orElse(MediaType.EMPTY).isMetaSubtype();
-	}
+	public final boolean isMetaSubtype() { return orElse(MediaType.EMPTY).isMetaSubtype(); }
 
 	/**
 	 * Given a list of media types, returns the best match for this <c>Content-Type</c> header.
@@ -319,7 +308,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 		if (value != null) {
 			int i = value.indexOf(',');
 			if (i != -1)
-				value = value.substring(i+1);
+				value = value.substring(i + 1);
 		}
 		return MediaType.of(value);
 	}

@@ -147,81 +147,63 @@ public class Components extends OpenApiElement {
 	 *
 	 * @return The callbacks map.
 	 */
-	public Map<String,Callback> getCallbacks() {
-		return callbacks;
-	}
+	public Map<String,Callback> getCallbacks() { return callbacks; }
 
 	/**
 	 * Returns the examples map.
 	 *
 	 * @return The examples map.
 	 */
-	public Map<String,Example> getExamples() {
-		return examples;
-	}
+	public Map<String,Example> getExamples() { return examples; }
 
 	/**
 	 * Returns the headers map.
 	 *
 	 * @return The headers map.
 	 */
-	public Map<String,HeaderInfo> getHeaders() {
-		return headers;
-	}
+	public Map<String,HeaderInfo> getHeaders() { return headers; }
 
 	/**
 	 * Returns the links map.
 	 *
 	 * @return The links map.
 	 */
-	public Map<String,Link> getLinks() {
-		return links;
-	}
+	public Map<String,Link> getLinks() { return links; }
 
 	/**
 	 * Returns the parameters map.
 	 *
 	 * @return The parameters map.
 	 */
-	public Map<String,Parameter> getParameters() {
-		return parameters;
-	}
+	public Map<String,Parameter> getParameters() { return parameters; }
 
 	/**
 	 * Returns the request bodies map.
 	 *
 	 * @return The request bodies map.
 	 */
-	public Map<String,RequestBodyInfo> getRequestBodies() {
-		return requestBodies;
-	}
+	public Map<String,RequestBodyInfo> getRequestBodies() { return requestBodies; }
 
 	/**
 	 * Returns the responses map.
 	 *
 	 * @return The responses map.
 	 */
-	public Map<String,Response> getResponses() {
-		return responses;
-	}
+	public Map<String,Response> getResponses() { return responses; }
 
 	/**
 	 * Returns the schemas map.
 	 *
 	 * @return The schemas map.
 	 */
-	public Map<String,SchemaInfo> getSchemas() {
-		return schemas;
-	}
+	public Map<String,SchemaInfo> getSchemas() { return schemas; }
 
 	/**
 	 * Returns the security schemes map.
 	 *
 	 * @return The security schemes map.
 	 */
-	public Map<String,SecuritySchemeInfo> getSecuritySchemes() {
-		return securitySchemes;
-	}
+	public Map<String,SecuritySchemeInfo> getSecuritySchemes() { return securitySchemes; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

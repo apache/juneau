@@ -100,7 +100,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="pre")
+@Bean(typeName = "pre")
 public class Pre extends HtmlElementMixed {
 
 	/**
@@ -116,11 +116,13 @@ public class Pre extends HtmlElementMixed {
 	public Pre(Object...children) {
 		children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public Pre _class(String value) {  // NOSONAR - Intentional naming.
+	public Pre _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Pre accesskey(String value) {
 		super.accesskey(value);
@@ -163,12 +165,10 @@ public class Pre extends HtmlElementMixed {
 		return this;
 	}
 
-	@Xml(format=MIXED_PWS)
-	@Beanp(dictionary=HtmlBeanDictionary.class, name="c")
+	@Xml(format = MIXED_PWS)
+	@Beanp(dictionary = HtmlBeanDictionary.class, name = "c")
 	@Override
-	public List<Object> getChildren() {
-		return super.getChildren();
-	}
+	public List<Object> getChildren() { return super.getChildren(); }
 
 	@Override /* Overridden from HtmlElement */
 	public Pre hidden(Object value) {

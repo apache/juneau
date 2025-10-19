@@ -33,10 +33,10 @@ import org.apache.juneau.plaintext.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({PlainTextConfigAnnotation.SerializerApply.class,PlainTextConfigAnnotation.ParserApply.class})
+@ContextApply({ PlainTextConfigAnnotation.SerializerApply.class, PlainTextConfigAnnotation.ParserApply.class })
 public @interface PlainTextConfig {
 
 	/**

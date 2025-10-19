@@ -34,7 +34,7 @@ import org.apache.juneau.annotation.*;
 
  * </ul>
  */
-@Bean(properties="type,properties")
+@Bean(properties = "type,properties")
 public class BeanDescription {
 	/**
 	 * Information about a bean property.
@@ -58,6 +58,7 @@ public class BeanDescription {
 			this.type = type.getSerializedClassMeta(null).toString();
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *

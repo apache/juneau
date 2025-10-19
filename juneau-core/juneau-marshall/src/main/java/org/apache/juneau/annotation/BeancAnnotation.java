@@ -60,7 +60,7 @@ public class BeancAnnotation {
 	 * A collection of {@link Beanc @Beanc annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -82,7 +82,7 @@ public class BeancAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationCBuilder<Builder> {
 
-		String properties="";
+		String properties = "";
 
 		/**
 		 * Constructor.
@@ -115,7 +115,7 @@ public class BeancAnnotation {
 
 	private static class Impl extends TargetedAnnotationImpl implements Beanc {
 
-		private String properties="";
+		private String properties = "";
 
 		Impl(Builder b) {
 			super(b);
@@ -128,8 +128,10 @@ public class BeancAnnotation {
 			return properties;
 		}
 	}
+
 	/** Default value */
 	public static final Beanc DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -138,12 +140,15 @@ public class BeancAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static Beanc copy(Beanc a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.on(r.resolve(a.on()))
 			.properties(r.resolve(a.properties()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -152,6 +157,7 @@ public class BeancAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

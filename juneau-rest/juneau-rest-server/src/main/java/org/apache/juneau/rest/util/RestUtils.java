@@ -46,6 +46,7 @@ import jakarta.servlet.http.*;
 @SuppressWarnings("resource")
 public class RestUtils {
 
+	// @formatter:off
 	private static Map<Integer,String> httpMsgs = mapBuilder(Integer.class, String.class)
 		.add(100, "Continue")
 		.add(101, "Switching Protocols")
@@ -89,6 +90,7 @@ public class RestUtils {
 		.add(505, "HTTP Version Not Supported")
 		.build()
 	;
+	// @formatter:on
 
 	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
@@ -146,7 +148,7 @@ public class RestUtils {
 			return false;
 		if (value.isEmpty())
 			return true;
-		if (value.charAt(value.length()-1) == '/' || value.charAt(0) != '/')
+		if (value.charAt(value.length() - 1) == '/' || value.charAt(0) != '/')
 			return false;
 		return true;
 	}
@@ -183,7 +185,7 @@ public class RestUtils {
 			return false;
 		if (value.isEmpty())
 			return true;
-		if (value.equals("/") || value.charAt(value.length()-1) == '/' || value.charAt(0) != '/')
+		if (value.equals("/") || value.charAt(value.length() - 1) == '/' || value.charAt(0) != '/')
 			return false;
 		return true;
 	}
@@ -214,8 +216,8 @@ public class RestUtils {
 		if (i == -1)
 			return null;
 		String name = s.substring(0, i).trim().toLowerCase(Locale.ENGLISH);
-		String val = s.substring(i+1).trim();
-		return new String[]{name,val};
+		String val = s.substring(i + 1).trim();
+		return new String[] { name, val };
 	}
 
 	/**
@@ -234,8 +236,8 @@ public class RestUtils {
 		if (i == -1)
 			return null;
 		String name = s.substring(0, i).trim();
-		String val = s.substring(i+1).trim();
-		return new String[]{name,val};
+		String val = s.substring(i + 1).trim();
+		return new String[] { name, val };
 	}
 
 	/**
@@ -267,10 +269,10 @@ public class RestUtils {
 
 			try (ParserPipe p = new ParserPipe(qs)) {
 
-				final int S1=1; // Looking for attrName start.
-				final int S2=2; // Found attrName start, looking for = or & or end.
-				final int S3=3; // Found =, looking for valStart or &.
-				final int S4=4; // Found valStart, looking for & or end.
+				final int S1 = 1; // Looking for attrName start.
+				final int S2 = 2; // Found attrName start, looking for = or & or end.
+				final int S3 = 3; // Found =, looking for valStart or &.
+				final int S4 = 4; // Found valStart, looking for & or end.
 
 				try (UonReader r = new UonReader(p, true)) {
 					int c = r.peekSkipWs();
@@ -291,10 +293,10 @@ public class RestUtils {
 							if (c == -1) {
 								add(m, r.getMarked(), null);
 							} else if (c == '\u0001') {
-								m.put(r.getMarked(0,-1), null);
+								m.put(r.getMarked(0, -1), null);
 								state = S1;
 							} else if (c == '\u0002') {
-								currAttr = r.getMarked(0,-1);
+								currAttr = r.getMarked(0, -1);
 								state = S3;
 							}
 						} else if (state == S3) {
@@ -312,7 +314,7 @@ public class RestUtils {
 							if (c == -1) {
 								add(m, currAttr, r.getMarked());
 							} else if (c == '\u0001') {
-								add(m, currAttr, r.getMarked(0,-1));
+								add(m, currAttr, r.getMarked(0, -1));
 								state = S1;
 							} else if (c == '\u0002') {
 								r.replace('=');
@@ -484,7 +486,7 @@ public class RestUtils {
 		} else if (b && m.get(key) != null) {
 			m.put(key, append(m.get(key), val));
 		} else {
-			m.put(key, new String[]{val});
+			m.put(key, new String[] { val });
 		}
 	}
 

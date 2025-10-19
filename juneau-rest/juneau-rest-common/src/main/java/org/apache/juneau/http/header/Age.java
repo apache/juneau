@@ -108,6 +108,7 @@ public class Age extends BasicIntegerHeader {
 	public static Age of(Supplier<Integer> value) {
 		return value == null ? null : new Age(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

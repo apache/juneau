@@ -183,9 +183,7 @@ public class ParserPipe implements Closeable {
 	 * @return The contents of this pipe as a buffered reader.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public Reader getBufferedReader() throws IOException {
-		return toBufferedReader(getReader());
-	}
+	public Reader getBufferedReader() throws IOException { return toBufferedReader(getReader()); }
 
 	/**
 	 * Returns the input to this parser as a plain string.
@@ -195,9 +193,7 @@ public class ParserPipe implements Closeable {
 	 *
 	 * @return The input as a string, or <jk>null</jk> if debug mode not enabled.
 	 */
-	public String getInputAsString() {
-		return inputString;
-	}
+	public String getInputAsString() { return inputString; }
 
 	/**
 	 * Wraps the specified input object inside an input stream.
@@ -240,7 +236,7 @@ public class ParserPipe implements Closeable {
 				doClose = true;
 			}
 		} else {
-			throw new IOException("Cannot convert object of type "+className(input)+" to an InputStream.");
+			throw new IOException("Cannot convert object of type " + className(input) + " to an InputStream.");
 		}
 
 		return inputStream;
@@ -289,11 +285,7 @@ public class ParserPipe implements Closeable {
 			doClose = false;
 		} else if (input instanceof InputStream || input instanceof byte[]) {
 			doClose = input instanceof InputStream && autoCloseStreams;
-			InputStream is = (
-				input instanceof InputStream
-				? (InputStream)input
-				: new ByteArrayInputStream((byte[])input)
-			);
+			InputStream is = (input instanceof InputStream ? (InputStream)input : new ByteArrayInputStream((byte[])input));
 			CharsetDecoder cd = charset.newDecoder();
 			if (strict) {
 				cd.onMalformedInput(CodingErrorAction.REPORT);
@@ -323,7 +315,7 @@ public class ParserPipe implements Closeable {
 			}
 			doClose = true;
 		} else {
-			throw new IOException("Cannot convert object of type "+className(input)+" to an InputStream.");
+			throw new IOException("Cannot convert object of type " + className(input) + " to an InputStream.");
 		}
 
 		return reader;
@@ -334,9 +326,7 @@ public class ParserPipe implements Closeable {
 	 *
 	 * @return <jk>true</jk> if the contents passed into this pipe was a {@link CharSequence}.
 	 */
-	public boolean isString() {
-		return inputString != null;
-	}
+	public boolean isString() { return inputString != null; }
 
 	/**
 	 * Sets the ParserReader/ParserInputStream/XmlReader constructed from this pipe.
@@ -346,16 +336,18 @@ public class ParserPipe implements Closeable {
 	 *
 	 * @param positionable The ParserReader/ParserInputStream/XmlReader constructed from this pipe.
 	 */
-	public void setPositionable(Positionable positionable) {
-		this.positionable = positionable;
-	}
+	public void setPositionable(Positionable positionable) { this.positionable = positionable; }
 
 	private byte[] convertFromString(String in) {
-		switch(binaryFormat) {
-			case BASE64: return base64Decode(in);
-			case HEX: return fromHex(in);
-			case SPACED_HEX: return fromSpacedHex(in);
-			default:	return new byte[0];
+		switch (binaryFormat) {
+			case BASE64:
+				return base64Decode(in);
+			case HEX:
+				return fromHex(in);
+			case SPACED_HEX:
+				return fromSpacedHex(in);
+			default:
+				return new byte[0];
 		}
 	}
 

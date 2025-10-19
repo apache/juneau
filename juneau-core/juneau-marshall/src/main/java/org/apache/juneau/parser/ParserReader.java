@@ -112,7 +112,7 @@ public class ParserReader extends Reader implements Positionable {
 	 */
 	public final ParserReader delete(int count) {
 		for (int i = 0; i < count; i++)
-			buff[iCurrent-i-1] = 127;
+			buff[iCurrent - i - 1] = 127;
 		holesExist = true;
 		return this;
 	}
@@ -122,9 +122,7 @@ public class ParserReader extends Reader implements Positionable {
 	 *
 	 * @return The contents of the reusable character buffer as a string.
 	 */
-	public final String getMarked() {
-		return getMarked(0, 0);
-	}
+	public final String getMarked() { return getMarked(0, 0); }
 
 	/**
 	 * Same as {@link #getMarked()} except allows you to specify offsets into the buffer.
@@ -149,7 +147,7 @@ public class ParserReader extends Reader implements Positionable {
 				if (c == 127)
 					offset++;
 				else
-					buff[i-offset] = c;
+					buff[i - offset] = c;
 			}
 			holesExist = false;
 		}
@@ -160,9 +158,7 @@ public class ParserReader extends Reader implements Positionable {
 	}
 
 	@Override /* Overridden from Positionable */
-	public Position getPosition() {
-		return new Position(line, column);
-	}
+	public Position getPosition() { return new Position(line, column); }
 
 	/**
 	 * Start buffering the calls to read() so that the text can be gathered from the mark point on calling {@code getFromMarked()}.
@@ -218,7 +214,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
 	public final int peekSkipWs() throws IOException {
-		while(true) {
+		while (true) {
 			int c = read();
 			boolean isWs = Character.isWhitespace(c);
 			if (c != -1 && ! isWs)
@@ -325,6 +321,7 @@ public class ParserReader extends Reader implements Positionable {
 	public final ParserReader replace(char c) throws IOException {
 		return replace(c, 1);
 	}
+
 	/**
 	 * Replaces the last character in the marking buffer with the specified character.
 	 *
@@ -341,18 +338,18 @@ public class ParserReader extends Reader implements Positionable {
 		if (c < 0x10000) {
 			if (offset < 1)
 				throw new IOException("Buffer underflow.");
-			buff[iCurrent-offset] = (char)c;
+			buff[iCurrent - offset] = (char)c;
 		} else {
 			if (offset < 2)
 				throw new IOException("Buffer underflow.");
 			c -= 0x10000;
-			buff[iCurrent-offset] = (char)(0xd800 + (c >> 10));
-			buff[iCurrent-offset+1] = (char)(0xdc00 + (c & 0x3ff));
+			buff[iCurrent - offset] = (char)(0xd800 + (c >> 10));
+			buff[iCurrent - offset + 1] = (char)(0xdc00 + (c & 0x3ff));
 			offset--;
 		}
 		// Fill in the gap with DEL characters.
 		for (int i = 1; i < offset; i++)
-			buff[iCurrent-i] = 127;
+			buff[iCurrent - i] = 127;
 		holesExist |= (offset > 1);
 		return this;
 	}
@@ -382,8 +379,8 @@ public class ParserReader extends Reader implements Positionable {
 			// If there's still space at the end of this buffer, fill it.
 			// Make sure there's at least 2 character spaces free for extended unicode characters.
 			//if (false) {
-			if (iEnd+1 < buff.length) {
-				int x = read(buff, iCurrent, buff.length-iEnd);
+			if (iEnd + 1 < buff.length) {
+				int x = read(buff, iCurrent, buff.length - iEnd);
 				if (x == -1) {
 					endReached = true;
 					return -1;
@@ -398,11 +395,11 @@ public class ParserReader extends Reader implements Positionable {
 					// If we're marking from the beginning of the array, we double the size of the
 					// buffer.  This isn't likely to occur often.
 					if (iMark == 0) {
-						char[] buff2 = new char[buff.length<<1];
+						char[] buff2 = new char[buff.length << 1];
 						System.arraycopy(buff, 0, buff2, 0, buff.length);
 						buff = buff2;
 
-					// Otherwise, we copy what's currently marked to the beginning of the buffer.
+						// Otherwise, we copy what's currently marked to the beginning of the buffer.
 					} else {
 						int copyBuff = iMark;
 						System.arraycopy(buff, copyBuff, buff, 0, buff.length - copyBuff);
@@ -421,7 +418,7 @@ public class ParserReader extends Reader implements Positionable {
 				} else {
 					// Copy the last 10 chars in the buffer to the beginning of the buffer.
 					int copyBuff = Math.min(iCurrent, 10);
-					System.arraycopy(buff, iCurrent-copyBuff, buff, 0, copyBuff);
+					System.arraycopy(buff, iCurrent - copyBuff, buff, 0, copyBuff);
 
 					// Number of characters we expect to copy on the next read.
 					int expected = buff.length - copyBuff;

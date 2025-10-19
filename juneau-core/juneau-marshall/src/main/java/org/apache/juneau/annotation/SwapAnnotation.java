@@ -60,7 +60,7 @@ public class SwapAnnotation {
 	 * A collection of {@link Swap @Swap annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -82,9 +82,9 @@ public class SwapAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
-		Class<?> impl=void.class, value=void.class;
-		String template="";
-		String[] mediaTypes={};
+		Class<?> impl = void.class, value = void.class;
+		String template = "";
+		String[] mediaTypes = {};
 
 		/**
 		 * Constructor.
@@ -186,6 +186,7 @@ public class SwapAnnotation {
 
 	/** Default value */
 	public static final Swap DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -194,6 +195,7 @@ public class SwapAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static Swap copy(Swap a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.impl(a.impl())
@@ -203,7 +205,9 @@ public class SwapAnnotation {
 			.template(r.resolve(a.template()))
 			.value(a.value())
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -212,6 +216,7 @@ public class SwapAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -221,6 +226,7 @@ public class SwapAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

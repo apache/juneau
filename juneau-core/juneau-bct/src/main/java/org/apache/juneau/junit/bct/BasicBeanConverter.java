@@ -476,6 +476,7 @@ public class BasicBeanConverter implements BeanConverter {
 			this.function = function;
 		}
 	}
+
 	static class SwapperEntry<T> {
 		private Class<T> forClass;
 		private Swapper<T> function;
@@ -706,11 +707,12 @@ public class BasicBeanConverter implements BeanConverter {
 	public String getNested(Object o, NestedTokenizer.Token token) {
 		assertArgNotNull("token", token);
 
-		if (o == null) return getSetting(SETTING_nullValue, null);
+		if (o == null)
+			return getSetting(SETTING_nullValue, null);
 
 		// Handle #{...} syntax for iterating over collections/arrays
 		if (eq("#", token.getValue()) && canListify(o)) {
-			return listify(o).stream().map(x -> token.getNested().stream().map(x2 -> getNested(x, x2)).collect(joining(",","{","}"))).collect(joining(",","[","]"));
+			return listify(o).stream().map(x -> token.getNested().stream().map(x2 -> getNested(x, x2)).collect(joining(",", "{", "}"))).collect(joining(",", "[", "]"));
 		}
 
 		// Original logic for regular property access
@@ -724,19 +726,16 @@ public class BasicBeanConverter implements BeanConverter {
 		} else {
 			e = ofNullable(getProperty(o, pn)).orElse(null);
 		}
-		if (e == null || ! token.hasNested()) return stringify(e);
-		return token.getNested().stream().map(x -> getNested(e, x)).map(this::stringify).collect(joining(",","{","}"));
+		if (e == null || !token.hasNested())
+			return stringify(e);
+		return token.getNested().stream().map(x -> getNested(e, x)).map(this::stringify).collect(joining(",", "{", "}"));
 	}
 
 	@Override
 	public Object getProperty(Object object, String name) {
 		var o = swap(object);
-		return propertyExtractors
-			.stream()
-			.filter(x -> x.canExtract(this, o, name))
-			.findFirst()
-			.orElseThrow(()->new RuntimeException(f("Could not find extractor for object of type {0}", o.getClass().getName())))
-			.extract(this, o, name);
+		return propertyExtractors.stream().filter(x -> x.canExtract(this, o, name)).findFirst()
+			.orElseThrow(() -> new RuntimeException(f("Could not find extractor for object of type {0}", o.getClass().getName()))).extract(this, o, name);
 	}
 
 	@Override
@@ -756,7 +755,8 @@ public class BasicBeanConverter implements BeanConverter {
 		if (c.isArray())
 			return arrayToList(o);
 		var o2 = o;
-		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2)).orElseThrow(()->new IllegalArgumentException(f("Object of type {0} could not be converted to a list.", t(o2))));
+		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2))
+			.orElseThrow(() -> new IllegalArgumentException(f("Object of type {0} could not be converted to a list.", t(o2))));
 	}
 
 	@Override
@@ -831,7 +831,8 @@ public class BasicBeanConverter implements BeanConverter {
 	@Override
 	@SuppressWarnings("unchecked")
 	public Object swap(Object o) {
-		if (o == null) return null;
+		if (o == null)
+			return null;
 		var c = o.getClass();
 		var swapper = swapperMap.computeIfAbsent(c, this::findSwapper);
 		if (swapper.isPresent())

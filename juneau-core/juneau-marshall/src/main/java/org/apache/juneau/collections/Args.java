@@ -143,7 +143,7 @@ public class Args extends JsonMap {
 		int i = 0;
 		while (! argList.isEmpty()) {
 			String s = argList.get(0);
-			if (startsWith(s,'-'))
+			if (startsWith(s, '-'))
 				break;
 			put(Integer.toString(i), argList.remove(0));
 			i++;
@@ -245,6 +245,7 @@ public class Args extends JsonMap {
 	public String getArg(int i) {
 		return getString(Integer.toString(i));
 	}
+
 	/**
 	 * Returns the optional argument value, or blank if the optional argument was not specified.
 	 *
@@ -276,7 +277,7 @@ public class Args extends JsonMap {
 	 * @param name The optional argument name.
 	 * @return The optional argument values, or an empty list if the optional argument was not specified.
 	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<String> getArgs(String name) {
 		List l = (JsonList)get(name);
 		if (l == null)

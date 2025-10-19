@@ -141,6 +141,7 @@ public class IfMatch extends BasicEntityTagsHeader {
 	public static IfMatch of(Supplier<EntityTags> value) {
 		return value == null ? null : new IfMatch(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

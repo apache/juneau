@@ -121,6 +121,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 		super(FORMDATA, request, name, value);
 		this.part = null;
 	}
+
 	@Override /* Overridden from RequestHttpPart */
 	public RequestFormParam def(String def) {
 		super.def(def);
@@ -132,9 +133,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 *
 	 * @return The content type of this part, or <jk>null</jk> if not known.
 	 */
-	public String getContentType() {
-		return (part == null ? null : part.getContentType());
-	}
+	public String getContentType() { return (part == null ? null : part.getContentType()); }
 
 	/**
 	 * Returns the value of the specified mime header as a String.
@@ -157,9 +156,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 *
 	 * @return The header names of this param.
 	 */
-	public Collection<String> getHeaderNames() {
-		return part.getHeaderNames();
-	}
+	public Collection<String> getHeaderNames() { return part.getHeaderNames(); }
 
 	/**
 	 * Returns the values of the param header with the given name.
@@ -176,9 +173,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 *
 	 * @return A long specifying the size of this part, in bytes.
 	 */
-	public long getSize() {
-		return part.getSize();
-	}
+	public long getSize() { return part.getSize(); }
 
 	/**
 	 * Returns this part value as an input stream.
@@ -197,9 +192,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 *
 	 * @return The file name specified by the client.
 	 */
-	public String getSubmittedFileName() {
-		return part.getSubmittedFileName();
-	}
+	public String getSubmittedFileName() { return part.getSubmittedFileName(); }
 
 	@Override /* Overridden from RequestHttpPart */
 	public String getValue() {

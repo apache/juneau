@@ -40,7 +40,7 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,ANNOTATION_TYPE,FIELD,METHOD})
+@Target({ TYPE, ANNOTATION_TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(SwapAnnotation.Array.class)

@@ -64,6 +64,7 @@ public class RrpcRestOpSession extends RestOpSession {
 		}
 
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -75,6 +76,7 @@ public class RrpcRestOpSession extends RestOpSession {
 		return new Builder(ctx, session);
 
 	}
+
 	private final RrpcRestOpContext ctx;
 
 	/**
@@ -111,7 +113,7 @@ public class RrpcRestOpSession extends RestOpSession {
 		} else if ("POST".equals(session.getMethod())) {
 			String pip = session.getUrlPath().getPath();
 			if (pip.indexOf('/') != -1)
-				pip = pip.substring(pip.lastIndexOf('/')+1);
+				pip = pip.substring(pip.lastIndexOf('/') + 1);
 			pip = urlDecode(pip);
 			RrpcInterfaceMethodMeta rmm = ctx.getMeta().getMethodMetaByPath(pip);
 			if (rmm != null) {

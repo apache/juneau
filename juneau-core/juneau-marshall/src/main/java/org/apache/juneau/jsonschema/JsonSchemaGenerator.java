@@ -199,6 +199,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		public Builder allowNestedDescriptions() {
 			return allowNestedDescriptions(true);
 		}
+
 		/**
 		 * Same as {@link #allowNestedDescriptions()} but allows you to explicitly specify the value.
 		 *
@@ -300,6 +301,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			beanDefMapper = value;
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanDictionary(java.lang.Class<?>...values) {
 			super.beanDictionary(values);
@@ -525,21 +527,18 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 *
 		 * @return The JSON serializer builder.
 		 */
-		public JsonParser.Builder getJsonParserBuilder() {
-			return jsonParserBuilder;
-		}
+		public JsonParser.Builder getJsonParserBuilder() { return jsonParserBuilder; }
 
 		/**
 		 * Gives access to the inner JSON serializer builder if you want to modify the serializer settings.
 		 *
 		 * @return The JSON serializer builder.
 		 */
-		public JsonSerializer.Builder getJsonSerializerBuilder() {
-			return jsonSerializerBuilder;
-		}
+		public JsonSerializer.Builder getJsonSerializerBuilder() { return jsonSerializerBuilder; }
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				jsonSerializerBuilder.hashKey(),
@@ -552,6 +551,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 				beanDefMapper,
 				ignoreTypes
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -713,13 +713,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -815,6 +815,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 	/** Default serializer, all default settings.*/
 	public static final JsonSchemaGenerator DEFAULT = new JsonSchemaGenerator(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -823,6 +824,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
 	final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
 	final Class<? extends BeanDefMapper> beanDefMapper;
@@ -882,9 +884,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */
-	public List<Pattern> getIgnoreTypes() {
-		return Utils.alist(ignoreTypePatterns);
-	}
+	public List<Pattern> getIgnoreTypes() { return Utils.alist(ignoreTypePatterns); }
 
 	@Override
 	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
@@ -905,10 +905,9 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 		return m;
 	}
+
 	@Override /* Overridden from Context */
-	public JsonSchemaGeneratorSession getSession() {
-		return createSession().build();
-	}
+	public JsonSchemaGeneratorSession getSession() { return createSession().build(); }
 
 	/**
 	 * Returns <jk>true</jk> if the specified type is ignored.
@@ -934,9 +933,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
 	 */
-	protected final Set<TypeCategory> getAddDescriptionsTo() {
-		return addDescriptionsTo;
-	}
+	protected final Set<TypeCategory> getAddDescriptionsTo() { return addDescriptionsTo; }
 
 	/**
 	 * Add examples.
@@ -945,9 +942,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	Set of categories of types that examples should be automatically added to generated schemas.
 	 */
-	protected final Set<TypeCategory> getAddExamplesTo() {
-		return addExamplesTo;
-	}
+	protected final Set<TypeCategory> getAddExamplesTo() { return addExamplesTo; }
 
 	/**
 	 * Bean schema definition mapper.
@@ -956,9 +951,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
 	 */
-	protected final BeanDefMapper getBeanDefMapper() {
-		return beanDefMapperBean;
-	}
+	protected final BeanDefMapper getBeanDefMapper() { return beanDefMapperBean; }
 
 	/**
 	 * Allow nested descriptions.
@@ -967,9 +960,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
 	 */
-	protected final boolean isAllowNestedDescriptions() {
-		return allowNestedDescriptions;
-	}
+	protected final boolean isAllowNestedDescriptions() { return allowNestedDescriptions; }
 
 	/**
 	 * Allow nested examples.
@@ -978,9 +969,8 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
 	 */
-	protected final boolean isAllowNestedExamples() {
-		return allowNestedExamples;
-	}
+	protected final boolean isAllowNestedExamples() { return allowNestedExamples; }
+
 	/**
 	 * Use bean definitions.
 	 *
@@ -988,12 +978,11 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
 	 */
-	protected final boolean isUseBeanDefs() {
-		return useBeanDefs;
-	}
+	protected final boolean isUseBeanDefs() { return useBeanDefs; }
 
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("useBeanDefs", useBeanDefs)
 			.append("allowNestedExamples", allowNestedExamples)
@@ -1002,11 +991,10 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			.append("addExamplesTo", addExamplesTo)
 			.append("addDescriptionsTo", addDescriptionsTo)
 			.append("ignoreTypes", ignoreTypes);
+		// @formatter:on
 	}
-	JsonParser getJsonParser() {
-		return jsonParser;
-	}
-	JsonSerializer getJsonSerializer() {
-		return jsonSerializer;
-	}
+
+	JsonParser getJsonParser() { return jsonParser; }
+
+	JsonSerializer getJsonSerializer() { return jsonSerializer; }
 }

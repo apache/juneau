@@ -257,7 +257,7 @@ public class SerializerWriter extends Writer {
 	 * @return This object.
 	 */
 	public SerializerWriter cre(int depth) {
-		if (useWhitespace && depth <= maxIndent-1)
+		if (useWhitespace && depth <= maxIndent - 1)
 			return nl(depth).i(depth);
 		return this;
 	}
@@ -287,7 +287,7 @@ public class SerializerWriter extends Writer {
 	 * @return This object.
 	 */
 	public SerializerWriter ie(int indent) {
-		if (useWhitespace && indent <= maxIndent-1)
+		if (useWhitespace && indent <= maxIndent - 1)
 			for (int i = 0; i < indent; i++)
 				w('\t');
 		return this;
@@ -354,6 +354,7 @@ public class SerializerWriter extends Writer {
 			w(' ');
 		return this;
 	}
+
 	/**
 	 * Writes the specified character to the writer.
 	 *

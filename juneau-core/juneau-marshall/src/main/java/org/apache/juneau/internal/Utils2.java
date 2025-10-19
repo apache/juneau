@@ -72,7 +72,7 @@ public class Utils2 extends Utils {
 			PROPERTIES_METHODS.put(o.getClass(), methods);
 		}
 		JsonMap m = JsonMap.create().append("id", identity(o));
-		methods.forEach((k,v) -> m.put(k, v.invoke(o)));
+		methods.forEach((k, v) -> m.put(k, v.invoke(o)));
 		return m;
 	}
 

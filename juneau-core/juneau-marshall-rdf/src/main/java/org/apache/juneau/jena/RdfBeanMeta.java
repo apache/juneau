@@ -49,9 +49,7 @@ public class RdfBeanMeta extends ExtendedBeanMeta {
 	 *
 	 * @return The URI property, or <jk>null</jk> if no URI property exists on this bean.
 	 */
-	public BeanPropertyMeta getBeanUriProperty() {
-		return beanUriProperty;
-	}
+	public BeanPropertyMeta getBeanUriProperty() { return beanUriProperty; }
 
 	/**
 	 * Returns <jk>true</jk> if one of the properties on this bean is annotated with {@link Rdf#beanUri() @Rdf(beanUri)} as

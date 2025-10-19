@@ -41,6 +41,7 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 			return (CachingHttpServletResponse)res;
 		return new CachingHttpServletResponse(res);
 	}
+
 	final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 	final ServletOutputStream os;
@@ -61,9 +62,7 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The content of the response.
 	 */
-	public byte[] getContent() {
-		return baos.toByteArray();
-	}
+	public byte[] getContent() { return baos.toByteArray(); }
 
 	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
@@ -80,9 +79,7 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 			}
 
 			@Override
-			public boolean isReady() {
-				return os.isReady();
-			}
+			public boolean isReady() { return os.isReady(); }
 
 			@Override
 			public void setWriteListener(WriteListener writeListener) {

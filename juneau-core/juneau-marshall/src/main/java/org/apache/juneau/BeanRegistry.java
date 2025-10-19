@@ -82,8 +82,8 @@ public class BeanRegistry {
 		ClassMeta<?> cm = map.get(typeName);
 		if (cm != null)
 			return cm;
-		if (typeName.charAt(typeName.length()-1) == '^') {
-			cm = getClassMeta(typeName.substring(0, typeName.length()-1));
+		if (typeName.charAt(typeName.length() - 1) == '^') {
+			cm = getClassMeta(typeName.substring(0, typeName.length() - 1));
 			if (cm != null) {
 				cm = beanContext.getClassMeta(Array.newInstance(cm.innerClass, 1).getClass());
 				map.put(typeName, cm);
@@ -119,7 +119,7 @@ public class BeanRegistry {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append('{');
-		map.forEach((k,v) -> sb.append(k).append(":").append(v.toString(true)).append(", "));
+		map.forEach((k, v) -> sb.append(k).append(":").append(v.toString(true)).append(", "));
 		sb.append('}');
 		return sb.toString();
 	}
@@ -138,7 +138,7 @@ public class BeanRegistry {
 					});
 				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
-					m.forEach((k,v) -> {
+					m.forEach((k, v) -> {
 						String typeName = Utils.s(k);
 						ClassMeta<?> val = null;
 						if (v instanceof Type)
@@ -152,10 +152,8 @@ public class BeanRegistry {
 				} else {
 					Value<String> typeName = Value.empty();
 					ci.forEachAnnotation(beanContext, Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
-					addToMap(
-						typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", className(c))),
-						beanContext.getClassMeta(c)
-					);
+					addToMap(typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", className(c))),
+						beanContext.getClassMeta(c));
 				}
 			}
 		} catch (BeanRuntimeException e) {
@@ -175,9 +173,9 @@ public class BeanRegistry {
 		if (len == 0)
 			throw new BeanRuntimeException("Map entry had an empty array value.");
 		Type type = (Type)Array.get(array, 0);
-		Type[] args = new Type[len-1];
+		Type[] args = new Type[len - 1];
 		for (int i = 1; i < len; i++)
-			args[i-1] = (Type)Array.get(array, i);
+			args[i - 1] = (Type)Array.get(array, i);
 		return beanContext.getClassMeta(type, args);
 	}
 }

@@ -59,6 +59,7 @@ public class BasicIntegerPart extends BasicPart {
 			return null;
 		return new BasicIntegerPart(name, value);
 	}
+
 	private final Integer value;
 	private final Supplier<Integer> supplier;
 
@@ -122,9 +123,7 @@ public class BasicIntegerPart extends BasicPart {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
+	public String getValue() { return Utils.s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

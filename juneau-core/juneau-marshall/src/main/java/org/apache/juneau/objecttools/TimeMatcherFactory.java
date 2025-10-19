@@ -68,9 +68,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 			return new CalendarP(c.getTime(), precision);
 		}
 
-		public Calendar getCalendar() {
-			return c;
-		}
+		public Calendar getCalendar() { return c; }
 
 		public CalendarP roll(int amount) {
 			return roll(precision, amount);
@@ -87,9 +85,11 @@ public class TimeMatcherFactory extends MatcherFactory {
 	 */
 	private static class TimeMatcher extends AbstractMatcher {
 
+		// @formatter:off
 		private static final AsciiSet
 			DT = AsciiSet.of("0123456789-:T./"),
 			WS = AsciiSet.of(" \t");
+		// @formatter:on
 
 		TimestampRange[] ranges;
 		List<TimestampRange> l = new LinkedList<>();
@@ -135,10 +135,10 @@ public class TimeMatcherFactory extends MatcherFactory {
 						eq = Equality.LT;
 					} else if (c == '\'') {
 						state = S05;
-						mark = i+1;
+						mark = i + 1;
 					} else if (c == '"') {
 						state = S06;
-						mark = i+1;
+						mark = i + 1;
 					} else if (DT.contains(c)) {
 						state = S08;
 						mark = i;
@@ -154,10 +154,10 @@ public class TimeMatcherFactory extends MatcherFactory {
 						eq = Equality.GTE;
 					} else if (c == '\'') {
 						state = S05;
-						mark = i+1;
+						mark = i + 1;
 					} else if (c == '"') {
 						state = S06;
-						mark = i+1;
+						mark = i + 1;
 					} else if (DT.contains(c)) {
 						state = S08;
 						mark = i;
@@ -173,10 +173,10 @@ public class TimeMatcherFactory extends MatcherFactory {
 						eq = Equality.LTE;
 					} else if (c == '\'') {
 						state = S05;
-						mark = i+1;
+						mark = i + 1;
 					} else if (c == '"') {
 						state = S06;
-						mark = i+1;
+						mark = i + 1;
 					} else if (DT.contains(c)) {
 						state = S08;
 						mark = i;
@@ -189,10 +189,10 @@ public class TimeMatcherFactory extends MatcherFactory {
 						state = S04;
 					} else if (c == '\'') {
 						state = S05;
-						mark = i+1;
+						mark = i + 1;
 					} else if (c == '"') {
 						state = S06;
-						mark = i+1;
+						mark = i + 1;
 					} else if (DT.contains(c)) {
 						state = S08;
 						mark = i;
@@ -245,13 +245,13 @@ public class TimeMatcherFactory extends MatcherFactory {
 					} else if (c == '\'') {
 						state = S05;
 						l.add(new TimestampRange(f, eq, s1));
-						mark = i+1;
+						mark = i + 1;
 						eq = null;
 						s1 = null;
 					} else if (c == '"') {
 						state = S06;
 						l.add(new TimestampRange(f, eq, s1));
-						mark = i+1;
+						mark = i + 1;
 						eq = null;
 						s1 = null;
 					} else if (DT.contains(c)) {
@@ -269,10 +269,10 @@ public class TimeMatcherFactory extends MatcherFactory {
 						state = S10;
 					} else if (c == '\'') {
 						state = S11;
-						mark = i+1;
+						mark = i + 1;
 					} else if (c == '"') {
 						state = S12;
-						mark = i+1;
+						mark = i + 1;
 					} else if (DT.contains(c)) {
 						state = S13;
 						mark = i;
@@ -473,6 +473,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 	 * @return TODO
 	 */
 	protected String[] getTimestampFormatStrings() {
+		// @formatter:off
 		return new String[]{
 			"yyyy-MM-dd'T'HH:mm:ss",
 			"yyyy-MM-dd'T'HH:mm",
@@ -481,5 +482,6 @@ public class TimeMatcherFactory extends MatcherFactory {
 			"yyyy-MM",
 			"yyyy"
 		};
+		// @formatter:on
 	}
 }

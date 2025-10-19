@@ -127,7 +127,7 @@ public class AcceptLanguage extends BasicStringRangesHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptLanguage of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new AcceptLanguage(value));
+		return value == null ? null : CACHE.get(value, () -> new AcceptLanguage(value));
 	}
 
 	/**
@@ -156,6 +156,7 @@ public class AcceptLanguage extends BasicStringRangesHeader {
 	public static AcceptLanguage of(Supplier<StringRanges> value) {
 		return value == null ? null : new AcceptLanguage(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

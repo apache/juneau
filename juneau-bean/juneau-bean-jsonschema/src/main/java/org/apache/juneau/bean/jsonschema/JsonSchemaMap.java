@@ -66,7 +66,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 		var s = super.get(u);
 		if (s != null)
 			return s;
-		synchronized(this) {
+		synchronized (this) {
 			s = load(u);
 			if (s != null) {
 				// Note:  Can't use add(Schema...) since the ID property may not be set.

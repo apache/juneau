@@ -63,12 +63,8 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The content of the request.
 	 */
-	public byte[] getContent() {
-		return content;
-	}
+	public byte[] getContent() { return content; }
 
 	@Override
-	public ServletInputStream getInputStream() {
-		return new BoundedServletInputStream(content);
-	}
+	public ServletInputStream getInputStream() { return new BoundedServletInputStream(content); }
 }

@@ -54,7 +54,7 @@ import org.apache.juneau.oapi.*;
 
  * </ul>
  */
-@Target({PARAMETER,TYPE})
+@Target({ PARAMETER, TYPE })
 @Retention(RUNTIME)
 @Inherited
 public @interface Attr {
@@ -83,6 +83,7 @@ public @interface Attr {
 	 * @return The annotation value.
 	 */
 	String name() default "";
+
 	/**
 	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
 	 *

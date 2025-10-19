@@ -131,6 +131,7 @@ public class Upgrade extends BasicCsvHeader {
 	public static Upgrade of(Supplier<String[]> value) {
 		return value == null ? null : new Upgrade(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

@@ -80,8 +80,8 @@ import org.apache.juneau.marshaller.*;
  */
 public class Parameter extends OpenApiElement {
 
-	private static final String[] VALID_IN = {"query", "header", "path", "cookie"};
-	private static final String[] VALID_STYLES = {"matrix", "label", "form", "simple", "spaceDelimited", "pipeDelimited", "deepObject"};
+	private static final String[] VALID_IN = { "query", "header", "path", "cookie" };
+	private static final String[] VALID_STYLES = { "matrix", "label", "form", "simple", "spaceDelimited", "pipeDelimited", "deepObject" };
 
 	private String name, in, description, style;
 	private Boolean required, deprecated, allowEmptyValue, explode, allowReserved;
@@ -149,108 +149,84 @@ public class Parameter extends OpenApiElement {
 	 *
 	 * @return The allow empty value flag.
 	 */
-	public Boolean getAllowEmptyValue() {
-		return allowEmptyValue;
-	}
+	public Boolean getAllowEmptyValue() { return allowEmptyValue; }
 
 	/**
 	 * Returns the allow reserved flag.
 	 *
 	 * @return The allow reserved flag.
 	 */
-	public Boolean getAllowReserved() {
-		return allowReserved;
-	}
+	public Boolean getAllowReserved() { return allowReserved; }
 
 	/**
 	 * Returns the deprecated flag.
 	 *
 	 * @return The deprecated flag.
 	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
+	public Boolean getDeprecated() { return deprecated; }
 
 	/**
 	 * Returns the description.
 	 *
 	 * @return The description.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Returns the example.
 	 *
 	 * @return The example.
 	 */
-	public Object getExample() {
-		return example;
-	}
+	public Object getExample() { return example; }
 
 	/**
 	 * Returns the examples map.
 	 *
 	 * @return The examples map.
 	 */
-	public Map<String,Example> getExamples() {
-		return examples;
-	}
+	public Map<String,Example> getExamples() { return examples; }
 
 	/**
 	 * Returns the explode flag.
 	 *
 	 * @return The explode flag.
 	 */
-	public Boolean getExplode() {
-		return explode;
-	}
+	public Boolean getExplode() { return explode; }
 
 	/**
 	 * Returns the parameter location.
 	 *
 	 * @return The parameter location.
 	 */
-	public String getIn() {
-		return in;
-	}
+	public String getIn() { return in; }
 
 	/**
 	 * Returns the parameter name.
 	 *
 	 * @return The parameter name.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Returns the required flag.
 	 *
 	 * @return The required flag.
 	 */
-	public Boolean getRequired() {
-		return required;
-	}
+	public Boolean getRequired() { return required; }
 
 	/**
 	 * Returns the schema.
 	 *
 	 * @return The schema.
 	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
+	public SchemaInfo getSchema() { return schema; }
 
 	/**
 	 * Returns the style.
 	 *
 	 * @return The style.
 	 */
-	public String getStyle() {
-		return style;
-	}
+	public String getStyle() { return style; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
@@ -379,10 +355,7 @@ public class Parameter extends OpenApiElement {
 	 */
 	public Parameter setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_IN)
-			);
+			throw new BasicRuntimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_IN));
 		this.in = value;
 		return this;
 	}
@@ -428,10 +401,7 @@ public class Parameter extends OpenApiElement {
 	 */
 	public Parameter setStyle(String value) {
 		if (isStrict() && ! contains(value, VALID_STYLES))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_STYLES)
-			);
+			throw new BasicRuntimeException("Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_STYLES));
 		this.style = value;
 		return this;
 	}

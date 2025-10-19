@@ -38,6 +38,7 @@ public class ResourceDescriptions extends ArrayList<ResourceDescription> {
 	public static ResourceDescriptions create() {
 		return new ResourceDescriptions();
 	}
+
 	/**
 	 * Adds a new {@link ResourceDescription} to this list.
 	 *
@@ -49,6 +50,7 @@ public class ResourceDescriptions extends ArrayList<ResourceDescription> {
 		super.add(new ResourceDescription(name, description));
 		return this;
 	}
+
 	/**
 	 * Adds a new {@link ResourceDescription} to this list when the uri is different from the name.
 	 *

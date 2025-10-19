@@ -94,7 +94,7 @@ public class BasicPartIterator implements PartIterator {
 
 		int to = entries.length - 1;
 		boolean found = false;
-		while (!found && (from < to)) {
+		while (! found && (from < to)) {
 			from++;
 			found = filter(from);
 		}

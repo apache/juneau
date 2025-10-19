@@ -71,7 +71,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="output")
+@Bean(typeName = "output")
 public class Output extends HtmlElementMixed {
 
 	/**
@@ -89,7 +89,7 @@ public class Output extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Output _class(String value) {  // NOSONAR - Intentional naming.
+	public Output _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -107,7 +107,7 @@ public class Output extends HtmlElementMixed {
 	 * @param value The IDs of the form controls that contribute to this output.
 	 * @return This object.
 	 */
-	public Output _for(String value) {  // NOSONAR - Intentional naming.
+	public Output _for(String value) { // NOSONAR - Intentional naming.
 		attr("for", value);
 		return this;
 	}
@@ -117,6 +117,7 @@ public class Output extends HtmlElementMixed {
 		super.accesskey(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Output attr(String key, Object val) {
 		super.attr(key, val);

@@ -66,6 +66,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public CsvSerializerSession build() {
 			return new CsvSerializerSession(this);
@@ -179,6 +180,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -188,6 +190,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	public static Builder create(CsvSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	/**
 	 * Constructor.
 	 *
@@ -208,7 +211,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	 * @param type The class metadata of the value's type.
 	 * @return The swapped value, or the original value if no swap is registered.
 	 */
-	@SuppressWarnings({"rawtypes"})
+	@SuppressWarnings({ "rawtypes" })
 	private Object applySwap(Object value, ClassMeta<?> type) {
 		try {
 			if (value == null || type == null)

@@ -94,8 +94,9 @@ public class StringRanges {
 	 * @return A parsed header value.
 	 */
 	public static StringRanges of(String value) {
-		return isEmpty(value) ? EMPTY : CACHE.get(value, ()->new StringRanges(value));
+		return isEmpty(value) ? EMPTY : CACHE.get(value, () -> new StringRanges(value));
 	}
+
 	/**
 	 * Returns a parsed string range header value.
 	 *
@@ -105,6 +106,7 @@ public class StringRanges {
 	public static StringRanges of(StringRange...value) {
 		return value == null ? null : new StringRanges(value);
 	}
+
 	private static HeaderElement[] parse(String value) {
 		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 	}

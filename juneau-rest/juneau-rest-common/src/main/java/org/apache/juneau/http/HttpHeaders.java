@@ -42,6 +42,7 @@ import org.apache.juneau.reflect.*;
  */
 public class HttpHeaders {
 
+	// @formatter:off
 	@SuppressWarnings("javadoc")
 	public static final Accept
 		ACCEPT_APPLICATION_ATOM_XML = Accept.APPLICATION_ATOM_XML,
@@ -87,6 +88,8 @@ public class HttpHeaders {
 		CONTENTTYPE_TEXT_PLAIN = ContentType.TEXT_PLAIN,
 		CONTENTTYPE_TEXT_XML = ContentType.TEXT_XML,
 		CONTENTTYPE_WILDCARD = ContentType.WILDCARD;
+	// @formatter:on
+
 	/**
 	 * Creates a new {@link Accept} header.
 	 *
@@ -1979,6 +1982,7 @@ public class HttpHeaders {
 	public static final ProxyAuthenticate proxyAuthenticate(String value) {
 		return ProxyAuthenticate.of(value);
 	}
+
 	/**
 	 * Creates a new {@link ProxyAuthenticate} header with a delayed value.
 	 *
@@ -2644,6 +2648,7 @@ public class HttpHeaders {
 	public static final Warning warning(Supplier<String> value) {
 		return Warning.of(value);
 	}
+
 	/**
 	 * Creates a new {@link WwwAuthenticate} header.
 	 *

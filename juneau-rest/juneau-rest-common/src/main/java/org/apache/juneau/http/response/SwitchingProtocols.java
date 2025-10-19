@@ -40,7 +40,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class SwitchingProtocols extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -93,6 +93,7 @@ public class SwitchingProtocols extends BasicHttpResponse {
 	public SwitchingProtocols copy() {
 		return new SwitchingProtocols(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public SwitchingProtocols setContent(HttpEntity value) {
 		super.setContent(value);

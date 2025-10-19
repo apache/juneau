@@ -123,7 +123,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 
-
 	private static BeanMap<?> beanMap(Object o) {
 		return BeanMap.of(o);
 	}
@@ -148,7 +147,6 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	public FluentBeanListAssertion(Assertion creator, List<E> value, R returns) {
 		super(creator, value, returns);
 	}
-
 
 	/**
 	 * Constructor.

@@ -40,7 +40,7 @@ import org.apache.juneau.http.header.*;
  */
 @Response
 @StatusCode(STATUS_CODE)
-@Schema(description=REASON_PHRASE)
+@Schema(description = REASON_PHRASE)
 public class NonAuthoritiveInformation extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -93,6 +93,7 @@ public class NonAuthoritiveInformation extends BasicHttpResponse {
 	public NonAuthoritiveInformation copy() {
 		return new NonAuthoritiveInformation(this);
 	}
+
 	@Override /* Overridden from BasicHttpResponse */
 	public NonAuthoritiveInformation setContent(HttpEntity value) {
 		super.setContent(value);

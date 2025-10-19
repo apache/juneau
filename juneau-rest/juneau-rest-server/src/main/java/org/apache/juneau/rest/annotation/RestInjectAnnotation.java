@@ -34,7 +34,7 @@ public class RestInjectAnnotation {
 	 * A collection of {@link RestInject @RestInject annotations}.
 	 */
 	@Documented
-	@Target({FIELD,METHOD,TYPE})
+	@Target({ FIELD, METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -138,8 +138,10 @@ public class RestInjectAnnotation {
 			return value;
 		}
 	}
+
 	/** Default value */
 	public static final RestInject DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -148,6 +150,7 @@ public class RestInjectAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Pulls the name/value attribute from a {@link RestInject} annotation.
 	 *

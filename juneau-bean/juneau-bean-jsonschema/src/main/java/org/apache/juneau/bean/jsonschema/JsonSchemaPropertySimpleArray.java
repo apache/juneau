@@ -43,11 +43,8 @@ public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 	public JsonSchemaPropertySimpleArray(String name, JsonType elementType) {
 		setName(name);
 		setType(JsonType.ARRAY);
-		setItems(
-			new JsonSchema().setType(elementType)
-		);
+		setItems(new JsonSchema().setType(elementType));
 	}
-
 
 	@Override /* Overridden from JsonSchemaProperty */
 	public JsonSchemaPropertySimpleArray setName(String name) {

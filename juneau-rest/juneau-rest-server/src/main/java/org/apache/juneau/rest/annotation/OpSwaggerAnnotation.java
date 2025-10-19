@@ -40,8 +40,8 @@ public class OpSwaggerAnnotation {
 	public static class Builder extends AnnotationBuilder<Builder> {
 
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
-		String deprecated="", operationId="";
-		String[] consumes={}, parameters={}, produces={}, responses={}, schemes={}, summary={}, tags={}, value={};
+		String deprecated = "", operationId = "";
+		String[] consumes = {}, parameters = {}, produces = {}, responses = {}, schemes = {}, summary = {}, tags = {}, value = {};
 
 		/**
 		 * Constructor.
@@ -271,6 +271,7 @@ public class OpSwaggerAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
@@ -280,6 +281,7 @@ public class OpSwaggerAnnotation {
 	public static boolean empty(OpSwagger a) {
 		return a == null || DEFAULT.equals(a);
 	}
+
 	/**
 	 * Returns <jk>false</jk> if the specified annotation contains all default values.
 	 *

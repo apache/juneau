@@ -89,6 +89,7 @@ public class BasicCsvHeader extends BasicHeader {
 	public static BasicCsvHeader of(String name, Supplier<String[]> value) {
 		return value == null ? null : new BasicCsvHeader(name, value);
 	}
+
 	private final String[] value;
 	private final Supplier<String[]> supplier;
 
@@ -219,9 +220,7 @@ public class BasicCsvHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.join(value(), ", ");
-	}
+	public String getValue() { return Utils.join(value(), ", "); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

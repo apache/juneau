@@ -45,8 +45,7 @@ public class MsgPackConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackParser.Builder b) {
-		}
+		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackParser.Builder b) {}
 	}
 
 	/**

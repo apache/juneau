@@ -85,6 +85,7 @@ public class WwwAuthenticate extends BasicStringHeader {
 	public static WwwAuthenticate of(Supplier<String> value) {
 		return value == null ? null : new WwwAuthenticate(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

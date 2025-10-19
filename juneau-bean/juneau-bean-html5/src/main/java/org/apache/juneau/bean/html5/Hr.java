@@ -79,15 +79,16 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="hr")
+@Bean(typeName = "hr")
 public class Hr extends HtmlElementVoid {
 
 	/**
 	 * Creates an empty {@link Hr} element.
 	 */
 	public Hr() { /* Empty constructor. */ }
+
 	@Override /* Overridden from HtmlElement */
-	public Hr _class(String value) {  // NOSONAR - Intentional naming.
+	public Hr _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

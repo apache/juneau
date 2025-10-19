@@ -51,7 +51,7 @@ public abstract class DefaultingVar extends SimpleVar {
 		if (i == -1)
 			return resolve(session, s.trim());
 		String s1 = s.substring(0, i);
-		String s2 = s.length() == i ? null : s.substring(i+1);
+		String s2 = s.length() == i ? null : s.substring(i + 1);
 		String v = resolve(session, s1);
 		if (v == null)
 			v = s2;

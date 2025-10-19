@@ -46,12 +46,13 @@ public enum Enablement {
 	private static final Map<String,Enablement> MAP = new HashMap<>();
 
 	static {
-		MAP.put("TRUE",ALWAYS);
-		MAP.put("ALWAYS",ALWAYS);
-		MAP.put("FALSE",NEVER);
-		MAP.put("NEVER",NEVER);
-		MAP.put("CONDITIONAL",CONDITIONAL);
+		MAP.put("TRUE", ALWAYS);
+		MAP.put("ALWAYS", ALWAYS);
+		MAP.put("FALSE", NEVER);
+		MAP.put("NEVER", NEVER);
+		MAP.put("CONDITIONAL", CONDITIONAL);
 	}
+
 	/**
 	 * Retrieves this enum using case-insensitive matching.
 	 *
@@ -84,8 +85,8 @@ public enum Enablement {
 	 */
 	public boolean isOneOf(Enablement...values) {
 		for (Enablement v : values)
-			 if (this == v)
-				 return true;
+			if (this == v)
+				return true;
 		return false;
 	}
 }

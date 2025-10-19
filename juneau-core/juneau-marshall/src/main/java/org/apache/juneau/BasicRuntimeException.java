@@ -65,6 +65,7 @@ public class BasicRuntimeException extends RuntimeException {
 	public BasicRuntimeException(Throwable cause, String message, Object...args) {
 		super(format(message, args), cause);
 	}
+
 	@Override /* Overridden from Throwable */
 	public synchronized Throwable fillInStackTrace() {
 		assertModifiable();
@@ -103,9 +104,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 *
 	 * @return <jk>true</jk> if this bean is unmodifiable.
 	 */
-	public boolean isUnmodifiable() {
-		return unmodifiable;
-	}
+	public boolean isUnmodifiable() { return unmodifiable; }
 
 	/**
 	 * Sets the detail message on this exception.

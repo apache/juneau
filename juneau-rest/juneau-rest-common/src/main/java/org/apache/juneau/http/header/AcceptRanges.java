@@ -100,6 +100,7 @@ public class AcceptRanges extends BasicStringHeader {
 	public static AcceptRanges of(Supplier<String> value) {
 		return value == null ? null : new AcceptRanges(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

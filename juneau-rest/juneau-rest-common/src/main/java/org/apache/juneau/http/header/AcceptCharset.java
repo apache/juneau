@@ -94,7 +94,7 @@ public class AcceptCharset extends BasicStringRangesHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static AcceptCharset of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new AcceptCharset(value));
+		return value == null ? null : CACHE.get(value, () -> new AcceptCharset(value));
 	}
 
 	/**
@@ -123,6 +123,7 @@ public class AcceptCharset extends BasicStringRangesHeader {
 	public static AcceptCharset of(Supplier<StringRanges> value) {
 		return value == null ? null : new AcceptCharset(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

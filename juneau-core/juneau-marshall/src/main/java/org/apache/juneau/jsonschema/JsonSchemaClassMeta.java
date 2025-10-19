@@ -61,7 +61,5 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
-	protected JsonMap getSchema() {
-		return schema;
-	}
+	protected JsonMap getSchema() { return schema; }
 }

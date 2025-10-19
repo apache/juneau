@@ -41,8 +41,7 @@ public class FileEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 */
-	public FileEntity() {
-	}
+	public FileEntity() {}
 
 	/**
 	 * Constructor.
@@ -71,6 +70,7 @@ public class FileEntity extends BasicHttpEntity {
 			return byteCache;
 		return readBytes(content());
 	}
+
 	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		if (isCached() && stringCache == null)
@@ -93,17 +93,13 @@ public class FileEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public long getContentLength() {
-		return content().length();
-	}
+	public long getContentLength() { return content().length(); }
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return true;
-	}
+	public boolean isRepeatable() { return true; }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setCached() throws IOException{
+	public FileEntity setCached() throws IOException {
 		super.setCached();
 		return this;
 	}
@@ -113,6 +109,7 @@ public class FileEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public FileEntity setChunked() {
 		super.setChunked();

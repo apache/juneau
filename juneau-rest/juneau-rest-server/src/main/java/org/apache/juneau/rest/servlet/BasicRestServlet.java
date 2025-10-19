@@ -49,6 +49,7 @@ import org.apache.juneau.rest.stats.*;
 @Rest
 public abstract class BasicRestServlet extends RestServlet implements BasicRestOperations, BasicUniversalConfig {
 	private static final long serialVersionUID = 1L;
+
 	@Override /* Overridden from BasicRestOperations */
 	public void error() {}
 

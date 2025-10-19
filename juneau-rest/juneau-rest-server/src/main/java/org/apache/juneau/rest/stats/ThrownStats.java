@@ -120,6 +120,7 @@ public class ThrownStats implements Cloneable {
 			return this;
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -129,6 +130,7 @@ public class ThrownStats implements Cloneable {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final long guid;
 	private final long hash;
 	private final Class<?> thrownClass;
@@ -182,36 +184,28 @@ public class ThrownStats implements Cloneable {
 	 *
 	 * @return The stats on the caused-by exception, never <jk>null</jk>.
 	 */
-	public Optional<ThrownStats> getCausedBy() {
-		return causedBy;
-	}
+	public Optional<ThrownStats> getCausedBy() { return causedBy; }
 
 	/**
 	 * Returns the number of times this exception occurred at a specific location in code.
 	 *
 	 * @return The number of times this exception occurred at a specific location in code.
 	 */
-	public int getCount() {
-		return count.intValue();
-	}
+	public int getCount() { return count.intValue(); }
 
 	/**
 	 * Returns the message of the first exception at a specific location in code.
 	 *
 	 * @return The message of the first exception at a specific location in code.
 	 */
-	public String getFirstMessage() {
-		return firstMessage;
-	}
+	public String getFirstMessage() { return firstMessage; }
 
 	/**
 	 * Returns the UTC time of the first occurrence of this exception at a specific location in code.
 	 *
 	 * @return The UTC time of the first occurrence of this exception at a specific location in code.
 	 */
-	public long getFirstOccurrence() {
-		return firstOccurrence.longValue();
-	}
+	public long getFirstOccurrence() { return firstOccurrence.longValue(); }
 
 	/**
 	 * Returns a globally unique ID for this object.
@@ -223,45 +217,35 @@ public class ThrownStats implements Cloneable {
 	 *
 	 * @return The globally unique ID for this object.
 	 */
-	public long getGuid() {
-		return guid;
-	}
+	public long getGuid() { return guid; }
 
 	/**
 	 * Returns a hash of this exception that can typically be used to uniquely identify it.
 	 *
 	 * @return A hash of this exception.
 	 */
-	public long getHash() {
-		return hash;
-	}
+	public long getHash() { return hash; }
 
 	/**
 	 * Returns the UTC time of the last occurrence of this exception at a specific location in code.
 	 *
 	 * @return The UTC time of the last occurrence of this exception at a specific location in code.
 	 */
-	public long getLastOccurrence() {
-		return lastOccurrence.longValue();
-	}
+	public long getLastOccurrence() { return lastOccurrence.longValue(); }
 
 	/**
 	 * Returns the stack trace of the first exception at a specific location in code.
 	 *
 	 * @return The stack trace of the first exception at a specific location in code.
 	 */
-	public List<String> getStackTrace() {
-		return stackTrace;
-	}
+	public List<String> getStackTrace() { return stackTrace; }
 
 	/**
 	 * Returns the exception class.
 	 *
 	 * @return The exception class.
 	 */
-	public Class<?> getThrownClass() {
-		return thrownClass;
-	}
+	public Class<?> getThrownClass() { return thrownClass; }
 
 	/**
 	 * Increments the occurrence count of this exception.

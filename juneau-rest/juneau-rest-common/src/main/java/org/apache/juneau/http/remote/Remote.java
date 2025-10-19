@@ -31,7 +31,7 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @Documented
-@Target({TYPE})
+@Target({ TYPE })
 @Retention(RUNTIME)
 @Inherited
 public @interface Remote {

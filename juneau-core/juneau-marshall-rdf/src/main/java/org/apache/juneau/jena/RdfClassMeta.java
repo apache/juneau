@@ -61,9 +61,7 @@ public class RdfClassMeta extends ExtendedClassMeta {
 	 * @return The value of the annotation, or <jk>null</jk> if annotation is not
 	 * specified.
 	 */
-	protected RdfCollectionFormat getCollectionFormat() {
-		return collectionFormat;
-	}
+	protected RdfCollectionFormat getCollectionFormat() { return collectionFormat; }
 
 	/**
 	 * Returns the RDF namespace associated with this class.
@@ -81,7 +79,5 @@ public class RdfClassMeta extends ExtendedClassMeta {
 	 *
 	 * @return The namespace associated with this class, or <jk>null</jk> if no namespace is associated with it.
 	 */
-	protected Namespace getNamespace() {
-		return namespace;
-	}
+	protected Namespace getNamespace() { return namespace; }
 }

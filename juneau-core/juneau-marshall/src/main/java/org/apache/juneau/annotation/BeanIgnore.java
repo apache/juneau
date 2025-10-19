@@ -39,7 +39,7 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target({FIELD,METHOD,TYPE,CONSTRUCTOR})
+@Target({ FIELD, METHOD, TYPE, CONSTRUCTOR })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeanIgnoreAnnotation.Array.class)

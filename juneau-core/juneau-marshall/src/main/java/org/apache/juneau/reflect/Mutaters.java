@@ -44,6 +44,7 @@ public class Mutaters {
 
 	// Special cases.
 	static {
+		// @formatter:off
 
 		// TimeZone doesn't follow any standard conventions.
 		add(String.class, TimeZone.class,
@@ -82,6 +83,7 @@ public class Mutaters {
 				}
 			}
 		);
+		// @formatter:on
 	}
 
 	/**
@@ -185,12 +187,13 @@ public class Mutaters {
 		return t == null ? o.toString() : t.mutate(o);
 	}
 
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static Mutater find(Class<?> ic, Class<?> oc, Map<Class<?>,Mutater<?,?>> m) {
 
 		if (ic == oc) {
 			return new Mutater() {
-				@Override public Object mutate(Object outer, Object in) {
+				@Override
+				public Object mutate(Object outer, Object in) {
 					return in;
 				}
 			};
@@ -206,6 +209,7 @@ public class Mutaters {
 			Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
 			ClassInfo oc2i = ClassInfo.of(oc2);
 
+			// @formatter:off
 			final MethodInfo createMethod = oc2i.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
@@ -213,6 +217,7 @@ public class Mutaters {
 				&& x.hasParamTypes(ic)
 				&& (x.hasName("forName") || isStaticCreateMethodName(x, ic))
 			);
+			// @formatter:on
 
 			if (oc2.isEnum() && createMethod == null) {
 				return new Mutater<String,Object>() {
@@ -236,6 +241,7 @@ public class Mutaters {
 				};
 			}
 		} else {
+			// @formatter:off
 			MethodInfo createMethod = oci.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
@@ -243,6 +249,7 @@ public class Mutaters {
 				&& x.hasParamTypes(ic)
 				&& isStaticCreateMethodName(x, ic)
 			);
+			// @formatter:on
 
 			if (createMethod != null) {
 				Method cm = createMethod.inner();
@@ -295,19 +302,23 @@ public class Mutaters {
 
 	private static MethodInfo findToXMethod(ClassInfo ic, ClassInfo oc) {
 		String tn = oc.getReadableName();
+		// @formatter:off
 		return ic.getPublicMethod(
 			x -> x.isNotStatic()
 			&& x.hasNoParams()
 			&& x.getSimpleName().startsWith("to")
 			&& x.getSimpleName().substring(2).equalsIgnoreCase(tn)
 		);
+		// @formatter:on
 	}
 
 	private static boolean isStaticCreateMethodName(MethodInfo mi, Class<?> ic) {
 		String n = mi.getSimpleName(), cn = ic.getSimpleName();
+		// @formatter:off
 		return isOneOf(n, "create","from","fromValue","parse","valueOf","builder")
 			|| (n.startsWith("from") && n.substring(4).equals(cn))
 			|| (n.startsWith("for") && n.substring(3).equals(cn))
 			|| (n.startsWith("parse") && n.substring(5).equals(cn));
+		// @formatter:on
 	}
 }

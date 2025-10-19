@@ -137,7 +137,13 @@ The `D_additionalMethods` test class should contain three tests:
 - Verify all changes work correctly
 - Maintain consistency across similar files
 
-### 11. Fluent Setter Override Formatting
+### 11. TODO List Management
+- When the user says "add to TODO" or "add to the TODO list", this refers to the `TODO.md` file in the project root
+- Do NOT use the in-memory todo list tool for user-requested TODO items
+- Add items directly to the `TODO.md` file using the write or search_replace tools
+- Follow the existing format and structure of the `TODO.md` file
+
+### 12. Fluent Setter Override Formatting
 When adding fluent setter overrides to classes:
 - Include blank lines between each method
 - Each override method should be separated by exactly one blank line

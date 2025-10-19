@@ -54,19 +54,13 @@ public class ResponseHeader extends BasicHeader {
 	static final Header NULL_HEADER = new Header() {
 
 		@Override /* Overridden from Header */
-		public HeaderElement[] getElements() throws org.apache.http.ParseException {
-			return new HeaderElement[0];
-		}
+		public HeaderElement[] getElements() throws org.apache.http.ParseException { return new HeaderElement[0]; }
 
 		@Override /* Overridden from Header */
-		public String getName() {
-			return null;
-		}
+		public String getName() { return null; }
 
 		@Override /* Overridden from Header */
-		public String getValue() {
-			return null;
-		}
+		public String getValue() { return null; }
 	};
 
 	private final HeaderElement[] elements;
@@ -90,6 +84,7 @@ public class ResponseHeader extends BasicHeader {
 		this.elements = header == null ? new HeaderElement[0] : header.getElements();
 		parser(null);
 	}
+
 	/**
 	 * Converts this header to the specified type.
 	 *
@@ -115,6 +110,7 @@ public class ResponseHeader extends BasicHeader {
 			throw new BasicRuntimeException(e, "Could not parse response header {0}.", getName());
 		}
 	}
+
 	/**
 	 * Converts this header to the specified type.
 	 *
@@ -482,6 +478,7 @@ public class ResponseHeader extends BasicHeader {
 		value.set(orElse(null));
 		return response;
 	}
+
 	/**
 	 * Returns the value of this header as a string header.
 	 *
@@ -516,9 +513,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @throws org.apache.http.ParseException In case of a parsing error.
 	 */
 	@Override /* Overridden from Header */
-	public HeaderElement[] getElements() throws org.apache.http.ParseException {
-		return elements;
-	}
+	public HeaderElement[] getElements() throws org.apache.http.ParseException { return elements; }
 
 	/**
 	 * Specifies the part parser to use for this header.
@@ -544,6 +539,7 @@ public class ResponseHeader extends BasicHeader {
 	public RestResponse response() {
 		return response;
 	}
+
 	/**
 	 * Specifies the part schema for this header.
 	 *

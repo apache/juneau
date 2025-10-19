@@ -35,10 +35,10 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Basics</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({MsgPackConfigAnnotation.SerializerApply.class,MsgPackConfigAnnotation.ParserApply.class})
+@ContextApply({ MsgPackConfigAnnotation.SerializerApply.class, MsgPackConfigAnnotation.ParserApply.class })
 public @interface MsgPackConfig {
 
 	/**

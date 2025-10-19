@@ -60,6 +60,7 @@ public class BasicPart implements NameValuePair, Headerable {
 		ClassInfo ci = ClassInfo.of(o);
 		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
+
 	/**
 	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.
 	 *
@@ -113,7 +114,7 @@ public class BasicPart implements NameValuePair, Headerable {
 			i = pair.indexOf('=');
 		if (i == -1)
 			return of(pair, "");
-		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
+		return of(pair.substring(0, i).trim(), pair.substring(i + 1).trim());
 	}
 
 	private final String name;
@@ -166,23 +167,17 @@ public class BasicPart implements NameValuePair, Headerable {
 	}
 
 	@Override /* Overridden from NameValuePair */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Returns the raw value of the part.
 	 *
 	 * @return The raw value of the part.
 	 */
-	public Object getRawValue() {
-		return unwrap(value);
-	}
+	public Object getRawValue() { return unwrap(value); }
 
 	@Override /* Overridden from NameValuePair */
-	public String getValue() {
-		return Utils.s(unwrap(value));
-	}
+	public String getValue() { return Utils.s(unwrap(value)); }
 
 	@Override /* Overridden from Object */
 	public String toString() {

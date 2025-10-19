@@ -51,11 +51,13 @@ public class StringMatcherFactory extends MatcherFactory {
 	 * A construct representing a single search pattern.
 	 */
 	private static class StringMatcher extends AbstractMatcher {
+		// @formatter:off
 		private static final AsciiSet
 			META_CHARS = AsciiSet.of("*?'\""),
 			SQ_CHAR = AsciiSet.of("'"),
 			DQ_CHAR = AsciiSet.of("\""),
 			REGEX_CHARS = AsciiSet.of("+\\[]{}()^$.");
+		// @formatter:on
 		private String pattern;
 
 		Pattern[] orPatterns, andPatterns, notPatterns;
@@ -68,7 +70,7 @@ public class StringMatcherFactory extends MatcherFactory {
 			List<Pattern> nots = new LinkedList<>();
 
 			for (String s : Utils.splitQuoted(pattern, true)) {
-				char c0 = s.charAt(0), c9 = s.charAt(s.length()-1);
+				char c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);
 
 				if (c0 == '/' && c9 == '/' && s.length() > 1) {
 					ands.add(Pattern.compile(strip(s)));

@@ -34,7 +34,7 @@ public class AtomFeed {
 	 * @return A sample Atom feed.
 	 * @throws URISyntaxException Won't happen
 	 */
-	public static Feed getAtomFeed() throws URISyntaxException{
+	public static Feed getAtomFeed() throws URISyntaxException {
 
 		return
 			feed("tag:foo.org", "Title", "2016-12-31T05:02:03Z")

@@ -89,6 +89,7 @@ public class UserAgent extends BasicStringHeader {
 	public static UserAgent of(Supplier<String> value) {
 		return value == null ? null : new UserAgent(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

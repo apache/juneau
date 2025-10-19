@@ -58,7 +58,7 @@ import org.apache.juneau.*;
  * </ul>
  */
 @Documented
-@Target({METHOD,TYPE,CONSTRUCTOR})
+@Target({ METHOD, TYPE, CONSTRUCTOR })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(BeancAnnotation.Array.class)

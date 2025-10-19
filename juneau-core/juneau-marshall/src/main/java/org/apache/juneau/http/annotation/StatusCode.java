@@ -104,7 +104,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,METHOD,TYPE})
+@Target({ PARAMETER, METHOD, TYPE })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(StatusCodeAnnotation.Array.class)

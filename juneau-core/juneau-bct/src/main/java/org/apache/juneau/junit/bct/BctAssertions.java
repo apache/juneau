@@ -183,11 +183,8 @@ public class BctAssertions {
 		assertArgNotNull("args", args);
 		assertArgNotNull("fields", fields);
 		assertArgNotNull("expected", expected);
-		assertEquals(
-			expected,
-			tokenize(fields).stream().map(x -> args.getBeanConverter().orElse(DEFAULT_CONVERTER).getNested(actual, x)).collect(joining(",")),
-			args.getMessage("Bean assertion failed.")
-			);
+		assertEquals(expected, tokenize(fields).stream().map(x -> args.getBeanConverter().orElse(DEFAULT_CONVERTER).getNested(actual, x)).collect(joining(",")),
+			args.getMessage("Bean assertion failed."));
 	}
 
 	/**
@@ -399,18 +396,17 @@ public class BctAssertions {
 			}
 		}
 
-		if (errors.isEmpty()) return;
+		if (errors.isEmpty())
+			return;
 
 		var actualStrings = new ArrayList<String>();
 		for (var o : actualList) {
 			actualStrings.add(tokens.stream().map(x -> converter.getNested(o, x)).collect(joining(",")));
 		}
 
-		throw assertEqualsFailed(
-			Stream.of(expected).map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
+		throw assertEqualsFailed(Stream.of(expected).map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
 			actualStrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
-			args.getMessage("{0} bean assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n")))
-		);
+			args.getMessage("{0} bean assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
 	/**
@@ -545,9 +541,11 @@ public class BctAssertions {
 			}
 		}
 
-		if (errors.isEmpty()) return;
+		if (errors.isEmpty())
+			return;
 
-		if (errors.size() == 1) throw errors.get(0);
+		if (errors.size() == 1)
+			throw errors.get(0);
 
 		var missingSubstrings = new ArrayList<String>();
 		for (var e : expected) {
@@ -556,11 +554,8 @@ public class BctAssertions {
 			}
 		}
 
-		throw assertEqualsFailed(
-			missingSubstrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
-			Utils.escapeForJava(a),
-			args.getMessage("{0} substring assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n")))
-		);
+		throw assertEqualsFailed(missingSubstrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")), Utils.escapeForJava(a),
+			args.getMessage("{0} substring assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
 	/**
@@ -693,7 +688,7 @@ public class BctAssertions {
 					if (ne(e2, converter.stringify(x))) {
 						errors.add(assertEqualsFailed(e2, converter.stringify(x), args.getMessage("Element at index {0} did not match.", i)));
 					}
-				} else if (e instanceof Predicate e2) {  // NOSONAR
+				} else if (e instanceof Predicate e2) { // NOSONAR
 					if (!e2.test(x)) {
 						errors.add(new AssertionFailedError(args.getMessage("Element at index {0} did not pass predicate.  ==> actual: <{1}>", i, converter.stringify(x)).get()));
 					}
@@ -705,20 +700,20 @@ public class BctAssertions {
 			}
 		}
 
-		if (errors.isEmpty()) return;
+		if (errors.isEmpty())
+			return;
 
 		var actualStrings = new ArrayList<String>();
 		for (var o : list) {
 			actualStrings.add(converter.stringify(o));
 		}
 
-		if (errors.size() == 1) throw errors.get(0);
+		if (errors.size() == 1)
+			throw errors.get(0);
 
-		throw assertEqualsFailed(
-			Stream.of(expected).map(converter::stringify).map(Utils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
+		throw assertEqualsFailed(Stream.of(expected).map(converter::stringify).map(Utils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
 			actualStrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
-			args.getMessage("{0} list assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n")))
-		);
+			args.getMessage("{0} list assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
 	/**

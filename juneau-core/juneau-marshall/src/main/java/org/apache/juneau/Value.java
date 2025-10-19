@@ -79,9 +79,7 @@ public class Value<T> {
 	 * @return <jk>true</jk> if the specified type is this class.
 	 */
 	public static boolean isType(Type t) {
-		return
-			(t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class)
-			|| (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
+		return (t instanceof ParameterizedType && ((ParameterizedType)t).getRawType() == Value.class) || (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
 	}
 
 	/**
@@ -105,6 +103,7 @@ public class Value<T> {
 		Type x = getParameterType(t);
 		return x != null ? x : t;
 	}
+
 	private T t;
 	private ValueListener<T> listener;
 
@@ -157,18 +156,14 @@ public class Value<T> {
 	 *
 	 * @return <jk>true</jk> if the value is empty.
 	 */
-	public boolean isEmpty() {
-		return t == null;
-	}
+	public boolean isEmpty() { return t == null; }
 
 	/**
 	 * Returns <jk>true</jk> if the value is set.
 	 *
 	 * @return <jk>true</jk> if the value is set.
 	 */
-	public boolean isPresent() {
-		return get() != null;
-	}
+	public boolean isPresent() { return get() != null; }
 
 	/**
 	 * Adds a listener for this value.
@@ -188,7 +183,7 @@ public class Value<T> {
 	 * @param mapper The mapping function.
 	 * @return The mapped value.
 	 */
-	public <T2> Value<T2> map(Function<? super T, T2> mapper) {
+	public <T2> Value<T2> map(Function<? super T,T2> mapper) {
 		if (t != null)
 			return Value.of(mapper.apply(t));
 		return Value.empty();
@@ -217,6 +212,7 @@ public class Value<T> {
 	public T orElseGet(Supplier<? extends T> other) {
 		return t != null ? t : other.get();
 	}
+
 	/**
 	 * Return the contained value, if present, otherwise throw an exception
 	 * to be created by the provided supplier.
@@ -262,6 +258,6 @@ public class Value<T> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return "Value("+t+")";
+		return "Value(" + t + ")";
 	}
 }

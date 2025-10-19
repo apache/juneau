@@ -170,7 +170,7 @@ public class ContextBeanCreator<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public ContextBeanCreator<T> type(Class<? extends T> value) {
-		builder = Context.createBuilder((Class<? extends Context>) value);
+		builder = Context.createBuilder((Class<? extends Context>)value);
 		if (builder == null)
 			throw new IllegalArgumentException("Creator for class {0} not found." + value.getName());
 		return this;

@@ -42,16 +42,12 @@ public class RemoteOperationBeanArg {
 	 *
 	 * @return The index of the parameter in the method that is a request bean.
 	 */
-	public int getIndex() {
-		return index;
-	}
+	public int getIndex() { return index; }
 
 	/**
 	 * Returns metadata on the request bean.
 	 *
 	 * @return Metadata about the bean.
 	 */
-	public RequestBeanMeta getMeta() {
-		return meta;
-	}
+	public RequestBeanMeta getMeta() { return meta; }
 }

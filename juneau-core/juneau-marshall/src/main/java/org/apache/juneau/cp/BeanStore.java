@@ -115,12 +115,14 @@ public class BeanStore {
 
 			ClassInfo c = ClassInfo.of(type);
 
+			// @formatter:off
 			MethodInfo m = c.getDeclaredMethod(
 				x -> x.isPublic()
 				&& x.hasNoParams()
 				&& x.isStatic()
 				&& x.hasName("getInstance")
 			);
+			// @formatter:on
 			if (m != null)
 				return m.invoke(null);
 
@@ -134,6 +136,7 @@ public class BeanStore {
 
 			throw new BasicRuntimeException("Could not find a way to instantiate class {0}", type);
 		}
+
 		/**
 		 * Overrides the bean to return from the {@link #build()} method.
 		 *
@@ -244,6 +247,7 @@ public class BeanStore {
 	public static BeanStore of(BeanStore parent) {
 		return create().parent(parent).build();
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -254,6 +258,7 @@ public class BeanStore {
 	public static BeanStore of(BeanStore parent, Object outer) {
 		return create().parent(parent).outer(outer).build();
 	}
+
 	private final Deque<BeanStoreEntry<?>> entries;
 	private final Map<Class<?>,BeanStoreEntry<?>> unnamedEntries;
 
@@ -330,7 +335,7 @@ public class BeanStore {
 	 * @return This object.
 	 */
 	public <T> BeanStore addBean(Class<T> beanType, T bean, String name) {
-		return addSupplier(beanType, ()->bean, name);
+		return addSupplier(beanType, () -> bean, name);
 	}
 
 	/**
@@ -432,7 +437,7 @@ public class BeanStore {
 	 * @return The method finder.  Never <jk>null</jk>.
 	 */
 	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType, Class<?> resourceClass) {
-		return new BeanCreateMethodFinder<>(beanType, resourceClass , this);
+		return new BeanCreateMethodFinder<>(beanType, resourceClass, this);
 	}
 
 	/**
@@ -461,7 +466,7 @@ public class BeanStore {
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType) {
 		try (SimpleLock x = lock.read()) {
-			BeanStoreEntry<T> e = (BeanStoreEntry<T>) unnamedEntries.get(beanType);
+			BeanStoreEntry<T> e = (BeanStoreEntry<T>)unnamedEntries.get(beanType);
 			if (e != null)
 				return Utils.opt(e.get());
 			if (parent.isPresent())
@@ -479,7 +484,7 @@ public class BeanStore {
 	 * @return The bean.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> Optional<T> getBean(Class<T> beanType, String name)  {
+	public <T> Optional<T> getBean(Class<T> beanType, String name) {
 		try (SimpleLock x = lock.read()) {
 			BeanStoreEntry<T> e = (BeanStoreEntry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
 			if (e != null)
@@ -508,9 +513,9 @@ public class BeanStore {
 				continue loop;
 			String beanName = findBeanName(pi);
 			Class<?> ptc = pt.inner();
-			if (beanName == null && !hasBean(ptc))
+			if (beanName == null && ! hasBean(ptc))
 				l.add(pt.getSimpleName());
-			if (beanName != null && !hasBean(ptc, beanName))
+			if (beanName != null && ! hasBean(ptc, beanName))
 				l.add(pt.getSimpleName() + '@' + beanName);
 		}
 		return l.isEmpty() ? null : l.stream().sorted().collect(joining(","));
@@ -557,7 +562,7 @@ public class BeanStore {
 				continue loop;
 			String beanName = findBeanName(pi);
 			Class<?> ptc = pt.inner();
-			if ((beanName == null && !hasBean(ptc)) || (beanName != null && !hasBean(ptc, beanName)))
+			if ((beanName == null && ! hasBean(ptc)) || (beanName != null && ! hasBean(ptc, beanName)))
 				return false;
 		}
 		return true;
@@ -624,7 +629,7 @@ public class BeanStore {
 	 * @param beanType The bean type to return.
 	 * @return The bean entries.  Never <jk>null</jk>.
 	 */
-	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> beanType)  {
+	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> beanType) {
 		@SuppressWarnings("unchecked")
 		Stream<BeanStoreEntry<T>> s = entries.stream().filter(x -> x.matches(beanType)).map(x -> (BeanStoreEntry<T>)x);
 		if (parent.isPresent())
@@ -636,10 +641,12 @@ public class BeanStore {
 	public String toString() {
 		return Json5.of(properties());
 	}
+
 	private void assertCanWrite() {
 		if (readOnly)
 			throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");
 	}
+
 	private static String findBeanName(ParamInfo pi) {
 		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
 		if (n != null)
@@ -649,6 +656,7 @@ public class BeanStore {
 
 	private JsonMap properties() {
 		Predicate<Boolean> nf = Utils::isTrue;
+		// @formatter:off
 		return filteredMap()
 			.append("identity", Utils2.identity(this))
 			.append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
@@ -657,6 +665,7 @@ public class BeanStore {
 			.appendIf(nf, "readOnly", readOnly)
 			.appendIf(nf, "threadSafe", threadSafe)
 		;
+		// @formatter:on
 	}
 
 	/**

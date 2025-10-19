@@ -156,6 +156,7 @@ public class Accept extends BasicMediaRangesHeader {
 
 	// Constants
 	@SuppressWarnings("javadoc")
+	// @formatter:off
 	public static final Accept
 		APPLICATION_ATOM_XML = of("application/atom+xml"),
 		APPLICATION_FORM_URLENCODED = of("application/x-www-form-urlencoded"),
@@ -178,6 +179,7 @@ public class Accept extends BasicMediaRangesHeader {
 		TEXT_XML = of("text/xml"),
 		WILDCARD = of("*/*"),
 		NULL = new Accept((String)null);
+	// @formatter:on
 
 	/**
 	 * Static creator.
@@ -213,7 +215,7 @@ public class Accept extends BasicMediaRangesHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Accept of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new Accept(value));
+		return value == null ? null : CACHE.get(value, () -> new Accept(value));
 	}
 
 	/**
@@ -230,6 +232,7 @@ public class Accept extends BasicMediaRangesHeader {
 	public static Accept of(Supplier<MediaRanges> value) {
 		return value == null ? null : new Accept(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

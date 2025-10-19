@@ -64,6 +64,7 @@ public class SerializedPojoProcessor implements ResponseProcessor {
 				else
 					res.setHeader(ContentType.of(responseType.toString()));
 
+				// @formatter:off
 				SerializerSession session = s
 					.createSession()
 					.properties(req.getAttributes().asMap())
@@ -77,6 +78,7 @@ public class SerializedPojoProcessor implements ResponseProcessor {
 					.uriContext(req.getUriContext())
 					.resolver(req.getVarResolverSession())
 					.build();
+				// @formatter:on
 
 				for (Map.Entry<String,String> h : session.getResponseHeaders().entrySet())
 					res.addHeader(h.getKey(), h.getValue());
@@ -110,9 +112,7 @@ public class SerializedPojoProcessor implements ResponseProcessor {
 		if (o == null)
 			return FINISHED;
 
-		throw new NotAcceptable(
-			"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",
-			req.getHeaderParam("Accept").orElse(""), Json5.of(res.getOpContext().getSerializers().getSupportedMediaTypes())
-		);
+		throw new NotAcceptable("Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}", req.getHeaderParam("Accept").orElse(""),
+			Json5.of(res.getOpContext().getSerializers().getSupportedMediaTypes()));
 	}
 }

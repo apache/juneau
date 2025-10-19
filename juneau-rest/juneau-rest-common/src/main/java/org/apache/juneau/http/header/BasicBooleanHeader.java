@@ -41,7 +41,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header
-@Schema(type="boolean")
+@Schema(type = "boolean")
 public class BasicBooleanHeader extends BasicHeader {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +90,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	public static BasicBooleanHeader of(String name, Supplier<Boolean> value) {
 		return value == null ? null : new BasicBooleanHeader(name, value);
 	}
+
 	private final Boolean value;
 	private final Supplier<Boolean> supplier;
 
@@ -171,9 +172,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
+	public String getValue() { return Utils.s(value()); }
 
 	/**
 	 * Returns <jk>true</jk> if the header value is <jk>true</jk>.

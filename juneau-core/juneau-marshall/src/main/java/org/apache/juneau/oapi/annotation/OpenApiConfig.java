@@ -35,10 +35,10 @@ import org.apache.juneau.msgpack.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({OpenApiConfigAnnotation.SerializerApply.class,OpenApiConfigAnnotation.ParserApply.class})
+@ContextApply({ OpenApiConfigAnnotation.SerializerApply.class, OpenApiConfigAnnotation.ParserApply.class })
 public @interface OpenApiConfig {
 
 	/**
@@ -67,6 +67,7 @@ public @interface OpenApiConfig {
 	 * @return The annotation value.
 	 */
 	String collectionFormat() default "";
+
 	/**
 	 * Default format for HTTP parts.
 	 *

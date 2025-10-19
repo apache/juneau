@@ -33,7 +33,7 @@ import org.apache.juneau.soap.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @ContextApply(SoapXmlConfigAnnotation.SerializerApply.class)

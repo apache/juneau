@@ -120,13 +120,13 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentDateAssertion.class, "Messages");
 	private static final String
 		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue"),
 		MSG_valueWasNotAfterExpected = MESSAGES.getString("valueWasNotAfterExpected"),
 		MSG_valueWasNotBeforeExpected = MESSAGES.getString("valueWasNotBeforeExpected");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -164,7 +164,6 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 		this(null, value, returns);
 	}
 
-
 	/**
 	 * Returns an long assertion on the epoch milliseconds of this date.
 	 *
@@ -191,7 +190,6 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 		return new FluentLongAssertion<>(this, valueIsNull() ? null : value().getTime() / 1000, returns());
 	}
 
-
 	/**
 	 * Asserts that the value equals the specified value at the specified precision.
 	 *
@@ -201,7 +199,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Date value, ChronoUnit precision) throws AssertionError {
-		if (Utils.ne(value(), value, (x,y)->x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
+		if (Utils.ne(value(), value, (x, y) -> x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
 			throw error(MSG_unexpectedValue, value, value());
 		return returns();
 	}
@@ -215,7 +213,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 */
 	public R isAfter(Date value) throws AssertionError {
 		Utils.assertArgNotNull("value", value);
-		if (! (value().after(value)))
+		if (!(value().after(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
 	}
@@ -226,9 +224,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isAfterNow() throws AssertionError {
-		return isAfter(new Date());
-	}
+	public R isAfterNow() throws AssertionError { return isAfter(new Date()); }
 
 	/**
 	 * Asserts that the value is before the specified value.
@@ -239,7 +235,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 */
 	public R isBefore(Date value) throws AssertionError {
 		Utils.assertArgNotNull("value", value);
-		if (! (value().before(value)))
+		if (!(value().before(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
 	}
@@ -250,9 +246,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isBeforeNow() throws AssertionError {
-		return isBefore(new Date());
-	}
+	public R isBeforeNow() throws AssertionError { return isBefore(new Date()); }
 
 	/**
 	 * Asserts that the value is between (inclusive) the specified upper and lower values.

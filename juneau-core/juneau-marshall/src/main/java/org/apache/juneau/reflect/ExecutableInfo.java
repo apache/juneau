@@ -82,6 +82,7 @@ public abstract class ExecutableInfo {
 				action.accept(pi);
 		return this;
 	}
+
 	/**
 	 * Performs an action on all matching parameter annotations at the specified parameter index.
 	 *
@@ -109,7 +110,7 @@ public abstract class ExecutableInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int fuzzyArgsMatch(Class<?>... argTypes) {
+	public final int fuzzyArgsMatch(Class<?>...argTypes) {
 		int matches = 0;
 		outer: for (ClassInfo pi : getParamTypes()) {
 			for (Class<?> a : argTypes) {
@@ -133,7 +134,7 @@ public abstract class ExecutableInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int fuzzyArgsMatch(ClassInfo... argTypes) {
+	public final int fuzzyArgsMatch(ClassInfo...argTypes) {
 		int matches = 0;
 		outer: for (ClassInfo pi : getParamTypes()) {
 			for (ClassInfo a : argTypes) {
@@ -157,7 +158,7 @@ public abstract class ExecutableInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int fuzzyArgsMatch(Object... argTypes) {
+	public final int fuzzyArgsMatch(Object...argTypes) {
 		int matches = 0;
 		outer: for (ClassInfo pi : getParamTypes()) {
 			for (Object a : argTypes) {
@@ -176,18 +177,14 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return Metadata about the class that declared this method or constructor.
 	 */
-	public final ClassInfo getDeclaringClass() {
-		return declaringClass;
-	}
+	public final ClassInfo getDeclaringClass() { return declaringClass; }
 
 	/**
 	 * Returns the exception types on this executable.
 	 *
 	 * @return The exception types on this executable.
 	 */
-	public final List<ClassInfo> getExceptionTypes() {
-		return u(alist(_getExceptionTypes()));
-	}
+	public final List<ClassInfo> getExceptionTypes() { return u(alist(_getExceptionTypes())); }
 
 	/**
 	 * Returns the full name of this executable.
@@ -239,9 +236,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The number of parameters in this executable.
 	 */
-	public final int getParamCount() {
-		return e.getParameterCount();
-	}
+	public final int getParamCount() { return e.getParameterCount(); }
 
 	/**
 	 * Returns the parameters defined on this executable.
@@ -251,9 +246,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
-	public final List<ParamInfo> getParams() {
-		return u(alist(_getParams()));
-	}
+	public final List<ParamInfo> getParams() { return u(alist(_getParams())); }
 
 	/**
 	 * Returns the parameter type of the parameter at the specified index.
@@ -271,9 +264,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The parameter types on this executable.
 	 */
-	public final List<ClassInfo> getParamTypes() {
-		return u(alist(_getParameterTypes()));
-	}
+	public final List<ClassInfo> getParamTypes() { return u(alist(_getParameterTypes())); }
 
 	/**
 	 * Returns the raw generic parameter type of the parameter at the specified index.
@@ -291,9 +282,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The raw generic parameter types on this executable.
 	 */
-	public final List<Type> getRawGenericParamTypes() {
-		return u(alist(_getRawGenericParamTypes()));
-	}
+	public final List<Type> getRawGenericParamTypes() { return u(alist(_getRawGenericParamTypes())); }
 
 	/**
 	 * Returns the raw {@link Parameter} object that represents the parameter at the specified index.
@@ -313,9 +302,7 @@ public abstract class ExecutableInfo {
 	 * @return An array of raw {@link Parameter} objects, or an empty array if executable has no parameters.
 	 * @see Executable#getParameters()
 	 */
-	public final List<Parameter> getRawParameters() {
-		return u(alist(_getRawParameters()));
-	}
+	public final List<Parameter> getRawParameters() { return u(alist(_getRawParameters())); }
 
 	/**
 	 * Returns the raw parameter type of the parameter at the specified index.
@@ -333,9 +320,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The raw parameter types on this executable.
 	 */
-	public final List<Class<?>> getRawParamTypes() {
-		return u(alist(_getRawParamTypes()));
-	}
+	public final List<Class<?>> getRawParamTypes() { return u(alist(_getRawParamTypes())); }
 
 	/**
 	 * Returns the short name of this executable.
@@ -366,9 +351,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The simple name of the underlying method;
 	 */
-	public final String getSimpleName() {
-		return isConstructor ? e.getDeclaringClass().getSimpleName() : e.getName();
-	}
+	public final String getSimpleName() { return isConstructor ? e.getDeclaringClass().getSimpleName() : e.getName(); }
 
 	/**
 	 * Returns <jk>true</jk> if this method has at most only this arguments in any order.
@@ -379,6 +362,7 @@ public abstract class ExecutableInfo {
 	public final boolean hasFuzzyParamTypes(Class<?>...args) {
 		return fuzzyArgsMatch(args) != -1;
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this method has at most only this arguments in any order.
 	 *
@@ -440,6 +424,7 @@ public abstract class ExecutableInfo {
 	public final boolean hasName(Set<String> names) {
 		return names.contains(getSimpleName());
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this method has this name.
 	 *
@@ -462,6 +447,7 @@ public abstract class ExecutableInfo {
 				return true;
 		return false;
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this executable has no parameters.
 	 *
@@ -548,9 +534,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return <jk>true</jk> if this method is abstract.
 	 */
-	public final boolean isAbstract() {
-		return Modifier.isAbstract(e.getModifiers());
-	}
+	public final boolean isAbstract() { return Modifier.isAbstract(e.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this method.
@@ -687,9 +671,7 @@ public abstract class ExecutableInfo {
 	 * 	<jk>true</jk> if this executable represents a {@link Constructor} and can be cast to {@link ConstructorInfo}.
 	 * 	<jk>false</jk> if this executable represents a {@link Method} and can be cast to {@link MethodInfo}.
 	 */
-	public final boolean isConstructor() {
-		return isConstructor;
-	}
+	public final boolean isConstructor() { return isConstructor; }
 
 	/**
 	 * Returns <jk>true</jk> if this method has the {@link Deprecated @Deprecated} annotation on it.
@@ -706,9 +688,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return <jk>true</jk> if this method is not abstract.
 	 */
-	public final boolean isNotAbstract() {
-		return ! Modifier.isAbstract(e.getModifiers());
-	}
+	public final boolean isNotAbstract() { return ! Modifier.isAbstract(e.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this method doesn't have the {@link Deprecated @Deprecated} annotation on it.
@@ -725,54 +705,42 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return <jk>true</jk> if this method is not protected.
 	 */
-	public final boolean isNotProtected() {
-		return ! Modifier.isProtected(e.getModifiers());
-	}
+	public final boolean isNotProtected() { return ! Modifier.isProtected(e.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this method is not public.
 	 *
 	 * @return <jk>true</jk> if this method is not public.
 	 */
-	public final boolean isNotPublic() {
-		return ! Modifier.isPublic(e.getModifiers());
-	}
+	public final boolean isNotPublic() { return ! Modifier.isPublic(e.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this method is not static.
 	 *
 	 * @return <jk>true</jk> if this method is not static.
 	 */
-	public final boolean isNotStatic() {
-		return ! Modifier.isStatic(e.getModifiers());
-	}
+	public final boolean isNotStatic() { return ! Modifier.isStatic(e.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this method is protected.
 	 *
 	 * @return <jk>true</jk> if this method is protected.
 	 */
-	public final boolean isProtected() {
-		return Modifier.isProtected(e.getModifiers());
-	}
+	public final boolean isProtected() { return Modifier.isProtected(e.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this method is public.
 	 *
 	 * @return <jk>true</jk> if this method is public.
 	 */
-	public final boolean isPublic() {
-		return Modifier.isPublic(e.getModifiers());
-	}
+	public final boolean isPublic() { return Modifier.isPublic(e.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this method is static.
 	 *
 	 * @return <jk>true</jk> if this method is static.
 	 */
-	public final boolean isStatic() {
-		return Modifier.isStatic(e.getModifiers());
-	}
+	public final boolean isStatic() { return Modifier.isStatic(e.getModifiers()); }
 
 	/**
 	 * Identifies if the specified visibility matches this method.
@@ -803,6 +771,7 @@ public abstract class ExecutableInfo {
 	public String toString() {
 		return getShortName();
 	}
+
 	private void checkIndex(int index) {
 		int pc = getParamCount();
 		if (pc == 0)
@@ -813,7 +782,7 @@ public abstract class ExecutableInfo {
 
 	final Annotation[] _getDeclaredAnnotations() {
 		if (declaredAnnotations == null) {
-			synchronized(this) {
+			synchronized (this) {
 				declaredAnnotations = e.getDeclaredAnnotations();
 			}
 		}
@@ -822,7 +791,7 @@ public abstract class ExecutableInfo {
 
 	final ClassInfo[] _getExceptionTypes() {
 		if (exceptionInfos == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Class<?>[] exceptionTypes = e.getExceptionTypes();
 				ClassInfo[] l = new ClassInfo[exceptionTypes.length];
 				for (int i = 0; i < exceptionTypes.length; i++)
@@ -832,9 +801,10 @@ public abstract class ExecutableInfo {
 		}
 		return exceptionInfos;
 	}
+
 	final Annotation[][] _getParameterAnnotations() {
 		if (parameterAnnotations == null) {
-			synchronized(this) {
+			synchronized (this) {
 				parameterAnnotations = e.getParameterAnnotations();
 			}
 		}
@@ -852,7 +822,7 @@ public abstract class ExecutableInfo {
 			for (int i = 0; i < diff; i++)
 				x2[i] = new Annotation[0];
 			for (int i = diff; i < c; i++)
-				x2[i] = x[i-diff];
+				x2[i] = x[i - diff];
 			x = x2;
 		}
 		return x[index];
@@ -860,7 +830,7 @@ public abstract class ExecutableInfo {
 
 	final ClassInfo[] _getParameterTypes() {
 		if (paramTypes == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Class<?>[] ptc = _getRawParamTypes();
 				// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
 				// always return an empty array.  This appears to be fixed in Java 8 b75.
@@ -872,7 +842,7 @@ public abstract class ExecutableInfo {
 						Type[] ptt2 = new Type[ptc.length];
 						ptt2[0] = ptc[0];
 						for (int i = 0; i < ptt.length; i++)
-							ptt2[i+1] = ptt[i];
+							ptt2[i + 1] = ptt[i];
 						ptt = ptt2;
 					} else {
 						ptt = ptc;
@@ -886,9 +856,10 @@ public abstract class ExecutableInfo {
 		}
 		return paramTypes;
 	}
+
 	final ParamInfo[] _getParams() {
 		if (params == null) {
-			synchronized(this) {
+			synchronized (this) {
 				Parameter[] rp = _getRawParameters();
 				ParamInfo[] l = new ParamInfo[rp.length];
 				for (int i = 0; i < rp.length; i++)
@@ -901,7 +872,7 @@ public abstract class ExecutableInfo {
 
 	final Type[] _getRawGenericParamTypes() {
 		if (rawGenericParamTypes == null) {
-			synchronized(this) {
+			synchronized (this) {
 				rawGenericParamTypes = e.getGenericParameterTypes();
 			}
 		}
@@ -910,7 +881,7 @@ public abstract class ExecutableInfo {
 
 	final Parameter[] _getRawParameters() {
 		if (rawParameters == null) {
-			synchronized(this) {
+			synchronized (this) {
 				rawParameters = e.getParameters();
 			}
 		}
@@ -919,7 +890,7 @@ public abstract class ExecutableInfo {
 
 	Class<?>[] _getRawParamTypes() {
 		if (rawParamTypes == null) {
-			synchronized(this) {
+			synchronized (this) {
 				rawParamTypes = e.getParameterTypes();
 			}
 		}

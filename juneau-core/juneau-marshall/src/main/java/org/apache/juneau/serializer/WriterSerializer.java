@@ -112,6 +112,7 @@ public class WriterSerializer extends Serializer {
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addRootType() {
 			super.addRootType();
@@ -165,6 +166,7 @@ public class WriterSerializer extends Serializer {
 			super.beanContext(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder beanContext(BeanContext.Builder value) {
 			super.beanContext(value);
@@ -424,6 +426,7 @@ public class WriterSerializer extends Serializer {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				fileCharset,
@@ -433,6 +436,7 @@ public class WriterSerializer extends Serializer {
 				quoteCharOverride,
 				useWhitespace
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -767,13 +771,13 @@ public class WriterSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -955,6 +959,7 @@ public class WriterSerializer extends Serializer {
 			return useWhitespace();
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -963,6 +968,7 @@ public class WriterSerializer extends Serializer {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final Charset fileCharset, streamCharset;
 	final int maxIndent;
 	final Character quoteChar, quoteCharOverride;
@@ -1000,14 +1006,10 @@ public class WriterSerializer extends Serializer {
 	}
 
 	@Override /* Overridden from Context */
-	public WriterSerializerSession getSession() {
-		return createSession().build();
-	}
+	public WriterSerializerSession getSession() { return createSession().build(); }
 
 	@Override /* Overridden from Serializer */
-	public final boolean isWriterSerializer() {
-		return true;
-	}
+	public final boolean isWriterSerializer() { return true; }
 
 	/**
 	 * Convenience method for serializing an object and sending it to STDOUT.
@@ -1048,6 +1050,7 @@ public class WriterSerializer extends Serializer {
 			throw asRuntimeException(e);
 		}
 	}
+
 	/**
 	 * File charset.
 	 *
@@ -1055,9 +1058,7 @@ public class WriterSerializer extends Serializer {
 	 * @return
 	 * 	The character set to use when writing to <c>Files</c> on the file system.
 	 */
-	protected final Charset getFileCharset() {
-		return fileCharset;
-	}
+	protected final Charset getFileCharset() { return fileCharset; }
 
 	/**
 	 * Maximum indentation.
@@ -1066,9 +1067,7 @@ public class WriterSerializer extends Serializer {
 	 * @return
 	 * 	The maximum indentation level in the serialized document.
 	 */
-	protected final int getMaxIndent() {
-		return maxIndent;
-	}
+	protected final int getMaxIndent() { return maxIndent; }
 
 	/**
 	 * Quote character.
@@ -1077,9 +1076,7 @@ public class WriterSerializer extends Serializer {
 	 * @return
 	 * 	The character used for quoting attributes and values.
 	 */
-	protected char getQuoteChar() {
-		return quoteCharValue;
-	}
+	protected char getQuoteChar() { return quoteCharValue; }
 
 	/**
 	 * Output stream charset.
@@ -1088,9 +1085,7 @@ public class WriterSerializer extends Serializer {
 	 * @return
 	 * 	The character set to use when writing to <c>OutputStreams</c> and byte arrays.
 	 */
-	protected final Charset getStreamCharset() {
-		return streamCharset;
-	}
+	protected final Charset getStreamCharset() { return streamCharset; }
 
 	/**
 	 * Trim strings.
@@ -1099,14 +1094,13 @@ public class WriterSerializer extends Serializer {
 	 * @return
 	 * 	When enabled, whitespace is added to the output to improve readability.
 	 */
-	protected final boolean isUseWhitespace() {
-		return useWhitespace;
-	}
+	protected final boolean isUseWhitespace() { return useWhitespace; }
 
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "maxIndent", maxIndent, "quoteChar", quoteChar, "streamCharset", streamCharset, "useWhitespace", useWhitespace);
 	}
+
 	/**
 	 * Quote character.
 	 *

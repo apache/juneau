@@ -99,6 +99,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addBeanTypesUon() {
 			super.addBeanTypesUon();
@@ -110,6 +111,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 			super.addBeanTypesUon(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addRootType() {
 			super.addRootType();
@@ -514,11 +516,13 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				format,
 				collectionFormat
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -750,13 +754,13 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -890,6 +894,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 
 	/** Reusable instance of {@link OpenApiSerializer}, all default settings. */
 	public static final OpenApiSerializer DEFAULT = new OpenApiSerializer(create());
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -898,6 +903,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final HttpPartFormat format;
 	final HttpPartCollectionFormat collectionFormat;
 
@@ -947,30 +953,24 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		}
 		return m;
 	}
+
 	@Override /* Overridden from HttpPartSerializer */
-	public OpenApiSerializerSession getPartSession() {
-		return OpenApiSerializerSession.create(this).build();
-	}
+	public OpenApiSerializerSession getPartSession() { return OpenApiSerializerSession.create(this).build(); }
 
 	@Override /* Overridden from Context */
-	public OpenApiSerializerSession getSession() {
-		return createSession().build();
-	}
+	public OpenApiSerializerSession getSession() { return createSession().build(); }
+
 	/**
 	 * Returns the default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
 	 *
 	 * @return The default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
 	 */
-	protected final HttpPartCollectionFormat getCollectionFormat() {
-		return collectionFormat;
-	}
+	protected final HttpPartCollectionFormat getCollectionFormat() { return collectionFormat; }
 
 	/**
 	 * Returns the default format to use when not otherwise specified via {@link Schema#format()}
 	 *
 	 * @return The default format to use when not otherwise specified via {@link Schema#format()}
 	 */
-	protected final HttpPartFormat getFormat() {
-		return format;
-	}
+	protected final HttpPartFormat getFormat() { return format; }
 }

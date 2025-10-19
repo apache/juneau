@@ -135,6 +135,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'>{doc jrs.AnnotatedClasses}
  * </ul>
  */
+// @formatter:off
 @Rest(
 	serializers={
 		RdfXmlSerializer.class,

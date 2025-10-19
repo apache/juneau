@@ -95,6 +95,7 @@ public class N3 extends CharMarshaller {
 		DEFAULT.write(object, output);
 		return output;
 	}
+
 	/**
 	 * Parses an N3 input object to the specified Java type.
 	 *

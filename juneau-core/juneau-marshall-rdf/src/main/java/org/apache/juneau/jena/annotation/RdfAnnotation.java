@@ -41,7 +41,7 @@ public class RdfAnnotation {
 	 * A collection of {@link Rdf @Rdf annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -63,9 +63,9 @@ public class RdfAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
-		String namespace="", prefix="";
-		boolean	beanUri;
-		RdfCollectionFormat collectionFormat=RdfCollectionFormat.DEFAULT;
+		String namespace = "", prefix = "";
+		boolean beanUri;
+		RdfCollectionFormat collectionFormat = RdfCollectionFormat.DEFAULT;
 
 		/**
 		 * Constructor.
@@ -127,21 +127,25 @@ public class RdfAnnotation {
 			super.on(value);
 			return this;
 		}
+
 		@Override /* Overridden from TargetedAnnotationTMFBuilder */
 		public Builder on(Method...value) {
 			super.on(value);
 			return this;
 		}
+
 		@Override /* Overridden from TargetedAnnotationBuilder */
 		public Builder on(String...values) {
 			super.on(values);
 			return this;
 		}
+
 		@Override /* Overridden from TargetedAnnotationTBuilder */
 		public Builder onClass(Class<?>...value) {
 			super.onClass(value);
 			return this;
 		}
+
 		/**
 		 * Sets the {@link Rdf#prefix} property on this annotation.
 		 *
@@ -235,8 +239,10 @@ public class RdfAnnotation {
 			return prefix;
 		}
 	}
+
 	/** Default value */
 	public static final Rdf DEFAULT = create().build();
+
 	/**
 	 * Creates a copy of the specified annotation.
 	 *
@@ -245,6 +251,7 @@ public class RdfAnnotation {
 	 * @return A copy of the specified annotation.
 	 */
 	public static Rdf copy(Rdf a, VarResolverSession r) {
+		// @formatter:off
 		return
 			create()
 			.beanUri(r.resolve(a.beanUri()))
@@ -254,7 +261,9 @@ public class RdfAnnotation {
 			.onClass(a.onClass())
 			.prefix(r.resolve(a.prefix()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -273,6 +282,7 @@ public class RdfAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

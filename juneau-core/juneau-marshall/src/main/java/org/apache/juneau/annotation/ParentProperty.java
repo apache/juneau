@@ -44,7 +44,7 @@ import java.lang.annotation.*;
 
  * </ul>
  */
-@Target({METHOD,FIELD,TYPE})
+@Target({ METHOD, FIELD, TYPE })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(ParentPropertyAnnotation.Array.class)

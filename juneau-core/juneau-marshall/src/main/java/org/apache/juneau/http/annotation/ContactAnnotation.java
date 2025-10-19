@@ -36,7 +36,7 @@ public class ContactAnnotation {
 	 */
 	public static class Builder extends AnnotationBuilder<Builder> {
 
-		String email="", name="", url="";
+		String email = "", name = "", url = "";
 
 		/**
 		 * Constructor.
@@ -119,6 +119,7 @@ public class ContactAnnotation {
 
 	/** Default value */
 	public static final Contact DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -127,6 +128,7 @@ public class ContactAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *

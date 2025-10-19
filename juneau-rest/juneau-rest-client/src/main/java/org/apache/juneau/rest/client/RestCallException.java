@@ -42,11 +42,11 @@ public class RestCallException extends HttpException {
 		message = emptyIfNull(message);
 
 		boolean needsCleaning = false;
-		for (int i = 0; i < message.length() && !needsCleaning; i++)
+		for (int i = 0; i < message.length() && ! needsCleaning; i++)
 			if (message.charAt(i) < 32)
 				needsCleaning = true;
 
-		if (!needsCleaning)
+		if (! needsCleaning)
 			return message;
 
 		StringBuilder sb = new StringBuilder(message.length());
@@ -57,6 +57,7 @@ public class RestCallException extends HttpException {
 
 		return sb.toString();
 	}
+
 	private static String format(String msg, Object...args) {
 		if (args.length == 0)
 			return clean(msg);
@@ -77,7 +78,7 @@ public class RestCallException extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RestCallException(int statusCode, Thrown thrown, Throwable cause, String message, Object...args) {
-		super(format(message,args),cause);
+		super(format(message, args), cause);
 		this.statusCode = statusCode;
 		this.thrown = thrown;
 	}
@@ -91,11 +92,7 @@ public class RestCallException extends HttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public RestCallException(RestResponse response, Throwable cause, String message, Object...args) {
-		this(
-			(response == null ? 0 : response.getStatusCode()),
-			(response == null ? Thrown.EMPTY : response.getHeader("Thrown").as(Thrown.class).orElse(null)),
-			cause, message, args
-		);
+		this((response == null ? 0 : response.getStatusCode()), (response == null ? Thrown.EMPTY : response.getHeader("Thrown").as(Thrown.class).orElse(null)), cause, message, args);
 	}
 
 	/**
@@ -108,21 +105,18 @@ public class RestCallException extends HttpException {
 	public <T extends Throwable> T getCause(Class<T> c) {
 		return ThrowableUtils.getCause(c, this);
 	}
+
 	/**
 	 * Returns the HTTP response status code.
 	 *
 	 * @return The response status code.  If a connection could not be made at all, returns <c>0</c>.
 	 */
-	public int getResponseCode() {
-		return statusCode;
-	}
+	public int getResponseCode() { return statusCode; }
 
 	/**
 	 * Returns the value of the <js>"Thrown"</js> header on the response.
 	 *
 	 * @return The value of the <js>"Thrown"</js> header on the response, never <jk>null</jk>.
 	 */
-	public Thrown getThrown() {
-		return thrown;
-	}
+	public Thrown getThrown() { return thrown; }
 }

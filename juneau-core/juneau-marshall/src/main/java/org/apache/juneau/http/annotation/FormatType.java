@@ -25,6 +25,7 @@ package org.apache.juneau.http.annotation;
 public class FormatType {
 
 	@SuppressWarnings("javadoc")
+	// @formatter:off
 	public static final String
 		INT32 = "int32",
 		INT64 = "int64",
@@ -36,4 +37,5 @@ public class FormatType {
 		DATE_TIME = "date-time",
 		PASSWORD = "password",
 		UON = "uon";
+	// @formatter:on
 }

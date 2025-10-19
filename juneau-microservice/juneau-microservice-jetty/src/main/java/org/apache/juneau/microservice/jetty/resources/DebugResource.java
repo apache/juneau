@@ -61,7 +61,7 @@ public class DebugResource extends BasicRestServlet {
 	 * @throws Exception Gets converted to 500 response.
 	 * @return The thread dump contents.
 	 */
-	@RestPost(path="/jetty/dump", description="Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
+	@RestPost(path = "/jetty/dump", description = "Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
 	public Ok createJettyDump(RestRequest req, RestResponse res) throws Exception {
 		String dump = JettyMicroservice.getInstance().getServer().dump();
 		try (FileWriter fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {
@@ -90,7 +90,7 @@ public class DebugResource extends BasicRestServlet {
 	 * @param res The response.
 	 * @return The thread dump contents.
 	 */
-	@RestGet(path="/jetty/dump", description="Generates and retrieves the jetty thread dump.")
+	@RestGet(path = "/jetty/dump", description = "Generates and retrieves the jetty thread dump.")
 	public Reader getJettyDump(RestRequest req, RestResponse res) {
 		res.setContentType("text/plain");
 		return new StringReader(JettyMicroservice.getInstance().getServer().dump());

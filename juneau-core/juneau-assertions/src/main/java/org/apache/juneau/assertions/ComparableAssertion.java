@@ -92,7 +92,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ComparableAssertion<T extends Comparable<T>> extends FluentComparableAssertion<T,ComparableAssertion<T>> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -105,7 +104,6 @@ public class ComparableAssertion<T extends Comparable<T>> extends FluentComparab
 	public static <T extends Comparable<T>> ComparableAssertion<T> create(T value) {
 		return new ComparableAssertion<>(value);
 	}
-
 
 	/**
 	 * Constructor.

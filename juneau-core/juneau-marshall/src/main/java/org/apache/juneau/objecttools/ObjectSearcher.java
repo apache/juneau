@@ -101,7 +101,7 @@ import org.apache.juneau.common.utils.*;
 
  * </ul>
  */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({ "rawtypes" })
 public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	/*
 	 * Matcher that uses the correct matcher based on object type.
@@ -157,7 +157,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		@SuppressWarnings("unchecked")
 		RowMatcher(BeanSession bs, Map query) {
 			this.bs = bs;
-			query.forEach((k,v) -> entryMatchers.put(Utils.s(k), new ColumnMatcher(bs, Utils.s(v))));
+			query.forEach((k, v) -> entryMatchers.put(Utils.s(k), new ColumnMatcher(bs, Utils.s(v))));
 		}
 
 		boolean matches(Object o) {
@@ -194,6 +194,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 			return false;
 		}
 	}
+
 	/**
 	 * Default reusable searcher.
 	 */
@@ -231,8 +232,9 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 * 	</ul>
 	 */
 	public ObjectSearcher(MatcherFactory...factories) {
-		this.factories = factories.length == 0 ? new MatcherFactory[]{NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT} : factories;
+		this.factories = factories.length == 0 ? new MatcherFactory[] { NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT } : factories;
 	}
+
 	@Override /* Overridden from ObjectTool */
 	public Object run(BeanSession session, Object input, SearchArgs args) {
 
@@ -266,6 +268,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 
 		return l;
 	}
+
 	/**
 	 * Convenience method for executing the searcher.
 	 *

@@ -180,11 +180,12 @@ public class RestRequest extends HttpServletRequestWrapper {
 		String country = "";
 		int i = lang.indexOf('-');
 		if (i > -1) {
-			country = lang.substring(i+1).trim();
-			lang = lang.substring(0,i).trim();
+			country = lang.substring(i + 1).trim();
+			lang = lang.substring(0, i).trim();
 		}
 		return new Locale(lang, country);
 	}
+
 	// Constructor initialized.
 	private HttpServletRequest inner;
 	private final RestContext context;
@@ -207,6 +208,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	private Swagger swagger;
 
 	private Charset charset;
+
 	/**
 	 * Constructor.
 	 */
@@ -242,6 +244,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		pathParams.parser(partParserSession);
 
+		// @formatter:off
 		queryParams
 			.addDefault(opContext.getDefaultRequestQueryData().getAll())
 			.parser(partParserSession);
@@ -259,6 +262,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		attrs
 			.addDefault(opContext.getDefaultRequestAttributes())
 			.addDefault(context.getDefaultRequestAttributes());
+		// @formatter:on
 
 		if (isDebug())
 			inner = CachingHttpServletRequest.wrap(inner);
@@ -280,6 +284,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public FluentStringAssertion<RestRequest> assertCharset() {
 		return new FluentStringAssertion<>(getCharset().name(), this);
 	}
+
 	/**
 	 * Returns a fluent assertion for the request content.
 	 *
@@ -362,6 +367,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public FluentRequestLineAssertion<RestRequest> assertRequestLine() {
 		return new FluentRequestLineAssertion<>(getRequestLine(), this);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this request contains the specified header.
 	 *
@@ -441,9 +447,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The headers on this request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestAttributes getAttributes() {
-		return attrs;
-	}
+	public RequestAttributes getAttributes() { return attrs; }
 
 	/**
 	 * Returns the URI authority portion of the request.
@@ -469,9 +473,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The request bean session.
 	 */
-	public BeanSession getBeanSession() {
-		return beanSession;
-	}
+	public BeanSession getBeanSession() { return beanSession; }
+
 	/**
 	 * Returns the charset specified on the <c>Content-Type</c> header, or <js>"UTF-8"</js> if not specified.
 	 *
@@ -486,7 +489,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			if (h != null) {
 				int i = h.indexOf(";charset=");
 				if (i > 0)
-					charset = Charset.forName(h.substring(i+9).trim());
+					charset = Charset.forName(h.substring(i + 9).trim());
 			}
 			if (charset == null)
 				charset = opContext.getDefaultCharset();
@@ -542,6 +545,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			config = context.getConfig().resolving(getVarResolverSession());
 		return config;
 	}
+
 	/**
 	 * Request content.
 	 *
@@ -574,9 +578,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The content of this HTTP request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestContent getContent() {
-		return content;
-	}
+	public RequestContent getContent() { return content; }
 
 	/**
 	 * Returns the resource context handling the request.
@@ -587,9 +589,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The resource context handling the request.
 	 */
-	public RestContext getContext() {
-		return context;
-	}
+	public RestContext getContext() { return context; }
 
 	/**
 	 * Returns the portion of the request URI that indicates the context of the request.
@@ -607,6 +607,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		String cp = context.getUriContext();
 		return cp == null ? inner.getContextPath() : cp;
 	}
+
 	/**
 	 * Returns the request form-data parameter of the specified type.
 	 *
@@ -743,6 +744,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public <T> Optional<T> getHeader(Class<T> type) {
 		return headers.get(type);
 	}
+
 	/**
 	 * Returns the last header with a specified name of this message.
 	 *
@@ -810,18 +812,14 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The headers on this request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestHeaders getHeaders() {
-		return headers;
-	}
+	public RequestHeaders getHeaders() { return headers; }
 
 	/**
 	 * Returns the wrapped servlet request.
 	 *
 	 * @return The wrapped servlet request.
 	 */
-	public HttpServletRequest getHttpServletRequest() {
-		return inner;
-	}
+	public HttpServletRequest getHttpServletRequest() { return inner; }
 
 	/**
 	 * Returns the HTTP content content as an {@link InputStream}.
@@ -836,9 +834,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
 	@Override
-	public ServletInputStream getInputStream() throws IOException {
-		return getContent().getInputStream();
-	}
+	public ServletInputStream getInputStream() throws IOException { return getContent().getInputStream(); }
+
 	/**
 	 * Returns the preferred Locale that the client will accept content in, based on the Accept-Language header.
 	 *
@@ -902,9 +899,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The resource bundle.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Messages getMessages() {
-		return context.getMessages().forLocale(getLocale());
-	}
+	public Messages getMessages() { return context.getMessages().forLocale(getLocale()); }
 
 	/**
 	 * Returns the HTTP method of this request.
@@ -916,17 +911,14 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return The HTTP method of this request.
 	 */
 	@Override
-	public String getMethod() {
-		return session.getMethod();
-	}
+	public String getMethod() { return session.getMethod(); }
+
 	/**
 	 * Returns access to the inner {@link RestOpContext} of this method.
 	 *
 	 * @return The {@link RestOpContext} of this method.  May be <jk>null</jk> if method has not yet been found.
 	 */
-	public RestOpContext getOpContext() {
-		return opContext;
-	}
+	public RestOpContext getOpContext() { return opContext; }
 
 	/**
 	 * Returns the swagger for the Java method invoked.
@@ -947,17 +939,14 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The part serializer associated with this request.
 	 */
-	public HttpPartParserSession getPartParserSession() {
-		return partParserSession;
-	}
+	public HttpPartParserSession getPartParserSession() { return partParserSession; }
+
 	/**
 	 * Returns the part serializer session for this request.
 	 *
 	 * @return The part serializer session for this request.
 	 */
-	public HttpPartSerializerSession getPartSerializerSession() {
-		return opContext.getPartSerializer().getPartSession();
-	}
+	public HttpPartSerializerSession getPartSerializerSession() { return opContext.getPartSerializer().getPartSession(); }
 
 	/**
 	 * Returns the request path parameter of the specified type.
@@ -1016,27 +1005,21 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The path parameters.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestPathParams getPathParams() {
-		return pathParams;
-	}
+	public RequestPathParams getPathParams() { return pathParams; }
 
 	/**
 	 * Shortcut for calling <c>getPathParams().getRemainder()</c>.
 	 *
 	 * @return The path remainder value, never <jk>null</jk>.
 	 */
-	public RequestPathParam getPathRemainder() {
-		return pathParams.getRemainder();
-	}
+	public RequestPathParam getPathRemainder() { return pathParams.getRemainder(); }
 
 	/**
 	 * Returns the protocol version from the request line of this request.
 	 *
 	 * @return The protocol version from the request line of this request.
 	 */
-	public ProtocolVersion getProtocolVersion() {
-		return getRequestLine().getProtocolVersion();
-	}
+	public ProtocolVersion getProtocolVersion() { return getRequestLine().getProtocolVersion(); }
 
 	/**
 	 * Returns the request query parameter of the specified type.
@@ -1052,6 +1035,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public <T> Optional<T> getQueryParam(Class<T> type) {
 		return queryParams.get(type);
 	}
+
 	/**
 	 * Shortcut for calling <c>getRequestQuery().getLast(<jv>name</jv>)</c>.
 	 *
@@ -1099,9 +1083,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The query parameters as a modifiable map.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestQueryParams getQueryParams() {
-		return queryParams;
-	}
+	public RequestQueryParams getQueryParams() { return queryParams; }
+
 	/**
 	 * Returns the HTTP content content as a {@link Reader}.
 	 *
@@ -1119,9 +1102,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @throws IOException If content could not be read.
 	 */
 	@Override
-	public BufferedReader getReader() throws IOException {
-		return getContent().getReader();
-	}
+	public BufferedReader getReader() throws IOException { return getContent().getReader(); }
 
 	/**
 	 * Creates a proxy interface to retrieve HTTP parts of this request as a proxy bean.
@@ -1181,30 +1162,27 @@ public class RestRequest extends HttpServletRequestWrapper {
 			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
 			final BeanSession bs = getBeanSession();
 			final BeanMeta<T> bm = bs.getBeanMeta(c);
-			return (T)Proxy.newProxyInstance(
-				c.getClassLoader(),
-				new Class[] { c },
-				(InvocationHandler) (proxy, method, args) -> {
-					RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
-					if (pm != null) {
-						HttpPartParserSession pp = pm.getParser(getPartParserSession());
-						HttpPartSchema schema = pm.getSchema();
-						String name = pm.getPartName();
-						ClassMeta<?> type = bs.getClassMeta(method.getGenericReturnType());
-						HttpPartType pt = pm.getPartType();
-						if (pt == HttpPartType.BODY)
-							return getContent().setSchema(schema).as(type);
-						if (pt == QUERY)
-							return getQueryParam(name).parser(pp).schema(schema).as(type).orElse(null);
-						if (pt == FORMDATA)
-							return getFormParam(name).parser(pp).schema(schema).as(type).orElse(null);
-						if (pt == HEADER)
-							return getHeaderParam(name).parser(pp).schema(schema).as(type).orElse(null);
-						if (pt == PATH)
-							return getPathParam(name).parser(pp).schema(schema).as(type).orElse(null);
-					}
-					return null;
-				});
+			return (T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler)(proxy, method, args) -> {
+				RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
+				if (pm != null) {
+					HttpPartParserSession pp = pm.getParser(getPartParserSession());
+					HttpPartSchema schema = pm.getSchema();
+					String name = pm.getPartName();
+					ClassMeta<?> type = bs.getClassMeta(method.getGenericReturnType());
+					HttpPartType pt = pm.getPartType();
+					if (pt == HttpPartType.BODY)
+						return getContent().setSchema(schema).as(type);
+					if (pt == QUERY)
+						return getQueryParam(name).parser(pp).schema(schema).as(type).orElse(null);
+					if (pt == FORMDATA)
+						return getFormParam(name).parser(pp).schema(schema).as(type).orElse(null);
+					if (pt == HEADER)
+						return getHeaderParam(name).parser(pp).schema(schema).as(type).orElse(null);
+					if (pt == PATH)
+						return getPathParam(name).parser(pp).schema(schema).as(type).orElse(null);
+				}
+				return null;
+			});
 		} catch (Exception e) {
 			throw asRuntimeException(e);
 		}
@@ -1219,7 +1197,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		String x = inner.getProtocol();
 		int i = x.indexOf('/');
 		int j = x.indexOf('.', i);
-		ProtocolVersion pv = new ProtocolVersion(x.substring(0,i), parseInt(x.substring(i+1,j)), parseInt(x.substring(j+1)));
+		ProtocolVersion pv = new ProtocolVersion(x.substring(0, i), parseInt(x.substring(i + 1, j)), parseInt(x.substring(j + 1)));
 		return new BasicRequestLine(inner.getMethod(), inner.getRequestURI(), pv);
 	}
 
@@ -1248,9 +1226,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return This object.
 	 */
-	public StaticFiles getStaticFiles() {
-		return context.getStaticFiles();
-	}
+	public StaticFiles getStaticFiles() { return context.getStaticFiles(); }
 
 	/**
 	 * Returns the localized swagger associated with the resource.
@@ -1281,9 +1257,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The swagger associated with the resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Optional<Swagger> getSwagger() {
-		return context.getSwagger(getLocale());
-	}
+	public Optional<Swagger> getSwagger() { return context.getSwagger(getLocale()); }
 
 	/**
 	 * Returns the <c>Time-Zone</c> header value on the request if there is one.
@@ -1353,9 +1327,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return The URI resolver for this request.
 	 */
-	public UriResolver getUriResolver() {
-		return UriResolver.of(context.getUriResolution(), context.getUriRelativity(), getUriContext());
-	}
+	public UriResolver getUriResolver() { return UriResolver.of(context.getUriResolution(), context.getUriRelativity(), getUriContext()); }
 
 	/**
 	 * Returns a URI resolver that can be used to convert URIs to absolute or root-relative form.
@@ -1400,6 +1372,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return The variable resolver for this request.
 	 */
 	public VarResolverSession getVarResolverSession() {
+		// @formatter:off
 		if (varSession == null)
 			varSession = context
 				.getVarResolver()
@@ -1407,6 +1380,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 				.bean(RestRequest.class, this)
 				.bean(RestSession.class, session);
 		return varSession;
+		// @formatter:on
 	}
 
 	/**
@@ -1416,9 +1390,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return <jk>true</jk> if debug mode is enabled.
 	 */
-	public boolean isDebug() {
-		return getAttribute("Debug").as(Boolean.class).orElse(false);
-	}
+	public boolean isDebug() { return getAttribute("Debug").as(Boolean.class).orElse(false); }
 
 	/**
 	 * Returns <jk>true</jk> if <c>&amp;plainText=true</c> was specified as a URL parameter.
@@ -1432,9 +1404,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @return <jk>true</jk> if {@code &amp;plainText=true} was specified as a URL parameter
 	 */
-	public boolean isPlainText() {
-		return "true".equals(queryParams.get("plainText").asString().orElse("false"));
-	}
+	public boolean isPlainText() { return "true".equals(queryParams.get("plainText").asString().orElse("false")); }
 
 	/**
 	 * Sets a request attribute.
@@ -1452,9 +1422,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * @param value The new value to use for the request content.
 	 */
-	public void setCharset(Charset value) {
-		this.charset = value;
-	}
+	public void setCharset(Charset value) { this.charset = value; }
 
 	/**
 	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
@@ -1538,6 +1506,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		}
 		return sb.toString();
 	}
+
 	/* Called by RestSession.finish() */
 	void close() {
 		if (config != null) {

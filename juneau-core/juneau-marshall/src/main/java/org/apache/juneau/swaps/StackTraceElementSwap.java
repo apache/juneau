@@ -53,22 +53,22 @@ public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> 
 
 		int i = in.indexOf('(');
 		if (i != -1) {
-			String s = in.substring(i+1, in.lastIndexOf(')'));
+			String s = in.substring(i + 1, in.lastIndexOf(')'));
 			in = in.substring(0, i);
 			i = s.indexOf(':');
 			if (i != -1) {
 				fileName = s.substring(0, i);
-				lineNumber = Integer.parseInt(s.substring(i+1));
+				lineNumber = Integer.parseInt(s.substring(i + 1));
 			} else if ("Native Method".equals(s)) {
 				lineNumber = -2;
 			} else if (! "Unknown Source".equals(s)) {
 				fileName = s;
 			}
- 		}
+		}
 
 		i = in.lastIndexOf('.');
 		if (i != -1) {
-			methodName = in.substring(i+1);
+			methodName = in.substring(i + 1);
 			in = in.substring(0, i);
 		}
 

@@ -122,7 +122,7 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(MethodInfo m, AnnotationWorkList annotations) {
-		if (! (m.hasAnnotation(Response.class) || m.getReturnType().unwrap(Value.class,Optional.class).hasAnnotation(Response.class)))
+		if (! (m.hasAnnotation(Response.class) || m.getReturnType().unwrap(Value.class, Optional.class).hasAnnotation(Response.class)))
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
@@ -143,10 +143,11 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
-		mpi.forEachAnnotation(Response.class, x-> true, x -> b.apply(x));
+		mpi.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
 		mpi.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
 		return b.build();
 	}
+
 	/**
 	 * Create metadata from specified class.
 	 *
@@ -164,6 +165,7 @@ public class ResponseBeanMeta {
 		ci.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
 		return b.build();
 	}
+
 	private final ClassMeta<?> cm;
 	private final Map<String,ResponseBeanPropertyMeta> properties;
 	private final int code;
@@ -184,7 +186,7 @@ public class ResponseBeanMeta {
 		Map<String,ResponseBeanPropertyMeta> properties = map();
 
 		Map<String,ResponseBeanPropertyMeta> hm = map();
-		b.headerMethods.forEach((k,v) -> {
+		b.headerMethods.forEach((k, v) -> {
 			ResponseBeanPropertyMeta pm = v.build(partSerializer, partParser);
 			hm.put(k, pm);
 			properties.put(pm.getGetter().getName(), pm);
@@ -207,54 +209,42 @@ public class ResponseBeanMeta {
 	 *
 	 * @return Metadata about the class.
 	 */
-	public ClassMeta<?> getClassMeta() {
-		return cm;
-	}
+	public ClassMeta<?> getClassMeta() { return cm; }
 
 	/**
 	 * Returns the HTTP status code.
 	 *
 	 * @return The HTTP status code.
 	 */
-	public int getCode() {
-		return code;
-	}
+	public int getCode() { return code; }
 
 	/**
 	 * Returns the <ja>@Content</ja>-annotated method.
 	 *
 	 * @return The <ja>@Content</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
 	 */
-	public ResponseBeanPropertyMeta getContentMethod() {
-		return contentMethod;
-	}
+	public ResponseBeanPropertyMeta getContentMethod() { return contentMethod; }
 
 	/**
 	 * Returns metadata about the <ja>@Header</ja>-annotated methods.
 	 *
 	 * @return Metadata about the <ja>@Header</ja>-annotated methods, or an empty collection if none exist.
 	 */
-	public Collection<ResponseBeanPropertyMeta> getHeaderMethods() {
-		return headerMethods.values();
-	}
+	public Collection<ResponseBeanPropertyMeta> getHeaderMethods() { return headerMethods.values(); }
 
 	/**
 	 * Returns the part serializer to use to serialize this response.
 	 *
 	 * @return The part serializer to use to serialize this response.
 	 */
-	public Optional<HttpPartSerializer> getPartSerializer() {
-		return partSerializer;
-	}
+	public Optional<HttpPartSerializer> getPartSerializer() { return partSerializer; }
 
 	/**
 	 * Returns all the annotated methods on this bean.
 	 *
 	 * @return All the annotated methods on this bean.
 	 */
-	public Collection<ResponseBeanPropertyMeta> getProperties() {
-		return properties.values();
-	}
+	public Collection<ResponseBeanPropertyMeta> getProperties() { return properties.values(); }
 
 	/**
 	 * Returns metadata about the bean property with the specified method getter name.
@@ -271,16 +261,12 @@ public class ResponseBeanMeta {
 	 *
 	 * @return The schema information about the response object.
 	 */
-	public HttpPartSchema getSchema() {
-		return schema;
-	}
+	public HttpPartSchema getSchema() { return schema; }
 
 	/**
 	 * Returns the <ja>@StatusCode</ja>-annotated method.
 	 *
 	 * @return The <ja>@StatusCode</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
 	 */
-	public ResponseBeanPropertyMeta getStatusMethod() {
-		return statusMethod;
-	}
+	public ResponseBeanPropertyMeta getStatusMethod() { return statusMethod; }
 }

@@ -103,6 +103,7 @@ public class ReaderParser extends Parser {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
@@ -114,6 +115,7 @@ public class ReaderParser extends Parser {
 			super.autoCloseStreams();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder autoCloseStreams(boolean value) {
 			super.autoCloseStreams(value);
@@ -397,11 +399,13 @@ public class ReaderParser extends Parser {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				fileCharset,
 				streamCharset
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -562,13 +566,13 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -651,6 +655,7 @@ public class ReaderParser extends Parser {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -659,6 +664,7 @@ public class ReaderParser extends Parser {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final Charset streamCharset, fileCharset;
 
 	/**
@@ -678,14 +684,11 @@ public class ReaderParser extends Parser {
 	}
 
 	@Override /* Overridden from Context */
-	public ReaderParserSession getSession() {
-		return createSession().build();
-	}
+	public ReaderParserSession getSession() { return createSession().build(); }
 
 	@Override /* Overridden from Parser */
-	public final boolean isReaderParser() {
-		return true;
-	}
+	public final boolean isReaderParser() { return true; }
+
 	/**
 	 * File charset.
 	 *
@@ -693,9 +696,7 @@ public class ReaderParser extends Parser {
 	 * @return
 	 * 	The character set to use for reading <c>Files</c> from the file system.
 	 */
-	protected final Charset getFileCharset() {
-		return fileCharset;
-	}
+	protected final Charset getFileCharset() { return fileCharset; }
 
 	/**
 	 * Input stream charset.
@@ -704,9 +705,8 @@ public class ReaderParser extends Parser {
 	 * @return
 	 * 	The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
 	 */
-	protected final Charset getStreamCharset() {
-		return streamCharset;
-	}
+	protected final Charset getStreamCharset() { return streamCharset; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);

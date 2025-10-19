@@ -106,11 +106,13 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addBeanTypesXml() {
 			super.addBeanTypesXml();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addBeanTypesXml(boolean value) {
 			super.addBeanTypesXml(value);
@@ -447,10 +449,12 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
+			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
 				soapAction
 			);
+			// @formatter:on
 		}
 
 		@Override /* Overridden from Builder */
@@ -689,13 +693,13 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -826,6 +830,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -834,6 +839,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final String soapAction;
 
 	private final Map<ClassMeta<?>,SoapXmlClassMeta> soapXmlClassMetas = new ConcurrentHashMap<>();
@@ -860,9 +866,8 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	}
 
 	@Override /* Overridden from Context */
-	public SoapXmlSerializerSession getSession() {
-		return createSession().build();
-	}
+	public SoapXmlSerializerSession getSession() { return createSession().build(); }
+
 	/**
 	 * The SOAPAction HTTP header value to set on responses.
 	 *
@@ -870,9 +875,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	 * @return
 	 * 	The SOAPAction HTTP header value to set on responses.
 	 */
-	public String getSoapAction() {
-		return soapAction;
-	}
+	public String getSoapAction() { return soapAction; }
 
 	@Override /* Overridden from SoapXmlMetaProvider */
 	public SoapXmlBeanPropertyMeta getSoapXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
@@ -885,6 +888,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		}
 		return m;
 	}
+
 	@Override /* Overridden from SoapXmlMetaProvider */
 	public SoapXmlClassMeta getSoapXmlClassMeta(ClassMeta<?> cm) {
 		SoapXmlClassMeta m = soapXmlClassMetas.get(cm);
@@ -894,6 +898,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		}
 		return m;
 	}
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("soapAction", soapAction);

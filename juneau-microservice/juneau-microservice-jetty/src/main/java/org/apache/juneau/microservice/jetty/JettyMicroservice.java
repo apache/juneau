@@ -154,6 +154,7 @@ public class JettyMicroservice extends Microservice {
 		public Builder copy() {
 			return new Builder(this);
 		}
+
 		/**
 		 * Specifies the factory to use for creating the Jetty {@link Server} instance.
 		 *
@@ -411,7 +412,7 @@ public class JettyMicroservice extends Microservice {
 	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
 	 */
 	public static JettyMicroservice getInstance() {
-		synchronized(JettyMicroservice.class) {
+		synchronized (JettyMicroservice.class) {
 			return INSTANCE;
 		}
 	}
@@ -423,6 +424,7 @@ public class JettyMicroservice extends Microservice {
 	 * @throws Exception Error occurred.
 	 */
 	public static void main(String[] args) throws Exception {
+		// @formatter:off
 		JettyMicroservice
 			.create()
 			.args(args)
@@ -430,7 +432,9 @@ public class JettyMicroservice extends Microservice {
 			.start()
 			.startConsole()
 			.join();
+		// @formatter:on
 	}
+
 	private static int findOpenPort(int[] ports) {
 		for (int port : ports) {
 			// If port is 0, try a random port between ports[0] and 32767.
@@ -442,8 +446,9 @@ public class JettyMicroservice extends Microservice {
 		}
 		return 0;
 	}
+
 	private static void setInstance(JettyMicroservice m) {
-		synchronized(JettyMicroservice.class) {
+		synchronized (JettyMicroservice.class) {
 			INSTANCE = m;
 		}
 	}
@@ -455,6 +460,7 @@ public class JettyMicroservice extends Microservice {
 	private final JettyServerFactory factory;
 
 	volatile Server server;
+
 	/**
 	 * Constructor.
 	 *
@@ -539,7 +545,7 @@ public class JettyMicroservice extends Microservice {
 		JsonMap mf = getManifest();
 		VarResolver vr = getVarResolver();
 
-		int[] ports = Utils.firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(()->mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class)));
+		int[] ports = Utils.firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.getWithDefault("Jetty-Port", new int[] { 8000 }, int[].class)));
 		int availablePort = findOpenPort(ports);
 
 		if (System.getProperty("availablePort") == null)
@@ -579,7 +585,7 @@ public class JettyMicroservice extends Microservice {
 			}
 		}
 
-		cf.get("Jetty/servletMap").asMap().orElse(EMPTY_MAP).forEach((k,v) -> {
+		cf.get("Jetty/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -> {
 			try {
 				ClassInfo c = ClassInfo.of(Class.forName(v.toString()));
 				if (c.isChildOf(Servlet.class)) {
@@ -595,7 +601,7 @@ public class JettyMicroservice extends Microservice {
 
 		cf.get("Jetty/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);
 
-		builder.servlets.forEach((k,v) -> addServlet(v, k));
+		builder.servlets.forEach((k, v) -> addServlet(v, k));
 
 		builder.servletAttributes.forEach(this::addServletAttribute);
 
@@ -626,16 +632,17 @@ public class JettyMicroservice extends Microservice {
 	 */
 	public String getContextPath() {
 		return getServletContextHandler().getContextPath();
-//        for (Handler h : getServer().getHandlers()) {
-//            if (h instanceof HandlerCollection)
-//                for (org.eclipse.jetty.ee9.nested.Handler h2 : ((HandlerCollection) h).getChildHandlers())
-//                    if (h2 instanceof ServletContextHandler)
-//                        return ((ServletContextHandler) h2).getContextPath();
-//            if (h instanceof ServletContextHandler)
-//                return ((ServletContextHandler) h).getContextPath();
-//        }
-//        throw new IllegalStateException("Could not locate ServletContextHandler in Jetty server.");
+		//        for (Handler h : getServer().getHandlers()) {
+		//            if (h instanceof HandlerCollection)
+		//                for (org.eclipse.jetty.ee9.nested.Handler h2 : ((HandlerCollection) h).getChildHandlers())
+		//                    if (h2 instanceof ServletContextHandler)
+		//                        return ((ServletContextHandler) h2).getContextPath();
+		//            if (h instanceof ServletContextHandler)
+		//                return ((ServletContextHandler) h).getContextPath();
+		//        }
+		//        throw new IllegalStateException("Could not locate ServletContextHandler in Jetty server.");
 	}
+
 	/**
 	 * Returns the hostname of this microservice.
 	 * <p>
@@ -689,9 +696,7 @@ public class JettyMicroservice extends Microservice {
 	 *
 	 * @return The underlying Jetty server, or <jk>null</jk> if {@link #createServer()} has not yet been called.
 	 */
-	public Server getServer() {
-		return Objects.requireNonNull(server, "Server not found.  createServer() must be called first.");
-	}
+	public Server getServer() { return Objects.requireNonNull(server, "Server not found.  createServer() must be called first."); }
 
 	/**
 	 * Finds and returns the servlet context handler defined in the Jetty container.
@@ -783,6 +788,7 @@ public class JettyMicroservice extends Microservice {
 		super.stopConsole();
 		return this;
 	}
+
 	/**
 	 * Method used to start the Jetty server created by {@link #createServer()}.
 	 *

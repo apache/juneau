@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -73,7 +74,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="optgroup")
+@Bean(typeName = "optgroup")
 public class Optgroup extends HtmlElementContainer {
 
 	/**
@@ -91,7 +92,7 @@ public class Optgroup extends HtmlElementContainer {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Optgroup _class(String value) {  // NOSONAR - Intentional naming.
+	public Optgroup _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -101,6 +102,7 @@ public class Optgroup extends HtmlElementContainer {
 		super.accesskey(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Optgroup attr(String key, Object val) {
 		super.attr(key, val);

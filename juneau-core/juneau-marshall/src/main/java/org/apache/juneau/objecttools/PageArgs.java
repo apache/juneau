@@ -35,9 +35,11 @@ public class PageArgs {
 	 * @return A new {@link PageArgs} object.
 	 */
 	public static PageArgs create(Integer position, Integer limit) {
-		if (position == null && limit == null) return null;
+		if (position == null && limit == null)
+			return null;
 		return new PageArgs(ofNullable(position).orElse(0), ofNullable(limit).orElse(-1));
 	}
+
 	final int position, limit;
 
 	/**
@@ -56,16 +58,12 @@ public class PageArgs {
 	 *
 	 * @return The number of rows to return.
 	 */
-	public int getLimit() {
-		return limit;
-	}
+	public int getLimit() { return limit; }
 
 	/**
 	 * Returns the zero-indexed position to start the page on.
 	 *
 	 * @return The zero-indexed position to start the page on.
 	 */
-	public int getPosition() {
-		return position;
-	}
+	public int getPosition() { return position; }
 }

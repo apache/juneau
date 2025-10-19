@@ -52,6 +52,7 @@ public class AnnotationInfo<T extends Annotation> {
 	public static <A extends Annotation> AnnotationInfo<A> of(ClassInfo onClass, A value) {
 		return new AnnotationInfo<>(onClass, null, null, value);
 	}
+
 	/**
 	 * Convenience constructor when annotation is found on a method.
 	 *
@@ -63,6 +64,7 @@ public class AnnotationInfo<T extends Annotation> {
 	public static <A extends Annotation> AnnotationInfo<A> of(MethodInfo onMethod, A value) {
 		return new AnnotationInfo<>(null, onMethod, null, value);
 	}
+
 	/**
 	 * Convenience constructor when annotation is found on a package.
 	 *
@@ -74,6 +76,7 @@ public class AnnotationInfo<T extends Annotation> {
 	public static <A extends Annotation> AnnotationInfo<A> of(Package onPackage, A value) {
 		return new AnnotationInfo<>(null, null, onPackage, value);
 	}
+
 	private static int getRank(Object a) {
 		ClassInfo ci = ClassInfo.of(a);
 		MethodInfo mi = ci.getPublicMethod(x -> x.hasName("rank") && x.hasNoParams() && x.hasReturnType(int.class));
@@ -86,6 +89,7 @@ public class AnnotationInfo<T extends Annotation> {
 		}
 		return 0;
 	}
+
 	private final ClassInfo c;
 	private final MethodInfo m;
 
@@ -160,15 +164,15 @@ public class AnnotationInfo<T extends Annotation> {
 			if (applyConstructors == null) {
 				ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
 				if (cpa == null)
-					applyConstructors = new Constructor[]{ AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class) };
+					applyConstructors = new Constructor[] { AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class) };
 				else {
 					applyConstructors = new Constructor[cpa.value().length];
 					for (int i = 0; i < cpa.value().length; i++)
-						applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>) cpa.value()[i].getConstructor(VarResolverSession.class);
+						applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>)cpa.value()[i].getConstructor(VarResolverSession.class);
 				}
 			}
-			for (Constructor<? extends AnnotationApplier<?, ?>> applyConstructor : applyConstructors)
-				consumer.accept((AnnotationApplier<Annotation,Object>) applyConstructor.newInstance(vrs));
+			for (Constructor<? extends AnnotationApplier<?,?>> applyConstructor : applyConstructors)
+				consumer.accept((AnnotationApplier<Annotation,Object>)applyConstructor.newInstance(vrs));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ExecutableException(e);
 		}
@@ -193,36 +197,28 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * @return the class where the annotation was found, or <jk>null</jk> if it wasn't found on a method.
 	 */
-	public ClassInfo getClassOn() {
-		return c;
-	}
+	public ClassInfo getClassOn() { return c; }
 
 	/**
 	 * Returns the method where the annotation was found.
 	 *
 	 * @return the method where the annotation was found, or <jk>null</jk> if it wasn't found on a method.
 	 */
-	public MethodInfo getMethodOn() {
-		return m;
-	}
+	public MethodInfo getMethodOn() { return m; }
 
 	/**
 	 * Returns the class name of the annotation.
 	 *
 	 * @return The simple class name of the annotation.
 	 */
-	public String getName() {
-		return a.annotationType().getSimpleName();
-	}
+	public String getName() { return a.annotationType().getSimpleName(); }
 
 	/**
 	 * Returns the package where the annotation was found.
 	 *
 	 * @return the package where the annotation was found, or <jk>null</jk> if it wasn't found on a package.
 	 */
-	public Package getPackageOn() {
-		return p;
-	}
+	public Package getPackageOn() { return p; }
 
 	/**
 	 * Returns a matching value on this annotation.
@@ -340,7 +336,7 @@ public class AnnotationInfo<T extends Annotation> {
 
 	Method[] _getMethods() {
 		if (methods == null)
-			synchronized(this) {
+			synchronized (this) {
 				methods = a.annotationType().getMethods();
 			}
 		return methods;

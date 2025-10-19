@@ -51,7 +51,7 @@ import org.apache.juneau.marshaller.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@Bean(properties="v1,v2")
+@Bean(properties = "v1,v2")
 public class BeanDiff {
 	/**
 	 * Builder class.
@@ -158,6 +158,7 @@ public class BeanDiff {
 			return this;
 		}
 	}
+
 	/**
 	 * Create a new builder for this class.
 	 *
@@ -169,6 +170,7 @@ public class BeanDiff {
 	public static <T> Builder<T> create(T first, T second) {
 		return new Builder<T>().first(first).second(second);
 	}
+
 	private JsonMap v1 = new JsonMap(), v2 = new JsonMap();
 
 	/**
@@ -211,18 +213,14 @@ public class BeanDiff {
 	 *
 	 * @return The differences in the first bean.
 	 */
-	public JsonMap getV1() {
-		return v1;
-	}
+	public JsonMap getV1() { return v1; }
 
 	/**
 	 * Returns the differences in the second bean.
 	 *
 	 * @return The differences in the second bean.
 	 */
-	public JsonMap getV2() {
-		return v2;
-	}
+	public JsonMap getV2() { return v2; }
 
 	/**
 	 * Returns <jk>true</jk> if the beans had differences.

@@ -79,9 +79,7 @@ public class AtomFeedResource extends BasicRestServlet {
 	 *
 	 * @return The sample ATOM feed.
 	 */
-	@RestGet(
-		summary="Get the sample ATOM feed"
-	)
+	@RestGet(summary = "Get the sample ATOM feed")
 	public Feed get() {
 		return feed;
 	}
@@ -132,10 +130,7 @@ public class AtomFeedResource extends BasicRestServlet {
 	 * @param feed The new ATOM feed.
 	 * @return The updated ATOM feed.
 	 */
-	@RestPut(
-		summary="Overwrite the sample ATOM feed",
-		description="Replaces the feed with the specified content, and then mirrors it as the response."
-	)
+	@RestPut(summary = "Overwrite the sample ATOM feed", description = "Replaces the feed with the specified content, and then mirrors it as the response.")
 	public Feed put(@Content Feed feed) {
 		this.feed = feed;
 		return feed;

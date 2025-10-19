@@ -97,8 +97,8 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="object")
-public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming.
+@Bean(typeName = "object")
+public class Object_ extends HtmlElementMixed { // NOSONAR - Intentional naming.
 
 	/**
 	 * Creates an empty {@link Object_} element.
@@ -115,7 +115,7 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Object_ _class(String value) {  // NOSONAR - Intentional naming.
+	public Object_ _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -177,6 +177,7 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 		attr("data", value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Object_ dir(String value) {
 		super.dir(value);

@@ -187,7 +187,7 @@ public class ReflectionMap<V> {
 				splitNames(key, k -> {
 					if (k.endsWith(")")) {
 						int i = k.substring(0, k.indexOf('(')).lastIndexOf('.');
-						if (i == -1 || isUpperCase(k.charAt(i+1))) {
+						if (i == -1 || isUpperCase(k.charAt(i + 1))) {
 							constructorEntries.add(new ConstructorEntry<>(k, value));
 						} else {
 							methodEntries.add(new MethodEntry<>(k, value));
@@ -196,7 +196,7 @@ public class ReflectionMap<V> {
 						int i = k.lastIndexOf('.');
 						if (i == -1) {
 							classEntries.add(new ClassEntry<>(k, value));
-						} else if (isUpperCase(k.charAt(i+1))) {
+						} else if (isUpperCase(k.charAt(i + 1))) {
 							classEntries.add(new ClassEntry<>(k, value));
 							fieldEntries.add(new FieldEntry<>(k, value));
 						} else {
@@ -230,6 +230,7 @@ public class ReflectionMap<V> {
 			return new Builder<>(this);
 		}
 	}
+
 	static class ClassEntry<V> {
 		final String simpleName, fullName;
 		final V value;
@@ -248,20 +249,23 @@ public class ReflectionMap<V> {
 
 		@Override
 		public String toString() {
+			// @formatter:off
 			return filteredMap()
 				.append("simpleName", simpleName)
 				.append("fullName", fullName)
 				.append("value", value)
 				.asString();
+			// @formatter:on
 		}
 	}
+
 	static class ConstructorEntry<V> {
 		String simpleClassName, fullClassName, args[];
 		V value;
 
 		ConstructorEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = splita(name.substring(i+1, name.length()-1));
+			this.args = splita(name.substring(i + 1, name.length() - 1));
 			name = name.substring(0, i).trim();
 			this.simpleClassName = simpleClassName(name);
 			this.fullClassName = name;
@@ -272,28 +276,29 @@ public class ReflectionMap<V> {
 			if (m == null)
 				return false;
 			Class<?> c = m.getDeclaringClass();
-			return
-				classMatches(simpleClassName, fullClassName, c)
-				&& (argsMatch(args, m.getParameterTypes()));
+			return classMatches(simpleClassName, fullClassName, c) && (argsMatch(args, m.getParameterTypes()));
 		}
 
 		@Override
 		public String toString() {
+			// @formatter:off
 			return filteredMap()
 				.append("simpleClassName", simpleClassName)
 				.append("fullClassName", fullClassName)
 				.append("args", args)
 				.append("value", value)
 				.asString();
+			// @formatter:on
 		}
 	}
+
 	static class FieldEntry<V> {
 		String simpleClassName, fullClassName, fieldName;
 		V value;
 
 		FieldEntry(String name, V value) {
 			int i = name.lastIndexOf('.');
-			String s1 = name.substring(0, i), s2 = name.substring(i+1);
+			String s1 = name.substring(0, i), s2 = name.substring(i + 1);
 			this.simpleClassName = simpleClassName(s1);
 			this.fullClassName = s1;
 			this.fieldName = s2;
@@ -304,28 +309,29 @@ public class ReflectionMap<V> {
 			if (f == null)
 				return false;
 			Class<?> c = f.getDeclaringClass();
-			return
-				classMatches(simpleClassName, fullClassName, c)
-				&& (Utils.eq(f.getName(), fieldName));
+			return classMatches(simpleClassName, fullClassName, c) && (Utils.eq(f.getName(), fieldName));
 		}
 
 		@Override
 		public String toString() {
+			// @formatter:off
 			return filteredMap()
 				.append("simpleClassName", simpleClassName)
 				.append("fullClassName", fullClassName)
 				.append("fieldName", fieldName)
 				.append("value", value)
 				.asString();
+			// @formatter:on
 		}
 	}
+
 	static class MethodEntry<V> {
 		String simpleClassName, fullClassName, methodName, args[];
 		V value;
 
 		MethodEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = i == -1 ? null : Utils.splitMethodArgs(name.substring(i+1, name.length()-1));
+			this.args = i == -1 ? null : Utils.splitMethodArgs(name.substring(i + 1, name.length() - 1));
 			if (args != null) {
 				for (int j = 0; j < args.length; j++) {
 
@@ -339,7 +345,7 @@ public class ReflectionMap<V> {
 						int l = 0;
 						while (args[j].endsWith("[]")) {
 							l++;
-							args[j] = args[j].substring(0, args[j].length()-2);
+							args[j] = args[j].substring(0, args[j].length() - 2);
 						}
 						StringBuilder sb = new StringBuilder(args[j].length() + l + 2);
 						for (int m = 0; m < l; m++)
@@ -351,7 +357,7 @@ public class ReflectionMap<V> {
 			}
 			name = i == -1 ? name : name.substring(0, i);
 			i = name.lastIndexOf('.');
-			String s1 = name.substring(0, i).trim(), s2 = name.substring(i+1).trim();
+			String s1 = name.substring(0, i).trim(), s2 = name.substring(i + 1).trim();
 			this.simpleClassName = simpleClassName(s1);
 			this.fullClassName = s1;
 			this.methodName = s2;
@@ -362,14 +368,17 @@ public class ReflectionMap<V> {
 			if (m == null)
 				return false;
 			Class<?> c = m.getDeclaringClass();
+			// @formatter:off
 			return
 				classMatches(simpleClassName, fullClassName, c)
 				&& (Utils.eq(m.getName(), methodName))
 				&& (argsMatch(args, m.getParameterTypes()));
+			// @formatter:on
 		}
 
 		@Override
 		public String toString() {
+			// @formatter:off
 			return filteredMap()
 				.append("simpleClassName", simpleClassName)
 				.append("fullClassName", fullClassName)
@@ -377,8 +386,10 @@ public class ReflectionMap<V> {
 				.append("args", args)
 				.append("value", value)
 				.asString();
+			// @formatter:on
 		}
 	}
+
 	/**
 	 * Static builder creator.
 	 *
@@ -447,7 +458,7 @@ public class ReflectionMap<V> {
 				return true;
 			int i = cFull.indexOf('$');
 			while (i != -1) {
-				cFull = cFull.substring(i+1);
+				cFull = cFull.substring(i + 1);
 				if (Utils.eq(simpleName, cFull))
 					return true;
 				i = cFull.indexOf('$');
@@ -477,7 +488,7 @@ public class ReflectionMap<V> {
 					escaped = false;
 				else if (c == ',' && ! escaped) {
 					consumer.accept(key.substring(m, i).trim());
-					m = i+1;
+					m = i + 1;
 				}
 			}
 			consumer.accept(key.substring(m).trim());
@@ -762,6 +773,7 @@ public class ReflectionMap<V> {
 					list = lazyAdd(list, e.value);
 		return lazyList(list);
 	}
+
 	/**
 	 * Finds all values in this map that matches the specified method.
 	 *
@@ -794,11 +806,13 @@ public class ReflectionMap<V> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
+		// @formatter:off
 		return filteredMap()
 			.append("classEntries", classEntries)
 			.append("methodEntries", methodEntries)
 			.append("fieldEntries", fieldEntries)
 			.append("constructorEntries", constructorEntries)
 			.asString();
+		// @formatter:on
 	}
 }

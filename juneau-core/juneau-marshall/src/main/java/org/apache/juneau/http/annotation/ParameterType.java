@@ -24,6 +24,7 @@ package org.apache.juneau.http.annotation;
  */
 public class ParameterType {
 
+	// @formatter:off
 	@SuppressWarnings("javadoc")
 	public static final String
 		STRING = "string",
@@ -33,4 +34,5 @@ public class ParameterType {
 		ARRAY = "array",
 		OBJECT = "object",
 		FILE = "file";
+	// @formatter:on
 }

@@ -51,7 +51,7 @@ public class LocalFile {
 		this.clazzPath = Utils.assertArgNotNull("clazzPath", clazzPath);
 		this.path = null;
 		int i = clazzPath.lastIndexOf('/');
-		this.name = i == -1 ? clazzPath : clazzPath.substring(i+1);
+		this.name = i == -1 ? clazzPath : clazzPath.substring(i + 1);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class LocalFile {
 	 * @throws IOException If file could not be read.
 	 */
 	public LocalFile cache() throws IOException {
-		synchronized(this) {
+		synchronized (this) {
 			this.cache = readBytes(read());
 		}
 		return this;
@@ -84,9 +84,7 @@ public class LocalFile {
 	 *
 	 * @return The name of this file.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Returns the contents of this file.
@@ -95,7 +93,7 @@ public class LocalFile {
 	 * @throws IOException If file could not be read.
 	 */
 	public InputStream read() throws IOException {
-		synchronized(this) {
+		synchronized (this) {
 			if (cache != null)
 				return new ByteArrayInputStream(cache);
 		}

@@ -51,6 +51,7 @@ public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
 		this.description = value;
 		return asThis();
 	}
+
 	/**
 	 * Returns this instance typed as {@code B}.
 	 *
@@ -59,6 +60,6 @@ public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected B asThis() {
-		return (B) this;
+		return (B)this;
 	}
 }

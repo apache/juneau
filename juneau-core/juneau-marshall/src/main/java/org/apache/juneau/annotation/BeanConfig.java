@@ -36,7 +36,7 @@ import org.apache.juneau.swap.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @ContextApply(BeanConfigAnnotation.Applier.class)
@@ -72,6 +72,7 @@ public @interface BeanConfig {
 	 * @return The annotation value.
 	 */
 	String beanClassVisibility() default "";
+
 	/**
 	 * Minimum bean constructor visibility.
 	 *
@@ -916,7 +917,7 @@ public @interface BeanConfig {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
-
+	
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Bean#typePropertyName()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}

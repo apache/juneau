@@ -83,7 +83,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="progress")
+@Bean(typeName = "progress")
 public class Progress extends HtmlElementMixed {
 
 	/**
@@ -101,7 +101,7 @@ public class Progress extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Progress _class(String value) {  // NOSONAR - Intentional naming.
+	public Progress _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -111,6 +111,7 @@ public class Progress extends HtmlElementMixed {
 		super.accesskey(value);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Progress attr(String key, Object val) {
 		super.attr(key, val);

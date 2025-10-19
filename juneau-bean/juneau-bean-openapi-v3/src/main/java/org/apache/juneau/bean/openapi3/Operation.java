@@ -332,45 +332,35 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The callbacks map.
 	 */
-	public Map<String,Callback> getCallbacks() {
-		return callbacks;
-	}
+	public Map<String,Callback> getCallbacks() { return callbacks; }
 
 	/**
 	 * Returns the deprecated flag.
 	 *
 	 * @return The deprecated flag.
 	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
+	public Boolean getDeprecated() { return deprecated; }
 
 	/**
 	 * Returns the description.
 	 *
 	 * @return The description.
 	 */
-	public String getDescription() {
-		return description;
-	}
+	public String getDescription() { return description; }
 
 	/**
 	 * Returns the external documentation.
 	 *
 	 * @return The external documentation.
 	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
+	public ExternalDocumentation getExternalDocs() { return externalDocs; }
 
 	/**
 	 * Returns the operation ID.
 	 *
 	 * @return The operation ID.
 	 */
-	public String getOperationId() {
-		return operationId;
-	}
+	public String getOperationId() { return operationId; }
 
 	/**
 	 * Returns the parameter with the specified type and name.
@@ -394,18 +384,14 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The parameters list.
 	 */
-	public List<Parameter> getParameters() {
-		return parameters;
-	}
+	public List<Parameter> getParameters() { return parameters; }
 
 	/**
 	 * Returns the request body.
 	 *
 	 * @return The request body.
 	 */
-	public RequestBodyInfo getRequestBody() {
-		return requestBody;
-	}
+	public RequestBodyInfo getRequestBody() { return requestBody; }
 
 	/**
 	 * Returns the response with the given status code.
@@ -433,45 +419,35 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The responses map.
 	 */
-	public Map<String,Response> getResponses() {
-		return responses;
-	}
+	public Map<String,Response> getResponses() { return responses; }
 
 	/**
 	 * Returns the security requirements list.
 	 *
 	 * @return The security requirements list.
 	 */
-	public List<SecurityRequirement> getSecurity() {
-		return security;
-	}
+	public List<SecurityRequirement> getSecurity() { return security; }
 
 	/**
 	 * Returns the servers list.
 	 *
 	 * @return The servers list.
 	 */
-	public List<Server> getServers() {
-		return servers;
-	}
+	public List<Server> getServers() { return servers; }
 
 	/**
 	 * Returns the summary.
 	 *
 	 * @return The summary.
 	 */
-	public String getSummary() {
-		return summary;
-	}
+	public String getSummary() { return summary; }
 
 	/**
 	 * Returns the tags list.
 	 *
 	 * @return The tags list.
 	 */
-	public List<String> getTags() {
-		return tags;
-	}
+	public List<String> getTags() { return tags; }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {

@@ -53,8 +53,7 @@ public abstract class StringSwap<T> extends ObjectSwap<T,String> {
 	/**
 	 * Constructor.
 	 */
-	protected StringSwap() {
-	}
+	protected StringSwap() {}
 
 	/**
 	 * Constructor for when the normal and transformed classes are already known.

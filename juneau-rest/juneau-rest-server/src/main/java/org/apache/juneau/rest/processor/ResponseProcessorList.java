@@ -61,6 +61,7 @@ public class ResponseProcessorList {
 			addAll(entries, (Object[])Utils.assertClassArrayArgIsType("values", ResponseProcessor.class, values));
 			return this;
 		}
+
 		/**
 		 * Appends the specified rest response processor objects to the list.
 		 *
@@ -77,6 +78,7 @@ public class ResponseProcessorList {
 			super.impl(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -88,6 +90,7 @@ public class ResponseProcessorList {
 			return new ResponseProcessorList(this);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -97,6 +100,7 @@ public class ResponseProcessorList {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private static ResponseProcessor instantiate(Object o, BeanStore bs) {
 		if (o instanceof ResponseProcessor)
 			return (ResponseProcessor)o;
@@ -116,12 +120,14 @@ public class ResponseProcessorList {
 	 */
 	protected ResponseProcessorList(Builder builder) {
 		BeanStore bs = builder.beanStore();
+		// @formatter:off
 		entries =
 			builder
 				.entries
 				.stream()
 				.map(x -> instantiate(x, bs))
 				.toArray(ResponseProcessor[]::new);
+		// @formatter:on
 	}
 
 	/**

@@ -154,7 +154,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 				values[0] = "";
 
 			if (values.length == 0)
-				values = new String[]{null};
+				values = new String[] { null };
 
 			for (String value : values)
 				add(new RequestQueryParam(req, name, value));
@@ -218,6 +218,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		add(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
+
 	/**
 	 * Adds default entries to these parameters.
 	 *
@@ -343,9 +344,10 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(QUERY, cm).orElseThrow(()->new BasicRuntimeException("@Query(name) not found on class {0}", className(type)));
+		String name = HttpParts.getName(QUERY, cm).orElseThrow(() -> new BasicRuntimeException("@Query(name) not found on class {0}", className(type)));
 		return get(name).as(type);
 	}
+
 	/**
 	 * Returns the condensed header with the specified name.
 	 *
@@ -392,7 +394,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public RequestQueryParam getFirst(String name) {
 		Utils.assertArgNotNull("name", name);
-		return stream(name).findFirst().orElseGet(()->new RequestQueryParam(req, name, null).parser(parser));
+		return stream(name).findFirst().orElseGet(() -> new RequestQueryParam(req, name, null).parser(parser));
 	}
 
 	/**
@@ -416,9 +418,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * Returns all the unique header names in this list.
 	 * @return The list of all unique header names in this list.
 	 */
-	public List<String> getNames() {
-		return stream().map(RequestQueryParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
-	}
+	public List<String> getNames() { return stream().map(RequestQueryParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList()); }
 
 	/**
 	 * Locates the position/limit query arguments ({@code &amp;p=}, {@code &amp;l=}) in the query string and returns them as a {@link PageArgs} object.
@@ -426,9 +426,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<PageArgs> getPageArgs() {
-		return ofNullable(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null)));
-	}
+	public Optional<PageArgs> getPageArgs() { return ofNullable(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null))); }
 
 	/**
 	 * Locates the search query argument ({@code &amp;s=}) in the query string and returns them as a {@link SearchArgs} object.
@@ -436,9 +434,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link SearchArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<SearchArgs> getSearchArgs() {
-		return ofNullable(SearchArgs.create(get("s").asString().orElse(null)));
-	}
+	public Optional<SearchArgs> getSearchArgs() { return ofNullable(SearchArgs.create(get("s").asString().orElse(null))); }
 
 	/**
 	 * Locates the sort query argument ({@code &amp;o=}) in the query string and returns them as a {@link SortArgs} object.
@@ -446,9 +442,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link SortArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<SortArgs> getSortArgs() {
-		return ofNullable(SortArgs.create(get("o").asString().orElse(null)));
-	}
+	public Optional<SortArgs> getSortArgs() { return ofNullable(SortArgs.create(get("o").asString().orElse(null))); }
 
 	/**
 	 * Returns all headers in sorted order.
@@ -460,7 +454,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		if (caseSensitive)
 			x = Comparator.comparing(RequestQueryParam::getName);
 		else
-			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+			x = (x1, x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
 		return stream().sorted(x);
 	}
 
@@ -470,9 +464,8 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<ViewArgs> getViewArgs() {
-		return ofNullable(ViewArgs.create(get("v").asString().orElse(null)));
-	}
+	public Optional<ViewArgs> getViewArgs() { return ofNullable(ViewArgs.create(get("v").asString().orElse(null))); }
+
 	/**
 	 * Sets the parser to use for part values.
 	 *

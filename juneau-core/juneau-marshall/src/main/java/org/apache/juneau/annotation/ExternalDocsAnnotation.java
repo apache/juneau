@@ -41,7 +41,7 @@ public class ExternalDocsAnnotation {
 	 */
 	public static class Builder extends AnnotationBuilder<Builder> {
 
-		String url="";
+		String url = "";
 
 		/**
 		 * Constructor.
@@ -99,6 +99,7 @@ public class ExternalDocsAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *
@@ -108,6 +109,7 @@ public class ExternalDocsAnnotation {
 	public static boolean empty(ExternalDocs a) {
 		return a == null || DEFAULT.equals(a);
 	}
+
 	/**
 	 * Merges the contents of the specified annotation into the specified generic map.
 	 *
@@ -120,9 +122,11 @@ public class ExternalDocsAnnotation {
 		if (ExternalDocsAnnotation.empty(a))
 			return m;
 		Predicate<String> ne = Utils::isNotEmpty;
+		// @formatter:off
 		return m
 			.appendIf(ne, "description", joinnl(a.description()))
 			.appendIf(ne, "url", a.url())
 		;
+		// @formatter:on
 	}
 }

@@ -45,7 +45,7 @@ public class RestSessionArgs extends SimpleRestOperationArg {
 	 */
 	public static RestSessionArgs create(ParamInfo paramInfo) {
 		if (paramInfo.isType(RestSession.class))
-			return new RestSessionArgs(x->x);
+			return new RestSessionArgs(x -> x);
 		if (paramInfo.isType(UrlPath.class))
 			return new RestSessionArgs(RestSession::getUrlPath);
 		if (paramInfo.isType(UrlPathMatch.class))

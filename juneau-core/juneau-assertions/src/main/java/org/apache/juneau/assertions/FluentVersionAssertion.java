@@ -110,7 +110,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version,R> {
 
-
 	/**
 	 * Chained constructor.
 	 *
@@ -146,7 +145,6 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	public FluentVersionAssertion(Version value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Extracts the maintenance part of the version string (index position 2).

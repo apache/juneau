@@ -41,7 +41,7 @@ import java.lang.annotation.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,FIELD,METHOD})
+@Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(UriAnnotation.Array.class)

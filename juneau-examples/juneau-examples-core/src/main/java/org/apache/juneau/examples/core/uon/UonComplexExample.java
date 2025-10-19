@@ -37,7 +37,7 @@ public class UonComplexExample {
 	public static void main(String[] args) throws Exception {
 
 		// Fill some data to a PojoComplex bean
-		HashMap<String, List<Pojo>> values = new HashMap<>();
+		HashMap<String,List<Pojo>> values = new HashMap<>();
 		ArrayList<Pojo> setOne = new ArrayList<>();
 		setOne.add(new Pojo("1.1", "name1"));
 		setOne.add(new Pojo("1.1", "name2"));

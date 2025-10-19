@@ -30,7 +30,7 @@ import org.apache.juneau.swaps.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */
-@Bean(properties="startTime,upTime,methodStats")
+@Bean(properties = "startTime,upTime,methodStats")
 public class RestContextStats {
 	private final Instant startTime;
 	private final List<MethodExecStats> methodStats;
@@ -51,9 +51,7 @@ public class RestContextStats {
 	 *
 	 * @return Statistics on all method executions.
 	 */
-	public Collection<MethodExecStats> getMethodStats() {
-		return methodStats;
-	}
+	public Collection<MethodExecStats> getMethodStats() { return methodStats; }
 
 	/**
 	 * Returns the time this REST resource class was started.
@@ -61,9 +59,7 @@ public class RestContextStats {
 	 * @return The time this REST resource class was started.
 	 */
 	@Swap(TemporalSwap.IsoInstant.class)
-	public Instant getStartTime() {
-		return startTime;
-	}
+	public Instant getStartTime() { return startTime; }
 
 	/**
 	 * Returns the time in milliseconds that this REST resource class has been running.

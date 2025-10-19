@@ -77,11 +77,13 @@ import org.apache.juneau.rest.servlet.*;
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings("javadoc")
 public class DirectoryResource extends BasicRestServlet {
-	@Response @Schema(description="File action")
+	@Response
+	@Schema(description = "File action")
 	public static class Action extends LinkString {
 		public Action(String name, String uri, Object...uriArgs) {
 			super(name, uri, uriArgs);
 		}
+
 		@Override /* Overridden from LinkString */
 		public Action setName(String value) {
 			super.setName(value);
@@ -106,8 +108,10 @@ public class DirectoryResource extends BasicRestServlet {
 			return this;
 		}
 	}
-	@Response @Schema(description="File or directory details")
-	@Bean(properties="type,name,size,lastModified,actions,files")
+
+	@Response
+	@Schema(description = "File or directory details")
+	@Bean(properties = "type,name,size,lastModified,actions,files")
 	public class FileResource {
 		private final File f;
 		private final String path;
@@ -117,11 +121,11 @@ public class DirectoryResource extends BasicRestServlet {
 		public FileResource(File f, String path, boolean includeChildren) {
 			this.f = f;
 			this.path = path;
-			this.uri = "servlet:/"+(path == null ? "" : path);
+			this.uri = "servlet:/" + (path == null ? "" : path);
 			this.includeChildren = includeChildren;
 		}
 
-		@Html(format=HtmlFormat.HTML_CDC)
+		@Html(format = HtmlFormat.HTML_CDC)
 		public List<Action> getActions() throws Exception {
 			List<Action> l = list();
 			if (allowViews && f.canRead() && ! f.isDirectory()) {
@@ -142,24 +146,17 @@ public class DirectoryResource extends BasicRestServlet {
 			return s;
 		}
 
-		public Date getLastModified() {
-			return new Date(f.lastModified());
-		}
+		public Date getLastModified() { return new Date(f.lastModified()); }
 
-		public LinkString getName() {
-			return new LinkString(f.getName(), uri);
-		}
+		public LinkString getName() { return new LinkString(f.getName(), uri); }
 
-		public long getSize() {
-			return f.isDirectory() ? f.listFiles().length : f.length();
-		}
+		public long getSize() { return f.isDirectory() ? f.listFiles().length : f.length(); }
 
-		public String getType() {
-			return (f.isDirectory() ? "dir" : "file");
-		}
+		public String getType() { return (f.isDirectory() ? "dir" : "file"); }
 	}
 
-	@Response @Schema(type="string",format="binary",description="Contents of file")
+	@Response
+	@Schema(type = "string", format = "binary", description = "Contents of file")
 	static class FileContents extends FileInputStream {
 		public FileContents(File file) throws FileNotFoundException {
 			super(file);
@@ -168,6 +165,7 @@ public class DirectoryResource extends BasicRestServlet {
 
 	static class FileResourceComparator implements Comparator<FileResource>, Serializable {
 		private static final long serialVersionUID = 1L;
+
 		@Override /* Overridden from Comparator */
 		public int compare(FileResource o1, FileResource o2) {
 			int c = o1.getType().compareTo(o2.getType());
@@ -175,7 +173,8 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 	}
 
-	@Response @Schema(description="Redirect to root page on success")
+	@Response
+	@Schema(description = "Redirect to root page on success")
 	static class RedirectToRoot extends SeeOtherRoot {}
 
 	private static final long serialVersionUID = 1L;
@@ -297,6 +296,7 @@ public class DirectoryResource extends BasicRestServlet {
 			throw new NotFound("File not found");
 		}
 	}
+
 	private void deleteFile(File f) {
 		if (! allowDeletes)
 			throw new MethodNotAllowed("DELETE not enabled");
@@ -308,7 +308,7 @@ public class DirectoryResource extends BasicRestServlet {
 			}
 		}
 		if (! f.delete())
-			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath()) ;
+			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath());
 	}
 
 	private File getFile(String path) throws NotFound {
@@ -325,7 +325,5 @@ public class DirectoryResource extends BasicRestServlet {
 	 *
 	 * @return The root directory.
 	 */
-	protected File getRootDir() {
-		return rootDir;
-	}
+	protected File getRootDir() { return rootDir; }
 }

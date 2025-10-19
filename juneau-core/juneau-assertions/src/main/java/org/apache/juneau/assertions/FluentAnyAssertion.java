@@ -137,11 +137,11 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentAnyAssertion.class, "Messages");
 	private static final String
 		MSG_objectWasNotType = MESSAGES.getString("objectWasNotType");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -178,7 +178,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	public FluentAnyAssertion(T value, R returns) {
 		this(null, value, returns);
 	}
-
 
 	/**
 	 * Converts this object assertion into an array assertion.
@@ -417,7 +416,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @throws AssertionError If object is not a map.
 	 */
 	public FluentMapAssertion<String,Object,R> asMap() {
-		return asMap(String.class,Object.class);
+		return asMap(String.class, Object.class);
 	}
 
 	/**

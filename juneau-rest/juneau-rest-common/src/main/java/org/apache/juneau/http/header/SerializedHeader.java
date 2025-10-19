@@ -113,6 +113,7 @@ public class SerializedHeader extends BasicHeader {
 	public static SerializedHeader of(String name, Supplier<?> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
+
 	private final Object value;
 	private final Supplier<Object> supplier;
 	private HttpPartSerializerSession serializer;

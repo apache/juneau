@@ -144,10 +144,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		this(0, copyFrom.getCause(), copyFrom.getMessage());
 		setStatusLine(copyFrom.statusLine.copy());
 	}
+
 	@Override /* Overridden from HttpMessage */
 	public void addHeader(Header value) {
 		headers.append(value);
 	}
+
 	@Override /* Overridden from HttpMessage */
 	public void addHeader(String name, String value) {
 		headers.append(name, value);
@@ -159,9 +161,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public Header[] getAllHeaders() {
-		return headers.getAll();
-	}
+	public Header[] getAllHeaders() { return headers.getAll(); }
 
 	@Override /* Overridden from HttpMessage */
 	public HttpEntity getEntity() {
@@ -209,6 +209,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		}
 		return sb.toString();
 	}
+
 	/**
 	 * Returns access to the underlying builder for the headers.
 	 *
@@ -230,9 +231,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public Locale getLocale() {
-		return statusLine.getLocale();
-	}
+	public Locale getLocale() { return statusLine.getLocale(); }
 
 	@Override /* Overridden from Throwable */
 	public String getMessage() {
@@ -243,16 +242,13 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 			m = statusLine.getReasonPhrase();
 		return m;
 	}
+
 	@SuppressWarnings("deprecation")
 	@Override /* Overridden from HttpMessage */
-	public HttpParams getParams() {
-		return null;
-	}
+	public HttpParams getParams() { return null; }
 
 	@Override /* Overridden from HttpMessage */
-	public ProtocolVersion getProtocolVersion() {
-		return statusLine.getProtocolVersion();
-	}
+	public ProtocolVersion getProtocolVersion() { return statusLine.getProtocolVersion(); }
 
 	/**
 	 * Returns the root cause of this exception.
@@ -268,7 +264,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	public Throwable getRootCause() {
 		Throwable t = this;
-		while(t != null) {
+		while (t != null) {
 			if (! (t instanceof BasicHttpException || t instanceof InvocationTargetException))
 				return t;
 			t = t.getCause();
@@ -277,9 +273,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public StatusLine getStatusLine() {
-		return statusLine;
-	}
+	public StatusLine getStatusLine() { return statusLine; }
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
@@ -287,7 +281,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		Throwable t = this;
 		while (t != null) {
 			for (StackTraceElement e : t.getStackTrace())
-			i ^= e.hashCode();
+				i ^= e.hashCode();
 			t = t.getCause();
 		}
 		return i;
@@ -430,8 +424,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@SuppressWarnings("deprecation")
 	@Override /* Overridden from HttpMessage */
-	public void setParams(HttpParams params) {
-	}
+	public void setParams(HttpParams params) {}
 
 	/**
 	 * Sets the protocol version on the status line.
@@ -546,6 +539,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public String toString() {
 		return emptyIfNull(getLocalizedMessage());
 	}
+
 	/**
 	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
 	 *

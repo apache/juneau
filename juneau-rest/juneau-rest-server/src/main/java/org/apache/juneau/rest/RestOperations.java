@@ -64,6 +64,7 @@ public class RestOperations {
 		public Builder add(RestOpContext value) {
 			return add(value.getHttpMethod(), value);
 		}
+
 		/**
 		 * Adds a method context to this builder.
 		 *
@@ -85,6 +86,7 @@ public class RestOperations {
 			super.impl(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -106,6 +108,7 @@ public class RestOperations {
 			super(builder);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -115,6 +118,7 @@ public class RestOperations {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final Map<String,List<RestOpContext>> map;
 	private RestOpContext[] list;
 
@@ -185,7 +189,5 @@ public class RestOperations {
 	 *
 	 * @return An unmodifiable list of method contexts in this object.
 	 */
-	public List<RestOpContext> getOpContexts() {
-		return u(alist(list));
-	}
+	public List<RestOpContext> getOpContexts() { return u(alist(list)); }
 }

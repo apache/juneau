@@ -83,6 +83,7 @@ public class MockLogger extends Logger {
 	public static MockLogger create() {
 		return new MockLogger();
 	}
+
 	private final List<LogRecord> logRecords = list();
 	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	private volatile Formatter formatter;
@@ -218,7 +219,7 @@ public class MockLogger extends Logger {
 
 	private Formatter getFormatter() {
 		if (formatter == null) {
-			synchronized(this) {
+			synchronized (this) {
 				String oldFormat = System.getProperty(FORMAT_PROPERTY);
 				System.setProperty(FORMAT_PROPERTY, format);
 				formatter = new SimpleFormatter();
@@ -234,6 +235,6 @@ public class MockLogger extends Logger {
 	private LogRecord last() {
 		if (logRecords.isEmpty())
 			throw new AssertionError("Message not logged");
-		return logRecords.get(logRecords.size()-1);
+		return logRecords.get(logRecords.size() - 1);
 	}
 }

@@ -44,7 +44,7 @@ import java.util.function.*;
 public interface Tuple5Function<A,B,C,D,E,R> {
 
 	@SuppressWarnings("javadoc")
-	default <V> Tuple5Function<A,B,C,D,E,V> andThen(Function<? super R, ? extends V> after) {
+	default <V> Tuple5Function<A,B,C,D,E,V> andThen(Function<? super R,? extends V> after) {
 		return (A a, B b, C c, D d, E e) -> after.apply(apply(a, b, c, d, e));
 	}
 

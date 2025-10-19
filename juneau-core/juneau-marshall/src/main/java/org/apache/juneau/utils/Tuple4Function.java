@@ -43,7 +43,7 @@ import java.util.function.*;
 public interface Tuple4Function<A,B,C,D,R> {
 
 	@SuppressWarnings("javadoc")
-	default <V> Tuple4Function<A,B,C,D,V> andThen(Function<? super R, ? extends V> after) {
+	default <V> Tuple4Function<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
 		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
 	}
 

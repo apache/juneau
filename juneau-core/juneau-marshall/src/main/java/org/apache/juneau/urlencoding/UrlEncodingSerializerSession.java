@@ -68,6 +68,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public UrlEncodingSerializerSession build() {
 			return new UrlEncodingSerializerSession(this);
@@ -187,6 +188,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -196,6 +198,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	public static Builder create(UrlEncodingSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	/*
 	 * Converts a Collection into an integer-indexed map.
 	 */
@@ -294,7 +297,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		}
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
-		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			ClassMeta<?> cMeta = pMeta.getClassMeta();
 			ClassMeta<?> sMeta = cMeta.getSerializedClassMeta(this);
 
@@ -309,19 +312,19 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 				// so we need to check type if we think it's an array.
 				if (sMeta.isCollection() || value instanceof Collection) {
 					((Collection<?>)value).forEach(x -> {
-						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
 						super.serializeAnything(out, x, cMeta.getElementType(), key, pMeta);
 					});
 				} else /* array */ {
 					for (int i = 0; i < Array.getLength(value); i++) {
-						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
 						super.serializeAnything(out, Array.get(value, i), cMeta.getElementType(), key, pMeta);
 					}
 				}
 			} else {
-				addAmp.ifSet(()->out.cr(indent).append('&')).set();
+				addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 				out.appendObject(key, true).append('=');
 				super.serializeAnything(out, value, cMeta, key, pMeta);
 			}
@@ -336,8 +339,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 		Flag addAmp = Flag.create();
 
-		m.forEach((k,v) -> {
-			addAmp.ifSet(()->out.cr(indent).append('&')).set();
+		m.forEach((k, v) -> {
+			addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 			out.append(k).append('=');
 			super.serializeAnything(out, v, valueType, null, null);
 		});
@@ -358,19 +361,19 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			if (shouldUseExpandedParams(value)) {
 				if (value instanceof Collection) {
 					((Collection<?>)value).forEach(x -> {
-						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
 						super.serializeAnything(out, x, null, Utils.s(key), null);
 					});
 				} else /* array */ {
 					for (int i = 0; i < Array.getLength(value); i++) {
-						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 						out.appendObject(key, true).append('=');
 						super.serializeAnything(out, Array.get(value, i), null, Utils.s(key), null);
 					}
 				}
 			} else {
-				addAmp.ifSet(()->out.cr(indent).append('&')).set();
+				addAmp.ifSet(() -> out.cr(indent).append('&')).set();
 				out.appendObject(key, true).append('=');
 				super.serializeAnything(out, value, valueType, (key == null ? null : key.toString()), null);
 			}
@@ -409,6 +412,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getUonWriter(out).i(getInitialDepth()), o);
 	}
+
 	/**
 	 * Returns the language-specific metadata on the specified class.
 	 *
@@ -418,6 +422,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
 		return ctx.getUrlEncodingClassMeta(cm);
 	}
+
 	/**
 	 * Serialize bean property collections/arrays as separate key/value pairs.
 	 *
@@ -426,7 +431,5 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 * 	<jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 	 * 	<br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 	 */
-	protected final boolean isExpandedParams() {
-		return ctx.isExpandedParams();
-	}
+	protected final boolean isExpandedParams() { return ctx.isExpandedParams(); }
 }

@@ -35,14 +35,14 @@ public class DebugEnablementMap extends ReflectionMap<Enablement> {
 		/**
 		 * Constructor.
 		 */
-		protected Builder() {
-		}
+		protected Builder() {}
 
 		@Override /* Overridden from ReflectionMapBuilder */
 		public DebugEnablementMap build() {
 			return new DebugEnablementMap(this);
 		}
 	}
+
 	/**
 	 * Static builder creator.
 	 *
@@ -51,6 +51,7 @@ public class DebugEnablementMap extends ReflectionMap<Enablement> {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Constructor.
 	 *

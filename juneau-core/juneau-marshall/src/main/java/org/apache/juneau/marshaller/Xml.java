@@ -53,6 +53,7 @@ public class Xml extends CharMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final Xml DEFAULT = new Xml();
+
 	/**
 	 * Serializes a Java object to an XML string.
 	 *

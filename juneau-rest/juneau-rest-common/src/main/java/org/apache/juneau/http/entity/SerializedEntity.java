@@ -46,8 +46,7 @@ public class SerializedEntity extends BasicHttpEntity {
 	/**
 	 * Constructor.
 	 */
-	public SerializedEntity() {
-	}
+	public SerializedEntity() {}
 
 	/**
 	 * Constructor.
@@ -121,9 +120,7 @@ public class SerializedEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public long getContentLength() {
-		return -1;
-	}
+	public long getContentLength() { return -1; }
 
 	@Override
 	public Header getContentType() {
@@ -134,12 +131,10 @@ public class SerializedEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public boolean isRepeatable() {
-		return true;
-	}
+	public boolean isRepeatable() { return true; }
 
 	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setCached() throws IOException{
+	public SerializedEntity setCached() throws IOException {
 		super.setCached();
 		return this;
 	}
@@ -155,6 +150,7 @@ public class SerializedEntity extends BasicHttpEntity {
 		super.setChunked();
 		return this;
 	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public SerializedEntity setChunked(boolean value) {
 		super.setChunked(value);

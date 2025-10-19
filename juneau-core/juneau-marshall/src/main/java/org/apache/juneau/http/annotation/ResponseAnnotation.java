@@ -62,7 +62,7 @@ public class ResponseAnnotation {
 	 * A collection of {@link Response @Response annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -86,9 +86,9 @@ public class ResponseAnnotation {
 
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
-		Header[] headers={};
+		Header[] headers = {};
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String[] examples={};
+		String[] examples = {};
 
 		/**
 		 * Constructor.
@@ -209,6 +209,7 @@ public class ResponseAnnotation {
 
 	/** Default value */
 	public static final Response DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -217,6 +218,7 @@ public class ResponseAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -226,6 +228,7 @@ public class ResponseAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -235,6 +238,7 @@ public class ResponseAnnotation {
 	public static Builder create(String...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *

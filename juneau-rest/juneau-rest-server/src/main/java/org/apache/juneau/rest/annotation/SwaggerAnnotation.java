@@ -43,9 +43,9 @@ public class SwaggerAnnotation {
 		Contact contact = ContactAnnotation.DEFAULT;
 		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 		License license = LicenseAnnotation.DEFAULT;
-		String version="";
-		String[] termsOfService={}, title={}, value={};
-		Tag[] tags={};
+		String version = "";
+		String[] termsOfService = {}, title = {}, value = {};
+		Tag[] tags = {};
 
 		/**
 		 * Constructor.
@@ -218,6 +218,7 @@ public class SwaggerAnnotation {
 
 	/** Default value */
 	public static final Swagger DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -226,6 +227,7 @@ public class SwaggerAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified annotation contains all default values.
 	 *

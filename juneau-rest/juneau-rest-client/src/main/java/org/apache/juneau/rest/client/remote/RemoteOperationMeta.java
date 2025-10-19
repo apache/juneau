@@ -49,20 +49,11 @@ public class RemoteOperationMeta {
 
 	private static class Builder {
 		String httpMethod, fullPath, path;
-		List<RemoteOperationArg>
-			pathArgs = new LinkedList<>(),
-			queryArgs = new LinkedList<>(),
-			headerArgs = new LinkedList<>(),
-			formDataArgs = new LinkedList<>();
-		List<RemoteOperationBeanArg>
-			requestArgs = new LinkedList<>();
+		List<RemoteOperationArg> pathArgs = new LinkedList<>(), queryArgs = new LinkedList<>(), headerArgs = new LinkedList<>(), formDataArgs = new LinkedList<>();
+		List<RemoteOperationBeanArg> requestArgs = new LinkedList<>();
 		RemoteOperationArg bodyArg;
 		RemoteOperationReturn methodReturn;
-		Map<String,String>
-			pathDefaults = new LinkedHashMap<>(),
-			queryDefaults = new LinkedHashMap<>(),
-			headerDefaults = new LinkedHashMap<>(),
-			formDataDefaults = new LinkedHashMap<>();
+		Map<String,String> pathDefaults = new LinkedHashMap<>(), queryDefaults = new LinkedHashMap<>(), headerDefaults = new LinkedHashMap<>(), formDataDefaults = new LinkedHashMap<>();
 		String contentDefault = null;
 
 		Builder(String parentPath, Method m, String defaultMethod) {
@@ -71,12 +62,12 @@ public class RemoteOperationMeta {
 
 			AnnotationList al = mi.getAnnotationList(REMOTE_OP_GROUP);
 			if (al.isEmpty())
-				al = mi.getReturnType().unwrap(Value.class,Optional.class).getAnnotationList(REMOTE_OP_GROUP);
+				al = mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationList(REMOTE_OP_GROUP);
 
 			Value<String> _httpMethod = Value.empty(), _path = Value.empty();
 			al.stream().map(x -> x.getName().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
 			al.forEachValue(String.class, "method", NOT_EMPTY, x -> _httpMethod.set(x.trim().toUpperCase()));
-			al.forEachValue(String.class, "path", NOT_EMPTY, x-> _path.set(x.trim()));
+			al.forEachValue(String.class, "path", NOT_EMPTY, x -> _path.set(x.trim()));
 			httpMethod = _httpMethod.orElse("").trim();
 			path = _path.orElse("").trim();
 
@@ -93,7 +84,8 @@ public class RemoteOperationMeta {
 					path = v.substring(i).trim();
 				}
 			} else {
-				al.forEach(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value", NOT_EMPTY).orElse("").trim()),x -> value.set(x.getValue(String.class, "value", NOT_EMPTY).get().trim()));
+				al.forEach(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value", NOT_EMPTY).orElse("").trim()),
+					x -> value.set(x.getValue(String.class, "value", NOT_EMPTY).get().trim()));
 				if (value.isPresent())
 					path = value.get();
 			}
@@ -108,7 +100,7 @@ public class RemoteOperationMeta {
 
 			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
 				throw new RemoteMetadataException(m,
-					"Invalid value specified for @RemoteOp(httpMethod) annotation: '"+httpMethod+"'.  Valid values are [DELETE,GET,POST,PUT,OPTIONS,HEAD,CONNECT,TRACE,PATCH].");
+					"Invalid value specified for @RemoteOp(httpMethod) annotation: '" + httpMethod + "'.  Valid values are [DELETE,GET,POST,PUT,OPTIONS,HEAD,CONNECT,TRACE,PATCH].");
 
 			methodReturn = new RemoteOperationReturn(mi);
 
@@ -247,6 +239,7 @@ public class RemoteOperationMeta {
 			});
 		}
 	}
+
 	private final String httpMethod;
 	private final String fullPath;
 	private final RemoteOperationArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
@@ -363,9 +356,7 @@ public class RemoteOperationMeta {
 	 *
 	 * @return A index of the argument with the {@link Content @Content} annotation, or <jk>null</jk> if no argument exists.
 	 */
-	public RemoteOperationArg getContentArg() {
-		return contentArg;
-	}
+	public RemoteOperationArg getContentArg() { return contentArg; }
 
 	/**
 	 * Returns the default value for a {@link Content @Content} annotation on the method.
@@ -373,9 +364,7 @@ public class RemoteOperationMeta {
 	 * @return The default value, or <jk>null</jk> if not specified.
 	 * @since 9.2.0
 	 */
-	public String getContentDefault() {
-		return contentDefault;
-	}
+	public String getContentDefault() { return contentDefault; }
 
 	/**
 	 * Returns the default value for a {@link FormData @FormData} annotation on the method.
@@ -393,9 +382,7 @@ public class RemoteOperationMeta {
 	 *
 	 * @return The absolute URI of the REST interface, never <jk>null</jk>.
 	 */
-	public String getFullPath() {
-		return fullPath;
-	}
+	public String getFullPath() { return fullPath; }
 
 	/**
 	 * Returns the default value for a {@link Header @Header} annotation on the method.
@@ -413,9 +400,7 @@ public class RemoteOperationMeta {
 	 *
 	 * @return The value of the annotation, never <jk>null</jk>.
 	 */
-	public String getHttpMethod() {
-		return httpMethod;
-	}
+	public String getHttpMethod() { return httpMethod; }
 
 	/**
 	 * Returns the default value for a {@link Path @Path} annotation on the method.
@@ -444,7 +429,5 @@ public class RemoteOperationMeta {
 	 *
 	 * @return Whether the method returns the HTTP response body or status code.
 	 */
-	public RemoteOperationReturn getReturns() {
-		return methodReturn;
-	}
+	public RemoteOperationReturn getReturns() { return methodReturn; }
 }

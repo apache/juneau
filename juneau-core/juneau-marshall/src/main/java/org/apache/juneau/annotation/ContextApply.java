@@ -31,7 +31,7 @@ import org.apache.juneau.*;
  * </ul>
  */
 @Documented
-@Target({ANNOTATION_TYPE})
+@Target({ ANNOTATION_TYPE })
 @Retention(RUNTIME)
 @Inherited
 public @interface ContextApply {

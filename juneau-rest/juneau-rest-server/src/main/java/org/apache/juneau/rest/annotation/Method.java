@@ -54,5 +54,4 @@ import java.lang.annotation.*;
 @Target(PARAMETER)
 @Retention(RUNTIME)
 @Inherited
-public @interface Method {
-}
+public @interface Method {}

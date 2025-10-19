@@ -129,6 +129,7 @@ public class RestContext extends Context {
 	 */
 	public static class Builder extends Context.Builder implements ServletConfig {
 
+		// @formatter:off
 		private static final Set<Class<?>> DELAYED_INJECTION = Utils.set(
 			BeanContext.Builder.class,
 			BeanStore.Builder.class,
@@ -188,6 +189,7 @@ public class RestContext extends Context {
 			"preCallMethods",
 			"startCallMethods"
 		);
+		// @formatter:on
 
 		//-----------------------------------------------------------------------------------------------------------------
 		// The following fields are meant to be modifiable.
@@ -199,10 +201,12 @@ public class RestContext extends Context {
 			Map<String,Method> x = map();
 			Object r = resource.get();
 
+			// @formatter:off
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(annotation),
 				y -> y.forEachAnnotation(annotation, predicate, z -> x.put(y.getSignature(), y.accessible().inner()))
 			);
+			// @formatter:on
 
 			MethodList x2 = MethodList.of(x.values());
 			return x2;
@@ -212,6 +216,7 @@ public class RestContext extends Context {
 			RestInject x = mi.getAnnotation(RestInject.class);
 			return x != null && x.methodScope().length == 0;
 		}
+
 		private static boolean isRestBeanMethod(MethodInfo mi, String name) {
 			RestInject x = mi.getAnnotation(RestInject.class);
 			return x != null && x.methodScope().length == 0 && x.name().equals(name);
@@ -253,15 +258,9 @@ public class RestContext extends Context {
 		private EncoderSet.Builder encoders;
 		private SerializerSet.Builder serializers;
 		private ParserSet.Builder parsers;
-		String
-			allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"),
-			allowedMethodHeaders = env("RestContext.allowedMethodHeaders", ""),
-			allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS"),
-			clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version"),
-			debugOn = env("RestContext.debugOn", null),
-			path = null,
-			uriAuthority = env("RestContext.uriAuthority", (String)null),
-			uriContext = env("RestContext.uriContext", (String)null);
+		String allowedHeaderParams = env("RestContext.allowedHeaderParams", "Accept,Content-Type"), allowedMethodHeaders = env("RestContext.allowedMethodHeaders", ""),
+			allowedMethodParams = env("RestContext.allowedMethodParams", "HEAD,OPTIONS"), clientVersionHeader = env("RestContext.clientVersionHeader", "Client-Version"),
+			debugOn = env("RestContext.debugOn", null), path = null, uriAuthority = env("RestContext.uriAuthority", (String)null), uriContext = env("RestContext.uriContext", (String)null);
 		UriRelativity uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
 		UriResolution uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
 		Charset defaultCharset = env("RestContext.defaultCharset", IOUtils.UTF8);
@@ -327,7 +326,7 @@ public class RestContext extends Context {
 		 * 	<li class='note'>
 		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 		 * </ul>
-
+		
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
 		 * </ul>
@@ -480,6 +479,7 @@ public class RestContext extends Context {
 			allowedMethodParams = value;
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -491,6 +491,7 @@ public class RestContext extends Context {
 			super.apply(work);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
@@ -502,6 +503,7 @@ public class RestContext extends Context {
 			super.applyAnnotations(from);
 			return this;
 		}
+
 		/**
 		 * Returns the bean context sub-builder.
 		 *
@@ -604,6 +606,7 @@ public class RestContext extends Context {
 				throw new InternalServerError(e, "Could not instantiate RestContext.");
 			}
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
@@ -726,6 +729,7 @@ public class RestContext extends Context {
 			callLogger().type(value);
 			return this;
 		}
+
 		/**
 		 * Add a child REST resource.
 		 *
@@ -917,6 +921,7 @@ public class RestContext extends Context {
 			clientVersionHeader = value;
 			return this;
 		}
+
 		/**
 		 * Returns the external configuration file for this resource.
 		 *
@@ -982,6 +987,7 @@ public class RestContext extends Context {
 		public Optional<List<MediaType>> consumes() {
 			return Utils.opt(consumes);
 		}
+
 		/**
 		 * Supported content media types.
 		 *
@@ -1048,6 +1054,7 @@ public class RestContext extends Context {
 			super.debug(value);
 			return this;
 		}
+
 		/**
 		 * Sets the debug default value.
 		 *
@@ -1103,6 +1110,7 @@ public class RestContext extends Context {
 			debugEnablement().impl(value);
 			return this;
 		}
+
 		/**
 		 * Specifies a default <c>Accept</c> header value if not specified on a request.
 		 *
@@ -1206,6 +1214,7 @@ public class RestContext extends Context {
 			defaultClasses().add(values);
 			return this;
 		}
+
 		/**
 		 * Specifies a default <c>Content-Type</c> header value if not specified on a request.
 		 *
@@ -1294,6 +1303,7 @@ public class RestContext extends Context {
 				defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), resource());
 			return defaultRequestHeaders;
 		}
+
 		/**
 		 * Default request headers.
 		 *
@@ -1440,6 +1450,7 @@ public class RestContext extends Context {
 			defaultSettings().set(key, value);
 			return this;
 		}
+
 		/**
 		 * Returns the default settings map.
 		 *
@@ -1527,6 +1538,7 @@ public class RestContext extends Context {
 			disableContentParam = value;
 			return this;
 		}
+
 		/**
 		 * Returns the encoder group sub-builder.
 		 *
@@ -1614,6 +1626,7 @@ public class RestContext extends Context {
 				endCallMethods = createEndCallMethods(beanStore(), resource());
 			return endCallMethods;
 		}
+
 		/**
 		 * Returns the encoder group builder containing the encoders for compressing/decompressing input and output streams.
 		 *
@@ -1630,9 +1643,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The encoder group builder for this context builder.
 		 */
-		public EncoderSet.Builder getEncoders() {
-			return encoders;
-		}
+		public EncoderSet.Builder getEncoders() { return encoders; }
 
 		@Override /* Overridden from ServletConfig */
 		public String getInitParameter(String name) {
@@ -1640,9 +1651,7 @@ public class RestContext extends Context {
 		}
 
 		@Override /* Overridden from ServletConfig */
-		public Enumeration<String> getInitParameterNames() {
-			return inner == null ? new Vector<String>().elements() : inner.getInitParameterNames();
-		}
+		public Enumeration<String> getInitParameterNames() { return inner == null ? new Vector<String>().elements() : inner.getInitParameterNames(); }
 
 		/**
 		 * Returns the parser group builder containing the parsers for converting HTTP request bodies into POJOs.
@@ -1666,9 +1675,8 @@ public class RestContext extends Context {
 		 *
 		 * @return The parser group builder for this context builder.
 		 */
-		public ParserSet.Builder getParsers() {
-			return parsers;
-		}
+		public ParserSet.Builder getParsers() { return parsers; }
+
 		/**
 		 * Returns the serializer group builder containing the serializers for marshalling POJOs into response bodies.
 		 *
@@ -1691,18 +1699,15 @@ public class RestContext extends Context {
 		 *
 		 * @return The serializer group builder for this context builder.
 		 */
-		public SerializerSet.Builder getSerializers() {
-			return serializers;
-		}
+		public SerializerSet.Builder getSerializers() { return serializers; }
 
 		@Override /* Overridden from ServletConfig */
 		public ServletContext getServletContext() {
 			return inner != null ? inner.getServletContext() : parentContext != null ? parentContext.getBuilder().getServletContext() : null;
 		}
+
 		@Override /* Overridden from ServletConfig */
-		public String getServletName() {
-			return inner == null ? null : inner.getServletName();
-		}
+		public String getServletName() { return inner == null ? null : inner.getServletName(); }
 
 		@Override /* Overridden from Builder */
 		public Builder impl(Context value) {
@@ -1728,12 +1733,14 @@ public class RestContext extends Context {
 			Supplier<?> r = this.resource;
 			Class<?> rc = resourceClass;
 
+			// @formatter:off
 			beanStore = createBeanStore(resource)
 				.build()
 				.addBean(Builder.class, this)
 				.addBean(ResourceSupplier.class, this.resource)
 				.addBean(ServletConfig.class, inner != null ? inner : this)
 				.addBean(ServletContext.class, (inner != null ? inner : this).getServletContext());
+			// @formatter:on
 
 			if (rootBeanStore == null) {
 				rootBeanStore = beanStore;
@@ -1750,6 +1757,7 @@ public class RestContext extends Context {
 			ClassInfo rci = ClassInfo.of(resourceClass);
 
 			// Get @RestInject fields initialized with values.
+			// @formatter:off
 			rci.forEachAllField(
 				x -> x.hasAnnotation(RestInject.class),
 				x -> x.getOptional(resource.get()).ifPresent(
@@ -1760,15 +1768,18 @@ public class RestContext extends Context {
 					)
 				)
 			);
+			// @formatter:on
 
 			rci.forEachMethod(x -> x.hasAnnotation(RestInject.class), x -> {
 				Class<Object> rt = x.getReturnType().inner();
 				String name = RestInjectAnnotation.name(x.getAnnotation(RestInject.class));
 				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
+					// @formatter:off
 					beanStore
 						.createMethodFinder(rt)
 						.find(Builder::isRestBeanMethod)
 						.run(y -> beanStore.add(rt, y, name));
+					// @formatter:on
 				}
 			});
 
@@ -1784,6 +1795,7 @@ public class RestContext extends Context {
 			runInitHooks(bs, resource());
 
 			// Set @RestInject fields not initialized with values.
+			// @formatter:off
 			rci.forEachAllField(
 				x -> x.hasAnnotation(RestInject.class),
 				x -> x.setIfNull(
@@ -1794,6 +1806,7 @@ public class RestContext extends Context {
 					).orElse(null)
 				)
 			);
+			// @formatter:on
 
 			return this;
 		}
@@ -1827,6 +1840,7 @@ public class RestContext extends Context {
 				jsonSchemaGenerator = createJsonSchemaGenerator(beanStore(), resource());
 			return jsonSchemaGenerator;
 		}
+
 		/**
 		 * Specifies the JSON schema generator for this class.
 		 *
@@ -1922,6 +1936,7 @@ public class RestContext extends Context {
 			logger = value;
 			return this;
 		}
+
 		/**
 		 * The maximum allowed input size (in bytes) on HTTP requests.
 		 *
@@ -2128,6 +2143,7 @@ public class RestContext extends Context {
 			messages().impl(value);
 			return this;
 		}
+
 		/**
 		 * Returns the method execution statistics store sub-builder.
 		 *
@@ -2221,6 +2237,7 @@ public class RestContext extends Context {
 				parsers.forEach(x -> x.listener(value));
 			return this;
 		}
+
 		/**
 		 * Returns the parser group sub-builder.
 		 *
@@ -2348,6 +2365,7 @@ public class RestContext extends Context {
 			partParser().type(value);
 			return this;
 		}
+
 		/**
 		 * Specifies the part parser to use for parsing HTTP parts for this class.
 		 *
@@ -2421,6 +2439,7 @@ public class RestContext extends Context {
 			partSerializer().type(value);
 			return this;
 		}
+
 		/**
 		 * Specifies the part serializer to use for serializing HTTP parts for this class.
 		 *
@@ -2519,6 +2538,7 @@ public class RestContext extends Context {
 				postCallMethods = createPostCallMethods(beanStore(), resource());
 			return postCallMethods;
 		}
+
 		/**
 		 * Returns the post-init-child-first method list.
 		 *
@@ -2554,6 +2574,7 @@ public class RestContext extends Context {
 				preCallMethods = createPreCallMethods(beanStore(), resource());
 			return preCallMethods;
 		}
+
 		/**
 		 * Returns the media types produced by this resource if it's manually specified.
 		 *
@@ -2652,6 +2673,7 @@ public class RestContext extends Context {
 		public Supplier<?> resource() {
 			return Objects.requireNonNull(resource, "Resource not available. init(Object) has not been called.");
 		}
+
 		/**
 		 * Returns the REST servlet/bean instance that this context is defined against if it's the specified type.
 		 *
@@ -2764,6 +2786,7 @@ public class RestContext extends Context {
 				responseProcessors = createResponseProcessors(beanStore(), resource());
 			return responseProcessors;
 		}
+
 		/**
 		 * Adds one or more response processors to this class.
 		 *
@@ -2808,6 +2831,7 @@ public class RestContext extends Context {
 			responseProcessors().add(value);
 			return this;
 		}
+
 		/**
 		 * Returns the REST children list.
 		 *
@@ -2876,6 +2900,7 @@ public class RestContext extends Context {
 			childrenClass = value;
 			return this;
 		}
+
 		/**
 		 * Returns the REST operation args sub-builder.
 		 *
@@ -2904,6 +2929,7 @@ public class RestContext extends Context {
 			restOpArgs().add(value);
 			return this;
 		}
+
 		/**
 		 * REST operation context class.
 		 *
@@ -2980,6 +3006,7 @@ public class RestContext extends Context {
 				restOperations = createRestOperations(beanStore(), resource(), restContext);
 			return restOperations;
 		}
+
 		/**
 		 * REST operations class.
 		 *
@@ -3048,6 +3075,7 @@ public class RestContext extends Context {
 		public BeanStore rootBeanStore() {
 			return rootBeanStore;
 		}
+
 		/**
 		 * <i><l>RestContext</l> configuration property:&emsp;</i>  Serializer listener.
 		 *
@@ -3097,6 +3125,7 @@ public class RestContext extends Context {
 				serializers = createSerializers(beanStore(), resource());
 			return serializers;
 		}
+
 		/**
 		 * Adds one or more serializers to this class.
 		 *
@@ -3141,6 +3170,7 @@ public class RestContext extends Context {
 			serializers().add(value);
 			return this;
 		}
+
 		/**
 		 * Returns the start call method list.
 		 *
@@ -3216,6 +3246,7 @@ public class RestContext extends Context {
 				staticFiles = createStaticFiles(beanStore, resource);
 			return staticFiles;
 		}
+
 		/**
 		 * Specifies the static files resource finder for this class.
 		 *
@@ -3285,6 +3316,7 @@ public class RestContext extends Context {
 			swaggerProvider().type(value);
 			return this;
 		}
+
 		/**
 		 * Specifies the swagger provider for this class.
 		 *
@@ -3747,6 +3779,7 @@ public class RestContext extends Context {
 			Object r = resource.get();
 
 			Map<String,MethodInfo> map = map();
+			// @formatter:off
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestInit.class) && ! y.hasArg(RestOpContext.Builder.class),
 				y -> {
@@ -3755,10 +3788,12 @@ public class RestContext extends Context {
 						map.put(sig, y.accessible());
 				}
 			);
+			// @formatter:on
 
 			for (MethodInfo m : map.values()) {
 				if (! beanStore.hasAllParams(m))
-					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), beanStore.getMissingParams(m));
+					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(),
+						beanStore.getMissingParams(m));
 				try {
 					m.invoke(r, beanStore.getParams(m));
 				} catch (Exception e) {
@@ -3779,23 +3814,22 @@ public class RestContext extends Context {
 		protected BeanContext.Builder createBeanContext(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<BeanContext.Builder> v = Value.of(
-				BeanContext.create()
-			);
+			Value<BeanContext.Builder> v = Value.of(BeanContext.create());
 
 			// Replace with builder from bean store.
+			// @formatter:off
 			beanStore
 				.getBean(BeanContext.Builder.class)
 				.map(BeanContext.Builder::copy)
 				.ifPresent(x -> v.set(x));
+			// @formatter:on
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(BeanContext.class)
-				.ifPresent(x -> v.get().impl(x));
+			beanStore.getBean(BeanContext.class).ifPresent(x -> v.get().impl(x));
 
 			return v.get();
 		}
+
 		/**
 		 * Creates the bean store in this builder.
 		 *
@@ -3806,21 +3840,25 @@ public class RestContext extends Context {
 		protected BeanStore.Builder createBeanStore(Supplier<?> resource) {
 
 			// Default value.
+			// @formatter:off
 			Value<BeanStore.Builder> v = Value.of(
 				BeanStore
 					.create()
 					.parent(rootBeanStore())
 					.outer(resource.get())
 			);
+			// @formatter:on
 
 			// Apply @Rest(beanStore).
 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotVoid(x.beanStore()), x -> v.get().type(x.beanStore()));
 
 			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
+			// @formatter:off
 			v.get().build()
 				.createMethodFinder(BeanStore.class)
 				.find(Builder::isRestBeanMethod)
 				.run(x -> v.get().impl(x));
+			// @formatter:on
 
 			return v.get();
 		}
@@ -3843,19 +3881,12 @@ public class RestContext extends Context {
 			BeanCreator<CallLogger> creator = beanStore.createBean(CallLogger.class).type(BasicCallLogger.class);
 
 			// Specify the bean type if its set as a default.
-			defaultClasses()
-				.get(CallLogger.class)
-				.ifPresent(x -> creator.type(x));
+			defaultClasses().get(CallLogger.class).ifPresent(x -> creator.type(x));
 
-			beanStore
-				.getBean(CallLogger.class)
-				.ifPresent(x -> creator.impl(x));
+			beanStore.getBean(CallLogger.class).ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  @RestInject public [static] CallLogger xxx(<args>)
-			beanStore
-				.createMethodFinder(CallLogger.class)
-				.find(Builder::isRestBeanMethod)
-				.run(x -> creator.impl(x));
+			beanStore.createMethodFinder(CallLogger.class).find(Builder::isRestBeanMethod).run(x -> creator.impl(x));
 
 			return creator;
 		}
@@ -3899,19 +3930,14 @@ public class RestContext extends Context {
 			}
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(Config.class)
-				.ifPresent(x -> v.set(x));
+			beanStore.getBean(Config.class).ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject public [static] Config xxx(<args>)
-			beanStore
-				.createMethodFinder(Config.class)
-				.addBean(Config.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(Config.class).addBean(Config.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.set(x));
 
 			return v.get();
 		}
+
 		/**
 		 * Instantiates the debug enablement bean creator.
 		 *
@@ -3926,19 +3952,12 @@ public class RestContext extends Context {
 			BeanCreator<DebugEnablement> creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class);
 
 			// Specify the bean type if its set as a default.
-			defaultClasses()
-				.get(DebugEnablement.class)
-				.ifPresent(x -> creator.type(x));
+			defaultClasses().get(DebugEnablement.class).ifPresent(x -> creator.type(x));
 
-			beanStore
-				.getBean(DebugEnablement.class)
-				.ifPresent(x -> creator.impl(x));
+			beanStore.getBean(DebugEnablement.class).ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  @RestInject public [static] DebugEnablement xxx(<args>)
-			beanStore
-				.createMethodFinder(DebugEnablement.class)
-				.find(Builder::isRestBeanMethod)
-				.run(x -> creator.impl(x));
+			beanStore.createMethodFinder(DebugEnablement.class).find(Builder::isRestBeanMethod).run(x -> creator.impl(x));
 
 			return creator;
 		}
@@ -3955,20 +3974,12 @@ public class RestContext extends Context {
 		protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<NamedAttributeMap> v = Value.of(
-				NamedAttributeMap.create()
-			);
+			Value<NamedAttributeMap> v = Value.of(NamedAttributeMap.create());
 
-			beanStore
-				.getBean(NamedAttributeMap.class, "defaultRequestAttributes")
-				.ifPresent(x -> v.set(x));
+			beanStore.getBean(NamedAttributeMap.class, "defaultRequestAttributes").ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultRequestAttributes") public [static] NamedAttributeMap xxx(<args>)
-			beanStore
-				.createMethodFinder(NamedAttributeMap.class)
-				.addBean(NamedAttributeMap.class, v.get())
-				.find(x -> isRestBeanMethod(x, "defaultRequestAttributes"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(NamedAttributeMap.class).addBean(NamedAttributeMap.class, v.get()).find(x -> isRestBeanMethod(x, "defaultRequestAttributes")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -3985,21 +3996,13 @@ public class RestContext extends Context {
 		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<HeaderList> v = Value.of(
-				HeaderList.create()
-			);
+			Value<HeaderList> v = Value.of(HeaderList.create());
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(HeaderList.class, "defaultRequestHeaders")
-				.ifPresent(x -> v.set(x));
+			beanStore.getBean(HeaderList.class, "defaultRequestHeaders").ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultRequestHeaders") public [static] HeaderList xxx(<args>)
-			beanStore
-				.createMethodFinder(HeaderList.class)
-				.addBean(HeaderList.class, v.get())
-				.find(x -> isRestBeanMethod(x, "defaultRequestHeaders"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(HeaderList.class).addBean(HeaderList.class, v.get()).find(x -> isRestBeanMethod(x, "defaultRequestHeaders")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4016,21 +4019,13 @@ public class RestContext extends Context {
 		protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<HeaderList> v = Value.of(
-				HeaderList.create()
-			);
+			Value<HeaderList> v = Value.of(HeaderList.create());
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(HeaderList.class, "defaultResponseHeaders")
-				.ifPresent(x -> v.set(x));
+			beanStore.getBean(HeaderList.class, "defaultResponseHeaders").ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders") public [static] HeaderList xxx(<args>)
-			beanStore
-				.createMethodFinder(HeaderList.class)
-				.addBean(HeaderList.class, v.get())
-				.find(x -> isRestBeanMethod(x, "defaultResponseHeaders"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(HeaderList.class).addBean(HeaderList.class, v.get()).find(x -> isRestBeanMethod(x, "defaultResponseHeaders")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4047,16 +4042,10 @@ public class RestContext extends Context {
 		protected MethodList createDestroyMethods(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(
-				getAnnotatedMethods(resource, RestDestroy.class, x -> true)
-			);
+			Value<MethodList> v = Value.of(getAnnotatedMethods(resource, RestDestroy.class, x -> true));
 
 			// Replace with bean from:  @RestInject(name="destroyMethods") public [static] MethodList xxx(<args>)
-			beanStore
-				.createMethodFinder(MethodList.class)
-				.addBean(MethodList.class, v.get())
-				.find(x -> isRestBeanMethod(x, "destroyMethods"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "destroyMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4079,28 +4068,16 @@ public class RestContext extends Context {
 		protected EncoderSet.Builder createEncoders(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<EncoderSet.Builder> v = Value.of(
-				EncoderSet
-					.create(beanStore)
-					.add(IdentityEncoder.INSTANCE)
-			);
+			Value<EncoderSet.Builder> v = Value.of(EncoderSet.create(beanStore).add(IdentityEncoder.INSTANCE));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses()
-				.get(EncoderSet.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(EncoderSet.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(EncoderSet.class)
-				.ifPresent(x->v.get().impl(x));
+			beanStore.getBean(EncoderSet.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] EncoderSet xxx(<args>)
-			beanStore
-				.createMethodFinder(EncoderSet.class)
-				.addBean(EncoderSet.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(EncoderSet.class).addBean(EncoderSet.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4117,16 +4094,10 @@ public class RestContext extends Context {
 		protected MethodList createEndCallMethods(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(
-				getAnnotatedMethods(resource, RestEndCall.class, x -> true)
-			);
+			Value<MethodList> v = Value.of(getAnnotatedMethods(resource, RestEndCall.class, x -> true));
 
 			// Replace with bean from:  @RestInject(name="endCallMethods") public [static] MethodList xxx(<args>)
-			beanStore
-				.createMethodFinder(MethodList.class)
-				.addBean(MethodList.class, v.get())
-				.find(x -> isRestBeanMethod(x, "endCallMethods"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "endCallMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4147,27 +4118,16 @@ public class RestContext extends Context {
 		protected JsonSchemaGenerator.Builder createJsonSchemaGenerator(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<JsonSchemaGenerator.Builder> v = Value.of(
-				JsonSchemaGenerator.create()
-			);
+			Value<JsonSchemaGenerator.Builder> v = Value.of(JsonSchemaGenerator.create());
 
 			// Replace with builder from bean store.
-			beanStore
-				.getBean(JsonSchemaGenerator.Builder.class)
-				.map(JsonSchemaGenerator.Builder::copy)
-				.ifPresent(x -> v.set(x));
+			beanStore.getBean(JsonSchemaGenerator.Builder.class).map(JsonSchemaGenerator.Builder::copy).ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(JsonSchemaGenerator.class)
-				.ifPresent(x -> v.get().impl(x));
+			beanStore.getBean(JsonSchemaGenerator.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] JsonSchemaGenerator xxx(<args>)
-			beanStore
-				.createMethodFinder(JsonSchemaGenerator.class)
-				.addBean(JsonSchemaGenerator.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(JsonSchemaGenerator.class).addBean(JsonSchemaGenerator.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4191,21 +4151,13 @@ public class RestContext extends Context {
 		protected Logger createLogger(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
-			Value<Logger> v = Value.of(
-				Logger.getLogger(resourceClass.getClass().getName())
-			);
+			Value<Logger> v = Value.of(Logger.getLogger(resourceClass.getClass().getName()));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(Logger.class)
-				.ifPresent(x -> v.set(x));
+			beanStore.getBean(Logger.class).ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject public [static] Logger xxx(<args>)
-			beanStore
-				.createMethodFinder(Logger.class)
-				.addBean(Logger.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(Logger.class).addBean(Logger.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4226,22 +4178,13 @@ public class RestContext extends Context {
 		protected Messages.Builder createMessages(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<Messages.Builder> v = Value.of(
-				Messages
-				.create(resourceClass)
-			);
+			Value<Messages.Builder> v = Value.of(Messages.create(resourceClass));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(Messages.class)
-				.ifPresent(x->v.get().impl(x));
+			beanStore.getBean(Messages.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] Messages xxx(<args>)
-			beanStore
-				.createMethodFinder(Messages.class)
-				.addBean(Messages.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(Messages.class).addBean(Messages.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4262,27 +4205,16 @@ public class RestContext extends Context {
 		protected MethodExecStore.Builder createMethodExecStore(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodExecStore.Builder> v = Value.of(
-				MethodExecStore
-					.create(beanStore)
-			);
+			Value<MethodExecStore.Builder> v = Value.of(MethodExecStore.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses()
-				.get(MethodExecStore.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(MethodExecStore.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(MethodExecStore.class)
-				.ifPresent(x->v.get().impl(x));
+			beanStore.getBean(MethodExecStore.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] MethodExecStore xxx(<args>)
-			beanStore
-				.createMethodFinder(MethodExecStore.class)
-				.addBean(MethodExecStore.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(MethodExecStore.class).addBean(MethodExecStore.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4304,30 +4236,20 @@ public class RestContext extends Context {
 		protected ParserSet.Builder createParsers(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<ParserSet.Builder> v = Value.of(
-				ParserSet
-					.create(beanStore)
-			);
+			Value<ParserSet.Builder> v = Value.of(ParserSet.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses()
-				.get(ParserSet.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(ParserSet.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(ParserSet.class)
-				.ifPresent(x->v.get().impl(x));
+			beanStore.getBean(ParserSet.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] ParserSet xxx(<args>)
-			beanStore
-				.createMethodFinder(ParserSet.class)
-				.addBean(ParserSet.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(ParserSet.class).addBean(ParserSet.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
+
 		/**
 		 * Instantiates the part parser sub-builder.
 		 *
@@ -4344,38 +4266,22 @@ public class RestContext extends Context {
 		protected HttpPartParser.Creator createPartParser(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<HttpPartParser.Creator> v = Value.of(
-				HttpPartParser
-					.creator()
-					.type(OpenApiParser.class)
-			);
+			Value<HttpPartParser.Creator> v = Value.of(HttpPartParser.creator().type(OpenApiParser.class));
 
 			// Replace with builder from bean store.
-			beanStore
-				.getBean(HttpPartParser.Creator.class)
-				.map(HttpPartParser.Creator::copy)
-				.ifPresent(x -> v.set(x));
+			beanStore.getBean(HttpPartParser.Creator.class).map(HttpPartParser.Creator::copy).ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(HttpPartParser.class)
-				.ifPresent(x -> v.get().impl(x));
+			beanStore.getBean(HttpPartParser.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with this bean.
-			resourceAs(HttpPartParser.class)
-				.ifPresent(x -> v.get().impl(x));
+			resourceAs(HttpPartParser.class).ifPresent(x -> v.get().impl(x));
 
 			// Specify the bean type if its set as a default.
-			defaultClasses()
-				.get(HttpPartParser.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(HttpPartParser.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] HttpPartParser xxx(<args>)
-			beanStore
-				.createMethodFinder(HttpPartParser.class)
-				.addBean(HttpPartParser.Creator.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(HttpPartParser.class).addBean(HttpPartParser.Creator.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4396,38 +4302,22 @@ public class RestContext extends Context {
 		protected HttpPartSerializer.Creator createPartSerializer(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<HttpPartSerializer.Creator> v = Value.of(
-				HttpPartSerializer
-					.creator()
-					.type(OpenApiSerializer.class)
-			);
+			Value<HttpPartSerializer.Creator> v = Value.of(HttpPartSerializer.creator().type(OpenApiSerializer.class));
 
 			// Replace with builder from bean store.
-			beanStore
-				.getBean(HttpPartSerializer.Creator.class)
-				.map(Creator::copy)
-				.ifPresent(x -> v.set(x));
+			beanStore.getBean(HttpPartSerializer.Creator.class).map(Creator::copy).ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(HttpPartSerializer.class)
-				.ifPresent(x -> v.get().impl(x));
+			beanStore.getBean(HttpPartSerializer.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with this bean.
-			resourceAs(HttpPartSerializer.class)
-				.ifPresent(x -> v.get().impl(x));
+			resourceAs(HttpPartSerializer.class).ifPresent(x -> v.get().impl(x));
 
 			// Specify the bean type if its set as a default.
-			defaultClasses()
-				.get(HttpPartSerializer.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(HttpPartSerializer.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from:  @RestInject public [static] HttpPartSerializer xxx(<args>)
-			beanStore
-				.createMethodFinder(HttpPartSerializer.class)
-				.addBean(HttpPartSerializer.Creator.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(HttpPartSerializer.class).addBean(HttpPartSerializer.Creator.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4444,16 +4334,10 @@ public class RestContext extends Context {
 		protected MethodList createPostCallMethods(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(
-				getAnnotatedMethods(resource, RestPostCall.class, x -> true)
-			);
+			Value<MethodList> v = Value.of(getAnnotatedMethods(resource, RestPostCall.class, x -> true));
 
 			// Replace with bean from:  @RestInject(name="postCallMethods") public [static] MethodList xxx(<args>)
-			beanStore
-				.createMethodFinder(MethodList.class)
-				.addBean(MethodList.class, v.get())
-				.find(x -> isRestBeanMethod(x, "postCallMethods"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "postCallMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4470,16 +4354,10 @@ public class RestContext extends Context {
 		protected MethodList createPostInitChildFirstMethods(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(
-				getAnnotatedMethods(resource, RestPostInit.class, RestPostInit::childFirst)
-			);
+			Value<MethodList> v = Value.of(getAnnotatedMethods(resource, RestPostInit.class, RestPostInit::childFirst));
 
 			// Replace with bean from:  @RestInject(name="postInitChildFirstMethods") public [static] MethodList xxx(<args>)
-			beanStore
-				.createMethodFinder(MethodList.class)
-				.addBean(MethodList.class, v.get())
-				.find(x -> isRestBeanMethod(x, "postInitChildFirstMethods"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "postInitChildFirstMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4496,16 +4374,10 @@ public class RestContext extends Context {
 		protected MethodList createPostInitMethods(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(
-				getAnnotatedMethods(resource, RestPostInit.class, x -> ! x.childFirst())
-			);
+			Value<MethodList> v = Value.of(getAnnotatedMethods(resource, RestPostInit.class, x -> ! x.childFirst()));
 
 			// Replace with bean from:  @RestInject(name="postInitMethods") public [static] MethodList xxx(<args>)
-			beanStore
-				.createMethodFinder(MethodList.class)
-				.addBean(MethodList.class, v.get())
-				.find(x -> isRestBeanMethod(x, "postInitMethods"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "postInitMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4522,16 +4394,10 @@ public class RestContext extends Context {
 		protected MethodList createPreCallMethods(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(
-				getAnnotatedMethods(resource, RestPreCall.class, x -> true)
-			);
+			Value<MethodList> v = Value.of(getAnnotatedMethods(resource, RestPreCall.class, x -> true));
 
 			// Replace with bean from:  @RestInject(name="preCallMethods") public [static] MethodList xxx(<args>)
-			beanStore
-				.createMethodFinder(MethodList.class)
-				.addBean(MethodList.class, v.get())
-				.find(x -> isRestBeanMethod(x, "preCallMethods"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "preCallMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -4552,6 +4418,7 @@ public class RestContext extends Context {
 		protected ResponseProcessorList.Builder createResponseProcessors(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
+			// @formatter:off
 			Value<ResponseProcessorList.Builder> v = Value.of(
 				 ResponseProcessorList
 				 	.create(beanStore)
@@ -4567,18 +4434,13 @@ public class RestContext extends Context {
 						SerializedPojoProcessor.class
 					)
 			);
+			// @formatter:on
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(ResponseProcessorList.class)
-				.ifPresent(x -> v.get().impl(x));
+			beanStore.getBean(ResponseProcessorList.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] ResponseProcessorList xxx(<args>)
-			beanStore
-				.createMethodFinder(ResponseProcessorList.class)
-				.addBean(ResponseProcessorList.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(ResponseProcessorList.class).addBean(ResponseProcessorList.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4597,11 +4459,7 @@ public class RestContext extends Context {
 		protected RestChildren.Builder createRestChildren(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws Exception {
 
 			// Default value.
-			Value<RestChildren.Builder> v = Value.of(
-				RestChildren
-					.create(beanStore)
-					.type(childrenClass)
-				);
+			Value<RestChildren.Builder> v = Value.of(RestChildren.create(beanStore).type(childrenClass));
 
 			// Initialize our child resources.
 			for (Object o : children) {
@@ -4612,7 +4470,7 @@ public class RestContext extends Context {
 					RestChild rc = (RestChild)o;
 					path = rc.path;
 					Object o2 = rc.resource;
-					so = ()->o2;
+					so = () -> o2;
 				}
 
 				Builder cb = null;
@@ -4624,14 +4482,14 @@ public class RestContext extends Context {
 						continue;
 					cb = RestContext.create(oc, restContext, inner);
 					if (beanStore.getBean(oc).isPresent()) {
-						so = ()->beanStore.getBean(oc).get();  // If we resolved via injection, always get it this way.
+						so = () -> beanStore.getBean(oc).get();  // If we resolved via injection, always get it this way.
 					} else {
 						Object o2 = beanStore.createBean(oc).builder(RestContext.Builder.class, cb).run();
-						so = ()->o2;
+						so = () -> o2;
 					}
 				} else {
 					cb = RestContext.create(o.getClass(), restContext, inner);
-					so = ()->o;
+					so = () -> o;
 				}
 
 				if (path != null)
@@ -4639,10 +4497,7 @@ public class RestContext extends Context {
 
 				RestContext cc = cb.init(so).build();
 
-				MethodInfo mi = ClassInfo.of(so.get()).getMethod(
-					x -> x.hasName("setContext")
-					&& x.hasParamTypes(RestContext.class)
-				);
+				MethodInfo mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParamTypes(RestContext.class));
 				if (mi != null)
 					mi.accessible().invoke(so.get(), cc);
 
@@ -4650,11 +4505,7 @@ public class RestContext extends Context {
 			}
 
 			// Replace with bean from:  @RestInject public [static] RestChildren xxx(<args>)
-			beanStore
-				.createMethodFinder(RestChildren.class)
-				.addBean(RestChildren.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(RestChildren.class).addBean(RestChildren.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4684,54 +4535,20 @@ public class RestContext extends Context {
 		protected RestOpArgList.Builder createRestOpArgs(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<RestOpArgList.Builder> v = Value.of(
-				RestOpArgList
-					.create(beanStore)
-					.add(
-						AttributeArg.class,
-						ContentArg.class,
-						FormDataArg.class,
-						HasFormDataArg.class,
-						HasQueryArg.class,
-						HeaderArg.class,
-						HttpServletRequestArgs.class,
-						HttpServletResponseArgs.class,
-						HttpSessionArgs.class,
-						InputStreamParserArg.class,
-						MethodArg.class,
-						ParserArg.class,
-						PathArg.class,
-						PathRemainderArg.class,
-						QueryArg.class,
-						ReaderParserArg.class,
-						RequestBeanArg.class,
-						ResponseBeanArg.class,
-						ResponseHeaderArg.class,
-						ResponseCodeArg.class,
-						RestContextArgs.class,
-						RestSessionArgs.class,
-						RestOpContextArgs.class,
-						RestOpSessionArgs.class,
-						RestRequestArgs.class,
-						RestResponseArgs.class,
-						DefaultArg.class
-					)
-			);
+			Value<RestOpArgList.Builder> v = Value.of(RestOpArgList.create(beanStore).add(AttributeArg.class, ContentArg.class, FormDataArg.class, HasFormDataArg.class, HasQueryArg.class,
+				HeaderArg.class, HttpServletRequestArgs.class, HttpServletResponseArgs.class, HttpSessionArgs.class, InputStreamParserArg.class, MethodArg.class, ParserArg.class, PathArg.class,
+				PathRemainderArg.class, QueryArg.class, ReaderParserArg.class, RequestBeanArg.class, ResponseBeanArg.class, ResponseHeaderArg.class, ResponseCodeArg.class, RestContextArgs.class,
+				RestSessionArgs.class, RestOpContextArgs.class, RestOpSessionArgs.class, RestRequestArgs.class, RestResponseArgs.class, DefaultArg.class));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(RestOpArgList.class)
-				.ifPresent(x -> v.get().impl(x));
+			beanStore.getBean(RestOpArgList.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] RestOpArgList xxx(<args>)
-			beanStore
-				.createMethodFinder(RestOpArgList.class)
-				.addBean(RestOpArgList.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(RestOpArgList.class).addBean(RestOpArgList.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
+
 		/**
 		 * Instantiates the REST operations list.
 		 *
@@ -4749,13 +4566,12 @@ public class RestContext extends Context {
 		protected RestOperations.Builder createRestOperations(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws ServletException {
 
 			// Default value.
-			Value<RestOperations.Builder> v = Value.of(
-				RestOperations.create(beanStore)
-			);
+			Value<RestOperations.Builder> v = Value.of(RestOperations.create(beanStore));
 
 			ClassInfo rci = ClassInfo.of(resource.get());
 
 			Map<String,MethodInfo> initMap = map();
+			// @formatter:off
 			ClassInfo.ofProxy(resource.get()).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestInit.class) && y.hasArg(RestOpContext.Builder.class),
 				y -> {
@@ -4764,6 +4580,7 @@ public class RestContext extends Context {
 						initMap.put(sig, y.accessible());
 				}
 			);
+			// @formatter:on
 
 			for (MethodInfo mi : rci.getPublicMethods()) {
 				AnnotationList al = mi.getAnnotationList(REST_OP_GROUP);
@@ -4779,15 +4596,13 @@ public class RestContext extends Context {
 						if (mi.isNotPublic())
 							throw servletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
 
-						RestOpContext.Builder rocb = RestOpContext
-							.create(mi.inner(), restContext)
-							.beanStore(beanStore)
-							.type(opContextClass);
+						RestOpContext.Builder rocb = RestOpContext.create(mi.inner(), restContext).beanStore(beanStore).type(opContextClass);
 
 						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
 						for (MethodInfo m : initMap.values()) {
 							if (! beanStore.hasAllParams(m)) {
-								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), beanStore.getMissingParams(m));
+								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(),
+									beanStore.getMissingParams(m));
 							}
 							try {
 								m.invoke(resource.get(), beanStore.getParams(m));
@@ -4805,6 +4620,7 @@ public class RestContext extends Context {
 						// We override the CallMethod.invoke() method to insert our logic.
 						if ("RRPC".equals(httpMethod)) {
 
+							// @formatter:off
 							RestOpContext roc2 = RestOpContext
 								.create(mi.inner(), restContext)
 								.dotAll()
@@ -4814,6 +4630,7 @@ public class RestContext extends Context {
 							v.get()
 								.add("GET", roc2)
 								.add("POST", roc2);
+							// @formatter:on
 
 						} else {
 							v.get().add(roc);
@@ -4825,11 +4642,7 @@ public class RestContext extends Context {
 			}
 
 			// Replace with bean from:  @RestInject public [static] RestOperations xxx(<args>)
-			beanStore
-				.createMethodFinder(RestOperations.class)
-				.addBean(RestOperations.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(RestOperations.class).addBean(RestOperations.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4851,27 +4664,16 @@ public class RestContext extends Context {
 		protected SerializerSet.Builder createSerializers(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<SerializerSet.Builder> v = Value.of(
-				SerializerSet
-					.create(beanStore)
-			);
+			Value<SerializerSet.Builder> v = Value.of(SerializerSet.create(beanStore));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses()
-				.get(SerializerSet.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(SerializerSet.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(SerializerSet.class)
-				.ifPresent(x->v.get().impl(x));
+			beanStore.getBean(SerializerSet.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] SerializerSet xxx(<args>)
-			beanStore
-				.createMethodFinder(SerializerSet.class)
-				.addBean(SerializerSet.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(SerializerSet.class).addBean(SerializerSet.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -4888,19 +4690,14 @@ public class RestContext extends Context {
 		protected MethodList createStartCallMethods(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(
-				getAnnotatedMethods(resource, RestStartCall.class, x -> true)
-			);
+			Value<MethodList> v = Value.of(getAnnotatedMethods(resource, RestStartCall.class, x -> true));
 
 			// Replace with bean from:  @RestInject(name="startCallMethods") public [static] MethodList xxx(<args>)
-			beanStore
-				.createMethodFinder(MethodList.class)
-				.addBean(MethodList.class, v.get())
-				.find(x -> isRestBeanMethod(x, "startCallMethods"))
-				.run(x -> v.set(x));
+			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "startCallMethods")).run(x -> v.set(x));
 
 			return v.get();
 		}
+
 		/**
 		 * Instantiates the static files bean creator.
 		 *
@@ -4919,19 +4716,12 @@ public class RestContext extends Context {
 			BeanCreator<StaticFiles> creator = beanStore.createBean(StaticFiles.class).type(BasicStaticFiles.class);
 
 			// Specify the bean type if its set as a default.
-			defaultClasses()
-				.get(StaticFiles.class)
-				.ifPresent(x -> creator.type(x));
+			defaultClasses().get(StaticFiles.class).ifPresent(x -> creator.type(x));
 
-			beanStore
-				.getBean(StaticFiles.class)
-				.ifPresent(x -> creator.impl(x));
+			beanStore.getBean(StaticFiles.class).ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  @RestInject public [static] StaticFiles xxx(<args>)
-			beanStore
-				.createMethodFinder(StaticFiles.class)
-				.find(Builder::isRestBeanMethod)
-				.run(x -> creator.impl(x));
+			beanStore.createMethodFinder(StaticFiles.class).find(Builder::isRestBeanMethod).run(x -> creator.impl(x));
 
 			return creator;
 		}
@@ -4975,19 +4765,12 @@ public class RestContext extends Context {
 			BeanCreator<SwaggerProvider> creator = beanStore.createBean(SwaggerProvider.class).type(BasicSwaggerProvider.class);
 
 			// Specify the bean type if its set as a default.
-			defaultClasses()
-				.get(SwaggerProvider.class)
-				.ifPresent(x -> creator.type(x));
+			defaultClasses().get(SwaggerProvider.class).ifPresent(x -> creator.type(x));
 
-			beanStore
-				.getBean(SwaggerProvider.class)
-				.ifPresent(x -> creator.impl(x));
+			beanStore.getBean(SwaggerProvider.class).ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  @RestInject public [static] SwaggerProvider xxx(<args>)
-			beanStore
-				.createMethodFinder(SwaggerProvider.class)
-				.find(Builder::isRestBeanMethod)
-				.run(x -> creator.impl(x));
+			beanStore.createMethodFinder(SwaggerProvider.class).find(Builder::isRestBeanMethod).run(x -> creator.impl(x));
 
 			return creator;
 		}
@@ -5012,28 +4795,16 @@ public class RestContext extends Context {
 		protected ThrownStore.Builder createThrownStore(BeanStore beanStore, Supplier<?> resource, RestContext parent) {
 
 			// Default value.
-			Value<ThrownStore.Builder> v = Value.of(
-				ThrownStore
-					.create(beanStore)
-					.impl(parent == null ? null : parent.getThrownStore())
-			);
+			Value<ThrownStore.Builder> v = Value.of(ThrownStore.create(beanStore).impl(parent == null ? null : parent.getThrownStore()));
 
 			// Specify the implementation class if its set as a default.
-			defaultClasses()
-				.get(ThrownStore.class)
-				.ifPresent(x -> v.get().type(x));
+			defaultClasses().get(ThrownStore.class).ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(ThrownStore.class)
-				.ifPresent(x->v.get().impl(x));
+			beanStore.getBean(ThrownStore.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] ThrownStore xxx(<args>)
-			beanStore
-				.createMethodFinder(ThrownStore.class)
-				.addBean(ThrownStore.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(ThrownStore.class).addBean(ThrownStore.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -5056,6 +4827,7 @@ public class RestContext extends Context {
 		protected VarResolver.Builder createVarResolver(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
+			// @formatter:off
 			Value<VarResolver.Builder> v = Value.of(
 				VarResolver
 					.create()
@@ -5083,24 +4855,19 @@ public class RestContext extends Context {
 					)
 					.bean(FileFinder.class, FileFinder.create(beanStore).cp(resourceClass,null,true).build())
 			);
+			// @formatter:on
 
 			// Replace with bean from bean store.
-			beanStore
-				.getBean(VarResolver.class)
-				.ifPresent(x -> v.get().impl(x));
+			beanStore.getBean(VarResolver.class).ifPresent(x -> v.get().impl(x));
 
 			// Replace with bean from:  @RestInject public [static] VarResolver xxx(<args>)
-			beanStore
-				.createMethodFinder(VarResolver.class)
-				.addBean(VarResolver.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.get().impl(x));
+			beanStore.createMethodFinder(VarResolver.class).addBean(VarResolver.Builder.class, v.get()).find(Builder::isRestBeanMethod).run(x -> v.get().impl(x));
 
 			return v.get();
 		}
 	}
 
-	private static final Map<Class<?>, RestContext> REGISTRY = new ConcurrentHashMap<>();
+	private static final Map<Class<?>,RestContext> REGISTRY = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates a new builder for this object.
@@ -5122,17 +4889,18 @@ public class RestContext extends Context {
 	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
 		return new Builder(resourceClass, parentContext, servletConfig);
 	}
+
 	/**
 	 * Returns a registry of all created {@link RestContext} objects.
 	 *
 	 * @return An unmodifiable map of resource classes to {@link RestContext} objects.
 	 */
-	public static final Map<Class<?>, RestContext> getGlobalRegistry() {
-		return u(REGISTRY);
-	}
+	public static final Map<Class<?>,RestContext> getGlobalRegistry() { return u(REGISTRY); }
+
 	static ServletException servletException(String msg, Object...args) {
 		return new ServletException(Utils.f(msg, args));
 	}
+
 	static ServletException servletException(Throwable t, String msg, Object...args) {
 		return new ServletException(Utils.f(msg, args), t);
 	}
@@ -5140,13 +4908,8 @@ public class RestContext extends Context {
 	private final Supplier<?> resource;
 	private final Class<?> resourceClass;
 	final Builder builder;
-	private final boolean
-		allowContentParam,
-		renderResponseStackTraces;
-	private final String
-		clientVersionHeader,
-		uriAuthority,
-		uriContext;
+	private final boolean allowContentParam, renderResponseStackTraces;
+	private final String clientVersionHeader, uriAuthority, uriContext;
 
 	private final String path, fullPath;
 
@@ -5190,15 +4953,8 @@ public class RestContext extends Context {
 	final BeanStore rootBeanStore;
 
 	// Lifecycle methods
-	private final MethodInvoker[]
-		postInitMethods,
-		postInitChildFirstMethods,
-		startCallMethods,
-		endCallMethods,
-		destroyMethods;
-	private final MethodList
-		preCallMethods,
-		postCallMethods;
+	private final MethodInvoker[] postInitMethods, postInitChildFirstMethods, startCallMethods, endCallMethods, destroyMethods;
+	private final MethodList preCallMethods, postCallMethods;
 	private final StaticFiles staticFiles;
 
 	private final CallLogger callLogger;
@@ -5236,6 +4992,7 @@ public class RestContext extends Context {
 			defaultSettings = builder.defaultSettings();
 
 			BeanStore bs = beanStore = builder.beanStore();
+			// @formatter:off
 			beanStore
 				.addBean(BeanStore.class, beanStore)
 				.addBean(RestContext.class, this)
@@ -5243,6 +5000,7 @@ public class RestContext extends Context {
 				.addBean(DefaultSettingsMap.class, defaultSettings)
 				.addBean(Builder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
+			// @formatter:on
 
 			path = builder.path != null ? builder.path : "";
 			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
@@ -5299,6 +5057,7 @@ public class RestContext extends Context {
 
 			List<RestOpContext> opContexts = restOperations.getOpContexts();
 
+			// @formatter:off
 			produces = builder.produces().orElseGet(
 				()->{
 					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : setFrom(opContexts.get(0).getSerializers().getSupportedMediaTypes());
@@ -5313,6 +5072,7 @@ public class RestContext extends Context {
 					return u(listFrom(s));
 				}
 			);
+			// @formatter:on
 
 		} catch (BasicHttpException e) {
 			_initException = e;
@@ -5338,7 +5098,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), ()->Utils.f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> Utils.f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
 			}
 		}
 
@@ -5363,7 +5123,7 @@ public class RestContext extends Context {
 
 		// Must be careful not to bleed thread-locals.
 		if (localSession.get() != null)
-			System.err.println("WARNING:  Thread-local call object was not cleaned up from previous request.  " + this + ", thread=["+Thread.currentThread().getId()+"]");
+			System.err.println("WARNING:  Thread-local call object was not cleaned up from previous request.  " + this + ", thread=[" + Thread.currentThread().getId() + "]");
 
 		RestSession.Builder sb = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger());
 
@@ -5383,11 +5143,7 @@ public class RestContext extends Context {
 				UrlPathMatch uppm = pathMatcher.match(upi2);
 				if (uppm != null && ! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					sb.req(
-						new OverrideableHttpServletRequest(sb.req())
-							.pathInfo(Utils.nullIfEmpty(urlDecode(uppm.getSuffix())))
-							.servletPath(uppm.getPrefix())
-					);
+					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(Utils.nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
 				} else {
 					RestSession call = sb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
@@ -5402,8 +5158,7 @@ public class RestContext extends Context {
 				RestContext rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req())
-						.pathInfo(Utils.nullIfEmpty(urlDecode(uppm.getSuffix())))
+					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(Utils.nullIfEmpty(urlDecode(uppm.getSuffix())))
 						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
 					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {
@@ -5448,9 +5203,7 @@ public class RestContext extends Context {
 	 * 	The header names allowed to be passed as URL parameters.
 	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
-	public Set<String> getAllowedHeaderParams() {
-		return allowedHeaderParams;
-	}
+	public Set<String> getAllowedHeaderParams() { return allowedHeaderParams; }
 
 	/**
 	 * Allowed method headers.
@@ -5464,9 +5217,7 @@ public class RestContext extends Context {
 	 * 	The method names allowed to be passed as <c>X-Method</c> headers.
 	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
-	public Set<String> getAllowedMethodHeaders() {
-		return allowedMethodHeaders;
-	}
+	public Set<String> getAllowedMethodHeaders() { return allowedMethodHeaders; }
 
 	/**
 	 * Allowed method URL parameters.
@@ -5480,49 +5231,43 @@ public class RestContext extends Context {
 	 * 	The method names allowed to be passed as <c>method</c> URL parameters.
 	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
-	public Set<String> getAllowedMethodParams() {
-		return allowedMethodParams;
-	}
+	public Set<String> getAllowedMethodParams() { return allowedMethodParams; }
 
 	//	/**
-//	 * If the specified object is annotated with {@link Response}, this returns the response metadata about that object.
-//	 *
-//	 * @param o The object to check.
-//	 * @return The response metadata, or <jk>null</jk> if it wasn't annotated with {@link Response}.
-//	 */
-//	public ResponseBeanMeta getResponseBeanMeta(Object o) {
-//		if (o == null)
-//			return null;
-//		Class<?> c = o.getClass();
-//		ResponseBeanMeta rbm = responseBeanMetas.get(c);
-//		if (rbm == null) {
-//			rbm = ResponseBeanMeta.create(c, getAnnotations());
-//			if (rbm == null)
-//				rbm = ResponseBeanMeta.NULL;
-//			responseBeanMetas.put(c, rbm);
-//		}
-//		if (rbm == ResponseBeanMeta.NULL)
-//			return null;
-//		return rbm;
-//	}
-//
+	//	 * If the specified object is annotated with {@link Response}, this returns the response metadata about that object.
+	//	 *
+	//	 * @param o The object to check.
+	//	 * @return The response metadata, or <jk>null</jk> if it wasn't annotated with {@link Response}.
+	//	 */
+	//	public ResponseBeanMeta getResponseBeanMeta(Object o) {
+	//		if (o == null)
+	//			return null;
+	//		Class<?> c = o.getClass();
+	//		ResponseBeanMeta rbm = responseBeanMetas.get(c);
+	//		if (rbm == null) {
+	//			rbm = ResponseBeanMeta.create(c, getAnnotations());
+	//			if (rbm == null)
+	//				rbm = ResponseBeanMeta.NULL;
+	//			responseBeanMetas.put(c, rbm);
+	//		}
+	//		if (rbm == ResponseBeanMeta.NULL)
+	//			return null;
+	//		return rbm;
+	//	}
+	//
 	/**
 	 * Returns the annotations applied to this context.
 	 *
 	 * @return The annotations applied to this context.
 	 */
-	public AnnotationWorkList getAnnotations() {
-		return builder.getApplied();
-	}
+	public AnnotationWorkList getAnnotations() { return builder.getApplied(); }
 
 	/**
 	 * Returns the bean context associated with this context.
 	 *
 	 * @return The bean store associated with this context.
 	 */
-	public BeanContext getBeanContext() {
-		return beanContext;
-	}
+	public BeanContext getBeanContext() { return beanContext; }
 
 	/**
 	 * Returns the bean store associated with this context.
@@ -5532,18 +5277,14 @@ public class RestContext extends Context {
 	 *
 	 * @return The resource resolver associated with this context.
 	 */
-	public BeanStore getBeanStore() {
-		return beanStore;
-	}
+	public BeanStore getBeanStore() { return beanStore; }
 
 	/**
 	 * Returns the builder that created this context.
 	 *
 	 * @return The builder that created this context.
 	 */
-	public ServletConfig getBuilder() {
-		return builder;
-	}
+	public ServletConfig getBuilder() { return builder; }
 
 	/**
 	 * Returns the call logger to use for this resource.
@@ -5556,9 +5297,7 @@ public class RestContext extends Context {
 	 * 	The call logger to use for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public CallLogger getCallLogger() {
-		return callLogger;
-	}
+	public CallLogger getCallLogger() { return callLogger; }
 
 	/**
 	 * Returns the name of the client version header name used by this resource.
@@ -5572,9 +5311,7 @@ public class RestContext extends Context {
 	 * 	The name of the client version header used by this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public String getClientVersionHeader() {
-		return clientVersionHeader;
-	}
+	public String getClientVersionHeader() { return clientVersionHeader; }
 
 	/**
 	 * Returns the config file associated with this servlet.
@@ -5590,9 +5327,7 @@ public class RestContext extends Context {
 	 * 	The resolving config file associated with this servlet.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Config getConfig() {
-		return config;
-	}
+	public Config getConfig() { return config; }
 
 	/**
 	 * Returns the explicit list of supported content types for this resource.
@@ -5607,18 +5342,14 @@ public class RestContext extends Context {
 	 * 	An unmodifiable list of supported <c>Content-Type</c> header values for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public List<MediaType> getConsumes() {
-		return consumes;
-	}
+	public List<MediaType> getConsumes() { return consumes; }
 
 	/**
 	 * Returns the debug enablement bean for this context.
 	 *
 	 * @return The debug enablement bean for this context.
 	 */
-	public DebugEnablement getDebugEnablement() {
-		return debugEnablement;
-	}
+	public DebugEnablement getDebugEnablement() { return debugEnablement; }
 
 	/**
 	 * Returns the default request attributes for this resource.
@@ -5631,9 +5362,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public NamedAttributeMap getDefaultRequestAttributes() {
-		return defaultRequestAttributes;
-	}
+	public NamedAttributeMap getDefaultRequestAttributes() { return defaultRequestAttributes; }
 
 	/**
 	 * Returns the default request headers for this resource.
@@ -5646,9 +5375,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultRequestHeaders() {
-		return defaultRequestHeaders;
-	}
+	public HeaderList getDefaultRequestHeaders() { return defaultRequestHeaders; }
 
 	/**
 	 * Returns the default response headers for this resource.
@@ -5661,18 +5388,14 @@ public class RestContext extends Context {
 	 * 	The default response headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HeaderList getDefaultResponseHeaders() {
-		return defaultResponseHeaders;
-	}
+	public HeaderList getDefaultResponseHeaders() { return defaultResponseHeaders; }
 
 	/**
 	 * Returns the encoders associated with this context.
 	 *
 	 * @return The encoders associated with this context.
 	 */
-	public EncoderSet getEncoders() {
-		return encoders;
-	}
+	public EncoderSet getEncoders() { return encoders; }
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
@@ -5687,9 +5410,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The full path.
 	 */
-	public String getFullPath() {
-		return fullPath;
-	}
+	public String getFullPath() { return fullPath; }
 
 	/**
 	 * Returns the JSON-Schema generator associated with this resource.
@@ -5698,9 +5419,7 @@ public class RestContext extends Context {
 	 * 	The HTTP-part serializer associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public JsonSchemaGenerator getJsonSchemaGenerator() {
-		return jsonSchemaGenerator;
-	}
+	public JsonSchemaGenerator getJsonSchemaGenerator() { return jsonSchemaGenerator; }
 
 	/**
 	 * Returns the HTTP call for the current request.
@@ -5722,9 +5441,7 @@ public class RestContext extends Context {
 	 * 	The logger for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Logger getLogger() {
-		return logger;
-	}
+	public Logger getLogger() { return logger; }
 
 	/**
 	 * Returns the resource bundle used by this resource.
@@ -5733,27 +5450,21 @@ public class RestContext extends Context {
 	 * 	The resource bundle for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Messages getMessages() {
-		return messages;
-	}
+	public Messages getMessages() { return messages; }
 
 	/**
 	 * Returns the timing statistics on all method executions on this class.
 	 *
 	 * @return The timing statistics on all method executions on this class.
 	 */
-	public MethodExecStore getMethodExecStore() {
-		return methodExecStore;
-	}
+	public MethodExecStore getMethodExecStore() { return methodExecStore; }
 
 	/**
 	 * Returns the parsers associated with this context.
 	 *
 	 * @return The parsers associated with this context.
 	 */
-	public ParserSet getParsers() {
-		return parsers;
-	}
+	public ParserSet getParsers() { return parsers; }
 
 	/**
 	 * Returns the HTTP-part parser associated with this resource.
@@ -5762,9 +5473,7 @@ public class RestContext extends Context {
 	 * 	The HTTP-part parser associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartParser getPartParser() {
-		return partParser;
-	}
+	public HttpPartParser getPartParser() { return partParser; }
 
 	/**
 	 * Returns the HTTP-part serializer associated with this resource.
@@ -5773,9 +5482,7 @@ public class RestContext extends Context {
 	 * 	The HTTP-part serializer associated with this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartSerializer getPartSerializer() {
-		return partSerializer;
-	}
+	public HttpPartSerializer getPartSerializer() { return partSerializer; }
 
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
@@ -5790,18 +5497,14 @@ public class RestContext extends Context {
 	 *
 	 * @return The servlet path.
 	 */
-	public String getPath() {
-		return path;
-	}
+	public String getPath() { return path; }
 
 	/**
 	 * Returns the path matcher for this context.
 	 *
 	 * @return The path matcher for this context.
 	 */
-	public UrlPathMatcher getPathMatcher() {
-		return pathMatcher;
-	}
+	public UrlPathMatcher getPathMatcher() { return pathMatcher; }
 
 	/**
 	 * Returns the explicit list of supported accept types for this resource.
@@ -5816,9 +5519,7 @@ public class RestContext extends Context {
 	 * 	An unmodifiable list of supported <c>Accept</c> header values for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public List<MediaType> getProduces() {
-		return produces;
-	}
+	public List<MediaType> getProduces() { return produces; }
 
 	/**
 	 * Returns the resource object.
@@ -5831,18 +5532,14 @@ public class RestContext extends Context {
 	 * 	The resource object.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Object getResource() {
-		return resource.get();
-	}
+	public Object getResource() { return resource.get(); }
 
 	/**
 	 * Returns the resource class type.
 	 *
 	 * @return The resource class type.
 	 */
-	public Class<?> getResourceClass() {
-		return resourceClass;
-	}
+	public Class<?> getResourceClass() { return resourceClass; }
 
 	/**
 	 * Returns the child resources associated with this servlet.
@@ -5851,9 +5548,7 @@ public class RestContext extends Context {
 	 * 	An unmodifiable map of child resources.
 	 * 	Keys are the {@link Rest#path() @Rest(path)} annotation defined on the child resource.
 	 */
-	public RestChildren getRestChildren() {
-		return restChildren;
-	}
+	public RestChildren getRestChildren() { return restChildren; }
 
 	/**
 	 * Returns the REST Java methods defined in this resource.
@@ -5864,27 +5559,21 @@ public class RestContext extends Context {
 	 * @return
 	 * 	An unmodifiable map of Java method names to call method objects.
 	 */
-	public RestOperations getRestOperations() {
-		return restOperations;
-	}
+	public RestOperations getRestOperations() { return restOperations; }
 
 	/**
 	 * Returns the root bean store for this context.
 	 *
 	 * @return The root bean store for this context.
 	 */
-	public BeanStore getRootBeanStore() {
-		return rootBeanStore;
-	}
+	public BeanStore getRootBeanStore() { return rootBeanStore; }
 
 	/**
 	 * Returns the serializers associated with this context.
 	 *
 	 * @return The serializers associated with this context.
 	 */
-	public SerializerSet getSerializers() {
-		return serializers;
-	}
+	public SerializerSet getSerializers() { return serializers; }
 
 	/**
 	 * Returns the servlet init parameter returned by {@link ServletConfig#getInitParameter(String)}.
@@ -5903,18 +5592,14 @@ public class RestContext extends Context {
 	 * 	The static files for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public StaticFiles getStaticFiles() {
-		return staticFiles;
-	}
+	public StaticFiles getStaticFiles() { return staticFiles; }
 
 	/**
 	 * Gives access to the internal statistics on this context.
 	 *
 	 * @return The context statistics.
 	 */
-	public RestContextStats getStats() {
-		return new RestContextStats(startTime, getMethodExecStore().getStatsByTotalTime());
-	}
+	public RestContextStats getStats() { return new RestContextStats(startTime, getMethodExecStore().getStatsByTotalTime()); }
 
 	/**
 	 * Returns the swagger for the REST resource.
@@ -5948,9 +5633,7 @@ public class RestContext extends Context {
 	 * 	The information provider for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public SwaggerProvider getSwaggerProvider() {
-		return swaggerProvider;
-	}
+	public SwaggerProvider getSwaggerProvider() { return swaggerProvider; }
 
 	/**
 	 * Returns the stack trace database associated with this context.
@@ -5959,9 +5642,7 @@ public class RestContext extends Context {
 	 * 	The stack trace database for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public ThrownStore getThrownStore() {
-		return thrownStore;
-	}
+	public ThrownStore getThrownStore() { return thrownStore; }
 
 	/**
 	 * Returns the authority path of the resource.
@@ -6012,9 +5693,7 @@ public class RestContext extends Context {
 	 * 	The URI-resolution relativity setting value.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public UriRelativity getUriRelativity() {
-		return uriRelativity;
-	}
+	public UriRelativity getUriRelativity() { return uriRelativity; }
 
 	/**
 	 * Returns the setting on how relative URIs should be resolved.
@@ -6027,9 +5706,7 @@ public class RestContext extends Context {
 	 * 	The URI-resolution setting value.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public UriResolution getUriResolution() {
-		return uriResolution;
-	}
+	public UriResolution getUriResolution() { return uriResolution; }
 
 	/**
 	 * Returns the variable resolver for this servlet.
@@ -6082,9 +5759,7 @@ public class RestContext extends Context {
 	 *
 	 * @return The var resolver in use by this resource.
 	 */
-	public VarResolver getVarResolver() {
-		return varResolver;
-	}
+	public VarResolver getVarResolver() { return varResolver; }
 
 	/**
 	 * Returns whether it's safe to pass the HTTP content as a <js>"content"</js> GET parameter.
@@ -6095,18 +5770,14 @@ public class RestContext extends Context {
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
 	 */
-	public boolean isAllowContentParam() {
-		return allowContentParam;
-	}
+	public boolean isAllowContentParam() { return allowContentParam; }
 
 	/**
 	 * Returns whether it's safe to render stack traces in HTTP responses.
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
 	 */
-	public boolean isRenderResponseStackTraces() {
-		return renderResponseStackTraces;
-	}
+	public boolean isRenderResponseStackTraces() { return renderResponseStackTraces; }
 
 	/**
 	 * Called during servlet initialization to invoke all {@link RestPostInit} child-last methods.
@@ -6118,10 +5789,7 @@ public class RestContext extends Context {
 		if (initialized.get())
 			return this;
 		Object resource = getResource();
-		MethodInfo mi = ClassInfo.of(getResource()).getPublicMethod(
-			x -> x.hasName("setContext")
-			&& x.hasParamTypes(RestContext.class)
-		);
+		MethodInfo mi = ClassInfo.of(getResource()).getPublicMethod(x -> x.hasName("setContext") && x.hasParamTypes(RestContext.class));
 		if (mi != null) {
 			try {
 				mi.accessible().invoke(resource, this);
@@ -6168,6 +5836,7 @@ public class RestContext extends Context {
 	private static Set<String> newCaseInsensitiveSet(String value) {
 		Set<String> s = new TreeSet<>(String.CASE_INSENSITIVE_ORDER) {
 			private static final long serialVersionUID = 1L;
+
 			@Override
 			public boolean contains(Object v) {
 				return v == null ? false : super.contains(v);
@@ -6245,7 +5914,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), session.getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), ()->Utils.f("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> Utils.f("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
 		}
 	}
@@ -6301,18 +5970,14 @@ public class RestContext extends Context {
 	 *
 	 * @return The list of methods to invoke after the actual REST method is called.
 	 */
-	protected MethodList getPostCallMethods() {
-		return postCallMethods;
-	}
+	protected MethodList getPostCallMethods() { return postCallMethods; }
 
 	/**
 	 * Returns the list of methods to invoke before the actual REST method is called.
 	 *
 	 * @return The list of methods to invoke before the actual REST method is called.
 	 */
-	protected MethodList getPreCallMethods() {
-		return preCallMethods;
-	}
+	protected MethodList getPreCallMethods() { return preCallMethods; }
 
 	/**
 	 * Method for handling response errors.
@@ -6392,7 +6057,7 @@ public class RestContext extends Context {
 		String pathInfo = session.getPathInfo();
 		String methodUC = session.getMethod();
 		int rc = session.getStatus();
-		String onPath = pathInfo == null ? " on no pathInfo"  : String.format(" on path '%s'", pathInfo);
+		String onPath = pathInfo == null ? " on no pathInfo" : String.format(" on path '%s'", pathInfo);
 		if (rc == SC_NOT_FOUND)
 			throw new NotFound("Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
 		else if (rc == SC_PRECONDITION_FAILED)
@@ -6403,16 +6068,17 @@ public class RestContext extends Context {
 			throw new ServletException("Invalid method response: " + rc, session.getException());
 	}
 
-/**
-	 * Called during a request to invoke all {@link RestPostCall} methods.
-	 *
-	 * @param session The current request.
-	 * @throws Throwable If thrown from call methods.
-	 */
+	/**
+		 * Called during a request to invoke all {@link RestPostCall} methods.
+		 *
+		 * @param session The current request.
+		 * @throws Throwable If thrown from call methods.
+		 */
 	protected void postCall(RestOpSession session) throws Throwable {
 		for (RestOpInvoker m : session.getContext().getPostCallMethods())
 			m.invoke(session);
 	}
+
 	/**
 	 * Called during a request to invoke all {@link RestPreCall} methods.
 	 *
@@ -6463,6 +6129,7 @@ public class RestContext extends Context {
 
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
+		// @formatter:off
 		return filteredMap()
 			.append("allowContentParam", allowContentParam)
 			.append("allowedMethodHeader", allowedMethodHeaders)
@@ -6485,7 +6152,9 @@ public class RestContext extends Context {
 			.append("uriContext", uriContext)
 			.append("uriRelativity", uriRelativity)
 			.append("uriResolution", uriResolution);
+		// @formatter:on
 	}
+
 	/**
 	 * Called at the start of a request to invoke all {@link RestStartCall} methods.
 	 *
@@ -6496,7 +6165,7 @@ public class RestContext extends Context {
 		for (MethodInvoker x : startCallMethods) {
 			try {
 				x.invoke(session.getBeanStore(), session.getContext().getResource());
-			} catch (IllegalAccessException|IllegalArgumentException e) {
+			} catch (IllegalAccessException | IllegalArgumentException e) {
 				throw new InternalServerError(e, "Error occurred invoking start-call method ''{0}''.", x.getFullName());
 			} catch (InvocationTargetException e) {
 				Throwable t = e.getTargetException();

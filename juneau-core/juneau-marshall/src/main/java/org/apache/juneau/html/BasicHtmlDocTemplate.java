@@ -61,12 +61,12 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	protected void article(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		// To allow for page formatting using CSS, we encapsulate the data inside two div tags:
 		// <div class='outerdata'><div class='data' id='data'>...</div></div>
-		w.oTag(4, "div").attr("class","outerdata").append('>').nl(4);
-		w.oTag(5, "div").attr("class","data").attr("id", "data").append('>').nl(5);
+		w.oTag(4, "div").attr("class", "outerdata").append('>').nl(4);
+		w.oTag(5, "div").attr("class", "data").attr("id", "data").append('>').nl(5);
 
 		if (o == null) {
 			w.append(6, "<null/>").nl(6);
-		} else if (Utils.isEmpty(o)){
+		} else if (Utils.isEmpty(o)) {
 			String m = session.getNoResultsMessage();
 			if (exists(m))
 				w.append(6, session.resolve(m)).nl(6);
@@ -307,7 +307,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 				if (l.matches("(?s)\\S+\\:.*")) {
 					int i = l.indexOf(':');
 					String key = l.substring(0, i);
-					String val = l.substring(i+1).trim();
+					String val = l.substring(i + 1).trim();
 					if (val.startsWith("<"))
 						w.nl(4).appendln(5, val);
 					else

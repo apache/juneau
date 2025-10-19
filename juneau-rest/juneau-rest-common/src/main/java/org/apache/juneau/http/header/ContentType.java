@@ -64,6 +64,7 @@ public class ContentType extends BasicMediaTypeHeader {
 
 	// Constants
 	@SuppressWarnings("javadoc")
+	// @formatter:off
 	public static final ContentType
 		APPLICATION_ATOM_XML = of("application/atom+xml"),
 		APPLICATION_FORM_URLENCODED = of("application/x-www-form-urlencoded"),
@@ -87,6 +88,7 @@ public class ContentType extends BasicMediaTypeHeader {
 		TEXT_XML = of("text/xml"),
 		WILDCARD = of("*/*"),
 		NULL = new ContentType((String)null);
+	// @formatter:on
 
 	/**
 	 * Static creator.
@@ -110,7 +112,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentType of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new ContentType(value));
+		return value == null ? null : CACHE.get(value, () -> new ContentType(value));
 	}
 
 	/**
@@ -127,6 +129,7 @@ public class ContentType extends BasicMediaTypeHeader {
 	public static ContentType of(Supplier<MediaType> value) {
 		return value == null ? null : new ContentType(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

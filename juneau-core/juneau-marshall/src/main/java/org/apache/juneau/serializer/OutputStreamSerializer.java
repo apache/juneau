@@ -91,11 +91,13 @@ public class OutputStreamSerializer extends Serializer {
 			super.addBeanTypes(value);
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addRootType() {
 			super.addRootType();
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
 		public Builder addRootType(boolean value) {
 			super.addRootType(value);
@@ -404,10 +406,7 @@ public class OutputStreamSerializer extends Serializer {
 
 		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				binaryFormat
-			);
+			return HashKey.of(super.hashKey(), binaryFormat);
 		}
 
 		@Override /* Overridden from Builder */
@@ -591,13 +590,13 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
 			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
 			return this;
 		}
@@ -710,6 +709,7 @@ public class OutputStreamSerializer extends Serializer {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -718,6 +718,7 @@ public class OutputStreamSerializer extends Serializer {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	final BinaryFormat binaryFormat;
 
 	/**
@@ -738,14 +739,10 @@ public class OutputStreamSerializer extends Serializer {
 	}
 
 	@Override /* Overridden from Context */
-	public OutputStreamSerializerSession getSession() {
-		return createSession().build();
-	}
+	public OutputStreamSerializerSession getSession() { return createSession().build(); }
 
 	@Override /* Overridden from Serializer */
-	public final boolean isWriterSerializer() {
-		return false;
-	}
+	public final boolean isWriterSerializer() { return false; }
 
 	/**
 	 * Convenience method for serializing an object to a <code><jk>byte</jk></code>.
@@ -758,6 +755,7 @@ public class OutputStreamSerializer extends Serializer {
 	public final byte[] serialize(Object o) throws SerializeException {
 		return getSession().serialize(o);
 	}
+
 	/**
 	 * Binary output format.
 	 *
@@ -765,9 +763,8 @@ public class OutputStreamSerializer extends Serializer {
 	 * @return
 	 * 	The format to use for the {@link #serializeToString(Object)} method on stream-based serializers when converting byte arrays to strings.
 	 */
-	protected final BinaryFormat getBinaryFormat() {
-		return binaryFormat;
-	}
+	protected final BinaryFormat getBinaryFormat() { return binaryFormat; }
+
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("binaryFormat", binaryFormat);

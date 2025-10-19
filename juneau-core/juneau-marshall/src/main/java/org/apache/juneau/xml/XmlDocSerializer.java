@@ -51,6 +51,7 @@ public class XmlDocSerializer extends XmlSerializer {
 			super(builder.enableNamespaces());
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -59,6 +60,7 @@ public class XmlDocSerializer extends XmlSerializer {
 	public static Builder create() {
 		return new Builder().type(XmlDocSerializer.class);
 	}
+
 	/**
 	 * Constructor.
 	 *
@@ -79,7 +81,5 @@ public class XmlDocSerializer extends XmlSerializer {
 	}
 
 	@Override /* Overridden from Context */
-	public XmlDocSerializerSession getSession() {
-		return createSession().build();
-	}
+	public XmlDocSerializerSession getSession() { return createSession().build(); }
 }

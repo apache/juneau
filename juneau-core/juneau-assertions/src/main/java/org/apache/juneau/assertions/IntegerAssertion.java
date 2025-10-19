@@ -96,7 +96,6 @@ import org.apache.juneau.serializer.*;
  */
 public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 
-
 	/**
 	 * Static creator.
 	 *
@@ -108,7 +107,6 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 	public static IntegerAssertion create(Integer value) {
 		return new IntegerAssertion(value);
 	}
-
 
 	/**
 	 * Constructor.

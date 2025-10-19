@@ -62,6 +62,7 @@ public class PlainTextParserSession extends ReaderParserSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public PlainTextParserSession build() {
 			return new PlainTextParserSession(this);
@@ -163,6 +164,7 @@ public class PlainTextParserSession extends ReaderParserSession {
 			return this;
 		}
 	}
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -172,6 +174,7 @@ public class PlainTextParserSession extends ReaderParserSession {
 	public static Builder create(PlainTextParser ctx) {
 		return new Builder(ctx);
 	}
+
 	/**
 	 * Constructor.
 	 *

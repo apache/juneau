@@ -127,6 +127,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	public FluentProtocolVersionAssertion(ProtocolVersion value, R returns) {
 		this(null, value, returns);
 	}
+
 	/**
 	 * Returns the protocol major version as a new assertion.
 	 *
@@ -153,6 +154,7 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 	public FluentStringAssertion<R> asProtocol() {
 		return new FluentStringAssertion<>(value().getProtocol(), returns());
 	}
+
 	@Override /* Overridden from Assertion */
 	public FluentProtocolVersionAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

@@ -66,6 +66,7 @@ public class BeanTraverseSession extends BeanSession {
 			this.ctx = ctx;
 			initialDepth = ctx.initialDepth;
 		}
+
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
@@ -132,6 +133,7 @@ public class BeanTraverseSession extends BeanSession {
 			return this;
 		}
 	}
+
 	private class StackElement {
 		final int depth;
 		final String name;
@@ -154,6 +156,7 @@ public class BeanTraverseSession extends BeanSession {
 			return sb.toString();
 		}
 	}
+
 	private final BeanTraverseContext ctx;
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
 
@@ -177,7 +180,7 @@ public class BeanTraverseSession extends BeanSession {
 	protected BeanTraverseSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
-		indent =  builder.initialDepth;
+		indent = builder.initialDepth;
 		if (isDetectRecursions() || isDebug()) {
 			set = new IdentityHashMap<>();
 		} else {
@@ -192,9 +195,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return
 	 * 	The initial indentation level at the root.
 	 */
-	public final int getInitialDepth() {
-		return ctx.getInitialDepth();
-	}
+	public final int getInitialDepth() { return ctx.getInitialDepth(); }
 
 	/**
 	 * Returns information used to determine at what location in the parse a failure occurred.
@@ -204,10 +205,13 @@ public class BeanTraverseSession extends BeanSession {
 	public final JsonMap getLastLocation() {
 		Predicate<Object> nn = Utils::isNotNull;
 		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		return JsonMap.create()
+		// @formatter:off
+		return JsonMap
+			.create()
 			.appendIf(nn, "currentClass", currentClass)
 			.appendIf(nn, "currentProperty", currentProperty)
 			.appendIf(nec, "stack", stack);
+		// @formatter:on
 	}
 
 	/**
@@ -218,9 +222,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
 	 *	<br>If this depth is exceeded, an exception is thrown.
 	 */
-	public final int getMaxDepth() {
-		return ctx.getMaxDepth();
-	}
+	public final int getMaxDepth() { return ctx.getMaxDepth(); }
 
 	/**
 	 * Automatically detect POJO recursions.
@@ -229,9 +231,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return
 	 * 	<jk>true</jk> if recursions should be checked for during traversal.
 	 */
-	public final boolean isDetectRecursions() {
-		return ctx.isDetectRecursions();
-	}
+	public final boolean isDetectRecursions() { return ctx.isDetectRecursions(); }
 
 	/**
 	 * Ignore recursion errors.
@@ -241,9 +241,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * 	<br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 */
-	public final boolean isIgnoreRecursions() {
-		return ctx.isIgnoreRecursions();
-	}
+	public final boolean isIgnoreRecursions() { return ctx.isIgnoreRecursions(); }
 
 	/**
 	 * Returns the inner type of an {@link Optional}.
@@ -313,9 +311,7 @@ public class BeanTraverseSession extends BeanSession {
 	 *
 	 * @return <jk>true</jk> if we're processing the root node.
 	 */
-	protected final boolean isRoot() {
-		return depth == 1;
-	}
+	protected final boolean isRoot() { return depth == 1; }
 
 	/**
 	 * Logs a warning message.
@@ -324,7 +320,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @param msg The warning message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	protected void onError(Throwable t, String msg, Object... args) {
+	protected void onError(Throwable t, String msg, Object...args) {
 		super.addWarning(msg, args);
 	}
 
@@ -334,7 +330,7 @@ public class BeanTraverseSession extends BeanSession {
 	protected final void pop() {
 		indent--;
 		depth--;
-		if ((isDetectRecursions() || isDebug()) && ! isBottom)  {
+		if ((isDetectRecursions() || isDebug()) && ! isBottom) {
 			Object o = stack.removeLast().o;
 			Object o2 = set.remove(o);
 			if (o2 == null)
@@ -347,6 +343,7 @@ public class BeanTraverseSession extends BeanSession {
 	protected JsonMap properties() {
 		return filteredMap("indent", indent, "depth", depth);
 	}
+
 	/**
 	 * Push the specified object onto the stack.
 	 *
@@ -385,18 +382,14 @@ public class BeanTraverseSession extends BeanSession {
 	 *
 	 * @param currentClass The current class being traversed.
 	 */
-	protected final void setCurrentClass(ClassMeta<?> currentClass) {
-		this.currentClass = currentClass;
-	}
+	protected final void setCurrentClass(ClassMeta<?> currentClass) { this.currentClass = currentClass; }
 
 	/**
 	 * Sets the current bean property being traversed for proper error messages.
 	 *
 	 * @param currentProperty The current property being traversed.
 	 */
-	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) {
-		this.currentProperty = currentProperty;
-	}
+	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) { this.currentProperty = currentProperty; }
 
 	/**
 	 * Returns <jk>true</jk> if we're about to exceed the max depth for the document.
@@ -406,6 +399,7 @@ public class BeanTraverseSession extends BeanSession {
 	protected final boolean willExceedDepth() {
 		return (depth >= getMaxDepth());
 	}
+
 	/**
 	 * Returns <jk>true</jk> if {@link BeanTraverseContext.Builder#detectRecursions()} is enabled, and the specified
 	 * object is already higher up in the traversal chain.

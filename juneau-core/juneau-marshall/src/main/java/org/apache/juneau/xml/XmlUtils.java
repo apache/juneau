@@ -39,6 +39,8 @@ import org.apache.juneau.xml.annotation.*;
  */
 @SuppressWarnings("resource")
 public class XmlUtils {
+
+	// @formatter:off
 	private static AsciiMap REPLACE_TEXT = new AsciiMap()
 		.append('&', "&amp;")
 		.append('<', "&lt;")
@@ -56,6 +58,7 @@ public class XmlUtils {
 		.append((char)0x09, "&#x0009;")
 		.append((char)0x0A, "&#x000a;")
 		.append((char)0x0D, "&#x000d;");
+	// @formatter:on
 
 	/**
 	 * Given a list of Strings and other Objects, combines Strings that are next to each other in the list.
@@ -102,9 +105,9 @@ public class XmlUtils {
 
 		for (int i = 0; i < value.length(); i++) {
 			char c = value.charAt(i);
-			if (c == '_' && isEscapeSequence(value,i)) {
+			if (c == '_' && isEscapeSequence(value, i)) {
 
-				int x = Integer.parseInt(value.substring(i+2, i+6), 16);
+				int x = Integer.parseInt(value.substring(i + 2, i + 6), 16);
 
 				// If we find _x0000_, then that means a null.
 				// If we find _xE000_, then that means an empty string.
@@ -113,13 +116,14 @@ public class XmlUtils {
 				else if (x != 0xE000)
 					sb.append((char)x);
 
-				i+=6;
+				i += 6;
 			} else {
 				sb.append(c);
 			}
 		}
 		return sb.toString();
 	}
+
 	/**
 	 * Serializes and encodes the specified object as valid XML attribute name.
 	 *
@@ -139,14 +143,14 @@ public class XmlUtils {
 				if (i == 0) {
 					if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == ':')
 						w.append(c);
-					else if (c == '_' && ! isEscapeSequence(s,i))
+					else if (c == '_' && ! isEscapeSequence(s, i))
 						w.append(c);
 					else
 						appendPaddedHexChar(w, c);
 				} else {
 					if ((c >= '0' && c <= '9' || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == ':'))
 						w.append(c);
-					else if (c == '_' && ! isEscapeSequence(s,i))
+					else if (c == '_' && ! isEscapeSequence(s, i))
 						w.append(c);
 					else
 						appendPaddedHexChar(w, c);
@@ -189,11 +193,11 @@ public class XmlUtils {
 				final int len = s.length();
 				for (int i = 0; i < len; i++) {
 					char c = s.charAt(i);
-					if ((i == 0 || i == len-1) && Character.isWhitespace(c))
+					if ((i == 0 || i == len - 1) && Character.isWhitespace(c))
 						appendPaddedHexChar(w, c);
 					else if (REPLACE_ATTR_VAL.contains(c))
 						w.append(REPLACE_ATTR_VAL.get(c));
-					else if (c == '_' && isEscapeSequence(s,i))
+					else if (c == '_' && isEscapeSequence(s, i))
 						appendPaddedHexChar(w, c);
 					else if (isValidXmlCharacter(c))
 						w.append(c);
@@ -255,6 +259,7 @@ public class XmlUtils {
 		}
 		return w;
 	}
+
 	/**
 	 * Encodes the specified element text and sends the results to the specified writer.
 	 *
@@ -288,11 +293,11 @@ public class XmlUtils {
 				final int len = s.length();
 				for (int i = 0; i < len; i++) {
 					char c = s.charAt(i);
-					if ((i == 0 || i == len-1) && Character.isWhitespace(c) && ! preserveWhitespace)
+					if ((i == 0 || i == len - 1) && Character.isWhitespace(c) && ! preserveWhitespace)
 						appendPaddedHexChar(w, c);
 					else if (REPLACE_TEXT.contains(c))
 						w.append(REPLACE_TEXT.get(c));
-					else if (c == '_' && isEscapeSequence(s,i))
+					else if (c == '_' && isEscapeSequence(s, i))
 						appendPaddedHexChar(w, c);
 					else if (isValidXmlCharacter(c))
 						w.append(c);
@@ -324,12 +329,12 @@ public class XmlUtils {
 			if (! needsTextEncoding(s))
 				return s;
 			final int len = s.length();
-			StringWriter sw = new StringWriter(s.length()*2);
+			StringWriter sw = new StringWriter(s.length() * 2);
 			for (int i = 0; i < len; i++) {
 				char c = s.charAt(i);
-				if ((i == 0 || i == len-1) && Character.isWhitespace(c))
+				if ((i == 0 || i == len - 1) && Character.isWhitespace(c))
 					appendPaddedHexChar(sw, c);
-				else if (c == '_' && isEscapeSequence(s,i))
+				else if (c == '_' && isEscapeSequence(s, i))
 					appendPaddedHexChar(sw, c);
 				else if (isValidXmlCharacter(c))
 					sw.append(c);
@@ -341,6 +346,7 @@ public class XmlUtils {
 			throw asRuntimeException(e); // Never happens
 		}
 	}
+
 	/**
 	 * Find the namespace given a list of <ja>@Xml</ja> and <ja>@XmlSchema</ja> annotations.
 	 *
@@ -353,14 +359,14 @@ public class XmlUtils {
 	 */
 	public static Namespace findNamespace(List<Xml> xmls, List<XmlSchema> schemas) {
 
-		for (int i = xmls.size()-1; i >= 0; i--) {
+		for (int i = xmls.size() - 1; i >= 0; i--) {
 			Xml xml = xmls.get(i);
 			Namespace ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);
 			if (ns != null)
 				return ns;
 		}
 
-		for (int i = schemas.size()-1; i >= 0; i--) {
+		for (int i = schemas.size() - 1; i >= 0; i--) {
 			XmlSchema schema = schemas.get(i);
 			Namespace ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
 			if (ns != null)
@@ -379,9 +385,9 @@ public class XmlUtils {
 	public static String toReadableEvent(XMLStreamReader r) {
 		int t = r.getEventType();
 		if (t == 1)
-			return "<"+r.getLocalName()+">";
+			return "<" + r.getLocalName() + ">";
 		if (t == 2)
-			return "</"+r.getLocalName()+">";
+			return "</" + r.getLocalName() + ">";
 		if (t == 3)
 			return "PROCESSING_INSTRUCTION";
 		if (t == 4)
@@ -401,7 +407,7 @@ public class XmlUtils {
 		if (t == 11)
 			return "DTD";
 		if (t == 12)
-			return "CDATA=["+r.getText()+"]";
+			return "CDATA=[" + r.getText() + "]";
 		if (t == 13)
 			return "NAMESPACE";
 		if (t == 14)
@@ -418,9 +424,11 @@ public class XmlUtils {
 			out.append(c);
 		return out.append('_');
 	}
+
 	private static Writer encodeElementNameInner(Writer w, String s) throws IOException {
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
+			// @formatter:off
 			if ((c >= 'A' && c <= 'Z')
 					|| (c == '_' && ! isEscapeSequence(s,i))
 					|| (c >= 'a' && c <= 'z')
@@ -443,8 +451,9 @@ public class XmlUtils {
 					|| (c >= '\u3001' && c <= '\ud7ff')
 					|| (c >= '\uf900' && c <= '\ufdcf')
 					|| (c >= '\ufdf0' && c <= '\ufffd')) {
+				// @formatter:on
 				w.append(c);
-			}  else {
+			} else {
 				appendPaddedHexChar(w, c);
 			}
 		}
@@ -470,7 +479,7 @@ public class XmlUtils {
 					if (xmlNs.prefix().equals(prefix))
 						return Namespace.of(prefix, xmlNs.namespaceURI());
 			}
-			throw new BeanRuntimeException("Found @Xml.prefix annotation with no matching URI.  prefix='"+prefix+"'");
+			throw new BeanRuntimeException("Found @Xml.prefix annotation with no matching URI.  prefix='" + prefix + "'");
 		}
 
 		// If only namespaceURI specified, need to search for prefix.
@@ -490,9 +499,11 @@ public class XmlUtils {
 
 		return null;
 	}
+
 	// Returns true if the string at the specified position is of the form "_x####_"
 	// where '#' are hexadecimal characters.
 	private static boolean isEscapeSequence(String s, int i) {
+		// @formatter:off
 		return s.length() > i+6
 			&& s.charAt(i) == '_'
 			&& s.charAt(i+1) == 'x'
@@ -501,6 +512,7 @@ public class XmlUtils {
 			&& isHexCharacter(s.charAt(i+4))
 			&& isHexCharacter(s.charAt(i+5))
 			&& s.charAt(i+6) == '_';
+		// @formatter:on
 	}
 
 	// Returns true if the character is a hexadecimal character
@@ -529,9 +541,9 @@ public class XmlUtils {
 		final int len = value.length();
 		for (int i = 0; i < len; i++) {
 			char c = value.charAt(i);
-			if ((i == 0 || i == len-1) && Character.isWhitespace(c))
+			if ((i == 0 || i == len - 1) && Character.isWhitespace(c))
 				return true;
-			if (REPLACE_ATTR_VAL.contains(c) || ! isValidXmlCharacter(c) || (c == '_' && isEscapeSequence(value,i)))
+			if (REPLACE_ATTR_VAL.contains(c) || ! isValidXmlCharacter(c) || (c == '_' && isEscapeSequence(value, i)))
 				return true;
 		}
 		return false;
@@ -553,9 +565,9 @@ public class XmlUtils {
 		final int len = value.length();
 		for (int i = 0; i < len; i++) {
 			char c = value.charAt(i);
-			if ((i == 0 || i == len-1) && Character.isWhitespace(c))
+			if ((i == 0 || i == len - 1) && Character.isWhitespace(c))
 				return true;
-			if (REPLACE_TEXT.contains(c) || ! isValidXmlCharacter(c) || (c == '_' && isEscapeSequence(value,i)))
+			if (REPLACE_TEXT.contains(c) || ! isValidXmlCharacter(c) || (c == '_' && isEscapeSequence(value, i)))
 				return true;
 		}
 		return false;

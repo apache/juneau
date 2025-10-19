@@ -72,6 +72,7 @@ public class BiMap<K,V> implements Map<K,V> {
 		}
 
 	}
+
 	/**
 	 * Create a new builder for this class.
 	 *
@@ -82,6 +83,7 @@ public class BiMap<K,V> implements Map<K,V> {
 	public static <K,V> Builder<K,V> create() {
 		return new Builder<>();
 	}
+
 	private final Map<K,V> forward;
 	private final Map<V,K> reverse;
 
@@ -134,9 +136,7 @@ public class BiMap<K,V> implements Map<K,V> {
 	}
 
 	@Override /* Overridden from Map */
-	public boolean isEmpty() {
-		return forward.isEmpty();
-	}
+	public boolean isEmpty() { return forward.isEmpty(); }
 
 	@Override /* Overridden from Map */
 	public Set<K> keySet() {

@@ -169,7 +169,7 @@ public class AnyAssertion<T> extends FluentAnyAssertion<T,AnyAssertion<T>> {
 	// Fluent setters
 	// -----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
-	public AnyAssertion<T> setMsg(String msg, Object... args) {
+	public AnyAssertion<T> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}

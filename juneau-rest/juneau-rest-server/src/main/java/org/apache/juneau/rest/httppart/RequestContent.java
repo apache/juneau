@@ -94,7 +94,7 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-@SuppressWarnings({"unchecked","resource"})
+@SuppressWarnings({ "unchecked", "resource" })
 public class RequestContent {
 
 	private byte[] content;
@@ -176,7 +176,7 @@ public class RequestContent {
 	 *
 	 * 	<jc>// Parse into an int array.</jc>
 	 * 	<jk>int</jk>[] <jv>content2</jv> = <jv>req</jv>.getContent().as(<jk>int</jk>[].<jk>class</jk>);
-
+	
 	 * 	<jc>// Parse into a bean.</jc>
 	 * 	MyBean <jv>content3</jv> = <jv>req</jv>.getContent().as(MyBean.<jk>class</jk>);
 	 *
@@ -353,9 +353,7 @@ public class RequestContent {
 	 *
 	 * @return The content length of the content in bytes.
 	 */
-	public int getContentLength() {
-		return contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength;
-	}
+	public int getContentLength() { return contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength; }
 
 	/**
 	 * Returns the HTTP content content as an {@link InputStream}.
@@ -485,10 +483,8 @@ public class RequestContent {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)
-					throw new UnsupportedMediaType(
-						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
-						req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings())
-					);
+					throw new UnsupportedMediaType("Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
+						req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings()));
 			}
 
 			if (encoder != null)
@@ -521,7 +517,7 @@ public class RequestContent {
 		if (mediaType != null)
 			return mediaType;
 		Optional<ContentType> ct = req.getHeader(ContentType.class);
-		if (!ct.isPresent() && content != null)
+		if (! ct.isPresent() && content != null)
 			return MediaType.UON;
 		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
 	}
@@ -545,6 +541,7 @@ public class RequestContent {
 		if (pm != null) {
 			Parser p = pm.getParser();
 			MediaType mediaType = pm.getMediaType();
+			// @formatter:off
 			ParserSession session = p
 				.createSession()
 				.properties(req.getAttributes().asMap())
@@ -557,6 +554,7 @@ public class RequestContent {
 				.debug(req.isDebug() ? true : null)
 				.outer(req.getContext().getResource())
 				.build();
+			// @formatter:on
 
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				T o = session.parse(in, cm);
@@ -578,11 +576,10 @@ public class RequestContent {
 			return cm.getStringMutater().mutate(asString());
 
 		Optional<ContentType> ct = req.getHeader(ContentType.class);
-		throw new UnsupportedMediaType(
-			"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes())
-		);
+		throw new UnsupportedMediaType("Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
+			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
 	}
+
 	/**
 	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};
 	 *
@@ -595,7 +592,5 @@ public class RequestContent {
 		return new InputStreamReader(getInputStream(), req.getCharset());
 	}
 
-	boolean isLoaded() {
-		return content != null;
-	}
+	boolean isLoaded() { return content != null; }
 }

@@ -62,7 +62,7 @@ public class RequestAnnotation {
 	 * A collection of {@link Request @Request annotations}.
 	 */
 	@Documented
-	@Target({METHOD,TYPE})
+	@Target({ METHOD, TYPE })
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface Array {
@@ -149,8 +149,10 @@ public class RequestAnnotation {
 			return serializer;
 		}
 	}
+
 	/** Default value */
 	public static final Request DEFAULT = create().build();
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -159,6 +161,7 @@ public class RequestAnnotation {
 	public static Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *
@@ -168,6 +171,7 @@ public class RequestAnnotation {
 	public static Builder create(Class<?>...on) {
 		return create().on(on);
 	}
+
 	/**
 	 * Instantiates a new builder for this class.
 	 *

@@ -72,6 +72,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			return null;
 		return ClassInfo.of(m.getDeclaringClass()).getMethodInfo(m);
 	}
+
 	private static List<MethodInfo> findMatching(List<MethodInfo> l, MethodInfo m, ClassInfo c) {
 		for (MethodInfo m2 : c._getDeclaredMethods())
 			if (m.hasName(m2.getName()) && Arrays.equals(m._getParameterTypes(), m2._getParameterTypes()))
@@ -83,6 +84,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			findMatching(l, m, ic);
 		return l;
 	}
+
 	private final Method m;
 	private volatile ClassInfo returnType;
 
@@ -98,6 +100,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		super(declaringClass, m);
 		this.m = m;
 	}
+
 	/**
 	 * Performs an action on this object if the specified predicate test passes.
 	 *
@@ -214,12 +217,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public <A extends Annotation> MethodInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
 		MethodInfo[] m = _getMatching();
-		for (int i = m.length-1; i >= 0; i--)
+		for (int i = m.length - 1; i >= 0; i--)
 			for (Annotation a2 : m[i]._getDeclaredAnnotations())
 				consume(type, filter, action, a2);
-		getReturnType().unwrap(Value.class,Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
+		getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
 		return this;
 	}
+
 	/**
 	 * Performs an action on all matching annotations defined on this method.
 	 *
@@ -249,12 +253,12 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		ClassInfo c = this.declaringClass;
 		forEachDeclaredAnnotationInfo(c.getPackage(), filter, action);
 		ClassInfo[] interfaces = c._getInterfaces();
-		for (int i = interfaces.length-1; i >= 0; i--) {
+		for (int i = interfaces.length - 1; i >= 0; i--) {
 			forEachDeclaredAnnotationInfo(interfaces[i], filter, action);
 			forEachDeclaredMethodAnnotationInfo(interfaces[i], filter, action);
 		}
 		ClassInfo[] parents = c._getParents();
-		for (int i = parents.length-1; i >= 0; i--) {
+		for (int i = parents.length - 1; i >= 0; i--) {
 			forEachDeclaredAnnotationInfo(parents[i], filter, action);
 			forEachDeclaredMethodAnnotationInfo(parents[i], filter, action);
 		}
@@ -289,7 +293,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public MethodInfo forEachMatchingParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		MethodInfo[] m = _getMatching();
-		for (int i = m.length-1; i >= 0; i--)
+		for (int i = m.length - 1; i >= 0; i--)
 			consume(filter, action, m[i]);
 		return this;
 	}
@@ -355,9 +359,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList() {
-		return getAnnotationList(x -> true);
-	}
+	public AnnotationList getAnnotationList() { return getAnnotationList(x -> true); }
 
 	/**
 	 * Constructs an {@link AnnotationList} of all matching annotations found on this method.
@@ -414,9 +416,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return The name of this method
 	 */
-	public String getName() {
-		return m.getName();
-	}
+	public String getName() { return m.getName(); }
 
 	/**
 	 * Returns the bean property name if this is a getter or setter.
@@ -439,7 +439,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public ClassInfo getReturnType() {
 		if (returnType == null) {
-			synchronized(this) {
+			synchronized (this) {
 				returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
 			}
 		}
@@ -517,6 +517,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
 		return hasAnnotation(AnnotationProvider.DEFAULT, type);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if at least one of the specified annotation is present on this method.
 	 *
@@ -576,6 +577,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public boolean hasReturnType(Class<?> c) {
 		return m.getReturnType() == c;
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this method has this return type.
 	 *
@@ -670,9 +672,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return <jk>true</jk> if this method is a bridge method.
 	 */
-	public boolean isBridge() {
-		return m.isBridge();
-	}
+	public boolean isBridge() { return m.isBridge(); }
 
 	/**
 	 * Returns <jk>true</jk> if this object passes the specified predicate test.
@@ -694,10 +694,10 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	private void forEachAnnotationInfoMethodOnly(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		ClassInfo c = this.declaringClass;
 		ClassInfo[] interfaces = c._getInterfaces();
-		for (int i = interfaces.length-1; i >= 0; i--)
+		for (int i = interfaces.length - 1; i >= 0; i--)
 			forEachDeclaredMethodAnnotationInfo(interfaces[i], filter, action);
 		ClassInfo[] parents = c._getParents();
-		for (int i = parents.length-1; i >= 0; i--)
+		for (int i = parents.length - 1; i >= 0; i--)
 			forEachDeclaredMethodAnnotationInfo(parents[i], filter, action);
 	}
 
@@ -712,6 +712,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			for (Annotation a : p.getDeclaredAnnotations())
 				AnnotationInfo.of(p, a).accept(filter, action);
 	}
+
 	private void forEachDeclaredMethodAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		MethodInfo m = findMatchingOnClass(ci);
 		if (m != null)
@@ -721,7 +722,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	MethodInfo[] _getMatching() {
 		if (matching == null) {
-			synchronized(this) {
+			synchronized (this) {
 				List<MethodInfo> l = findMatching(list(), this, getDeclaringClass());
 				matching = l.toArray(new MethodInfo[l.size()]);
 			}

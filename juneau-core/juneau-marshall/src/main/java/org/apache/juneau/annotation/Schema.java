@@ -94,7 +94,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  */
 @Documented
-@Target({PARAMETER,METHOD,TYPE,FIELD})
+@Target({ PARAMETER, METHOD, TYPE, FIELD })
 @Retention(RUNTIME)
 @Repeatable(SchemaAnnotation.Array.class)
 @ContextApply(SchemaAnnotation.Apply.class)
@@ -1442,6 +1442,7 @@ public @interface Schema {
 	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
+
 	/**
 	 * Synonym for {@link #pattern()}.
 	 *

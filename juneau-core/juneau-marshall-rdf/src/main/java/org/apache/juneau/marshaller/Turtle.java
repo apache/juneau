@@ -95,6 +95,7 @@ public class Turtle extends CharMarshaller {
 		DEFAULT.write(object, output);
 		return output;
 	}
+
 	/**
 	 * Parses a Turtle input object to the specified Java type.
 	 *

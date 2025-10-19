@@ -69,7 +69,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="option")
+@Bean(typeName = "option")
 public class Option extends HtmlElementText {
 
 	/**
@@ -98,7 +98,7 @@ public class Option extends HtmlElementText {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Option _class(String value) {  // NOSONAR - Intentional naming.
+	public Option _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -120,6 +120,7 @@ public class Option extends HtmlElementText {
 		super.attrUri(key, val);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Option contenteditable(Object value) {
 		super.contenteditable(value);

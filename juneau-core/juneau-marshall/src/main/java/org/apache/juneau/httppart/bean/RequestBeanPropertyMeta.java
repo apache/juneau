@@ -60,12 +60,14 @@ public class RequestBeanPropertyMeta {
 			return this;
 		}
 	}
+
 	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, MethodInfo m) {
 		HttpPartSchema.Builder sb = HttpPartSchema.create().name(m.getPropertyName());
 		m.forEachAnnotation(Schema.class, x -> true, x -> sb.apply(x));
 		m.forEachAnnotation(c, x -> true, x -> sb.apply(x));
 		return new Builder().partType(partType).schema(sb.build()).getter(m.inner());
 	}
+
 	private final Method getter;
 	private final HttpPartType partType;
 	private final Optional<HttpPartSerializer> serializer;
@@ -88,9 +90,7 @@ public class RequestBeanPropertyMeta {
 	 * 	The name of the Java method getter that defines this property.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Method getGetter() {
-		return getter;
-	}
+	public Method getGetter() { return getter; }
 
 	/**
 	 * Returns the parser to use for parsing the bean property value.
@@ -107,9 +107,7 @@ public class RequestBeanPropertyMeta {
 	 *
 	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
 	 */
-	public String getPartName() {
-		return schema == null ? null : schema.getName();
-	}
+	public String getPartName() { return schema == null ? null : schema.getName(); }
 
 	/**
 	 * Returns the HTTP part type for this property (query parameter for example).
@@ -118,9 +116,7 @@ public class RequestBeanPropertyMeta {
 	 * 	The HTTP part type for this property.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartType getPartType() {
-		return partType;
-	}
+	public HttpPartType getPartType() { return partType; }
 
 	/**
 	 * Returns the schema information gathered from annotations on the method and return type.
@@ -129,16 +125,12 @@ public class RequestBeanPropertyMeta {
 	 * 	The schema information gathered from annotations on the method and return type.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public HttpPartSchema getSchema() {
-		return schema;
-	}
+	public HttpPartSchema getSchema() { return schema; }
 
 	/**
 	 * Returns the serializer to use for serializing the bean property value.
 	 *
 	 * @return The serializer to use for serializing the bean property value.
 	 */
-	public Optional<HttpPartSerializer> getSerializer() {
-		return serializer;
-	}
+	public Optional<HttpPartSerializer> getSerializer() { return serializer; }
 }

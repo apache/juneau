@@ -121,6 +121,7 @@ public class LastModified extends BasicDateHeader {
 	public static LastModified of(ZonedDateTime value) {
 		return value == null ? null : new LastModified(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

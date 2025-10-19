@@ -130,6 +130,7 @@ public class Date extends BasicDateHeader {
 	public static Date of(ZonedDateTime value) {
 		return value == null ? null : new Date(value);
 	}
+
 	/**
 	 * Constructor.
 	 *

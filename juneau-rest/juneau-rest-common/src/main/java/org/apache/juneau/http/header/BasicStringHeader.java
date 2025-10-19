@@ -87,8 +87,9 @@ public class BasicStringHeader extends BasicHeader {
 			i = pair.indexOf('=');
 		if (i == -1)
 			return of(pair, "");
-		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
+		return of(pair.substring(0, i).trim(), pair.substring(i + 1).trim());
 	}
+
 	private final String value;
 	private final Supplier<String> supplier;
 
@@ -150,9 +151,7 @@ public class BasicStringHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
+	public String getValue() { return Utils.s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

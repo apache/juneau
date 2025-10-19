@@ -44,8 +44,7 @@ public class PlainTextConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextParser.Builder b) {
-		}
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextParser.Builder b) {}
 	}
 
 	/**
@@ -63,7 +62,6 @@ public class PlainTextConfigAnnotation {
 		}
 
 		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextSerializer.Builder b) {
-		}
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextSerializer.Builder b) {}
 	}
 }

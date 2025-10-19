@@ -42,6 +42,7 @@ public class LogConfig {
 	public static LogConfig create() {
 		return new LogConfig();
 	}
+
 	String logFile, logDir;
 	Boolean append;
 	Integer limit, count;

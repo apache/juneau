@@ -143,9 +143,7 @@ public abstract class OpenApiElement {
 	 *
 	 * @return <jk>true</jk> if contents should be validated per the Swagger spec.
 	 */
-	protected boolean isStrict() {
-		return strict;
-	}
+	protected boolean isStrict() { return strict; }
 
 	/**
 	 * Sets strict mode on this bean.

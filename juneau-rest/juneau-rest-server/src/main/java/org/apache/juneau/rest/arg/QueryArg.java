@@ -69,6 +69,7 @@ public class QueryArg implements RestOpArg {
 			return new QueryArg(paramInfo, annotations);
 		return null;
 	}
+
 	/**
 	 * Gets the merged @Query annotation combining class-level and parameter-level values.
 	 *
@@ -113,6 +114,7 @@ public class QueryArg implements RestOpArg {
 		// Merge the two annotations: parameter-level takes precedence
 		return mergeAnnotations(classLevelQuery, paramQuery);
 	}
+
 	/**
 	 * Merges two @Query annotations, with param-level taking precedence over class-level.
 	 *
@@ -121,6 +123,7 @@ public class QueryArg implements RestOpArg {
 	 * @return Merged annotation.
 	 */
 	private static Query mergeAnnotations(Query classLevel, Query paramLevel) {
+		// @formatter:off
 		return QueryAnnotation.create()
 			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
 			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
@@ -130,7 +133,9 @@ public class QueryArg implements RestOpArg {
 			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
 			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
 			.build();
+		// @formatter:on
 	}
+
 	/**
 	 * Merges two @Schema annotations, with param-level taking precedence.
 	 *
@@ -140,10 +145,11 @@ public class QueryArg implements RestOpArg {
 	 */
 	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
 		// If parameter has a non-default schema, use it; otherwise use class-level
-		if (!SchemaAnnotation.empty(paramLevel))
+		if (! SchemaAnnotation.empty(paramLevel))
 			return paramLevel;
 		return classLevel;
 	}
+
 	private final boolean multi;
 
 	private final HttpPartParser partParser;
@@ -168,7 +174,7 @@ public class QueryArg implements RestOpArg {
 		Query mergedQuery = getMergedQuery(pi, name);
 
 		// Use merged query annotation for all lookups
-		this.def = mergedQuery != null && !mergedQuery.def().isEmpty() ? mergedQuery.def() : findDef(pi).orElse(null);
+		this.def = mergedQuery != null && ! mergedQuery.def().isEmpty() ? mergedQuery.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
 		this.schema = mergedQuery != null ? HttpPartSchema.create(mergedQuery) : HttpPartSchema.create(Query.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();

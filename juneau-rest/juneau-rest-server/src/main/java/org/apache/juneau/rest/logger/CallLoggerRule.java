@@ -65,6 +65,7 @@ public class CallLoggerRule {
 		public Builder disabled() {
 			return this.enabled(Enablement.NEVER);
 		}
+
 		/**
 		 * Specifies whether logging is enabled when using this rule.
 		 *
@@ -280,6 +281,7 @@ public class CallLoggerRule {
 			this.statusFilter = value;
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
@@ -291,6 +293,7 @@ public class CallLoggerRule {
 			return new CallLoggerRule(this);
 		}
 	}
+
 	/**
 	 * Static creator.
 	 *
@@ -300,6 +303,7 @@ public class CallLoggerRule {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final Predicate<Integer> statusFilter;
 	private final Predicate<HttpServletRequest> requestFilter;
 	private final Predicate<HttpServletResponse> responseFilter;
@@ -331,45 +335,35 @@ public class CallLoggerRule {
 	 *
 	 * @return The enablement flag value on this rule, or <jk>null</jk> if it's not set.
 	 */
-	public Enablement getEnabled() {
-		return enabled;
-	}
+	public Enablement getEnabled() { return enabled; }
 
 	/**
 	 * Returns the enablement predicate test on this rule.
 	 *
 	 * @return The enablement predicate test on this rule, or <jk>null</jk> if it's not set.
 	 */
-	public Predicate<HttpServletRequest> getEnabledTest() {
-		return enabledTest;
-	}
+	public Predicate<HttpServletRequest> getEnabledTest() { return enabledTest; }
 
 	/**
 	 * Returns the log level on this rule.
 	 *
 	 * @return The log level on this rule, or <jk>null</jk> if it's not set.
 	 */
-	public Level getLevel() {
-		return level;
-	}
+	public Level getLevel() { return level; }
 
 	/**
 	 * Returns the detail level for HTTP requests.
 	 *
 	 * @return the detail level for HTTP requests, or <jk>null</jk> if it's not set.
 	 */
-	public CallLoggingDetail getRequestDetail() {
-		return requestDetail;
-	}
+	public CallLoggingDetail getRequestDetail() { return requestDetail; }
 
 	/**
 	 * Returns the detail level for HTTP responses.
 	 *
 	 * @return the detail level for HTTP responses, or <jk>null</jk> if it's not set.
 	 */
-	public CallLoggingDetail getResponseDetail() {
-		return responseDetail;
-	}
+	public CallLoggingDetail getResponseDetail() { return responseDetail; }
 
 	/**
 	 * Returns <jk>true</jk> if this rule matches the specified parameters.
@@ -395,6 +389,7 @@ public class CallLoggerRule {
 
 	@Override /* Overridden from Object */
 	public String toString() {
+		// @formatter:off
 		return filteredMap()
 			.append("codeFilter", statusFilter)
 			.append("exceptionFilter", exceptionFilter)
@@ -406,5 +401,6 @@ public class CallLoggerRule {
 			.append("enabled", enabled)
 			.append("enabledTest", enabledTest)
 			.asReadableString();
+		// @formatter:off
 	}
 }

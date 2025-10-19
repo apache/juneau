@@ -35,9 +35,9 @@ import java.util.function.*;
 @FunctionalInterface
 public interface Function4<A,B,C,D,R> {
 
-	default <V> Function4<A, B, C, D, V> andThen(Function<? super R, ? extends V> after) {
+	default <V> Function4<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
 		Objects.requireNonNull(after);
-		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c ,d));
+		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
 	}
 
 	R apply(A a, B b, C c, D d);

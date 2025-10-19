@@ -29,9 +29,8 @@ public class ResourceBundleUtils {
 
 	private static final ResourceBundle EMPTY = new ResourceBundle() {
 		@Override
-		public Enumeration<String> getKeys() {
-			return Collections.emptyEnumeration();
-		}
+		public Enumeration<String> getKeys() { return Collections.emptyEnumeration(); }
+
 		@Override
 		protected Object handleGetObject(String key) {
 			return null;

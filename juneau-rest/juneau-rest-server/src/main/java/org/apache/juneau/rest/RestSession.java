@@ -180,6 +180,7 @@ public class RestSession extends ContextSession {
 	 * Request attribute name for passing path variables from parent to child.
 	 */
 	private static final String REST_PATHVARS_ATTR = "juneau.pathVars";
+
 	/**
 	 * Creates a builder of this object.
 	 *
@@ -189,6 +190,7 @@ public class RestSession extends ContextSession {
 	public static Builder create(RestContext ctx) {
 		return new Builder(ctx);
 	}
+
 	private final Object resource;
 	private final RestContext context;
 	private HttpServletRequest req;
@@ -222,6 +224,7 @@ public class RestSession extends ContextSession {
 		urlPath = beanStore.add(UrlPath.class, builder.urlPath);
 		pathInfoUndecoded = builder.pathInfoUndecoded;
 	}
+
 	/**
 	 * Enables or disabled debug mode on this call.
 	 *
@@ -278,9 +281,7 @@ public class RestSession extends ContextSession {
 	 *
 	 * @return The bean store of this call.
 	 */
-	public BeanStore getBeanStore() {
-		return beanStore;
-	}
+	public BeanStore getBeanStore() { return beanStore; }
 
 	/**
 	 * Returns the context that created this call.
@@ -288,18 +289,15 @@ public class RestSession extends ContextSession {
 	 * @return The context that created this call.
 	 */
 	@Override
-	public RestContext getContext() {
-		return context;
-	}
+	public RestContext getContext() { return context; }
 
 	/**
 	 * Returns the exception that occurred during this call.
 	 *
 	 * @return The exception that occurred during this call.
 	 */
-	public Throwable getException() {
-		return (Throwable)req.getAttribute("Exception");
-	}
+	public Throwable getException() { return (Throwable)req.getAttribute("Exception"); }
+
 	/**
 	 * Returns the HTTP method name.
 	 *
@@ -352,9 +350,7 @@ public class RestSession extends ContextSession {
 	 *
 	 * @return The request servlet path info.
 	 */
-	public String getPathInfo() {
-		return req.getPathInfo();
-	}
+	public String getPathInfo() { return req.getPathInfo(); }
 
 	/**
 	 * Same as {@link #getPathInfo()} but doesn't decode encoded characters.
@@ -395,49 +391,41 @@ public class RestSession extends ContextSession {
 		}
 		return queryParams;
 	}
+
 	/**
 	 * Returns the HTTP servlet request of this REST call.
 	 *
 	 * @return the HTTP servlet request of this REST call.
 	 */
-	public HttpServletRequest getRequest() {
-		return req;
-	}
+	public HttpServletRequest getRequest() { return req; }
+
 	/**
 	 * Returns the REST object.
 	 *
 	 * @return The rest object.
 	 */
-	public Object getResource() {
-		return resource;
-	}
+	public Object getResource() { return resource; }
 
 	/**
 	 * Returns the HTTP servlet response of this REST call.
 	 *
 	 * @return the HTTP servlet response of this REST call.
 	 */
-	public HttpServletResponse getResponse() {
-		return res;
-	}
+	public HttpServletResponse getResponse() { return res; }
 
 	/**
 	 * Shortcut for calling <c>getRequest().getServletPath()</c>.
 	 *
 	 * @return The request servlet path.
 	 */
-	public String getServletPath() {
-		return req.getServletPath();
-	}
+	public String getServletPath() { return req.getServletPath(); }
 
 	/**
 	 * Shortcut for calling <c>getRequest().getStatus()</c>.
 	 *
 	 * @return The response status code.
 	 */
-	public int getStatus() {
-		return res.getStatus();
-	}
+	public int getStatus() { return res.getStatus(); }
 
 	/**
 	 * Returns the request path info as a {@link UrlPath} bean.
@@ -455,9 +443,7 @@ public class RestSession extends ContextSession {
 	 *
 	 * @return The URL path pattern match on this call.
 	 */
-	public UrlPathMatch getUrlPathMatch() {
-		return urlPathMatch;
-	}
+	public UrlPathMatch getUrlPathMatch() { return urlPathMatch; }
 
 	/**
 	 * Sets the logger to use when logging this call.

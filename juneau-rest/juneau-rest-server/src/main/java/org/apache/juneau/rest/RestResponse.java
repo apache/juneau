@@ -157,20 +157,21 @@ public class RestResponse extends HttpServletResponseWrapper {
 		Charset charset = null;
 		if (h == null)
 			charset = opContext.getDefaultCharset();
-		else for (StringRange r : StringRanges.of(h).toList()) {
-			if (r.getQValue() > 0) {
-				if (r.getName().equals("*"))
-					charset = opContext.getDefaultCharset();
-				else if (Charset.isSupported(r.getName()))
-					charset = Charset.forName(r.getName());
-				if (charset != null)
-					break;
+		else
+			for (StringRange r : StringRanges.of(h).toList()) {
+				if (r.getQValue() > 0) {
+					if (r.getName().equals("*"))
+						charset = opContext.getDefaultCharset();
+					else if (Charset.isSupported(r.getName()))
+						charset = Charset.forName(r.getName());
+					if (charset != null)
+						break;
+				}
 			}
-		}
 
-		request.getContext().getDefaultResponseHeaders().forEach(x->addHeader(x.getValue(), resolveUris(x.getValue())));  // Done this way to avoid list/array copy.
+		request.getContext().getDefaultResponseHeaders().forEach(x -> addHeader(x.getValue(), resolveUris(x.getValue())));  // Done this way to avoid list/array copy.
 
-		opContext.getDefaultResponseHeaders().forEach(x->addHeader(x.getName(), resolveUris(x.getValue())));
+		opContext.getDefaultResponseHeaders().forEach(x -> addHeader(x.getName(), resolveUris(x.getValue())));
 
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeaderParam("Accept-Charset").orElse(null));
@@ -267,9 +268,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The request attributes object.
 	 */
-	public RequestAttributes getAttributes() {
-		return request.getAttributes();
-	}
+	public RequestAttributes getAttributes() { return request.getAttributes(); }
 
 	/**
 	 * Wrapper around {@link #getCharacterEncoding()} that converts the value to a {@link Charset}.
@@ -291,9 +290,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The output object, or <jk>null</jk> if {@link #setContent(Object)} was never called.
 	 */
-	public Optional<Object> getContent() {
-		return content;
-	}
+	public Optional<Object> getContent() { return content; }
 
 	/**
 	 * Returns this value cast to the specified class.
@@ -334,9 +331,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The {@link RestContext} of this class.  Never <jk>null</jk>.
 	 */
-	public RestContext getContext() {
-		return request.getContext();
-	}
+	public RestContext getContext() { return request.getContext(); }
 
 	/**
 	 * Convenience method meant to be used when rendering directly to a browser with no buffering.
@@ -364,18 +359,14 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return The wrapped servlet request.
 	 */
-	public HttpServletResponse getHttpServletResponse() {
-		return inner;
-	}
+	public HttpServletResponse getHttpServletResponse() { return inner; }
 
 	/**
 	 * Returns the <c>Content-Type</c> header stripped of the charset attribute if present.
 	 *
 	 * @return The <c>media-type</c> portion of the <c>Content-Type</c> header.
 	 */
-	public MediaType getMediaType() {
-		return MediaType.of(getContentType());
-	}
+	public MediaType getMediaType() { return MediaType.of(getContentType()); }
 
 	/**
 	 * Equivalent to {@link HttpServletResponse#getOutputStream()}, except wraps the output stream if an {@link Encoder}
@@ -396,10 +387,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.
 					if (ae.matches(".*(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0).*")) {
-						throw new NotAcceptable(
-							"Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}",
-							ae, Json5.of(encoders.getSupportedEncodings())
-						);
+						throw new NotAcceptable("Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}", ae, Json5.of(encoders.getSupportedEncodings()));
 					}
 				} else {
 					encoder = match.getEncoder();
@@ -425,18 +413,14 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws NotAcceptable If unsupported charset in request header Accept-Charset.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public FinishablePrintWriter getNegotiatedWriter() throws NotAcceptable, IOException {
-		return getWriter(false, false);
-	}
+	public FinishablePrintWriter getNegotiatedWriter() throws NotAcceptable, IOException { return getWriter(false, false); }
 
 	/**
 	 * Returns access to the inner {@link RestOpContext} of this method.
 	 *
 	 * @return The {@link RestOpContext} of this method.  Never <jk>null</jk>.
 	 */
-	public RestOpContext getOpContext() {
-		return request.getOpContext();
-	}
+	public RestOpContext getOpContext() { return request.getOpContext(); }
 
 	/**
 	 * Returns a ServletOutputStream suitable for writing binary data in the response.
@@ -463,9 +447,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return <jk>true</jk> if {@link #getOutputStream()} has been called.
 	 */
-	public boolean getOutputStreamCalled() {
-		return sos != null;
-	}
+	public boolean getOutputStreamCalled() { return sos != null; }
 
 	/**
 	 * Returns the metadata about this response.
@@ -474,9 +456,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * 	The metadata about this response.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public ResponseBeanMeta getResponseBeanMeta() {
-		return responseBeanMeta;
-	}
+	public ResponseBeanMeta getResponseBeanMeta() { return responseBeanMeta; }
 
 	/**
 	 * Returns the matching serializer and media type for this response.
@@ -505,9 +485,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @throws IOException If writer could not be accessed.
 	 */
 	@Override
-	public PrintWriter getWriter() throws IOException {
-		return getWriter(true, false);
-	}
+	public PrintWriter getWriter() throws IOException { return getWriter(true, false); }
 
 	/**
 	 * Returns <jk>true</jk> if the response contains output.
@@ -831,9 +809,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		return this;
 	}
 
-	private Object getRawOutput() {
-		return content == null ? null : content.orElse(null);
-	}
+	private Object getRawOutput() { return content == null ? null : content.orElse(null); }
 
 	private FinishablePrintWriter getWriter(boolean raw, boolean autoflush) throws NotAcceptable, IOException {
 		if (w != null)

@@ -118,6 +118,7 @@ public class CallLogger {
 			responseDetail = env(SP_responseDetail, STATUS_LINE);
 			level = env(SP_level).map(Level::parse).orElse(OFF);
 		}
+
 		/**
 		 * Instantiates a new call logger based on the settings in this builder.
 		 *
@@ -201,6 +202,7 @@ public class CallLogger {
 			enabledTest = value;
 			return this;
 		}
+
 		/**
 		 * The default logging level to use for logging the request/response.
 		 *
@@ -269,7 +271,7 @@ public class CallLogger {
 		 * @return This object.
 		 */
 		public Builder logger(String value) {
-			logger = value == null ? null :Logger.getLogger(value);
+			logger = value == null ? null : Logger.getLogger(value);
 			return this;
 		}
 
@@ -474,6 +476,7 @@ public class CallLogger {
 	 * </ul>
 	 */
 	public static final String SP_level = "juneau.restLogger.level";
+
 	/**
 	 * Static creator.
 	 *
@@ -483,6 +486,7 @@ public class CallLogger {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
+
 	private final Logger logger;
 	private final ThrownStore thrownStore;
 	private final CallLoggerRule[] normalRules, debugRules;
@@ -586,7 +590,7 @@ public class CallLogger {
 					sb.append('?').append(qs);
 			}
 
-			if (reqContent != null && reqd.isOneOf(HEADER ,ENTITY))
+			if (reqContent != null && reqd.isOneOf(HEADER, ENTITY))
 				sb.append("\n\tRequest length: ").append(reqContent.length).append(" bytes");
 
 			if (resd.isOneOf(HEADER, ENTITY))
@@ -649,6 +653,7 @@ public class CallLogger {
 
 	@Override /* Overridden from Object */
 	public String toString() {
+		// @formatter:off
 		return filteredMap()
 			.append("logger", logger)
 			.append("thrownStore", thrownStore)
@@ -659,6 +664,7 @@ public class CallLogger {
 			.append("normalRules", normalRules.length == 0 ? null : normalRules)
 			.append("debugRules", debugRules.length == 0 ? null : debugRules)
 			.asReadableString();
+		// @formatter:off
 	}
 
 	private static byte[] getRequestContent(HttpServletRequest req) {
@@ -678,6 +684,7 @@ public class CallLogger {
 			return null;
 		return thrownStore.getStats(e).orElse(null);
 	}
+
 	/**
 	 * Returns the logger to use for logging REST calls.
 	 *
@@ -689,9 +696,7 @@ public class CallLogger {
 	 *
 	 * @return The logger to use for logging REST calls.
 	 */
-	protected Logger getLogger() {
-		return logger;
-	}
+	protected Logger getLogger() { return logger; }
 
 	/**
 	 * Given the specified servlet request/response, find the rule that applies to it.
@@ -719,9 +724,7 @@ public class CallLogger {
 	 * @return A new builder object.
 	 */
 	protected Builder init(BeanStore beanStore) {
-		return new Builder(beanStore)
-			.logger(beanStore.getBean(Logger.class).orElse(null))
-			.thrownStore(beanStore.getBean(ThrownStore.class).orElse(null));
+		return new Builder(beanStore).logger(beanStore.getBean(Logger.class).orElse(null)).thrownStore(beanStore.getBean(ThrownStore.class).orElse(null));
 	}
 
 	/**

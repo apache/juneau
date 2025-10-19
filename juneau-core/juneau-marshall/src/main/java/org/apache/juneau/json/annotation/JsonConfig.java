@@ -35,10 +35,10 @@ import org.apache.juneau.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
  * </ul>
  */
-@Target({TYPE,METHOD})
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({JsonConfigAnnotation.SerializerApply.class,JsonConfigAnnotation.ParserApply.class})
+@ContextApply({ JsonConfigAnnotation.SerializerApply.class, JsonConfigAnnotation.ParserApply.class })
 public @interface JsonConfig {
 
 	/**
@@ -96,6 +96,7 @@ public @interface JsonConfig {
 	 * @return The annotation value.
 	 */
 	String escapeSolidus() default "";
+
 	/**
 	 * Optional rank for this config.
 	 *

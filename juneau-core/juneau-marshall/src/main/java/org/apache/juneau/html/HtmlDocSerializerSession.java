@@ -68,6 +68,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			super.apply(type, apply);
 			return this;
 		}
+
 		@Override
 		public HtmlDocSerializerSession build() {
 			return new HtmlDocSerializerSession(this);
@@ -183,6 +184,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	private static final VarResolver DEFAULT_VR = VarResolver.create().defaultVars().vars(HtmlWidgetVar.class).build();
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -192,6 +194,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	public static Builder create(HtmlDocSerializer ctx) {
 		return new Builder(ctx);
 	}
+
 	private final HtmlDocSerializer ctx;
 
 	/**
@@ -213,9 +216,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * 	<jk>null</jk> if not specified.
 	 * 	Never an empty map.
 	 */
-	public final String[] getNavLinks() {
-		return ctx.navlinks;
-	}
+	public final String[] getNavLinks() { return ctx.navlinks; }
 
 	/**
 	 * Calls the parent {@link #doSerialize(SerializerPipe, Object)} method which invokes just the HTML serializer.
@@ -247,6 +248,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			}
 		}
 	}
+
 	/**
 	 * Performs an action on all widgets defined in his session.
 	 *
@@ -266,9 +268,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The overridden contents of the aside section on the HTML page.
 	 */
-	protected final String[] getAside() {
-		return ctx.aside;
-	}
+	protected final String[] getAside() { return ctx.aside; }
 
 	/**
 	 * Aside section contents float.
@@ -277,9 +277,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The location of where to place the aside section.
 	 */
-	protected final AsideFloat getAsideFloat() {
-		return ctx.asideFloat;
-	}
+	protected final AsideFloat getAsideFloat() { return ctx.asideFloat; }
 
 	/**
 	 * Footer section contents.
@@ -288,9 +286,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The overridden contents of the footer section on the HTML page.
 	 */
-	protected final String[] getFooter() {
-		return ctx.footer;
-	}
+	protected final String[] getFooter() { return ctx.footer; }
 
 	/**
 	 * Additional head section content.
@@ -299,9 +295,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	HTML content to add to the head section of the HTML page.
 	 */
-	protected final String[] getHead() {
-		return ctx.head;
-	}
+	protected final String[] getHead() { return ctx.head; }
 
 	/**
 	 * Header section contents.
@@ -310,9 +304,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The overridden contents of the header section on the HTML page.
 	 */
-	protected final String[] getHeader() {
-		return ctx.header;
-	}
+	protected final String[] getHeader() { return ctx.header; }
 
 	/**
 	 * Nav section contents.
@@ -321,9 +313,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The overridden contents of the nav section on the HTML page.
 	 */
-	protected final String[] getNav() {
-		return ctx.nav;
-	}
+	protected final String[] getNav() { return ctx.nav; }
 
 	/**
 	 * Page navigation links.
@@ -332,9 +322,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	Navigation links to add to the HTML page.
 	 */
-	protected final String[] getNavlinks() {
-		return ctx.navlinks;
-	}
+	protected final String[] getNavlinks() { return ctx.navlinks; }
 
 	/**
 	 * No-results message.
@@ -343,9 +331,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The message used when serializing an empty array or empty list.
 	 */
-	protected final String getNoResultsMessage() {
-		return ctx.getNoResultsMessage();
-	}
+	protected final String getNoResultsMessage() { return ctx.getNoResultsMessage(); }
 
 	/**
 	 * Javascript code.
@@ -354,9 +340,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	Arbitrary Javascript to add to the HTML page.
 	 */
-	protected final String[] getScript() {
-		return ctx.script;
-	}
+	protected final String[] getScript() { return ctx.script; }
 
 	/**
 	 * CSS style code.
@@ -365,9 +349,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The CSS instructions to add to the HTML page.
 	 */
-	protected final String[] getStyle() {
-		return ctx.style;
-	}
+	protected final String[] getStyle() { return ctx.style; }
 
 	/**
 	 * Stylesheet import URLs.
@@ -376,9 +358,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The link to the stylesheet of the HTML page.
 	 */
-	protected final String[] getStylesheet() {
-		return ctx.stylesheet;
-	}
+	protected final String[] getStylesheet() { return ctx.stylesheet; }
 
 	/**
 	 * HTML document template.
@@ -387,9 +367,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	The template to use for serializing the page.
 	 */
-	protected final HtmlDocTemplate getTemplate() {
-		return ctx.getTemplate();
-	}
+	protected final HtmlDocTemplate getTemplate() { return ctx.getTemplate(); }
 
 	/**
 	 * Prevent word wrap on page.
@@ -398,9 +376,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> should be added to the CSS instructions on the page to prevent word wrapping.
 	 */
-	protected final boolean isNowrap() {
-		return ctx.nowrap;
-	}
+	protected final boolean isNowrap() { return ctx.nowrap; }
 
 	/**
 	 * Resolve $ variables in serialized POJO.
@@ -409,9 +385,8 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 * @return
 	 * 	<jk>true</jk> if $ variables in serialized POJO should be resolved.
 	 */
-	protected final boolean isResolveBodyVars() {
-		return ctx.resolveBodyVars;
-	}
+	protected final boolean isResolveBodyVars() { return ctx.resolveBodyVars; }
+
 	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("ctx", ctx, "varResolver", getVarResolver());

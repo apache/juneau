@@ -40,6 +40,7 @@ public class ParamInfo {
 	private final Parameter p;
 	private final int index;
 	private volatile Map<Class<?>,Optional<Annotation>> annotationMap;
+
 	/**
 	 * Constructor.
 	 *
@@ -109,6 +110,7 @@ public class ParamInfo {
 			consume(type, filter, action, a);
 		return this;
 	}
+
 	/**
 	 * Finds the annotation of the specified type defined on this method parameter.
 	 *
@@ -152,7 +154,7 @@ public class ParamInfo {
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> filter) {
 		if (eInfo.isConstructor) {
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
+			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			A o = ci.getAnnotation(type, filter);
 			if (o != null)
 				return o;
@@ -161,7 +163,7 @@ public class ParamInfo {
 					return (A)a2;
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
+			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			A o = ci.getAnnotation(type, filter);
 			if (o != null)
 				return o;
@@ -177,9 +179,7 @@ public class ParamInfo {
 	 *
 	 * @return The constructor that this parameter belongs to, or <jk>null</jk> if it belongs to a method.
 	 */
-	public ConstructorInfo getConstructor() {
-		return eInfo.isConstructor() ? (ConstructorInfo)eInfo : null;
-	}
+	public ConstructorInfo getConstructor() { return eInfo.isConstructor() ? (ConstructorInfo)eInfo : null; }
 
 	/**
 	 * Returns the specified parameter annotation declared on this parameter.
@@ -201,18 +201,14 @@ public class ParamInfo {
 	 *
 	 * @return The index position of this parameter.
 	 */
-	public int getIndex() {
-		return index;
-	}
+	public int getIndex() { return index; }
 
 	/**
 	 * Returns the method that this parameter belongs to.
 	 *
 	 * @return The method that this parameter belongs to, or <jk>null</jk> if it belongs to a constructor.
 	 */
-	public MethodInfo getMethod() {
-		return eInfo.isConstructor() ? null : (MethodInfo)eInfo;
-	}
+	public MethodInfo getMethod() { return eInfo.isConstructor() ? null : (MethodInfo)eInfo; }
 
 	/**
 	 * Returns the name of the parameter.
@@ -238,9 +234,7 @@ public class ParamInfo {
 	 *
 	 * @return The class type of this parameter.
 	 */
-	public ClassInfo getParameterType() {
-		return eInfo.getParamType(index);
-	}
+	public ClassInfo getParameterType() { return eInfo.getParamType(index); }
 
 	/**
 	 * Returns <jk>true</jk> if this parameter has the specified annotation.
@@ -262,6 +256,7 @@ public class ParamInfo {
 	public boolean hasName() {
 		return p.isNamePresent() || p.isAnnotationPresent(Name.class);
 	}
+
 	/**
 	 * Returns <jk>true</jk> if this parameter doesn't have the specified annotation.
 	 *
@@ -301,7 +296,7 @@ public class ParamInfo {
 
 	private Map<Class<?>,Optional<Annotation>> annotationMap() {
 		if (annotationMap == null) {
-			synchronized(this) {
+			synchronized (this) {
 				annotationMap = new ConcurrentHashMap<>();
 			}
 		}
@@ -313,24 +308,24 @@ public class ParamInfo {
 			for (Annotation a2 : eInfo._getParameterAnnotations(index))
 				if (type.isInstance(a2))
 					return type.cast(a2);
-			return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getAnnotation(type);
+			return eInfo.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type);
 		}
 		MethodInfo mi = (MethodInfo)eInfo;
 		Value<A> v = Value.empty();
 		mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, y -> true, y -> v.set(y)));
-		return v.orElseGet(() -> eInfo.getParamType(index).unwrap(Value.class,Optional.class).getAnnotation(type));
+		return v.orElseGet(() -> eInfo.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type));
 	}
 
 	private <A extends Annotation> ParamInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (eInfo.isConstructor) {
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
+			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			Annotation[] annotations = eInfo._getParameterAnnotations(index);
 			ci.forEachAnnotation(ap, a, filter, action);
 			for (Annotation a2 : annotations)
 				consume(a, filter, action, a2);
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
+			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			ci.forEachAnnotation(ap, a, filter, action);
 			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, a, filter, action));
 		}

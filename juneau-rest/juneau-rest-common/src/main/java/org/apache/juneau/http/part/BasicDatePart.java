@@ -64,6 +64,7 @@ public class BasicDatePart extends BasicPart {
 			return null;
 		return new BasicDatePart(name, value);
 	}
+
 	private final ZonedDateTime value;
 	private final Supplier<ZonedDateTime> supplier;
 

@@ -106,9 +106,9 @@ import org.apache.juneau.serializer.*;
  * @param <V> The value type.
  * @param <R> The return type.
  */
-public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>  {
+public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R> {
 
-
+	// @formatter:off
 	private static final Messages MESSAGES = Messages.of(FluentMapAssertion.class, "Messages");
 	private static final String
 		MSG_mapWasNotEmpty = MESSAGES.getString("mapWasNotEmpty"),
@@ -116,7 +116,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		MSG_mapContainedUnexpectedKey = MESSAGES.getString("mapContainedUnexpectedKey"),
 		MSG_mapWasEmpty = MESSAGES.getString("mapWasEmpty"),
 		MSG_mapDidNotHaveTheExpectedSize = MESSAGES.getString("mapDidNotHaveTheExpectedSize");
-
+	// @formatter:on
 
 	/**
 	 * Chained constructor.
@@ -154,7 +154,6 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		this(null, value, returns);
 	}
 
-
 	/**
 	 * Returns an integer assertion on the size of this map.
 	 *
@@ -169,7 +168,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */
-	public FluentMapAssertion<K,V,R> asTransformed(Function<Map<K,V>,Map<K,V>> function) {  // NOSONAR - Intentional.
+	public FluentMapAssertion<K,V,R> asTransformed(Function<Map<K,V>,Map<K,V>> function) { // NOSONAR - Intentional.
 		return new FluentMapAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -218,7 +217,6 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		return new FluentListAssertion<>(this, valueIsNull() ? null : stream(keys).map(this::get).collect(toList()), returns());
 	}
 
-
 	/**
 	 * Asserts that the map contains the expected key.
 	 *
@@ -239,7 +237,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isEmpty() throws AssertionError {
-		if (! value().isEmpty())
+		if (!value().isEmpty())
 			throw error(MSG_mapWasNotEmpty);
 		return returns();
 	}
@@ -252,7 +250,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isNotContainsKey(String name) throws AssertionError {
-		if (! value().containsKey(name))
+		if (!value().containsKey(name))
 			return returns();
 		throw error(MSG_mapContainedUnexpectedKey, name, value());
 	}

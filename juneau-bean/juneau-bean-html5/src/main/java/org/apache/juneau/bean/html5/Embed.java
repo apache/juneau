@@ -71,7 +71,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="embed")
+@Bean(typeName = "embed")
 public class Embed extends HtmlElementVoid {
 
 	/**
@@ -89,7 +89,7 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
-	public Embed _class(String value) {  // NOSONAR - Intentional naming.
+	public Embed _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
@@ -111,6 +111,7 @@ public class Embed extends HtmlElementVoid {
 		super.attrUri(key, val);
 		return this;
 	}
+
 	@Override /* Overridden from HtmlElement */
 	public Embed contenteditable(Object value) {
 		super.contenteditable(value);

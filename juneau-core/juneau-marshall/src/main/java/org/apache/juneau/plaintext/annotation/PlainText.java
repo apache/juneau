@@ -39,7 +39,7 @@ import org.apache.juneau.plaintext.*;
  * </ul>
  */
 @Documented
-@Target({TYPE,FIELD,METHOD})
+@Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
 @Inherited
 @Repeatable(PlainTextAnnotation.Array.class)

@@ -84,6 +84,7 @@ public class Person extends Common {
 	public Person(String name) {
 		setName(name);
 	}
+
 	/**
 	 * Bean property getter:  <property>email</property>.
 	 *
@@ -92,9 +93,7 @@ public class Person extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getEmail() {
-		return email;
-	}
+	public String getEmail() { return email; }
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -104,9 +103,7 @@ public class Person extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
-	}
+	public String getName() { return name; }
 
 	/**
 	 * Bean property getter:  <property>uri</property>.
@@ -119,9 +116,7 @@ public class Person extends Common {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public URI getUri() {
-		return uri;
-	}
+	public URI getUri() { return uri; }
 
 	@Override /* Overridden from Common */
 	public Person setBase(Object value) {
@@ -156,6 +151,7 @@ public class Person extends Common {
 		super.setLang(value);
 		return this;
 	}
+
 	/**
 	 * Bean property setter:  <property>name</property>.
 	 *

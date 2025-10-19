@@ -87,7 +87,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */
-@Bean(typeName="i")
+@Bean(typeName = "i")
 public class I extends HtmlElementMixed {
 
 	/**
@@ -103,8 +103,9 @@ public class I extends HtmlElementMixed {
 	public I(Object...children) {
 		children(children);
 	}
+
 	@Override /* Overridden from HtmlElement */
-	public I _class(String value) {  // NOSONAR - Intentional naming.
+	public I _class(String value) { // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}

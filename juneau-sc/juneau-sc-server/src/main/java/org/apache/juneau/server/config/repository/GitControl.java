@@ -44,7 +44,7 @@ import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
-@SuppressWarnings({"javadoc","unused"})
+@SuppressWarnings({ "javadoc", "unused" })
 public class GitControl {
 
 	private String localPath, remotePath;
@@ -67,8 +67,7 @@ public class GitControl {
 		add.addFilepattern(".").call();
 	}
 
-	public void branch(String name) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException,
-			CheckoutConflictException, GitAPIException {
+	public void branch(String name) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
 		git.checkout().setName(name).setStartPoint("origin/".concat(name)).call();
 	}
 
@@ -77,14 +76,13 @@ public class GitControl {
 		Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();
 	}
 
-	public void commitToRepo(String message) throws IOException, NoHeadException, NoMessageException,
-			ConcurrentRefUpdateException, JGitInternalException, WrongRepositoryStateException, GitAPIException {
+	public void commitToRepo(String message)
+		throws IOException, NoHeadException, NoMessageException, ConcurrentRefUpdateException, JGitInternalException, WrongRepositoryStateException, GitAPIException {
 		git.commit().setMessage(message).call();
 	}
 
-	public void pullFromRepo()
-			throws IOException, WrongRepositoryStateException, InvalidConfigurationException, DetachedHeadException,
-			InvalidRemoteException, CanceledException, RefNotFoundException, NoHeadException, GitAPIException {
+	public void pullFromRepo() throws IOException, WrongRepositoryStateException, InvalidConfigurationException, DetachedHeadException, InvalidRemoteException, CanceledException, RefNotFoundException,
+		NoHeadException, GitAPIException {
 		git.pull().call();
 	}
 

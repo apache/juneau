@@ -124,10 +124,7 @@ public class BeanBuilder<T> {
 	 * @return A new bean.
 	 */
 	protected T buildDefault() {
-		return beanStore
-			.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified.")))
-			.builder(BeanBuilder.class, this)
-			.run();
+		return beanStore.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified."))).builder(BeanBuilder.class, this).run();
 	}
 
 	/**
@@ -139,9 +136,7 @@ public class BeanBuilder<T> {
 	 * @return The creator for this bean.
 	 */
 	protected BeanCreator<? extends T> creator() {
-		return beanStore
-			.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified.")))
-			.builder(BeanBuilder.class, this);
+		return beanStore.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified."))).builder(BeanBuilder.class, this);
 	}
 
 	/**

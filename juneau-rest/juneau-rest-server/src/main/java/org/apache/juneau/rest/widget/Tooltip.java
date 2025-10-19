@@ -50,7 +50,7 @@ public class Tooltip {
 	 * @param content The hover contents. <br>
 	 * 	Typically a list of strings, but can also include any HTML5 beans as well.
 	 */
-	public Tooltip(String display, Object... content) {
+	public Tooltip(String display, Object...content) {
 		this.display = new HtmlText(display);
 		this.content = u(alist(content));
 	}

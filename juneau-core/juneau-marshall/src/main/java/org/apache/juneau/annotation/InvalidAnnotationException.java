@@ -44,7 +44,8 @@ public class InvalidAnnotationException extends BasicRuntimeException {
 	public static void assertNoInvalidAnnotations(MethodInfo onMethod, Class<? extends Annotation>...types) throws InvalidAnnotationException {
 		Annotation a = onMethod.getAnyAnnotation(types);
 		if (a != null)
-			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", a.getClass().getSimpleName(), onMethod.getDeclaringClass().getSimpleName(), onMethod);
+			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", a.getClass().getSimpleName(), onMethod.getDeclaringClass().getSimpleName(),
+				onMethod);
 	}
 
 	/**
