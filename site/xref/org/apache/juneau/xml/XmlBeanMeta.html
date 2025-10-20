@@ -25,12 +25,12 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.xml;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.CollectionUtils.map;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.xml.annotation.XmlFormat.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.xml.annotation.XmlFormat.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.xml.annotation.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="XmlBeanMeta" href="../../../../org/apache/juneau/xml/XmlBeanMeta.html#XmlBeanMeta">XmlBeanMeta</a> <strong class="jxr_keyword">extends</strong> <a name="ExtendedBeanMeta" href="../../../../org/apache/juneau/ExtendedBeanMeta.html#ExtendedBeanMeta">ExtendedBeanMeta</a> {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> XmlBeanMetaBuilder {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		Map&lt;String,BeanPropertyMeta&gt; attrs = map(), elements = map(), collapsedProperties = map();
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		Map&lt;String,BeanPropertyMeta&gt; attrs = CollectionUtils.map(), elements = CollectionUtils.map(), collapsedProperties = CollectionUtils.map();
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		BeanPropertyMeta attrsProperty, contentProperty;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		XmlFormat contentFormat = DEFAULT;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  

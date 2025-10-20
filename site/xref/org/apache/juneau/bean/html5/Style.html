@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Values will be concatenated with newlines.</em>
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">public</strong> <a name="Style" href="../../../../../org/apache/juneau/bean/html5/Style.html#Style">Style</a>(String...text) {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		text(Utils.joinnl(text));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		text(StringUtils.joinnl(text));
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>

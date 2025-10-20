@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * @param text The child text node.</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> <a name="Script" href="../../../../../org/apache/juneau/bean/html5/Script.html#Script">Script</a>(String type, String...text) {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		type(type).text(Utils.joinnl(text));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		type(type).text(StringUtils.joinnl(text));
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>

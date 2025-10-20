@@ -543,9 +543,9 @@
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 			<strong class="jxr_keyword">if</strong> (cf == PIPES)
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 				<strong class="jxr_keyword">return</strong> StringUtils.joine(l, '|');
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 			<strong class="jxr_keyword">if</strong> (cf == SSV)
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 				<strong class="jxr_keyword">return</strong> Utils.join(l, ' ');
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 				<strong class="jxr_keyword">return</strong> StringUtils.join(l, ' ');
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 			<strong class="jxr_keyword">if</strong> (cf == TSV)
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 				<strong class="jxr_keyword">return</strong> Utils.join(l, '\t');
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 				<strong class="jxr_keyword">return</strong> StringUtils.join(l, '\t');
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 			<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t == OBJECT) {
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">return</strong> toMap(partType, getClassMetaForObject(o), o, s);

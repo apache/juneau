@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">public</strong> <a name="Version" href="../../../org/apache/juneau/Version.html#Version">Version</a>(String value) {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">if</strong> (Utils.isEmpty(value))
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			value = <span class="jxr_string">"0"</span>;
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		String[] sParts = Utils.splita(value, '.');
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		String[] sParts = StringUtils.splita(value, '.');
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		parts = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[sParts.length];
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sParts.length; i++) {
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">try</strong> {
@@ -254,7 +254,7 @@
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">return</strong> Utils.join(parts, '.');
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">return</strong> StringUtils.join(parts, '.');
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 	}
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> }
 </pre>

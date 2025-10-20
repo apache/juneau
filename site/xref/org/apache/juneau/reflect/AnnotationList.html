@@ -24,7 +24,7 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.reflect;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConsumerUtils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.PredicateUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> forEach(Class&lt;A&gt; type, Predicate&lt;AnnotationInfo&lt;A&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;A&gt;&gt; action) {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		forEach(x -&gt; {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">if</strong> (x.isType(type))
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  				consume(filter, action, (AnnotationInfo&lt;A&gt;)x);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  				consumeIf(filter, action, (AnnotationInfo&lt;A&gt;)x);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		});
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> forEach(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		forEach(x -&gt; consume(filter, action, x));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		forEach(x -&gt; consumeIf(filter, action, x));
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  

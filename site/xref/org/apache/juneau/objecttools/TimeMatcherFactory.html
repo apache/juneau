@@ -463,36 +463,44 @@
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 	}
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * TODO</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * Returns the timestamp formats to use for parsing timestamps in time matching operations.</em>
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * @return TODO</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<strong class="jxr_keyword">protected</strong> SimpleDateFormat[] getTimestampFormats() {
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		String[] s = getTimestampFormatStrings();
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		SimpleDateFormat[] a = <strong class="jxr_keyword">new</strong> SimpleDateFormat[s.length];
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length; i++)
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			a[i] = <strong class="jxr_keyword">new</strong> SimpleDateFormat(s[i]);
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">return</strong> a;
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	}
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * TODO</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * @return TODO</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<strong class="jxr_keyword">protected</strong> String[] getTimestampFormatStrings() {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[]{
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH:mm:ss"</span>,
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH:mm"</span>,
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH"</span>,
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			<span class="jxr_string">"yyyy-MM-dd"</span>,
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<span class="jxr_string">"yyyy-MM"</span>,
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<span class="jxr_string">"yyyy"</span>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		};
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	}
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> }
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * This method converts the format strings returned by {@link #getTimestampFormatStrings()} into</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * {@link SimpleDateFormat} objects for actual date parsing.</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * @return An array of {@link SimpleDateFormat} objects representing the supported timestamp formats.</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<strong class="jxr_keyword">protected</strong> SimpleDateFormat[] getTimestampFormats() {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		String[] s = getTimestampFormatStrings();
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		SimpleDateFormat[] a = <strong class="jxr_keyword">new</strong> SimpleDateFormat[s.length];
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length; i++)
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			a[i] = <strong class="jxr_keyword">new</strong> SimpleDateFormat(s[i]);
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">return</strong> a;
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	}
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * Returns the timestamp format strings used for parsing timestamps in time matching operations.</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * This method defines the default set of timestamp formats that are recognized by the time matcher.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * Formats are tried in order until a match is found. Override this method to provide custom timestamp formats.</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * @return An array of timestamp format strings compatible with {@link SimpleDateFormat}.</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<strong class="jxr_keyword">protected</strong> String[] getTimestampFormatStrings() {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[]{
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH:mm:ss"</span>,
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH:mm"</span>,
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH"</span>,
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<span class="jxr_string">"yyyy-MM-dd"</span>,
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			<span class="jxr_string">"yyyy-MM"</span>,
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			<span class="jxr_string">"yyyy"</span>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		};
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	}
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

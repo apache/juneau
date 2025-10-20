@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<em class="jxr_comment">// Need a unique number to define unique function names.</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		Integer id = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		String pre = Utils.nullIfEmpty3(getBeforeShowScript(req, res)), post = Utils.nullIfEmpty3(getAfterShowScript(req, res));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		String pre = StringUtils.nullIfEmpty(getBeforeShowScript(req, res)), post = StringUtils.nullIfEmpty(getAfterShowScript(req, res));
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		sb.append(<span class="jxr_string">"\n&lt;div class='menu-item'&gt;"</span>);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">if</strong> (pre != <strong class="jxr_keyword">null</strong> || post != <strong class="jxr_keyword">null</strong>) {

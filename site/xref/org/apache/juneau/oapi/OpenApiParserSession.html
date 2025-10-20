@@ -382,19 +382,19 @@
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 				<strong class="jxr_keyword">if</strong> (cf == MULTI)
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 					ss = <strong class="jxr_keyword">new</strong> String[] { in };
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == CSV)
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 					ss = Utils.splita(in, ',');
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 					ss = StringUtils.splita(in, ',');
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == PIPES)
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 					ss = Utils.splita(in, '|');
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 					ss = StringUtils.splita(in, '|');
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == SSV)
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 					ss = Utils.splitQuoted(in);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 					ss = StringUtils.splitQuoted(in);
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == TSV)
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 					ss = Utils.splita(in, '\t');
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 					ss = StringUtils.splita(in, '\t');
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.UONC)
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parse(partType, <strong class="jxr_keyword">null</strong>, in, type);
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == NO_COLLECTION_FORMAT) {
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 					<strong class="jxr_keyword">if</strong> (firstNonWhitespaceChar(in) == '@' &amp;&amp; lastNonWhitespaceChar(in) == ')')
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parse(partType, <strong class="jxr_keyword">null</strong>, in, type);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 					ss = Utils.splita(in, ',');
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 					ss = StringUtils.splita(in, ',');
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 				}
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 				HttpPartSchema items = schema.getItems();
@@ -427,25 +427,25 @@
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 				<strong class="jxr_keyword">if</strong> (cf == MULTI)
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 					ss = <strong class="jxr_keyword">new</strong> String[] { in };
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == CSV)
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 					ss = Utils.splita(in, ',');
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 					ss = StringUtils.splita(in, ',');
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == PIPES)
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 					ss = Utils.splita(in, '|');
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 					ss = StringUtils.splita(in, '|');
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == SSV)
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 					ss = Utils.splitQuoted(in);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 					ss = StringUtils.splitQuoted(in);
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == TSV)
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 					ss = Utils.splita(in, '\t');
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 					ss = StringUtils.splita(in, '\t');
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == HttpPartCollectionFormat.UONC)
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parse(partType, <strong class="jxr_keyword">null</strong>, in, type);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == NO_COLLECTION_FORMAT) {
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 					<strong class="jxr_keyword">if</strong> (firstNonWhitespaceChar(in) == '@' &amp;&amp; lastNonWhitespaceChar(in) == ')')
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parse(partType, <strong class="jxr_keyword">null</strong>, in, type);
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 					ss = Utils.splita(in, ',');
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 					ss = StringUtils.splita(in, ',');
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 				}
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 				<strong class="jxr_keyword">if</strong> (type.isBean()) {
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 					BeanMap&lt;T&gt; m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 					<strong class="jxr_keyword">for</strong> (String s : ss) {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 						String[] kv = Utils.splita(s, '=', 2);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 						String[] kv = StringUtils.splita(s, '=', 2);
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 						<strong class="jxr_keyword">if</strong> (kv.length != 2)
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid input {0} for part type OBJECT."</span>, in);
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 						String key = kv[0], value = kv[1];
@@ -469,7 +469,7 @@
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 						m = JsonMap.create();
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 					<strong class="jxr_keyword">for</strong> (String s : ss) {
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 						String[] kv = Utils.splita(s, '=', 2);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 						String[] kv = StringUtils.splita(s, '=', 2);
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 						<strong class="jxr_keyword">if</strong> (kv.length != 2)
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid input {0} for part type OBJECT."</span>, in);
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 						String key = kv[0], value = kv[1];

@@ -45,7 +45,7 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	@ParameterizedTest
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">void</strong> a01_emptyOptional(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> x = empty();
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> x = opte();
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertFalse(x.isPresent());
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
@@ -86,7 +86,7 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">void</strong> b01b_stringField_emptyValue(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B01();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		x.f1 = empty();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		x.f1 = opte();
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertFalse(x.f1.isPresent());
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
@@ -123,7 +123,7 @@
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">void</strong> b02b_integerField_emptyValue(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B02();
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		x.f1 = empty();
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		x.f1 = opte();
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertFalse(x.f1.isPresent());
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
@@ -181,7 +181,7 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">void</strong> b03d_integerListField_emptyValue(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B03();
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		x.f1 = empty();
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		x.f1 = opte();
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertFalse(x.f1.isPresent());
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
@@ -218,7 +218,7 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<strong class="jxr_keyword">void</strong> b04b_optionalOptionalInteger_emptyInnerValue(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B04();
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		x.f1 = opt(empty());
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		x.f1 = opt(opte());
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertTrue(x.f1.isPresent());
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertFalse(x.f1.get().isPresent());
@@ -228,7 +228,7 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<strong class="jxr_keyword">void</strong> b04c_optionalOptionalInteger_emptyOuterValue(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B04();
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		x.f1 = empty();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		x.f1 = opte();
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">if</strong> (t.isValidationOnly())
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">return</strong>;
@@ -278,7 +278,7 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<strong class="jxr_keyword">void</strong> b05b_optionalOptionalBean_emptyInnerValue(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B05();
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		x.f1 = opt(empty());
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		x.f1 = opt(opte());
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		assertTrue(x.f1.isPresent());
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertFalse(x.f1.get().isPresent());
@@ -288,7 +288,7 @@
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">void</strong> b05c_optionalOptionalBean_emptyOuterValue(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B05();
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		x.f1 = empty();
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		x.f1 = opte();
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">if</strong> (t.isValidationOnly())
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">return</strong>;
@@ -329,7 +329,7 @@
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">void</strong> b06b_listOfOptionalIntegers_listWithEmpty(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B06();
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		x.f1 = alist(empty());
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		x.f1 = alist(opte());
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		assertEquals(1, x.f1.size());
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 		assertFalse(x.f1.get(0).isPresent());
@@ -379,7 +379,7 @@
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<strong class="jxr_keyword">void</strong> b07b_arrayOfOptionalIntegers_listWithEmpty(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B07();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		x.f1 = a(empty());
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		x.f1 = a(opte());
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 		assertEquals(1, x.f1.length);
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertFalse(x.f1[0].isPresent());

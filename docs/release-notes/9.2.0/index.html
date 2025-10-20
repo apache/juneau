@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">Release 9.2.0 | Apache Juneau</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://juneau.apache.org/docs/release-notes/9.2.0"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Release 9.2.0 | Apache Juneau"><meta data-rh="true" name="description" content="Date: TBD"><meta data-rh="true" property="og:description" content="Date: TBD"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://juneau.apache.org/docs/release-notes/9.2.0"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="en"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.c21a577c.css">
-<script src="/assets/js/runtime~main.17b785d7.js" defer="defer"></script>
-<script src="/assets/js/main.c9b090f0.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.076c50ee.js" defer="defer"></script>
+<script src="/assets/js/main.cf1ad55f.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -162,6 +162,43 @@ Features and release date are subject to change.</p></div></div>
 <li><strong>Properties Files</strong>: Updated license headers in <code>.properties</code> files to use the standard format</li>
 <li><strong>XML Files</strong>: Standardized XML license headers with proper comment syntax</li>
 <li><strong>Package Statement Fixes</strong>: Corrected package statements that were in unusual positions after license header changes</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="stringutils-improvements">StringUtils Improvements<a href="#stringutils-improvements" class="hash-link" aria-label="Direct link to StringUtils Improvements" title="Direct link to StringUtils Improvements">​</a></h4>
+<ul>
+<li>
+<p><strong>Input Validation for Hex Methods</strong>: Added negative number validation to <code>StringUtils.toHex4()</code> and <code>StringUtils.toHex8()</code> methods to prevent invalid input processing:</p>
+<ul>
+<li><code>toHex4(int)</code> now throws <code>NumberFormatException</code> for negative numbers</li>
+<li><code>toHex8(long)</code> now throws <code>NumberFormatException</code> for negative numbers</li>
+<li>Both methods provide clear error messages: &quot;toHex4/toHex8 can only be used on non-negative numbers&quot;</li>
+<li>Maintains consistency with existing <code>toHex2(int)</code> method which already had similar validation</li>
+<li>Comprehensive unit tests added for both methods covering positive numbers, edge cases, and negative number validation</li>
+</ul>
+</li>
+<li>
+<p><strong>State Machine Standardization</strong>: Converted remaining integer-based state machine constants to use <code>StateEnum</code> for improved type safety:</p>
+<ul>
+<li>Updated <code>StringUtils.replaceVars()</code> method to use <code>StateEnum.S1</code> and <code>StateEnum.S2</code></li>
+<li>Updated <code>Utils.parseKeyValuePairs()</code> method to use <code>StateEnum.S1</code> and <code>StateEnum.S2</code></li>
+<li>Updated <code>UonParserSession.parseObject()</code> method to use <code>StateEnum.S1</code> through <code>StateEnum.S4</code></li>
+<li>Updated <code>UrlEncodingParserSession</code> methods to use <code>StateEnum.S1</code> through <code>StateEnum.S4</code></li>
+<li>Added missing <code>StateEnum</code> import to <code>UrlEncodingParserSession</code></li>
+<li>All state machines now use consistent enum-based state management</li>
+</ul>
+</li>
+<li>
+<p><strong>Code Cleanup</strong>: Removed commented-out code blocks to improve code maintainability:</p>
+<ul>
+<li>Removed entire commented-out <code>getResponseBeanMeta()</code> method from <code>RestContext.java</code></li>
+<li>Removed commented-out <code>findClasses()</code> method from <code>BeanMeta.java</code></li>
+<li>Removed commented-out control flow block from <code>JettyMicroservice.java</code></li>
+<li>Removed debug <code>if(false)</code> condition from <code>ParserReader.java</code></li>
+<li>Removed commented-out method call from <code>HtmlParserSession.java</code></li>
+<li>Removed commented-out test assertion from <code>ThirdPartyProxyResource.java</code></li>
+<li>Removed commented-out <code>list2()</code> method from <code>CollectionUtils.java</code></li>
+<li>Preserved test method section headers as they serve as useful documentation</li>
+</ul>
+</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="mockito-compatibility">Mockito Compatibility<a href="#mockito-compatibility" class="hash-link" aria-label="Direct link to Mockito Compatibility" title="Direct link to Mockito Compatibility">​</a></h4>
 <ul>
@@ -463,6 +500,18 @@ Features and release date are subject to change.</p></div></div>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-bct-new-module">juneau-bct (NEW MODULE)<a href="#juneau-bct-new-module" class="hash-link" aria-label="Direct link to juneau-bct (NEW MODULE)" title="Direct link to juneau-bct (NEW MODULE)">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="bean-centric-testing-framework">Bean-Centric Testing Framework<a href="#bean-centric-testing-framework" class="hash-link" aria-label="Direct link to Bean-Centric Testing Framework" title="Direct link to Bean-Centric Testing Framework">​</a></h4>
 <p>A new testing module that provides fluent, powerful APIs for testing Java beans with minimal boilerplate code.</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="enhanced-stringifier-support">Enhanced Stringifier Support<a href="#enhanced-stringifier-support" class="hash-link" aria-label="Direct link to Enhanced Stringifier Support" title="Direct link to Enhanced Stringifier Support">​</a></h4>
+<ul>
+<li><strong>New charArrayStringifier</strong>: Added <code>charArrayStringifier()</code> to the <code>Stringifiers</code> class for simplified char array testing<!-- -->
+<ul>
+<li>Converts char arrays directly to strings using <code>new String(chars)</code></li>
+<li>Enables cleaner test assertions: <code>assertString(&quot;Hello&quot;, charArray)</code> instead of <code>assertArrayEquals(new char[]{&#x27;H&#x27;,&#x27;e&#x27;,&#x27;l&#x27;,&#x27;l&#x27;,&#x27;o&#x27;}, charArray)</code></li>
+<li>Automatically registered in <code>defaultSettings()</code> for immediate use</li>
+<li>Comprehensive unit tests added covering various char array scenarios</li>
+<li>Updated documentation with examples and built-in stringifier reference</li>
+</ul>
+</li>
+</ul>
 <p><strong>Key Features</strong>:</p>
 <ul>
 <li>
@@ -611,6 +660,17 @@ Features and release date are subject to change.</p></div></div>
 </li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-rest-server">juneau-rest-server<a href="#juneau-rest-server" class="hash-link" aria-label="Direct link to juneau-rest-server" title="Direct link to juneau-rest-server">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="calllogger-exception-statistics-fix">CallLogger Exception Statistics Fix<a href="#calllogger-exception-statistics-fix" class="hash-link" aria-label="Direct link to CallLogger Exception Statistics Fix" title="Direct link to CallLogger Exception Statistics Fix">​</a></h4>
+<ul>
+<li><strong>Fixed CallLogger.getThrownStats()</strong>: Corrected the method to call <code>thrownStore.add(Throwable)</code> instead of <code>thrownStore.getStats(Throwable)</code>
+<ul>
+<li>The <code>add()</code> method properly increments the exception count and creates new stats if needed</li>
+<li>The previous <code>getStats()</code> method only retrieved existing stats without updating counts</li>
+<li>This ensures accurate exception statistics tracking in REST call logging</li>
+<li>Exception counts and hashes are now properly maintained in the ThrownStore</li>
+</ul>
+</li>
+</ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="class-level-http-parameter-defaults">Class-Level HTTP Parameter Defaults<a href="#class-level-http-parameter-defaults" class="hash-link" aria-label="Direct link to Class-Level HTTP Parameter Defaults" title="Direct link to Class-Level HTTP Parameter Defaults">​</a></h4>
 <ul>
 <li>

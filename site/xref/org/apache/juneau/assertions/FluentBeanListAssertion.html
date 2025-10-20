@@ -189,7 +189,7 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">public</strong> FluentListAssertion&lt;Map&lt;String,Object&gt;,R&gt; asPropertyMaps(String...names) {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		String[] n = Utils.splita(names, ',');
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		String[] n = StringUtils.splita(names, ',');
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentListAssertion&lt;&gt;(<strong class="jxr_keyword">this</strong>, value().stream().map(x -&gt; beanMap(x).getProperties(n)).toList(), returns());
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 

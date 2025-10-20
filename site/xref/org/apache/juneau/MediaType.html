@@ -185,7 +185,7 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		type = (i == -1 ? x : x.substring(0, i));
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		subType = (i == -1 ? <span class="jxr_string">"*"</span> : x.substring(i + 1));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		subTypes = Utils.splita(subType, '+');
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		subTypes = StringUtils.splita(subType, '+');
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		Arrays.sort(<strong class="jxr_keyword">this</strong>.subTypesSorted);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		hasSubtypeMeta = ArrayUtils.contains(<span class="jxr_string">"*"</span>, <strong class="jxr_keyword">this</strong>.subTypes);

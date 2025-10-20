@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt; args.length; i++) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			String pattern = args[i];
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			String[] parts = Utils.splita(pattern, ':', 2);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			String[] parts = StringUtils.splita(pattern, ':', 2);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			Utils.assertArg(parts.length &gt;= 2, <span class="jxr_string">"Invalid arguments passed to $SW var.  Each case statement must contains 'pattern:value'."</span>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			Pattern p = Pattern.compile(parts[0].replace(<span class="jxr_string">"*"</span>, <span class="jxr_string">".*"</span>).replace(<span class="jxr_string">"?"</span>, <span class="jxr_string">"."</span>));

@@ -163,7 +163,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * 	The header value.</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<strong class="jxr_keyword">public</strong> <a name="Thrown" href="../../../../../org/apache/juneau/http/header/Thrown.html#Thrown">Thrown</a>(List&lt;Part&gt; value) {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">super</strong>(NAME, Utils.join(value, <span class="jxr_string">", "</span>));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">super</strong>(NAME, StringUtils.join(value, <span class="jxr_string">", "</span>));
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">this</strong>.value = u(value);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">public</strong> <a name="Thrown" href="../../../../../org/apache/juneau/http/header/Thrown.html#Thrown">Thrown</a>(String value) {
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">super</strong>(NAME, value);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		List&lt;Part&gt; l = Utils.list();
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		Utils.split(value, x -&gt; l.add(<strong class="jxr_keyword">new</strong> Part(x)));
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		StringUtils.split(value, x -&gt; l.add(<strong class="jxr_keyword">new</strong> Part(x)));
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">this</strong>.value = value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : u(l);
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 

@@ -187,12 +187,12 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 				@Override
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">public</strong> Object extract(BeanConverter converter, Object o, String key) {
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 					<strong class="jxr_keyword">if</strong> (o instanceof Number) {
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 						<strong class="jxr_keyword">switch</strong> (key) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"doubled"</span>: <strong class="jxr_keyword">return</strong> ((Number) o).doubleValue() * 2;
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"string"</span>: <strong class="jxr_keyword">return</strong> o.toString();
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"type"</span>: <strong class="jxr_keyword">return</strong> o.getClass().getSimpleName();
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 							<strong class="jxr_keyword">default</strong>: <strong class="jxr_keyword">return</strong> <span class="jxr_string">"UNKNOWN_PROP:"</span> + key;
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 						}
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (key) {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"doubled"</span> -&gt; ((Number) o).doubleValue() * 2;
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"string"</span> -&gt; o.toString();
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"type"</span> -&gt; o.getClass().getSimpleName();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 							<strong class="jxr_keyword">default</strong> -&gt; <span class="jxr_string">"UNKNOWN_PROP:"</span> + key;
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 						};
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 					}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"NOT_A_NUMBER"</span>;
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 				}
@@ -278,12 +278,12 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 				<strong class="jxr_keyword">public</strong> Object extract(BeanConverter converter, Object o, String key) {
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 					<strong class="jxr_keyword">if</strong> (o instanceof Map) {
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 						Map&lt;?, ?&gt; map = (Map&lt;?, ?&gt;) o;
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 						<strong class="jxr_keyword">switch</strong> (key) {
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"keys"</span>: <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(map.keySet());
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"values"</span>: <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(map.values());
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"entries"</span>: <strong class="jxr_keyword">return</strong> map.entrySet().size();
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 							<strong class="jxr_keyword">default</strong>: <strong class="jxr_keyword">return</strong> map.get(key);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 						}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (key) {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"keys"</span> -&gt; <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(map.keySet());
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"values"</span> -&gt; <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(map.values());
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"entries"</span> -&gt; map.entrySet().size();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 							<strong class="jxr_keyword">default</strong> -&gt; map.get(key);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 						};
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 					}
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"NOT_A_MAP"</span>;
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 				}

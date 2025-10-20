@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> || s.isEmpty())
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">return</strong> Collections.emptySet();
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		Set&lt;TypeCategory&gt; set = set();
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		Utils.split(s, x -&gt; set.add(valueOf(x.toUpperCase())));
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		StringUtils.split(s, x -&gt; set.add(valueOf(x.toUpperCase())));
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">return</strong> set;
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> || s.isEmpty())
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="TypeCategory" href="../../../../org/apache/juneau/jsonschema/TypeCategory.html#TypeCategory">TypeCategory</a>[0];
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		List&lt;TypeCategory&gt; list = list();
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		Utils.split(s, x -&gt; list.add(valueOf(x.toUpperCase())));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		StringUtils.split(s, x -&gt; list.add(valueOf(x.toUpperCase())));
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">return</strong> list.toArray(<strong class="jxr_keyword">new</strong> <a name="TypeCategory" href="../../../../org/apache/juneau/jsonschema/TypeCategory.html#TypeCategory">TypeCategory</a>[list.size()]);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  }

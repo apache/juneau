@@ -425,7 +425,7 @@
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 	<strong class="jxr_keyword">public</strong> R isLines(String...lines) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 		Utils.assertArgNotNull(<span class="jxr_string">"lines"</span>, lines);
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> v = Utils.join(lines, '\n');
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> v = StringUtils.join(lines, '\n');
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">var</strong> s = value();
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">if</strong> (Utils.ne(v, s))
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
@@ -444,7 +444,7 @@
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">public</strong> R isMatches(String searchPattern) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 		Utils.assertArgNotNull(<span class="jxr_string">"searchPattern"</span>, searchPattern);
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">return</strong> isPattern(Utils.getMatchPattern3(searchPattern));
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">return</strong> isPattern(StringUtils.getMatchPattern(searchPattern));
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 	}
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -576,7 +576,7 @@
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 		Utils.assertArgNotNull(<span class="jxr_string">"lines"</span>, lines);
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<em class="jxr_comment">// Must work for windows too.</em>
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">var</strong> e = Utils.join(lines, '\n').trim().split(<span class="jxr_string">"[\r\n]+"</span>);
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">var</strong> e = StringUtils.join(lines, '\n').trim().split(<span class="jxr_string">"[\r\n]+"</span>);
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">var</strong> a = value().trim().split(<span class="jxr_string">"[\r\n]+"</span>);
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">if</strong> (e.length != a.length)

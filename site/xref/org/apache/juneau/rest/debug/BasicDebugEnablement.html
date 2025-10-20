@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			x -&gt; <strong class="jxr_keyword">true</strong>,
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			x -&gt; {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 				String x2 = varResolver.resolve(x.debugOn());
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,String&gt; e : Utils.splitMap(x2, <strong class="jxr_keyword">true</strong>).entrySet()) {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,String&gt; e : StringUtils.splitMap(x2, <strong class="jxr_keyword">true</strong>).entrySet()) {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 					String k = e.getKey(), v = e.getValue();
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 					<strong class="jxr_keyword">if</strong> (v.isEmpty())
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 						v = <span class="jxr_string">"ALWAYS"</span>;
