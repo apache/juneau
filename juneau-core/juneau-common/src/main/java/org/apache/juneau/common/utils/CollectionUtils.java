@@ -3,9 +3,7 @@ package org.apache.juneau.common.utils;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
-import java.lang.reflect.*;
 import java.util.*;
-import java.util.Map.*;
 import java.util.function.*;
 
 /*
@@ -600,6 +598,41 @@ public class CollectionUtils {
 	 */
 	public static <E> Set<E> synced(Set<E> value) {
 		return value == null ? null : Collections.synchronizedSet(value);
+	}
+
+    /**
+     * Convenience factory for a {@link ListBuilder}.
+     *
+     * @param <E> The element type.
+     * @param type The element type.
+     * @return A new list builder.
+     */
+    public static <E> ListBuilder<E> listb(Class<E> type, Converter...converters) {
+		return ListBuilder.create(type).converters(converters);
+	}
+
+    /**
+     * Convenience factory for a {@link SetBuilder}.
+     *
+     * @param <E> The element type.
+     * @param type The element type.
+     * @return A new set builder.
+     */
+    public static <E> SetBuilder<E> setb(Class<E> type, Converter...converters) {
+		return SetBuilder.create(type).converters(converters);
+	}
+
+    /**
+     * Convenience factory for a {@link MapBuilder}.
+     *
+     * @param <K> The key type.
+     * @param <V> The value type.
+     * @param keyType The key type.
+     * @param valueType The value type.
+     * @return A new map builder.
+     */
+    public static <K,V> MapBuilder<K,V> mapb(Class<K> keyType, Class<V> valueType, Converter...converters) {
+		return MapBuilder.create(keyType, valueType).converters(converters);
 	}
 
 	private CollectionUtils() {}

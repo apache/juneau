@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -118,7 +117,7 @@ public class HeaderInfo extends OpenApiElement {
 	public HeaderInfo addExample(String name, Example example) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("example", example);
-		examples = mapBuilder(examples).sparse().add(name, example).build();
+		examples = CollectionUtils.mapb(String.class, Example.class).to(examples).sparse().add(name, example).build();
 		return this;
 	}
 
@@ -244,7 +243,7 @@ public class HeaderInfo extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(ref != null, "$ref")
 			.addIf(allowEmptyValue != null, "allowEmptyValue")
 			.addIf(allowReserved != null, "allowReserved")
@@ -296,7 +295,7 @@ public class HeaderInfo extends OpenApiElement {
 			case "allowReserved" -> setAllowReserved(toBoolean(value));
 			case "deprecated" -> setDeprecated(toBoolean(value));
 			case "description" -> setDescription(Utils.s(value));
-			case "examples" -> setExamples(mapBuilder(String.class, Example.class).sparse().addAny(value).build());
+			case "examples" -> setExamples(toMap(value, String.class, Example.class).sparse().build());
 			case "explode" -> setExplode(toBoolean(value));
 			case "required" -> setRequired(toBoolean(value));
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));

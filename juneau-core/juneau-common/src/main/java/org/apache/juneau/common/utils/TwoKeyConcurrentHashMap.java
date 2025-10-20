@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.utils;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -31,7 +31,7 @@ import java.util.function.*;
  * @param <V> Value type.
  * @serial exclude
  */
-public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConcurrentCache.Key<K1,K2>,V> {
+public class TwoKeyConcurrentHashMap<K1,K2,V> extends ConcurrentHashMap<TwoKeyConcurrentHashMap.Key<K1,K2>,V> {
 	static class Key<K1,K2> {
 		final K1 k1;
 		final K2 k2;
@@ -64,7 +64,7 @@ public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConc
 	/**
 	 * Constructor.
 	 */
-	public TwoKeyConcurrentCache() {
+	public TwoKeyConcurrentHashMap() {
 		this(false, null);
 	}
 
@@ -73,7 +73,7 @@ public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConc
 	 * @param disabled If <jk>true</jk>, get/put operations are no-ops.
 	 * @param supplier The supplier for this cache.
 	 */
-	public TwoKeyConcurrentCache(boolean disabled, BiFunction<K1,K2,V> supplier) {
+	public TwoKeyConcurrentHashMap(boolean disabled, BiFunction<K1,K2,V> supplier) {
 		this.disabled = disabled;
 		this.supplier = supplier;
 	}

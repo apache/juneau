@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -175,7 +174,7 @@ public class Xml extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(attribute != null, "attribute")
 			.addIf(name != null, "name")
 			.addIf(namespace != null, "namespace")

@@ -17,7 +17,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -265,7 +264,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList forEach(Predicate<Header> filter, Consumer<Header> action) {
-		forEach(x -> consume(filter, action, x));
+		forEach(x -> PredicateUtils.consumeIf(filter, action, x));
 		return this;
 	}
 

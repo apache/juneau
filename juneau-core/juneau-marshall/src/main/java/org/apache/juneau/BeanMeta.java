@@ -19,7 +19,6 @@ package org.apache.juneau;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -932,7 +931,7 @@ public class BeanMeta<T> {
 	 */
 	public <T2> Optional<T2> firstProperty(Predicate<BeanPropertyMeta> filter, Function<BeanPropertyMeta,T2> function) {
 		for (BeanPropertyMeta x : propertyArray)
-			if (test(filter, x))
+			if (PredicateUtils.test(filter, x))
 				return Optional.ofNullable(function.apply(x));
 		return Optional.empty();
 	}
@@ -945,7 +944,7 @@ public class BeanMeta<T> {
 	 */
 	public void forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
 		for (BeanPropertyMeta x : propertyArray)
-			if (test(filter, x))
+			if (PredicateUtils.test(filter, x))
 				action.accept(x);
 	}
 

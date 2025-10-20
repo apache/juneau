@@ -30,7 +30,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 import org.junit.jupiter.api.*;
 
 class ExecutableInfo_Test extends TestBase {

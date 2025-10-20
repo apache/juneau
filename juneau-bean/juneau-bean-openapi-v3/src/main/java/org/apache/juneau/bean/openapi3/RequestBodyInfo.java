@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -102,7 +101,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	public RequestBodyInfo addContent(String key, MediaType value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		content = mapBuilder(content).sparse().add(key, value).build();
+		content = CollectionUtils.mapb(String.class, MediaType.class).to(content).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -155,7 +154,7 @@ public class RequestBodyInfo extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(content != null, "content")
 			.addIf(description != null, "description")
 			.addIf(required != null, "required")
@@ -167,7 +166,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	public RequestBodyInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "content" -> setContent(mapBuilder(String.class, MediaType.class).sparse().addAny(value).build());
+			case "content" -> setContent(toMap(value, String.class, MediaType.class).sparse().build());
 			case "description" -> setDescription(Utils.s(value));
 			case "required" -> setRequired(toBoolean(value));
 			default -> {

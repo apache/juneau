@@ -17,7 +17,6 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.common.StateEnum.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.text.*;
 import java.util.*;

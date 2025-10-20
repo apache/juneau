@@ -29,7 +29,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
 

@@ -22,7 +22,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.annotation.*;

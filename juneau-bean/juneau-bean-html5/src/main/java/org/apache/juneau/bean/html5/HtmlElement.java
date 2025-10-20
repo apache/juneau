@@ -17,14 +17,13 @@
 package org.apache.juneau.bean.html5;
 
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;

@@ -19,7 +19,6 @@ package org.apache.juneau.microservice;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.FileUtils.*;
 
 import java.io.*;

@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -124,7 +123,7 @@ public class SecurityScheme extends SwaggerElement {
 	public SecurityScheme addScope(String key, String value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		scopes = mapBuilder(scopes).sparse().add(key, value).build();
+		scopes = CollectionUtils.mapb(String.class, String.class).to(scopes).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -236,7 +235,7 @@ public class SecurityScheme extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(authorizationUrl != null, "authorizationUrl")
 			.addIf(description != null, "description")
 			.addIf(flow != null, "flow")
@@ -259,7 +258,7 @@ public class SecurityScheme extends SwaggerElement {
 			case "flow" -> setFlow(Utils.s(value));
 			case "in" -> setIn(Utils.s(value));
 			case "name" -> setName(Utils.s(value));
-			case "scopes" -> setScopes(mapBuilder(String.class, String.class).sparse().addAny(value).build());
+			case "scopes" -> setScopes(toMap(value, String.class, String.class).sparse().build());
 			case "tokenUrl" -> setTokenUrl(Utils.s(value));
 			case "type" -> setType(Utils.s(value));
 			default -> {

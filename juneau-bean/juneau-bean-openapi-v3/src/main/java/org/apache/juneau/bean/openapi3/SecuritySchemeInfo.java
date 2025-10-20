@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -236,7 +235,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(bearerFormat != null, "bearerFormat")
 			.addIf(description != null, "description")
 			.addIf(flows != null, "flows")

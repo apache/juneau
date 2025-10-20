@@ -17,6 +17,7 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Interface for providing access to {@link HtmlClassMeta} and {@link HtmlBeanPropertyMeta} objects.

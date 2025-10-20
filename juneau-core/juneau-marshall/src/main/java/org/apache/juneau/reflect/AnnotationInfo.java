@@ -17,7 +17,6 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -146,7 +145,7 @@ public class AnnotationInfo<T extends Annotation> {
 	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
 		for (Method m : _getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type))
-				Utils.safe(() -> consume(test, action, (V)m.invoke(a)));
+				Utils.safe(() -> PredicateUtils.consumeIf(test, action, (V)m.invoke(a)));
 		return this;
 	}
 
@@ -235,7 +234,7 @@ public class AnnotationInfo<T extends Annotation> {
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
 					V v = (V)m.invoke(a);
-					if (test(test, v))
+					if (PredicateUtils.test(test, v))
 						return Utils.opt(v);
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.
@@ -295,7 +294,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<AnnotationInfo<?>> test) {
-		return test(test, this);
+		return PredicateUtils.test(test, this);
 	}
 
 	/**

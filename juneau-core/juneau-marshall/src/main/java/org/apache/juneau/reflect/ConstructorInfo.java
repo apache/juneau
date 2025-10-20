@@ -16,13 +16,14 @@
  */
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -254,6 +255,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<ConstructorInfo> test) {
-		return test(test, this);
+		return PredicateUtils.test(test, this);
 	}
 }

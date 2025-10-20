@@ -20,8 +20,6 @@ import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -31,6 +29,7 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.csv.annotation.*;
 import org.apache.juneau.html.annotation.*;
@@ -759,11 +758,11 @@ public abstract class Context implements AnnotationProvider {
 	final boolean debug;
 
 	private final ReflectionMap<Annotation> annotationMap;
-	private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache;
-	private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache;
-	private final TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache;
-	private final TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache;
-	private final TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache;
+	private final TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache;
+	private final TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache;
+	private final TwoKeyConcurrentHashMap<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache;
+	private final TwoKeyConcurrentHashMap<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache;
+	private final TwoKeyConcurrentHashMap<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache;
 
 	/**
 	 * Constructor for this class.
@@ -805,11 +804,11 @@ public abstract class Context implements AnnotationProvider {
 		});
 		this.annotationMap = rmb.build();
 		boolean disabled = Boolean.getBoolean("juneau.disableAnnotationCaching");
-		classAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-		declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2)));
-		methodAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-		fieldAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-		constructorAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		classAnnotationCache = new TwoKeyConcurrentHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		declaredClassAnnotationCache = new TwoKeyConcurrentHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2)));
+		methodAnnotationCache = new TwoKeyConcurrentHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		fieldAnnotationCache = new TwoKeyConcurrentHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		constructorAnnotationCache = new TwoKeyConcurrentHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
 	}
 
 	/**
@@ -857,7 +856,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		if (type != null && onClass != null)
 			for (A a : annotations(type, onClass))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					return a;
 		return null;
 	}
@@ -866,7 +865,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 		if (type != null && onConstructor != null)
 			for (A a : annotations(type, onConstructor))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					return a;
 		return null;
 	}
@@ -875,7 +874,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 		if (type != null && onField != null)
 			for (A a : annotations(type, onField))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					return a;
 		return null;
 	}
@@ -884,7 +883,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 		if (type != null && onMethod != null)
 			for (A a : annotations(type, onMethod))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					return a;
 		return null;
 	}
@@ -893,7 +892,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		if (type != null && onClass != null)
 			for (A a : declaredAnnotations(type, onClass))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					return a;
 		return null;
 	}
@@ -902,35 +901,35 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onClass != null)
 			for (A a : annotations(type, onClass))
-				consume(filter, action, a);
+				PredicateUtils.consumeIf(filter, action, a);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onConstructor != null)
 			for (A a : annotations(type, onConstructor))
-				consume(filter, action, a);
+				PredicateUtils.consumeIf(filter, action, a);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onField != null)
 			for (A a : annotations(type, onField))
-				consume(filter, action, a);
+				PredicateUtils.consumeIf(filter, action, a);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onMethod != null)
 			for (A a : annotations(type, onMethod))
-				consume(filter, action, a);
+				PredicateUtils.consumeIf(filter, action, a);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onClass != null)
 			for (A a : declaredAnnotations(type, onClass))
-				consume(filter, action, a);
+				PredicateUtils.consumeIf(filter, action, a);
 	}
 
 	/**
@@ -1005,7 +1004,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onClass != null)
 			for (A a : annotations(type, onClass))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					x = a;
 		return x;
 	}
@@ -1015,7 +1014,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onConstructor != null)
 			for (A a : annotations(type, onConstructor))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					x = a;
 		return x;
 	}
@@ -1025,7 +1024,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onField != null)
 			for (A a : annotations(type, onField))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					x = a;
 		return x;
 	}
@@ -1035,7 +1034,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onMethod != null)
 			for (A a : annotations(type, onMethod))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					x = a;
 		return x;
 	}
@@ -1045,7 +1044,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onClass != null)
 			for (A a : declaredAnnotations(type, onClass))
-				if (test(filter, a))
+				if (PredicateUtils.test(filter, a))
 					x = a;
 		return x;
 	}

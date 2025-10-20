@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -104,7 +103,7 @@ public class Discriminator extends OpenApiElement {
 	public Discriminator addMapping(String key, String value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		mapping = mapBuilder(mapping).sparse().add(key, value).build();
+		mapping = CollectionUtils.mapb(String.class, String.class).to(mapping).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -149,7 +148,7 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(mapping != null, "mapping")
 			.addIf(propertyName != null, "propertyName")
 			.build();
@@ -160,7 +159,7 @@ public class Discriminator extends OpenApiElement {
 	public Discriminator set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "mapping" -> setMapping(mapBuilder(String.class, String.class).sparse().addAny(value).build());
+			case "mapping" -> setMapping(toMap(value, String.class, String.class).sparse().build());
 			case "propertyName" -> setPropertyName(Utils.s(value));
 			default -> {
 				super.set(property, value);

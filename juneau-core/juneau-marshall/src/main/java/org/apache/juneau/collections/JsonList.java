@@ -17,7 +17,6 @@
 package org.apache.juneau.collections;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -461,7 +460,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @return This object.
 	 */
 	public <T> JsonList appendIf(Predicate<T> test, T value) {
-		return appendIf(test(test, value), value);
+		return appendIf(PredicateUtils.test(test, value), value);
 	}
 
 	/**

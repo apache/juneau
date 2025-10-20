@@ -20,7 +20,6 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 
 /**

@@ -18,7 +18,6 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;

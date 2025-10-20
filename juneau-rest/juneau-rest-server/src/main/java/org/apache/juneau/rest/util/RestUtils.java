@@ -20,7 +20,6 @@ import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.io.*;
 import java.util.*;
@@ -46,7 +45,8 @@ import jakarta.servlet.http.*;
 public class RestUtils {
 
 	// @formatter:off
-	private static Map<Integer,String> httpMsgs = mapBuilder(Integer.class, String.class)
+	private static Map<Integer,String> httpMsgs = CollectionUtils.mapb(Integer.class, String.class)
+		.unmodifiable()
 		.add(100, "Continue")
 		.add(101, "Switching Protocols")
 		.add(102, "Processing")

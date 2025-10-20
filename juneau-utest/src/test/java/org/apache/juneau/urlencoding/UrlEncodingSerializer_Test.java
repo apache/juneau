@@ -24,7 +24,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class UrlEncodingSerializer_Test extends TestBase {
@@ -553,7 +553,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=(foo)", s2.serialize("(foo)"));
 		assertEquals("_value=@(foo)", s2.serialize("@(foo)"));
 
-		var m = CollectionBuilders.mapBuilder(String.class,Object.class).add("foo","foo").add("'foo'","'foo'").add("(foo)","(foo)").add("@(foo)","@(foo)").build();
+		var m = CollectionUtils.mapb(String.class,Object.class).add("foo","foo").add("'foo'","'foo'").add("(foo)","(foo)").add("@(foo)","@(foo)").build();
 		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s2.serialize(m));
 
 		var l = list("foo", "'foo'", "(foo)", "@(foo)");

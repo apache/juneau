@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.ConsumerUtils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -48,7 +48,7 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	public <A extends Annotation> AnnotationList forEach(Class<A> type, Predicate<AnnotationInfo<A>> filter, Consumer<AnnotationInfo<A>> action) {
 		forEach(x -> {
 			if (x.isType(type))
-				consume(filter, action, (AnnotationInfo<A>)x);
+				consumeIf(filter, action, (AnnotationInfo<A>)x);
 		});
 		return this;
 	}
@@ -61,7 +61,7 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	 * @return This object.
 	 */
 	public AnnotationList forEach(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		forEach(x -> consume(filter, action, x));
+		forEach(x -> consumeIf(filter, action, x));
 		return this;
 	}
 

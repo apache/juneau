@@ -17,8 +17,8 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
@@ -228,7 +228,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addConsumes(Collection<MediaType> values) {
-		consumes = setBuilder(consumes).sparse().addAll(values).build();
+		consumes = CollectionUtils.setb(MediaType.class).to(consumes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -243,7 +243,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addConsumes(MediaType...value) {
-		consumes = setBuilder(consumes).sparse().add(value).build();
+		consumes = CollectionUtils.setb(MediaType.class).to(consumes).sparse().add(value).build();
 		return this;
 	}
 
@@ -259,7 +259,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(Collection<ParameterInfo> values) {
-		parameters = listBuilder(parameters).sparse().addAll(values).build();
+		parameters = CollectionUtils.listb(ParameterInfo.class).to(parameters).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -274,7 +274,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(ParameterInfo...value) {
-		parameters = listBuilder(parameters).sparse().add(value).build();
+		parameters = CollectionUtils.listb(ParameterInfo.class).to(parameters).sparse().add(value).build();
 		return this;
 	}
 
@@ -290,7 +290,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addProduces(Collection<MediaType> values) {
-		produces = setBuilder(produces).sparse().addAll(values).build();
+		produces = CollectionUtils.setb(MediaType.class).to(produces).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -305,7 +305,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addProduces(MediaType...value) {
-		produces = setBuilder(produces).sparse().add(value).build();
+		produces = CollectionUtils.setb(MediaType.class).to(produces).sparse().add(value).build();
 		return this;
 	}
 
@@ -319,7 +319,7 @@ public class Operation extends SwaggerElement {
 	public Operation addResponse(String statusCode, ResponseInfo response) {
 		assertArgNotNull("statusCode", statusCode);
 		assertArgNotNull("response", response);
-		responses = mapBuilder(responses).add(statusCode, response).build();
+		responses = CollectionUtils.mapb(String.class, ResponseInfo.class).to(responses).add(statusCode, response).build();
 		return this;
 	}
 
@@ -335,7 +335,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSchemes(Collection<String> values) {
-		schemes = setBuilder(schemes).sparse().addAll(values).build();
+		schemes = CollectionUtils.setb(String.class).to(schemes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -351,7 +351,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSchemes(String...value) {
-		schemes = setBuilder(schemes).sparse().add(value).build();
+		schemes = CollectionUtils.setb(String.class).to(schemes).sparse().add(value).build();
 		return this;
 	}
 
@@ -368,9 +368,11 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
 		assertArgNotNull("value", value);
-		security = listBuilder(security).addAll(value).build();
+		security = CollectionUtils.listb(Map.class).to((List)security).addAny(value).build();
 		return this;
 	}
+
+
 
 	/**
 	 * Same as {@link #addSecurity(String, String...)}.
@@ -387,7 +389,7 @@ public class Operation extends SwaggerElement {
 		assertArgNotNull("scheme", scheme);
 		Map<String,List<String>> m = CollectionUtils.map();
 		m.put(scheme, alist(alternatives));
-		security = listBuilder(security).add(m).build();
+		security = CollectionUtils.listb(Map.class).to((List)security).add(m).build();
 		return this;
 	}
 
@@ -403,7 +405,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addTags(Collection<String> values) {
-		tags = setBuilder(tags).sparse().addAll(values).build();
+		tags = CollectionUtils.setb(String.class).to(tags).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -419,7 +421,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addTags(String...value) {
-		tags = setBuilder(tags).sparse().add(value).build();
+		tags = CollectionUtils.setb(String.class).to(tags).sparse().add(value).build();
 		return this;
 	}
 
@@ -639,7 +641,7 @@ public class Operation extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(consumes != null, "consumes")
 			.addIf(deprecated != null, "deprecated")
 			.addIf(description != null, "description")
@@ -662,24 +664,26 @@ public class Operation extends SwaggerElement {
 	public Operation set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "consumes" -> setConsumes(toList(value, MediaType.class).sparse().build());
 			case "deprecated" -> setDeprecated(toBoolean(value));
 			case "description" -> setDescription(Utils.s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			case "operationId" -> setOperationId(Utils.s(value));
-			case "parameters" -> setParameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
-			case "produces" -> setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "responses" -> setResponses(mapBuilder(String.class, ResponseInfo.class).sparse().addAny(value).build());
-			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
-			case "security" -> setSecurity((List)listBuilder(Map.class, String.class, List.class, String.class).sparse().addAny(value).build());
+			case "parameters" -> setParameters(toList(value, ParameterInfo.class).sparse().build());
+			case "produces" -> setProduces(toList(value, MediaType.class).sparse().build());
+			case "responses" -> setResponses(toMap(value, String.class, ResponseInfo.class).sparse().build());
+			case "schemes" -> setSchemes(toList(value, String.class).sparse().addAny(value).build());
+			case "security" -> setSecurity((List)toList(value, MapStringList.class).sparse().build());
 			case "summary" -> setSummary(Utils.s(value));
-			case "tags" -> setTags(listBuilder(String.class).sparse().addAny(value).build());
+			case "tags" -> setTags(toList(value, String.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
 			}
 		};
 	}
+
+	private interface MapStringList extends Map<String,List<String>> {}
 
 	/**
 	 * Bean property setter:  <property>consumes</property>.
@@ -897,7 +901,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSchemes(String...value) {
-		setSchemes(setBuilder(String.class).sparse().add(value).build());
+		setSchemes(CollectionUtils.setb(String.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -979,7 +983,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setTags(String...value) {
-		setTags(setBuilder(String.class).sparse().add(value).build());
+		setTags(CollectionUtils.setb(String.class).sparse().add(value).build());
 		return this;
 	}
 

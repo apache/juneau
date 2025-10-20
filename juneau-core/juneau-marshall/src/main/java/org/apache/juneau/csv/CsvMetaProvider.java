@@ -17,6 +17,7 @@
 package org.apache.juneau.csv;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Interface for providing access to {@link CsvClassMeta} and {@link CsvBeanPropertyMeta} objects.

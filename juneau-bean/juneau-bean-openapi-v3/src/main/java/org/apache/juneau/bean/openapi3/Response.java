@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -111,7 +110,7 @@ public class Response extends OpenApiElement {
 	public Response addContent(String key, MediaType value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		content = mapBuilder(content).sparse().add(key, value).build();
+		content = CollectionUtils.mapb(String.class, MediaType.class).to(content).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -125,7 +124,7 @@ public class Response extends OpenApiElement {
 	public Response addHeader(String key, HeaderInfo value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		headers = mapBuilder(headers).sparse().add(key, value).build();
+		headers = CollectionUtils.mapb(String.class, HeaderInfo.class).to(headers).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -139,7 +138,7 @@ public class Response extends OpenApiElement {
 	public Response addLink(String key, Link value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		links = mapBuilder(links).sparse().add(key, value).build();
+		links = CollectionUtils.mapb(String.class, Link.class).to(links).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -230,7 +229,7 @@ public class Response extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(content != null, "content")
 			.addIf(description != null, "description")
 			.addIf(headers != null, "headers")
@@ -243,10 +242,10 @@ public class Response extends OpenApiElement {
 	public Response set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "content" -> setContent(mapBuilder(String.class, MediaType.class).sparse().addAny(value).build());
+			case "content" -> setContent(toMap(value, String.class, MediaType.class).sparse().build());
 			case "description" -> setDescription(Utils.s(value));
-			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
-			case "links" -> setLinks(mapBuilder(String.class, Link.class).sparse().addAny(value).build());
+			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
+			case "links" -> setLinks(toMap(value, String.class, Link.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

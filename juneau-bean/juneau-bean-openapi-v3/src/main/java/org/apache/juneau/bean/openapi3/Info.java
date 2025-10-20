@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -210,7 +209,7 @@ public class Info extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(contact != null, "contact")
 			.addIf(description != null, "description")
 			.addIf(license != null, "license")

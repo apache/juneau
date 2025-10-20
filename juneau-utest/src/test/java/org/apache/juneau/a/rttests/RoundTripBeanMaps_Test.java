@@ -29,7 +29,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.msgpack.*;

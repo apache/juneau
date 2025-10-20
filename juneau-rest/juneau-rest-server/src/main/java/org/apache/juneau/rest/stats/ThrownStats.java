@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.stats;
 
-import static org.apache.juneau.internal.CollectionBuilders.*;
-
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
@@ -148,7 +146,7 @@ public class ThrownStats implements Cloneable {
 		this.guid = x.guid;
 		this.thrownClass = x.thrownClass;
 		this.firstMessage = x.firstMessage;
-		this.stackTrace = listBuilder(x.stackTrace).copy().unmodifiable().build();
+		this.stackTrace = x.stackTrace == null ? null : Utils.u(CollectionUtils.copyOf(x.stackTrace));
 		this.causedBy = Utils.opt(x.causedBy.isPresent() ? x.causedBy.get().clone() : null);
 		this.hash = x.hash;
 		this.count = new AtomicInteger(x.count.get());
@@ -165,7 +163,7 @@ public class ThrownStats implements Cloneable {
 		this.guid = new Random().nextLong();
 		this.thrownClass = builder.throwable.getClass();
 		this.firstMessage = builder.throwable.getMessage();
-		this.stackTrace = listBuilder(builder.stackTrace).copy().unmodifiable().build();
+		this.stackTrace = builder.stackTrace == null ? null : Utils.u(CollectionUtils.copyOf(builder.stackTrace));
 		this.causedBy = Utils.opt(builder.causedBy);
 		this.hash = builder.hash;
 		this.count = new AtomicInteger(0);

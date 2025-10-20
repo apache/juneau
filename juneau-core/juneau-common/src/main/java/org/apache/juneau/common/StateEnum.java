@@ -20,7 +20,7 @@ package org.apache.juneau.common;
  * Enumeration of state machine states for use in parsing operations.
  *
  * <p>
- * This enum provides a standardized set of state constants (S1 through S20) that can be used
+ * This enum provides a standardized set of state constants (S1 through S50) that can be used
  * in state machine implementations throughout the Juneau codebase. This eliminates the need
  * to declare local int constants and provides better code readability.
  *
@@ -79,5 +79,65 @@ public enum StateEnum {
 	/** State 19 */
 	S19,
 	/** State 20 */
-	S20;
+	S20,
+	/** State 21 */
+	S21,
+	/** State 22 */
+	S22,
+	/** State 23 */
+	S23,
+	/** State 24 */
+	S24,
+	/** State 25 */
+	S25,
+	/** State 26 */
+	S26,
+	/** State 27 */
+	S27,
+	/** State 28 */
+	S28,
+	/** State 29 */
+	S29,
+	/** State 30 */
+	S30,
+	/** State 31 */
+	S31,
+	/** State 32 */
+	S32,
+	/** State 33 */
+	S33,
+	/** State 34 */
+	S34,
+	/** State 35 */
+	S35,
+	/** State 36 */
+	S36,
+	/** State 37 */
+	S37,
+	/** State 38 */
+	S38,
+	/** State 39 */
+	S39,
+	/** State 40 */
+	S40,
+	/** State 41 */
+	S41,
+	/** State 42 */
+	S42,
+	/** State 43 */
+	S43,
+	/** State 44 */
+	S44,
+	/** State 45 */
+	S45,
+	/** State 46 */
+	S46,
+	/** State 47 */
+	S47,
+	/** State 48 */
+	S48,
+	/** State 49 */
+	S49,
+	/** State 50 */
+	S50;
 }

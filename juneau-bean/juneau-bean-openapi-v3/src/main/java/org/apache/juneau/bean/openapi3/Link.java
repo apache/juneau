@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -102,7 +101,7 @@ public class Link extends OpenApiElement {
 	public Link addParameter(String mimeType, Object parameter) {
 		assertArgNotNull("mimeType", mimeType);
 		assertArgNotNull("parameter", parameter);
-		parameters = mapBuilder(parameters).sparse().add(mimeType, parameter).build();
+		parameters = CollectionUtils.mapb(String.class, Object.class).to(parameters).sparse().add(mimeType, parameter).build();
 		return this;
 	}
 
@@ -192,7 +191,7 @@ public class Link extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(description != null, "description")
 			.addIf(operationId != null, "operationId")
 			.addIf(operationRef != null, "operationRef")
@@ -210,7 +209,7 @@ public class Link extends OpenApiElement {
 			case "description" -> setDescription(Utils.s(value));
 			case "operationId" -> setOperationId(Utils.s(value));
 			case "operationRef" -> setOperationRef(Utils.s(value));
-			case "parameters" -> setParameters(mapBuilder(String.class, Object.class).sparse().addAny(value).build());
+			case "parameters" -> setParameters(toMap(value, String.class, Object.class).sparse().build());
 			case "requestBody" -> setRequestBody(value);
 			case "server" -> setServer(toType(value, Server.class));
 			default -> {

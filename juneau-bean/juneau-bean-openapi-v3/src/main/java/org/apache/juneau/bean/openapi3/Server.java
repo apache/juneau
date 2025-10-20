@@ -18,7 +18,6 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -107,7 +106,7 @@ public class Server extends OpenApiElement {
 	public Server addVariable(String key, ServerVariable value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		variables = mapBuilder(variables).sparse().add(key, value).build();
+		variables = CollectionUtils.mapb(String.class, ServerVariable.class).to(variables).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -158,7 +157,7 @@ public class Server extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(description != null, "description")
 			.addIf(url != null, "url")
 			.addIf(variables != null, "variables")
@@ -173,7 +172,7 @@ public class Server extends OpenApiElement {
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
 			case "url" -> setUrl(toURI(value));
-			case "variables" -> setVariables(mapBuilder(String.class, ServerVariable.class).sparse().addAny(value).build());
+			case "variables" -> setVariables(toMap(value, String.class, ServerVariable.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

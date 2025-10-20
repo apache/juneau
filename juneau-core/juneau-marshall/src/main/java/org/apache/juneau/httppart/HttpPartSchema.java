@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -38,7 +37,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 
@@ -3673,7 +3671,7 @@ public class HttpPartSchema {
 
 		// Validation.
 		List<String> errors = Utils.list();
-		ListBuilder<String> notAllowed = listBuilder(String.class);
+		ListBuilder<String> notAllowed = CollectionUtils.listb(String.class);
 		boolean invalidFormat = false;
 		// @formatter:off
 		switch (type) {

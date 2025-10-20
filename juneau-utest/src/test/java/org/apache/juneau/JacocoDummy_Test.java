@@ -31,7 +31,7 @@ class JacocoDummy_Test extends TestBase {
 	@Test void accessPrivateConstructorsOnStaticUtilityClasses() throws Exception {
 
 		Class<?>[] classes = new Class[] {
-			StringUtils.class, ArrayUtils.class, ClassUtils.class, CollectionBuilders.class
+			StringUtils.class, ArrayUtils.class, ClassUtils.class, CollectionUtils.class
 		};
 
 		for (Class<?> c : classes) {

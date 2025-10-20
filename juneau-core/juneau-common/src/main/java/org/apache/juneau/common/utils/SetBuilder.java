@@ -14,27 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.utils;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.parser.*;
-
 /**
- * Builder for sets.
+ * Builder for sets with fluent convenience methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
+ * <p>
+ * Supports adding single/multiple values, collections, arbitrary inputs (arrays/collections/convertible values),
+ * optional sorting/comparators, sparse output (return null when empty), and unmodifiable output.
  *
- * @param <E> Element type.
+ * @param <E> The element type
  */
 public class SetBuilder<E> {
 
@@ -43,7 +38,19 @@ public class SetBuilder<E> {
 	private Comparator<E> comparator;
 
 	private Class<E> elementType;
-	private Type[] elementTypeArgs;
+	private List<Converter> converters;
+
+	/**
+	 * Static creator.
+	 *
+	 * @param <E> The element type.
+	 * @param elementType The element type.
+	 * @param elementTypeArgs Optional element type arguments.
+	 * @return A new builder.
+	 */
+	public static <E> SetBuilder<E> create(Class<E> elementType) {
+		return new SetBuilder<>(elementType);
+	}
 
 	/**
 	 * Constructor.
@@ -51,18 +58,13 @@ public class SetBuilder<E> {
 	 * @param elementType The element type.
 	 * @param elementTypeArgs The element type generic arguments if there are any.
 	 */
-	public SetBuilder(Class<E> elementType, Type...elementTypeArgs) {
+	public SetBuilder(Class<E> elementType) {
 		this.elementType = elementType;
-		this.elementTypeArgs = elementTypeArgs;
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param addTo The set to add to.
-	 */
-	public SetBuilder(Set<E> addTo) {
-		this.set = addTo;
+	public SetBuilder<E> to(Set<E> set) {
+		this.set = set;
+		return this;
 	}
 
 	/**
@@ -127,28 +129,48 @@ public class SetBuilder<E> {
 	public SetBuilder<E> addAny(Object...values) {
 		if (elementType == null)
 			throw new IllegalStateException("Unknown element type. Cannot use this method.");
-		try {
-			if (values != null) {
-				for (Object o : values) {
-					if (o != null) {
-						if (o instanceof Collection) {
-							((Collection<?>)o).forEach(x -> addAny(x));
-						} else if (isArray(o)) {
-							for (int i = 0; i < Array.getLength(o); i++)
-								addAny(Array.get(o, i));
-						} else if (isJsonArray(o, false)) {
-							new JsonList(o.toString()).forEach(x -> addAny(x));
-						} else if (elementType.isInstance(o)) {
-							add(elementType.cast(o));
-						} else {
-							add(toType(o, elementType, elementTypeArgs));
+		if (values != null) {
+			for (Object o : values) {
+				if (o != null) {
+					if (o instanceof Collection) {
+						((Collection<?>)o).forEach(x -> addAny(x));
+					} else if (isArray(o)) {
+						for (int i = 0; i < Array.getLength(o); i++)
+							addAny(Array.get(o, i));
+					} else if (elementType.isInstance(o)) {
+						add(elementType.cast(o));
+					} else {
+						if (converters != null) {
+							var e = converters.stream().map(x -> x.convertTo(elementType, o)).filter(x -> x != null).findFirst().orElse(null);
+							if (e != null) {
+								add(e);
+							} else {
+								var l = converters.stream().map(x -> x.convertTo(List.class, o)).filter(x -> x != null).findFirst().orElse(null);
+								if (l != null)
+									addAny(l);
+								else
+									throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), elementType);
+							}
 						}
 					}
 				}
 			}
-		} catch (ParseException e) {
-			throw asRuntimeException(e);
 		}
+		return this;
+	}
+
+    /**
+     * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+     *
+     * @param values Converters to register. Ignored if {@code null}.
+     * @return This object.
+     */
+    public SetBuilder<E> converters(Converter...values) {
+    	if (values.length == 0)
+    		return this;
+		if (converters == null)
+			converters = new ArrayList<>();
+		converters.addAll(Arrays.asList(values));
 		return this;
 	}
 
@@ -180,7 +202,15 @@ public class SetBuilder<E> {
 	 *
 	 * @return A set conforming to the settings on this builder.
 	 */
-	public Set<E> build() {
+    /**
+     * Builds the set.
+     *
+     * <p>
+     * Applies sorting/unmodifiable/sparse options.
+     *
+     * @return The built set or {@code null} if {@link #sparse()} is set and the set is empty.
+     */
+    public Set<E> build() {
 		if (sparse) {
 			if (set != null && set.isEmpty())
 				set = null;

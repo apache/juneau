@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -230,7 +229,7 @@ public class Parameter extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(allowEmptyValue != null, "allowEmptyValue")
 			.addIf(allowReserved != null, "allowReserved")
 			.addIf(description != null, "description")
@@ -256,7 +255,7 @@ public class Parameter extends OpenApiElement {
 			case "description" -> setDescription(Utils.s(value));
 			case "deprecated" -> setDeprecated(toType(value, Boolean.class));
 			case "example" -> setExample(value);
-			case "examples" -> setExamples(mapBuilder(String.class, Example.class).sparse().addAny(value).build());
+			case "examples" -> setExamples(toMap(value, String.class, Example.class).sparse().build());
 			case "explode" -> setExplode(toType(value, Boolean.class));
 			case "in" -> setIn(Utils.s(value));
 			case "name" -> setName(Utils.s(value));

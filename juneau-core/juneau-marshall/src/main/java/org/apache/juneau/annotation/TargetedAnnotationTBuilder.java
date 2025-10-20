@@ -19,7 +19,6 @@ package org.apache.juneau.annotation;
 import java.lang.annotation.*;
 
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.

@@ -28,6 +28,7 @@
 			.append("listener", listener);
 - [ ] TODO-18 Look for places where we concatenate strings across multiple lines and determine if they can use Java multiline strings.
 - [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
+- [ ] TODO-30 Finish setting up SonarQube analysis in git workflow.
 
 ## Framework Improvements
 
@@ -46,3 +47,7 @@
 ## Notes
 
 This TODO list tracks specific issues that need to be addressed in the Juneau project.
+
+## Website/Docs
+
+- [ ] TODO-29 Add searching to website using Algolia DocSearch.

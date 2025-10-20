@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.staticfile;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.nio.file.*;
 import java.util.*;

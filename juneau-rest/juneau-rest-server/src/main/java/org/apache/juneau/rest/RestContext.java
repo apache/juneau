@@ -23,9 +23,9 @@ import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.list;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
 

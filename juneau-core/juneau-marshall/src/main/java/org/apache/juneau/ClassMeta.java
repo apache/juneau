@@ -20,7 +20,6 @@ import static java.util.Arrays.*;
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -866,7 +865,7 @@ public class ClassMeta<T> implements Type {
 			return Optional.empty();
 		}
 		for (A a : array)
-			if (test(filter, a))
+			if (PredicateUtils.test(filter, a))
 				return Optional.of(a);
 		return Optional.empty();
 	}
@@ -888,7 +887,7 @@ public class ClassMeta<T> implements Type {
 			return this;
 		}
 		for (A a : array)
-			consume(filter, action, a);
+			PredicateUtils.consumeIf(filter, action, a);
 		return this;
 	}
 
@@ -1788,7 +1787,7 @@ public class ClassMeta<T> implements Type {
 			return Optional.empty();
 		}
 		for (int i = array.length - 1; i >= 0; i--)
-			if (test(filter, array[i]))
+			if (PredicateUtils.test(filter, array[i]))
 				return Optional.of(array[i]);
 		return Optional.empty();
 	}

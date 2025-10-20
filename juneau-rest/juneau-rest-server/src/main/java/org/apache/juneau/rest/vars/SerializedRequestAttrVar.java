@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.vars;
 
-import static org.apache.juneau.common.utils.Utils.*;
-
 import java.io.*;
 
 import org.apache.juneau.common.utils.*;

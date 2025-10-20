@@ -18,8 +18,8 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
@@ -162,7 +162,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addConsumes(Collection<MediaType> values) {
-		consumes = setBuilder(consumes).sparse().addAll(values).build();
+		consumes = CollectionUtils.setb(MediaType.class).to(consumes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -179,7 +179,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addConsumes(MediaType...values) {
-		consumes = setBuilder(consumes).sparse().add(values).build();
+		consumes = CollectionUtils.setb(MediaType.class).to(consumes).sparse().add(values).build();
 		return this;
 	}
 
@@ -196,7 +196,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addDefinition(String name, JsonMap schema) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("schema", schema);
-		definitions = mapBuilder(definitions).sparse().add(name, schema).build();
+		definitions = CollectionUtils.mapb(String.class, JsonMap.class).to(definitions).sparse().add(name, schema).build();
 		return this;
 	}
 
@@ -213,7 +213,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addParameter(String name, ParameterInfo parameter) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("parameter", parameter);
-		parameters = mapBuilder(parameters).sparse().add(name, parameter).build();
+		parameters = CollectionUtils.mapb(String.class, ParameterInfo.class).to(parameters).sparse().add(name, parameter).build();
 		return this;
 	}
 
@@ -251,7 +251,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addProduces(Collection<MediaType> values) {
-		produces = setBuilder(produces).sparse().addAll(values).build();
+		produces = CollectionUtils.setb(MediaType.class).to(produces).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -268,7 +268,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addProduces(MediaType...values) {
-		produces = setBuilder(produces).sparse().add(values).build();
+		produces = CollectionUtils.setb(MediaType.class).to(produces).sparse().add(values).build();
 		return this;
 	}
 
@@ -285,7 +285,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addResponse(String name, ResponseInfo response) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("response", response);
-		responses = mapBuilder(responses).sparse().add(name, response).build();
+		responses = CollectionUtils.mapb(String.class, ResponseInfo.class).to(responses).sparse().add(name, response).build();
 		return this;
 	}
 
@@ -308,7 +308,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addSchemes(Collection<String> values) {
-		schemes = setBuilder(schemes).sparse().addAll(values).build();
+		schemes = CollectionUtils.setb(String.class).to(schemes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -331,7 +331,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addSchemes(String...values) {
-		schemes = setBuilder(schemes).sparse().add(values).build();
+		schemes = CollectionUtils.setb(String.class).to(schemes).sparse().add(values).build();
 		return this;
 	}
 
@@ -347,7 +347,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addSecurity(Collection<Map<String,List<String>>> values) {
-		security = listBuilder(security).sparse().addAll(values).build();
+		security = CollectionUtils.listb(Map.class).to((List)security).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -366,7 +366,7 @@ public class Swagger extends SwaggerElement {
 		assertArgNotNull("scheme", scheme);
 		Map<String,List<String>> m = CollectionUtils.map();
 		m.put(scheme, alist(alternatives));
-		security = listBuilder(security).sparse().addAll(Collections.singleton(m)).build();
+		security = CollectionUtils.listb(Map.class).to((List)security).sparse().addAll(Collections.singleton(m)).build();
 		return this;
 	}
 
@@ -383,7 +383,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addSecurityDefinition(String name, SecurityScheme securityScheme) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("securityScheme", securityScheme);
-		securityDefinitions = mapBuilder(securityDefinitions).sparse().add(name, securityScheme).build();
+		securityDefinitions = CollectionUtils.mapb(String.class, SecurityScheme.class).to(securityDefinitions).sparse().add(name, securityScheme).build();
 		return this;
 	}
 
@@ -403,7 +403,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addTags(Collection<Tag> values) {
-		tags = setBuilder(tags).sparse().addAll(values).build();
+		tags = CollectionUtils.setb(Tag.class).to(tags).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -423,7 +423,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addTags(Tag...values) {
-		tags = setBuilder(tags).sparse().add(values).build();
+		tags = CollectionUtils.setb(Tag.class).to(tags).sparse().add(values).build();
 		return this;
 	}
 
@@ -707,7 +707,7 @@ public class Swagger extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(basePath != null, "basePath")
 			.addIf(consumes != null, "consumes")
 			.addIf(definitions != null, "definitions")
@@ -734,26 +734,28 @@ public class Swagger extends SwaggerElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "basePath" -> setBasePath(Utils.s(value));
-			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "definitions" -> setDefinitions(mapBuilder(String.class, JsonMap.class).sparse().addAny(value).build());
+			case "consumes" -> setConsumes(toList(value, MediaType.class).sparse().build());
+			case "definitions" -> setDefinitions(toMap(value, String.class, JsonMap.class).sparse().build());
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			case "host" -> setHost(Utils.s(value));
 			case "info" -> setInfo(toType(value, Info.class));
-			case "parameters" -> setParameters(mapBuilder(String.class, ParameterInfo.class).sparse().addAny(value).build());
-			case "paths" -> setPaths(mapBuilder(String.class, OperationMap.class).sparse().addAny(value).build());
-			case "produces" -> setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "responses" -> setResponses(mapBuilder(String.class, ResponseInfo.class).sparse().addAny(value).build());
-			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
-			case "security" -> setSecurity((List)listBuilder(Map.class, String.class, List.class, String.class).sparse().addAny(value).build());
-			case "securityDefinitions" -> setSecurityDefinitions(mapBuilder(String.class, SecurityScheme.class).sparse().addAny(value).build());
+			case "parameters" -> setParameters(toMap(value, String.class, ParameterInfo.class).sparse().build());
+			case "paths" -> setPaths(toMap(value, String.class, OperationMap.class).sparse().build());
+			case "produces" -> setProduces(toList(value, MediaType.class).sparse().build());
+			case "responses" -> setResponses(toMap(value, String.class, ResponseInfo.class).sparse().build());
+			case "schemes" -> setSchemes(toList(value, String.class).sparse().build());
+			case "security" -> setSecurity((List)toList(value, MapOfStringLists.class).sparse().build());
+			case "securityDefinitions" -> setSecurityDefinitions(toMap(value, String.class, SecurityScheme.class).sparse().build());
 			case "swagger" -> setSwagger(Utils.s(value));
-			case "tags" -> setTags(listBuilder(Tag.class).sparse().addAny(value).build());
+			case "tags" -> setTags(toList(value, Tag.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
 			}
 		};
 	}
+
+	private static interface MapOfStringLists extends Map<String,List<String>> {}
 
 	/**
 	 * Bean property setter:  <property>basePath</property>.
@@ -802,7 +804,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setConsumes(MediaType...value) {
-		setConsumes(setBuilder(MediaType.class).sparse().add(value).build());
+		setConsumes(CollectionUtils.setb(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -904,7 +906,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setPaths(Map<String,OperationMap> value) {
-		paths = mapBuilder(String.class, OperationMap.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
+		paths = CollectionUtils.mapb(String.class, OperationMap.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
 		return this;
 	}
 
@@ -936,7 +938,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setProduces(MediaType...value) {
-		setProduces(setBuilder(MediaType.class).sparse().add(value).build());
+		setProduces(CollectionUtils.setb(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -991,7 +993,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSchemes(String...value) {
-		setSchemes(setBuilder(String.class).sparse().addJson(value).build());
+		setSchemes(CollectionUtils.setb(String.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -1080,7 +1082,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setTags(Tag...value) {
-		setTags(setBuilder(Tag.class).sparse().add(value).build());
+		setTags(CollectionUtils.setb(Tag.class).sparse().add(value).build());
 		return this;
 	}
 

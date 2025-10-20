@@ -16,19 +16,18 @@
  */
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.common.StateEnum.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
-import static org.apache.juneau.common.StateEnum.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.uon.*;

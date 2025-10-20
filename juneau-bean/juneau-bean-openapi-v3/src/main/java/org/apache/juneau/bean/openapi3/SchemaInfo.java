@@ -17,8 +17,8 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
@@ -189,7 +189,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addAllOf(Object...values) {
-		allOf = listBuilder(allOf).elementType(Object.class).sparse().addAny(values).build();
+		allOf = CollectionUtils.listb(Object.class).to(allOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -217,7 +217,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addAnyOf(Object...values) {
-		anyOf = listBuilder(anyOf).elementType(Object.class).sparse().addAny(values).build();
+		anyOf = CollectionUtils.listb(Object.class).to(anyOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -245,7 +245,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addEnum(Object...values) {
-		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
+		_enum = CollectionUtils.listb(Object.class).to(_enum).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -273,7 +273,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addOneOf(Object...values) {
-		oneOf = listBuilder(oneOf).elementType(Object.class).sparse().addAny(values).build();
+		oneOf = CollectionUtils.listb(Object.class).to(oneOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -299,7 +299,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addRequired(String...values) {
-		required = listBuilder(required).sparse().add(values).build();
+		required = CollectionUtils.listb(String.class).to(required).sparse().add(values).build();
 		return this;
 	}
 
@@ -618,7 +618,7 @@ public class SchemaInfo extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(ref != null, "$ref")
 			.addIf(additionalProperties != null, "additionalProperties")
 			.addIf(allOf != null, "allOf")
@@ -706,13 +706,13 @@ public class SchemaInfo extends OpenApiElement {
 		return switch (property) {  // NOSONAR
 			case "$ref" -> setRef(value);
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
-			case "allOf" -> setAllOf(listBuilder(Object.class).sparse().addAny(value).build());
-			case "anyOf" -> setAnyOf(listBuilder(Object.class).sparse().addAny(value).build());
+			case "allOf" -> setAllOf(toList(value, Object.class).sparse().build());
+			case "anyOf" -> setAnyOf(toList(value, Object.class).sparse().build());
 			case "default" -> setDefault(value);
 			case "deprecated" -> setDeprecated(toBoolean(value));
 			case "description" -> setDescription(Utils.s(value));
 			case "discriminator" -> setDiscriminator(toType(value, Discriminator.class));
-			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
+			case "enum" -> setEnum(toList(value, Object.class).sparse().build());
 			case "example" -> setExample(value);
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
@@ -730,11 +730,11 @@ public class SchemaInfo extends OpenApiElement {
 			case "multipleOf" -> setMultipleOf(toNumber(value));
 			case "not" -> setNot(toType(value, SchemaInfo.class));
 			case "nullable" -> setNullable(toBoolean(value));
-			case "oneOf" -> setOneOf(listBuilder(Object.class).sparse().addAny(value).build());
+			case "oneOf" -> setOneOf(toList(value, Object.class).sparse().build());
 			case "pattern" -> setPattern(Utils.s(value));
-			case "properties" -> setProperties(mapBuilder(String.class, SchemaInfo.class).sparse().addAny(value).build());
+			case "properties" -> setProperties(toMap(value, String.class, SchemaInfo.class).sparse().build());
 			case "readOnly" -> setReadOnly(toBoolean(value));
-			case "required" -> setRequired(listBuilder(String.class).sparse().addAny(value).build());
+			case "required" -> setRequired(toList(value, String.class).sparse().build());
 			case "title" -> setTitle(Utils.s(value));
 			case "type" -> setType(Utils.s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));

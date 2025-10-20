@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -133,7 +132,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items addEnum(Object...values) {
-		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
+		_enum = CollectionUtils.listb(Object.class).to(_enum).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -324,7 +323,7 @@ public class Items extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(ref != null, "$ref")
 			.addIf(collectionFormat != null, "collectionFormat")
 			.addIf(_default != null, "default")
@@ -497,7 +496,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Object...values) {  // NOSONAR - Intentional naming.
-		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
+		_enum = CollectionUtils.listb(Object.class).sparse().addAny(_enum, values).build();
 		return this;
 	}
 

@@ -14,25 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.utils;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
-
-import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
-import org.apache.juneau.parser.*;
 
 /**
- * Builder for maps.
+ * Builder for maps with fluent convenience methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
+ * <p>
+ * Supports adding entries and other maps, arbitrary inputs (maps/convertible values), optional sorting by key,
+ * sparse output (return null when empty), and unmodifiable output.
  *
  * @param <K> Key type.
  * @param <V> Value type.
@@ -45,28 +37,35 @@ public class MapBuilder<K,V> {
 
 	private Class<K> keyType;
 	private Class<V> valueType;
-	private Type[] valueTypeArgs;
+	private List<Converter> converters;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param keyType The key type.
-	 * @param valueType The value type.
-	 * @param valueTypeArgs The value type generic arguments if there are any.
-	 */
-	public MapBuilder(Class<K> keyType, Class<V> valueType, Type...valueTypeArgs) {
-		this.keyType = keyType;
-		this.valueType = valueType;
-		this.valueTypeArgs = valueTypeArgs;
+    /**
+     * Static creator.
+     *
+     * @param <K> Key type.
+     * @param <V> Value type.
+     * @param keyType The key type.
+     * @param valueType The value type.
+     * @return A new builder.
+     */
+	public static <K,V> MapBuilder<K,V> create(Class<K> keyType, Class<V> valueType) {
+		return new MapBuilder<>(keyType, valueType);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param addTo The map to add to.
-	 */
-	public MapBuilder(Map<K,V> addTo) {
-		this.map = addTo;
+	public MapBuilder<K,V> to(Map<K,V> map) {
+		this.map = map;
+		return this;
+	}
+
+    /**
+     * Constructor.
+     *
+     * @param keyType The key type.
+     * @param valueType The value type.
+     */
+	public MapBuilder(Class<K> keyType, Class<V> valueType) {
+		this.keyType = keyType;
+		this.valueType = valueType;
 	}
 
 	/**
@@ -119,32 +118,20 @@ public class MapBuilder<K,V> {
 	public MapBuilder<K,V> addAny(Object...values) {
 		if (keyType == null || valueType == null)
 			throw new IllegalStateException("Unknown key and value types. Cannot use this method.");
-		try {
-			for (Object o : values) {
-				if (o != null) {
-					if (o instanceof Map) {
-						((Map<Object,Object>)o).forEach((k, v) -> add(toType(k, keyType), toType(v, valueType, valueTypeArgs)));
-					} else if (isJsonObject(o, false)) {
-						JsonMap.ofJson(o.toString()).forEach((k, v) -> add(toType(k, keyType), toType(v, valueType, valueTypeArgs)));
-					} else {
-						throw new BasicRuntimeException("Invalid object type {0} passed to addAny()", className(o));
-					}
+		for (Object o : values) {
+			if (o != null) {
+				if (o instanceof Map) {
+					((Map<Object,Object>)o).forEach((k, v) -> add(toType(keyType, k), toType(valueType, v)));
+				} else {
+					var m = converters.stream().map(x -> x.convertTo(Map.class, o)).filter(x -> x != null).findFirst().orElse(null);
+					if (m != null)
+						addAny(m);
+					else
+						throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), "Map");
 				}
 			}
-		} catch (ParseException e) {
-			throw asRuntimeException(e);
 		}
 		return this;
-	}
-
-	/**
-	 * Adds entries to this list via JSON object strings.
-	 *
-	 * @param values The JSON object strings to parse and add to this list.
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> addJson(String...values) {
-		return addAny((Object[])values);
 	}
 
 	/**
@@ -162,12 +149,46 @@ public class MapBuilder<K,V> {
 		return this;
 	}
 
+	private <T> T toType(Class<T> c, Object o) {
+		if (c.isInstance(o))
+			return c.cast(o);
+		if (converters != null) {
+			var e = converters.stream().map(x -> x.convertTo(c, o)).filter(x -> x != null).findFirst().orElse(null);
+			if (e != null)
+				return e;
+		}
+		throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), c);
+	}
+
 	/**
+     * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+     *
+     * @param values Converters to register. Ignored if {@code null}.
+     * @return This object.
+     */
+    public MapBuilder<K,V> converters(Converter...values) {
+    	if (values.length == 0)
+    		return this;
+		if (converters == null)
+			converters = new ArrayList<>();
+		converters.addAll(Arrays.asList(values));
+		return this;
+	}
+
+ 	/**
 	 * Builds the map.
 	 *
 	 * @return A map conforming to the settings on this builder.
 	 */
-	public Map<K,V> build() {
+    /**
+     * Builds the map.
+     *
+     * <p>
+     * Applies sorting/unmodifiable/sparse options.
+     *
+     * @return The built map or {@code null} if {@link #sparse()} is set and the map is empty.
+     */
+    public Map<K,V> build() {
 		if (sparse) {
 			if (map != null && map.isEmpty())
 				map = null;

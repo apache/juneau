@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ConsumerUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * Builder for arrays.
@@ -69,7 +69,7 @@ public class ArrayBuilder<E> {
 	 * @throws ArrayIndexOutOfBoundsException if size is exceeded.
 	 */
 	public ArrayBuilder<E> add(E t) {
-		if (test(filter, t)) {
+		if (PredicateUtils.test(filter, t)) {
 			if (list == null)
 				list = size < 0 ? new ArrayList<>() : new ArrayList<>(size);
 			list.add(t);

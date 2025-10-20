@@ -17,8 +17,8 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
@@ -132,7 +132,7 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items addEnum(Object...value) {
-		setEnum(setBuilder(_enum).sparse().add(value).build());
+		setEnum(CollectionUtils.setb(Object.class).to(_enum).sparse().add(value).build());
 		return this;
 	}
 
@@ -323,7 +323,7 @@ public class Items extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(collectionFormat != null, "collectionFormat")
 			.addIf(_default != null, "default")
 			.addIf(_enum != null, "enum")
@@ -383,7 +383,7 @@ public class Items extends SwaggerElement {
 		return switch (property) {
 			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
 			case "default" -> setDefault(value);
-			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
+			case "enum" -> setEnum(toList(value, Object.class).sparse().build());
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
 			case "format" -> setFormat(Utils.s(value));

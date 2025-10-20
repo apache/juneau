@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -112,7 +111,7 @@ public class Encoding extends OpenApiElement {
 	public Encoding addHeader(String key, HeaderInfo value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		headers = mapBuilder(headers).sparse().add(key, value).build();
+		headers = CollectionUtils.mapb(String.class, HeaderInfo.class).to(headers).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -184,7 +183,7 @@ public class Encoding extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(allowReserved != null, "allowReserved")
 			.addIf(contentType != null, "contentType")
 			.addIf(explode != null, "explode")
@@ -201,7 +200,7 @@ public class Encoding extends OpenApiElement {
 			case "allowReserved" -> setAllowReserved(toBoolean(value));
 			case "contentType" -> setContentType(Utils.s(value));
 			case "explode" -> setExplode(toBoolean(value));
-			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
+			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
 			case "style" -> setStyle(Utils.s(value));
 			default -> {
 				super.set(property, value);

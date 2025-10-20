@@ -17,7 +17,6 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.jena.Constants.*;
 
 import java.io.*;
@@ -193,8 +192,19 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.
 	 */
-	static final Map<String,String> LANG_PROP_MAP = mapBuilder(String.class, String.class).add("RDF/XML", "rdfXml.").add("RDF/XML-ABBREV", "rdfXml.").add("N3", "n3.").add("N3-PP", "n3.")
-		.add("N3-PLAIN", "n3.").add("N3-TRIPLES", "n3.").add("TURTLE", "n3.").add("N-TRIPLE", "ntriple.").build();
+	// @formatter:off
+	static final Map<String,String> LANG_PROP_MAP = CollectionUtils.mapb(String.class, String.class)
+		.unmodifiable()
+		.add("RDF/XML", "rdfXml.")
+		.add("RDF/XML-ABBREV", "rdfXml.")
+		.add("N3", "n3.")
+		.add("N3-PP", "n3.")
+		.add("N3-PLAIN", "n3.")
+		.add("N3-TRIPLES", "n3.")
+		.add("TURTLE", "n3.")
+		.add("N-TRIPLE", "ntriple.")
+		.build();
+	// @formatter:on
 
 	/**
 	 * Creates a new builder for this object.

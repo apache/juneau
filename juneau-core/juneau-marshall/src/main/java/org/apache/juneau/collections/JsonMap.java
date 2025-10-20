@@ -17,7 +17,6 @@
 package org.apache.juneau.collections;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -26,7 +25,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.objecttools.*;
@@ -441,7 +439,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	@SafeVarargs
 	public final <T> JsonMap appendFirst(Predicate<T> test, String key, T...values) {
 		for (T v : values)
-			if (test(test, v))
+			if (PredicateUtils.test(test, v))
 				return append(key, v);
 		return this;
 	}
@@ -470,7 +468,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return This object.
 	 */
 	public <T> JsonMap appendIf(Predicate<T> test, String key, T value) {
-		return appendIf(test(test, value), key, value);
+		return appendIf(PredicateUtils.test(test, value), key, value);
 	}
 
 	/**

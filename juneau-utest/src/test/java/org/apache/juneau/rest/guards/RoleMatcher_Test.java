@@ -24,7 +24,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.guard.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;

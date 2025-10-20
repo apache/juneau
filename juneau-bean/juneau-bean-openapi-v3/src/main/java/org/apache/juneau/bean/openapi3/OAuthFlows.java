@@ -17,11 +17,11 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -158,7 +158,7 @@ public class OAuthFlows extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(authorizationCode != null, "authorizationCode")
 			.addIf(clientCredentials != null, "clientCredentials")
 			.addIf(implicit != null, "implicit")

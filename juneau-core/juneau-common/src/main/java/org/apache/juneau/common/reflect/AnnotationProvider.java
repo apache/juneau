@@ -14,15 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
-
-import static org.apache.juneau.internal.ConsumerUtils.*;
+package org.apache.juneau.common.reflect;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
 
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Interface that provides the ability to look up annotations on classes/methods/constructors/fields.
@@ -44,18 +42,18 @@ public interface AnnotationProvider {
 	AnnotationProvider DEFAULT = new AnnotationProvider() {
 
 		// @formatter:off
-		private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Class::getAnnotationsByType);
-		private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Class::getDeclaredAnnotationsByType);
-		private final TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Method::getAnnotationsByType);
-		private final TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Field::getAnnotationsByType);
-		private final TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Constructor::getAnnotationsByType);
+		private final TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Class::getAnnotationsByType);
+		private final TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Class::getDeclaredAnnotationsByType);
+		private final TwoKeyConcurrentHashMap<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Method::getAnnotationsByType);
+		private final TwoKeyConcurrentHashMap<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Field::getAnnotationsByType);
+		private final TwoKeyConcurrentHashMap<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Constructor::getAnnotationsByType);
 		// @formatter:on
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (type != null && onClass != null)
 				for (A a : annotations(type, onClass))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						return a;
 			return null;
 		}
@@ -64,7 +62,7 @@ public interface AnnotationProvider {
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 			if (type != null && onConstructor != null)
 				for (A a : annotations(type, onConstructor))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						return a;
 			return null;
 		}
@@ -73,7 +71,7 @@ public interface AnnotationProvider {
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 			if (type != null && onField != null)
 				for (A a : annotations(type, onField))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						return a;
 			return null;
 		}
@@ -82,7 +80,7 @@ public interface AnnotationProvider {
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 			if (type != null && onMethod != null)
 				for (A a : annotations(type, onMethod))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						return a;
 			return null;
 		}
@@ -91,7 +89,7 @@ public interface AnnotationProvider {
 		public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (type != null && onClass != null)
 				for (A a : declaredAnnotations(type, onClass))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						return a;
 			return null;
 		}
@@ -100,35 +98,35 @@ public interface AnnotationProvider {
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onClass != null)
 				for (A a : annotations(type, onClass))
-					consume(filter, action, a);
+					PredicateUtils.consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onConstructor != null)
 				for (A a : annotations(type, onConstructor))
-					consume(filter, action, a);
+					PredicateUtils.consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onField != null)
 				for (A a : annotations(type, onField))
-					consume(filter, action, a);
+					PredicateUtils.consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onMethod != null)
 				for (A a : annotations(type, onMethod))
-					consume(filter, action, a);
+					PredicateUtils.consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onClass != null)
 				for (A a : declaredAnnotations(type, onClass))
-					consume(filter, action, a);
+					PredicateUtils.consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
@@ -136,7 +134,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (type != null && onClass != null)
 				for (A a : annotations(type, onClass))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						x = a;
 			return x;
 		}
@@ -146,7 +144,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (type != null && onConstructor != null)
 				for (A a : annotations(type, onConstructor))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						x = a;
 			return x;
 		}
@@ -156,7 +154,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (type != null && onField != null)
 				for (A a : annotations(type, onField))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						x = a;
 			return x;
 		}
@@ -166,7 +164,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (type != null && onMethod != null)
 				for (A a : annotations(type, onMethod))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						x = a;
 			return x;
 		}
@@ -176,7 +174,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (type != null && onClass != null)
 				for (A a : declaredAnnotations(type, onClass))
-					if (test(filter, a))
+					if (PredicateUtils.test(filter, a))
 						x = a;
 			return x;
 		}

@@ -17,7 +17,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.assertions.AssertionPredicates.contains;
+import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.AssertionPredicates.ne;
 import static org.apache.juneau.assertions.Assertions.*;
 import java.time.*;

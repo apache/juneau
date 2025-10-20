@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -26,6 +25,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -107,7 +107,8 @@ public class ParamInfo {
 	 */
 	public <A extends Annotation> ParamInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		for (Annotation a : eInfo._getParameterAnnotations(index))
-			consume(type, filter, action, a);
+			if (type.isInstance(a))
+				PredicateUtils.consumeIf(filter, action, type.cast(a));
 		return this;
 	}
 
@@ -159,7 +160,7 @@ public class ParamInfo {
 			if (o != null)
 				return o;
 			for (Annotation a2 : eInfo._getParameterAnnotations(index))
-				if (test(type, filter, a2))
+				if (type.isInstance(a2) && PredicateUtils.test(filter, type.cast(a2)))
 					return (A)a2;
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
@@ -286,7 +287,7 @@ public class ParamInfo {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<ParamInfo> test) {
-		return test(test, this);
+		return PredicateUtils.test(test, this);
 	}
 
 	@Override
@@ -322,7 +323,8 @@ public class ParamInfo {
 			Annotation[] annotations = eInfo._getParameterAnnotations(index);
 			ci.forEachAnnotation(ap, a, filter, action);
 			for (Annotation a2 : annotations)
-				consume(a, filter, action, a2);
+				if (a.isInstance(a2))
+					PredicateUtils.consumeIf(filter, action, a.cast(a2));
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);

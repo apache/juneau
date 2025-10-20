@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.soap;
 
-import static org.apache.juneau.internal.CollectionBuilders.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;

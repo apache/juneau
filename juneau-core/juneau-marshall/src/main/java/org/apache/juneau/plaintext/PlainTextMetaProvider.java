@@ -17,6 +17,7 @@
 package org.apache.juneau.plaintext;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Interface for providing access to {@link PlainTextClassMeta} and {@link PlainTextBeanPropertyMeta} objects.

@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.CollectionBuilders.*;
-
 import java.io.*;
 import java.util.*;
 

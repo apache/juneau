@@ -17,8 +17,8 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
@@ -119,7 +119,7 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable addEnum(Object...values) {
-		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
+		_enum = CollectionUtils.listb(Object.class).to(_enum).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -188,7 +188,7 @@ public class ServerVariable extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(_default != null,"default" )
 			.addIf(description != null, "description")
 			.addIf(_enum != null, "enum")
@@ -203,7 +203,7 @@ public class ServerVariable extends OpenApiElement {
 		return switch (property) {
 			case "default" -> setDefault(Utils.s(value));
 			case "description" -> setDescription(Utils.s(value));
-			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
+			case "enum" -> setEnum(toList(value, Object.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

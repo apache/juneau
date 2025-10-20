@@ -18,10 +18,10 @@ package org.apache.juneau.httppart;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import jakarta.validation.constraints.*;
-
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+
+import jakarta.validation.constraints.*;
 
 /**
  * Tests for Jakarta Bean Validation integration with HttpPartSchema.

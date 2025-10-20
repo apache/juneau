@@ -50,6 +50,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
@@ -1223,7 +1224,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * @return This object.
 		 */
 		public Builder pathVars(String...pairs) {
-			return pathVars(CollectionBuilders.mapBuilder(String.class, String.class).addPairs((Object[])pairs).build());
+			return pathVars(CollectionUtils.mapb(String.class, String.class).addPairs((Object[])pairs).build());
 		}
 
 		@Override /* Overridden from Builder */

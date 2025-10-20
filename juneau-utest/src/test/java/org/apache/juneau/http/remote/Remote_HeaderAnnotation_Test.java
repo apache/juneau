@@ -27,9 +27,9 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -716,9 +716,9 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 	}
 
 	public static class K2a {
-		@Header public Map<String,Object> getA() { return CollectionBuilders.mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
+		@Header public Map<String,Object> getA() { return CollectionUtils.mapb(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
 		@Header("*") public Map<String,Object> getB() { return map("b1","true","b2","123","b3","null"); }
-		@Header(name="*") @Schema(aev=true) public Map<String,Object> getC() { return CollectionBuilders.mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
+		@Header(name="*") @Schema(aev=true) public Map<String,Object> getC() { return CollectionUtils.mapb(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
 		@Header("*") public Map<String,Object> getD() { return null; }
 	}
 

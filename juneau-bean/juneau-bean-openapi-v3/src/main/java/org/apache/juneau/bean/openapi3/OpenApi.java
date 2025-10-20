@@ -18,8 +18,8 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
@@ -142,7 +142,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addSecurity(Collection<SecurityRequirement> values) {
-		security = listBuilder(security).sparse().addAll(values).build();
+		security = CollectionUtils.listb(SecurityRequirement.class).sparse().addAny(security, values).build();
 		return this;
 	}
 
@@ -158,7 +158,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addSecurity(SecurityRequirement...values) {
-		security = listBuilder(security).sparse().add(values).build();
+		security = CollectionUtils.listb(SecurityRequirement.class).sparse().addAll(security).addAny((Object)values).build();
 		return this;
 	}
 
@@ -174,7 +174,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addServers(Collection<Server> values) {
-		servers = listBuilder(servers).sparse().addAll(values).build();
+		servers = CollectionUtils.listb(Server.class).to(servers).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -190,7 +190,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addServers(Server...values) {
-		servers = listBuilder(servers).sparse().add(values).build();
+		servers = CollectionUtils.listb(Server.class).to(servers).sparse().add(values).build();
 		return this;
 	}
 
@@ -206,7 +206,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addTags(Collection<Tag> values) {
-		tags = listBuilder(tags).sparse().addAll(values).build();
+		tags = CollectionUtils.listb(Tag.class).to(tags).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -222,7 +222,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addTags(Tag...values) {
-		tags = listBuilder(tags).sparse().add(values).build();
+		tags = CollectionUtils.listb(Tag.class).to(tags).sparse().add(values).build();
 		return this;
 	}
 
@@ -328,7 +328,7 @@ public class OpenApi extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(components != null, "components")
 			.addIf(externalDocs != null, "externalDocs")
 			.addIf(info != null, "info")
@@ -349,10 +349,10 @@ public class OpenApi extends OpenApiElement {
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			case "info" -> setInfo(toType(value, Info.class));
 			case "openapi" -> setOpenapi(Utils.s(value));
-			case "paths" -> setPaths(mapBuilder(String.class, PathItem.class).sparse().addAny(value).build());
-			case "security" -> setSecurity(listBuilder(SecurityRequirement.class).sparse().addAny(value).build());
-			case "servers" -> setServers(listBuilder(Server.class).sparse().addAny(value).build());
-			case "tags" -> setTags(listBuilder(Tag.class).sparse().addAny(value).build());
+			case "paths" -> setPaths(toMap(value, String.class, PathItem.class).sparse().build());
+			case "security" -> setSecurity(toList(value, SecurityRequirement.class).sparse().build());
+			case "servers" -> setServers(toList(value, Server.class).sparse().build());
+			case "tags" -> setTags(toList(value, Tag.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -411,7 +411,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setPaths(Map<String,PathItem> value) {
-		this.paths = mapBuilder(String.class, PathItem.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
+		this.paths = toMap(value, String.class, PathItem.class).sparse().sorted(PATH_COMPARATOR).build();
 		return this;
 	}
 
@@ -460,7 +460,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setTags(Tag...value) {
-		setTags(listBuilder(Tag.class).sparse().add(value).build());
+		setTags(toList(value, Tag.class).sparse().build());
 		return this;
 	}
 

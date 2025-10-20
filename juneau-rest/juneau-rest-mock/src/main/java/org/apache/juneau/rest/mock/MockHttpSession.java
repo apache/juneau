@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.internal.CollectionBuilders.*;
-
 import java.util.*;
 
 import org.apache.juneau.common.utils.*;

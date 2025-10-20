@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Utility class for efficiently converting objects between types.
@@ -214,6 +215,17 @@ public class ConverterUtils {
 		return session.convertToType(value, type);
 	}
 
+	public static <T> ListBuilder<T> toList(Object value, Class<T> type) {
+		return CollectionUtils.listb(type, GenericConverter.INSTANCE).addAny(value);
+	}
+
+	public static <K,V> MapBuilder<K,V> toMap(Object value, Class<K> keyType, Class<V> valueType) {
+		return CollectionUtils.mapb(keyType, valueType, GenericConverter.INSTANCE).addAny(value);
+	}
+
+	public static <T> SetBuilder<T> toSet(Object value, Class<T> type) {
+		return CollectionUtils.setb(type, GenericConverter.INSTANCE).addAny(value);
+	}
 	/**
 	 * Converts the specified object to the specified type.
 	 *

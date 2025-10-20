@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -111,7 +110,7 @@ public class OAuthFlow extends OpenApiElement {
 	public OAuthFlow addScope(String name, String description) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("description", description);
-		scopes = mapBuilder(scopes).sparse().add(name, description).build();
+		scopes = CollectionUtils.mapb(String.class, String.class).to(scopes).sparse().add(name, description).build();
 		return this;
 	}
 
@@ -178,7 +177,7 @@ public class OAuthFlow extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(authorizationUrl != null, "authorizationUrl")
 			.addIf(refreshUrl != null, "refreshUrl")
 			.addIf(scopes != null, "scopes")
@@ -193,7 +192,7 @@ public class OAuthFlow extends OpenApiElement {
 		return switch (property) {
 			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
 			case "refreshUrl" -> setRefreshUrl(Utils.s(value));
-			case "scopes" -> setScopes(mapBuilder(String.class, String.class).sparse().addAny(value).build());
+			case "scopes" -> setScopes(toMap(value, String.class, String.class).sparse().build());
 			case "tokenUrl" -> setTokenUrl(Utils.s(value));
 			default -> {
 				super.set(property, value);

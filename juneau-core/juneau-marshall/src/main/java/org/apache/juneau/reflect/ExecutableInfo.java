@@ -18,7 +18,6 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -26,6 +25,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Contains common methods between {@link ConstructorInfo} and {@link MethodInfo}.
@@ -46,6 +46,23 @@ public abstract class ExecutableInfo {
 	private volatile Parameter[] rawParameters;
 	private volatile Annotation[][] parameterAnnotations;
 	private volatile Annotation[] declaredAnnotations;
+
+	/**
+	 * Returns a predicate that evaluates to true only when the value is an instance of the given type and the provided
+	 * predicate also returns true for the cast value.
+	 *
+	 * @param <T> The target type to test and cast to.
+	 * @param type The target class.
+	 * @param predicate The predicate to apply to the cast value. Can be null (treated as always-true after type check).
+	 * @return A predicate over Object that performs an instanceof check AND the provided predicate.
+	 */
+	public static <T> java.util.function.Predicate<Object> andType(Class<T> type, java.util.function.Predicate<? super T> predicate) {
+		java.util.function.Predicate<Object> p = type::isInstance;
+		if (predicate != null) {
+			p = p.and(o -> predicate.test(type.cast(o)));
+		}
+		return p;
+	}
 
 	/**
 	 * Constructor.
@@ -78,7 +95,7 @@ public abstract class ExecutableInfo {
 	 */
 	public ExecutableInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
 		for (ParamInfo pi : _getParams())
-			if (test(filter, pi))
+			if (PredicateUtils.test(filter, pi))
 				action.accept(pi);
 		return this;
 	}
@@ -96,7 +113,7 @@ public abstract class ExecutableInfo {
 	public final <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
 		for (Annotation a : _getParameterAnnotations(index))
 			if (type.isInstance(a))
-				consume(predicate, consumer, type.cast(a));
+				PredicateUtils.consumeIf(predicate, consumer, type.cast(a));
 		return this;
 	}
 

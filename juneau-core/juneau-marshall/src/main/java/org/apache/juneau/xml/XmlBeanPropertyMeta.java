@@ -19,6 +19,7 @@ package org.apache.juneau.xml;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**

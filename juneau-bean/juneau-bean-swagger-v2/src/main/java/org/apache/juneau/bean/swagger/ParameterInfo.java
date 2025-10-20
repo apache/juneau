@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -187,7 +186,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo addEnum(Object...value) {
-		_enum = setBuilder(_enum).sparse().add(value).build();
+		_enum = CollectionUtils.setb(Object.class).to(_enum).sparse().add(value).build();
 		return this;
 	}
 
@@ -533,7 +532,7 @@ public class ParameterInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(allowEmptyValue != null, "allowEmptyValue")
 			.addIf(collectionFormat != null, "collectionFormat")
 			.addIf(_default != null, "default")
@@ -727,7 +726,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setEnum(Object...value) {
-		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
+		setEnum(CollectionUtils.setb(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 

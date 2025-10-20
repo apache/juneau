@@ -17,8 +17,6 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
-import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -27,6 +25,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
@@ -89,7 +88,8 @@ public class ClassInfo {
 	@SuppressWarnings("rawtypes")
 	// @formatter:off
 	private static final Map<Class,Object> primitiveDefaultMap =
-		mapBuilder(Class.class,Object.class).unmodifiable()
+		CollectionUtils.mapb(Class.class,Object.class)
+			.unmodifiable()
 			.add(Boolean.TYPE, false)
 			.add(Character.TYPE, (char)0)
 			.add(Short.TYPE, (short)0)
@@ -393,7 +393,7 @@ public class ClassInfo {
 			annotationProvider = AnnotationProvider.DEFAULT;
 		A x = null;
 		x = getPackageAnnotation(type);
-		if (x != null && test(filter, x))
+		if (x != null && PredicateUtils.test(filter, x))
 			return x;
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length - 1; i >= 0; i--) {
@@ -443,7 +443,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachAllField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
 		for (FieldInfo fi : _getAllFields())
-			consume(filter, action, fi);
+			PredicateUtils.consumeIf(filter, action, fi);
 		return this;
 	}
 
@@ -456,7 +456,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachAllMethodParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getAllMethodsParentFirst())
-			consume(filter, action, mi);
+			PredicateUtils.consumeIf(filter, action, mi);
 		return this;
 	}
 
@@ -484,7 +484,7 @@ public class ClassInfo {
 			annotationProvider = AnnotationProvider.DEFAULT;
 		A t2 = getPackageAnnotation(type);
 		if (t2 != null)
-			consume(filter, action, t2);
+			PredicateUtils.consumeIf(filter, action, t2);
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length - 1; i >= 0; i--)
 			annotationProvider.forEachDeclaredAnnotation(type, interfaces[i].inner(), filter, action);
@@ -551,7 +551,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachDeclaredConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
 		for (ConstructorInfo mi : _getDeclaredConstructors())
-			consume(filter, action, mi);
+			PredicateUtils.consumeIf(filter, action, mi);
 		return this;
 	}
 
@@ -564,7 +564,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachDeclaredField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
 		for (FieldInfo fi : _getDeclaredFields())
-			consume(filter, action, fi);
+			PredicateUtils.consumeIf(filter, action, fi);
 		return this;
 	}
 
@@ -577,7 +577,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachDeclaredMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getDeclaredMethods())
-			consume(filter, action, mi);
+			PredicateUtils.consumeIf(filter, action, mi);
 		return this;
 	}
 
@@ -590,7 +590,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getAllMethods())
-			consume(filter, action, mi);
+			PredicateUtils.consumeIf(filter, action, mi);
 		return this;
 	}
 
@@ -603,7 +603,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachPublicConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
 		for (ConstructorInfo mi : _getPublicConstructors())
-			consume(filter, action, mi);
+			PredicateUtils.consumeIf(filter, action, mi);
 		return this;
 	}
 
@@ -616,7 +616,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachPublicField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
 		for (FieldInfo mi : _getPublicFields())
-			consume(filter, action, mi);
+			PredicateUtils.consumeIf(filter, action, mi);
 		return this;
 	}
 
@@ -629,7 +629,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachPublicMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getPublicMethods())
-			consume(filter, action, mi);
+			PredicateUtils.consumeIf(filter, action, mi);
 		return this;
 	}
 
@@ -786,7 +786,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo getAnyParent(Predicate<ClassInfo> filter) {
 		for (ClassInfo ci : _getAllParents())
-			if (test(filter, ci))
+			if (PredicateUtils.test(filter, ci))
 				return ci;
 		return null;
 	}
@@ -814,7 +814,7 @@ public class ClassInfo {
 	 */
 	public ConstructorInfo getDeclaredConstructor(Predicate<ConstructorInfo> filter) {
 		for (ConstructorInfo ci : _getDeclaredConstructors())
-			if (test(filter, ci))
+			if (PredicateUtils.test(filter, ci))
 				return ci;
 		return null;
 	}
@@ -836,7 +836,7 @@ public class ClassInfo {
 	 */
 	public FieldInfo getDeclaredField(Predicate<FieldInfo> filter) {
 		for (FieldInfo f : _getDeclaredFields())
-			if (test(filter, f))
+			if (PredicateUtils.test(filter, f))
 				return f;
 		return null;
 	}
@@ -874,7 +874,7 @@ public class ClassInfo {
 	 */
 	public MethodInfo getDeclaredMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getDeclaredMethods())
-			if (test(filter, mi))
+			if (PredicateUtils.test(filter, mi))
 				return mi;
 		return null;
 	}
@@ -956,7 +956,7 @@ public class ClassInfo {
 	 */
 	public MethodInfo getMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getAllMethods())
-			if (test(filter, mi))
+			if (PredicateUtils.test(filter, mi))
 				return mi;
 		return null;
 	}
@@ -1142,7 +1142,7 @@ public class ClassInfo {
 	 */
 	public ConstructorInfo getPublicConstructor(Predicate<ConstructorInfo> filter) {
 		for (ConstructorInfo ci : _getPublicConstructors())
-			if (test(filter, ci))
+			if (PredicateUtils.test(filter, ci))
 				return ci;
 		return null;
 	}
@@ -1162,7 +1162,7 @@ public class ClassInfo {
 	 */
 	public FieldInfo getPublicField(Predicate<FieldInfo> filter) {
 		for (FieldInfo f : _getPublicFields())
-			if (test(filter, f))
+			if (PredicateUtils.test(filter, f))
 				return f;
 		return null;
 	}
@@ -1188,7 +1188,7 @@ public class ClassInfo {
 	 */
 	public MethodInfo getPublicMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getPublicMethods())
-			if (test(filter, mi))
+			if (PredicateUtils.test(filter, mi))
 				return mi;
 		return null;
 	}
@@ -1958,7 +1958,7 @@ public class ClassInfo {
 				return x;
 		}
 		x = getPackageAnnotation(type);
-		if (x != null && test(filter, x))
+		if (x != null && PredicateUtils.test(filter, x))
 			return x;
 		return null;
 	}
@@ -1991,7 +1991,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<ClassInfo> test) {
-		return test(test, this);
+		return PredicateUtils.test(test, this);
 	}
 
 	/**

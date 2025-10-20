@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -105,7 +104,7 @@ public class MediaType extends OpenApiElement {
 	public MediaType addEncoding(String key, Encoding value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		encoding = mapBuilder(encoding).sparse().add(key, value).build();
+		encoding = CollectionUtils.mapb(String.class, Encoding.class).to(encoding).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -119,7 +118,7 @@ public class MediaType extends OpenApiElement {
 	public MediaType addExample(String name, Example example) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("example", example);
-		examples = mapBuilder(examples).add(name, example).build();
+		examples = CollectionUtils.mapb(String.class, Example.class).to(examples).add(name, example).build();
 		return this;
 	}
 
@@ -178,7 +177,7 @@ public class MediaType extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(schema != null, "schema")
 			.addIf(example != null, "x-example")
 			.addIf(encoding != null, "encoding")
@@ -191,8 +190,8 @@ public class MediaType extends OpenApiElement {
 	public MediaType set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "encoding" -> setEncoding(mapBuilder(String.class, Encoding.class).sparse().addAny(value).build());
-			case "examples" -> setExamples(mapBuilder(String.class, Example.class).sparse().addAny(value).build());
+			case "encoding" -> setEncoding(toMap(value, String.class, Encoding.class).sparse().build());
+			case "examples" -> setExamples(toMap(value, String.class, Example.class).sparse().build());
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
 			case "x-example" -> setExample(value);
 			default -> {

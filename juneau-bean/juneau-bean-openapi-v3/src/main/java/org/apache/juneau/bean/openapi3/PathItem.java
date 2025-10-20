@@ -17,8 +17,8 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
@@ -228,7 +228,7 @@ public class PathItem extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(delete != null, "delete")
 			.addIf(description != null, "description")
 			.addIf(get != null, "get")
@@ -255,10 +255,10 @@ public class PathItem extends OpenApiElement {
 			case "head" -> setHead(toType(value, Operation.class));
 			case "options" -> setOptions(toType(value, Operation.class));
 			case "patch" -> setPatch(toType(value, Operation.class));
-			case "parameters" -> setParameters(listBuilder(Parameter.class).sparse().addAny(value).build());
+			case "parameters" -> setParameters(toList(value, Parameter.class).sparse().build());
 			case "post" -> setPost(toType(value, Operation.class));
 			case "put" -> setPut(toType(value, Operation.class));
-			case "servers" -> setServers(listBuilder(Server.class).sparse().addAny(value).build());
+			case "servers" -> setServers(toList(value, Server.class).sparse().build());
 			case "summary" -> setSummary(Utils.s(value));
 			case "trace" -> setTrace(toType(value, Operation.class));
 			default -> {

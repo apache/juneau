@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -132,7 +131,7 @@ public class Callback extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class).addIf(callbacks != null, "callbacks").build();
+		var s = CollectionUtils.setb(String.class).addIf(callbacks != null, "callbacks").build();
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -140,7 +139,7 @@ public class Callback extends OpenApiElement {
 	public Callback set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "callbacks" -> setCallbacks(mapBuilder(String.class, PathItem.class).sparse().addAny(value).build());
+			case "callbacks" -> setCallbacks(toMap(value, String.class, PathItem.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

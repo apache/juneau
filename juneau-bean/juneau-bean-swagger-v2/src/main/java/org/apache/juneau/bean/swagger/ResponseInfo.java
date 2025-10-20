@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -119,7 +118,7 @@ public class ResponseInfo extends SwaggerElement {
 	public ResponseInfo addExample(String mimeType, Object example) {
 		assertArgNotNull("mimeType", mimeType);
 		assertArgNotNull("example", example);
-		examples = mapBuilder(examples).sparse().add(mimeType, example).build();
+		examples = CollectionUtils.mapb(String.class, Object.class).to(examples).sparse().add(mimeType, example).build();
 		return this;
 	}
 
@@ -133,7 +132,7 @@ public class ResponseInfo extends SwaggerElement {
 	public ResponseInfo addHeader(String name, HeaderInfo header) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("header", header);
-		headers = mapBuilder(headers).add(name, header).build();
+		headers = CollectionUtils.mapb(String.class, HeaderInfo.class).to(headers).add(name, header).build();
 		return this;
 	}
 
@@ -234,7 +233,7 @@ public class ResponseInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(description != null, "description")
 			.addIf(examples != null, "examples")
 			.addIf(headers != null, "headers")
@@ -273,8 +272,8 @@ public class ResponseInfo extends SwaggerElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(Utils.s(value));
-			case "examples" -> setExamples(mapBuilder(String.class, Object.class).sparse().addAny(value).build());
-			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
+			case "examples" -> setExamples(toMap(value, String.class, Object.class).sparse().build());
+			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
 			default -> {
 				super.set(property, value);

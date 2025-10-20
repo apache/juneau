@@ -22,7 +22,6 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.http.Header;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;

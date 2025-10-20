@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.internal.CollectionBuilders.*;
-
 import java.util.*;
 
 import org.apache.juneau.common.utils.*;

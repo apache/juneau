@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -208,7 +207,7 @@ public class Components extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = setBuilder(String.class)
+		var s = CollectionUtils.setb(String.class)
 			.addIf(callbacks != null, "callbacks")
 			.addIf(examples != null, "examples")
 			.addIf(headers != null, "headers")
@@ -226,15 +225,15 @@ public class Components extends OpenApiElement {
 	public Components set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "callbacks" -> setCallbacks(mapBuilder(String.class, Callback.class).sparse().addAny(value).build());
-			case "examples" -> setExamples(mapBuilder(String.class, Example.class).sparse().addAny(value).build());
-			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
-			case "links" -> setLinks(mapBuilder(String.class, Link.class).sparse().addAny(value).build());
-			case "parameters" -> setParameters(mapBuilder(String.class, Parameter.class).sparse().addAny(value).build());
-			case "requestBodies" -> setRequestBodies(mapBuilder(String.class, RequestBodyInfo.class).sparse().addAny(value).build());
-			case "responses" -> setResponses(mapBuilder(String.class, Response.class).sparse().addAny(value).build());
-			case "schemas" -> setSchemas(mapBuilder(String.class, SchemaInfo.class).sparse().addAny(value).build());
-			case "securitySchemes" -> setSecuritySchemes(mapBuilder(String.class, SecuritySchemeInfo.class).sparse().addAny(value).build());
+			case "callbacks" -> setCallbacks(toMap(value, String.class, Callback.class).sparse().build());
+			case "examples" -> setExamples(toMap(value, String.class, Example.class).sparse().build());
+			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
+			case "links" -> setLinks(toMap(value, String.class, Link.class).sparse().build());
+			case "parameters" -> setParameters(toMap(value, String.class, Parameter.class).sparse().build());
+			case "requestBodies" -> setRequestBodies(toMap(value, String.class, RequestBodyInfo.class).sparse().build());
+			case "responses" -> setResponses(toMap(value, String.class, Response.class).sparse().build());
+			case "schemas" -> setSchemas(toMap(value, String.class, SchemaInfo.class).sparse().build());
+			case "securitySchemes" -> setSecuritySchemes(toMap(value, String.class, SecuritySchemeInfo.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

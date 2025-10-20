@@ -28,7 +28,6 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.urlencoding.*;
 
@@ -706,7 +705,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest pathVars(String...pairs) {
-		return pathVars(CollectionBuilders.mapBuilder(String.class, String.class).addPairs((Object[])pairs).build());
+		return pathVars(CollectionUtils.mapb(String.class, String.class).addPairs((Object[])pairs).build());
 	}
 
 	/**

@@ -14,29 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.utils;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.parser.*;
-
 /**
- * Builder for lists.
+ * Builder for lists with fluent convenience methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
+ * <p>
+ * Supports adding single/multiple values, collections, arbitrary inputs (arrays/collections/convertible values),
+ * optional sorting/comparators, sparse output (return null when empty), and unmodifiable output.
  *
- * @param <E> Element type.
+ * @param <E> The element type
  */
 public class ListBuilder<E> {
+
 	/**
 	 * Static creator.
 	 *
@@ -45,35 +41,29 @@ public class ListBuilder<E> {
 	 * @param elementTypeArgs Optional element type arguments.
 	 * @return A new builder.
 	 */
-	public static <E> ListBuilder<E> create(Class<E> elementType, Type...elementTypeArgs) {
-		return new ListBuilder<>(elementType, elementTypeArgs);
+	public static <E> ListBuilder<E> create(Class<E> elementType) {
+		return new ListBuilder<>(elementType);
 	}
 
-	private List<E> list;
+    private List<E> list;
 	private boolean unmodifiable = false, sparse = false;
 	private Comparator<E> comparator;
+	private List<Converter> converters;
 
-	private Class<E> elementType;
-	private Type[] elementTypeArgs;
+    private Class<E> elementType;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param elementType The element type.
-	 * @param elementTypeArgs The element type generic arguments if there are any.
-	 */
-	public ListBuilder(Class<E> elementType, Type...elementTypeArgs) {
+    /**
+     * Constructor.
+     *
+     * @param elementType The element type.
+     */
+	public ListBuilder(Class<E> elementType) {
 		this.elementType = elementType;
-		this.elementTypeArgs = elementTypeArgs;
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param addTo The list to add to.
-	 */
-	public ListBuilder(List<E> addTo) {
-		this.list = addTo;
+	public ListBuilder<E> to(List<E> list) {
+		this.list = list;
+		return this;
 	}
 
 	/**
@@ -121,6 +111,21 @@ public class ListBuilder<E> {
 		return this;
 	}
 
+    /**
+     * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+     *
+     * @param values Converters to register. Ignored if {@code null}.
+     * @return This object.
+     */
+    public ListBuilder<E> converters(Converter...values) {
+    	if (values.length == 0)
+    		return this;
+		if (converters == null)
+			converters = new ArrayList<>();
+		converters.addAll(Arrays.asList(values));
+		return this;
+	}
+
 	/**
 	 * Adds arbitrary values to this list.
 	 *
@@ -129,7 +134,6 @@ public class ListBuilder<E> {
 	 * <ul>
 	 * 	<li>The same type or convertible to the element type of this list.
 	 * 	<li>Collections or arrays of anything on this list.
-	 * 	<li>JSON array strings parsed and convertible to the element type of this list.
 	 * </ul>
 	 *
 	 * @param values The values to add.
@@ -138,7 +142,6 @@ public class ListBuilder<E> {
 	public ListBuilder<E> addAny(Object...values) {
 		if (elementType == null)
 			throw new IllegalStateException("Unknown element type. Cannot use this method.");
-		try {
 			if (values != null) {
 				for (Object o : values) {
 					if (o != null) {
@@ -147,19 +150,25 @@ public class ListBuilder<E> {
 						} else if (isArray(o)) {
 							for (int i = 0; i < Array.getLength(o); i++)
 								addAny(Array.get(o, i));
-						} else if (isJsonArray(o, false)) {
-							new JsonList(o.toString()).forEach(x -> addAny(x));
 						} else if (elementType.isInstance(o)) {
 							add(elementType.cast(o));
 						} else {
-							add(toType(o, elementType, elementTypeArgs));
+							if (converters != null) {
+								var e = converters.stream().map(x -> x.convertTo(elementType, o)).filter(x -> x != null).findFirst().orElse(null);
+								if (e != null) {
+									add(e);
+								} else {
+									var l = converters.stream().map(x -> x.convertTo(List.class, o)).filter(x -> x != null).findFirst().orElse(null);
+									if (l != null)
+										addAny(l);
+									else
+										throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), elementType);
+								}
+							}
 						}
 					}
 				}
 			}
-		} catch (ParseException e) {
-			throw asRuntimeException(e);
-		}
 		return this;
 	}
 
@@ -177,21 +186,19 @@ public class ListBuilder<E> {
 	}
 
 	/**
-	 * Adds entries to this list via JSON array strings.
-	 *
-	 * @param values The JSON array strings to parse and add to this list.
-	 * @return This object.
-	 */
-	public ListBuilder<E> addJson(String...values) {
-		return addAny((Object[])values);
-	}
-
-	/**
 	 * Builds the list.
 	 *
 	 * @return A list conforming to the settings on this builder.
 	 */
-	public List<E> build() {
+    /**
+     * Builds the list.
+     *
+     * <p>
+     * Applies sorting/unmodifiable/sparse options.
+     *
+     * @return The built list or {@code null} if {@link #sparse()} is set and the list is empty.
+     */
+    public List<E> build() {
 		if (sparse) {
 			if (list != null && list.isEmpty())
 				list = null;
