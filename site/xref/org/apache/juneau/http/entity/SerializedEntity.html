@@ -34,9 +34,9 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.internal.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">/**</em>
@@ -249,7 +249,7 @@
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(OutputStream os) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			os = <strong class="jxr_keyword">new</strong> <a name="NoCloseOutputStream" href="../../../../../org/apache/juneau/internal/NoCloseOutputStream.html#NoCloseOutputStream">NoCloseOutputStream</a>(os);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			os = <strong class="jxr_keyword">new</strong> <a name="NoCloseOutputStream" href="../../../../../org/apache/juneau/common/utils/NoCloseOutputStream.html#NoCloseOutputStream">NoCloseOutputStream</a>(os);
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 			Object o = contentOrElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">if</strong> (serializer == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 				<strong class="jxr_keyword">try</strong> (Writer w = <strong class="jxr_keyword">new</strong> OutputStreamWriter(os, UTF8)) {

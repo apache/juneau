@@ -272,7 +272,7 @@
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<strong class="jxr_keyword">final</strong> Optional&lt;BeanStore&gt; parent;
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<strong class="jxr_keyword">final</strong> Optional&lt;Object&gt; <strong class="jxr_keyword">outer</strong>;
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> readOnly, threadSafe;
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">final</strong> <a name="SimpleReadWriteLock" href="../../../../org/apache/juneau/internal/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> lock;
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">final</strong> <a name="SimpleReadWriteLock" href="../../../../org/apache/juneau/common/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> lock;
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
@@ -284,7 +284,7 @@
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">outer</strong> = Utils.opt(builder.<strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		readOnly = builder.readOnly;
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		threadSafe = builder.threadSafe;
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		lock = threadSafe ? <strong class="jxr_keyword">new</strong> <a name="SimpleReadWriteLock" href="../../../../org/apache/juneau/internal/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>() : SimpleReadWriteLock.NO_OP;
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		lock = threadSafe ? <strong class="jxr_keyword">new</strong> <a name="SimpleReadWriteLock" href="../../../../org/apache/juneau/common/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>() : SimpleReadWriteLock.NO_OP;
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 		entries = threadSafe ? <strong class="jxr_keyword">new</strong> ConcurrentLinkedDeque&lt;&gt;() : <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		unnamedEntries = threadSafe ? <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;() : CollectionUtils.map();
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 	}
@@ -369,7 +369,7 @@
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> addSupplier(Class&lt;T&gt; beanType, Supplier&lt;T&gt; bean, String name) {
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertCanWrite();
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 		BeanStoreEntry&lt;T&gt; e = createEntry(beanType, bean, name);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/internal/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.write()) {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.write()) {
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 			entries.addFirst(e);
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">if</strong> (Utils.isEmpty(name))
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 				unnamedEntries.put(beanType, e);
@@ -387,7 +387,7 @@
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<strong class="jxr_keyword">public</strong> <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> clear() {
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertCanWrite();
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/internal/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.write()) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.write()) {
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			unnamedEntries.clear();
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 			entries.clear();
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		}
@@ -472,7 +472,7 @@
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; beanType) {
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/internal/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.read()) {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.read()) {
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			BeanStoreEntry&lt;T&gt; e = (BeanStoreEntry&lt;T&gt;)unnamedEntries.get(beanType);
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 			<strong class="jxr_keyword">if</strong> (e != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 				<strong class="jxr_keyword">return</strong> Utils.opt(e.get());
@@ -492,7 +492,7 @@
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; beanType, String name) {
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/internal/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.read()) {
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.read()) {
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 			BeanStoreEntry&lt;T&gt; e = (BeanStoreEntry&lt;T&gt;)entries.stream().filter(x2 -&gt; x2.matches(beanType, name)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">if</strong> (e != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 				<strong class="jxr_keyword">return</strong> Utils.opt(e.get());
@@ -615,7 +615,7 @@
 <a class="jxr_linenumber" name="L607" href="#L607">607</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 	<strong class="jxr_keyword">public</strong> <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> removeBean(Class&lt;?&gt; beanType, String name) {
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 		assertCanWrite();
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/internal/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.write()) {
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.write()) {
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 			<strong class="jxr_keyword">if</strong> (name == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 				unnamedEntries.remove(beanType);
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 			entries.removeIf(y -&gt; y.matches(beanType, name));
