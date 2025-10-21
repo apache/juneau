@@ -27,42 +27,43 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.json.annotation.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * the class.</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JsonBasics" target="alexandria_uri">https://juneau.apache.org/docs/topics/JsonBasics</a>"&gt;JSON Basics&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="JsonClassMeta" href="../../../../org/apache/juneau/json/JsonClassMeta.html#JsonClassMeta">JsonClassMeta</a> <strong class="jxr_keyword">extends</strong> <a name="ExtendedClassMeta" href="../../../../org/apache/juneau/ExtendedClassMeta.html#ExtendedClassMeta">ExtendedClassMeta</a> {
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String wrapperAttr;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 * @param cm The class that this annotation is defined on.</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 * @param mp JSON metadata provider (for finding information about other artifacts).</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">public</strong> <a name="JsonClassMeta" href="../../../../org/apache/juneau/json/JsonClassMeta.html#JsonClassMeta">JsonClassMeta</a>(ClassMeta&lt;?&gt; cm, <a name="JsonMetaProvider" href="../../../../org/apache/juneau/json/JsonMetaProvider.html#JsonMetaProvider">JsonMetaProvider</a> mp) {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">super</strong>(cm);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		Value&lt;String&gt; wrapperAttr = Value.empty();
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		cm.forEachAnnotation(Json.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.wrapperAttr()), x -&gt; wrapperAttr.set(x.wrapperAttr()));
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">this</strong>.wrapperAttr = wrapperAttr.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * Returns the {@link Json#wrapperAttr() @Json(wrapperAttr)} annotation defined on the class.</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 * @return The value of the annotation, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">protected</strong> String getWrapperAttr() { <strong class="jxr_keyword">return</strong> wrapperAttr; }
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  }
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.json.annotation.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * the class.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JsonBasics" target="alexandria_uri">https://juneau.apache.org/docs/topics/JsonBasics</a>"&gt;JSON Basics&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="JsonClassMeta" href="../../../../org/apache/juneau/json/JsonClassMeta.html#JsonClassMeta">JsonClassMeta</a> <strong class="jxr_keyword">extends</strong> <a name="ExtendedClassMeta" href="../../../../org/apache/juneau/ExtendedClassMeta.html#ExtendedClassMeta">ExtendedClassMeta</a> {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String wrapperAttr;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 * @param cm The class that this annotation is defined on.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">	 * @param mp JSON metadata provider (for finding information about other artifacts).</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <a name="JsonClassMeta" href="../../../../org/apache/juneau/json/JsonClassMeta.html#JsonClassMeta">JsonClassMeta</a>(ClassMeta&lt;?&gt; cm, <a name="JsonMetaProvider" href="../../../../org/apache/juneau/json/JsonMetaProvider.html#JsonMetaProvider">JsonMetaProvider</a> mp) {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">super</strong>(cm);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		Value&lt;String&gt; wrapperAttr = Value.empty();
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		cm.forEachAnnotation(Json.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.wrapperAttr()), x -&gt; wrapperAttr.set(x.wrapperAttr()));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">this</strong>.wrapperAttr = wrapperAttr.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * Returns the {@link Json#wrapperAttr() @Json(wrapperAttr)} annotation defined on the class.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 * @return The value of the annotation, or &lt;jk&gt;null&lt;/jk&gt; if not specified.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">protected</strong> String getWrapperAttr() { <strong class="jxr_keyword">return</strong> wrapperAttr; }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">if</strong> (rc == 1)
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="PreconditionFailed" href="../../../../org/apache/juneau/http/response/PreconditionFailed.html#PreconditionFailed">PreconditionFailed</a>(<span class="jxr_string">"Method ''{0}'' not found on resource on path ''{1}'' with matching matcher."</span>, m, session.getPathInfo());
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"Java method matching path ''{0}'' not found on resource ''{1}''."</span>, session.getPathInfo(), className(session.getResource()));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"Java method matching path ''{0}'' not found on resource ''{1}''."</span>, session.getPathInfo(), ClassUtils2.className(session.getResource()));
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<em class="jxr_javadoccomment">/**</em>

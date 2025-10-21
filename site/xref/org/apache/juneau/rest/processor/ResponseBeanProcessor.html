@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  						} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o2 instanceof NameValuePair) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  							h = BasicHeader.of((NameValuePair)o2);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  						} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(<span class="jxr_string">"Invalid type ''{0}'' for header ''{1}''"</span>, className(o2), n);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(<span class="jxr_string">"Invalid type ''{0}'' for header ''{1}''"</span>, ClassUtils2.className(o2), n);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  						}
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  						res.addHeader(h);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  					}
@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">return</strong> alist((Object[])o);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Collection)
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">return</strong> (Collection&lt;?&gt;)o;
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(<span class="jxr_string">"Could not iterate over Headers of type ''{0}''"</span>, className(o));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(<span class="jxr_string">"Could not iterate over Headers of type ''{0}''"</span>, ClassUtils2.className(o));
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> }
 </pre>

@@ -135,7 +135,7 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (output instanceof File)
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			outputStream = <strong class="jxr_keyword">new</strong> BufferedOutputStream(<strong class="jxr_keyword">new</strong> FileOutputStream((File)output));
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Cannot convert object of type "</span> + className(output) + <span class="jxr_string">" to an OutputStream."</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Cannot convert object of type "</span> + ClassUtils2.className(output) + <span class="jxr_string">" to an OutputStream."</span>);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="NoCloseOutputStream" href="../../../../org/apache/juneau/internal/NoCloseOutputStream.html#NoCloseOutputStream">NoCloseOutputStream</a>(outputStream);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
@@ -181,7 +181,7 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (output instanceof StringBuilder)
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 				writer = <strong class="jxr_keyword">new</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/internal/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>((StringBuilder)output);
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<span class="jxr_string">"Cannot convert object of type "</span> + className(output) + <span class="jxr_string">" to a Writer."</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<span class="jxr_string">"Cannot convert object of type "</span> + ClassUtils2.className(output) + <span class="jxr_string">" to a Writer."</span>);
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		} <strong class="jxr_keyword">catch</strong> (FileNotFoundException e) {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">cast</strong>(SerializeException.<strong class="jxr_keyword">class</strong>, e);
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		}

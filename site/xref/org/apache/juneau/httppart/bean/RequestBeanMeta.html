@@ -94,9 +94,9 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		Builder apply(Request a) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">if</strong> (a != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				<strong class="jxr_keyword">if</strong> (isNotVoid(a.serializer()))
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				<strong class="jxr_keyword">if</strong> (ClassUtils2.isNotVoid(a.serializer()))
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  					serializer.type(a.serializer());
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  				<strong class="jxr_keyword">if</strong> (isNotVoid(a.parser()))
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  				<strong class="jxr_keyword">if</strong> (ClassUtils2.isNotVoid(a.parser()))
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  					parser.type(a.parser());
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  			}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;

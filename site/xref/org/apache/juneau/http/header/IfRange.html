@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o instanceof ZonedDateTime) {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 				<strong class="jxr_keyword">return</strong> RFC_1123_DATE_TIME.format((ZonedDateTime)o);
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 			}
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid object type returned by supplier: {0}"</span>, className(o));
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid object type returned by supplier: {0}"</span>, ClassUtils2.className(o));
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		}
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 			<strong class="jxr_keyword">return</strong> Utils.s(value);
