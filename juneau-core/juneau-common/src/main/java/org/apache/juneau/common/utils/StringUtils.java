@@ -18,8 +18,8 @@ package org.apache.juneau.common.utils;
 
 import static java.lang.Character.*;
 import static java.nio.charset.StandardCharsets.*;
-import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 

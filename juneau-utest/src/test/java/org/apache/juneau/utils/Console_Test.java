@@ -19,6 +19,7 @@ package org.apache.juneau.utils;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class Console_Test extends TestBase {

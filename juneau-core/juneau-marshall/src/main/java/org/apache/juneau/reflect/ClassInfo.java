@@ -159,7 +159,7 @@ public class ClassInfo {
 			return null;
 		if (t instanceof Class)
 			return of((Class<?>)t);
-		return new ClassInfo(ClassUtils2.toClass(t), t);
+		return new ClassInfo(ClassUtils.toClass(t), t);
 	}
 
 	/**

@@ -344,7 +344,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(QUERY, cm).orElseThrow(() -> new BasicRuntimeException("@Query(name) not found on class {0}", ClassUtils2.className(type)));
+		String name = HttpParts.getName(QUERY, cm).orElseThrow(() -> new BasicRuntimeException("@Query(name) not found on class {0}", ClassUtils.className(type)));
 		return get(name).as(type);
 	}
 

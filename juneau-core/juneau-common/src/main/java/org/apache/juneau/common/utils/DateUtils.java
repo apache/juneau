@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
-import static org.apache.juneau.common.StateEnum.*;
+import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.lang.ref.*;
@@ -26,8 +26,6 @@ import java.time.*;
 import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
-
-import org.apache.juneau.common.*;
 
 import jakarta.xml.bind.*;
 

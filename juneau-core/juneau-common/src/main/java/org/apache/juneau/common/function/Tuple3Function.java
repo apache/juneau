@@ -14,29 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common;
+package org.apache.juneau.common.function;
 
-import java.util.*;
 import java.util.function.*;
 
 /**
- * A function that takes in 2 arguments.
+ * Allows you to perform a function against 3 objects.
+ *
+ * <p>
+ * Similar to {@link BiFunction} except for 3 parameters.
+ *
+ * <p class='bjava'>
+ * 	Tuple3Function&lt;A,B,C,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>,<jv>c</jv>) -&gt; <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>,<jv>c</jv>);
+ *
+ * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>,<jv>xc</jv>);
+ * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
- * @param <A> The first argument.
- * @param <B> The second argument.
- * @param <R> The return type.
+ * @param <A> Object 1 type.
+ * @param <B> Object 2 type.
+ * @param <C> Object 3 type.
+ * @param <R> Result type.
  */
-@SuppressWarnings("javadoc")
 @FunctionalInterface
-public interface Function2<A,B,R> {
+public interface Tuple3Function<A,B,C,R> {
 
-	default <V> Function2<A,B,V> andThen(Function<? super R,? extends V> after) {
-		Objects.requireNonNull(after);
-		return (A a, B b) -> after.apply(apply(a, b));
+	@SuppressWarnings("javadoc")
+	default <V> Tuple3Function<A,B,C,V> andThen(Function<? super R,? extends V> after) {
+		return (A a, B b, C c) -> after.apply(apply(a, b, c));
 	}
 
-	R apply(A a, B b);
+	@SuppressWarnings("javadoc")
+	R apply(A a, B b, C c);
 }

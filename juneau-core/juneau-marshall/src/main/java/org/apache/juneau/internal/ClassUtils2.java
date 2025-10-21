@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.internal;
 
-import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -26,7 +25,7 @@ import org.apache.juneau.reflect.*;
 
  * </ul>
  */
-public class ClassUtils {
+public class ClassUtils2 {
 
 	/**
 	 * Matches arguments to a list of parameter types.
@@ -61,23 +60,5 @@ public class ClassUtils {
 			}
 		}
 		return params;
-	}
-
-	/**
-	 * Returns the simple class name for the specified object.
-	 *
-	 * @param value The object to get the class name for.
-	 * @return The name of the class or <jk>null</jk> if the value was null.
-	 */
-	public static String simpleClassName(Object value) {
-		if (value == null)
-			return null;
-		if (value instanceof ClassInfo)
-			return ((ClassInfo)value).getSimpleName();
-		if (value instanceof ClassMeta)
-			return ((ClassMeta<?>)value).getSimpleName();
-		if (value instanceof Class)
-			return ((Class<?>)value).getSimpleName();
-		return value.getClass().getSimpleName();
 	}
 }

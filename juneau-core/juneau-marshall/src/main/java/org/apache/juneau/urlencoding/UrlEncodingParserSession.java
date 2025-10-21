@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.common.StateEnum.*;
+import static org.apache.juneau.common.utils.StateEnum.*;
 
 import java.io.*;
 import java.lang.reflect.*;

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.utest.utils.Constants.*;

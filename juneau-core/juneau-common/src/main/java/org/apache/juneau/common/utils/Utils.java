@@ -29,6 +29,9 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.collections.*;
+import org.apache.juneau.common.function.*;
+
 /**
  * Common utility methods.
  *
@@ -1260,4 +1263,20 @@ public class Utils {
 
 	/** Constructor - This class is meant to be subclasses. */
 	protected Utils() {}
+
+	/**
+	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
+	 *
+	 * @param o The object to unwrap.
+	 * @return The unwrapped object.
+	 */
+	public static Object unwrap(Object o) {
+		if (o instanceof Supplier)
+			o = unwrap(((Supplier<?>)o).get());
+		if (o instanceof Value)
+			o = unwrap(((Value<?>)o).get());
+		if (o instanceof Optional)
+			o = unwrap(((Optional<?>)o).orElse(null));
+		return o;
+	}
 }

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau;
 
-import org.apache.juneau.utils.*;
+import org.apache.juneau.common.function.*;
 
 /**
  * Represents a consumer of a single bean property value.

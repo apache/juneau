@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.AssertionPredicates.ne;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.time.*;
 import java.util.*;

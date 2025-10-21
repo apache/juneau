@@ -2231,7 +2231,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder parserListener(Class<? extends ParserListener> value) {
-			if (ClassUtils2.isNotVoid(value))
+			if (ClassUtils.isNotVoid(value))
 				parsers.forEach(x -> x.listener(value));
 			return this;
 		}
@@ -3088,7 +3088,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder serializerListener(Class<? extends SerializerListener> value) {
-			if (ClassUtils2.isNotVoid(value))
+			if (ClassUtils.isNotVoid(value))
 				serializers.forEach(x -> x.listener(value));
 			return this;
 		}
@@ -3848,7 +3848,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			// Apply @Rest(beanStore).
-			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> ClassUtils2.isNotVoid(x.beanStore()), x -> v.get().type(x.beanStore()));
+			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> ClassUtils.isNotVoid(x.beanStore()), x -> v.get().type(x.beanStore()));
 
 			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
 			// @formatter:off
@@ -5866,7 +5866,7 @@ public class RestContext extends Context {
 		if (ci.isChildOf(ParseException.class) || ci.is(InvalidDataConversionException.class))
 			return new BadRequest(t);
 
-		String n = ClassUtils2.className(t);
+		String n = ClassUtils.className(t);
 
 		if (n.contains("AccessDenied") || n.contains("Unauthorized"))
 			return new Unauthorized(t);
@@ -6100,7 +6100,7 @@ public class RestContext extends Context {
 		}
 
 		Object output = opSession.getResponse().getContent().orElse(null);
-		throw new NotImplemented("No response processors found to process output of type ''{0}''", ClassUtils2.className(output));
+		throw new NotImplemented("No response processors found to process output of type ''{0}''", ClassUtils.className(output));
 	}
 
 	@Override /* Overridden from Context */

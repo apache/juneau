@@ -59,9 +59,9 @@ public class ResponseBeanMeta {
 
 		Builder apply(Response a) {
 			if (a != null) {
-				if (ClassUtils2.isNotVoid(a.serializer()))
+				if (ClassUtils.isNotVoid(a.serializer()))
 					partSerializer = a.serializer();
-				if (ClassUtils2.isNotVoid(a.parser()))
+				if (ClassUtils.isNotVoid(a.parser()))
 					partParser = a.parser();
 				schema.apply(a.schema());
 			}
@@ -77,7 +77,7 @@ public class ResponseBeanMeta {
 		}
 
 		Builder apply(Type t) {
-			Class<?> c = ClassUtils2.toClass(t);
+			Class<?> c = ClassUtils.toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			ClassInfo ci = cm.getInfo();
 			ci.forEachPublicMethod(x -> true, x -> {

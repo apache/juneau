@@ -245,7 +245,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public <T> T invokeFuzzy(Object...args) throws ExecutableException {
-		return invoke(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
+		return invoke(ClassUtils2.getMatchingArgs(c.getParameterTypes(), args));
 	}
 
 	/**

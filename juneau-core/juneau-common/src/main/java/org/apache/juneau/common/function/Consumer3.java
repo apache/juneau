@@ -14,20 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.function;
 
 import java.util.function.*;
 
 /**
- * Functional interface for consumers of 4-part arguments.
+ * Functional interface for consumers of 3-part arguments.
  *
  * @param <A> Argument 1.
  * @param <B> Argument 2.
  * @param <C> Argument 3.
- * @param <D> Argument 4.
  */
 @FunctionalInterface
-public interface Consumer4<A,B,C,D> {
+public interface Consumer3<A,B,C> {
 
 	/**
 	 * Returns a composed {@link Consumer} that performs, in sequence, this operation followed by the <c>after</c> operation.
@@ -35,10 +34,10 @@ public interface Consumer4<A,B,C,D> {
 	 * @param after The operation to perform after this operation.
 	 * @return A composed {@link Consumer} that performs in sequence this operation followed by the after operation.
 	 */
-	default Consumer4<A,B,C,D> andThen(Consumer4<? super A,? super B,? super C,? super D> after) {  // NOSONAR - false positive on generics
-		return (A a, B b, C c, D d) -> {
-			apply(a, b, c, d);
-			after.apply(a, b, c, d);
+	default Consumer3<A,B,C> andThen(Consumer3<? super A,? super B,? super C> after) {  // NOSONAR - false positive on generics
+		return (A a, B b, C c) -> {
+			apply(a, b, c);
+			after.apply(a, b, c);
 		};
 	}
 
@@ -48,7 +47,6 @@ public interface Consumer4<A,B,C,D> {
 	 * @param a Argument 1.
 	 * @param b Argument 2.
 	 * @param c Argument 3.
-	 * @param d Argument 4.
 	 */
-	void apply(A a, B b, C c, D d);
+	void apply(A a, B b, C c);
 }

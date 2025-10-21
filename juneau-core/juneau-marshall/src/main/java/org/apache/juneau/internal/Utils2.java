@@ -18,10 +18,8 @@ package org.apache.juneau.internal;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 
@@ -74,21 +72,5 @@ public class Utils2 extends Utils {
 		JsonMap m = JsonMap.create().append("id", identity(o));
 		methods.forEach((k, v) -> m.put(k, v.invoke(o)));
 		return m;
-	}
-
-	/**
-	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
-	 *
-	 * @param o The object to unwrap.
-	 * @return The unwrapped object.
-	 */
-	public static Object unwrap(Object o) {
-		if (o instanceof Supplier)
-			o = unwrap(((Supplier<?>)o).get());
-		if (o instanceof Value)
-			o = unwrap(((Value<?>)o).get());
-		if (o instanceof Optional)
-			o = unwrap(((Optional<?>)o).orElse(null));
-		return o;
 	}
 }

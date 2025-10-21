@@ -235,7 +235,7 @@ public class ParserPipe implements Closeable {
 				doClose = true;
 			}
 		} else {
-			throw new IOException("Cannot convert object of type " + ClassUtils2.className(input) + " to an InputStream.");
+			throw new IOException("Cannot convert object of type " + ClassUtils.className(input) + " to an InputStream.");
 		}
 
 		return inputStream;
@@ -314,7 +314,7 @@ public class ParserPipe implements Closeable {
 			}
 			doClose = true;
 		} else {
-			throw new IOException("Cannot convert object of type " + ClassUtils2.className(input) + " to an InputStream.");
+			throw new IOException("Cannot convert object of type " + ClassUtils.className(input) + " to an InputStream.");
 		}
 
 		return reader;

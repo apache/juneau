@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.common.reflect;
 
-import static org.apache.juneau.common.utils.ClassUtils2.*;
+import static org.apache.juneau.common.utils.ClassUtils.*;
 
 import java.beans.beancontext.*;
 import java.lang.reflect.*;

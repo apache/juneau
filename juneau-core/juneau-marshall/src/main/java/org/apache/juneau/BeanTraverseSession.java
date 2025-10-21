@@ -333,7 +333,7 @@ public class BeanTraverseSession extends BeanSession {
 			Object o = stack.removeLast().o;
 			Object o2 = set.remove(o);
 			if (o2 == null)
-				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.", ClassUtils2.className(o), stack);
+				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.", ClassUtils.className(o), stack);
 		}
 		isBottom = false;
 	}

@@ -96,7 +96,7 @@ public class BuilderSwap<T,B> {
 		ConstructorInfo objectConstructor = null;
 		ConstructorInfo builderConstructor;
 
-		bc.forEachAnnotation(org.apache.juneau.annotation.Builder.class, objectClass, x -> ClassUtils2.isNotVoid(x.value()), x -> builderClass.set(x.value()));
+		bc.forEachAnnotation(org.apache.juneau.annotation.Builder.class, objectClass, x -> ClassUtils.isNotVoid(x.value()), x -> builderClass.set(x.value()));
 
 		ClassInfo pci = ClassInfo.of(objectClass);
 

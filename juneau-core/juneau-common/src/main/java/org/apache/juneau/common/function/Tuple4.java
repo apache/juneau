@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.function;
 
 import org.apache.juneau.common.utils.*;
 
 /**
- * Represents a simple tuple of 3 objects.
+ * Represents a simple tuple of 4 objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
@@ -27,8 +27,9 @@ import org.apache.juneau.common.utils.*;
  * @param <A> Object 1 type.
  * @param <B> Object 2 type.
  * @param <C> Object 3 type.
+ * @param <D> Object 4 type.
  */
-public class Tuple3<A,B,C> {
+public class Tuple4<A,B,C,D> {
 
 	/**
 	 * Static creator.
@@ -36,18 +37,21 @@ public class Tuple3<A,B,C> {
 	 * @param <A> Object 1 type.
 	 * @param <B> Object 2 type.
 	 * @param <C> Object 3 type.
+	 * @param <D> Object 4 type.
 	 * @param a Object 1.
 	 * @param b Object 2.
 	 * @param c Object 3.
+	 * @param d Object 4.
 	 * @return A new tuple object.
 	 */
-	public static <A,B,C> Tuple3<A,B,C> of(A a, B b, C c) {
-		return new Tuple3<>(a, b, c);
+	public static <A,B,C,D> Tuple4<A,B,C,D> of(A a, B b, C c, D d) {
+		return new Tuple4<>(a, b, c, d);
 	}
 
 	private final A a;
 	private final B b;
 	private final C c;
+	private final D d;
 
 	/**
 	 * Constructor.
@@ -55,16 +59,18 @@ public class Tuple3<A,B,C> {
 	 * @param a Object 1.
 	 * @param b Object 2.
 	 * @param c Object 3.
+	 * @param d Object 4.
 	 */
-	public Tuple3(A a, B b, C c) {
+	public Tuple4(A a, B b, C c, D d) {
 		this.a = a;
 		this.b = b;
 		this.c = c;
+		this.d = d;
 	}
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple3 && Utils.eq(this, (Tuple3<?,?,?>)o, (x, y) -> Utils.eq(x.a, y.a) && Utils.eq(x.b, y.b) && Utils.eq(x.c, y.c));
+		return o instanceof Tuple4 && Utils.eq(this, (Tuple4<?,?,?,?>)o, (x, y) -> Utils.eq(x.a, y.a) && Utils.eq(x.b, y.b) && Utils.eq(x.c, y.c) && Utils.eq(x.d, y.d));
 	}
 
 	/**
@@ -88,8 +94,15 @@ public class Tuple3<A,B,C> {
 	 */
 	public C getC() { return c; }
 
+	/**
+	 * Returns the fourth object in this tuple.
+	 *
+	 * @return The fourth object in this tuple.
+	 */
+	public D getD() { return d; }
+
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return HashCode.of(a, b, c);
+		return HashCode.of(a, b, c, d);
 	}
 }

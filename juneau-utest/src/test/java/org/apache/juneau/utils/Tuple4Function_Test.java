@@ -19,6 +19,7 @@ package org.apache.juneau.utils;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.function.*;
 import org.junit.jupiter.api.*;
 
 class Tuple4Function_Test extends TestBase {

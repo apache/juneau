@@ -141,14 +141,14 @@ public abstract class RestServlet extends HttpServlet {
 			context.get().postInitChildFirst();
 		} catch (ServletException e) {
 			initException.set(e);
-			log(SEVERE, e, "Servlet init error on class ''{0}''", ClassUtils2.className(this));
+			log(SEVERE, e, "Servlet init error on class ''{0}''", ClassUtils.className(this));
 			throw e;
 		} catch (BasicHttpException e) {
 			initException.set(e);
-			log(SEVERE, e, "Servlet init error on class ''{0}''", ClassUtils2.className(this));
+			log(SEVERE, e, "Servlet init error on class ''{0}''", ClassUtils.className(this));
 		} catch (Throwable e) {
 			initException.set(new InternalServerError(e));
-			log(SEVERE, e, "Servlet init error on class ''{0}''", ClassUtils2.className(this));
+			log(SEVERE, e, "Servlet init error on class ''{0}''", ClassUtils.className(this));
 		}
 	}
 
@@ -194,7 +194,7 @@ public abstract class RestServlet extends HttpServlet {
 				throw initException.get();
 			if (context.get() == null)
 				throw new InternalServerError(
-					"Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", ClassUtils2.className(this));
+					"Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", ClassUtils.className(this));
 			getContext().execute(this, r1, r2);
 
 		} catch (Throwable e) {
@@ -219,7 +219,7 @@ public abstract class RestServlet extends HttpServlet {
 		RestContext c = context.get();
 		Logger logger = c == null ? null : c.getLogger();
 		if (logger == null)
-			logger = Logger.getLogger(ClassUtils2.className(this));
+			logger = Logger.getLogger(ClassUtils.className(this));
 		logger.log(level, cause, msg);
 	}
 

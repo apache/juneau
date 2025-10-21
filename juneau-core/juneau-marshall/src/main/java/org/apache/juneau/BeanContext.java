@@ -4259,7 +4259,7 @@ public class BeanContext extends Context {
 
 		if (p != null) {
 
-			if (ClassUtils2.isNotVoid(p.type()))
+			if (ClassUtils.isNotVoid(p.type()))
 				cm2 = resolveClassMeta(p.type(), typeVarImpls);
 
 			if (cm2.isMap()) {

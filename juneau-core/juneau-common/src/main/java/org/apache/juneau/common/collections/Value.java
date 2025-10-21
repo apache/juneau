@@ -76,7 +76,7 @@ public class Value<T> {
 	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
 	 */
 	public static Type unwrap(Type t) {
-		Type x = ClassUtils2.getParameterType(t);
+		Type x = ClassUtils.getParameterType(t);
 		return x != null ? x : t;
 	}
 

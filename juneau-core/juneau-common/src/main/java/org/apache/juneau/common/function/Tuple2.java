@@ -14,69 +14,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.function;
 
 import org.apache.juneau.common.utils.*;
 
 /**
- * Represents a simple tuple of 5 objects.
+ * Represents a simple tuple of 2 objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
  * @param <A> Object 1 type.
  * @param <B> Object 2 type.
- * @param <C> Object 3 type.
- * @param <D> Object 4 type.
- * @param <E> Object 5 type.
  */
-public class Tuple5<A,B,C,D,E> {
+public class Tuple2<A,B> {
 
 	/**
 	 * Static creator.
 	 *
 	 * @param <A> Object 1 type.
 	 * @param <B> Object 2 type.
-	 * @param <C> Object 3 type.
-	 * @param <D> Object 4 type.
-	 * @param <E> Object 5 type.
 	 * @param a Object 1.
 	 * @param b Object 2.
-	 * @param c Object 3.
-	 * @param d Object 4.
-	 * @param e Object 5.
 	 * @return A new tuple object.
 	 */
-	public static <A,B,C,D,E> Tuple5<A,B,C,D,E> of(A a, B b, C c, D d, E e) {
-		return new Tuple5<>(a, b, c, d, e);
+	public static <A,B> Tuple2<A,B> of(A a, B b) {
+		return new Tuple2<>(a, b);
 	}
 
 	private final A a;
 	private final B b;
-	private final C c;
-	private final D d;
-	private final E e;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param a Object 1.
 	 * @param b Object 2.
-	 * @param c Object 3.
-	 * @param d Object 4.
-	 * @param e Object 5.
 	 */
-	public Tuple5(A a, B b, C c, D d, E e) {
+	public Tuple2(A a, B b) {
 		this.a = a;
 		this.b = b;
-		this.c = c;
-		this.d = d;
-		this.e = e;
 	}
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple5 && Utils.eq(this, (Tuple5<?,?,?,?,?>)o, (x, y) -> Utils.eq(x.a, y.a) && Utils.eq(x.b, y.b) && Utils.eq(x.c, y.c) && Utils.eq(x.d, y.d) && Utils.eq(x.e, y.e));
+		return o instanceof Tuple2 && Utils.eq(this, (Tuple2<?,?>)o, (x, y) -> Utils.eq(x.a, y.a) && Utils.eq(x.b, y.b));
 	}
 
 	/**
@@ -93,29 +75,8 @@ public class Tuple5<A,B,C,D,E> {
 	 */
 	public B getB() { return b; }
 
-	/**
-	 * Returns the third object in this tuple.
-	 *
-	 * @return The third object in this tuple.
-	 */
-	public C getC() { return c; }
-
-	/**
-	 * Returns the fourth object in this tuple.
-	 *
-	 * @return The fourth object in this tuple.
-	 */
-	public D getD() { return d; }
-
-	/**
-	 * Returns the fifth object in this tuple.
-	 *
-	 * @return The fifth object in this tuple.
-	 */
-	public E getE() { return e; }
-
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return HashCode.of(a, b, c, d, e);
+		return HashCode.of(a, b);
 	}
 }

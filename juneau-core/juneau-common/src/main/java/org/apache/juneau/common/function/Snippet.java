@@ -14,31 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common;
-
-import java.util.*;
-import java.util.function.*;
+package org.apache.juneau.common.function;
 
 /**
- * A function that takes in 4 arguments.
+ * Identical to {@link Runnable} but the run method can throw stuff.
+ *
+ * <p>
+ * Allows you to pass in arbitrary snippets of code in fluent interfaces.
+ *
+ * <p>
+ * See <c>Assertions.<jsm>assertThrown</jsm>(Snippet)</c> for an example.
  *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
  * </ul>
- *
- * @param <A> The first argument.
- * @param <B> The second argument.
- * @param <C> The third argument.
- * @param <D> The fourth argument.
- * @param <R> The return type.
  */
-@SuppressWarnings("javadoc")
-@FunctionalInterface
-public interface Function4<A,B,C,D,R> {
+public interface Snippet {
 
-	default <V> Function4<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
-		Objects.requireNonNull(after);
-		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
-	}
-
-	R apply(A a, B b, C c, D d);
+	/**
+	 * Run arbitrary code and optionally throw an exception.
+	 *
+	 * @throws Throwable Any throwable.
+	 */
+	void run() throws Throwable;
 }

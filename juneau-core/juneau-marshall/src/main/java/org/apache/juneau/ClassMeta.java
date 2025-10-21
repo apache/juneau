@@ -441,7 +441,7 @@ public class ClassMeta<T> implements Type {
 
 		private ObjectSwap<T,?> createSwap(Swap s) {
 			Class<?> c = s.value();
-			if (ClassUtils2.isVoid(c))
+			if (ClassUtils.isVoid(c))
 				c = s.impl();
 			ClassInfo ci = ClassInfo.of(c);
 

@@ -17,12 +17,14 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.function.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -30,7 +32,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**

@@ -22,6 +22,7 @@ import static org.apache.juneau.assertions.Assertions.assertBean;
 import static org.apache.juneau.assertions.Assertions.assertList;
 import static org.apache.juneau.assertions.Assertions.assertMap;
 import static org.apache.juneau.assertions.Assertions.assertThrowable;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;

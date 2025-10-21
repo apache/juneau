@@ -663,7 +663,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public Object invokeFuzzy(Object pojo, Object...args) throws ExecutableException {
 		try {
-			return m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
+			return m.invoke(pojo, ClassUtils2.getMatchingArgs(m.getParameterTypes(), args));
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new ExecutableException(e);
 		}

@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.function;
 
 import java.util.function.*;
 
 /**
- * Allows you to perform a function against 4 objects.
+ * Allows you to perform a function against 2 objects.
  *
  * <p>
- * Similar to {@link BiFunction} except for 4 parameters.
+ * Same as {@link BiFunction}.
  *
  * <p class='bjava'>
- * 	Tuple4Function&lt;A,B,C,D,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>) -&gt; <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>);
+ * 	Tuple2Function&lt;A,B,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>) -&gt; <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>);
  *
- * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>,<jv>xc</jv>,<jv>xd</jv>);
+ * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -35,18 +35,16 @@ import java.util.function.*;
  *
  * @param <A> Object 1 type.
  * @param <B> Object 2 type.
- * @param <C> Object 3 type.
- * @param <D> Object 4 type.
  * @param <R> Result type.
  */
 @FunctionalInterface
-public interface Tuple4Function<A,B,C,D,R> {
+public interface Tuple2Function<A,B,R> {
 
 	@SuppressWarnings("javadoc")
-	default <V> Tuple4Function<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
-		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
+	default <V> Tuple2Function<A,B,V> andThen(Function<? super R,? extends V> after) {
+		return (A a, B b) -> after.apply(apply(a, b));
 	}
 
 	@SuppressWarnings("javadoc")
-	R apply(A a, B b, C c, D d);
+	R apply(A a, B b);
 }

@@ -379,7 +379,7 @@ public class HttpPartSchema {
 			else if (a.annotationType().getName().startsWith("jakarta.validation.constraints."))
 				applyJakartaValidation(a);
 			else
-				throw new BasicRuntimeException("Builder.apply(@{0}) not defined", ClassUtils2.className(a));
+				throw new BasicRuntimeException("Builder.apply(@{0}) not defined", ClassUtils.className(a));
 			return this;
 		}
 
@@ -1883,7 +1883,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
-			if (ClassUtils2.isNotVoid(value))
+			if (ClassUtils.isNotVoid(value))
 				parser = value;
 			return this;
 		}
@@ -2065,7 +2065,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
-			if (ClassUtils2.isNotVoid(value))
+			if (ClassUtils.isNotVoid(value))
 				serializer = value;
 			return this;
 		}
@@ -2545,7 +2545,7 @@ public class HttpPartSchema {
 			if (t instanceof Class<?>) {
 				ClassInfo.of((Class<?>)t).forEachAnnotation(c, x -> true, this::apply);
 			} else if (Value.isType(t)) {
-				apply(c, ClassUtils2.getParameterType(t));
+				apply(c, ClassUtils.getParameterType(t));
 			}
 			return this;
 		}

@@ -56,7 +56,7 @@ public class ResponseCodeArg implements RestOpArg {
 	protected ResponseCodeArg(ParamInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
-		if (c != Value.class || ClassUtils2.getParameterType(type) != Integer.class)
+		if (c != Value.class || ClassUtils.getParameterType(type) != Integer.class)
 			throw new ArgException(paramInfo, "Type must be Value<Integer> on parameter annotated with @StatusCode annotation");
 	}
 

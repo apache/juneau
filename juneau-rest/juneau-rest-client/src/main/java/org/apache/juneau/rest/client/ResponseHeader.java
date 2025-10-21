@@ -264,7 +264,7 @@ public class ResponseHeader extends BasicHeader {
 				e = e.getCause();
 			throw asRuntimeException(e);
 		}
-		throw new BasicRuntimeException("Could not determine a method to construct type {0}", ClassUtils2.className(c));
+		throw new BasicRuntimeException("Could not determine a method to construct type {0}", ClassUtils.className(c));
 	}
 
 	/**

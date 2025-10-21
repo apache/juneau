@@ -14,30 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common;
+package org.apache.juneau.common.function;
 
-import java.util.*;
 import java.util.function.*;
 
 /**
- * A function that takes in 3 arguments.
+ * Functional interface for consumers of 2-part arguments.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
- *
- * @param <A> The first argument.
- * @param <B> The second argument.
- * @param <C> The third argument.
- * @param <R> The return type.
+ * @param <A> Argument 1.
+ * @param <B> Argument 2.
  */
-@SuppressWarnings("javadoc")
 @FunctionalInterface
-public interface Function3<A,B,C,R> {
+public interface Consumer2<A,B> {
 
-	default <V> Function3<A,B,C,V> andThen(Function<? super R,? extends V> after) {
-		Objects.requireNonNull(after);
-		return (A a, B b, C c) -> after.apply(apply(a, b, c));
+	/**
+	 * Returns a composed {@link Consumer} that performs, in sequence, this operation followed by the <c>after</c> operation.
+	 *
+	 * @param after The operation to perform after this operation.
+	 * @return A composed {@link Consumer} that performs in sequence this operation followed by the after operation.
+	 */
+	default Consumer2<A,B> andThen(Consumer2<? super A,? super B> after) {  // NOSONAR - false positive on generics
+		return (A a, B b) -> {
+			apply(a, b);
+			after.apply(a, b);
+		};
 	}
 
-	R apply(A a, B b, C c);
+	/**
+	 * Performs this operation on the given arguments.
+	 *
+	 * @param a Argument 1.
+	 * @param b Argument 2.
+	 */
+	void apply(A a, B b);
 }

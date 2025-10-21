@@ -18,6 +18,7 @@ package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.header.ContentType.*;
 import static org.junit.jupiter.api.Assertions.*;
 

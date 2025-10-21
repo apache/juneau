@@ -27,10 +27,10 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.utils.*;
 
 /**
  * An enhanced {@link ResourceBundle}.

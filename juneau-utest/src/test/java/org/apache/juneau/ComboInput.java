@@ -22,8 +22,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents the input to a ComboTest.

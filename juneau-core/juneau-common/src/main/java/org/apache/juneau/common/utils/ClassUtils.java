@@ -22,7 +22,7 @@ import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
 
-public class ClassUtils2 {
+public class ClassUtils {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
@@ -88,7 +88,7 @@ public class ClassUtils2 {
 		} else if (t instanceof Class) {
 			Class<?> c = (Class<?>)t;
 			if (Value.class.isAssignableFrom(c)) {
-				return ClassUtils2.getParameterType(c, 0, Value.class);
+				return ClassUtils.getParameterType(c, 0, Value.class);
 			}
 		}
 
@@ -201,7 +201,7 @@ public class ClassUtils2 {
 	/**
 	 * Predicate check to filter out void classes.
 	 */
-	public static final Predicate<Class<?>> NOT_VOID = ClassUtils2::isNotVoid;
+	public static final Predicate<Class<?>> NOT_VOID = ClassUtils::isNotVoid;
 
 	/**
 	 * Returns the fully-qualified class name for the specified object.
@@ -211,6 +211,18 @@ public class ClassUtils2 {
 	 */
 	public static String className(Object value) {
 		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getName() : value.getClass().getName();
+	}
+
+	public static String cn(Object value) {
+		return className(value);
+	}
+
+	public static String simpleClassName(Object value) {
+		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getSimpleName() : value.getClass().getSimpleName();
+	}
+
+	public static String scn(Object value) {
+		return simpleClassName(value);
 	}
 
 	/**
@@ -234,7 +246,7 @@ public class ClassUtils2 {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static boolean isNotVoid(Class c) {
-		return ! ClassUtils2.isVoid(c);
+		return ! ClassUtils.isVoid(c);
 	}
 
 	/**

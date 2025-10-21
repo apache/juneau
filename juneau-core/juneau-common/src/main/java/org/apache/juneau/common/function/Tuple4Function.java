@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.function;
 
 import java.util.function.*;
 
 /**
- * Allows you to perform a function against 3 objects.
+ * Allows you to perform a function against 4 objects.
  *
  * <p>
- * Similar to {@link BiFunction} except for 3 parameters.
+ * Similar to {@link BiFunction} except for 4 parameters.
  *
  * <p class='bjava'>
- * 	Tuple3Function&lt;A,B,C,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>,<jv>c</jv>) -&gt; <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>,<jv>c</jv>);
+ * 	Tuple4Function&lt;A,B,C,D,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>) -&gt; <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>);
  *
- * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>,<jv>xc</jv>);
+ * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>,<jv>xc</jv>,<jv>xd</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -36,16 +36,17 @@ import java.util.function.*;
  * @param <A> Object 1 type.
  * @param <B> Object 2 type.
  * @param <C> Object 3 type.
+ * @param <D> Object 4 type.
  * @param <R> Result type.
  */
 @FunctionalInterface
-public interface Tuple3Function<A,B,C,R> {
+public interface Tuple4Function<A,B,C,D,R> {
 
 	@SuppressWarnings("javadoc")
-	default <V> Tuple3Function<A,B,C,V> andThen(Function<? super R,? extends V> after) {
-		return (A a, B b, C c) -> after.apply(apply(a, b, c));
+	default <V> Tuple4Function<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
+		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
 	}
 
 	@SuppressWarnings("javadoc")
-	R apply(A a, B b, C c);
+	R apply(A a, B b, C c, D d);
 }

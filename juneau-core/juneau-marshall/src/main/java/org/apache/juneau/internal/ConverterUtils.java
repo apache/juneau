@@ -18,8 +18,6 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
-import java.lang.reflect.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
@@ -226,18 +224,5 @@ public class ConverterUtils {
 
 	public static <T> SetBuilder<T> toSet(Object value, Class<T> type) {
 		return CollectionUtils.setb(type, GenericConverter.INSTANCE).addAny(value);
-	}
-	/**
-	 * Converts the specified object to the specified type.
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param value The value to convert.
-	 * @param type The class type to convert the value to.
-	 * @param args The type arguments.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 * @return The converted value.
-	 */
-	public static <T> T toType(Object value, Class<T> type, Type...args) {
-		return session.convertToType(value, type, args);
 	}
 }

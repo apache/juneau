@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common;
+package org.apache.juneau.common.utils;
 
 /**
  * Enumeration of state machine states for use in parsing operations.
@@ -26,7 +26,7 @@ package org.apache.juneau.common;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
- * 	<jk>import static</jk> org.apache.juneau.common.StateEnum.*;
+ * 	<jk>import static</jk> org.apache.juneau.common.utils.StateEnum.*;
  *
  * 	<jc>// Use in state machine</jc>
  * 	<jk>var</jk> state = S1;
@@ -140,4 +140,17 @@ public enum StateEnum {
 	S49,
 	/** State 50 */
 	S50;
+
+	/**
+	 * Returns <jk>true</jk> if the state is any one of the specified states.
+	 *
+	 * @param states The states to check.
+	 * @return <jk>true</jk> if the state is any one of the specified states.
+	 */
+	public boolean isAny(StateEnum...states) {
+		for (StateEnum s : states)
+			if (this == s)
+				return true;
+		return false;
+	}
 }

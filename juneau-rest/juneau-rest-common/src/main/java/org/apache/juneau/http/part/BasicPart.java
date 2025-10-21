@@ -84,7 +84,7 @@ public class BasicPart implements NameValuePair, Headerable {
 			Map.Entry e = (Map.Entry)o;
 			return BasicPart.of(Utils.s(e.getKey()), e.getValue());
 		}
-		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", ClassUtils2.className(o));
+		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", ClassUtils.className(o));
 	}
 
 	/**

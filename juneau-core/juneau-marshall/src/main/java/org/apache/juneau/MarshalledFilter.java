@@ -66,7 +66,7 @@ public class MarshalledFilter {
 		public Builder applyAnnotations(List<Marshalled> annotations) {
 
 			annotations.forEach(x -> {
-				if (ClassUtils2.isNotVoid(x.implClass()))
+				if (ClassUtils.isNotVoid(x.implClass()))
 					implClass(x.implClass());
 				if (isNotEmpty(x.example()))
 					example(x.example());

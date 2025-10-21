@@ -308,7 +308,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(PATH, cm).orElseThrow(() -> new BasicRuntimeException("@Path(name) not found on class {0}", ClassUtils2.className(type)));
+		String name = HttpParts.getName(PATH, cm).orElseThrow(() -> new BasicRuntimeException("@Path(name) not found on class {0}", ClassUtils.className(type)));
 		return get(name).as(type);
 	}
 

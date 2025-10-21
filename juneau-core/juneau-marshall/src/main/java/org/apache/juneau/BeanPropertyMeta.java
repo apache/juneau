@@ -138,9 +138,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		private static ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
 			Class<?> c = s.value();
-			if (ClassUtils2.isVoid(c))
+			if (ClassUtils.isVoid(c))
 				c = s.impl();
-			if (ClassUtils2.isVoid(c))
+			if (ClassUtils.isVoid(c))
 				return null;
 			ClassInfo ci = ClassInfo.of(c);
 			if (ci.isChildOf(ObjectSwap.class)) {
@@ -172,20 +172,20 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		BeanPropertyMeta.Builder setExtraKeys(Method extraKeys) {
-			ClassUtils2.setAccessible(extraKeys);
+			ClassUtils.setAccessible(extraKeys);
 			this.extraKeys = extraKeys;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setField(Field field) {
-			ClassUtils2.setAccessible(field);
+			ClassUtils.setAccessible(field);
 			this.field = field;
 			this.innerField = field;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {
-			ClassUtils2.setAccessible(getter);
+			ClassUtils.setAccessible(getter);
 			this.getter = getter;
 			return this;
 		}
@@ -196,7 +196,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		BeanPropertyMeta.Builder setSetter(Method setter) {
-			ClassUtils2.setAccessible(setter);
+			ClassUtils.setAccessible(setter);
 			this.setter = setter;
 			return this;
 		}

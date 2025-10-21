@@ -21,7 +21,7 @@ import java.io.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.*;
+import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;

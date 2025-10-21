@@ -14,11 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.utils;
 
 import java.text.*;
-
-import org.apache.juneau.marshaller.*;
 
 /**
  * A utility for logging formatted messages to the console.
@@ -68,7 +66,7 @@ public class Console {
 	 */
 	public static final String format(String msg, Object...args) {
 		for (int i = 0; i < args.length; i++)
-			args[i] = Json5.of(args[i]);
+			args[i] = Utils.s(args[i]);
 		return MessageFormat.format(msg, args);
 	}
 

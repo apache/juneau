@@ -103,7 +103,7 @@ public abstract class RestObject {
 		RestContext c = context.get();
 		Logger logger = c == null ? null : c.getLogger();
 		if (logger == null)
-			logger = Logger.getLogger(ClassUtils2.className(this));
+			logger = Logger.getLogger(ClassUtils.className(this));
 		logger.log(level, cause, msg);
 	}
 

@@ -17,7 +17,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.Utils2.*;
 
 import org.apache.juneau.common.utils.*;
 
@@ -45,7 +44,7 @@ public class EntityTag {
 	 * @throws IllegalArgumentException If attempting to set an invalid entity tag value.
 	 */
 	public static EntityTag of(Object value) {
-		Object o = unwrap(value);
+		Object o = Utils.unwrap(value);
 		return o == null ? null : new EntityTag(o.toString());
 	}
 

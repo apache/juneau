@@ -87,7 +87,7 @@ public class Assertion {
 	 * @return The class name for an object.
 	 */
 	protected static String className(Object o) {
-		return ClassUtils2.className(o);
+		return ClassUtils.className(o);
 	}
 
 	private String msg;

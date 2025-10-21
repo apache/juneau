@@ -18,7 +18,7 @@ package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.common.function.*;
 
 /**
  * A simple settable boolean value.
