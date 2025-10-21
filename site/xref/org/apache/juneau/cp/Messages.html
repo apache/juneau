@@ -35,10 +35,10 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshaller.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.ParseException;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.utils.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshaller.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.ParseException;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * An enhanced {@link ResourceBundle}.</em>
@@ -261,7 +261,7 @@
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">protected</strong> <a name="Messages" href="../../../../org/apache/juneau/cp/Messages.html#Messages">Messages</a> buildDefault() {
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">if</strong> (! locations.isEmpty()) {
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 				Tuple2&lt;Class&lt;?&gt;,String&gt;[] mbl = locations.toArray(<strong class="jxr_keyword">new</strong> <a name="Tuple2" href="../../../../org/apache/juneau/utils/Tuple2.html#Tuple2">Tuple2</a>[0]);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 				Tuple2&lt;Class&lt;?&gt;,String&gt;[] mbl = locations.toArray(<strong class="jxr_keyword">new</strong> <a name="Tuple2" href="../../../../org/apache/juneau/common/function/Tuple2.html#Tuple2">Tuple2</a>[0]);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 				Builder x = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 

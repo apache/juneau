@@ -2239,7 +2239,7 @@
 <a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 		<strong class="jxr_keyword">public</strong> Builder parserListener(Class&lt;? <strong class="jxr_keyword">extends</strong> ParserListener&gt; value) {
-<a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils2.isNotVoid(value))
+<a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils.isNotVoid(value))
 <a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> 				parsers.forEach(x -&gt; x.listener(value));
 <a class="jxr_linenumber" name="L2236" href="#L2236">2236</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2237" href="#L2237">2237</a> 		}
@@ -3096,7 +3096,7 @@
 <a class="jxr_linenumber" name="L3088" href="#L3088">3088</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L3089" href="#L3089">3089</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L3090" href="#L3090">3090</a> 		<strong class="jxr_keyword">public</strong> Builder serializerListener(Class&lt;? <strong class="jxr_keyword">extends</strong> SerializerListener&gt; value) {
-<a class="jxr_linenumber" name="L3091" href="#L3091">3091</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils2.isNotVoid(value))
+<a class="jxr_linenumber" name="L3091" href="#L3091">3091</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils.isNotVoid(value))
 <a class="jxr_linenumber" name="L3092" href="#L3092">3092</a> 				serializers.forEach(x -&gt; x.listener(value));
 <a class="jxr_linenumber" name="L3093" href="#L3093">3093</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L3094" href="#L3094">3094</a> 		}
@@ -3856,7 +3856,7 @@
 <a class="jxr_linenumber" name="L3848" href="#L3848">3848</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L3849" href="#L3849">3849</a> 
 <a class="jxr_linenumber" name="L3850" href="#L3850">3850</a> 			<em class="jxr_comment">// Apply @Rest(beanStore).</em>
-<a class="jxr_linenumber" name="L3851" href="#L3851">3851</a> 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.<strong class="jxr_keyword">class</strong>, x -&gt; ClassUtils2.isNotVoid(x.beanStore()), x -&gt; v.get().type(x.beanStore()));
+<a class="jxr_linenumber" name="L3851" href="#L3851">3851</a> 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.<strong class="jxr_keyword">class</strong>, x -&gt; ClassUtils.isNotVoid(x.beanStore()), x -&gt; v.get().type(x.beanStore()));
 <a class="jxr_linenumber" name="L3852" href="#L3852">3852</a> 
 <a class="jxr_linenumber" name="L3853" href="#L3853">3853</a> 			<em class="jxr_comment">// Replace with bean from:  @RestInject public [static] BeanStore xxx(&lt;args&gt;)</em>
 <a class="jxr_linenumber" name="L3854" href="#L3854">3854</a> 			<em class="jxr_comment">// @formatter:off</em>
@@ -5874,7 +5874,7 @@
 <a class="jxr_linenumber" name="L5866" href="#L5866">5866</a> 		<strong class="jxr_keyword">if</strong> (ci.isChildOf(ParseException.<strong class="jxr_keyword">class</strong>) || ci.is(InvalidDataConversionException.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L5867" href="#L5867">5867</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BadRequest" href="../../../../org/apache/juneau/http/response/BadRequest.html#BadRequest">BadRequest</a>(t);
 <a class="jxr_linenumber" name="L5868" href="#L5868">5868</a> 
-<a class="jxr_linenumber" name="L5869" href="#L5869">5869</a> 		String n = ClassUtils2.className(t);
+<a class="jxr_linenumber" name="L5869" href="#L5869">5869</a> 		String n = ClassUtils.className(t);
 <a class="jxr_linenumber" name="L5870" href="#L5870">5870</a> 
 <a class="jxr_linenumber" name="L5871" href="#L5871">5871</a> 		<strong class="jxr_keyword">if</strong> (n.contains(<span class="jxr_string">"AccessDenied"</span>) || n.contains(<span class="jxr_string">"Unauthorized"</span>))
 <a class="jxr_linenumber" name="L5872" href="#L5872">5872</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Unauthorized" href="../../../../org/apache/juneau/http/response/Unauthorized.html#Unauthorized">Unauthorized</a>(t);
@@ -6108,7 +6108,7 @@
 <a class="jxr_linenumber" name="L6100" href="#L6100">6100</a> 		}
 <a class="jxr_linenumber" name="L6101" href="#L6101">6101</a> 
 <a class="jxr_linenumber" name="L6102" href="#L6102">6102</a> 		Object output = opSession.getResponse().getContent().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L6103" href="#L6103">6103</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotImplemented" href="../../../../org/apache/juneau/http/response/NotImplemented.html#NotImplemented">NotImplemented</a>(<span class="jxr_string">"No response processors found to process output of type ''{0}''"</span>, ClassUtils2.className(output));
+<a class="jxr_linenumber" name="L6103" href="#L6103">6103</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotImplemented" href="../../../../org/apache/juneau/http/response/NotImplemented.html#NotImplemented">NotImplemented</a>(<span class="jxr_string">"No response processors found to process output of type ''{0}''"</span>, ClassUtils.className(output));
 <a class="jxr_linenumber" name="L6104" href="#L6104">6104</a> 	}
 <a class="jxr_linenumber" name="L6105" href="#L6105">6105</a> 
 <a class="jxr_linenumber" name="L6106" href="#L6106">6106</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>

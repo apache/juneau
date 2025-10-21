@@ -330,7 +330,7 @@
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * @throws Exception If a problem occurred trying to convert the output.</em>
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<strong class="jxr_keyword">public</strong> S swap(BeanSession session, T o, String template) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<span class="jxr_string">"Swap method not implemented on ObjectSwap ''{0}''"</span>, ClassUtils2.className(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<span class="jxr_string">"Swap method not implemented on ObjectSwap ''{0}''"</span>, ClassUtils.className(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 	}
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
@@ -375,7 +375,7 @@
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * @throws Exception If a problem occurred trying to convert the output.</em>
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 	<strong class="jxr_keyword">public</strong> T unswap(BeanSession session, S f, ClassMeta&lt;?&gt; hint, String template) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Unswap method not implemented on ObjectSwap ''{0}''"</span>, ClassUtils2.className(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Unswap method not implemented on ObjectSwap ''{0}''"</span>, ClassUtils.className(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 	}
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<em class="jxr_javadoccomment">/**</em>

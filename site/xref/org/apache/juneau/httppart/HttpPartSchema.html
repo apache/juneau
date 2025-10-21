@@ -387,7 +387,7 @@
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (a.annotationType().getName().startsWith(<span class="jxr_string">"jakarta.validation.constraints."</span>))
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 				applyJakartaValidation(a);
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Builder.apply(@{0}) not defined"</span>, ClassUtils2.className(a));
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Builder.apply(@{0}) not defined"</span>, ClassUtils.className(a));
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		}
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 
@@ -1891,7 +1891,7 @@
 <a class="jxr_linenumber" name="L1883" href="#L1883">1883</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L1884" href="#L1884">1884</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> 		<strong class="jxr_keyword">public</strong> Builder parser(Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartParser&gt; value) {
-<a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils2.isNotVoid(value))
+<a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils.isNotVoid(value))
 <a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 				parser = value;
 <a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> 		}
@@ -2073,7 +2073,7 @@
 <a class="jxr_linenumber" name="L2065" href="#L2065">2065</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2066" href="#L2066">2066</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> 		<strong class="jxr_keyword">public</strong> Builder serializer(Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; value) {
-<a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils2.isNotVoid(value))
+<a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils.isNotVoid(value))
 <a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> 				serializer = value;
 <a class="jxr_linenumber" name="L2070" href="#L2070">2070</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> 		}
@@ -2553,7 +2553,7 @@
 <a class="jxr_linenumber" name="L2545" href="#L2545">2545</a> 			<strong class="jxr_keyword">if</strong> (t instanceof Class&lt;?&gt;) {
 <a class="jxr_linenumber" name="L2546" href="#L2546">2546</a> 				ClassInfo.of((Class&lt;?&gt;)t).forEachAnnotation(c, x -&gt; <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">this</strong>::apply);
 <a class="jxr_linenumber" name="L2547" href="#L2547">2547</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Value.isType(t)) {
-<a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 				apply(c, ClassUtils2.getParameterType(t));
+<a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 				apply(c, ClassUtils.getParameterType(t));
 <a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> 			}
 <a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> 		}

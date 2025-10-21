@@ -2522,7 +2522,7 @@
 <a class="jxr_linenumber" name="L2514" href="#L2514">2514</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isBean(value)) {
 <a class="jxr_linenumber" name="L2515" href="#L2515">2515</a> 			toBeanMap(value).forEach((k, v) -&gt; l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
 <a class="jxr_linenumber" name="L2516" href="#L2516">2516</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L2517" href="#L2517">2517</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid value type for header arg ''{0}'': {1}"</span>, name, ClassUtils2.className(value));
+<a class="jxr_linenumber" name="L2517" href="#L2517">2517</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid value type for header arg ''{0}'': {1}"</span>, name, ClassUtils.className(value));
 <a class="jxr_linenumber" name="L2518" href="#L2518">2518</a> 		}
 <a class="jxr_linenumber" name="L2519" href="#L2519">2519</a> 
 <a class="jxr_linenumber" name="L2520" href="#L2520">2520</a> 		<strong class="jxr_keyword">if</strong> (skipIfEmpty)
@@ -2557,7 +2557,7 @@
 <a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isBean(value)) {
 <a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 			toBeanMap(value).forEach((k, v) -&gt; l.add(createPart(k, v, PATH, serializer, schema, false)));
 <a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L2552" href="#L2552">2552</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid value type for path arg ''{0}'': {1}"</span>, name, ClassUtils2.className(value));
+<a class="jxr_linenumber" name="L2552" href="#L2552">2552</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid value type for path arg ''{0}'': {1}"</span>, name, ClassUtils.className(value));
 <a class="jxr_linenumber" name="L2553" href="#L2553">2553</a> 		}
 <a class="jxr_linenumber" name="L2554" href="#L2554">2554</a> 
 <a class="jxr_linenumber" name="L2555" href="#L2555">2555</a> 		pathData.append(l);

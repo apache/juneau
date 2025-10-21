@@ -341,7 +341,7 @@
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			Object o = stack.removeLast().o;
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 			Object o2 = set.remove(o);
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">if</strong> (o2 == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 				onError(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack."</span>, ClassUtils2.className(o), stack);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 				onError(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack."</span>, ClassUtils.className(o), stack);
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 		}
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 		isBottom = false;
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}

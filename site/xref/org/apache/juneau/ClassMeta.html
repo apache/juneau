@@ -449,7 +449,7 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">private</strong> ObjectSwap&lt;T,?&gt; createSwap(Swap s) {
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 			Class&lt;?&gt; c = s.value();
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils2.isVoid(c))
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils.isVoid(c))
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 				c = s.impl();
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			ClassInfo ci = ClassInfo.of(c);
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 

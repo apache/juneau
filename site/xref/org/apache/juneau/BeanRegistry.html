@@ -142,7 +142,7 @@
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 						<strong class="jxr_keyword">if</strong> (x instanceof Class)
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 							addClass((Class&lt;?&gt;)x);
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 						<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Collection class ''{0}'' passed to BeanRegistry does not contain Class objects."</span>, ClassUtils2.className(c));
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Collection class ''{0}'' passed to BeanRegistry does not contain Class objects."</span>, ClassUtils.className(c));
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 					});
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ci.isChildOf(Map.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 					Map&lt;?,?&gt; m = BeanCreator.of(Map.<strong class="jxr_keyword">class</strong>).type(c).run();
@@ -154,13 +154,13 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isArray(v))
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 							val = getTypedClassMeta(v);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 						<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object."</span>, ClassUtils2.className(c), ClassUtils2.className(v));
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object."</span>, ClassUtils.className(c), ClassUtils.className(v));
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 						addToMap(typeName, val);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 					});
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 					Value&lt;String&gt; typeName = Value.empty();
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 					ci.forEachAnnotation(beanContext, Bean.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.typeName()), x -&gt; typeName.set(x.typeName()));
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 					addToMap(typeName.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined."</span>, ClassUtils2.className(c))),
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 					addToMap(typeName.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined."</span>, ClassUtils.className(c))),
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 						beanContext.getClassMeta(c));
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 				}
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			}

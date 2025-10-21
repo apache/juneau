@@ -671,7 +671,7 @@
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 	<strong class="jxr_keyword">public</strong> Object invokeFuzzy(Object pojo, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			<strong class="jxr_keyword">return</strong> m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			<strong class="jxr_keyword">return</strong> m.invoke(pojo, ClassUtils2.getMatchingArgs(m.getParameterTypes(), args));
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | InvocationTargetException e) {
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 		}

@@ -896,7 +896,7 @@
 <a class="jxr_linenumber" name="L888" href="#L888">888</a> <em class="jxr_javadoccomment">	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.</em>
 <a class="jxr_linenumber" name="L889" href="#L889">889</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> 	<strong class="jxr_keyword">protected</strong> &lt;E&gt; Collection&lt;E&gt; doParseIntoCollection(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, Collection&lt;E&gt; c, Type elementType) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Parser '"</span> + ClassUtils2.className(getClass()) + <span class="jxr_string">"' does not support this method."</span>);
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Parser '"</span> + ClassUtils.className(getClass()) + <span class="jxr_string">"' does not support this method."</span>);
 <a class="jxr_linenumber" name="L892" href="#L892">892</a> 	}
 <a class="jxr_linenumber" name="L893" href="#L893">893</a> 
 <a class="jxr_linenumber" name="L894" href="#L894">894</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -915,7 +915,7 @@
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> <em class="jxr_javadoccomment">	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.</em>
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 	<strong class="jxr_keyword">protected</strong> &lt;K,V&gt; Map&lt;K,V&gt; doParseIntoMap(<a name="ParserPipe" href="../../../../org/apache/juneau/parser/ParserPipe.html#ParserPipe">ParserPipe</a> pipe, Map&lt;K,V&gt; m, Type keyType, Type valueType) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Parser '"</span> + ClassUtils2.className(getClass()) + <span class="jxr_string">"' does not support this method."</span>);
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Parser '"</span> + ClassUtils.className(getClass()) + <span class="jxr_string">"' does not support this method."</span>);
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> 	}
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 	<em class="jxr_javadoccomment">/**</em>

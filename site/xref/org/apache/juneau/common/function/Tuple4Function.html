@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title>Tuple5Function xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+<title>Tuple4Function xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/utils/Tuple5Function.html">View Javadoc</a></div><pre>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/common/function/Tuple4Function.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
@@ -22,20 +22,20 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.utils;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.common.function;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * Allows you to perform a function against 5 objects.</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * Allows you to perform a function against 4 objects.</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Similar to {@link BiFunction} except for 5 parameters.</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Similar to {@link BiFunction} except for 4 parameters.</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * 	Tuple5Function&amp;lt;A,B,C,D,E,R&amp;gt; &lt;jv&gt;x&lt;/jv&gt; = (&lt;jv&gt;a&lt;/jv&gt;,&lt;jv&gt;b&lt;/jv&gt;,&lt;jv&gt;c&lt;/jv&gt;,&lt;jv&gt;d&lt;/jv&gt;,&lt;jv&gt;e&lt;/jv&gt;) -&amp;gt; &lt;jsm&gt;doSomething&lt;/jsm&gt;(&lt;jv&gt;a&lt;/jv&gt;,&lt;jv&gt;b&lt;/jv&gt;,&lt;jv&gt;c&lt;/jv&gt;,&lt;jv&gt;d&lt;/jv&gt;,&lt;jv&gt;e&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * 	Tuple4Function&amp;lt;A,B,C,D,R&amp;gt; &lt;jv&gt;x&lt;/jv&gt; = (&lt;jv&gt;a&lt;/jv&gt;,&lt;jv&gt;b&lt;/jv&gt;,&lt;jv&gt;c&lt;/jv&gt;,&lt;jv&gt;d&lt;/jv&gt;) -&amp;gt; &lt;jsm&gt;doSomething&lt;/jsm&gt;(&lt;jv&gt;a&lt;/jv&gt;,&lt;jv&gt;b&lt;/jv&gt;,&lt;jv&gt;c&lt;/jv&gt;,&lt;jv&gt;d&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * 	R &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;x&lt;/jv&gt;.apply(&lt;jv&gt;xa&lt;/jv&gt;,&lt;jv&gt;xb&lt;/jv&gt;,&lt;jv&gt;xc&lt;/jv&gt;,&lt;jv&gt;xd&lt;/jv&gt;,&lt;jv&gt;xe&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * 	R &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;x&lt;/jv&gt;.apply(&lt;jv&gt;xa&lt;/jv&gt;,&lt;jv&gt;xb&lt;/jv&gt;,&lt;jv&gt;xc&lt;/jv&gt;,&lt;jv&gt;xd&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
@@ -45,20 +45,19 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * @param &lt;B&gt; Object 2 type.</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * @param &lt;C&gt; Object 3 type.</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * @param &lt;D&gt; Object 4 type.</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * @param &lt;E&gt; Object 5 type.</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * @param &lt;R&gt; Result type.</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  @FunctionalInterface
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> Tuple5Function&lt;A,B,C,D,E,R&gt; {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@SuppressWarnings(<span class="jxr_string">"javadoc"</span>)
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">default</strong> &lt;V&gt; Tuple5Function&lt;A,B,C,D,E,V&gt; andThen(Function&lt;? <strong class="jxr_keyword">super</strong> R,? <strong class="jxr_keyword">extends</strong> V&gt; after) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">return</strong> (A a, B b, C c, D d, E e) -&gt; after.apply(apply(a, b, c, d, e));
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@SuppressWarnings(<span class="jxr_string">"javadoc"</span>)
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	R apply(A a, B b, C c, D d, E e);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * @param &lt;R&gt; Result type.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  @FunctionalInterface
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> Tuple4Function&lt;A,B,C,D,R&gt; {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	@SuppressWarnings(<span class="jxr_string">"javadoc"</span>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">default</strong> &lt;V&gt; Tuple4Function&lt;A,B,C,D,V&gt; andThen(Function&lt;? <strong class="jxr_keyword">super</strong> R,? <strong class="jxr_keyword">extends</strong> V&gt; after) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">return</strong> (A a, B b, C c, D d) -&gt; after.apply(apply(a, b, c, d));
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	@SuppressWarnings(<span class="jxr_string">"javadoc"</span>)
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	R apply(A a, B b, C c, D d);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

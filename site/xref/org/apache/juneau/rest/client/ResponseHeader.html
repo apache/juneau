@@ -272,7 +272,7 @@
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 				e = e.getCause();
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		}
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Could not determine a method to construct type {0}"</span>, ClassUtils2.className(c));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Could not determine a method to construct type {0}"</span>, ClassUtils.className(c));
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	}
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 	<em class="jxr_javadoccomment">/**</em>

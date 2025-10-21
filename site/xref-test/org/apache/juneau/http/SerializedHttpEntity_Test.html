@@ -26,100 +26,101 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpEntities.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartSchema.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.json.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.msgpack.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.oapi.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.httppart.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.*;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.servlet.*;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.testutils.pojos.*;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">class</strong> <a name="SerializedHttpEntity_Test" href="../../../../org/apache/juneau/http/SerializedHttpEntity_Test.html#SerializedHttpEntity_Test">SerializedHttpEntity_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	@Rest
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> BasicRestObject {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		@RestPost
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">public</strong> String[] checkHeader(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.RestRequest req) {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">return</strong> req.getHeaders().getAll(req.getHeaderParam(<span class="jxr_string">"Check"</span>).orElse(<strong class="jxr_keyword">null</strong>)).stream().map(RequestHeader::getValue).toArray(String[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		}
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		@RestPost
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">public</strong> Reader checkBody(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.RestRequest req) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">return</strong> req.getReader();
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		}
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		serializedEntity(ABean.get(),JsonSerializer.DEFAULT).assertString().is(<span class="jxr_string">"{\&quot;a\&quot;:1,\&quot;b\&quot;:\&quot;foo\&quot;}"</span>);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		serializedEntity(ABean::get,JsonSerializer.DEFAULT).assertString().is(<span class="jxr_string">"{\&quot;a\&quot;:1,\&quot;b\&quot;:\&quot;foo\&quot;}"</span>);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).assertString().is(<span class="jxr_string">"{a:1,b:'foo'}"</span>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		serializedEntity(<strong class="jxr_keyword">null</strong>,JsonSerializer.DEFAULT).assertString().is(<span class="jxr_string">"null"</span>);
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@Test <strong class="jxr_keyword">void</strong> a02_schema() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		serializedEntity(alist(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is(<span class="jxr_string">"foo|bar"</span>);
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test <strong class="jxr_keyword">void</strong> a03_serializer_streaming() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		serializedEntity(ABean.get(),MsgPackSerializer.DEFAULT).assertBytes().asSpacedHex().is(<span class="jxr_string">"82 A1 61 01 A1 62 A3 66 6F 6F"</span>);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	@Test <strong class="jxr_keyword">void</strong> a04_serializer_bad() {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Required value not provided."</span>, ()-&gt;serializedEntity(<strong class="jxr_keyword">null</strong>,OpenApiSerializer.DEFAULT).setSchema(schema().required().build()).asString());
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> a05_writeTo() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		serializedEntity(<span class="jxr_string">"foo"</span>, <strong class="jxr_keyword">null</strong>).writeTo(baos);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(<span class="jxr_string">"foo"</span>, toUtf8(baos.toByteArray()));
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Test <strong class="jxr_keyword">void</strong> a06_isRepeatable() {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertTrue(serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).isRepeatable());
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a07_getContentLength() {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(-1L, serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).getContentLength());
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> a08_getContent() {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertEquals(<span class="jxr_string">"foo"</span>, toUtf8(serializedEntity(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">null</strong>).getContent()));
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@Test <strong class="jxr_keyword">void</strong> a09_chunked() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		checkHeaderClient(<span class="jxr_string">"Transfer-Encoding"</span>).post(<span class="jxr_string">"/"</span>,serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).setChunked()).run().assertContent(<span class="jxr_string">"['chunked']"</span>);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a10_contentEncoding() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		checkHeaderClient(<span class="jxr_string">"Content-Encoding"</span>).post(<span class="jxr_string">"/"</span>,serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).setContentEncoding(<span class="jxr_string">"identity"</span>)).run().assertContent(<span class="jxr_string">"['identity']"</span>);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a12_contentType() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		checkHeaderClient(<span class="jxr_string">"Content-Type"</span>).post(<span class="jxr_string">"/"</span>,serializedEntity(reader(<span class="jxr_string">"foo"</span>),<strong class="jxr_keyword">null</strong>).setContentType(<span class="jxr_string">"text/foo"</span>)).run().assertContent(<span class="jxr_string">"['text/foo']"</span>);
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_comment">// Utility methods</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpPartSchema.Builder schema() {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">return</strong> HttpPartSchema.create();
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient checkHeaderClient(String header) {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).rootUrl(<span class="jxr_string">"http://localhost/checkHeader"</span>).json5().header(<span class="jxr_string">"Check"</span>,header).ignoreErrors().build();
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> }
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpEntities.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartSchema.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.json.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.msgpack.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.oapi.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.httppart.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.servlet.*;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.testutils.pojos.*;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">class</strong> <a name="SerializedHttpEntity_Test" href="../../../../org/apache/juneau/http/SerializedHttpEntity_Test.html#SerializedHttpEntity_Test">SerializedHttpEntity_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Rest
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> BasicRestObject {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		@RestPost
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">public</strong> String[] checkHeader(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.RestRequest req) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			<strong class="jxr_keyword">return</strong> req.getHeaders().getAll(req.getHeaderParam(<span class="jxr_string">"Check"</span>).orElse(<strong class="jxr_keyword">null</strong>)).stream().map(RequestHeader::getValue).toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		}
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		@RestPost
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">public</strong> Reader checkBody(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.RestRequest req) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">return</strong> req.getReader();
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		}
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		serializedEntity(ABean.get(),JsonSerializer.DEFAULT).assertString().is(<span class="jxr_string">"{\&quot;a\&quot;:1,\&quot;b\&quot;:\&quot;foo\&quot;}"</span>);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		serializedEntity(ABean::get,JsonSerializer.DEFAULT).assertString().is(<span class="jxr_string">"{\&quot;a\&quot;:1,\&quot;b\&quot;:\&quot;foo\&quot;}"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).assertString().is(<span class="jxr_string">"{a:1,b:'foo'}"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		serializedEntity(<strong class="jxr_keyword">null</strong>,JsonSerializer.DEFAULT).assertString().is(<span class="jxr_string">"null"</span>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	}
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Test <strong class="jxr_keyword">void</strong> a02_schema() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		serializedEntity(alist(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is(<span class="jxr_string">"foo|bar"</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Test <strong class="jxr_keyword">void</strong> a03_serializer_streaming() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		serializedEntity(ABean.get(),MsgPackSerializer.DEFAULT).assertBytes().asSpacedHex().is(<span class="jxr_string">"82 A1 61 01 A1 62 A3 66 6F 6F"</span>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Test <strong class="jxr_keyword">void</strong> a04_serializer_bad() {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Required value not provided."</span>, ()-&gt;serializedEntity(<strong class="jxr_keyword">null</strong>,OpenApiSerializer.DEFAULT).setSchema(schema().required().build()).asString());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> a05_writeTo() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		serializedEntity(<span class="jxr_string">"foo"</span>, <strong class="jxr_keyword">null</strong>).writeTo(baos);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(<span class="jxr_string">"foo"</span>, toUtf8(baos.toByteArray()));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> a06_isRepeatable() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertTrue(serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).isRepeatable());
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test <strong class="jxr_keyword">void</strong> a07_getContentLength() {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(-1L, serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).getContentLength());
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> a08_getContent() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertEquals(<span class="jxr_string">"foo"</span>, toUtf8(serializedEntity(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">null</strong>).getContent()));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Test <strong class="jxr_keyword">void</strong> a09_chunked() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		checkHeaderClient(<span class="jxr_string">"Transfer-Encoding"</span>).post(<span class="jxr_string">"/"</span>,serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).setChunked()).run().assertContent(<span class="jxr_string">"['chunked']"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> a10_contentEncoding() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		checkHeaderClient(<span class="jxr_string">"Content-Encoding"</span>).post(<span class="jxr_string">"/"</span>,serializedEntity(ABean.get(),<strong class="jxr_keyword">null</strong>).setContentEncoding(<span class="jxr_string">"identity"</span>)).run().assertContent(<span class="jxr_string">"['identity']"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Test <strong class="jxr_keyword">void</strong> a12_contentType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		checkHeaderClient(<span class="jxr_string">"Content-Type"</span>).post(<span class="jxr_string">"/"</span>,serializedEntity(reader(<span class="jxr_string">"foo"</span>),<strong class="jxr_keyword">null</strong>).setContentType(<span class="jxr_string">"text/foo"</span>)).run().assertContent(<span class="jxr_string">"['text/foo']"</span>);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<em class="jxr_comment">// Utility methods</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpPartSchema.Builder schema() {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">return</strong> HttpPartSchema.create();
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient checkHeaderClient(String header) {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).rootUrl(<span class="jxr_string">"http://localhost/checkHeader"</span>).json5().header(<span class="jxr_string">"Check"</span>,header).ignoreErrors().build();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

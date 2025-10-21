@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Main class for creation of assertions for stand-alone testing.</em>
@@ -922,7 +922,7 @@
 <a class="jxr_linenumber" name="L914" href="#L914">914</a> <em class="jxr_javadoccomment">	 * @param snippet The snippet of code to execute.</em>
 <a class="jxr_linenumber" name="L915" href="#L915">915</a> <em class="jxr_javadoccomment">	 * @return A new assertion object.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L916" href="#L916">916</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ThrowableAssertion&lt;Throwable&gt; assertThrown(<a name="Snippet" href="../../../../org/apache/juneau/common/utils/Snippet.html#Snippet">Snippet</a> snippet) {
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ThrowableAssertion&lt;Throwable&gt; assertThrown(<a name="Snippet" href="../../../../org/apache/juneau/common/function/Snippet.html#Snippet">Snippet</a> snippet) {
 <a class="jxr_linenumber" name="L918" href="#L918">918</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L919" href="#L919">919</a> 			snippet.run();
 <a class="jxr_linenumber" name="L920" href="#L920">920</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {

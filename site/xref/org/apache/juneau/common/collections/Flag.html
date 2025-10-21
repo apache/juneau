@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * A simple settable boolean value.</em>
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * @param snippet The snippet of code to run.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <a name="Flag" href="../../../../../org/apache/juneau/common/collections/Flag.html#Flag">Flag</a> ifNotSet(<a name="Snippet" href="../../../../../org/apache/juneau/common/utils/Snippet.html#Snippet">Snippet</a> snippet) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <a name="Flag" href="../../../../../org/apache/juneau/common/collections/Flag.html#Flag">Flag</a> ifNotSet(<a name="Snippet" href="../../../../../org/apache/juneau/common/function/Snippet.html#Snippet">Snippet</a> snippet) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">if</strong> (! value)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			runSnippet(snippet);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * @param snippet The snippet of code to run.</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">public</strong> <a name="Flag" href="../../../../../org/apache/juneau/common/collections/Flag.html#Flag">Flag</a> ifSet(<a name="Snippet" href="../../../../../org/apache/juneau/common/utils/Snippet.html#Snippet">Snippet</a> snippet) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">public</strong> <a name="Flag" href="../../../../../org/apache/juneau/common/collections/Flag.html#Flag">Flag</a> ifSet(<a name="Snippet" href="../../../../../org/apache/juneau/common/function/Snippet.html#Snippet">Snippet</a> snippet) {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">if</strong> (value)
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			runSnippet(snippet);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -163,7 +163,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> runSnippet(<a name="Snippet" href="../../../../../org/apache/juneau/common/utils/Snippet.html#Snippet">Snippet</a> snippet) {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> runSnippet(<a name="Snippet" href="../../../../../org/apache/juneau/common/function/Snippet.html#Snippet">Snippet</a> snippet) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			snippet.run();
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		} <strong class="jxr_keyword">catch</strong> (Error | RuntimeException e) {

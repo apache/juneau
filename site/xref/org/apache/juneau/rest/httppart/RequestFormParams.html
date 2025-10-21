@@ -377,7 +377,7 @@
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 		ClassMeta&lt;T&gt; cm = req.getBeanSession().getClassMeta(type);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"@FormData(name) not found on class {0}"</span>, ClassUtils2.className(type)));
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"@FormData(name) not found on class {0}"</span>, ClassUtils.className(type)));
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">return</strong> get(name).as(type);
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 
