@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.server.config;
 
-import org.apache.juneau.microservice.jetty.JettyMicroservice;
-import org.apache.juneau.server.config.rest.LoadConfigResource;
+import org.apache.juneau.microservice.jetty.*;
+import org.apache.juneau.server.config.rest.*;
 
 /**
  * Entry-point class.

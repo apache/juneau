@@ -25,9 +25,9 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.

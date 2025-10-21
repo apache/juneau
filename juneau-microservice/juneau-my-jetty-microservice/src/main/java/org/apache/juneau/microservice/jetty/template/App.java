@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.microservice.jetty.template;
 
-import org.apache.juneau.microservice.jetty.JettyMicroservice;
+import org.apache.juneau.microservice.jetty.*;
 
 /**
  * Entry-point for your microservice.

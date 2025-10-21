@@ -16,9 +16,6 @@
  */
 package org.apache.juneau.internal;
 
-import java.lang.reflect.*;
-import java.util.function.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
 

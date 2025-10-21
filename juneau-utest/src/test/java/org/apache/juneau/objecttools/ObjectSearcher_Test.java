@@ -21,7 +21,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swaps.*;

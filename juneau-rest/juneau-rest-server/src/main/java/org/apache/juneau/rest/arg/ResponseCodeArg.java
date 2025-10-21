@@ -18,8 +18,7 @@ package org.apache.juneau.rest.arg;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.common.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.reflect.*;

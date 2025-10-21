@@ -16,12 +16,10 @@
  */
 package org.apache.juneau.swap;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;

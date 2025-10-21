@@ -21,8 +21,8 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * The Link object represents a possible design-time link for a response.

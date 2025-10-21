@@ -18,7 +18,6 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -28,7 +27,7 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;

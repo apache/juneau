@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -24,12 +24,12 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.time.*;
 import java.time.format.*;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
+import java.time.temporal.*;
 import java.util.*;
 
 import org.apache.juneau.common.*;
-import org.apache.juneau.common.utils.*;
+
+import jakarta.xml.bind.*;
 
 /**
  * A utility class for parsing and formatting HTTP dates as used in cookies and other headers.

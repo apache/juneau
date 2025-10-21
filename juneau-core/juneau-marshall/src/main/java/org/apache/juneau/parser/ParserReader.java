@@ -19,7 +19,6 @@ package org.apache.juneau.parser;
 import java.io.*;
 
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Similar to a {@link java.io.PushbackReader} with a pushback buffer of 1 character.

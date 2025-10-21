@@ -18,7 +18,7 @@ package org.apache.juneau.examples.rest.dto;
 
 import static org.apache.juneau.bean.atom.AtomBuilder.*;
 
-import java.net.URI;
+import java.net.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.atom.*;

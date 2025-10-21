@@ -14,13 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common.utils;
+package org.apache.juneau.common.collections;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * Builder for lists with fluent convenience methods.

@@ -18,11 +18,11 @@ package org.apache.juneau.examples.rest.springboot;
 
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.springboot.*;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.builder.*;
 import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.*;
 
 /**
  * Entry point for Examples REST application when deployed as a Spring Boot application.

@@ -21,8 +21,8 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A map of possible out-of-band callbacks related to the parent operation.

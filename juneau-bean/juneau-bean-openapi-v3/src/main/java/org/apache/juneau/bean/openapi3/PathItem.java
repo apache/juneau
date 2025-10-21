@@ -22,8 +22,8 @@ import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Describes the operations available on a single path.

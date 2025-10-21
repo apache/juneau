@@ -20,8 +20,8 @@ import java.util.*;
 
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.servlet.BasicRestObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.juneau.rest.servlet.*;
+import org.springframework.beans.factory.annotation.*;
 
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.

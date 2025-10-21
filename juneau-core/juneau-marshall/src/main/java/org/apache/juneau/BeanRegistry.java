@@ -17,14 +17,13 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.reflect.*;

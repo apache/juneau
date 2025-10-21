@@ -20,7 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class SimpleMap_Test extends TestBase {

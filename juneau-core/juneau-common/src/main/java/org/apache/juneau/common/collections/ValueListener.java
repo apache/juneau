@@ -14,39 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
-
-import java.util.*;
+package org.apache.juneau.common.collections;
 
 /**
- * Stores a set of language keywords for quick lookup.
+ * Simple listener for the {@link Value} class.
  *
  * <h5 class='section'>See Also:</h5><ul>
-
  * </ul>
+ *
+ * @param <T> Value type.
  */
-public class KeywordSet {
-	final String[] store;
+public interface ValueListener<T> {
 
 	/**
-	 * Constructor.
+	 * Called when {@link Value#set(Object)} is called.
 	 *
-	 * @param keywords The list of keywords.
+	 * @param newValue The new value.
 	 */
-	public KeywordSet(String...keywords) {
-		this.store = keywords;
-		Arrays.sort(store);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified string exists in this store.
-	 *
-	 * @param s The string to check.
-	 * @return <jk>true</jk> if the specified string exists in this store.
-	 */
-	public boolean contains(String s) {
-		if (s == null || s.length() < 2)
-			return false;
-		return Arrays.binarySearch(store, s) >= 0;
-	}
+	void onSet(T newValue);
 }

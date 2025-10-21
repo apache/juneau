@@ -20,7 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.*;
+import org.apache.juneau.common.collections.*;
 
 public class ClassUtils2 {
 	/**

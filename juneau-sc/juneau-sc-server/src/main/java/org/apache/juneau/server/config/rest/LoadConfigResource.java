@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.server.config.rest;
 
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.json.JsonSerializer;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.server.config.repository.GetConfiguration;
+import org.apache.juneau.server.config.repository.*;
 
 @Rest(path = "/configs/*")
 @SuppressWarnings("javadoc")

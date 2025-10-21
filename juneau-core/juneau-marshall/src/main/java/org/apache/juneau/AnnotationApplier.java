@@ -16,8 +16,6 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;

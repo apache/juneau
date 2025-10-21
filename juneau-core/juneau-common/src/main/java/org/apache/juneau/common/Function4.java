@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common;
 
 import java.util.*;
 import java.util.function.*;
 
 /**
- * A function that takes in 3 arguments.
+ * A function that takes in 4 arguments.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
@@ -28,16 +28,17 @@ import java.util.function.*;
  * @param <A> The first argument.
  * @param <B> The second argument.
  * @param <C> The third argument.
+ * @param <D> The fourth argument.
  * @param <R> The return type.
  */
 @SuppressWarnings("javadoc")
 @FunctionalInterface
-public interface Function3<A,B,C,R> {
+public interface Function4<A,B,C,D,R> {
 
-	default <V> Function3<A,B,C,V> andThen(Function<? super R,? extends V> after) {
+	default <V> Function4<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
 		Objects.requireNonNull(after);
-		return (A a, B b, C c) -> after.apply(apply(a, b, c));
+		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
 	}
 
-	R apply(A a, B b, C c);
+	R apply(A a, B b, C c, D d);
 }

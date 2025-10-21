@@ -20,6 +20,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 
 /**

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.server.config.repository;
 
-import org.apache.juneau.json.annotation.Json;
+import org.apache.juneau.json.annotation.*;
 
 @Json
 @SuppressWarnings("javadoc")

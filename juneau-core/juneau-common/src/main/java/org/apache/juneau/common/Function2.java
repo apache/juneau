@@ -16,20 +16,27 @@
  */
 package org.apache.juneau.common;
 
+import java.util.*;
+import java.util.function.*;
+
 /**
- * Simple listener for the {@link Value} class.
+ * A function that takes in 2 arguments.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  *
- * @param <T> Value type.
+ * @param <A> The first argument.
+ * @param <B> The second argument.
+ * @param <R> The return type.
  */
-public interface ValueListener<T> {
+@SuppressWarnings("javadoc")
+@FunctionalInterface
+public interface Function2<A,B,R> {
 
-	/**
-	 * Called when {@link Value#set(Object)} is called.
-	 *
-	 * @param newValue The new value.
-	 */
-	void onSet(T newValue);
+	default <V> Function2<A,B,V> andThen(Function<? super R,? extends V> after) {
+		Objects.requireNonNull(after);
+		return (A a, B b) -> after.apply(apply(a, b));
+	}
+
+	R apply(A a, B b);
 }

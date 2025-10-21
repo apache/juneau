@@ -18,8 +18,8 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.AsideFloat.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A basic template for the HTML doc serializer.

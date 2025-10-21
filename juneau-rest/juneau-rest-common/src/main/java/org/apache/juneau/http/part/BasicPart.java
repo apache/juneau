@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.util.*;
 import java.util.function.*;
 

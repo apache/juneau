@@ -14,31 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.utils;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.concurrent.locks.*;
 
 /**
- * A function that takes in 4 arguments.
- *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
- *
- * @param <A> The first argument.
- * @param <B> The second argument.
- * @param <C> The third argument.
- * @param <D> The fourth argument.
- * @param <R> The return type.
+ * A simple auto-closeable wrapper around a lock.
  */
-@SuppressWarnings("javadoc")
-@FunctionalInterface
-public interface Function4<A,B,C,D,R> {
+public class SimpleLock implements AutoCloseable {
 
-	default <V> Function4<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
-		Objects.requireNonNull(after);
-		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
+	/**
+	 * A simple no-op lock.
+	 */
+	public static final SimpleLock NO_OP = new SimpleLock(null);
+
+	private final Lock lock;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param lock The lock being wrapped.
+	 */
+	public SimpleLock(Lock lock) {
+		this.lock = lock;
+		if (lock != null)
+			lock.lock();
 	}
 
-	R apply(A a, B b, C c, D d);
+	@Override
+	public void close() {
+		if (lock != null)
+			lock.unlock();
+	}
 }

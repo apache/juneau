@@ -32,7 +32,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents the parsed contents of a configuration.

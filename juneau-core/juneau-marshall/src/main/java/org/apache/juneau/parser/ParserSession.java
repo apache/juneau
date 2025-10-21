@@ -18,7 +18,6 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

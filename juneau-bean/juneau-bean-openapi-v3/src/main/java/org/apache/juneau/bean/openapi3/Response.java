@@ -23,8 +23,8 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Describes a single response from an API operation.

@@ -17,7 +17,6 @@
 package org.apache.juneau.utils;
 
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents a simple tuple of 5 objects.

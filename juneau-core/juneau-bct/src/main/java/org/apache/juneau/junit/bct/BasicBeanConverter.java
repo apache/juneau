@@ -17,8 +17,8 @@
 package org.apache.juneau.junit.bct;
 
 import static java.util.Optional.*;
-import static org.apache.juneau.junit.bct.Utils.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.junit.bct.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

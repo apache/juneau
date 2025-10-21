@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 
 import java.io.*;

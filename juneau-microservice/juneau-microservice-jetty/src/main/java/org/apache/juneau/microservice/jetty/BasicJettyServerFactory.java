@@ -20,7 +20,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.resource.*;
 import org.eclipse.jetty.xml.*;

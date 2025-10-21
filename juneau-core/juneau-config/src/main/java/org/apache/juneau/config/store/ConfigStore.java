@@ -24,9 +24,9 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.internal.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 /**

@@ -21,8 +21,8 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Holds a set of reusable objects for different aspects of the OpenAPI Specification.

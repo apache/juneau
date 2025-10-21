@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.utils;
 
 import java.util.concurrent.locks.*;
 
@@ -22,20 +22,36 @@ import java.util.concurrent.locks.*;
  * An extension of {@link ReentrantReadWriteLock} with convenience methods for creating
  * auto-closeable locks.
  */
-public class SimpleNoOpLock extends ReentrantReadWriteLock {
+public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 	private static final long serialVersionUID = 1L;
+	/**
+	 * A no-op lock.
+	 */
+	public static SimpleReadWriteLock NO_OP = new SimpleReadWriteLock() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public SimpleLock read() {
+			return SimpleLock.NO_OP;
+		}
+
+		@Override
+		public SimpleLock write() {
+			return SimpleLock.NO_OP;
+		}
+	};
 
 	/**
 	 * Constructor.
 	 */
-	public SimpleNoOpLock() {}
+	public SimpleReadWriteLock() {}
 
 	/**
 	 * Constructor
 	 *
 	 * @param fair <jk>true</jk> if this lock should use a fair ordering policy.
 	 */
-	public SimpleNoOpLock(boolean fair) {
+	public SimpleReadWriteLock(boolean fair) {
 		super(fair);
 	}
 

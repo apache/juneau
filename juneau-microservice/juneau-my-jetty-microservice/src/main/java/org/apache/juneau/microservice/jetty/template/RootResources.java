@@ -16,13 +16,12 @@
  */
 package org.apache.juneau.microservice.jetty.template;
 
-import org.apache.juneau.html.annotation.HtmlDocConfig;
-import org.apache.juneau.microservice.jetty.resources.DebugResource;
-import org.apache.juneau.microservice.resources.ConfigResource;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.microservice.jetty.resources.*;
+import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.servlet.BasicRestServletGroup;
-import org.apache.juneau.rest.widget.ContentTypeMenuItem;
-import org.apache.juneau.rest.widget.ThemeMenuItem;
+import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.widget.*;
 
 /**
  * Root microservice page.

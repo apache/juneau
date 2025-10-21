@@ -21,8 +21,8 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A list of {@link EntityTag} beans.

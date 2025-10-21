@@ -21,9 +21,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.*;
+import org.apache.juneau.common.collections.*;
 
 /**
  * REST response status annotation.

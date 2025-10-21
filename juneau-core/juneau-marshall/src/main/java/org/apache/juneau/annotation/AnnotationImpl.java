@@ -25,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A concrete implementation of an annotation.

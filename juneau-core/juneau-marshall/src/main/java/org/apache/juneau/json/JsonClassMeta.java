@@ -19,7 +19,7 @@ package org.apache.juneau.json;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.json.annotation.*;
 
 /**

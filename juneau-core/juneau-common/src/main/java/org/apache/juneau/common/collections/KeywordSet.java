@@ -14,29 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.collections;
 
 import java.util.*;
-import java.util.function.*;
 
 /**
- * A function that takes in 2 arguments.
+ * Stores a set of language keywords for quick lookup.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * </ul>
- *
- * @param <A> The first argument.
- * @param <B> The second argument.
- * @param <R> The return type.
- */
-@SuppressWarnings("javadoc")
-@FunctionalInterface
-public interface Function2<A,B,R> {
 
-	default <V> Function2<A,B,V> andThen(Function<? super R,? extends V> after) {
-		Objects.requireNonNull(after);
-		return (A a, B b) -> after.apply(apply(a, b));
+ * </ul>
+ */
+public class KeywordSet {
+	final String[] store;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param keywords The list of keywords.
+	 */
+	public KeywordSet(String...keywords) {
+		this.store = keywords;
+		Arrays.sort(store);
 	}
 
-	R apply(A a, B b);
+	/**
+	 * Returns <jk>true</jk> if the specified string exists in this store.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if the specified string exists in this store.
+	 */
+	public boolean contains(String s) {
+		if (s == null || s.length() < 2)
+			return false;
+		return Arrays.binarySearch(store, s) >= 0;
+	}
 }

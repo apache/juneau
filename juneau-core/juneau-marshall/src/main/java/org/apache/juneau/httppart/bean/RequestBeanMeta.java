@@ -19,7 +19,6 @@ package org.apache.juneau.httppart.bean;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
 

@@ -22,7 +22,6 @@ import java.net.*;
 import java.nio.file.*;
 
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Identifies a directory located either on the classpath or file system.

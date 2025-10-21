@@ -14,28 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common;
 
-import static org.apache.juneau.TestUtils.*;
+import java.util.*;
+import java.util.function.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
-import org.junit.jupiter.api.*;
+/**
+ * A function that takes in 3 arguments.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * </ul>
+ *
+ * @param <A> The first argument.
+ * @param <B> The second argument.
+ * @param <C> The third argument.
+ * @param <R> The return type.
+ */
+@SuppressWarnings("javadoc")
+@FunctionalInterface
+public interface Function3<A,B,C,R> {
 
-class ArrayBuilder_Test extends TestBase {
-
-	@Test void a01_basic() {
-		String[] empty = {};
-		var x = ArrayBuilder.of(String.class).filter(y -> y != null).size(2);
-		assertEmpty(x.orElse(empty));
-		x.add(null);
-		assertEmpty(x.orElse(empty));
-		x.add("a");
-		assertList(x.orElse(empty), "a");
-		x.add("b");
-		x.add(null);
-		assertList(x.orElse(empty), "a", "b");
-		x.add("c");
-		assertList(x.orElse(empty), "a", "b", "c");
+	default <V> Function3<A,B,C,V> andThen(Function<? super R,? extends V> after) {
+		Objects.requireNonNull(after);
+		return (A a, B b, C c) -> after.apply(apply(a, b, c));
 	}
+
+	R apply(A a, B b, C c);
 }

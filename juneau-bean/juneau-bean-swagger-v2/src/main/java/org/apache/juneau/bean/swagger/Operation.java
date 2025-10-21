@@ -23,8 +23,8 @@ import static org.apache.juneau.internal.ConverterUtils.toList;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Describes a single API operation on a path.

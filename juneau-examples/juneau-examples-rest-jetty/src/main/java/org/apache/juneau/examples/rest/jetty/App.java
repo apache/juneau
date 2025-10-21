@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.examples.rest.jetty;
 
-import org.apache.juneau.examples.rest.RootResources;
+import org.apache.juneau.examples.rest.*;
 import org.apache.juneau.microservice.jetty.*;
 
 /**

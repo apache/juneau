@@ -28,7 +28,6 @@ import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Basic implementation of a {@link FileFinder}.

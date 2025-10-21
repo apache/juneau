@@ -23,8 +23,8 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Contact information for the exposed API.

@@ -20,7 +20,6 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -28,7 +27,7 @@ import java.util.stream.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;

@@ -23,8 +23,8 @@ import static org.apache.juneau.internal.ConverterUtils.toList;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Allows the definition of input and output data types.

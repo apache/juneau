@@ -18,8 +18,8 @@ package org.apache.juneau.http.header;
 
 import java.util.function.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents a parsed <l>Connection</l> HTTP request header.

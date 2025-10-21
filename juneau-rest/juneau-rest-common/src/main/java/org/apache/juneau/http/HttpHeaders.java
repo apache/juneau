@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.http;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.net.*;
 import java.time.*;
 import java.util.*;

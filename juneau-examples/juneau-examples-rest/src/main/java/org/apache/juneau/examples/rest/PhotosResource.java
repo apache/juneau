@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.examples.rest;
 
+import java.awt.image.*;
+import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.examples.parser.*;
@@ -26,9 +28,6 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
-
-import java.awt.image.*;
-import java.net.*;
 
 /**
  * Sample resource that allows images to be uploaded and retrieved.

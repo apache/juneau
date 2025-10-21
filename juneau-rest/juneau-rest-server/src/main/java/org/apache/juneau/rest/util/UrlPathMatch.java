@@ -22,7 +22,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents a URL path pattern match.

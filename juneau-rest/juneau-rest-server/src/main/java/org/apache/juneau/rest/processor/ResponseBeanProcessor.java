@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.processor;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

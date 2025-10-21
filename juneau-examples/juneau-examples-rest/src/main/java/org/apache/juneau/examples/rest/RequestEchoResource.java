@@ -16,9 +16,6 @@
  */
 package org.apache.juneau.examples.rest;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
@@ -29,6 +26,9 @@ import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.swaps.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Sample REST resource for echoing HttpServletRequests back to the browser.

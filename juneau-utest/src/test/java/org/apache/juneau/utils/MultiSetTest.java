@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.collections.*;
 import org.junit.jupiter.api.*;
 
 class MultiSetTest extends TestBase {

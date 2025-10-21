@@ -6,6 +6,8 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.collections.*;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with

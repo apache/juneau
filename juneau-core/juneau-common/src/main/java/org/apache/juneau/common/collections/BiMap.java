@@ -14,14 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.collections;
 
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
 import java.util.*;
-
-import org.apache.juneau.utils.*;
 
 /**
  * A linked hashmap with reverse key lookup by value.

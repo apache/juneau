@@ -19,7 +19,7 @@ package org.apache.juneau.utils;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.collections.*;
 import org.junit.jupiter.api.*;
 
 class KeywordStoreTest extends TestBase {

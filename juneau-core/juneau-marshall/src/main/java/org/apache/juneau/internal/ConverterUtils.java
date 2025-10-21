@@ -21,6 +21,7 @@ import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;

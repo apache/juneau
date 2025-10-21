@@ -23,7 +23,7 @@ import java.lang.annotation.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.utils.*;
 
 /**
