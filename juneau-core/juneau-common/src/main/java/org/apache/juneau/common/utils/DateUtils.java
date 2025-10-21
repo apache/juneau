@@ -436,7 +436,6 @@ public class DateUtils {
 		if (state != S7)
 			result += ZonedDateTime.now(ZoneId.systemDefault()).getOffset().toString();
 
-		System.err.println("XXX - " + result);
 		return result;
 	}
 

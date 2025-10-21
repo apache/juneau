@@ -17,8 +17,9 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.common.utils.StateEnum.*;
+import static java.time.temporal.ChronoField.*;
 
-import java.time.temporal.*;
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -49,41 +50,6 @@ import org.apache.juneau.common.utils.*;
  */
 public class TimeMatcherFactory extends MatcherFactory {
 
-	/**
-	 * Combines a Calendar with a precision identifier.
-	 */
-	private static class CalendarP {
-		public Calendar c;
-		public ChronoField precision;
-
-		public CalendarP(Date date, ChronoField precision) {
-			c = Calendar.getInstance();
-			c.setTime(date);
-			this.precision = precision;
-		}
-
-		public CalendarP(Calendar c, ChronoField precision) {
-			this.c = (Calendar)c.clone();
-			this.precision = precision;
-		}
-
-		public CalendarP copy() {
-			return new CalendarP(c, precision);
-		}
-
-		public Calendar getCalendar() { return (Calendar)c.clone(); }
-
-		public CalendarP roll(int amount) {
-			return roll(precision, amount);
-		}
-
-		public CalendarP roll(ChronoField field, int amount) {
-			// Use DateUtils utility method to convert ChronoField to Calendar field
-			int calendarField = DateUtils.toCalendarField(field);
-			c.add(calendarField, amount);
-			return this;
-		}
-	}
 
 	/**
 	 * A construct representing a single search pattern.
@@ -119,9 +85,9 @@ public class TimeMatcherFactory extends MatcherFactory {
 			// S12 = Found [2000 - "], looking for ["] (["]=S1)
 			// S13 = Found [2000 - 2], looking for WS (WS=S1)
 
-			StateEnum state = S1;
-			int mark = 0;
-			Equality eq = Equality.NONE;
+			var state = S1;
+			var mark = 0;
+			var eq = Equality.NONE;
 			String s1 = null, s2 = null;
 
 			int i;
@@ -339,15 +305,16 @@ public class TimeMatcherFactory extends MatcherFactory {
 			if (ranges.length == 0)
 				return true;
 
-			Calendar c = null;
-			if (cm.isCalendar())
-				c = (Calendar)o;
-			else {
-				c = Calendar.getInstance();
-				c.setTime((Date)o);
+			ZonedDateTime zdt = null;
+			if (cm.isCalendar()) {
+				var c = (Calendar)o;
+				zdt = c.toInstant().atZone(c.getTimeZone().toZoneId());
+			} else {
+				var date = (Date)o;
+				zdt = date.toInstant().atZone(ZoneId.systemDefault());
 			}
 			for (TimestampRange range : ranges)
-				if (range.matches(c))
+				if (range.matches(zdt))
 					return true;
 			return false;
 		}
@@ -358,39 +325,38 @@ public class TimeMatcherFactory extends MatcherFactory {
 	 * All possible forms of search patterns are boiled down to these timestamp ranges.
 	 */
 	private static class TimestampRange {
-		Calendar start;
-		Calendar end;
+		ZonedDateTime start;
+		ZonedDateTime end;
 
 		public TimestampRange(Equality eq, String singleDate) {
-			CalendarP singleDate1 = parseDate(singleDate);
+			var singleDate1 = GranularZonedDateTime.parse(singleDate);
 			if (eq == Equality.GT) {
-				this.start = singleDate1.roll(1).roll(ChronoField.MILLI_OF_SECOND, -1).getCalendar();
-				this.end = new CalendarP(new Date(Long.MAX_VALUE), ChronoField.MILLI_OF_SECOND).getCalendar();
+				this.start = singleDate1.roll(1).roll(MILLI_OF_SECOND, -1).getZonedDateTime();
+				this.end = Instant.ofEpochMilli(Long.MAX_VALUE).atZone(ZoneId.systemDefault());
 			} else if (eq == Equality.LT) {
-				this.start = new CalendarP(new Date(0), ChronoField.MILLI_OF_SECOND).getCalendar();
-				this.end = singleDate1.getCalendar();
+				this.start = Instant.ofEpochMilli(0).atZone(ZoneId.systemDefault());
+				this.end = singleDate1.getZonedDateTime();
 			} else if (eq == Equality.GTE) {
-				this.start = singleDate1.roll(ChronoField.MILLI_OF_SECOND, -1).getCalendar();
-				this.end = new CalendarP(new Date(Long.MAX_VALUE), ChronoField.MILLI_OF_SECOND).getCalendar();
+				this.start = singleDate1.roll(MILLI_OF_SECOND, -1).getZonedDateTime();
+				this.end = Instant.ofEpochMilli(Long.MAX_VALUE).atZone(ZoneId.systemDefault());
 			} else if (eq == Equality.LTE) {
-				this.start = new CalendarP(new Date(0), ChronoField.MILLI_OF_SECOND).getCalendar();
-				this.end = singleDate1.roll(1).getCalendar();
+				this.start = Instant.ofEpochMilli(0).atZone(ZoneId.systemDefault());
+				this.end = singleDate1.roll(1).getZonedDateTime();
 			} else {
-				this.start = singleDate1.copy().roll(ChronoField.MILLI_OF_SECOND, -1).getCalendar();
-				this.end = singleDate1.roll(1).getCalendar();
+				this.start = singleDate1.copy().roll(MILLI_OF_SECOND, -1).getZonedDateTime();
+				this.end = singleDate1.roll(1).getZonedDateTime();
 			}
 		}
 
 		public TimestampRange(String start, String end) {
-			CalendarP start1 = parseDate(start);
-			CalendarP end1 = parseDate(end);
-			this.start = start1.copy().roll(ChronoField.MILLI_OF_SECOND, -1).getCalendar();
-			this.end = end1.roll(1).getCalendar();
+			var start1 = GranularZonedDateTime.parse(start);
+			var end1 = GranularZonedDateTime.parse(end);
+			this.start = start1.copy().roll(MILLI_OF_SECOND, -1).getZonedDateTime();
+			this.end = end1.roll(1).getZonedDateTime();
 		}
 
-		public boolean matches(Calendar c) {
-			boolean b = (c.after(start) && c.before(end));
-			return b;
+		public boolean matches(ZonedDateTime zdt) {
+			return zdt.isAfter(start) && zdt.isBefore(end);
 		}
 	}
 
@@ -398,28 +364,6 @@ public class TimeMatcherFactory extends MatcherFactory {
 	 * Default reusable matcher.
 	 */
 	public static final TimeMatcherFactory DEFAULT = new TimeMatcherFactory();
-
-	/**
-	 * Parses a timestamp string off the beginning of the string segment 'seg'.
-	 * Goes through each possible valid timestamp format until it finds a match.
-	 * The position where the parsing left off is stored in pp.
-	 *
-	 * @param seg The string segment being parsed.
-	 * @param pp Where parsing last left off.
-	 * @return An object representing a timestamp.
-	 */
-	static CalendarP parseDate(String seg) {
-		// Try DateUtils.parseISO8601Calendar first for consistency
-		Calendar c = GregorianCalendar.from(DateUtils.fromIso8601(seg));
-		if (c != null) {
-			// Determine precision based on the input string
-			var precision = DateUtils.getPrecisionFromString(seg);
-			return new CalendarP(c, precision);
-		}
-
-		throw new BasicRuntimeException("Invalid date encountered:  ''{0}''", seg);
-	}
-
 
 	/**
 	 * Constructor.
