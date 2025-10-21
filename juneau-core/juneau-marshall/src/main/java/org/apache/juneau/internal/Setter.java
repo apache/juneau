@@ -19,6 +19,7 @@ package org.apache.juneau.internal;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Encapsulate a bean setter method that may be a method or field.

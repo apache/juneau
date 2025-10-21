@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.converter;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.httppart.*;

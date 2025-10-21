@@ -265,7 +265,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return An optional containing the specified value.
 	 */
 	protected <T> Optional<Class<T>> type(Class<T> in) {
-		return Utils.opt(in).filter(NOT_VOID);
+		return Utils.opt(in).filter(ClassUtils2.NOT_VOID);
 	}
 
 	/**

@@ -23,6 +23,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.*;
 
 /**
  * REST response status annotation.

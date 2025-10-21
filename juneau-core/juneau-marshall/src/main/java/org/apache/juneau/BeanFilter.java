@@ -89,15 +89,15 @@ public class BeanFilter {
 					writeOnlyProperties(x.writeOnlyProperties(), x.wo());
 				if (isNotEmpty(x.typeName()))
 					typeName(x.typeName());
-				if (isNotVoid(x.propertyNamer()))
+				if (ClassUtils2.isNotVoid(x.propertyNamer()))
 					propertyNamer(x.propertyNamer());
-				if (isNotVoid(x.interfaceClass()))
+				if (ClassUtils2.isNotVoid(x.interfaceClass()))
 					interfaceClass(x.interfaceClass());
-				if (isNotVoid(x.stopClass()))
+				if (ClassUtils2.isNotVoid(x.stopClass()))
 					stopClass(x.stopClass());
-				if (isNotVoid(x.interceptor()))
+				if (ClassUtils2.isNotVoid(x.interceptor()))
 					interceptor(x.interceptor());
-				if (isNotVoid(x.implClass()))
+				if (ClassUtils2.isNotVoid(x.implClass()))
 					implClass(x.implClass());
 				if (ArrayUtils.isNotEmptyArray(x.dictionary()))
 					dictionary(x.dictionary());

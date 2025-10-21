@@ -88,7 +88,7 @@ public class Thrown extends BasicCsvHeader {
 		 * @param value The throwable to create the header part value from.
 		 */
 		public Part(Throwable value) {
-			this.className = className(value);
+			this.className = ClassUtils2.className(value);
 			this.message = value.getMessage();
 			this.value = urlEncode(className) + ';' + urlEncode(value.getMessage());
 		}

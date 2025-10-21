@@ -88,7 +88,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 						} else if (o2 instanceof NameValuePair) {
 							h = BasicHeader.of((NameValuePair)o2);
 						} else {
-							throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", className(o2), n);
+							throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", ClassUtils2.className(o2), n);
 						}
 						res.addHeader(h);
 					}
@@ -139,6 +139,6 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 			return alist((Object[])o);
 		if (o instanceof Collection)
 			return (Collection<?>)o;
-		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", className(o));
+		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", ClassUtils2.className(o));
 	}
 }

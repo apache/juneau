@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.common.reflect;
 
-import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.common.utils.ClassUtils2.*;
 
 import java.lang.reflect.*;
 

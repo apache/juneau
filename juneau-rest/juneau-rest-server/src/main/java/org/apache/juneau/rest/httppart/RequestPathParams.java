@@ -28,6 +28,7 @@ import java.util.stream.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
@@ -308,7 +309,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(PATH, cm).orElseThrow(() -> new BasicRuntimeException("@Path(name) not found on class {0}", className(type)));
+		String name = HttpParts.getName(PATH, cm).orElseThrow(() -> new BasicRuntimeException("@Path(name) not found on class {0}", ClassUtils2.className(type)));
 		return get(name).as(type);
 	}
 

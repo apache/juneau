@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -22,8 +22,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Annotation utilities.

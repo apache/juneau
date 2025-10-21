@@ -21,6 +21,9 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.*;
+import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -95,7 +98,7 @@ public class BuilderSwap<T,B> {
 		ConstructorInfo objectConstructor = null;
 		ConstructorInfo builderConstructor;
 
-		bc.forEachAnnotation(org.apache.juneau.annotation.Builder.class, objectClass, x -> isNotVoid(x.value()), x -> builderClass.set(x.value()));
+		bc.forEachAnnotation(org.apache.juneau.annotation.Builder.class, objectClass, x -> ClassUtils2.isNotVoid(x.value()), x -> builderClass.set(x.value()));
 
 		ClassInfo pci = ClassInfo.of(objectClass);
 

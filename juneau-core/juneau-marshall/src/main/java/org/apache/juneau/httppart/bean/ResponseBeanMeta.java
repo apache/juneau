@@ -27,6 +27,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -60,9 +61,9 @@ public class ResponseBeanMeta {
 
 		Builder apply(Response a) {
 			if (a != null) {
-				if (isNotVoid(a.serializer()))
+				if (ClassUtils2.isNotVoid(a.serializer()))
 					partSerializer = a.serializer();
-				if (isNotVoid(a.parser()))
+				if (ClassUtils2.isNotVoid(a.parser()))
 					partParser = a.parser();
 				schema.apply(a.schema());
 			}
@@ -78,7 +79,7 @@ public class ResponseBeanMeta {
 		}
 
 		Builder apply(Type t) {
-			Class<?> c = ClassUtils.toClass(t);
+			Class<?> c = ClassUtils2.toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			ClassInfo ci = cm.getInfo();
 			ci.forEachPublicMethod(x -> true, x -> {

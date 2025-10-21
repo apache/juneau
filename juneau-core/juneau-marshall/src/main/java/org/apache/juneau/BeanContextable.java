@@ -27,6 +27,7 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.reflect.Visibility;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;

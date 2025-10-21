@@ -86,9 +86,9 @@ public class RequestBeanMeta {
 
 		Builder apply(Request a) {
 			if (a != null) {
-				if (isNotVoid(a.serializer()))
+				if (ClassUtils2.isNotVoid(a.serializer()))
 					serializer.type(a.serializer());
-				if (isNotVoid(a.parser()))
+				if (ClassUtils2.isNotVoid(a.parser()))
 					parser.type(a.parser());
 			}
 			return this;

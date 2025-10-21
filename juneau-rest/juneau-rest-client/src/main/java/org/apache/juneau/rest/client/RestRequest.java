@@ -2515,7 +2515,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
 		} else if (value != null) {
-			throw new BasicRuntimeException("Invalid value type for header arg ''{0}'': {1}", name, className(value));
+			throw new BasicRuntimeException("Invalid value type for header arg ''{0}'': {1}", name, ClassUtils2.className(value));
 		}
 
 		if (skipIfEmpty)
@@ -2550,7 +2550,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, PATH, serializer, schema, false)));
 		} else if (value != null) {
-			throw new BasicRuntimeException("Invalid value type for path arg ''{0}'': {1}", name, className(value));
+			throw new BasicRuntimeException("Invalid value type for path arg ''{0}'': {1}", name, ClassUtils2.className(value));
 		}
 
 		pathData.append(l);

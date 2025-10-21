@@ -127,7 +127,7 @@ public class SerializerPipe implements Closeable {
 		else if (output instanceof File)
 			outputStream = new BufferedOutputStream(new FileOutputStream((File)output));
 		else
-			throw new IOException("Cannot convert object of type " + className(output) + " to an OutputStream.");
+			throw new IOException("Cannot convert object of type " + ClassUtils2.className(output) + " to an OutputStream.");
 
 		return new NoCloseOutputStream(outputStream);
 	}
@@ -173,7 +173,7 @@ public class SerializerPipe implements Closeable {
 			else if (output instanceof StringBuilder)
 				writer = new StringBuilderWriter((StringBuilder)output);
 			else
-				throw new SerializeException("Cannot convert object of type " + className(output) + " to a Writer.");
+				throw new SerializeException("Cannot convert object of type " + ClassUtils2.className(output) + " to a Writer.");
 		} catch (FileNotFoundException e) {
 			throw cast(SerializeException.class, e);
 		}

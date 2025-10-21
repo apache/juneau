@@ -22,6 +22,8 @@ import java.io.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
@@ -62,7 +64,7 @@ public class Assertion {
 	private static final Messages MESSAGES = Messages.of(Assertion.class, "Messages");
 
 	// @formatter:off
-	static final String 
+	static final String
 		MSG_parameterCannotBeNull = MESSAGES.getString("parameterCannotBeNull"),
 		MSG_causedBy = MESSAGES.getString("causedBy");
 	// @formatter:on
@@ -86,7 +88,7 @@ public class Assertion {
 	 * @return The class name for an object.
 	 */
 	protected static String className(Object o) {
-		return ClassUtils.className(o);
+		return ClassUtils2.className(o);
 	}
 
 	private String msg;

@@ -526,7 +526,7 @@ public class HttpHeaders {
 			Map.Entry e = (Map.Entry)o;
 			return BasicHeader.of(Utils.s(e.getKey()), Utils.s(e.getValue()));
 		}
-		throw new BasicRuntimeException("Object of type {0} could not be converted to a Header.", className(o));
+		throw new BasicRuntimeException("Object of type {0} could not be converted to a Header.", ClassUtils2.className(o));
 	}
 
 	/**

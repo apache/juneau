@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.*;
 import org.apache.juneau.http.header.*;
 import org.junit.jupiter.api.*;
 

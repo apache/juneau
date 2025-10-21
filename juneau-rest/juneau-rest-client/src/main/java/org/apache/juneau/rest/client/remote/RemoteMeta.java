@@ -75,7 +75,7 @@ public class RemoteMeta {
 				clientVersion = resolve(r.version());
 			if (isNotEmpty(r.versionHeader()))
 				versionHeader = resolve(r.versionHeader());
-			if (isNotVoid(r.headerList())) {
+			if (ClassUtils2.isNotVoid(r.headerList())) {
 				try {
 					headers.append(r.headerList().getDeclaredConstructor().newInstance().getAll());
 				} catch (Exception e) {

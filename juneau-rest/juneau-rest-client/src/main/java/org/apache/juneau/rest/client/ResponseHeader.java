@@ -28,6 +28,8 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.common.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
@@ -263,7 +265,7 @@ public class ResponseHeader extends BasicHeader {
 				e = e.getCause();
 			throw asRuntimeException(e);
 		}
-		throw new BasicRuntimeException("Could not determine a method to construct type {0}", className(c));
+		throw new BasicRuntimeException("Could not determine a method to construct type {0}", ClassUtils2.className(c));
 	}
 
 	/**

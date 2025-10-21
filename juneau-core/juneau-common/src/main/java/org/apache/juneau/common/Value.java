@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.common;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a simple settable value.
@@ -46,30 +46,6 @@ public class Value<T> {
 	 */
 	public static <T> Value<T> empty() {
 		return new Value<>(null);
-	}
-
-	/**
-	 * Returns the generic parameter type of the Value type.
-	 *
-	 * @param t The type to find the parameter type of.
-	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
-	 */
-	public static Type getParameterType(Type t) {
-		if (t instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
-			if (pt.getRawType() == Value.class) {
-				Type[] ta = pt.getActualTypeArguments();
-				if (ta.length > 0)
-					return ta[0];
-			}
-		} else if (t instanceof Class) {
-			Class<?> c = (Class<?>)t;
-			if (Value.class.isAssignableFrom(c)) {
-				return ClassInfo.of(c).getParameterType(0, Value.class);
-			}
-		}
-
-		return null;
 	}
 
 	/**
@@ -100,7 +76,7 @@ public class Value<T> {
 	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
 	 */
 	public static Type unwrap(Type t) {
-		Type x = getParameterType(t);
+		Type x = ClassUtils2.getParameterType(t);
 		return x != null ? x : t;
 	}
 

@@ -19,7 +19,7 @@ package org.apache.juneau.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.reflect.ReflectFlags.*;
+import static org.apache.juneau.common.reflect.ReflectFlags.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -29,6 +29,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 

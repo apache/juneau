@@ -24,10 +24,9 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.common.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Lightweight utility class for introspecting information about a class.
@@ -160,7 +159,7 @@ public class ClassInfo {
 			return null;
 		if (t instanceof Class)
 			return of((Class<?>)t);
-		return new ClassInfo(ClassUtils.toClass(t), t);
+		return new ClassInfo(ClassUtils2.toClass(t), t);
 	}
 
 	/**
@@ -1485,7 +1484,7 @@ public class ClassInfo {
 						return false;
 					break;
 				default:
-					throw new BasicRuntimeException("Invalid flag for class: {0}", f);
+					throw ThrowableUtils.runtimeException("Invalid flag for class: {0}", f);
 
 			}
 		}
@@ -1570,7 +1569,7 @@ public class ClassInfo {
 						return true;
 					break;
 				default:
-					throw new BasicRuntimeException("Invalid flag for class: {0}", f);
+					throw ThrowableUtils.runtimeException("Invalid flag for class: {0}", f);
 			}
 		}
 		return false;

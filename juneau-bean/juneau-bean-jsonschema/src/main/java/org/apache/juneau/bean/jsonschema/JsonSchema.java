@@ -476,7 +476,7 @@ public class JsonSchema {
 			else if (type instanceof JsonTypeArray x)
 				this.typeJsonTypeArray = x;
 			else
-				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", className(type));
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", ClassUtils2.className(type));
 		}
 		return this;
 	}
@@ -816,7 +816,7 @@ public class JsonSchema {
 				this.itemsSchemaArray = x;
 				setMasterOn(this.itemsSchemaArray);
 			} else {
-				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", className(items));
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", ClassUtils2.className(items));
 			}
 		}
 		return this;
@@ -1059,7 +1059,7 @@ public class JsonSchema {
 				setMasterOn(this.additionalItemsSchemaArray);
 			} else {
 				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray",
-					className(additionalItems));
+					ClassUtils2.className(additionalItems));
 			}
 		}
 		return this;
@@ -1319,7 +1319,7 @@ public class JsonSchema {
 				setMasterOn(this.additionalPropertiesSchema);
 			} else
 				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema",
-					className(additionalProperties));
+					ClassUtils2.className(additionalProperties));
 		}
 		return this;
 	}

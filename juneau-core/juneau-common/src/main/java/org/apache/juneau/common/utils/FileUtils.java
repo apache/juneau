@@ -14,16 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.io.*;
 import java.nio.file.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * File utilities.
@@ -47,7 +44,7 @@ public class FileUtils {
 			return;
 		try {
 			if (! f.createNewFile())
-				throw new BasicRuntimeException("Could not create file ''{0}''", f.getAbsolutePath());
+				throw ThrowableUtils.runtimeException("Could not create file ''{0}''", f.getAbsolutePath());
 		} catch (IOException e) {
 			throw asRuntimeException(e);
 		}
@@ -199,13 +196,13 @@ public class FileUtils {
 		if (f.exists()) {
 			if (clean) {
 				if (! delete(f))
-					throw new BasicRuntimeException("Could not clean directory ''{0}''", f.getAbsolutePath());
+					throw ThrowableUtils.runtimeException("Could not clean directory ''{0}''", f.getAbsolutePath());
 			} else {
 				return f;
 			}
 		}
 		if (! f.mkdirs())
-			throw new BasicRuntimeException("Could not create directory ''{0}''", f.getAbsolutePath());
+			throw ThrowableUtils.runtimeException("Could not create directory ''{0}''", f.getAbsolutePath());
 		return f;
 	}
 
@@ -235,13 +232,13 @@ public class FileUtils {
 		if (lm == l)
 			l++;
 		if (! f.setLastModified(l))
-			throw new BasicRuntimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
+			throw ThrowableUtils.runtimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
 
 		// Linux only gives 1s precision, so set the date 1s into the future.
 		if (lm == f.lastModified()) {
 			l += 1000;
 			if (! f.setLastModified(l))
-				throw new BasicRuntimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
+				throw ThrowableUtils.runtimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
 		}
 	}
 }

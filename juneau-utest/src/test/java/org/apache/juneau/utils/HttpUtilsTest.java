@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.internal.HttpUtils.*;
+import static org.apache.juneau.rest.common.utils.HttpUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

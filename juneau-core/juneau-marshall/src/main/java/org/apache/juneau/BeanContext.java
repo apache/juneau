@@ -16,8 +16,8 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.reflect.Visibility.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
@@ -32,6 +32,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.reflect.Visibility;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -4259,7 +4260,7 @@ public class BeanContext extends Context {
 
 		if (p != null) {
 
-			if (isNotVoid(p.type()))
+			if (ClassUtils2.isNotVoid(p.type()))
 				cm2 = resolveClassMeta(p.type(), typeVarImpls);
 
 			if (cm2.isMap()) {

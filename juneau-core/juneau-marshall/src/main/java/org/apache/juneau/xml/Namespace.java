@@ -61,7 +61,7 @@ public class Namespace {
 			return (Namespace)o;
 		if (o instanceof CharSequence)
 			return of(o.toString());
-		throw new BasicRuntimeException("Invalid object type passed to Namespace.create(Object):  ''{0}''", className(o));
+		throw new BasicRuntimeException("Invalid object type passed to Namespace.create(Object):  ''{0}''", ClassUtils2.className(o));
 	}
 
 	/**

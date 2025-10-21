@@ -18,7 +18,6 @@ package org.apache.juneau.oapi;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
-import static org.apache.juneau.internal.DateUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -26,10 +25,9 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
-
-import jakarta.xml.bind.*;
 
 /**
  * Tests the OpenApiSerializer and OpenApiParser classes.
@@ -860,6 +858,6 @@ public class OpenApi_Test extends TestBase {
 	//---------------------------------------------------------------------------------------------
 
 	private static Calendar cal(String in) {
-		return DatatypeConverter.parseDateTime(toValidISO8601DT(in));
+		return DateUtils.fromIso8601Calendar(in);
 	}
 }

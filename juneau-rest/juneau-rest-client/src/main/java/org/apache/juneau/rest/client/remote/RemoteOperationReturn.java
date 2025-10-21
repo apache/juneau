@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.bean.*;

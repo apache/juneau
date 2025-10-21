@@ -16,10 +16,11 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.Visibility.*;
+import static org.apache.juneau.common.reflect.Visibility.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.a.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 

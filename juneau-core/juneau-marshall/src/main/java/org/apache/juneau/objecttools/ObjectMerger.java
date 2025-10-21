@@ -19,6 +19,7 @@ package org.apache.juneau.objecttools;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * POJO merger.

@@ -24,6 +24,7 @@ import java.util.*;
 
 import javax.xml.stream.*;
 
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
 

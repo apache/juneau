@@ -33,6 +33,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.annotation.Items;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
@@ -982,7 +983,7 @@ public class BasicSwaggerProviderSession {
 		}
 		if (o instanceof JsonMap)
 			return (JsonMap)o;
-		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", className(o));
+		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", ClassUtils2.className(o));
 	}
 
 	private JsonMap parseMap(String o, String location, Object...args) throws ParseException {

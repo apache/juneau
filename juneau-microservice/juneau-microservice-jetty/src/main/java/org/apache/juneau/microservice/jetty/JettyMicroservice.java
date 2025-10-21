@@ -30,6 +30,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
@@ -216,7 +217,7 @@ public class JettyMicroservice extends Microservice {
 			else if (jettyXml instanceof Reader reader)
 				this.jettyXml = read(reader);
 			else
-				throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object): {0}", className(jettyXml));
+				throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object): {0}", ClassUtils2.className(jettyXml));
 			this.jettyXmlResolveVars = resolveVars;
 			return this;
 		}

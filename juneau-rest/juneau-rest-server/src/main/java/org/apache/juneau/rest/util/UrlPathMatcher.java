@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.common.utils.FileUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.FileUtils.*;
 
 import java.util.*;
 import java.util.regex.*;

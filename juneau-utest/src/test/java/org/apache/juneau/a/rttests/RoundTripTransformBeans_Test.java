@@ -550,7 +550,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		public static F1 create() {
 			var x = new F1();
-			x.setC(parseISO8601Calendar("2018-12-12T05:12:00Z"));
+			x.setC(fromIso8601Calendar("2018-12-12T05:12:00Z"));
 			return x;
 		}
 	}
@@ -585,7 +585,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		public static F1c create() {
 			var x = new F1c();
-			x.setC(parseISO8601Calendar("2018-12-12T05:12:00Z"));
+			x.setC(fromIso8601Calendar("2018-12-12T05:12:00Z"));
 			return x;
 		}
 	}
@@ -619,7 +619,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		public static F2 create() {
 			var x = new F2();
-			x.setC(parseISO8601Calendar("2018-12-12T05:12:00Z"));
+			x.setC(fromIso8601Calendar("2018-12-12T05:12:00Z"));
 			return x;
 		}
 	}
@@ -657,7 +657,7 @@ class RoundTripTransformBeans_Test extends TestBase {
 
 		public static F2c create() {
 			var x = new F2c();
-			x.setC(parseISO8601Calendar("2018-12-12T05:12:00Z"));
+			x.setC(fromIso8601Calendar("2018-12-12T05:12:00Z"));
 			return x;
 		}
 	}

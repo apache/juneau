@@ -22,6 +22,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Parent class for all non-bean filters.
@@ -66,7 +67,7 @@ public class MarshalledFilter {
 		public Builder applyAnnotations(List<Marshalled> annotations) {
 
 			annotations.forEach(x -> {
-				if (isNotVoid(x.implClass()))
+				if (ClassUtils2.isNotVoid(x.implClass()))
 					implClass(x.implClass());
 				if (isNotEmpty(x.example()))
 					example(x.example());

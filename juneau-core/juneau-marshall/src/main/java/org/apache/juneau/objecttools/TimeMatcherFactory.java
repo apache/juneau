@@ -16,10 +16,9 @@
  */
 package org.apache.juneau.objecttools;
 
-import static java.util.Calendar.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 
-import java.text.*;
+import java.time.temporal.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -56,26 +55,33 @@ public class TimeMatcherFactory extends MatcherFactory {
 	 */
 	private static class CalendarP {
 		public Calendar c;
-		public int precision;
+		public ChronoField precision;
 
-		public CalendarP(Date date, int precision) {
+		public CalendarP(Date date, ChronoField precision) {
 			c = Calendar.getInstance();
 			c.setTime(date);
 			this.precision = precision;
 		}
 
-		public CalendarP copy() {
-			return new CalendarP(c.getTime(), precision);
+		public CalendarP(Calendar c, ChronoField precision) {
+			this.c = (Calendar)c.clone();
+			this.precision = precision;
 		}
 
-		public Calendar getCalendar() { return c; }
+		public CalendarP copy() {
+			return new CalendarP(c, precision);
+		}
+
+		public Calendar getCalendar() { return (Calendar)c.clone(); }
 
 		public CalendarP roll(int amount) {
 			return roll(precision, amount);
 		}
 
-		public CalendarP roll(int field, int amount) {
-			c.add(field, amount);
+		public CalendarP roll(ChronoField field, int amount) {
+			// Use DateUtils utility method to convert ChronoField to Calendar field
+			int calendarField = DateUtils.toCalendarField(field);
+			c.add(calendarField, amount);
 			return this;
 		}
 	}
@@ -94,7 +100,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 		TimestampRange[] ranges;
 		List<TimestampRange> l = new LinkedList<>();
 
-		public TimeMatcher(SimpleDateFormat[] f, String s) {
+		public TimeMatcher(String s) {
 
 			// Possible patterns:
 			// >2000, <2000, >=2000, <=2000, > 2000, 2000 - 2001, '2000', >'2000', '2000'-'2001', '2000' - '2001'
@@ -234,29 +240,29 @@ public class TimeMatcherFactory extends MatcherFactory {
 						state = S10;
 					} else if (c == '>') {
 						state = S02;
-						l.add(new TimestampRange(f, eq, s1));
+						l.add(new TimestampRange(eq, s1));
 						eq = Equality.GT;
 						s1 = null;
 					} else if (c == '<') {
 						state = S03;
-						l.add(new TimestampRange(f, eq, s1));
+						l.add(new TimestampRange(eq, s1));
 						eq = Equality.LT;
 						s1 = null;
 					} else if (c == '\'') {
 						state = S05;
-						l.add(new TimestampRange(f, eq, s1));
+						l.add(new TimestampRange(eq, s1));
 						mark = i + 1;
 						eq = null;
 						s1 = null;
 					} else if (c == '"') {
 						state = S06;
-						l.add(new TimestampRange(f, eq, s1));
+						l.add(new TimestampRange(eq, s1));
 						mark = i + 1;
 						eq = null;
 						s1 = null;
 					} else if (DT.contains(c)) {
 						state = S08;
-						l.add(new TimestampRange(f, eq, s1));
+						l.add(new TimestampRange(eq, s1));
 						eq = null;
 						s1 = null;
 						mark = i;
@@ -284,7 +290,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 					if (c == '\'') {
 						state = S01;
 						s2 = s.substring(mark, i);
-						l.add(new TimestampRange(f, s1, s2));
+						l.add(new TimestampRange(s1, s2));
 						s1 = null;
 						s2 = null;
 					}
@@ -293,7 +299,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 					if (c == '"') {
 						state = S01;
 						s2 = s.substring(mark, i);
-						l.add(new TimestampRange(f, s1, s2));
+						l.add(new TimestampRange(s1, s2));
 						s1 = null;
 						s2 = null;
 					}
@@ -302,7 +308,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 					if (WS.contains(c)) {
 						state = S01;
 						s2 = s.substring(mark, i);
-						l.add(new TimestampRange(f, s1, s2));
+						l.add(new TimestampRange(s1, s2));
 						s1 = null;
 						s2 = null;
 					}
@@ -317,13 +323,13 @@ public class TimeMatcherFactory extends MatcherFactory {
 			} else if (state == S02 || state == S03 || state == S04 || state == S05 || state == S06 || state == S10 || state == S11 || state == S12) {
 				throw new PatternException("Invalid range pattern (E{0}): {1}", state, s);
 			} else if (state == S07) {
-				l.add(new TimestampRange(f, eq, s1));
+				l.add(new TimestampRange(eq, s1));
 			} else if (state == S08) {
 				s1 = s.substring(mark).trim();
-				l.add(new TimestampRange(f, eq, s1));
+				l.add(new TimestampRange(eq, s1));
 			} else /* (state == S13) */ {
 				s2 = s.substring(mark).trim();
-				l.add(new TimestampRange(f, s1, s2));
+				l.add(new TimestampRange(s1, s2));
 			}
 
 			ranges = l.toArray(new TimestampRange[l.size()]);
@@ -356,30 +362,30 @@ public class TimeMatcherFactory extends MatcherFactory {
 		Calendar start;
 		Calendar end;
 
-		public TimestampRange(SimpleDateFormat[] formats, Equality eq, String singleDate) {
-			CalendarP singleDate1 = parseDate(formats, singleDate);
+		public TimestampRange(Equality eq, String singleDate) {
+			CalendarP singleDate1 = parseDate(singleDate);
 			if (eq == Equality.GT) {
-				this.start = singleDate1.roll(1).roll(MILLISECOND, -1).getCalendar();
-				this.end = new CalendarP(new Date(Long.MAX_VALUE), 0).getCalendar();
+				this.start = singleDate1.roll(1).roll(ChronoField.MILLI_OF_SECOND, -1).getCalendar();
+				this.end = new CalendarP(new Date(Long.MAX_VALUE), ChronoField.MILLI_OF_SECOND).getCalendar();
 			} else if (eq == Equality.LT) {
-				this.start = new CalendarP(new Date(0), 0).getCalendar();
+				this.start = new CalendarP(new Date(0), ChronoField.MILLI_OF_SECOND).getCalendar();
 				this.end = singleDate1.getCalendar();
 			} else if (eq == Equality.GTE) {
-				this.start = singleDate1.roll(MILLISECOND, -1).getCalendar();
-				this.end = new CalendarP(new Date(Long.MAX_VALUE), 0).getCalendar();
+				this.start = singleDate1.roll(ChronoField.MILLI_OF_SECOND, -1).getCalendar();
+				this.end = new CalendarP(new Date(Long.MAX_VALUE), ChronoField.MILLI_OF_SECOND).getCalendar();
 			} else if (eq == Equality.LTE) {
-				this.start = new CalendarP(new Date(0), 0).getCalendar();
+				this.start = new CalendarP(new Date(0), ChronoField.MILLI_OF_SECOND).getCalendar();
 				this.end = singleDate1.roll(1).getCalendar();
 			} else {
-				this.start = singleDate1.copy().roll(MILLISECOND, -1).getCalendar();
+				this.start = singleDate1.copy().roll(ChronoField.MILLI_OF_SECOND, -1).getCalendar();
 				this.end = singleDate1.roll(1).getCalendar();
 			}
 		}
 
-		public TimestampRange(SimpleDateFormat[] formats, String start, String end) {
-			CalendarP start1 = parseDate(formats, start);
-			CalendarP end1 = parseDate(formats, end);
-			this.start = start1.copy().roll(MILLISECOND, -1).getCalendar();
+		public TimestampRange(String start, String end) {
+			CalendarP start1 = parseDate(start);
+			CalendarP end1 = parseDate(end);
+			this.start = start1.copy().roll(ChronoField.MILLI_OF_SECOND, -1).getCalendar();
 			this.end = end1.roll(1).getCalendar();
 		}
 
@@ -394,22 +400,6 @@ public class TimeMatcherFactory extends MatcherFactory {
 	 */
 	public static final TimeMatcherFactory DEFAULT = new TimeMatcherFactory();
 
-	private static int getPrecisionField(String pattern) {
-		if (pattern.indexOf('s') != -1)
-			return SECOND;
-		if (pattern.indexOf('m') != -1)
-			return MINUTE;
-		if (pattern.indexOf('H') != -1)
-			return HOUR_OF_DAY;
-		if (pattern.indexOf('d') != -1)
-			return DAY_OF_MONTH;
-		if (pattern.indexOf('M') != -1)
-			return MONTH;
-		if (pattern.indexOf('y') != -1)
-			return YEAR;
-		return Calendar.MILLISECOND;
-	}
-
 	/**
 	 * Parses a timestamp string off the beginning of the string segment 'seg'.
 	 * Goes through each possible valid timestamp format until it finds a match.
@@ -419,30 +409,23 @@ public class TimeMatcherFactory extends MatcherFactory {
 	 * @param pp Where parsing last left off.
 	 * @return An object representing a timestamp.
 	 */
-	static CalendarP parseDate(SimpleDateFormat[] formats, String seg) {
-		ParsePosition pp = new ParsePosition(0);
-		for (SimpleDateFormat f : formats) {
-			Date d = f.parse(seg, pp);
-			int idx = pp.getIndex();
-			if (idx != 0) {
-				// it only counts if the next character is '-', 'space', or end-of-string.
-				char c = (seg.length() == idx ? 0 : seg.charAt(idx));
-				if (c == 0 || c == '-' || Character.isWhitespace(c))
-					return new CalendarP(d, getPrecisionField(f.toPattern()));
-			}
+	static CalendarP parseDate(String seg) {
+		// Try DateUtils.parseISO8601Calendar first for consistency
+		Calendar c = GregorianCalendar.from(DateUtils.fromIso8601(seg));
+		if (c != null) {
+			// Determine precision based on the input string
+			var precision = DateUtils.getPrecisionFromString(seg);
+			return new CalendarP(c, precision);
 		}
 
 		throw new BasicRuntimeException("Invalid date encountered:  ''{0}''", seg);
 	}
 
-	private final SimpleDateFormat[] formats;
 
 	/**
 	 * Constructor.
 	 */
-	protected TimeMatcherFactory() {
-		this.formats = getTimestampFormats();
-	}
+	protected TimeMatcherFactory() {}
 
 	@Override
 	public boolean canMatch(ClassMeta<?> cm) {
@@ -451,45 +434,6 @@ public class TimeMatcherFactory extends MatcherFactory {
 
 	@Override
 	public AbstractMatcher create(String pattern) {
-		return new TimeMatcher(formats, pattern);
-	}
-
-	/**
-	 * Returns the timestamp formats to use for parsing timestamps in time matching operations.
-	 *
-	 * <p>
-	 * This method converts the format strings returned by {@link #getTimestampFormatStrings()} into
-	 * {@link SimpleDateFormat} objects for actual date parsing.
-	 *
-	 * @return An array of {@link SimpleDateFormat} objects representing the supported timestamp formats.
-	 */
-	protected SimpleDateFormat[] getTimestampFormats() {
-		String[] s = getTimestampFormatStrings();
-		SimpleDateFormat[] a = new SimpleDateFormat[s.length];
-		for (int i = 0; i < s.length; i++)
-			a[i] = new SimpleDateFormat(s[i]);
-		return a;
-	}
-
-	/**
-	 * Returns the timestamp format strings used for parsing timestamps in time matching operations.
-	 *
-	 * <p>
-	 * This method defines the default set of timestamp formats that are recognized by the time matcher.
-	 * Formats are tried in order until a match is found. Override this method to provide custom timestamp formats.
-	 *
-	 * @return An array of timestamp format strings compatible with {@link SimpleDateFormat}.
-	 */
-	protected String[] getTimestampFormatStrings() {
-		// @formatter:off
-		return new String[]{
-			"yyyy-MM-dd'T'HH:mm:ss",
-			"yyyy-MM-dd'T'HH:mm",
-			"yyyy-MM-dd'T'HH",
-			"yyyy-MM-dd",
-			"yyyy-MM",
-			"yyyy"
-		};
-		// @formatter:on
+		return new TimeMatcher(pattern);
 	}
 }

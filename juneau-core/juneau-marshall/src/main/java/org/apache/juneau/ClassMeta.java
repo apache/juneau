@@ -32,6 +32,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -439,7 +440,7 @@ public class ClassMeta<T> implements Type {
 
 		private ObjectSwap<T,?> createSwap(Swap s) {
 			Class<?> c = s.value();
-			if (ClassUtils.isVoid(c))
+			if (ClassUtils2.isVoid(c))
 				c = s.impl();
 			ClassInfo ci = ClassInfo.of(c);
 

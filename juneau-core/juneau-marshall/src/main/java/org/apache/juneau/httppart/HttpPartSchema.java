@@ -35,6 +35,7 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
@@ -379,7 +380,7 @@ public class HttpPartSchema {
 			else if (a.annotationType().getName().startsWith("jakarta.validation.constraints."))
 				applyJakartaValidation(a);
 			else
-				throw new BasicRuntimeException("Builder.apply(@{0}) not defined", className(a));
+				throw new BasicRuntimeException("Builder.apply(@{0}) not defined", ClassUtils2.className(a));
 			return this;
 		}
 
@@ -1883,7 +1884,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
-			if (isNotVoid(value))
+			if (ClassUtils2.isNotVoid(value))
 				parser = value;
 			return this;
 		}
@@ -2065,7 +2066,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
-			if (isNotVoid(value))
+			if (ClassUtils2.isNotVoid(value))
 				serializer = value;
 			return this;
 		}
@@ -2545,7 +2546,7 @@ public class HttpPartSchema {
 			if (t instanceof Class<?>) {
 				ClassInfo.of((Class<?>)t).forEachAnnotation(c, x -> true, this::apply);
 			} else if (Value.isType(t)) {
-				apply(c, Value.getParameterType(t));
+				apply(c, ClassUtils2.getParameterType(t));
 			}
 			return this;
 		}

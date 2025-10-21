@@ -17,13 +17,15 @@
 package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.Visibility.*;
+import static org.apache.juneau.common.reflect.Visibility.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 

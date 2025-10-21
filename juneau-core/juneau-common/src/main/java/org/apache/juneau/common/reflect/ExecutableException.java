@@ -14,10 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.common.reflect;
 
 import java.lang.reflect.*;
 import java.text.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * General exception that occurs when trying to execute a constructor, method, or field using reflection.
@@ -27,7 +29,7 @@ import java.text.*;
  *
  * @serial exclude
  */
-public class ExecutableException extends BasicRuntimeException {
+public class ExecutableException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,7 +40,7 @@ public class ExecutableException extends BasicRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ExecutableException(String message, Object...args) {
-		super(message, args);
+		super(Utils.f(message, args));
 	}
 
 	/**
@@ -58,7 +60,7 @@ public class ExecutableException extends BasicRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ExecutableException(Throwable causedBy, String message, Object...args) {
-		super(causedBy, message, args);
+		super(Utils.f(message, args), causedBy);
 	}
 
 	/**
@@ -72,9 +74,13 @@ public class ExecutableException extends BasicRuntimeException {
 		return c instanceof InvocationTargetException ? ((InvocationTargetException)c).getTargetException() : c;
 	}
 
-	@Override /* Overridden from BasicRuntimeException */
-	public ExecutableException setMessage(String message, Object...args) {
-		super.setMessage(message, args);
-		return this;
+	/**
+	 * Returns the caused-by exception if there is one.
+	 *
+	 * @return The caused-by exception if there is one, or this exception if there isn't.
+	 */
+	public Throwable unwrap() {
+		Throwable t = getCause();
+		return t == null ? this : t;
 	}
 }

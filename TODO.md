@@ -28,7 +28,8 @@
 			.append("listener", listener);
 - [ ] TODO-18 Look for places where we concatenate strings across multiple lines and determine if they can use Java multiline strings.
 - [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
-- [ ] TODO-30 Finish setting up SonarQube analysis in git workflow.
+- [ ] TODO-28 Remove dependencies on jakarta.xml.bind-api.
+- [ ] TODO-29 Finish setting up SonarQube analysis in git workflow.
 
 ## Framework Improvements
 

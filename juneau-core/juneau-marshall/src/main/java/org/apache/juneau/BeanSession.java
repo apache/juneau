@@ -19,7 +19,6 @@ package org.apache.juneau;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -33,13 +32,12 @@ import java.util.logging.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-
-import jakarta.xml.bind.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link BeanContext}.
@@ -1111,7 +1109,7 @@ public class BeanSession extends ContextSession {
 	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
 		Utils.assertArgNotNull("o", o);
 		Utils.assertArgNotNull("c", c);
-		Utils.assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", className(c), className(o), 0);
+		Utils.assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", ClassUtils2.className(c), ClassUtils2.className(o), 0);
 
 		ClassMeta cm = getClassMeta(c);
 
@@ -1551,13 +1549,13 @@ public class BeanSession extends ContextSession {
 						return (T)c2;
 					}
 				}
-				return (T)DatatypeConverter.parseDateTime(DateUtils.toValidISO8601DT(value.toString()));
+				return (T)GregorianCalendar.from(DateUtils.fromIso8601(value.toString()));
 			}
 
 			if (to.isDate() && to.getInnerClass() == Date.class) {
 				if (from.isCalendar())
 					return (T)((Calendar)value).getTime();
-				return (T)DatatypeConverter.parseDateTime(DateUtils.toValidISO8601DT(value.toString())).getTime();
+				return (T)GregorianCalendar.from(DateUtils.fromIso8601(value.toString())).getTime();
 			}
 
 			if (to.hasMutaterFrom(from))

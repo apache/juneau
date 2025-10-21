@@ -73,7 +73,7 @@ public class SchemaUtils {
 		}
 		if (o instanceof JsonMap)
 			return (JsonMap)o;
-		throw new ParseException("Unexpected data type ''{0}''.  Expected JsonMap or String.", className(o));
+		throw new ParseException("Unexpected data type ''{0}''.  Expected JsonMap or String.", ClassUtils2.className(o));
 	}
 
 	/**

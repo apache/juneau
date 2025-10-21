@@ -213,7 +213,7 @@ public class RetryAfter extends BasicDateHeader {
 			} else if (o instanceof ZonedDateTime) {
 				return RFC_1123_DATE_TIME.format((ZonedDateTime)o);
 			}
-			throw new BasicRuntimeException("Invalid object type returned by supplier: {0}", className(o));
+			throw new BasicRuntimeException("Invalid object type returned by supplier: {0}", ClassUtils2.className(o));
 		}
 		if (value != null)
 			return Utils.s(value);

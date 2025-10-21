@@ -388,7 +388,7 @@ public class ObjectSearcher_Test extends TestBase {
 			var bb = new B[dates.length];
 			for (var i = 0; i < dates.length; i++) {
 				bb[i] = new B();
-				bb[i].f = DateUtils.parseISO8601Calendar(dates[i]);
+				bb[i].f = DateUtils.fromIso8601Calendar(dates[i]);
 			}
 			return bb;
 		}
