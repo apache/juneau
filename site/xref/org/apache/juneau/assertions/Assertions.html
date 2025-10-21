@@ -31,8 +31,8 @@
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Main class for creation of assertions for stand-alone testing.</em>
@@ -953,7 +953,7 @@
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">	 * 	A new assertion object.</em>
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="VersionAssertion" href="../../../../org/apache/juneau/assertions/VersionAssertion.html#VersionAssertion">VersionAssertion</a> assertVersion(<a name="Version" href="../../../../org/apache/juneau/Version.html#Version">Version</a> value) {
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="VersionAssertion" href="../../../../org/apache/juneau/assertions/VersionAssertion.html#VersionAssertion">VersionAssertion</a> assertVersion(<a name="Version" href="../../../../org/apache/juneau/common/utils/Version.html#Version">Version</a> value) {
 <a class="jxr_linenumber" name="L949" href="#L949">949</a> 		<strong class="jxr_keyword">return</strong> VersionAssertion.create(value);
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> 	}
 <a class="jxr_linenumber" name="L951" href="#L951">951</a> 
