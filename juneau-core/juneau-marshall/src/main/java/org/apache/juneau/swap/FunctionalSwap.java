@@ -17,7 +17,7 @@
 package org.apache.juneau.swap;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.common.function.*;
 
 /**
  * A subclass of {@link ObjectSwap} that allows swap and unswap methods to be defined as functions.

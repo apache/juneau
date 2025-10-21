@@ -27,6 +27,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
+import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;

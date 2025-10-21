@@ -14,21 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common.utils;
+package org.apache.juneau.common.function;
+
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+
+import java.util.function.*;
 
 /**
- * A supplier that throws an exception.
+ * A subclass of {@link Function} that allows for thrown exceptions.
  *
- * @param <T> The supplier type.
+ * <h5 class='section'>See Also:</h5><ul>
+ * </ul>
+ *
+ * @param <T> the type of the input to the function.
+ * @param <R> the type of the result of the function.
  */
 @FunctionalInterface
-public interface ThrowingSupplier<T> {
+public interface ThrowingFunction<T,R> extends Function<T,R> {
+
+	@Override
+	default R apply(T t) {
+		try {
+			return applyThrows(t);
+		} catch (Exception e) {
+			throw asRuntimeException(e);
+		}
+	}
 
 	/**
-	 * Gets a result.
+	 * The functional method to implement.
 	 *
-	 * @return A result.
-	 * @throws Exception If an error occurs.
+	 * @param t The type of the input to the function.
+	 * @return The type of the result of the function.
+	 * @throws Exception Any exception.
 	 */
-	T get() throws Exception;
+	R applyThrows(T t) throws Exception;
 }

@@ -51,6 +51,7 @@ import org.apache.http.message.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
+import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.ContentType;

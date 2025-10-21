@@ -31,6 +31,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Common utility methods.

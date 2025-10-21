@@ -14,37 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
-
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-
-import java.util.function.*;
+package org.apache.juneau.common.reflect;
 
 /**
- * A subclass of {@link Consumer} that allows for thrown exceptions.
+ * A supplier that throws an exception.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
- *
- * @param <T> the type of the input to the consumer.
+ * @param <T> The supplier type.
  */
 @FunctionalInterface
-public interface ThrowingConsumer<T> extends Consumer<T> {
-
-	@Override
-	default void accept(T t) {
-		try {
-			acceptThrows(t);
-		} catch (Exception e) {
-			throw asRuntimeException(e);
-		}
-	}
+public interface ThrowingSupplier<T> {
 
 	/**
-	 * The functional method to implement.
+	 * Gets a result.
 	 *
-	 * @param t The type of the input to the consumer.
-	 * @throws Exception Any exception.
+	 * @return A result.
+	 * @throws Exception If an error occurs.
 	 */
-	void acceptThrows(T t) throws Exception;
+	T get() throws Exception;
 }

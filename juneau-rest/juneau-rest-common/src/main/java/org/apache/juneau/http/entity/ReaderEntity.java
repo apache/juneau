@@ -23,6 +23,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.io.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 

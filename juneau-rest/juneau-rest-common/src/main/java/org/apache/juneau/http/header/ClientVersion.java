@@ -19,7 +19,6 @@ package org.apache.juneau.http.header;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;

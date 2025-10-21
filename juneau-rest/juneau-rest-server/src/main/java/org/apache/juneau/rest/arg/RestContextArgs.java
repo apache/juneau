@@ -19,6 +19,7 @@ package org.apache.juneau.rest.arg;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.function.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
@@ -29,7 +30,6 @@ import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.stats.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestContext} object.

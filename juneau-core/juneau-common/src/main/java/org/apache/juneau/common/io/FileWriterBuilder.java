@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common.utils;
+package org.apache.juneau.common.io;
 
 import java.io.*;
 import java.nio.charset.*;
 
 /**
- * Utility class for creating {@link FileReader} objects.
+ * Utility class for creating {@link FileWriter} objects.
  */
-public class FileReaderBuilder {
+public class FileWriterBuilder {
 
 	/**
 	 * Creates a new builder.
 	 *
 	 * @return A new builder.
 	 */
-	public static FileReaderBuilder create() {
-		return new FileReaderBuilder();
+	public static FileWriterBuilder create() {
+		return new FileWriterBuilder();
 	}
 	/**
 	 * Creates a new builder initialized with the specified file.
@@ -38,36 +38,56 @@ public class FileReaderBuilder {
 	 * @param file The file being written to.
 	 * @return A new builder.
 	 */
-	public static FileReaderBuilder create(File file) {
-		return new FileReaderBuilder().file(file);
+	public static FileWriterBuilder create(File file) {
+		return new FileWriterBuilder().file(file);
 	}
+	/**
+	 * Creates a new builder initialized with the specified file path.
+	 *
+	 * @param path The file path being written to.
+	 * @return A new builder.
+	 */
+	public static FileWriterBuilder create(String path) {
+		return new FileWriterBuilder().file(path);
+	}
+
 	private File file;
 
 	private Charset cs = Charset.defaultCharset();
 
-	private boolean allowNoFile;
+	private boolean append, buffered;
 
 	/**
-	 * If called and the file is <jk>null</jk> or non-existent, then the {@link #build()} command will return an empty
-	 * reader instead of a {@link FileNotFoundException}.
+	 * Sets the append mode on the writer to <jk>true</jk>.
 	 *
 	 * @return This object.
 	 */
-	public FileReaderBuilder allowNoFile() {
-		this.allowNoFile = true;
+	public FileWriterBuilder append() {
+		this.append = true;
 		return this;
 	}
 
 	/**
-	 * Creates a new File reader.
+	 * Sets the buffer mode on the writer to <jk>true</jk>.
 	 *
-	 * @return A new File reader.
+	 * @return This object.
+	 */
+	public FileWriterBuilder buffered() {
+		this.buffered = true;
+		return this;
+	}
+
+	/**
+	 * Creates a new File writer.
+	 *
+	 * @return A new File writer.
 	 * @throws FileNotFoundException If file could not be found.
 	 */
-	public Reader build() throws FileNotFoundException {
-		if (allowNoFile && (file == null || ! file.exists()))
-			return new StringReader("");
-		return new InputStreamReader(new FileInputStream(file), cs);
+	public Writer build() throws FileNotFoundException {
+		OutputStream os = new FileOutputStream(file, append);
+		if (buffered)
+			os = new BufferedOutputStream(os);
+		return new OutputStreamWriter(os, cs);
 	}
 
 	/**
@@ -78,7 +98,7 @@ public class FileReaderBuilder {
 	 * 	The default is {@link Charset#defaultCharset()}.
 	 * @return This object.
 	 */
-	public FileReaderBuilder charset(Charset cs) {
+	public FileWriterBuilder charset(Charset cs) {
 		this.cs = cs;
 		return this;
 	}
@@ -91,29 +111,29 @@ public class FileReaderBuilder {
 	 * 	The default is {@link Charset#defaultCharset()}.
 	 * @return This object.
 	 */
-	public FileReaderBuilder charset(String cs) {
+	public FileWriterBuilder charset(String cs) {
 		this.cs = Charset.forName(cs);
 		return this;
 	}
 
 	/**
-	 * Sets the file being written from.
+	 * Sets the file being written to.
 	 *
-	 * @param file The file being written from.
+	 * @param file The file being written to.
 	 * @return This object.
 	 */
-	public FileReaderBuilder file(File file) {
+	public FileWriterBuilder file(File file) {
 		this.file = file;
 		return this;
 	}
 
 	/**
-	 * Sets the path of the file being written from.
+	 * Sets the path of the file being written to.
 	 *
-	 * @param path The path of the file being written from.
+	 * @param path The path of the file being written to.
 	 * @return This object.
 	 */
-	public FileReaderBuilder file(String path) {
+	public FileWriterBuilder file(String path) {
 		this.file = new File(path);
 		return this;
 	}

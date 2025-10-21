@@ -23,6 +23,8 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.io.*;
+
 /**
  * Various I/O related utility methods.
  */

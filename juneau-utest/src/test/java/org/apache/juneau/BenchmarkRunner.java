@@ -21,7 +21,7 @@ import java.util.Map.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
-import org.apache.juneau.utils.*;
+import org.apache.juneau.common.function.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.*;
 import org.openjdk.jmh.runner.*;

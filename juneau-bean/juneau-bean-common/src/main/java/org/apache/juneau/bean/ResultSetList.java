@@ -21,7 +21,7 @@ import static org.apache.juneau.common.utils.IOUtils.*;
 import java.sql.*;
 import java.util.*;
 
-import org.apache.juneau.common.utils.*;
+import org.apache.juneau.common.collections.*;
 
 /**
  * Transforms an SQL {@link ResultSet ResultSet} into a list of maps.

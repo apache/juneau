@@ -14,39 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
-
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-
-import java.util.function.*;
+package org.apache.juneau.common.utils;
 
 /**
- * A subclass of {@link Function} that allows for thrown exceptions.
+ * A simple weighted average of numbers.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
- *
- * @param <T> the type of the input to the function.
- * @param <R> the type of the result of the function.
  */
-@FunctionalInterface
-public interface ThrowingFunction<T,R> extends Function<T,R> {
+public class WeightedAverage {
+	private Double value = 0d;
+	private int weight;
 
-	@Override
-	default R apply(T t) {
-		try {
-			return applyThrows(t);
-		} catch (Exception e) {
-			throw asRuntimeException(e);
+	/**
+	 * Add a number with a weight to this average.
+	 *
+	 * @param w The weight of the new value.
+	 * @param v The new value.
+	 * @return This object.
+	 */
+	public WeightedAverage add(int w, Number v) {
+		if (v != null) {
+			try {
+				double w1 = weight, w2 = w;
+				weight = Math.addExact(weight, w);
+				if (weight != 0) {
+					value = (value * (w1 / weight)) + (v.floatValue() * (w2 / weight));
+				}
+			} catch (@SuppressWarnings("unused") ArithmeticException ae) {
+				throw new ArithmeticException("Weight overflow.");
+			}
 		}
+		return this;
 	}
 
 	/**
-	 * The functional method to implement.
+	 * Returns the weighted average of all numbers.
 	 *
-	 * @param t The type of the input to the function.
-	 * @return The type of the result of the function.
-	 * @throws Exception Any exception.
+	 * @return The weighted average of all numbers.
 	 */
-	R applyThrows(T t) throws Exception;
+	public double getValue() { return value; }
 }

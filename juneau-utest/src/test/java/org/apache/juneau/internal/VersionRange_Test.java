@@ -19,6 +19,7 @@ package org.apache.juneau.internal;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

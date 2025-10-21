@@ -23,8 +23,8 @@ import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.common.function.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Main class for creation of assertions for stand-alone testing.

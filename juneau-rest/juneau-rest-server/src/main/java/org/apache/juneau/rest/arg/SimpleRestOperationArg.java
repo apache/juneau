@@ -18,8 +18,8 @@ package org.apache.juneau.rest.arg;
 
 import java.util.function.*;
 
+import org.apache.juneau.common.function.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.utils.*;
 
 /**
  * An implementation of a {@link RestOpArg} that takes in a {@link ThrowingFunction} for resolving a parameter value.

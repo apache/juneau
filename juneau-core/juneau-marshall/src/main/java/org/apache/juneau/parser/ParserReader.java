@@ -18,6 +18,7 @@ package org.apache.juneau.parser;
 
 import java.io.*;
 
+import org.apache.juneau.common.io.*;
 import org.apache.juneau.common.utils.*;
 
 /**

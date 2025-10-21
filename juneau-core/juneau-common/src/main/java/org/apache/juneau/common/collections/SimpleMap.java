@@ -14,11 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.common.utils;
+package org.apache.juneau.common.collections;
 
 
 import java.lang.reflect.*;
 import java.util.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * An instance of a <c>Map</c> where the keys and values are simple arrays.
