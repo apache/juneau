@@ -16,15 +16,14 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.StateMachineState.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
 
 /**
@@ -154,12 +153,12 @@ class MockPathResolver {
 		// Path starts with http[s]: so we have to parse it to resolve variables.
 		this.uri = pathToResolve;
 
-		// S03 - Found "http://", looking for any character other than '/' (end of target).
-		// S04 - Found  any character, looking for 3rd '/' (end of target).
-		// S05 - Found 3rd '/', resolving contextPath.
-		// S06 - Resolved contextPath, resolving servletPath.
-		// S07 - Resolved servletPath.
-		StateMachineState state = S03;
+		// S3 - Found "http://", looking for any character other than '/' (end of target).
+		// S4 - Found  any character, looking for 3rd '/' (end of target).
+		// S5 - Found 3rd '/', resolving contextPath.
+		// S6 - Resolved contextPath, resolving servletPath.
+		// S7 - Resolved servletPath.
+		StateEnum state = S3;
 
 		int cpSegments = StringUtils.countChars(contextPath, '/');
 		int spSegments = StringUtils.countChars(servletPath, '/');
@@ -171,54 +170,54 @@ class MockPathResolver {
 		int mark = 0;
 		for (int i = uri.indexOf("://") + 3; i < uri.length(); i++) {
 			char c = uri.charAt(i);
-			if (state == S03) {
+			if (state == S3) {
 				if (c != '/')
-					state = S04;
+					state = S4;
 				else
 					break;
-			} else if (state == S04) {
+			} else if (state == S4) {
 				if (c == '/') {
 					this.target = uri.substring(0, i);
-					state = S05;
+					state = S5;
 					if (contextPath.isEmpty()) {
-						state = S06;
+						state = S6;
 						if (servletPath.isEmpty()) {
-							state = S07;
+							state = S7;
 						}
 					}
 					mark = i;
 				}
-			} else if (state == S05) {
+			} else if (state == S5) {
 				if (c == '/') {
 					cpSegments--;
 					if (cpSegments == 0) {
 						this.contextPath = uri.substring(mark, i);
 						mark = i;
-						state = S06;
+						state = S6;
 						if (servletPath.isEmpty()) {
-							state = S07;
+							state = S7;
 						}
 					}
 				}
-			} else if (state == S06) {
+			} else if (state == S6) {
 				if (c == '/') {
 					spSegments--;
 					if (spSegments == 0) {
 						this.servletPath = uri.substring(mark, i);
 						mark = i;
-						state = S07;
+						state = S7;
 					}
 				}
 			}
 		}
 
-		if (state == S04) {
+		if (state == S4) {
 			this.target = uri;
-		} else if (state == S05) {
+		} else if (state == S5) {
 			this.contextPath = uri.substring(mark);
-		} else if (state == S06) {
+		} else if (state == S6) {
 			this.servletPath = uri.substring(mark);
-		} else if (state == S07) {
+		} else if (state == S7) {
 			this.remainder = uri.substring(mark);
 		} else {
 			throw new BasicRuntimeException("Invalid URI pattern encountered:  {0}", uri);

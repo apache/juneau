@@ -16,14 +16,13 @@
  */
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.internal.StateMachineState.*;
+import static org.apache.juneau.common.utils.StateEnum.*;
 
 import java.time.temporal.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Date/time matcher factory for the {@link ObjectSearcher} class.
@@ -106,21 +105,21 @@ public class TimeMatcherFactory extends MatcherFactory {
 			// >2000, <2000, >=2000, <=2000, > 2000, 2000 - 2001, '2000', >'2000', '2000'-'2001', '2000' - '2001'
 
 			// Possible states:
-			// S01 = Looking for [<]/[>]/quote/NUM ([>]=S02, [<]=S03, [']=S05, ["]=S06, NUM=S08)
-			// S02 = Found [>], looking for [=]/quote/NUM ([=]=S04, [']=S05, ["]=S06, NUM=S08)
-			// S03 = Found [<], looking for [=]/quote/NUM ([=]=S04, [']=S05, ["]=S06, NUM=S08)
-			// S04 = Found [>=] or [<=], looking for quote/NUM ([']=S05, ["]=S06, NUM=S08)
-			// S05 = Found ['], looking for ['] ([']=S01)
-			// S06 = Found ["], looking for ["] (["]=S01)
-			// S07 = Found [123"] or [123'], looking for WS (WS=S09)
-			// S08 = Found [2], looking for WS (WS=S09)
-			// S09 = Found [2000 ], looking for [-]/quote/NUM ([-]=S10, [']=S11, ["]=S12, NUM=S13)
+			// S1 = Looking for [<]/[>]/quote/NUM ([>]=S2, [<]=S3, [']=S5, ["]=S6, NUM=S8)
+			// S2 = Found [>], looking for [=]/quote/NUM ([=]=S4, [']=S5, ["]=S6, NUM=S8)
+			// S3 = Found [<], looking for [=]/quote/NUM ([=]=S4, [']=S5, ["]=S6, NUM=S8)
+			// S4 = Found [>=] or [<=], looking for quote/NUM ([']=S5, ["]=S6, NUM=S8)
+			// S5 = Found ['], looking for ['] ([']=S1)
+			// S6 = Found ["], looking for ["] (["]=S1)
+			// S7 = Found [123"] or [123'], looking for WS (WS=S9)
+			// S8 = Found [2], looking for WS (WS=S9)
+			// S9 = Found [2000 ], looking for [-]/quote/NUM ([-]=S10, [']=S11, ["]=S12, NUM=S13)
 			// S10 = Found [2000 -], looking for quote/NUM ([']=S11, ["]=S12, NUM=S13)
-			// S11 = Found [2000 - '], looking for ['] ([']=S01)
-			// S12 = Found [2000 - "], looking for ["] (["]=S01)
-			// S13 = Found [2000 - 2], looking for WS (WS=S01)
+			// S11 = Found [2000 - '], looking for ['] ([']=S1)
+			// S12 = Found [2000 - "], looking for ["] (["]=S1)
+			// S13 = Found [2000 - 2], looking for WS (WS=S1)
 
-			StateMachineState state = S01;
+			StateEnum state = S1;
 			int mark = 0;
 			Equality eq = Equality.NONE;
 			String s1 = null, s2 = null;
@@ -129,139 +128,139 @@ public class TimeMatcherFactory extends MatcherFactory {
 			char c = 0;
 			for (i = 0; i < s.trim().length(); i++) {
 				c = s.charAt(i);
-				if (state == S01) {
-					// S01 = Looking for [>]/[<]/quote/NUM ([>]=S02, [<]=S03, [']=S05, ["]=S06, NUM=S08)
+				if (state == S1) {
+					// S1 = Looking for [>]/[<]/quote/NUM ([>]=S2, [<]=S3, [']=S5, ["]=S6, NUM=S8)
 					if (WS.contains(c)) {
-						state = S01;
+						state = S1;
 					} else if (c == '>') {
-						state = S02;
+						state = S2;
 						eq = Equality.GT;
 					} else if (c == '<') {
-						state = S03;
+						state = S3;
 						eq = Equality.LT;
 					} else if (c == '\'') {
-						state = S05;
+						state = S5;
 						mark = i + 1;
 					} else if (c == '"') {
-						state = S06;
+						state = S6;
 						mark = i + 1;
 					} else if (DT.contains(c)) {
-						state = S08;
+						state = S8;
 						mark = i;
 					} else {
 						break;
 					}
-				} else if (state == S02) {
-					// S02 = Found [>], looking for [=]/quote/NUM ([=]=S04, [']=S05, ["]=S06, NUM=S08)
+				} else if (state == S2) {
+					// S2 = Found [>], looking for [=]/quote/NUM ([=]=S4, [']=S5, ["]=S6, NUM=S8)
 					if (WS.contains(c)) {
-						state = S02;
+						state = S2;
 					} else if (c == '=') {
-						state = S04;
+						state = S4;
 						eq = Equality.GTE;
 					} else if (c == '\'') {
-						state = S05;
+						state = S5;
 						mark = i + 1;
 					} else if (c == '"') {
-						state = S06;
+						state = S6;
 						mark = i + 1;
 					} else if (DT.contains(c)) {
-						state = S08;
+						state = S8;
 						mark = i;
 					} else {
 						break;
 					}
-				} else if (state == S03) {
-					// S03 = Found [<], looking for [=]/quote/NUM ([=]=S04, [']=S05, ["]=S06, NUM=S08)
+				} else if (state == S3) {
+					// S3 = Found [<], looking for [=]/quote/NUM ([=]=S4, [']=S5, ["]=S6, NUM=S8)
 					if (WS.contains(c)) {
-						state = S03;
+						state = S3;
 					} else if (c == '=') {
-						state = S04;
+						state = S4;
 						eq = Equality.LTE;
 					} else if (c == '\'') {
-						state = S05;
+						state = S5;
 						mark = i + 1;
 					} else if (c == '"') {
-						state = S06;
+						state = S6;
 						mark = i + 1;
 					} else if (DT.contains(c)) {
-						state = S08;
+						state = S8;
 						mark = i;
 					} else {
 						break;
 					}
-				} else if (state == S04) {
-					// S04 = Found [>=] or [<=], looking for quote/NUM ([']=S05, ["]=S06, NUM=S08)
+				} else if (state == S4) {
+					// S4 = Found [>=] or [<=], looking for quote/NUM ([']=S5, ["]=S6, NUM=S8)
 					if (WS.contains(c)) {
-						state = S04;
+						state = S4;
 					} else if (c == '\'') {
-						state = S05;
+						state = S5;
 						mark = i + 1;
 					} else if (c == '"') {
-						state = S06;
+						state = S6;
 						mark = i + 1;
 					} else if (DT.contains(c)) {
-						state = S08;
+						state = S8;
 						mark = i;
 					} else {
 						break;
 					}
-				} else if (state == S05) {
-					// S05 = Found ['], looking for ['] ([']=S07)
+				} else if (state == S5) {
+					// S5 = Found ['], looking for ['] ([']=S7)
 					if (c == '\'') {
-						state = S07;
+						state = S7;
 						s1 = s.substring(mark, i);
 					}
-				} else if (state == S06) {
-					// S06 = Found ["], looking for ["] (["]=S07)
+				} else if (state == S6) {
+					// S6 = Found ["], looking for ["] (["]=S7)
 					if (c == '"') {
-						state = S07;
+						state = S7;
 						s1 = s.substring(mark, i);
 					}
-				} else if (state == S07) {
-					// S07 = Found [123"] or [123'], looking for WS (WS=S09)
+				} else if (state == S7) {
+					// S7 = Found [123"] or [123'], looking for WS (WS=S9)
 					if (WS.contains(c)) {
-						state = S09;
+						state = S9;
 					} else if (c == '-') {
 						state = S10;
 					} else {
 						break;
 					}
-				} else if (state == S08) {
-					// S08 = Found [1], looking for WS (WS=S09)
+				} else if (state == S8) {
+					// S8 = Found [1], looking for WS (WS=S9)
 					if (WS.contains(c)) {
-						state = S09;
+						state = S9;
 						s1 = s.substring(mark, i);
 					}
-				} else if (state == S09) {
-					// S09 = Found [2000 ], looking for [-]/[>]/[<]/quote/NUM ([-]=S10, [>]=S02, [<]=S03, [']=S05, ["]=S06, NUM=S08)
+				} else if (state == S9) {
+					// S9 = Found [2000 ], looking for [-]/[>]/[<]/quote/NUM ([-]=S10, [>]=S2, [<]=S3, [']=S5, ["]=S6, NUM=S8)
 					if (WS.contains(c)) {
-						state = S09;
+						state = S9;
 					} else if (c == '-') {
 						state = S10;
 					} else if (c == '>') {
-						state = S02;
+						state = S2;
 						l.add(new TimestampRange(eq, s1));
 						eq = Equality.GT;
 						s1 = null;
 					} else if (c == '<') {
-						state = S03;
+						state = S3;
 						l.add(new TimestampRange(eq, s1));
 						eq = Equality.LT;
 						s1 = null;
 					} else if (c == '\'') {
-						state = S05;
+						state = S5;
 						l.add(new TimestampRange(eq, s1));
 						mark = i + 1;
 						eq = null;
 						s1 = null;
 					} else if (c == '"') {
-						state = S06;
+						state = S6;
 						l.add(new TimestampRange(eq, s1));
 						mark = i + 1;
 						eq = null;
 						s1 = null;
 					} else if (DT.contains(c)) {
-						state = S08;
+						state = S8;
 						l.add(new TimestampRange(eq, s1));
 						eq = null;
 						s1 = null;
@@ -286,27 +285,27 @@ public class TimeMatcherFactory extends MatcherFactory {
 						break;
 					}
 				} else if (state == S11) {
-					// S11 = Found [2000 - '], looking for ['] ([']=S01)
+					// S11 = Found [2000 - '], looking for ['] ([']=S1)
 					if (c == '\'') {
-						state = S01;
+						state = S1;
 						s2 = s.substring(mark, i);
 						l.add(new TimestampRange(s1, s2));
 						s1 = null;
 						s2 = null;
 					}
 				} else if (state == S12) {
-					// S12 = Found [2000 - "], looking for ["] (["]=S01)
+					// S12 = Found [2000 - "], looking for ["] (["]=S1)
 					if (c == '"') {
-						state = S01;
+						state = S1;
 						s2 = s.substring(mark, i);
 						l.add(new TimestampRange(s1, s2));
 						s1 = null;
 						s2 = null;
 					}
 				} else /* (state == S13) */ {
-					// S13 = Found [2000 - 2], looking for WS (WS=S01)
+					// S13 = Found [2000 - 2], looking for WS (WS=S1)
 					if (WS.contains(c)) {
-						state = S01;
+						state = S1;
 						s2 = s.substring(mark, i);
 						l.add(new TimestampRange(s1, s2));
 						s1 = null;
@@ -318,13 +317,13 @@ public class TimeMatcherFactory extends MatcherFactory {
 			if (i != s.length())
 				throw new PatternException("Invalid range pattern ({0}): pattern=[{1}], pos=[{2}], char=[{3}]", state, s, i, c);
 
-			if (state == S01) {
+			if (state == S1) {
 				// No tokens found.
-			} else if (state == S02 || state == S03 || state == S04 || state == S05 || state == S06 || state == S10 || state == S11 || state == S12) {
+			} else if (state == S2 || state == S3 || state == S4 || state == S5 || state == S6 || state == S10 || state == S11 || state == S12) {
 				throw new PatternException("Invalid range pattern (E{0}): {1}", state, s);
-			} else if (state == S07) {
+			} else if (state == S7) {
 				l.add(new TimestampRange(eq, s1));
-			} else if (state == S08) {
+			} else if (state == S8) {
 				s1 = s.substring(mark).trim();
 				l.add(new TimestampRange(eq, s1));
 			} else /* (state == S13) */ {

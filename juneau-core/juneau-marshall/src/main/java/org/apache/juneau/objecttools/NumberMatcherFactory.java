@@ -16,13 +16,12 @@
  */
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.internal.StateMachineState.*;
+import static org.apache.juneau.common.utils.StateEnum.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Number matcher factory for the {@link ObjectSearcher} class.
@@ -70,19 +69,19 @@ public class NumberMatcherFactory extends MatcherFactory {
 			// 123, >123, <123, >=123, <=123, >-123, >=-123, 123-456, -123--456, !123, !123-456, 123 - 456 (one token), 123 -456 (two separate tokens)
 
 			// Possible states:
-			// S01 = Looking for start (WS=S01, [!]=S01, [>]=S02, [<]=S03, SNUM=S06)
-			// S02 = Found [>], looking for [=]/SNUM ([=]=S04, WS=S05, SNUM=S06)
-			// S03 = Found [<], looking for [=]/SNUM ([=]=S05, WS=S05, SNUM=S06)
-			// S04 = Found [=], looking for SNUN (WS=S05, SNUM=S06)
-			// S05 = Found [... ], looking for SNUM (SNUM=S06)
-			// S06 = Found [1], looking for [-]/WS (WS=S07, [-]=S08)
-			// S07 = Found [123 ], looking for [-]/SNUM (if -, could be 123 - 456 or 123 -456) ([-]=S09, SNUM=S07)
-			// S08 = Found [123-], looking for SNUM (Could be 123- 456 or 123-456) (SNUM=S11)
-			// S09 = Found [123 -], looking for WS/SNUM (If WS, then it's 123 - 456, otherwise 123 -456) (WS=S10, SNUM=S06)
+			// S1 = Looking for start (WS=S1, [!]=S1, [>]=S2, [<]=S3, SNUM=S6)
+			// S2 = Found [>], looking for [=]/SNUM ([=]=S4, WS=S5, SNUM=S6)
+			// S3 = Found [<], looking for [=]/SNUM ([=]=S5, WS=S5, SNUM=S6)
+			// S4 = Found [=], looking for SNUN (WS=S5, SNUM=S6)
+			// S5 = Found [... ], looking for SNUM (SNUM=S6)
+			// S6 = Found [1], looking for [-]/WS (WS=S7, [-]=S8)
+			// S7 = Found [123 ], looking for [-]/SNUM (if -, could be 123 - 456 or 123 -456) ([-]=S9, SNUM=S7)
+			// S8 = Found [123-], looking for SNUM (Could be 123- 456 or 123-456) (SNUM=S11)
+			// S9 = Found [123 -], looking for WS/SNUM (If WS, then it's 123 - 456, otherwise 123 -456) (WS=S10, SNUM=S6)
 			// S10 = Found [123 - ], looking for SNUM (SNUM=S12)
-			// S11 = Found [123 - 4], looking for WS (WS=S01)
+			// S11 = Found [123 - 4], looking for WS (WS=S1)
 
-			StateMachineState state = S01;
+			StateEnum state = S1;
 			int mark = 0;
 			boolean isNot = false;
 			Equality eq = Equality.NONE;
@@ -91,84 +90,84 @@ public class NumberMatcherFactory extends MatcherFactory {
 			int i;
 			for (i = 0; i < s.length(); i++) {
 				char c = s.charAt(i);
-				if (state == S01) {
+				if (state == S1) {
 					if (c == '!') {
 						isNot = true;
 					} else if (WS.contains(c)) {
-						state = S01;
+						state = S1;
 					} else if (c == '>') {
-						state = S02;
+						state = S2;
 						eq = Equality.GT;
 					} else if (c == '<') {
-						state = S03;
+						state = S3;
 						eq = Equality.LT;
 					} else if (SNUM.contains(c)) {
-						state = S06;
+						state = S6;
 						mark = i;
 					} else {
 						break;
 					}
-				} else if (state == S02) {
+				} else if (state == S2) {
 					if (c == '=') {
-						state = S04;
+						state = S4;
 						eq = Equality.GTE;
 					} else if (WS.contains(c)) {
-						state = S05;
+						state = S5;
 					} else if (SNUM.contains(c)) {
-						state = S06;
+						state = S6;
 						mark = i;
 					} else {
 						break;
 					}
-				} else if (state == S03) {
+				} else if (state == S3) {
 					if (c == '=') {
-						state = S04;
+						state = S4;
 						eq = Equality.LTE;
 					} else if (WS.contains(c)) {
-						state = S05;
+						state = S5;
 					} else if (SNUM.contains(c)) {
-						state = S06;
+						state = S6;
 						mark = i;
 					} else {
 						break;
 					}
-				} else if (state == S04) {
+				} else if (state == S4) {
 					if (WS.contains(c)) {
-						state = S05;
+						state = S5;
 					} else if (SNUM.contains(c)) {
 						mark = i;
-						state = S06;
+						state = S6;
 					} else {
 						break;
 					}
-				} else if (state == S05) {
+				} else if (state == S5) {
 					if (WS.contains(c)) {
-						state = S05;
+						state = S5;
 					} else if (SNUM.contains(c)) {
-						state = S06;
+						state = S6;
 						mark = i;
 					} else {
 						break;
 					}
-				} else if (state == S06) {
+				} else if (state == S6) {
 					if (NUM.contains(c)) {
-						state = S06;
+						state = S6;
 					} else if (WS.contains(c)) {
-						state = S07;
+						state = S7;
 						n1 = Integer.parseInt(s.substring(mark, i));
 					} else if (c == '-') {
-						state = S08;
+						state = S8;
 						n1 = Integer.parseInt(s.substring(mark, i));
 					} else {
 						break;
 					}
-				} else if (state == S07) {
+				} else if (state == S7) {
 					if (WS.contains(c)) {
-						state = S07;
+						state = S7;
 					} else if (c == '-') {
-						state = S09;
+						state = S9;
 					} else if (SNUM.contains(c)) {
-						state = S06;
+						state = S6;
 						l.add(new NumberRange(eq, n1, isNot));
 						eq = Equality.NONE;
 						n1 = null;
@@ -177,20 +176,20 @@ public class NumberMatcherFactory extends MatcherFactory {
 					} else {
 						break;
 					}
-				} else if (state == S08) {
+				} else if (state == S8) {
 					if (WS.contains(c)) {
-						state = S08;
+						state = S8;
 					} else if (SNUM.contains(c)) {
 						state = S11;
 						mark = i;
 					} else {
 						break;
 					}
-				} else if (state == S09) {
+				} else if (state == S9) {
 					if (WS.contains(c)) {
 						state = S10;
 					} else if (NUM.contains(c)) {
-						state = S06;
+						state = S6;
 						l.add(new NumberRange(eq, n1, isNot));
 						eq = Equality.NONE;
 						n1 = null;
@@ -212,7 +211,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 					if (SNUM.contains(c)) {
 						state = S11;
 					} else if (WS.contains(c)) {
-						state = S01;
+						state = S1;
 						n2 = Integer.parseInt(s.substring(mark, i));
 						l.add(new NumberRange(eq, n1, n2, isNot));
 						eq = Equality.NONE;
@@ -227,11 +226,11 @@ public class NumberMatcherFactory extends MatcherFactory {
 			if (i != s.length())
 				throw new PatternException("Invalid range pattern ({0}): {1}", state, s);
 
-			if (state == S01) {
+			if (state == S1) {
 				// No tokens found.
-			} else if (state == S02 || state == S03 || state == S04 || state == S08 || state == S09) {
+			} else if (state == S2 || state == S3 || state == S4 || state == S8 || state == S9) {
 				throw new PatternException("Invalid range pattern (E{0}): {1}", state, s);
-			} else if (state == S06) {
+			} else if (state == S6) {
 				n1 = Integer.parseInt(s.substring(mark).trim());
 				l.add(new NumberRange(eq, n1, isNot));
 			} else /* (state == S11) */ {

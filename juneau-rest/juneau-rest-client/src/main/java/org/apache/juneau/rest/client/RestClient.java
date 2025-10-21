@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client;
 import static java.lang.Character.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;
@@ -26,7 +27,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.StateMachineState.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 
 import java.io.*;
@@ -78,7 +78,6 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.msgpack.*;
@@ -6168,42 +6167,42 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public RestRequest callback(String callString) throws RestCallException {
 		callString = emptyIfNull(callString);
 
-		// S01 - Looking for end of method.
-		// S02 - Found end of method, looking for beginning of URI or headers.
-		// S03 - Found beginning of headers, looking for end of headers.
-		// S04 - Found end of headers, looking for beginning of URI.
-		// S05 - Found beginning of URI, looking for end of URI.
+		// S1 - Looking for end of method.
+		// S2 - Found end of method, looking for beginning of URI or headers.
+		// S3 - Found beginning of headers, looking for end of headers.
+		// S4 - Found end of headers, looking for beginning of URI.
+		// S5 - Found beginning of URI, looking for end of URI.
 
-		StateMachineState state = S01;
+		StateEnum state = S1;
 
 		int mark = 0;
 		String method = null, headers = null, uri = null, content = null;
 		for (int i = 0; i < callString.length(); i++) {
 			char c = callString.charAt(i);
-			if (state == S01) {
+			if (state == S1) {
 				if (isWhitespace(c)) {
 					method = callString.substring(mark, i);
-					state = S02;
+					state = S2;
 				}
-			} else if (state == S02) {
+			} else if (state == S2) {
 				if (! isWhitespace(c)) {
 					mark = i;
 					if (c == '{')
-						state = S03;
+						state = S3;
 					else
-						state = S05;
+						state = S5;
 				}
-			} else if (state == S03) {
+			} else if (state == S3) {
 				if (c == '}') {
 					headers = callString.substring(mark, i + 1);
-					state = S04;
+					state = S4;
 				}
-			} else if (state == S04) {
+			} else if (state == S4) {
 				if (! isWhitespace(c)) {
 					mark = i;
-					state = S05;
+					state = S5;
 				}
-			} else /* (state == S05) */ {
+			} else /* (state == S5) */ {
 				if (isWhitespace(c)) {
 					uri = callString.substring(mark, i);
 					content = callString.substring(i).trim();
@@ -6212,7 +6211,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			}
 		}
 
-		if (state != S05)
+		if (state != S5)
 			throw new RestCallException(null, null, "Invalid format for call string.  State={0}", state);
 
 		try {

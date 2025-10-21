@@ -16,15 +16,14 @@
  */
 package org.apache.juneau.rest.guard;
 
+import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.StateMachineState.*;
 
 import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class for matching JEE user roles against string expressions.
@@ -246,30 +245,30 @@ public class RoleMatcher {
 		List<Exp> ors = list();
 		List<Exp> ands = list();
 
-		StateMachineState state = S01;
+		StateEnum state = S1;
 		int i = 0, mark = -1;
 		int pDepth = 0;
 		boolean error = false;
 
 		for (i = 0; i < expression.length(); i++) {
 			char c = expression.charAt(i);
-			if (state == S01) {
-				// S01 = Looking for start
+			if (state == S1) {
+				// S1 = Looking for start
 				if (! WS.contains(c)) {
 					if (c == '(') {
-						state = S02;
+						state = S2;
 						pDepth = 0;
 						mark = i + 1;
 					} else if (OP.contains(c)) {
 						error = true;
 						break;
 					} else {
-						state = S03;
+						state = S3;
 						mark = i;
 					}
 				}
-			} else if (state == S02) {
-				// S02 = Found [(], looking for [)].
+			} else if (state == S2) {
+				// S2 = Found [(], looking for [)].
 				if (c == '(')
 					pDepth++;
 				if (c == ')') {
@@ -278,37 +277,37 @@ public class RoleMatcher {
 					else {
 						ands.add(parse(expression.substring(mark, i)));
 						mark = -1;
-						state = S04;
+						state = S4;
 					}
 				}
-			} else if (state == S03) {
-				// S03 = Found [A], looking for end of A.
+			} else if (state == S3) {
+				// S3 = Found [A], looking for end of A.
 				if (WS.contains(c) || OP.contains(c)) {
 					ands.add(parseOperand(expression.substring(mark, i)));
 					mark = -1;
 					if (WS.contains(c)) {
-						state = S04;
+						state = S4;
 					} else {
 						i--;
-						state = S05;
+						state = S5;
 					}
 				}
-			} else if (state == S04) {
-				// S04 = Found [A ], looking for & or | or ,.
+			} else if (state == S4) {
+				// S4 = Found [A ], looking for & or | or ,.
 				if (! WS.contains(c)) {
 					if (OP.contains(c)) {
 						i--;
-						state = S05;
+						state = S5;
 					} else {
 						error = true;
 						break;
 					}
 				}
-			} else if (state == S05) {
-				// S05 = Found & or | or ,.
+			} else if (state == S5) {
+				// S5 = Found & or | or ,.
 				if (c == '&') {
 					//ands.add(operand);
-					state = S06;
+					state = S6;
 				} else /* (c == '|' || c == ',') */ {
 					if (ands.size() == 1) {
 						ors.add(ands.get(0));
@@ -317,24 +316,24 @@ public class RoleMatcher {
 					}
 					ands.clear();
 					if (c == '|') {
-						state = S07;
+						state = S7;
 					} else {
-						state = S01;
+						state = S1;
 					}
 				}
-			} else if (state == S06) {
-				// S06 = Found &, looking for & or other
+			} else if (state == S6) {
+				// S6 = Found &, looking for & or other
 				if (! WS.contains(c)) {
 					if (c != '&')
 						i--;
-					state = S01;
+					state = S1;
 				}
-			} else /* (state == S07) */ {
-				// S07 = Found |, looking for | or other
+			} else /* (state == S7) */ {
+				// S7 = Found |, looking for | or other
 				if (! WS.contains(c)) {
 					if (c != '|')
 						i--;
-					state = S01;
+					state = S1;
 				}
 			}
 		}
@@ -342,11 +341,11 @@ public class RoleMatcher {
 		if (error)
 			throw new ParseException("Invalid character in expression '" + expression + "' at position " + i + ". state=" + state, i);
 
-		if (state == S01)
+		if (state == S1)
 			throw new ParseException("Could not find beginning of clause in '" + expression + "'", i);
-		if (state == S02)
+		if (state == S2)
 			throw new ParseException("Could not find matching parenthesis in expression '" + expression + "'", i);
-		if (state == S05 || state == S06 || state == S07)
+		if (state == S5 || state == S6 || state == S7)
 			throw new ParseException("Dangling clause in expression '" + expression + "'", i);
 
 		if (mark != -1)
