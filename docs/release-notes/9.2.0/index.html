@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">Release 9.2.0 | Apache Juneau</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://juneau.apache.org/docs/release-notes/9.2.0"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Release 9.2.0 | Apache Juneau"><meta data-rh="true" name="description" content="Date: TBD"><meta data-rh="true" property="og:description" content="Date: TBD"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://juneau.apache.org/docs/release-notes/9.2.0"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="en"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.c21a577c.css">
-<script src="/assets/js/runtime~main.076c50ee.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.09192986.js" defer="defer"></script>
 <script src="/assets/js/main.cf1ad55f.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -184,6 +184,18 @@ Features and release date are subject to change.</p></div></div>
 <li>Updated <code>UrlEncodingParserSession</code> methods to use <code>StateEnum.S1</code> through <code>StateEnum.S4</code></li>
 <li>Added missing <code>StateEnum</code> import to <code>UrlEncodingParserSession</code></li>
 <li>All state machines now use consistent enum-based state management</li>
+</ul>
+</li>
+<li>
+<p><strong>Jakarta XML Bind Dependency Elimination</strong>: Replaced <code>jakarta.xml.bind-api</code> dependency with modern Java time APIs:</p>
+<ul>
+<li>Updated <code>StringUtils.toIsoDate(Calendar)</code> to use <code>ZonedDateTime</code> and <code>DateTimeFormatter.ISO_LOCAL_DATE</code></li>
+<li>Updated <code>StringUtils.toIsoDateTime(Calendar)</code> to use <code>ZonedDateTime</code> and <code>DateTimeFormatter.ISO_OFFSET_DATE_TIME</code></li>
+<li>Removed <code>import jakarta.xml.bind.*;</code> from <code>StringUtils.java</code></li>
+<li>Added <code>import java.time.*;</code> and <code>import java.time.format.*;</code> for modern time API support</li>
+<li>Maintains identical output format and behavior while eliminating external dependency</li>
+<li>Improved timezone preservation in serialized date-time values</li>
+<li>Enhanced performance with modern Java 8+ time APIs</li>
 </ul>
 </li>
 <li>
