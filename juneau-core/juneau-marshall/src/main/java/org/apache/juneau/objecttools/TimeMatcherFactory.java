@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.common.utils.StateEnum.*;
 import static java.time.temporal.ChronoField.*;
+import static org.apache.juneau.common.utils.StateEnum.*;
 
 import java.time.*;
 import java.util.*;

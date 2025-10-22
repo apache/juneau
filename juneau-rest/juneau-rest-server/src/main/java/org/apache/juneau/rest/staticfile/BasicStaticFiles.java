@@ -31,7 +31,6 @@ import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 
-import jakarta.activation.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.
@@ -58,7 +57,7 @@ public class BasicStaticFiles implements StaticFiles {
 	}
 
 	private final Header[] headers;
-	private final MimetypesFileTypeMap mimeTypes;
+	private final MimeTypeDetector mimeTypes;
 	private final int hashCode;
 
 	private final FileFinder fileFinder;

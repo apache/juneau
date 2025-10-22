@@ -29,6 +29,8 @@ import java.math.*;
 import java.net.*;
 import java.nio.*;
 import java.text.*;
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -36,8 +38,6 @@ import java.util.function.*;
 import java.util.regex.*;
 import java.util.stream.*;
 import java.util.zip.*;
-
-import jakarta.xml.bind.*;
 
 /**
  * Reusable string utility methods.
@@ -1868,7 +1868,7 @@ public class StringUtils {
 			date += ":00:00";
 		else if (date.matches("\\d{4}\\-\\d{2}\\-\\d{2}T\\d{2}\\:\\d{2}"))
 			date += ":00";
-		return DatatypeConverter.parseDateTime(date);
+		return DateUtils.fromIso8601Calendar(date);
 	}
 
 	/**
@@ -3170,7 +3170,12 @@ public class StringUtils {
 	 * @return The converted object.
 	 */
 	public static String toIsoDate(Calendar c) {
-		return DatatypeConverter.printDate(c);
+		if (c == null) {
+			return null;
+	}
+		// Convert Calendar to ZonedDateTime and format as ISO8601 date (YYYY-MM-DD)
+		ZonedDateTime zdt = c.toInstant().atZone(c.getTimeZone().toZoneId());
+		return zdt.format(DateTimeFormatter.ISO_LOCAL_DATE);
 	}
 
 	/**
@@ -3180,7 +3185,12 @@ public class StringUtils {
 	 * @return The converted object.
 	 */
 	public static String toIsoDateTime(Calendar c) {
-		return DatatypeConverter.printDateTime(c);
+		if (c == null) {
+			return null;
+		}
+		// Convert Calendar to ZonedDateTime and format as ISO8601 date-time with timezone
+		ZonedDateTime zdt = c.toInstant().atZone(c.getTimeZone().toZoneId());
+		return zdt.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 	}
 
 	/**

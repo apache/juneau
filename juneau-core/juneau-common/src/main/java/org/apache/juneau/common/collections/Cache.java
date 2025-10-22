@@ -147,4 +147,35 @@ public class Cache<K,V> {
 		}
 		return v;
 	}
+
+	/**
+	 * Returns the current number of entries in this cache.
+	 *
+	 * @return The cache size.
+	 */
+	public int size() {
+		return cache == null ? 0 : cache.size();
+	}
+
+	/**
+	 * Clears all entries from this cache.
+	 *
+	 * <p>
+	 * This method can be called to free memory or when you want to ensure
+	 * fresh lookups (e.g., after data has been modified).
+	 */
+	public void clear() {
+		if (cache != null) {
+			cache.clear();
+		}
+	}
+
+	/**
+	 * Returns the number of cache hits since this cache was created.
+	 *
+	 * @return The number of cache hits.
+	 */
+	public int getCacheHits() {
+		return cacheHits.get();
+	}
 }

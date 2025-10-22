@@ -300,6 +300,11 @@ This document outlines the documentation conventions, formatting rules, and best
 - Document parameter types and constraints
 - Specify when parameters can be null
 
+**Builder Method Parameter Naming**:
+- For single-value setter methods in builder classes, use `value` as the parameter name
+- This allows field assignment without the `this.` modifier (e.g., `field = value` instead of `this.field = value`)
+- Improves code readability and reduces redundancy
+
 **Null Parameter Handling**:
 ```java
 /**

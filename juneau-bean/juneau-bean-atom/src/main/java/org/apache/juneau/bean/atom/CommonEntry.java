@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.bean.atom;
 
-import static org.apache.juneau.bean.atom.Utils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -372,7 +372,7 @@ public class CommonEntry extends Common {
 	 * @return This object.
 	 */
 	public CommonEntry setUpdated(String value) {
-		setUpdated(parseDateTime(value));
+		setUpdated(DateUtils.fromIso8601Calendar(value));
 		return this;
 	}
 }

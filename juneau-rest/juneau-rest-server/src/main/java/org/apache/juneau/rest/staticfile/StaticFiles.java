@@ -26,9 +26,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
-import org.apache.juneau.utils.*;
-
-import jakarta.activation.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.
@@ -44,7 +41,7 @@ public interface StaticFiles extends FileFinder {
 	public static class Builder extends BeanBuilder<StaticFiles> {
 
 		List<Header> headers;
-		MimetypesFileTypeMap mimeTypes;
+		MimeTypeDetector mimeTypes;
 		FileFinder.Builder fileFinder;
 
 		/**
@@ -56,17 +53,19 @@ public interface StaticFiles extends FileFinder {
 			super(BasicStaticFiles.class, beanStore);
 			headers = list();
 			fileFinder = FileFinder.create(beanStore);
-			mimeTypes = new ExtendedMimetypesFileTypeMap();
+			mimeTypes = MimeTypeDetector.DEFAULT;
 		}
 
 		/**
 		 * Prepend the MIME type values to the MIME types registry.
 		 *
-		 * @param mimeTypes A .mime.types formatted string of entries.  See {@link MimetypesFileTypeMap#addMimeTypes(String)}.
+		 * @param mimeTypes A .mime.types formatted string of entries.  See {@link MimeTypeDetector.Builder#addTypes(String...)}.
 		 * @return This object.
 		 */
 		public Builder addMimeTypes(String mimeTypes) {
-			this.mimeTypes.addMimeTypes(mimeTypes);
+			this.mimeTypes = MimeTypeDetector.builder()
+				.addTypes(mimeTypes)
+				.build();
 			return this;
 		}
 
@@ -157,7 +156,7 @@ public interface StaticFiles extends FileFinder {
 		 * @param mimeTypes The new MIME types registry.
 		 * @return This object.
 		 */
-		public Builder mimeTypes(MimetypesFileTypeMap mimeTypes) {
+		public Builder mimeTypes(MimeTypeDetector mimeTypes) {
 			this.mimeTypes = mimeTypes;
 			return this;
 		}

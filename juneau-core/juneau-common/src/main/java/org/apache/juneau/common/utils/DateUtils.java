@@ -27,8 +27,6 @@ import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
 
-import jakarta.xml.bind.*;
-
 /**
  * A utility class for parsing and formatting HTTP dates as used in cookies and other headers.
  *
