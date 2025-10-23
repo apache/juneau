@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.uon.ParamFormat.*;
 

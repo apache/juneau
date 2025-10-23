@@ -42,7 +42,7 @@ public class UonUtils {
 	 * @return <jk>true</jk> if the specified string needs to be quoted per UON notation.
 	 */
 	public static boolean needsQuotes(String s) {
-		char c0 = s.isEmpty() ? 0 : s.charAt(0);
+		var c0 = s.isEmpty() ? 0 : s.charAt(0);
 		// @formatter:off
 		return (
 			s.isEmpty()

@@ -19,7 +19,6 @@ package org.apache.juneau.utils;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.UriRelativity.*;
 import static org.apache.juneau.UriResolution.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

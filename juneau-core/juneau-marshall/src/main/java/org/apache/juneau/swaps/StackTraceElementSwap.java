@@ -45,7 +45,8 @@ public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> 
 
 	@Override /* Overridden from ObjectSwap */
 	public StackTraceElement unswap(BeanSession session, String in, ClassMeta<?> hint) {
-		String methodName = "", fileName = null;
+		var methodName = "";
+		String fileName = null;
 		int lineNumber = -1;
 
 		if (in == null)
@@ -53,7 +54,7 @@ public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> 
 
 		int i = in.indexOf('(');
 		if (i != -1) {
-			String s = in.substring(i + 1, in.lastIndexOf(')'));
+			var s = in.substring(i + 1, in.lastIndexOf(')'));
 			in = in.substring(0, i);
 			i = s.indexOf(':');
 			if (i != -1) {

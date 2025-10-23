@@ -1069,7 +1069,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setRequiredProperties(String...value) {
-		setRequiredProperties(CollectionUtils.setb(String.class).sparse().addAny(value).build());
+		setRequiredProperties(CollectionUtils.setb(String.class).sparse().addAny((Object[])value).build());
 		return this;
 	}
 

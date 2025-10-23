@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.examples.bean.atom;
 
-import org.apache.juneau.bean.atom.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -36,10 +35,10 @@ public class AtomJsonExample {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception {
 
-		Feed feed = AtomFeed.getAtomFeed();
+		var feed = AtomFeed.getAtomFeed();
 
 		// Get JSON serializer with readable output.
-		JsonSerializer s = Json5Serializer.DEFAULT_READABLE;
+		var s = Json5Serializer.DEFAULT_READABLE;
 
 		// Serialize to ATOM/JSON
 		//Produces
@@ -120,6 +119,6 @@ public class AtomJsonExample {
 		 *  ]
 		 *  }
 		 */
-		String atomJson = s.serialize(feed);
+		var atomJson = s.serialize(feed);
 	}
 }

@@ -18,7 +18,6 @@ package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 

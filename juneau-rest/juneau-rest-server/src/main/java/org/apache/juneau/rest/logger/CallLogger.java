@@ -503,7 +503,7 @@ public class CallLogger {
 	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
 	public CallLogger(BeanStore beanStore) {
-		Builder builder = init(beanStore);
+		var builder = init(beanStore);
 		this.logger = builder.logger;
 		this.thrownStore = builder.thrownStore;
 		this.normalRules = builder.normalRules.toArray(new CallLoggerRule[builder.normalRules.size()]);
@@ -539,35 +539,35 @@ public class CallLogger {
 	 * @param res The servlet response.
 	 */
 	public void log(HttpServletRequest req, HttpServletResponse res) {
-
-		CallLoggerRule rule = getRule(req, res);
-
+	
+		var rule = getRule(req, res);
+	
 		if (! isEnabled(rule, req))
 			return;
-
-		Level level = firstNonNull(rule.getLevel(), this.level);
-
+	
+		var level = firstNonNull(rule.getLevel(), this.level);
+	
 		if (level == Level.OFF)
 			return;
-
-		Throwable e = castOrNull(req.getAttribute("Exception"), Throwable.class);
-		Long execTime = castOrNull(req.getAttribute("ExecTime"), Long.class);
-
-		CallLoggingDetail reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
-		CallLoggingDetail resd = firstNonNull(rule.getResponseDetail(), responseDetail);
-
-		String method = req.getMethod();
+	
+		var e = castOrNull(req.getAttribute("Exception"), Throwable.class);
+		var execTime = castOrNull(req.getAttribute("ExecTime"), Long.class);
+	
+		var reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
+		var resd = firstNonNull(rule.getResponseDetail(), responseDetail);
+	
+		var method = req.getMethod();
 		int status = res.getStatus();
-		String uri = req.getRequestURI();
+		var uri = req.getRequestURI();
 		byte[] reqContent = getRequestContent(req);
 		byte[] resContent = getResponseContent(req, res);
-
-		StringBuilder sb = new StringBuilder();
-
+	
+		var sb = new StringBuilder();
+	
 		if (reqd != STATUS_LINE || resd != STATUS_LINE)
 			sb.append("\n=== HTTP Call (incoming) ======================================================\n");
-
-		ThrownStats sti = getThrownStats(e);
+	
+		var sti = getThrownStats(e);
 
 		sb.append('[').append(status);
 
@@ -585,7 +585,7 @@ public class CallLogger {
 		if (reqd != STATUS_LINE || resd != STATUS_LINE) {
 
 			if (reqd.isOneOf(HEADER, ENTITY)) {
-				String qs = req.getQueryString();
+				var qs = req.getQueryString();
 				if (qs != null)
 					sb.append('?').append(qs);
 			}
@@ -603,21 +603,21 @@ public class CallLogger {
 				sb.append("\n\tExec time: ").append(execTime).append("ms");
 
 			if (reqd.isOneOf(HEADER, ENTITY)) {
-				Enumeration<String> hh = req.getHeaderNames();
+				var hh = req.getHeaderNames();
 				if (hh.hasMoreElements()) {
 					sb.append("\n---Request Headers---");
 					while (hh.hasMoreElements()) {
-						String h = hh.nextElement();
+						var h = hh.nextElement();
 						sb.append("\n\t").append(h).append(": ").append(req.getHeader(h));
 					}
 				}
 			}
 
 			if (resd.isOneOf(HEADER, ENTITY)) {
-				Collection<String> hh = res.getHeaderNames();
+				var hh = res.getHeaderNames();
 				if (hh.size() > 0) {
 					sb.append("\n---Response Headers---");
-					for (String h : hh) {
+					for (var h : hh) {
 						sb.append("\n\t").append(h).append(": ").append(res.getHeader(h));
 					}
 				}
@@ -761,8 +761,8 @@ public class CallLogger {
 	 * @return <jk>true</jk> if logging is enabled for this request.
 	 */
 	protected boolean isEnabled(CallLoggerRule rule, HttpServletRequest req) {
-		Enablement enabled = firstNonNull(rule.getEnabled(), this.enabled);
-		Predicate<HttpServletRequest> enabledTest = firstNonNull(rule.getEnabledTest(), this.enabledTest);
+		var enabled = firstNonNull(rule.getEnabled(), this.enabled);
+		var enabledTest = firstNonNull(rule.getEnabledTest(), this.enabledTest);
 		return enabled.isEnabled(enabledTest.test(req));
 	}
 

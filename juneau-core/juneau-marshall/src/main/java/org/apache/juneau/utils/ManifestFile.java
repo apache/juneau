@@ -54,14 +54,14 @@ public class ManifestFile extends JsonMap {
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
 	public ManifestFile(Class<?> c) throws IOException {
-		String className = c.getSimpleName() + ".class";
-		String classPath = c.getResource(className).toString();
+		var className = c.getSimpleName() + ".class";
+		var classPath = c.getResource(className).toString();
 		if (! classPath.startsWith("jar")) {
 			return;
 		}
-		String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
+		var manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
 		try {
-			Manifest mf = new Manifest(new URL(manifestPath).openStream());
+			var mf = new Manifest(new URL(manifestPath).openStream());
 			load(mf);
 		} catch (MalformedURLException e) {
 			throw ThrowableUtils.cast(IOException.class, e);
@@ -77,8 +77,8 @@ public class ManifestFile extends JsonMap {
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
 	public ManifestFile(File f) throws IOException {
-		Manifest mf = new Manifest();
-		try (FileInputStream fis = new FileInputStream(f)) {
+		var mf = new Manifest();
+		try (var fis = new FileInputStream(f)) {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
@@ -115,8 +115,8 @@ public class ManifestFile extends JsonMap {
 	 * @throws IOException If a problem occurred while trying to read the manifest path.
 	 */
 	public ManifestFile(Path path) throws IOException {
-		Manifest mf = new Manifest();
-		try (InputStream fis = Files.newInputStream(path)) {
+		var mf = new Manifest();
+		try (var fis = Files.newInputStream(path)) {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
@@ -192,7 +192,7 @@ public class ManifestFile extends JsonMap {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		forEach((k, v) -> sb.append(k).append(": ").append(v));
 		return sb.toString();
 	}

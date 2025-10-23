@@ -118,8 +118,8 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 		super(beanMeta);
 
-		Class<?> c = beanMeta.getClassMeta().getInnerClass();
-		XmlBeanMetaBuilder b = new XmlBeanMetaBuilder(beanMeta, mp);
+		var c = beanMeta.getClassMeta().getInnerClass();
+		var b = new XmlBeanMetaBuilder(beanMeta, mp);
 
 		attrs = u(b.attrs);
 		elements = u(b.elements);

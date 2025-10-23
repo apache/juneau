@@ -420,7 +420,7 @@ public class DateUtils {
 		if (needsT)
 			in = in.replace(' ', 'T');
 
-		String result = switch(state) {
+		String result = switch (state) {
 			case S1 -> in + "-01-01T00:00:00";
 			case S2 -> in + "-01T00:00:00";
 			case S3 -> in + "T00:00:00";
@@ -682,7 +682,7 @@ public class DateUtils {
 	 * @see ChronoField
 	 */
 	public static ChronoField toChronoField(ChronoUnit unit) {
-		return switch(unit) {
+		return switch (unit) {
 			case YEARS -> ChronoField.YEAR;
 			case MONTHS -> ChronoField.MONTH_OF_YEAR;
 			case DAYS -> ChronoField.DAY_OF_MONTH;
@@ -707,7 +707,7 @@ public class DateUtils {
 	 * @see ChronoUnit
 	 */
 	public static ChronoUnit toChronoUnit(ChronoField field) {
-		return switch(field) {
+		return switch (field) {
 			case YEAR -> ChronoUnit.YEARS;
 			case MONTH_OF_YEAR -> ChronoUnit.MONTHS;
 			case DAY_OF_MONTH -> ChronoUnit.DAYS;
@@ -732,7 +732,7 @@ public class DateUtils {
 	 * @see Calendar
 	 */
 	public static int toCalendarField(ChronoField field) {
-		return switch(field) {
+		return switch (field) {
 			case YEAR -> Calendar.YEAR;
 			case MONTH_OF_YEAR -> Calendar.MONTH;
 			case DAY_OF_MONTH -> Calendar.DAY_OF_MONTH;

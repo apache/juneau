@@ -30,9 +30,9 @@ public class LoadConfigResource extends RestServlet {
 
 	@RestGet(path = "/{project}/{branch}/*", produces = "application/json")
 	public String gets(@Path("project") String project, @Path("branch") String branch) throws Exception {
-		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT_READABLE;
+		var jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 
-		GetConfiguration config = new GetConfiguration(project, branch);
+		var config = new GetConfiguration(project, branch);
 		config.execute();
 
 		return jsonSerializer.serialize(config.get());

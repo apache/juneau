@@ -54,7 +54,8 @@ public class ConfigMap implements ConfigStoreListener {
 		 */
 		ConfigSection(List<String> lines) {
 
-			String name2 = null, rawLine2 = null;
+			var name2 = (String)null;
+			var rawLine2 = (String)null;
 
 			// S1: Looking for section.
 			// S2: Found section, looking for end.
@@ -855,7 +856,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		// Collapse any multi-lines.
 		var li = lines.listIterator(lines.size());
-		String accumulator = null;
+		var accumulator = (String)null;
 		while (li.hasPrevious()) {
 			var l = li.previous();
 			var c = firstChar(l);

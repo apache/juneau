@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.common.utils.*;
 
-
 /**
  * Builder for maps with fluent convenience methods.
  *
@@ -41,30 +40,39 @@ public class MapBuilder<K,V> {
 	private Class<V> valueType;
 	private List<Converter> converters;
 
-    /**
-     * Static creator.
-     *
-     * @param <K> Key type.
-     * @param <V> Value type.
-     * @param keyType The key type.
-     * @param valueType The value type.
-     * @return A new builder.
-     */
+	/**
+	 * Static creator.
+	 *
+	 * @param <K> Key type.
+	 * @param <V> Value type.
+	 * @param keyType The key type.
+	 * @param valueType The value type.
+	 * @return A new builder.
+	 */
 	public static <K,V> MapBuilder<K,V> create(Class<K> keyType, Class<V> valueType) {
 		return new MapBuilder<>(keyType, valueType);
 	}
 
+	/**
+	 * Specifies the map to append to.
+	 *
+	 * <p>
+	 * If not specified, uses a new {@link LinkedHashMap}.
+	 *
+	 * @param map The map to append to.
+	 * @return This object.
+	 */
 	public MapBuilder<K,V> to(Map<K,V> map) {
 		this.map = map;
 		return this;
 	}
 
-    /**
-     * Constructor.
-     *
-     * @param keyType The key type.
-     * @param valueType The value type.
-     */
+	/**
+	 * Constructor.
+	 *
+	 * @param keyType The key type.
+	 * @param valueType The value type.
+	 */
 	public MapBuilder(Class<K> keyType, Class<V> valueType) {
 		this.keyType = keyType;
 		this.valueType = valueType;
@@ -151,6 +159,15 @@ public class MapBuilder<K,V> {
 		return this;
 	}
 
+	/**
+	 * Converts an object to the specified type.
+	 *
+	 * @param <T> The type to convert to.
+	 * @param c The type to convert to.
+	 * @param o The object to convert.
+	 * @return The converted object.
+	 * @throws RuntimeException If the object cannot be converted to the specified type.
+	 */
 	private <T> T toType(Class<T> c, Object o) {
 		if (c.isInstance(o))
 			return c.cast(o);
@@ -163,34 +180,34 @@ public class MapBuilder<K,V> {
 	}
 
 	/**
-     * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
-     *
-     * @param values Converters to register. Ignored if {@code null}.
-     * @return This object.
-     */
-    public MapBuilder<K,V> converters(Converter...values) {
-    	if (values.length == 0)
-    		return this;
+	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+	 *
+	 * @param values Converters to register. Ignored if {@code null}.
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> converters(Converter...values) {
+		if (values.length == 0)
+			return this;
 		if (converters == null)
 			converters = new ArrayList<>();
 		converters.addAll(Arrays.asList(values));
 		return this;
 	}
 
- 	/**
+	/**
 	 * Builds the map.
 	 *
 	 * @return A map conforming to the settings on this builder.
 	 */
-    /**
-     * Builds the map.
-     *
-     * <p>
-     * Applies sorting/unmodifiable/sparse options.
-     *
-     * @return The built map or {@code null} if {@link #sparse()} is set and the map is empty.
-     */
-    public Map<K,V> build() {
+	/**
+	 * Builds the map.
+	 *
+	 * <p>
+	 * Applies sorting/unmodifiable/sparse options.
+	 *
+	 * @return The built map or {@code null} if {@link #sparse()} is set and the map is empty.
+	 */
+	public Map<K,V> build() {
 		if (sparse) {
 			if (map != null && map.isEmpty())
 				map = null;

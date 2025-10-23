@@ -46,7 +46,7 @@ public class UonConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<UonConfig> ai, UonParser.Builder b) {
-			UonConfig a = ai.inner();
+			var a = ai.inner();
 
 			bool(a.decoding()).ifPresent(x -> b.decoding(x));
 			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));
@@ -69,7 +69,7 @@ public class UonConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<UonConfig> ai, UonSerializer.Builder b) {
-			UonConfig a = ai.inner();
+			var a = ai.inner();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesUon(x));
 			bool(a.encoding()).ifPresent(x -> b.encoding(x));

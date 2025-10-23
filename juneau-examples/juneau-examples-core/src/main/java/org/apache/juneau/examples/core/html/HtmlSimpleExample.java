@@ -37,18 +37,18 @@ public class HtmlSimpleExample {
 		// Get a reference to a serializer - converting POJO to flat format
 		// Produces
 		// <table><tr><td>name</td><td>name</td></tr><tr><td>id</td><td>id</td></tr></table>
-		HtmlSerializer htmlSerializer = HtmlSerializer.DEFAULT;
+		var htmlSerializer = HtmlSerializer.DEFAULT;
 		// Get a reference to a parser - converts that flat format back into the POJO
-		HtmlParser htmlParser = HtmlParser.DEFAULT;
+		var htmlParser = HtmlParser.DEFAULT;
 
-		Pojo pojo = new Pojo("id", "name");
+		var pojo = new Pojo("id", "name");
 
-		String flat = htmlSerializer.serialize(pojo);
+		var flat = htmlSerializer.serialize(pojo);
 
 		// Print out the created POJO in JSON format.
 		System.out.println(flat);
 
-		Pojo parse = htmlParser.parse(flat, Pojo.class);
+		var parse = htmlParser.parse(flat, Pojo.class);
 
 		assert parse.getId().equals(pojo.getId());
 		assert parse.getName().equals(pojo.getName());
@@ -59,7 +59,7 @@ public class HtmlSimpleExample {
 		 *  <div class="data" id="data"><table><tr><td>name</td><td>name</td></tr><tr><td>id</td><td>id</td></tr>
 		 *  </table></div></div></article></section></body></html>
 		 */
-		String docSerialized = HtmlDocSerializer.DEFAULT.serialize(pojo);
+		var docSerialized = HtmlDocSerializer.DEFAULT.serialize(pojo);
 		System.out.println(docSerialized);
 
 		// The object above can be parsed thanks to the @Beanc(properties = id,name) annotation on Pojo

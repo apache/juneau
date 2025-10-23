@@ -214,14 +214,69 @@ public class ConverterUtils {
 		return session.convertToType(value, type);
 	}
 
+	/**
+	 * Converts the specified object to a {@link ListBuilder} with elements of the specified type.
+	 *
+	 * <p>
+	 * The input value can be any of the following:
+	 * <ul>
+	 * 	<li>An array of objects convertible to the element type
+	 * 	<li>A {@link Collection} of objects convertible to the element type
+	 * 	<li>A single object convertible to the element type (creates a list with one element)
+	 * 	<li>A JSON array string that can be parsed into objects of the element type
+	 * </ul>
+	 *
+	 * @param <T> The element type.
+	 * @param value The value to convert. Can be <jk>null</jk>.
+	 * @param type The element type class.
+	 * @return A new {@link ListBuilder} containing the converted elements.
+	 */
 	public static <T> ListBuilder<T> toList(Object value, Class<T> type) {
 		return CollectionUtils.listb(type, GenericConverter.INSTANCE).addAny(value);
 	}
 
+	/**
+	 * Converts the specified object to a {@link MapBuilder} with keys and values of the specified types.
+	 *
+	 * <p>
+	 * The input value can be any of the following:
+	 * <ul>
+	 * 	<li>A {@link java.util.Map Map} with entries convertible to the key/value types
+	 * 	<li>A JSON object string that can be parsed into a map with the specified key/value types
+	 * 	<li>An object with bean properties that can be converted to map entries
+	 * </ul>
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param value The value to convert. Can be <jk>null</jk>.
+	 * @param keyType The key type class.
+	 * @param valueType The value type class.
+	 * @return A new {@link MapBuilder} containing the converted entries.
+	 */
 	public static <K,V> MapBuilder<K,V> toMap(Object value, Class<K> keyType, Class<V> valueType) {
 		return CollectionUtils.mapb(keyType, valueType, GenericConverter.INSTANCE).addAny(value);
 	}
 
+	/**
+	 * Converts the specified object to a {@link SetBuilder} with elements of the specified type.
+	 *
+	 * <p>
+	 * The input value can be any of the following:
+	 * <ul>
+	 * 	<li>An array of objects convertible to the element type
+	 * 	<li>A {@link Collection} of objects convertible to the element type
+	 * 	<li>A single object convertible to the element type (creates a set with one element)
+	 * 	<li>A JSON array string that can be parsed into objects of the element type
+	 * </ul>
+	 *
+	 * <p>
+	 * Duplicate elements (after conversion) will be automatically removed as per {@link java.util.Set Set} semantics.
+	 *
+	 * @param <T> The element type.
+	 * @param value The value to convert. Can be <jk>null</jk>.
+	 * @param type The element type class.
+	 * @return A new {@link SetBuilder} containing the converted elements.
+	 */
 	public static <T> SetBuilder<T> toSet(Object value, Class<T> type) {
 		return CollectionUtils.setb(type, GenericConverter.INSTANCE).addAny(value);
 	}

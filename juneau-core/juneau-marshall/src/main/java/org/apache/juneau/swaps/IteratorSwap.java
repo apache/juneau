@@ -40,7 +40,7 @@ public class IteratorSwap extends ObjectSwap<Iterator,List> {
 	 */
 	@Override /* Overridden from ObjectSwap */
 	public List swap(BeanSession session, Iterator o) {
-		List l = new LinkedList();
+		var l = new LinkedList();
 		while (o.hasNext())
 			l.add(o.next());
 		return l;

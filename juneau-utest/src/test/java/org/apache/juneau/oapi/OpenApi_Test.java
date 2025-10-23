@@ -17,7 +17,6 @@
 package org.apache.juneau.oapi;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.jupiter.api.Assertions.*;
 

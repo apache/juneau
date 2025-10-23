@@ -49,28 +49,28 @@ public class HtmlComplexExample {
 		 * </th><th>id</th></tr><tr><td>name1</td><td>1.2</td></tr><tr><td>name2</td><td>1.2
 		 * </td></tr></table></td></tr></table></td></tr><tr><td>id</td><td>pojo</td></tr></table>
 		 */
-		HtmlSerializer htmlSerializer = HtmlSerializer.DEFAULT;
+		var htmlSerializer = HtmlSerializer.DEFAULT;
 		// Get a reference to a parser - converts that flat format back into the POJO
-		HtmlParser htmlParser = HtmlParser.DEFAULT;
+		var htmlParser = HtmlParser.DEFAULT;
 
 		// Fill some data to a PojoComplex bean
-		HashMap<String,List<Pojo>> values = new HashMap<>();
-		ArrayList<Pojo> setOne = new ArrayList<>();
+		var values = new HashMap<String,List<Pojo>>();
+		var setOne = new ArrayList<Pojo>();
 		setOne.add(new Pojo("1.1", "name1"));
 		setOne.add(new Pojo("1.1", "name2"));
-		ArrayList<Pojo> setTwo = new ArrayList<>();
+		var setTwo = new ArrayList<Pojo>();
 		setTwo.add(new Pojo("1.2", "name1"));
 		setTwo.add(new Pojo("1.2", "name2"));
 		values.put("setOne", setOne);
 		values.put("setTwo", setTwo);
-		PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
+		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
-		String flat = htmlSerializer.serialize(pojoc);
+		var flat = htmlSerializer.serialize(pojoc);
 
 		// Print out the created POJO in JSON format.
 		System.out.println(flat);
 
-		PojoComplex parse = htmlParser.parse(flat, PojoComplex.class);
+		var parse = htmlParser.parse(flat, PojoComplex.class);
 
 		assert parse.getId().equals(pojoc.getId());
 		assert parse.getInnerPojo().getName().equals(pojoc.getInnerPojo().getName());

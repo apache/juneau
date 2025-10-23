@@ -32,6 +32,7 @@ public class FileWriterBuilder {
 	public static FileWriterBuilder create() {
 		return new FileWriterBuilder();
 	}
+
 	/**
 	 * Creates a new builder initialized with the specified file.
 	 *
@@ -41,6 +42,7 @@ public class FileWriterBuilder {
 	public static FileWriterBuilder create(File file) {
 		return new FileWriterBuilder().file(file);
 	}
+
 	/**
 	 * Creates a new builder initialized with the specified file path.
 	 *

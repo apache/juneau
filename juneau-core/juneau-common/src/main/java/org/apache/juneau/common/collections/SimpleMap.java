@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.common.collections;
 
-
 import java.lang.reflect.*;
 import java.util.*;
 

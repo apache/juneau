@@ -30,7 +30,6 @@ import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.swap.*;
 import org.apache.juneau.uon.*;
 
 /**
@@ -246,10 +245,10 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			aType = object();
 
 		sType = aType;
-		String typeName = getBeanTypeName(this, eType, aType, null);
+		var typeName = getBeanTypeName(this, eType, aType, null);
 
 		// Swap if necessary
-		ObjectSwap swap = aType.getSwap(this);
+		var swap = aType.getSwap(this);
 		if (swap != null) {
 			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);
@@ -268,7 +267,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		} else if (sType.isBean()) {
 			serializeBeanMap(out, toBeanMap(o), typeName);
 		} else if (sType.isCollection() || sType.isArray()) {
-			Map m = sType.isCollection() ? getCollectionMap((Collection)o) : getCollectionMap(o);
+			var m = sType.isCollection() ? getCollectionMap((Collection)o) : getCollectionMap(o);
 			serializeCollectionMap(out, m, getClassMeta(Map.class, Integer.class, Object.class));
 		} else if (sType.isReader()) {
 			pipe((Reader)o, out);
@@ -291,7 +290,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		Flag addAmp = Flag.create();
 
 		if (typeName != null) {
-			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			var pm = m.getMeta().getTypeProperty();
 			out.appendObject(pm.getName(), true).append('=').appendObject(typeName, false);
 			addAmp.set();
 		}
@@ -355,8 +354,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		Flag addAmp = Flag.create();
 
 		forEachEntry(m, e -> {
-			Object key = generalize(e.getKey(), keyType);
-			Object value = e.getValue();
+			var key = generalize(e.getKey(), keyType);
+			var value = e.getValue();
 
 			if (shouldUseExpandedParams(value)) {
 				if (value instanceof Collection) {

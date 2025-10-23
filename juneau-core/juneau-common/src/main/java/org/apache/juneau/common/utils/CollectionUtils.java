@@ -25,6 +25,13 @@ import org.apache.juneau.common.collections.*;
  * limitations under the License.
  */
 
+/**
+ * Utility methods for working with collections and maps.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">juneau-common</a>
+ * </ul>
+ */
 public class CollectionUtils {
 
 	/**
@@ -195,7 +202,6 @@ public class CollectionUtils {
 			return null;  // NOSONAR - Intentional.
 		return m.entrySet().stream().collect(toMap(Map.Entry::getKey, e -> valueMapper.apply(e.getValue()), (a, b) -> b, mapFactory));
 	}
-
 
 	/**
 	 * Creates a new set from the specified collection.
@@ -602,38 +608,41 @@ public class CollectionUtils {
 		return value == null ? null : Collections.synchronizedSet(value);
 	}
 
-    /**
-     * Convenience factory for a {@link ListBuilder}.
-     *
-     * @param <E> The element type.
-     * @param type The element type.
-     * @return A new list builder.
-     */
-    public static <E> ListBuilder<E> listb(Class<E> type, Converter...converters) {
+	/**
+	 * Convenience factory for a {@link ListBuilder}.
+	 *
+	 * @param <E> The element type.
+	 * @param type The element type.
+	 * @param converters Optional converters to use for converting values.
+	 * @return A new list builder.
+	 */
+	public static <E> ListBuilder<E> listb(Class<E> type, Converter...converters) {
 		return ListBuilder.create(type).converters(converters);
 	}
 
-    /**
-     * Convenience factory for a {@link SetBuilder}.
-     *
-     * @param <E> The element type.
-     * @param type The element type.
-     * @return A new set builder.
-     */
-    public static <E> SetBuilder<E> setb(Class<E> type, Converter...converters) {
+	/**
+	 * Convenience factory for a {@link SetBuilder}.
+	 *
+	 * @param <E> The element type.
+	 * @param type The element type.
+	 * @param converters Optional converters to use for converting values.
+	 * @return A new set builder.
+	 */
+	public static <E> SetBuilder<E> setb(Class<E> type, Converter...converters) {
 		return SetBuilder.create(type).converters(converters);
 	}
 
-    /**
-     * Convenience factory for a {@link MapBuilder}.
-     *
-     * @param <K> The key type.
-     * @param <V> The value type.
-     * @param keyType The key type.
-     * @param valueType The value type.
-     * @return A new map builder.
-     */
-    public static <K,V> MapBuilder<K,V> mapb(Class<K> keyType, Class<V> valueType, Converter...converters) {
+	/**
+	 * Convenience factory for a {@link MapBuilder}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param keyType The key type.
+	 * @param valueType The value type.
+	 * @param converters Optional converters to use for converting values.
+	 * @return A new map builder.
+	 */
+	public static <K,V> MapBuilder<K,V> mapb(Class<K> keyType, Class<V> valueType, Converter...converters) {
 		return MapBuilder.create(keyType, valueType).converters(converters);
 	}
 

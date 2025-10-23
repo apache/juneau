@@ -20,7 +20,6 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
 
@@ -37,14 +36,14 @@ public class ConfigCommand extends ConsoleCommand {
 
 	@Override /* Overridden from ConsoleCommand */
 	public boolean execute(Scanner in, PrintWriter out, Args args) {
-		Config conf = Microservice.getInstance().getConfig();
+		var conf = Microservice.getInstance().getConfig();
 		if (args.size() > 2) {
-			String option = args.getArg(1);
-			String key = args.getArg(2);
+			var option = args.getArg(1);
+			var key = args.getArg(2);
 			if (option.equals("get")) {
 				// config get <key>
 				if (args.size() == 3) {
-					String val = conf.get(key).orElse(null);
+					var val = conf.get(key).orElse(null);
 					if (val != null)
 						out.println(val);
 					else

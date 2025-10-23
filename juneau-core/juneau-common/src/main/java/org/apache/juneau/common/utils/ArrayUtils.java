@@ -21,6 +21,12 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+/**
+ * Utility methods for working with arrays.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * </ul>
+ */
 public class ArrayUtils {
 
 	/**
@@ -71,17 +77,17 @@ public class ArrayUtils {
 	public static <T> Set<T> asSet(final T[] array) {
 		Utils.assertArgNotNull("array", array);
 		return new AbstractSet<>() {
-	
+
 			@Override /* Overridden from Set */
 			public Iterator<T> iterator() {
 				return new Iterator<>() {
 					int i = 0;
-	
+
 					@Override /* Overridden from Iterator */
 					public boolean hasNext() {
 						return i < array.length;
 					}
-	
+
 					@Override /* Overridden from Iterator */
 					public T next() {
 						if (i >= array.length)
@@ -90,14 +96,14 @@ public class ArrayUtils {
 						i++;
 						return t;
 					}
-	
+
 					@Override /* Overridden from Iterator */
 					public void remove() {
 						throw new UnsupportedOperationException("Not supported.");
 					}
 				};
 			}
-	
+
 			@Override /* Overridden from Set */
 			public int size() {
 				return array.length;

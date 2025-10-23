@@ -140,8 +140,8 @@ public class DirectoryResource extends BasicRestServlet {
 		public Set<FileResource> getFiles() {
 			if (f.isFile() || ! includeChildren)
 				return null;
-			Set<FileResource> s = new TreeSet<>(new FileResourceComparator());
-			for (File fc : f.listFiles())
+			var s = new TreeSet<>(new FileResourceComparator());
+			for (var fc : f.listFiles())
 				s.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName()), false));
 			return s;
 		}
@@ -249,7 +249,7 @@ public class DirectoryResource extends BasicRestServlet {
 	)
 	public FileResource getFile(RestRequest req, @Path("/*") String path) throws NotFound, Exception {
 
-		File dir = getFile(path);
+		var dir = getFile(path);
 		req.setAttribute("fullPath", dir.getAbsolutePath());
 
 		return new FileResource(dir, path, true);
@@ -268,9 +268,9 @@ public class DirectoryResource extends BasicRestServlet {
 		if (! allowUploads)
 			throw new MethodNotAllowed("PUT not enabled");
 
-		File f = getFile(path);
+		var f = getFile(path);
 
-		try (OutputStream os = new BufferedOutputStream(new FileOutputStream(f))) {
+		try (var os = new BufferedOutputStream(new FileOutputStream(f))) {
 			pipe(is, os);
 		} catch (IOException e) {
 			throw new InternalServerError(e);
@@ -301,9 +301,9 @@ public class DirectoryResource extends BasicRestServlet {
 		if (! allowDeletes)
 			throw new MethodNotAllowed("DELETE not enabled");
 		if (f.isDirectory()) {
-			File[] files = f.listFiles();
+			var files = f.listFiles();
 			if (files != null) {
-				for (File fc : files)
+				for (var fc : files)
 					deleteFile(fc);
 			}
 		}
@@ -314,7 +314,7 @@ public class DirectoryResource extends BasicRestServlet {
 	private File getFile(String path) throws NotFound {
 		if (path == null)
 			return rootDir;
-		File f = new File(rootDir.getAbsolutePath() + '/' + path);
+		var f = new File(rootDir.getAbsolutePath() + '/' + path);
 		if (f.exists())
 			return f;
 		throw new NotFound("File not found.");

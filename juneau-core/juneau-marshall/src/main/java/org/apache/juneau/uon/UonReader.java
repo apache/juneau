@@ -69,7 +69,7 @@ public class UonReader extends ParserReader {
 		super(pipe);
 		this.decodeChars = decodeChars;
 		if (pipe.isString()) {
-			String in = pipe.getInputAsString();
+			var in = pipe.getInputAsString();
 			this.buff = new char[in.length() < 1024 ? in.length() : 1024];
 		} else {
 			this.buff = new char[1024];
@@ -83,24 +83,24 @@ public class UonReader extends ParserReader {
 			return super.read(cbuf, off, len);
 
 		// Copy any remainder to the beginning of the buffer.
-		int remainder = iEnd - iCurrent;
+		var remainder = iEnd - iCurrent;
 		if (remainder > 0)
 			System.arraycopy(buff, iCurrent, buff, 0, remainder);
 		iCurrent = 0;
 
-		int expected = buff.length - remainder;
+		var expected = buff.length - remainder;
 
-		int x = super.read(buff, remainder, expected);
+		var x = super.read(buff, remainder, expected);
 		if (x == -1 && remainder == 0)
 			return -1;
 
 		iEnd = remainder + (x == -1 ? 0 : x);
 
-		int i = 0;
+		var i = 0;
 		while (i < len) {
 			if (iCurrent >= iEnd)
 				return i;
-			char c = buff[iCurrent++];
+			var c = buff[iCurrent++];
 			if (c == '+') {
 				cbuf[off + i++] = ' ';
 			} else if (c == '&') {
@@ -110,7 +110,7 @@ public class UonReader extends ParserReader {
 			} else if (c != '%') {
 				cbuf[off + i++] = c;
 			} else {
-				int iMark = iCurrent - 1;  // Keep track of current position.
+				var iMark = iCurrent - 1;  // Keep track of current position.
 
 				// Stop if there aren't at least two more characters following '%' in the buffer,
 				// or there aren't at least two more positions open in cbuf to handle double-char chars.
@@ -119,7 +119,7 @@ public class UonReader extends ParserReader {
 					return i;
 				}
 
-				int b0 = readEncodedByte();
+				var b0 = readEncodedByte();
 				int cx;
 
 				// 0xxxxxxx
@@ -189,7 +189,7 @@ public class UonReader extends ParserReader {
 	}
 
 	private int readHex() throws IOException {
-		int c = buff[iCurrent++];
+		var c = buff[iCurrent++];
 		if (c != '%')
 			throw new IOException("Did not find expected '%' character in UTF-8 sequence.");
 		return readEncodedByte();

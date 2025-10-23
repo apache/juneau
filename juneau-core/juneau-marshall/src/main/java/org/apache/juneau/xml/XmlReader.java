@@ -180,7 +180,7 @@ public class XmlReader implements XMLStreamReader, Positionable {
 
 	@Override /* Overridden from Positionable */
 	public Position getPosition() {
-		Location l = getLocation();
+		var l = getLocation();
 		return new Position(l.getLineNumber(), l.getColumnNumber());
 	}
 

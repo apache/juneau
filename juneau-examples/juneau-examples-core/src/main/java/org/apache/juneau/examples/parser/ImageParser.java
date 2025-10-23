@@ -41,8 +41,8 @@ public class ImageParser extends InputStreamParser {
 	@Override /* Parser */
 	@SuppressWarnings("unchecked")
 	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
-		try (InputStream is = pipe.getInputStream()) {
-			BufferedImage image = ImageIO.read(is);
+		try (var is = pipe.getInputStream()) {
+			var image = ImageIO.read(is);
 			return (T)image;
 		}
 	}

@@ -48,10 +48,10 @@ import java.util.*;
  * </ul>
  */
 public class GranularZonedDateTime {
-	
+
 	/** The ZonedDateTime value */
 	public final ZonedDateTime zdt;
-	
+
 	/** The precision of this time value */
 	public final ChronoField precision;
 
@@ -91,9 +91,7 @@ public class GranularZonedDateTime {
 	 *
 	 * @return The ZonedDateTime value.
 	 */
-	public ZonedDateTime getZonedDateTime() { 
-		return zdt; 
-	}
+	public ZonedDateTime getZonedDateTime() { return zdt; }
 
 	/**
 	 * Rolls this time value by the specified amount using the current precision.

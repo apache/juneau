@@ -70,8 +70,8 @@ public class HttpParts {
 	};
 
 	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {
-		ClassInfo ci = x.getInfo();
-		ConstructorInfo cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class));
+		var ci = x.getInfo();
+		var cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class));
 		if (cc == null)
 			cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class, String.class));
 		return cc;
@@ -158,7 +158,7 @@ public class HttpParts {
 	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 */
 	public static boolean canCast(Object o) {
-		ClassInfo ci = ClassInfo.of(o);
+		var ci = ClassInfo.of(o);
 		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 

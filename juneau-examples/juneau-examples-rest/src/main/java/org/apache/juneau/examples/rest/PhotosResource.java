@@ -123,7 +123,7 @@ public class PhotosResource extends BasicRestServlet {
 	 */
 	@RestDelete("/{id}")
 	public Ok deletePhoto(@Path("id") int id) throws NotFound {
-		Photo p = photos.remove(id);
+		var p = photos.remove(id);
 		if (p == null)
 			throw new NotFound("Photo not found");
 		return Ok.OK;
@@ -148,7 +148,7 @@ public class PhotosResource extends BasicRestServlet {
 	 */
 	@RestGet(path = "/{id}", serializers = ImageSerializer.class)
 	public BufferedImage getPhoto(@Path("id") int id) throws NotFound {
-		Photo p = photos.get(id);
+		var p = photos.get(id);
 		if (p == null)
 			throw new NotFound("Photo not found");
 		return p.image;
@@ -164,7 +164,7 @@ public class PhotosResource extends BasicRestServlet {
 	@RestPost(path = "/", parsers = ImageParser.class)
 	public Photo setPhoto(@Content BufferedImage image) {
 		int id = photos.size();
-		Photo p = new Photo(id, image);
+		var p = new Photo(id, image);
 		photos.put(id, p);
 		return p;
 	}

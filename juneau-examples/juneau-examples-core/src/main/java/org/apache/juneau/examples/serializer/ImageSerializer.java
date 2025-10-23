@@ -21,7 +21,6 @@ import java.io.*;
 
 import javax.imageio.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -40,9 +39,9 @@ public class ImageSerializer extends OutputStreamSerializer {
 
 	@Override
 	public void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
-		RenderedImage image = (RenderedImage)o;
-		MediaType mediaType = session.getMediaType();
-		try (OutputStream os = pipe.getOutputStream()) {
+		var image = (RenderedImage)o;
+		var mediaType = session.getMediaType();
+		try (var os = pipe.getOutputStream()) {
 			ImageIO.write(image, mediaType.getType(), os);
 		}
 	}

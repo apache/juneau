@@ -4592,7 +4592,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder rootUrl(Object value) {
-			String s = s(value);
+			var s = s(value);
 			if (! isEmpty(s))
 				s = s.replaceAll("\\/$", "");
 			if (isEmpty(s))
@@ -6175,8 +6175,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		StateEnum state = S1;
 
-		int mark = 0;
-		String method = null, headers = null, uri = null, content = null;
+		var mark = 0;
+		var method = (String)null;
+		var headers = (String)null;
+		var uri = (String)null;
+		var content = (String)null;
 		for (int i = 0; i < callString.length(); i++) {
 			char c = callString.charAt(i);
 			if (state == S1) {
@@ -6831,13 +6834,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				RemoteOperationMeta rom = rm.getOperationMeta(method);
 
-				String uri = rom.getFullPath();
+				var uri = rom.getFullPath();
 				if (uri.indexOf("://") == -1)
 					uri = restUrl2 + '/' + uri;
 				if (uri.indexOf("://") == -1)
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote resource.");
 
-				String httpMethod = rom.getHttpMethod();
+				var httpMethod = rom.getHttpMethod();
 				RestRequest rc = request(httpMethod, uri, hasContent(httpMethod));
 
 				rc.serializer(serializer);
@@ -6847,10 +6850,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 				// Apply method-level defaults if parameter values are not provided (9.2.0)
 				rom.forEachPathArg(a -> {
-					Object val = args[a.getIndex()];
+					var val = args[a.getIndex()];
 					if (val == null) {
 						// Check parameter-level default first (9.2.0)
-						String def = a.getSchema().getDefault();
+						var def = a.getSchema().getDefault();
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getPathDefault(a.getName());
@@ -6860,10 +6863,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					rc.pathArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer));
 				});
 				rom.forEachQueryArg(a -> {
-					Object val = args[a.getIndex()];
+					var val = args[a.getIndex()];
 					if (val == null) {
 						// Check parameter-level default first (9.2.0)
-						String def = a.getSchema().getDefault();
+						var def = a.getSchema().getDefault();
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getQueryDefault(a.getName());
@@ -6873,10 +6876,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					rc.queryArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
 				});
 				rom.forEachFormDataArg(a -> {
-					Object val = args[a.getIndex()];
+					var val = args[a.getIndex()];
 					if (val == null) {
 						// Check parameter-level default first (9.2.0)
-						String def = a.getSchema().getDefault();
+						var def = a.getSchema().getDefault();
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getFormDataDefault(a.getName());
@@ -6886,10 +6889,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					rc.formDataArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
 				});
 				rom.forEachHeaderArg(a -> {
-					Object val = args[a.getIndex()];
+					var val = args[a.getIndex()];
 					if (val == null) {
 						// Check parameter-level default first (9.2.0)
-						String def = a.getSchema().getDefault();
+						var def = a.getSchema().getDefault();
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getHeaderDefault(a.getName());
@@ -6899,12 +6902,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					rc.headerArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
 				});
 
-				RemoteOperationArg ba = rom.getContentArg();
+				var ba = rom.getContentArg();
 				if (ba != null) {
-					Object val = args[ba.getIndex()];
+					var val = args[ba.getIndex()];
 					if (val == null) {
 						// Check parameter-level default first (9.2.0)
-						String def = ba.getSchema().getDefault();
+						var def = ba.getSchema().getDefault();
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getContentDefault();
@@ -6914,19 +6917,19 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					rc.content(val, ba.getSchema());
 				} else {
 					// Apply Content default if no parameter is present
-					String contentDef = rom.getContentDefault();
+					var contentDef = rom.getContentDefault();
 					if (contentDef != null)
 						rc.content(contentDef);
 				}
 
 				rom.forEachRequestArg(rmba -> {
 					RequestBeanMeta rbm = rmba.getMeta();
-					Object bean = args[rmba.getIndex()];
+					var bean = args[rmba.getIndex()];
 					if (bean != null) {
 						for (RequestBeanPropertyMeta p : rbm.getProperties()) {
-							Object val = Utils.safeSupplier(() -> p.getGetter().invoke(bean));
-							HttpPartType pt = p.getPartType();
-							String pn = p.getPartName();
+							var val = Utils.safeSupplier(() -> p.getGetter().invoke(bean));
+							var pt = p.getPartType();
+							var pn = p.getPartName();
 							HttpPartSchema schema = p.getSchema();
 							if (pt == PATH)
 								rc.pathArg(pn, val, schema, p.getSerializer().orElse(partSerializer));

@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.xml;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.xml.annotation.*;
@@ -101,13 +99,13 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private void findXmlInfo(Xml xml, AnnotationProvider mp) {
 		if (xml == null)
 			return;
-		BeanPropertyMeta bpm = getBeanPropertyMeta();
-		ClassMeta<?> cmProperty = bpm.getClassMeta();
-		ClassMeta<?> cmBean = bpm.getBeanMeta().getClassMeta();
-		String name = bpm.getName();
+		var bpm = getBeanPropertyMeta();
+		var cmProperty = bpm.getClassMeta();
+		var cmBean = bpm.getBeanMeta().getClassMeta();
+		var name = bpm.getName();
 
-		List<Xml> xmls = bpm.getAllAnnotationsParentFirst(Xml.class);
-		List<XmlSchema> schemas = bpm.getAllAnnotationsParentFirst(XmlSchema.class);
+		var xmls = bpm.getAllAnnotationsParentFirst(Xml.class);
+		var schemas = bpm.getAllAnnotationsParentFirst(XmlSchema.class);
 		namespace = XmlUtils.findNamespace(xmls, schemas);
 
 		if (xmlFormat == XmlFormat.DEFAULT)

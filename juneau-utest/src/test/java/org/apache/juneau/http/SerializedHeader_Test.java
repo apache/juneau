@@ -17,7 +17,6 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;

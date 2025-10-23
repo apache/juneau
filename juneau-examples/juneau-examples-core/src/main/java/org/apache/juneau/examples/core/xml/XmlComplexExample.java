@@ -39,23 +39,23 @@ public class XmlComplexExample {
 	public static void main(String[] args) throws Exception {
 
 		// Fill some data to a PojoComplex bean
-		HashMap<String,List<Pojo>> values = new HashMap<>();
-		ArrayList<Pojo> setOne = new ArrayList<>();
+		var values = new HashMap<String,List<Pojo>>();
+		var setOne = new ArrayList<Pojo>();
 		setOne.add(new Pojo("1.1", "name1"));
 		setOne.add(new Pojo("1.1", "name2"));
-		ArrayList<Pojo> setTwo = new ArrayList<>();
+		var setTwo = new ArrayList<Pojo>();
 		setTwo.add(new Pojo("1.2", "name1"));
 		setTwo.add(new Pojo("1.2", "name2"));
 		values.put("setOne", setOne);
 		values.put("setTwo", setTwo);
-		PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
+		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
 		// Serialize to human readable XML and print
-		String serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojoc);
+		var serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojoc);
 		System.out.println(serial);
 
 		// Deserialize back to PojoComplex instance
-		PojoComplex obj = XmlParser.DEFAULT.parse(serial, PojoComplex.class);
+		var obj = XmlParser.DEFAULT.parse(serial, PojoComplex.class);
 
 		assert obj.getClass().equals(pojoc.getClass());
 		assert obj.getInnerPojo().getId().equals(pojoc.getInnerPojo().getId());

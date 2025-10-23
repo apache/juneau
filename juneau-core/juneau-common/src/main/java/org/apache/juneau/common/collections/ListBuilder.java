@@ -47,22 +47,31 @@ public class ListBuilder<E> {
 		return new ListBuilder<>(elementType);
 	}
 
-    private List<E> list;
+	private List<E> list;
 	private boolean unmodifiable = false, sparse = false;
 	private Comparator<E> comparator;
 	private List<Converter> converters;
 
-    private Class<E> elementType;
+	private Class<E> elementType;
 
-    /**
-     * Constructor.
-     *
-     * @param elementType The element type.
-     */
+	/**
+	 * Constructor.
+	 *
+	 * @param elementType The element type.
+	 */
 	public ListBuilder(Class<E> elementType) {
 		this.elementType = elementType;
 	}
 
+	/**
+	 * Specifies the list to append to.
+	 *
+	 * <p>
+	 * If not specified, uses a new {@link ArrayList}.
+	 *
+	 * @param list The list to append to.
+	 * @return This object.
+	 */
 	public ListBuilder<E> to(List<E> list) {
 		this.list = list;
 		return this;
@@ -113,15 +122,15 @@ public class ListBuilder<E> {
 		return this;
 	}
 
-    /**
-     * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
-     *
-     * @param values Converters to register. Ignored if {@code null}.
-     * @return This object.
-     */
-    public ListBuilder<E> converters(Converter...values) {
-    	if (values.length == 0)
-    		return this;
+	/**
+	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+	 *
+	 * @param values Converters to register. Ignored if {@code null}.
+	 * @return This object.
+	 */
+	public ListBuilder<E> converters(Converter...values) {
+		if (values.length == 0)
+			return this;
 		if (converters == null)
 			converters = new ArrayList<>();
 		converters.addAll(Arrays.asList(values));
@@ -144,33 +153,33 @@ public class ListBuilder<E> {
 	public ListBuilder<E> addAny(Object...values) {
 		if (elementType == null)
 			throw new IllegalStateException("Unknown element type. Cannot use this method.");
-			if (values != null) {
-				for (Object o : values) {
-					if (o != null) {
-						if (o instanceof Collection) {
-							((Collection<?>)o).forEach(x -> addAny(x));
-						} else if (isArray(o)) {
-							for (int i = 0; i < Array.getLength(o); i++)
-								addAny(Array.get(o, i));
-						} else if (elementType.isInstance(o)) {
-							add(elementType.cast(o));
-						} else {
-							if (converters != null) {
-								var e = converters.stream().map(x -> x.convertTo(elementType, o)).filter(x -> x != null).findFirst().orElse(null);
-								if (e != null) {
-									add(e);
-								} else {
-									var l = converters.stream().map(x -> x.convertTo(List.class, o)).filter(x -> x != null).findFirst().orElse(null);
-									if (l != null)
-										addAny(l);
-									else
-										throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), elementType);
-								}
+		if (values != null) {
+			for (Object o : values) {
+				if (o != null) {
+					if (o instanceof Collection) {
+						((Collection<?>)o).forEach(x -> addAny(x));
+					} else if (isArray(o)) {
+						for (int i = 0; i < Array.getLength(o); i++)
+							addAny(Array.get(o, i));
+					} else if (elementType.isInstance(o)) {
+						add(elementType.cast(o));
+					} else {
+						if (converters != null) {
+							var e = converters.stream().map(x -> x.convertTo(elementType, o)).filter(x -> x != null).findFirst().orElse(null);
+							if (e != null) {
+								add(e);
+							} else {
+								var l = converters.stream().map(x -> x.convertTo(List.class, o)).filter(x -> x != null).findFirst().orElse(null);
+								if (l != null)
+									addAny(l);
+								else
+									throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), elementType);
 							}
 						}
 					}
 				}
 			}
+		}
 		return this;
 	}
 
@@ -192,15 +201,15 @@ public class ListBuilder<E> {
 	 *
 	 * @return A list conforming to the settings on this builder.
 	 */
-    /**
-     * Builds the list.
-     *
-     * <p>
-     * Applies sorting/unmodifiable/sparse options.
-     *
-     * @return The built list or {@code null} if {@link #sparse()} is set and the list is empty.
-     */
-    public List<E> build() {
+	/**
+	 * Builds the list.
+	 *
+	 * <p>
+	 * Applies sorting/unmodifiable/sparse options.
+	 *
+	 * @return The built list or {@code null} if {@link #sparse()} is set and the list is empty.
+	 */
+	public List<E> build() {
 		if (sparse) {
 			if (list != null && list.isEmpty())
 				list = null;

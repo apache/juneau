@@ -51,18 +51,20 @@ public class IOUtils {
 	static final AtomicInteger CHAR_BUFFER_CACHE_HITS = new AtomicInteger();
 	static final AtomicInteger CHAR_BUFFER_CACHE_MISSES = new AtomicInteger();
 	static {
-		SystemUtils.shutdownMessage(()->"Byte buffer cache:  hits="+BYTE_BUFFER_CACHE_HITS.get()+", misses=" + BYTE_BUFFER_CACHE_MISSES);
-		SystemUtils.shutdownMessage(()->"Char buffer cache:  hits="+CHAR_BUFFER_CACHE_HITS.get()+", misses=" + CHAR_BUFFER_CACHE_MISSES);
+		SystemUtils.shutdownMessage(() -> "Byte buffer cache:  hits=" + BYTE_BUFFER_CACHE_HITS.get() + ", misses=" + BYTE_BUFFER_CACHE_MISSES);
+		SystemUtils.shutdownMessage(() -> "Char buffer cache:  hits=" + CHAR_BUFFER_CACHE_HITS.get() + ", misses=" + CHAR_BUFFER_CACHE_MISSES);
 	}
 
 	/** Reusable empty reader. */
 	public static final Reader EMPTY_READER = new Reader() {
 		@Override
 		public void close() throws IOException { /* no-op */ }
+
 		@Override
 		public int read() {
 			return -1;  // end of stream
 		}
+
 		@Override
 		public int read(char[] cbuf, int off, int len) throws IOException {
 			return -1;  // end of stream
@@ -96,6 +98,7 @@ public class IOUtils {
 		if (ex != null)
 			throw ex;
 	}
+
 	/**
 	 * Close input stream and ignore any exceptions.
 	 *
@@ -253,8 +256,8 @@ public class IOUtils {
 			var p = new File(path);
 			if (p.exists()) {
 				var f = new File(p, name);
-	 			if (f.exists() && f.canRead())
-	 				return read(f);
+				if (f.exists() && f.canRead())
+					return read(f);
 			}
 		}
 		var cl = Thread.currentThread().getContextClassLoader();
@@ -292,7 +295,7 @@ public class IOUtils {
 	public static long pipe(byte[] in, OutputStream out, int maxBytes) throws IOException {
 		if (in == null || out == null)
 			return 0;
-		var length = (maxBytes < 0 || maxBytes > in.length ) ? in.length : maxBytes;
+		var length = (maxBytes < 0 || maxBytes > in.length) ? in.length : maxBytes;
 		out.write(in, 0, length);
 		return length;
 	}
@@ -347,6 +350,7 @@ public class IOUtils {
 			return -1;
 		}
 	}
+
 	/**
 	 * Pipes the specified input stream to the specified output stream.
 	 *
@@ -765,6 +769,7 @@ public class IOUtils {
 			return read(in2);
 		throw new IllegalArgumentException("Invalid type passed to read:  " + in.getClass().getName());
 	}
+
 	/**
 	 * Reads the contents of a path into a string.
 	 *
@@ -780,7 +785,7 @@ public class IOUtils {
 	 * @since 9.1.0
 	 */
 	public static String read(Path in) throws IOException {
-		if (in == null || !Files.exists(in)) {
+		if (in == null || ! Files.exists(in)) {
 			return null;
 		}
 		try (var r = PathReaderBuilder.create(in).build()) {

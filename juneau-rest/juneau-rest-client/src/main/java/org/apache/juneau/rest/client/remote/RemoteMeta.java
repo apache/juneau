@@ -57,12 +57,13 @@ public class RemoteMeta {
 	 * @param c The interface class annotated with a {@link org.apache.juneau.http.remote.Remote @Remote} annotation (optional).
 	 */
 	public RemoteMeta(Class<?> c) {
-		String path = "";
+		var path = "";
 
-		ClassInfo ci = ClassInfo.of(c);
-		List<Remote> remotes = ci.getAnnotations(Remote.class);
+		var ci = ClassInfo.of(c);
+		var remotes = ci.getAnnotations(Remote.class);
 
-		String versionHeader = "Client-Version", clientVersion = null;
+		var versionHeader = "Client-Version";
+		var clientVersion = (String)null;
 		HeaderList headers = HeaderList.create().resolving();
 
 		for (Remote r : remotes) {
@@ -87,7 +88,7 @@ public class RemoteMeta {
 			headers.append(stringHeader(versionHeader, clientVersion));
 
 		Map<Method,RemoteOperationMeta> operations = CollectionUtils.map();
-		String path2 = path;
+		var path2 = path;
 		ci.forEachPublicMethod(x -> true, x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));
 
 		this.operations = u(operations);

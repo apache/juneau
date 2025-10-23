@@ -366,7 +366,7 @@ public class Items extends SwaggerElement {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
-			Items r = swagger.findRef(ref, Items.class).resolveRefs(swagger, refStack, maxDepth);
+			var r = swagger.findRef(ref, Items.class).resolveRefs(swagger, refStack, maxDepth);
 			refStack.removeLast();
 			return r;
 		}

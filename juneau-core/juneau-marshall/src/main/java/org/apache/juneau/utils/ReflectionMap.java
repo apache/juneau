@@ -274,7 +274,7 @@ public class ReflectionMap<V> {
 		public boolean matches(Constructor<?> m) {
 			if (m == null)
 				return false;
-			Class<?> c = m.getDeclaringClass();
+			var c = m.getDeclaringClass();
 			return classMatches(simpleClassName, fullClassName, c) && (argsMatch(args, m.getParameterTypes()));
 		}
 
@@ -297,7 +297,8 @@ public class ReflectionMap<V> {
 
 		FieldEntry(String name, V value) {
 			int i = name.lastIndexOf('.');
-			String s1 = name.substring(0, i), s2 = name.substring(i + 1);
+			var s1 = name.substring(0, i);
+			var s2 = name.substring(i + 1);
 			this.simpleClassName = simpleClassName(s1);
 			this.fullClassName = s1;
 			this.fieldName = s2;
@@ -307,7 +308,7 @@ public class ReflectionMap<V> {
 		public boolean matches(Field f) {
 			if (f == null)
 				return false;
-			Class<?> c = f.getDeclaringClass();
+			var c = f.getDeclaringClass();
 			return classMatches(simpleClassName, fullClassName, c) && (Utils.eq(f.getName(), fieldName));
 		}
 
@@ -346,7 +347,7 @@ public class ReflectionMap<V> {
 							l++;
 							args[j] = args[j].substring(0, args[j].length() - 2);
 						}
-						StringBuilder sb = new StringBuilder(args[j].length() + l + 2);
+						var sb = new StringBuilder(args[j].length() + l + 2);
 						for (int m = 0; m < l; m++)
 							sb.append('[');
 						sb.append('L').append(args[j]).append(';');
@@ -356,7 +357,8 @@ public class ReflectionMap<V> {
 			}
 			name = i == -1 ? name : name.substring(0, i);
 			i = name.lastIndexOf('.');
-			String s1 = name.substring(0, i).trim(), s2 = name.substring(i + 1).trim();
+			var s1 = name.substring(0, i).trim();
+			var s2 = name.substring(i + 1).trim();
 			this.simpleClassName = simpleClassName(s1);
 			this.fullClassName = s1;
 			this.methodName = s2;
@@ -366,7 +368,7 @@ public class ReflectionMap<V> {
 		public boolean matches(Method m) {
 			if (m == null)
 				return false;
-			Class<?> c = m.getDeclaringClass();
+			var c = m.getDeclaringClass();
 			// @formatter:off
 			return
 				classMatches(simpleClassName, fullClassName, c)
@@ -433,8 +435,8 @@ public class ReflectionMap<V> {
 		if (names.length != args.length)
 			return false;
 		for (int i = 0; i < args.length; i++) {
-			String n = names[i];
-			Class<?> a = args[i];
+			var n = names[i];
+			var a = args[i];
 			if (! (Utils.eq(n, a.getSimpleName()) || Utils.eq(n, a.getName())))
 				return false;
 		}
@@ -446,11 +448,12 @@ public class ReflectionMap<V> {
 		// c.getSimpleName() == "Builder"
 		// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"
 		// c.getPackage() == "org.apache.juneau.a.rttests"
-		String cSimple = c.getSimpleName(), cFull = c.getName();
+		var cSimple = c.getSimpleName();
+		var cFull = c.getName();
 		if (Utils.eq(simpleName, cSimple) || Utils.eq(fullName, cFull) || "*".equals(simpleName))
 			return true;
 		if (cFull.indexOf('$') != -1) {
-			Package p = c.getPackage();
+			var p = c.getPackage();
 			if (p != null)
 				cFull = cFull.substring(p.getName().length() + 1);
 			if (Utils.eq(simpleName, cFull))

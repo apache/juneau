@@ -44,7 +44,7 @@ public class GitControl {
 	}
 
 	public void addToRepo() throws IOException, NoFilepatternException, GitAPIException {
-		AddCommand add = git.add();
+		var add = git.add();
 		add.addFilepattern(".").call();
 	}
 
@@ -68,10 +68,10 @@ public class GitControl {
 	}
 
 	public void pushToRepo() throws IOException, JGitInternalException, InvalidRemoteException, GitAPIException {
-		PushCommand pc = git.push();
+		var pc = git.push();
 		pc.setCredentialsProvider(cp).setForce(true).setPushAll();
 		try {
-			Iterator<PushResult> it = pc.call().iterator();
+			var it = pc.call().iterator();
 			if (it.hasNext()) {
 				System.out.println(it.next().toString());
 			}

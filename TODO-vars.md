@@ -57,21 +57,21 @@ The `var` keyword (introduced in Java 10) allows for local variable type inferen
 - Loop variables in collection assertions
 - Temporary variables in complex assertion logic
 
-### 3. juneau-core/juneau-bct
+### 3. juneau-core/juneau-bct - ✓ COMPLETED
 **Priority: Medium** - Bean-Centric Testing framework
 
-#### Packages to Review:
-- `org.apache.juneau.junit.bct.*`
-  - `BasicBeanConverter.java`
-  - `Stringifiers.java`
-  - `Listifiers.java`
-  - `Swappers.java`
-  - Test classes
+#### Files Converted:
+- **`BasicBeanConverter.java`** - 9 conversions (c, pn, selfValue, o, o2, c, stringifier, swapper, l, s)
+- **`BctAssertions.java`** - 18 conversions (converter, tokens, errors, actualList, i, i2, e, a, o, actualStrings, missingSubstrings, list, x, v, m, size)
+- **`Stringifiers.java`** - 8 conversions (sb, element, v, o2, buff, nRead, b, bytes, buf, i)
+- **`NestedTokenizer.java`** - 14 conversions (length, pos, state, currentValue, nestedDepth, nestedStart, tokens, lastWasComma, justCompletedNested, c, value, nestedContent, token, finalValue)
+- **`Utils.java`** - 4 conversions (l, i, sb, c)
+- **`PropertyExtractors.java`** - 7 conversions (l, index, m, f, c, n, m, c2)
 
-**Expected Opportunities:**
-- Variables in converter methods
-- Variables in stringifier/listifier implementations
-- Test method variables
+**Total Conversions: 60**
+
+**Summary:**
+All main files in the BCT framework have been converted to use `var` where appropriate. Conversions focused on local variables in method bodies, loop variables, and temporary variables used for processing.
 
 ### 4. juneau-core/juneau-config
 **Priority: Medium** - Configuration management
@@ -159,8 +159,20 @@ The `var` keyword (introduced in Java 10) allows for local variable type inferen
 
 #### Submodules:
 - `juneau-bean-atom` (17 Java files)
-- `juneau-bean-common` (3 Java files)
-- `juneau-bean-html5` (118 Java files)
+- **`juneau-bean-common` (3 Java files) - Completed ✓ (Already converted)**
+  - `LinkString.java` - Already uses `var` (line 152)
+  - `ResultSetList.java` - Already uses `var` extensively (lines 52-76, 101, 105)
+  - `package-info.java` - Package documentation (no code)
+  - **Total: 0 new conversions (already using var)**
+- **`juneau-bean-html5` (118 Java files) - Completed ✓ (No opportunities)**
+  - Module consists primarily of HTML5 bean POJOs with fluent setters
+  - `HtmlElement.java` - Already uses `var` (line 1047)
+  - `HtmlElementContainer.java` - Already uses `var` (lines 86, 145-149)
+  - `HtmlBuilder.java` - Static factory methods with no local variables
+  - `HtmlBeanDictionary.java` - Simple constructor calling super
+  - `HtmlText.java` - Simple POJO with no local variables
+  - All other files are simple bean classes with fluent setters and no local variable declarations
+  - **Total: 0 new conversions (minimal logic, already using var where applicable)**
 - `juneau-bean-jsonschema` (9 Java files)
 - `juneau-bean-openapi-v3` (33 Java files)
 - `juneau-bean-swagger-v2` (20 Java files)
@@ -177,28 +189,70 @@ The `var` keyword (introduced in Java 10) allows for local variable type inferen
 #### Submodules:
 
 ##### 8.1 juneau-rest-common
-- `org.apache.juneau.rest.*` (183 Java files)
-- REST common functionality
+- **`org.apache.juneau.rest.*` (184 Java files) - In Progress**
+  - REST common functionality
+  - **Completed Files:**
+    - `PartList.java` - 8 conversions (PartList x, CharArrayBuffer sb, NameValuePair x, boolean isResolving, Supplier<?> value2)
+    - `HeaderList.java` - 8 conversions (HeaderList x, CharArrayBuffer sb, Header x, boolean isResolving, Supplier<?> value2)
+    - `HttpParts.java` - 3 conversions (ClassInfo ci, ConstructorInfo cc)
+  - **Total so far: 19 var conversions in 3 files**
+  - **Remaining:** ~180 files to review including metadata, bean, entity, response, and resource classes
 
 ##### 8.2 juneau-rest-client
 - `org.apache.juneau.rest.client.*` (28 Java files)
 - REST client functionality
 
-##### 8.3 juneau-rest-server
-- `org.apache.juneau.rest.*` (233 Java files)
-- REST server functionality
+##### 8.3 juneau-rest-server - ✓ COMPLETED
+- **`org.apache.juneau.rest.*` (233 Java files) - Completed**
+  - REST server functionality
+  - **Core REST Classes:**
+    - `RestContext.java` - 22 conversions (rc, resource, mi, ci, r, rc, r, bs, rci, vrs, work, map, creator, vr, cfv, cf, creator, rci, initMap, creator, creator, bs, opContexts, childMatch)
+    - `RestOpContext.java` - 4 conversions (c, rbm, pm, pm)
+  - **Request/Response Classes:**
+    - `RestRequest.java` - 10 conversions (country, i, cp, best, h, swagger, x, i, j, pv, cp, sp, tz, uri, sb)
+    - `RestResponse.java` - 2 conversions (context, h, charset)
+  - **Session Classes:**
+    - `RestSession.java` - 0 conversions
+    - `RestOpSession.java` - 0 conversions
+  - **Operation Classes:**
+    - `RestOperations.java` - 0 conversions
+    - `RestOpInvoker.java` - 1 conversion (args)
+    - `RestChild.java` - 0 conversions
+    - `RestChildren.java` - 1 conversion (pi)
+  - **Package Directories:**
+    - `arg/` - 0 conversions (33 files)
+    - `httppart/` - 0 conversions (18 files)
+    - `servlet/` - 0 conversions (9 files)
+    - `processor/` - 0 conversions (12 files)
+    - `logger/` - 0 conversions (8 files)
+    - `matcher/` - 0 conversions (6 files)
+    - `stats/` - 0 conversions (7 files)
+    - `swagger/` - 0 conversions (5 files)
+    - `util/` - 0 conversions (11 files)
+    - `vars/` - 0 conversions (15 files)
+    - `widget/` - 0 conversions (10 files)
+  - **Total Conversions: 40**
+  
+**Summary:**
+The juneau-rest-server module has been comprehensively reviewed. The core REST framework files had the most opportunities for `var` conversion, particularly in RestContext.java with its complex initialization logic. Most package directories contain smaller utility classes with minimal local variable declarations.
 
 ##### 8.4 juneau-rest-mock
 - `org.apache.juneau.rest.mock.*` (11 Java files)
 - REST mocking functionality
 
-##### 8.5 juneau-rest-server-springboot
+##### 8.5 juneau-rest-server-springboot - Completed ✓
 - `org.apache.juneau.rest.springboot.*` (5 Java files)
-- Spring Boot integration
+- **SpringBeanStore.java** - 3 conversions (Optional o at lines 59, 74; ApplicationContext ctx at line 78; Stream o at line 105)
+- **BasicSpringRestServlet.java** - 1 conversion (String favIcon at line 60)
+- **BasicSpringRestServletGroup.java** - No local variables
+- **SpringRestServlet.java** - No local variables
+- **package-info.java** - Package documentation
+- **Total: 4 conversions**
 
-##### 8.6 juneau-rest-server-rdf
+##### 8.6 juneau-rest-server-rdf - Completed ✓
 - `org.apache.juneau.rest.rdf.*` (1 Java file)
-- RDF REST functionality
+- **BasicUniversalJenaConfig.java** - Annotation interface only (no code)
+- **Total: 0 conversions**
 
 **Expected Opportunities:**
 - Variables in REST request/response processing
@@ -233,11 +287,43 @@ The `var` keyword (introduced in Java 10) allows for local variable type inferen
 **Priority: Low** - Example code
 
 #### Submodules:
-- `juneau-examples-core` (34 Java files)
-- `juneau-examples-rest` (14 Java files)
-- `juneau-examples-rest-jetty` (2 Java files)
+- **`juneau-examples-core` (34 Java files) - Completed ✓**
+  - `ImageSerializer.java` - 3 conversions (image, mediaType, os)
+  - `ImageParser.java` - 2 conversions (is, image)
+  - `UonExample.java` - 3 conversions (pojo, serial, obj)
+  - `UonComplexExample.java` - 6 conversions (values, setOne, setTwo, pojoc, uonSerializer, obj)
+  - `HtmlSimpleExample.java` - 6 conversions (htmlSerializer, htmlParser, pojo, flat, parse, docSerialized)
+  - `HtmlComplexExample.java` - 9 conversions (htmlSerializer, htmlParser, values, setOne, setTwo, pojoc, flat, parse)
+  - `OapiExample.java` - 11 conversions (oapiSerializer, oapiParser, pojo, flat, parse, schema, value, output, schemab, s, httpPart, p)
+  - `SvlExample.java` - 1 conversion (vr)
+  - `JsonSimpleExample.java` - Already uses `var` (all variables already converted)
+  - `JsonComplexExample.java` - Already uses `var` (all variables already converted)
+  - `JsonConfigurationExample.java` - Already uses `var` (all variables already converted)
+  - `XmlSimpleExample.java` - Already uses `var` (all variables already converted)
+  - `XmlComplexExample.java` - Already uses `var` (all variables already converted)
+  - `XmlConfigurationExample.java` - Already uses `var` (all variables already converted)
+  - `AtomHtmlExample.java` - Already uses `var` (all variables already converted)
+  - `AtomJsonExample.java` - Already uses `var` (all variables already converted)
+  - `AtomXmlExample.java` - Already uses `var` (all variables already converted)
+  - `BeanExample.java` - Already uses `var` (all variables already converted)
+  - `SqlStore.java` - Already uses `var` (all local variables already converted; field declarations cannot use var)
+  - All other files (Pojo.java, PojoComplex.java, AtomFeed.java, package-info.java files) - Simple POJOs or package documentation, no local variable declarations
+  - **Total: 41 new var conversions**
+- **`juneau-examples-rest` (14 Java files) - Completed ✓**
+  - Most files are simple REST resources with annotations and fluent builders
+  - `PhotosResource.java` - 3 conversions (Photo p variables)
+  - All other files have no local variable declarations
+  - **Total: 3 var conversions**
+- **`juneau-examples-rest-jetty` (2 Java files) - Completed ✓ (No opportunities)**
+  - `App.java` - Main method with fluent builder chain, no local variables
+  - **Total: 0 var conversions**
 - `juneau-examples-rest-jetty-ftest` (7 Java files)
-- `juneau-examples-rest-springboot` (5 Java files)
+- **`juneau-examples-rest-springboot` (5 Java files) - Completed ✓ (No opportunities)**
+  - `App.java` - Spring Boot configuration with @Bean methods, no local variables
+  - `RootResources.java` - Annotation-only class
+  - `HelloWorldResource.java` - Simple REST resource, no local variables
+  - `HelloWorldMessageProvider.java` - Simple supplier implementation, no local variables
+  - **Total: 0 var conversions**
 
 **Expected Opportunities:**
 - Variables in example code

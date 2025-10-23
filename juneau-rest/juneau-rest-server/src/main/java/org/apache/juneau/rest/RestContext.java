@@ -197,7 +197,7 @@ public class RestContext extends Context {
 
 		private static <T extends Annotation> MethodList getAnnotatedMethods(Supplier<?> resource, Class<T> annotation, Predicate<T> predicate) {
 			Map<String,Method> x = CollectionUtils.map();
-			Object r = resource.get();
+			var r = resource.get();
 
 			// @formatter:off
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
@@ -206,17 +206,17 @@ public class RestContext extends Context {
 			);
 			// @formatter:on
 
-			MethodList x2 = MethodList.of(x.values());
+			var x2 = MethodList.of(x.values());
 			return x2;
 		}
 
 		private static boolean isRestBeanMethod(MethodInfo mi) {
-			RestInject x = mi.getAnnotation(RestInject.class);
+			var x = mi.getAnnotation(RestInject.class);
 			return x != null && x.methodScope().length == 0;
 		}
 
 		private static boolean isRestBeanMethod(MethodInfo mi, String name) {
-			RestInject x = mi.getAnnotation(RestInject.class);
+			var x = mi.getAnnotation(RestInject.class);
 			return x != null && x.methodScope().length == 0 && x.name().equals(name);
 		}
 
@@ -1728,8 +1728,8 @@ public class RestContext extends Context {
 			initialized = true;
 
 			this.resource = new ResourceSupplier(resourceClass, resource);
-			Supplier<?> r = this.resource;
-			Class<?> rc = resourceClass;
+			var r = this.resource;
+			var rc = resourceClass;
 
 			// @formatter:off
 			beanStore = createBeanStore(resource)
@@ -1744,7 +1744,7 @@ public class RestContext extends Context {
 				rootBeanStore = beanStore;
 				beanStore = BeanStore.of(rootBeanStore, r.get());
 			}
-			BeanStore bs = beanStore;
+			var bs = beanStore;
 
 			beanStore.add(BeanStore.class, bs);
 			varResolver = createVarResolver(bs, r, rc);
@@ -1752,7 +1752,7 @@ public class RestContext extends Context {
 			config = beanStore.add(Config.class, createConfig(bs, r, rc));
 			beanStore.add(VarResolver.class, varResolver.bean(Config.class, config).build());
 
-			ClassInfo rci = ClassInfo.of(resourceClass);
+			var rci = ClassInfo.of(resourceClass);
 
 			// Get @RestInject fields initialized with values.
 			// @formatter:off
@@ -1769,8 +1769,8 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			rci.forEachMethod(x -> x.hasAnnotation(RestInject.class), x -> {
-				Class<Object> rt = x.getReturnType().inner();
-				String name = RestInjectAnnotation.name(x.getAnnotation(RestInject.class));
+				var rt = x.getReturnType().<Object>inner();
+				var name = RestInjectAnnotation.name(x.getAnnotation(RestInject.class));
 				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
 					// @formatter:off
 					beanStore
@@ -1781,8 +1781,8 @@ public class RestContext extends Context {
 				}
 			});
 
-			VarResolverSession vrs = varResolver().build().createSession();
-			AnnotationWorkList work = AnnotationWorkList.of(vrs, rci.getAnnotationList(CONTEXT_APPLY_FILTER));
+			var vrs = varResolver().build().createSession();
+			var work = AnnotationWorkList.of(vrs, rci.getAnnotationList(CONTEXT_APPLY_FILTER));
 
 			apply(work);
 			beanContext().apply(work);
@@ -2680,7 +2680,7 @@ public class RestContext extends Context {
 		 * @return The bean cast to that instance, or {@link Optional#empty()} if it's not the specified type.
 		 */
 		public <T> Optional<T> resourceAs(Class<T> type) {
-			Object r = resource().get();
+			var r = resource().get();
 			return opt(type.isInstance(r) ? type.cast(r) : null);
 		}
 
@@ -3774,14 +3774,14 @@ public class RestContext extends Context {
 
 		private static void runInitHooks(BeanStore beanStore, Supplier<?> resource) throws ServletException {
 
-			Object r = resource.get();
+			var r = resource.get();
 
-			Map<String,MethodInfo> map = CollectionUtils.map();
+			var map = CollectionUtils.<String,MethodInfo>map();
 			// @formatter:off
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestInit.class) && ! y.hasArg(RestOpContext.Builder.class),
 				y -> {
-					String sig = y.getSignature();
+					var sig = y.getSignature();
 					if (! map.containsKey(sig))
 						map.put(sig, y.accessible());
 				}
@@ -3876,7 +3876,7 @@ public class RestContext extends Context {
 		 */
 		protected BeanCreator<CallLogger> createCallLogger(BeanStore beanStore, Supplier<?> resource) {
 
-			BeanCreator<CallLogger> creator = beanStore.createBean(CallLogger.class).type(BasicCallLogger.class);
+			var creator = beanStore.createBean(CallLogger.class).type(BasicCallLogger.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses().get(CallLogger.class).ifPresent(x -> creator.type(x));
@@ -3906,14 +3906,14 @@ public class RestContext extends Context {
 		 * @return A new config.
 		 */
 		protected Config createConfig(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
-
-			Value<Config> v = Value.empty();
+	
+			var v = Value.<Config>empty();
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
-			VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
-			Value<String> cfv = Value.empty();
+			var vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
+			var cfv = Value.<String>empty();
 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
-			String cf = cfv.orElse("");
+			var cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
 			if (v.isEmpty() && "SYSTEM_DEFAULT".equals(cf))
@@ -3947,7 +3947,7 @@ public class RestContext extends Context {
 		 */
 		protected BeanCreator<DebugEnablement> createDebugEnablement(BeanStore beanStore, Supplier<?> resource) {
 
-			BeanCreator<DebugEnablement> creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class);
+			var creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses().get(DebugEnablement.class).ifPresent(x -> creator.type(x));
@@ -3972,8 +3972,8 @@ public class RestContext extends Context {
 		protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<NamedAttributeMap> v = Value.of(NamedAttributeMap.create());
-
+			var v = Value.of(NamedAttributeMap.create());
+	
 			beanStore.getBean(NamedAttributeMap.class, "defaultRequestAttributes").ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultRequestAttributes") public [static] NamedAttributeMap xxx(<args>)
@@ -3992,9 +3992,9 @@ public class RestContext extends Context {
 		 * @return A new default request headers sub-builder.
 		 */
 		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, Supplier<?> resource) {
-
+	
 			// Default value.
-			Value<HeaderList> v = Value.of(HeaderList.create());
+			var v = Value.of(HeaderList.create());
 
 			// Replace with bean from bean store.
 			beanStore.getBean(HeaderList.class, "defaultRequestHeaders").ifPresent(x -> v.set(x));
@@ -4017,11 +4017,11 @@ public class RestContext extends Context {
 		protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<HeaderList> v = Value.of(HeaderList.create());
-
+			var v = Value.of(HeaderList.create());
+	
 			// Replace with bean from bean store.
 			beanStore.getBean(HeaderList.class, "defaultResponseHeaders").ifPresent(x -> v.set(x));
-
+	
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders") public [static] HeaderList xxx(<args>)
 			beanStore.createMethodFinder(HeaderList.class).addBean(HeaderList.class, v.get()).find(x -> isRestBeanMethod(x, "defaultResponseHeaders")).run(x -> v.set(x));
 
@@ -4040,8 +4040,8 @@ public class RestContext extends Context {
 		protected MethodList createDestroyMethods(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<MethodList> v = Value.of(getAnnotatedMethods(resource, RestDestroy.class, x -> true));
-
+			var v = Value.of(getAnnotatedMethods(resource, RestDestroy.class, x -> true));
+	
 			// Replace with bean from:  @RestInject(name="destroyMethods") public [static] MethodList xxx(<args>)
 			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "destroyMethods")).run(x -> v.set(x));
 
@@ -4566,9 +4566,9 @@ public class RestContext extends Context {
 			// Default value.
 			Value<RestOperations.Builder> v = Value.of(RestOperations.create(beanStore));
 
-			ClassInfo rci = ClassInfo.of(resource.get());
+			var rci = ClassInfo.of(resource.get());
 
-			Map<String,MethodInfo> initMap = CollectionUtils.map();
+			var initMap = CollectionUtils.<String,MethodInfo>map();
 			// @formatter:off
 			ClassInfo.ofProxy(resource.get()).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestInit.class) && y.hasArg(RestOpContext.Builder.class),
@@ -4711,7 +4711,7 @@ public class RestContext extends Context {
 		 */
 		protected BeanCreator<StaticFiles> createStaticFiles(BeanStore beanStore, Supplier<?> resource) {
 
-			BeanCreator<StaticFiles> creator = beanStore.createBean(StaticFiles.class).type(BasicStaticFiles.class);
+			var creator = beanStore.createBean(StaticFiles.class).type(BasicStaticFiles.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses().get(StaticFiles.class).ifPresent(x -> creator.type(x));
@@ -4760,7 +4760,7 @@ public class RestContext extends Context {
 		 */
 		protected BeanCreator<SwaggerProvider> createSwaggerProvider(BeanStore beanStore, Supplier<?> resource) {
 
-			BeanCreator<SwaggerProvider> creator = beanStore.createBean(SwaggerProvider.class).type(BasicSwaggerProvider.class);
+			var creator = beanStore.createBean(SwaggerProvider.class).type(BasicSwaggerProvider.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses().get(SwaggerProvider.class).ifPresent(x -> creator.type(x));
@@ -5053,7 +5053,7 @@ public class RestContext extends Context {
 			restChildren = builder.restChildren(this).build();
 			swaggerProvider = bs.add(SwaggerProvider.class, builder.swaggerProvider().orElse(null));
 
-			List<RestOpContext> opContexts = restOperations.getOpContexts();
+			var opContexts = restOperations.getOpContexts();
 
 			// @formatter:off
 			produces = builder.produces().orElseGet(
@@ -5150,7 +5150,7 @@ public class RestContext extends Context {
 			}
 
 			// If this resource has child resources, try to recursively call them.
-			Optional<RestChildMatch> childMatch = restChildren.findMatch(sb);
+			var childMatch = restChildren.findMatch(sb);
 			if (childMatch.isPresent()) {
 				UrlPathMatch uppm = childMatch.get().getPathMatch();
 				RestContext rc = childMatch.get().getChildContext();
@@ -5404,7 +5404,7 @@ public class RestContext extends Context {
 	 * @throws InternalServerError If no active request exists on the current thread.
 	 */
 	public RestSession getLocalSession() {
-		RestSession rc = localSession.get();
+		var rc = localSession.get();
 		if (rc == null)
 			throw new InternalServerError("No active request on current thread.");
 		return rc;
@@ -5764,8 +5764,8 @@ public class RestContext extends Context {
 	public synchronized RestContext postInit() throws ServletException {
 		if (initialized.get())
 			return this;
-		Object resource = getResource();
-		MethodInfo mi = ClassInfo.of(getResource()).getPublicMethod(x -> x.hasName("setContext") && x.hasParamTypes(RestContext.class));
+		var resource = getResource();
+		var mi = ClassInfo.of(getResource()).getPublicMethod(x -> x.hasName("setContext") && x.hasParamTypes(RestContext.class));
 		if (mi != null) {
 			try {
 				mi.accessible().invoke(resource, this);
@@ -5858,7 +5858,7 @@ public class RestContext extends Context {
 		if (t instanceof BasicHttpException)
 			return t;
 
-		ClassInfo ci = ClassInfo.of(t);
+		var ci = ClassInfo.of(t);
 
 		if (ci.hasAnnotation(Response.class))
 			return t;
@@ -5906,9 +5906,9 @@ public class RestContext extends Context {
 	 */
 	protected RestOpArg[] findRestOperationArgs(Method m, BeanStore beanStore) {
 
-		MethodInfo mi = MethodInfo.of(m);
-		List<ClassInfo> pt = mi.getParamTypes();
-		RestOpArg[] ra = new RestOpArg[pt.size()];
+		var mi = MethodInfo.of(m);
+		var pt = mi.getParamTypes();
+		var ra = new RestOpArg[pt.size()];
 
 		beanStore = BeanStore.of(beanStore, getResource());
 
@@ -5974,16 +5974,16 @@ public class RestContext extends Context {
 
 		int code = 500;
 
-		ClassInfo ci = ClassInfo.of(e);
-		StatusCode r = ci.getAnnotation(StatusCode.class);
+		var ci = ClassInfo.of(e);
+		var r = ci.getAnnotation(StatusCode.class);
 		if (r != null)
 			if (r.value().length > 0)
 				code = r.value()[0];
 
-		BasicHttpException e2 = (e instanceof BasicHttpException ? (BasicHttpException)e : new BasicHttpException(code, e));
+		var e2 = (e instanceof BasicHttpException ? (BasicHttpException)e : new BasicHttpException(code, e));
 
-		HttpServletRequest req = session.getRequest();
-		HttpServletResponse res = session.getResponse();
+		var req = session.getRequest();
+		var res = session.getResponse();
 
 		Throwable t = e2.getRootCause();
 		if (t != null) {
@@ -6030,10 +6030,10 @@ public class RestContext extends Context {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	protected void handleNotFound(RestSession session) throws Exception {
-		String pathInfo = session.getPathInfo();
-		String methodUC = session.getMethod();
-		int rc = session.getStatus();
-		String onPath = pathInfo == null ? " on no pathInfo" : String.format(" on path '%s'", pathInfo);
+		var pathInfo = session.getPathInfo();
+		var methodUC = session.getMethod();
+		var rc = session.getStatus();
+		var onPath = pathInfo == null ? " on no pathInfo" : String.format(" on path '%s'", pathInfo);
 		if (rc == SC_NOT_FOUND)
 			throw new NotFound("Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
 		else if (rc == SC_PRECONDITION_FAILED)
@@ -6099,7 +6099,7 @@ public class RestContext extends Context {
 			}
 		}
 
-		Object output = opSession.getResponse().getContent().orElse(null);
+		var output = opSession.getResponse().getContent().orElse(null);
 		throw new NotImplemented("No response processors found to process output of type ''{0}''", ClassUtils.className(output));
 	}
 

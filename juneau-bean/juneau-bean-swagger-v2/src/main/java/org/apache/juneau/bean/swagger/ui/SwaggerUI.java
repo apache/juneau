@@ -240,7 +240,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 				table.child(tr(th("License:"), td(child)));
 			}
 
-			ExternalDocumentation ed = s.swagger.getExternalDocs();
+			var ed = s.swagger.getExternalDocs();
 			if (ed != null) {
 				var content = ed.getDescription() != null ? ed.getDescription() : ed.getUrl();
 				var child = ed.getUrl() != null ? a(ed.getUrl(), content) : ed.getDescription();

@@ -49,7 +49,7 @@ public class BuilderSwap<T,B> {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static BuilderSwap<?,?> findSwapFromBuilderClass(Class<?> builderClass, Visibility cVis, Visibility mVis) {
-		ClassInfo bci = ClassInfo.of(builderClass);
+		var bci = ClassInfo.of(builderClass);
 		if (bci.isNotPublic())
 			return null;
 
@@ -66,7 +66,7 @@ public class BuilderSwap<T,B> {
 		if (objectClass == null)
 			return null;
 
-		ClassInfo pci = ClassInfo.of(objectClass);
+		var pci = ClassInfo.of(objectClass);
 
 		objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass));
 		if (objectConstructor == null)
@@ -91,14 +91,14 @@ public class BuilderSwap<T,B> {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static BuilderSwap<?,?> findSwapFromObjectClass(BeanContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
-		Value<Class<?>> builderClass = Value.empty();
+		var builderClass = Value.<Class<?>>empty();
 		MethodInfo objectCreateMethod, builderCreateMethod;
 		ConstructorInfo objectConstructor = null;
 		ConstructorInfo builderConstructor;
 
 		bc.forEachAnnotation(org.apache.juneau.annotation.Builder.class, objectClass, x -> ClassUtils.isNotVoid(x.value()), x -> builderClass.set(x.value()));
 
-		ClassInfo pci = ClassInfo.of(objectClass);
+		var pci = ClassInfo.of(objectClass);
 
 		builderCreateMethod = getBuilderCreateMethod(pci);
 
@@ -107,7 +107,7 @@ public class BuilderSwap<T,B> {
 
 		if (builderClass.isEmpty()) {
 			// @formatter:off
-			ConstructorInfo cc = pci.getPublicConstructor(
+			var cc = pci.getPublicConstructor(
 				x -> x.isVisible(cVis)
 				&& x.hasNumParams(1)
 				&& x.getParamType(0).isChildOf(Builder.class)
@@ -122,13 +122,13 @@ public class BuilderSwap<T,B> {
 		if (builderClass.isEmpty())
 			return null;
 
-		ClassInfo bci = ClassInfo.of(builderClass.get());
+		var bci = ClassInfo.of(builderClass.get());
 		builderConstructor = bci.getNoArgConstructor(cVis);
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 
 		objectCreateMethod = getBuilderBuildMethod(bci);
-		Class<?> builderClass2 = builderClass.get();
+		var builderClass2 = builderClass.get();
 		if (objectConstructor == null)
 			objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass2));
 

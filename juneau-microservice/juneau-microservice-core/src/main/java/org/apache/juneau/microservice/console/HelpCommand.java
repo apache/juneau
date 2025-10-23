@@ -36,17 +36,20 @@ public class HelpCommand extends ConsoleCommand {
 
 	@Override /* Overridden from ConsoleCommand */
 	public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception {
-		Map<String,ConsoleCommand> commands = Microservice.getInstance().getConsoleCommands();
+		var commands = Microservice.getInstance().getConsoleCommands();
 		if (args.size() == 1) {
 			out.println(mb.getString("ListOfAvailableCommands"));
 			commands.forEach((k, v) -> out.append("\t").append(v.getName()).append(" -- ").append(indent(v.getInfo())).println());
 			out.println();
 		} else {
-			ConsoleCommand cc = commands.get(args.getArg(1));
+			var cc = commands.get(args.getArg(1));
 			if (cc == null) {
 				out.println(mb.getString("CommandNotFound"));
 			} else {
-				String info = cc.getInfo(), synopsis = cc.getSynopsis(), description = cc.getDescription(), examples = cc.getExamples();
+				var info = cc.getInfo();
+				var synopsis = cc.getSynopsis();
+				var description = cc.getDescription();
+				var examples = cc.getExamples();
 
 				out.append(mb.getString("NAME")).append("\n\t").append(cc.getName()).append(info == null ? "" : " -- " + indent(info)).println();
 

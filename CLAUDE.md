@@ -12,6 +12,55 @@ This document outlines the rules, guidelines, and best practices that Claude AI 
 - Use established naming conventions and formatting
 - Preserve existing functionality while making improvements
 
+#### Indentation Rules
+When adding or modifying Java code, **ALWAYS** preserve the exact indentation of the surrounding code:
+
+**Critical Requirements:**
+1. **Use tabs, not spaces** - Java files in this project use tab characters for indentation
+2. **Match surrounding code exactly** - Copy the leading whitespace character-for-character from the `old_string`
+3. **Preserve indentation levels** - Count tabs in nearby lines and use the same number
+
+**Common Patterns:**
+```java
+<TAB>/**
+<TAB> * Javadoc line 1
+<TAB> * Javadoc line 2
+<TAB> */
+<TAB>@Annotation
+<TAB>public ReturnType methodName() {
+<TAB><TAB>return statement;
+<TAB>}
+```
+
+Where `<TAB>` represents an actual tab character (`\t`), not spaces.
+
+**Why This Matters:**
+- Incorrect indentation (offset by one tab to the left) is a common error
+- Mixed tabs/spaces cause inconsistent formatting
+- IDE auto-formatting relies on consistent indentation
+- Project standards mandate tab-based indentation
+
+**Verification Steps:**
+1. Before creating `new_string`, examine the indentation in `old_string`
+2. Count the tab characters at the start of each line
+3. Copy the exact indentation pattern (including all tabs)
+4. For new Javadoc, match the indentation of nearby methods
+
+**Example Correction:**
+```java
+// WRONG - Missing leading tab
+/**
+ * Method description
+ */
+public void method() {
+
+// CORRECT - Includes leading tab
+<TAB>/**
+<TAB> * Method description
+<TAB> */
+<TAB>public void method() {
+```
+
 ### 2. Testing Standards
 - Ensure comprehensive test coverage for all changes
 - Follow the established unit testing patterns

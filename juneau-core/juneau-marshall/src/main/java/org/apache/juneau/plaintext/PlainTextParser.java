@@ -643,7 +643,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	public PlainTextBeanPropertyMeta getPlainTextBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return PlainTextBeanPropertyMeta.DEFAULT;
-		PlainTextBeanPropertyMeta m = plainTextBeanPropertyMetas.get(bpm);
+		var m = plainTextBeanPropertyMetas.get(bpm);
 		if (m == null) {
 			m = new PlainTextBeanPropertyMeta(bpm.getDelegateFor(), this);
 			plainTextBeanPropertyMetas.put(bpm, m);
@@ -653,7 +653,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 
 	@Override /* Overridden from PlainTextMetaProvider */
 	public PlainTextClassMeta getPlainTextClassMeta(ClassMeta<?> cm) {
-		PlainTextClassMeta m = plainTextClassMetas.get(cm);
+		var m = plainTextClassMetas.get(cm);
 		if (m == null) {
 			m = new PlainTextClassMeta(cm, this);
 			plainTextClassMetas.put(cm, m);

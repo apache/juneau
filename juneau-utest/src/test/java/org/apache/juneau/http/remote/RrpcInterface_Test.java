@@ -18,7 +18,6 @@ package org.apache.juneau.http.remote;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;

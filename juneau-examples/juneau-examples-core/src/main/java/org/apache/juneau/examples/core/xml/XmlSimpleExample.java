@@ -37,7 +37,7 @@ public class XmlSimpleExample {
 	public static void main(String[] args) throws Exception {
 
 		// Fill some data to a Pojo bean
-		Pojo pojo = new Pojo("id", "name");
+		var pojo = new Pojo("id", "name");
 
 		// Serialize to human readable XML and print
 		/**
@@ -46,11 +46,11 @@ public class XmlSimpleExample {
 		 * <id>id</id>
 		 * </object>
 		 */
-		String serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojo);
+		var serial = XmlSerializer.DEFAULT_SQ_READABLE.serialize(pojo);
 		System.out.println(serial);
 
 		// Deserialize back to Pojo instance
-		Pojo obj = XmlParser.DEFAULT.parse(serial, Pojo.class);
+		var obj = XmlParser.DEFAULT.parse(serial, Pojo.class);
 
 		assert obj.getId().equals(pojo.getId());
 		assert obj.getName().equals(pojo.getName());

@@ -45,28 +45,28 @@ public class JsonComplexExample {
 		 * "values":{"setOne":[{"name":"name1","id":"1.1"},{"name":"name2","id":"1.1"}],
 		 * "setTwo":[{"name":"name1","id":"1.2"},{"name":"name2","id":"1.2"}]},"id":"pojo"}
 		 */
-		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT;
+		var jsonSerializer = JsonSerializer.DEFAULT;
 		// Get a reference to a parser - converts that flat format back into the POJO
-		JsonParser jsonParser = JsonParser.DEFAULT;
+		var jsonParser = JsonParser.DEFAULT;
 
 		// Fill some data to a PojoComplex bean
-		HashMap<String,List<Pojo>> values = new HashMap<>();
-		ArrayList<Pojo> setOne = new ArrayList<>();
+		var values = new HashMap<String,List<Pojo>>();
+		var setOne = new ArrayList<Pojo>();
 		setOne.add(new Pojo("1.1", "name1"));
 		setOne.add(new Pojo("1.1", "name2"));
-		ArrayList<Pojo> setTwo = new ArrayList<>();
+		var setTwo = new ArrayList<Pojo>();
 		setTwo.add(new Pojo("1.2", "name1"));
 		setTwo.add(new Pojo("1.2", "name2"));
 		values.put("setOne", setOne);
 		values.put("setTwo", setTwo);
-		PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
+		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
-		String flat = jsonSerializer.serialize(pojoc);
+		var flat = jsonSerializer.serialize(pojoc);
 
 		// Print out the created POJO in JSON format.
 		System.out.println(flat);
 
-		PojoComplex parse = jsonParser.parse(flat, PojoComplex.class);
+		var parse = jsonParser.parse(flat, PojoComplex.class);
 
 		assert parse.getId().equals(pojoc.getId());
 		assert parse.getInnerPojo().getName().equals(pojoc.getInnerPojo().getName());

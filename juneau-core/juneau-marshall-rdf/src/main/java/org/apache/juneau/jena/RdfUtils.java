@@ -45,13 +45,13 @@ public class RdfUtils {
 	public static Namespace findNamespace(List<Rdf> rdfs, List<RdfSchema> schemas) {
 
 		for (Rdf rdf : rdfs) {
-			Namespace ns = findNamespace(rdf.prefix(), rdf.namespace(), rdfs, schemas);
+			var ns = findNamespace(rdf.prefix(), rdf.namespace(), rdfs, schemas);
 			if (ns != null)
 				return ns;
 		}
 
 		for (RdfSchema schema : schemas) {
-			Namespace ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
+			var ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
 			if (ns != null)
 				return ns;
 		}

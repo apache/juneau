@@ -345,6 +345,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger addSecurity(Collection<Map<String,List<String>>> values) {
 		security = CollectionUtils.listb(Map.class).to((List)security).sparse().addAll(values).build();
 		return this;
@@ -361,9 +362,10 @@ public class Swagger extends SwaggerElement {
 	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR between the security requirements).
 	 * @return This object.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
-		Map<String,List<String>> m = CollectionUtils.map();
+		var m = CollectionUtils.map();
 		m.put(scheme, alist(alternatives));
 		security = CollectionUtils.listb(Map.class).to((List)security).sparse().addAll(Collections.singleton(m)).build();
 		return this;

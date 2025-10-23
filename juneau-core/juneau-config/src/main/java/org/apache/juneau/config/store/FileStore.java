@@ -587,7 +587,7 @@ public class FileStore extends ConfigStore {
 	@Override
 	protected String resolveName(String name) {
 		if (! nameCache.containsKey(name)) {
-			String n = null;
+			var n = (String)null;
 
 			// Does file exist as-is?
 			if (FileUtils.exists(dir, name))

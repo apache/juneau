@@ -36,6 +36,7 @@ public class SystemUtils {
 			}
 		});
 	}
+
 	/**
 	 * Adds a console message to display when the JVM shuts down.
 	 *

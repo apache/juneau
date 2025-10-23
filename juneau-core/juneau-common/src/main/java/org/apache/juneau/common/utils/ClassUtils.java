@@ -22,6 +22,12 @@ import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
 
+/**
+ * Utility methods for working with classes.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * </ul>
+ */
 public class ClassUtils {
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
@@ -95,8 +101,19 @@ public class ClassUtils {
 		return null;
 	}
 
+	/**
+	 * Returns the generic parameter type at the specified index for a class that extends a parameterized type.
+	 *
+	 * @param c The class to examine.
+	 * @param index The zero-based index of the parameter to retrieve.
+	 * @param pt The parameterized superclass or interface.
+	 * @return The parameter type at the specified index.
+	 * @throws IllegalArgumentException If the class is not a subclass of the parameterized type or if the index is invalid.
+	 */
+	@SuppressWarnings("null")
 	public static Class<?> getParameterType(Class<?> c, int index, Class<?> pt) {
 		Utils.assertArgNotNull("pt", pt);
+		Utils.assertArgNotNull("c", c);
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
@@ -213,14 +230,32 @@ public class ClassUtils {
 		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getName() : value.getClass().getName();
 	}
 
+	/**
+	 * Shortcut for calling {@link #className(Object)}.
+	 *
+	 * @param value The object to get the class name for.
+	 * @return The name of the class or <jk>null</jk> if the value was null.
+	 */
 	public static String cn(Object value) {
 		return className(value);
 	}
 
+	/**
+	 * Returns the simple (non-qualified) class name for the specified object.
+	 *
+	 * @param value The object to get the simple class name for.
+	 * @return The simple name of the class or <jk>null</jk> if the value was null.
+	 */
 	public static String simpleClassName(Object value) {
 		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getSimpleName() : value.getClass().getSimpleName();
 	}
 
+	/**
+	 * Shortcut for calling {@link #simpleClassName(Object)}.
+	 *
+	 * @param value The object to get the simple class name for.
+	 * @return The simple name of the class or <jk>null</jk> if the value was null.
+	 */
 	public static String scn(Object value) {
 		return simpleClassName(value);
 	}

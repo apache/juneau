@@ -33,7 +33,7 @@ public class PredicateUtils_Test {
 
     @Test
     void and_empty_returnsTrue() {
-        @SuppressWarnings("unchecked") Predicate<String> p = PredicateUtils.and();
+        Predicate<String> p = PredicateUtils.and();
         assertTrue(p.test("x"));
     }
 
@@ -75,7 +75,7 @@ public class PredicateUtils_Test {
 
     @Test
     void or_empty_returnsFalse() {
-        @SuppressWarnings("unchecked") Predicate<String> p = PredicateUtils.or();
+        Predicate<String> p = PredicateUtils.or();
         assertFalse(p.test("x"));
     }
 

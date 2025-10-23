@@ -106,13 +106,13 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 		for (MethodInfo m : ci.getMethods()) {
 			if (isSwapMethod(bc, m)) {
 
-				ClassInfo rt = m.getReturnType();
+				var rt = m.getReturnType();
 
-				MethodInfo mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt));
+				var mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt));
 				if (mi != null)
 					return new AutoListSwap(bc, ci, m, mi, null);
 
-				ConstructorInfo cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt));
+				var cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt));
 				if (cs != null)
 					return new AutoListSwap(bc, ci, m, null, cs);
 

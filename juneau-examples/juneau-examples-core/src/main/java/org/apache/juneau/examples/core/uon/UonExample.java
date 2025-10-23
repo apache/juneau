@@ -37,17 +37,17 @@ public class UonExample {
 	public static void main(String[] args) throws Exception {
 
 		// Fill some data to a Pojo bean
-		Pojo pojo = new Pojo("id", "name");
+		var pojo = new Pojo("id", "name");
 
 		/**
 		 * Produces
 		 * (name=name,id=id)
 		 */
-		String serial = UonSerializer.DEFAULT.serialize(pojo);
+		var serial = UonSerializer.DEFAULT.serialize(pojo);
 		System.out.println(serial);
 
 		// Deserialize back to Pojo instance
-		Pojo obj = UonParser.DEFAULT.parse(serial, Pojo.class);
+		var obj = UonParser.DEFAULT.parse(serial, Pojo.class);
 
 		assert obj.getId().equals(pojo.getId());
 		assert obj.getName().equals(pojo.getName());

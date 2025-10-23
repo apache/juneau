@@ -33,7 +33,7 @@ public class SvlExample {
 	 */
 	public static void main(String[] args) {
 
-		VarResolver vr = VarResolver.DEFAULT;
+		var vr = VarResolver.DEFAULT;
 
 		// $E{key[,default]} for getting environment variables
 		System.out.println(vr.resolve("JAVA_HOME=$E{JAVA_HOME, not defined}"));

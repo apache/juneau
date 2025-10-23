@@ -17,8 +17,6 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;

@@ -135,7 +135,7 @@ public class XmlUtils {
 	public static Writer encodeAttrName(Writer w, Object value) throws IOException {
 		if (value == null)
 			return w.append("_x0000_");
-		String s = value.toString();
+		var s = value.toString();
 
 		if (needsAttrNameEncoding(s)) {
 			for (int i = 0; i < s.length(); i++) {
@@ -223,7 +223,7 @@ public class XmlUtils {
 	public static String encodeElementName(Object value) {
 		if (value == null)
 			return "_x0000_";
-		String s = value.toString();
+		var s = value.toString();
 		if (s.isEmpty())
 			return "_xE000_";
 
@@ -323,7 +323,7 @@ public class XmlUtils {
 	public static String escapeText(Object value) {
 		if (value == null)
 			return "_x0000_";
-		String s = value.toString();
+		var s = value.toString();
 
 		try {
 			if (! needsTextEncoding(s))

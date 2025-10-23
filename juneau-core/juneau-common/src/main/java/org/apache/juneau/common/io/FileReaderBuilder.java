@@ -32,6 +32,7 @@ public class FileReaderBuilder {
 	public static FileReaderBuilder create() {
 		return new FileReaderBuilder();
 	}
+
 	/**
 	 * Creates a new builder initialized with the specified file.
 	 *
@@ -41,6 +42,7 @@ public class FileReaderBuilder {
 	public static FileReaderBuilder create(File file) {
 		return new FileReaderBuilder().file(file);
 	}
+
 	private File file;
 
 	private Charset cs = Charset.defaultCharset();

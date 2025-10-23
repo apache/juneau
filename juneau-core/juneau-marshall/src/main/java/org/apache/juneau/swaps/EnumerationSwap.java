@@ -40,7 +40,7 @@ public class EnumerationSwap extends ObjectSwap<Enumeration,List> {
 	 */
 	@Override /* Overridden from ObjectSwap */
 	public List swap(BeanSession session, Enumeration o) {
-		List l = new LinkedList();
+		var l = new LinkedList();
 		while (o.hasMoreElements())
 			l.add(o.nextElement());
 		return l;

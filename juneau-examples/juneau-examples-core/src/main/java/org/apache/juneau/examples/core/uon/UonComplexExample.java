@@ -37,16 +37,16 @@ public class UonComplexExample {
 	public static void main(String[] args) throws Exception {
 
 		// Fill some data to a PojoComplex bean
-		HashMap<String,List<Pojo>> values = new HashMap<>();
-		ArrayList<Pojo> setOne = new ArrayList<>();
+		var values = new HashMap<String,List<Pojo>>();
+		var setOne = new ArrayList<Pojo>();
 		setOne.add(new Pojo("1.1", "name1"));
 		setOne.add(new Pojo("1.1", "name2"));
-		ArrayList<Pojo> setTwo = new ArrayList<>();
+		var setTwo = new ArrayList<Pojo>();
 		setTwo.add(new Pojo("1.2", "name1"));
 		setTwo.add(new Pojo("1.2", "name2"));
 		values.put("setOne", setOne);
 		values.put("setTwo", setTwo);
-		PojoComplex pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
+		var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);
 
 		// this creates an RDF serializer with the default XML structure
 		/**Produces
@@ -54,11 +54,11 @@ public class UonComplexExample {
 		 * values=(setOne=@((name=name1,id='1.1'),(name=name2,id='1.1')),
 		 * setTwo=@((name=name1,id='1.2'),(name=name2,id='1.2'))),id=pojo)
 		 */
-		UonSerializer uonSerializer = UonSerializer.DEFAULT;
+		var uonSerializer = UonSerializer.DEFAULT;
 		// This will show the final output from the bean
 		System.out.println(uonSerializer.serialize(pojoc));
 
-		PojoComplex obj = UonParser.DEFAULT.parse(uonSerializer.serialize(pojoc), PojoComplex.class);
+		var obj = UonParser.DEFAULT.parse(uonSerializer.serialize(pojoc), PojoComplex.class);
 
 		assert obj.getId().equals(pojoc.getId());
 

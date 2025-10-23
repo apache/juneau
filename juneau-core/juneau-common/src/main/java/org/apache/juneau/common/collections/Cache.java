@@ -175,7 +175,5 @@ public class Cache<K,V> {
 	 *
 	 * @return The number of cache hits.
 	 */
-	public int getCacheHits() {
-		return cacheHits.get();
-	}
+	public int getCacheHits() { return cacheHits.get(); }
 }

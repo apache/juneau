@@ -144,7 +144,7 @@ public class RestChildren {
 	 * @return The child that best matches the call, or an empty {@link Optional} if a match could not be made.
 	 */
 	public Optional<RestChildMatch> findMatch(RestSession.Builder builder) {
-		String pi = builder.getPathInfoUndecoded();
+		var pi = builder.getPathInfoUndecoded();
 		if ((! children.isEmpty()) && pi != null && ! pi.equals("/")) {
 			for (RestContext rc : children.values()) {
 				UrlPathMatcher upp = rc.getPathMatcher();

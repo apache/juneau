@@ -67,8 +67,8 @@ public class MimeTypeDetector {
 	 * Builder class for creating MimeTypeDetector instances.
 	 */
 	public static class Builder {
-		private final Map<String, String> extMap = new ConcurrentHashMap<>();
-		private final Map<String, String> fileMap = new ConcurrentHashMap<>();
+		private final Map<String,String> extMap = new ConcurrentHashMap<>();
+		private final Map<String,String> fileMap = new ConcurrentHashMap<>();
 		private boolean nioContentBasedDetection = true;
 		private int cacheSize = 1000;
 		private boolean cacheDisabled = false;
@@ -178,13 +178,13 @@ public class MimeTypeDetector {
 		 * @param mimeTypesLines The MIME types lines or file contents.
 		 * @return This builder.
 		 */
-		public Builder addTypes(String... mimeTypesLines) {
+		public Builder addTypes(String...mimeTypesLines) {
 			for (String input : mimeTypesLines) {
 				if (Utils.isNotEmpty(input)) {
 					// Split on newlines to handle both individual lines and file contents
 					var lines = input.split("\\r?\\n");
 					for (String line : lines) {
-						if (Utils.isNotEmpty(line) && !line.trim().startsWith("#")) {
+						if (Utils.isNotEmpty(line) && ! line.trim().startsWith("#")) {
 							var parts = line.trim().split("\\s+");
 							if (parts.length >= 2) {
 								var mimeType = parts[0];
@@ -205,63 +205,15 @@ public class MimeTypeDetector {
 		 * @return This builder.
 		 */
 		public Builder addDefaultMappings() {
-			return addTypes(
-				"application/epub+zip epub",
-				"application/java-archive jar",
-				"application/javascript js",
-				"application/json json",
-				"application/msword doc",
-				"application/ogg ogx",
-				"application/pdf pdf",
-				"application/rtf rtf",
-				"application/vnd.amazon.ebook azw",
-				"application/vnd.apple.installer+xml mpkg",
-				"application/vnd.mozilla.xul+xml xul",
-				"application/vnd.ms-excel xls",
-				"application/vnd.ms-powerpoint ppt",
-				"application/vnd.oasis.opendocument.presentation odp",
-				"application/vnd.oasis.opendocument.spreadsheet ods",
-				"application/vnd.oasis.opendocument.text odt",
-				"application/vnd.visio vsd",
-				"application/x-7z-compressed 7z",
-				"application/x-abiword abw",
-				"application/x-bzip bz",
-				"application/x-bzip2 bz2",
-				"application/x-csh csh",
-				"application/x-rar-compressed rar",
-				"application/x-sh sh",
-				"application/x-shockwave-flash swf",
-				"application/x-tar tar",
-				"application/xhtml+xml xhtml",
-				"application/xml xml",
-				"application/zip zip",
-				"audio/aac aac",
-				"audio/midi mid midi",
-				"audio/ogg oga",
-				"audio/webm weba",
-				"audio/x-wav wav",
-				"font/ttf ttf",
-				"font/woff woff",
-				"font/woff2 woff2",
-				"image/gif gif",
-				"image/jpeg jpeg jpg",
-				"image/png png",
-				"image/svg+xml svg",
-				"image/tiff tif tiff",
-				"image/webp webp",
-				"image/x-icon ico",
-				"text/calendar ics",
-				"text/css css",
-				"text/csv csv",
-				"text/html htm html",
-				"text/plain txt",
-				"video/3gpp 3gp",
-				"video/3gpp2 3g2",
-				"video/mpeg mpeg",
-				"video/ogg ogv",
-				"video/webm webm",
-				"video/x-msvideo avi"
-			);
+			return addTypes("application/epub+zip epub", "application/java-archive jar", "application/javascript js", "application/json json", "application/msword doc", "application/ogg ogx",
+				"application/pdf pdf", "application/rtf rtf", "application/vnd.amazon.ebook azw", "application/vnd.apple.installer+xml mpkg", "application/vnd.mozilla.xul+xml xul",
+				"application/vnd.ms-excel xls", "application/vnd.ms-powerpoint ppt", "application/vnd.oasis.opendocument.presentation odp", "application/vnd.oasis.opendocument.spreadsheet ods",
+				"application/vnd.oasis.opendocument.text odt", "application/vnd.visio vsd", "application/x-7z-compressed 7z", "application/x-abiword abw", "application/x-bzip bz",
+				"application/x-bzip2 bz2", "application/x-csh csh", "application/x-rar-compressed rar", "application/x-sh sh", "application/x-shockwave-flash swf", "application/x-tar tar",
+				"application/xhtml+xml xhtml", "application/xml xml", "application/zip zip", "audio/aac aac", "audio/midi mid midi", "audio/ogg oga", "audio/webm weba", "audio/x-wav wav",
+				"font/ttf ttf", "font/woff woff", "font/woff2 woff2", "image/gif gif", "image/jpeg jpeg jpg", "image/png png", "image/svg+xml svg", "image/tiff tif tiff", "image/webp webp",
+				"image/x-icon ico", "text/calendar ics", "text/css css", "text/csv csv", "text/html htm html", "text/plain txt", "video/3gpp 3gp", "video/3gpp2 3g2", "video/mpeg mpeg",
+				"video/ogg ogv", "video/webm webm", "video/x-msvideo avi");
 		}
 
 		/**
@@ -283,9 +235,9 @@ public class MimeTypeDetector {
 		return new Builder();
 	}
 
-	private final Map<String, String> extMap;
-	private final Map<String, String> fileMap;
-	private final Cache<String, String> cache;
+	private final Map<String,String> extMap;
+	private final Map<String,String> fileMap;
+	private final Cache<String,String> cache;
 	private final boolean nioContentBasedDetection;
 	private final String defaultType;
 
@@ -299,18 +251,17 @@ public class MimeTypeDetector {
 		this.fileMap = new ConcurrentHashMap<>(builder.fileMap);
 		this.nioContentBasedDetection = builder.nioContentBasedDetection;
 		this.defaultType = builder.defaultType;
-		
+
 		// Create cache for file-based lookups
-		var cacheBuilder = Cache.of(String.class, String.class)
-			.maxSize(builder.cacheSize);
-		
+		var cacheBuilder = Cache.of(String.class, String.class).maxSize(builder.cacheSize);
+
 		if (builder.cacheDisabled) {
 			cacheBuilder.disabled();
 		}
 		if (builder.cacheLogOnExit) {
 			cacheBuilder.logOnExit();
 		}
-		
+
 		this.cache = cacheBuilder.build();
 	}
 
@@ -398,16 +349,12 @@ public class MimeTypeDetector {
 	 *
 	 * @return The number of cached MIME type entries.
 	 */
-	public int getCacheSize() {
-		return cache.size();
-	}
+	public int getCacheSize() { return cache.size(); }
 
 	/**
 	 * Returns the number of cache hits since the cache was created.
 	 *
 	 * @return The number of cache hits.
 	 */
-	public int getCacheHits() {
-		return cache.getCacheHits();
-	}
+	public int getCacheHits() { return cache.getCacheHits(); }
 }

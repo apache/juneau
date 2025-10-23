@@ -43,15 +43,15 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	@Override
 	public void execute() throws Exception {
 
-		Config config = Config.create().name("juneau-server-config.cfg").build();
+		var config = Config.create().name("juneau-server-config.cfg").build();
 
-		String pathStr = config.get("GitServer/pathLocal").orElse(null);
+		var pathStr = config.get("GitServer/pathLocal").orElse(null);
 
-		String git = config.get("GitServer/gitRemote").orElse(null);
+		var git = config.get("GitServer/gitRemote").orElse(null);
 
-		GitControl gitControl = new GitControl(pathStr, git);
+		var gitControl = new GitControl(pathStr, git);
 
-		File path = new File(pathStr);
+		var path = new File(pathStr);
 
 		if (path.isDirectory()) {
 			gitControl.pullFromRepo();
@@ -62,18 +62,18 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 		gitControl.branch(branch);
 		gitControl.pullFromRepo();
 
-		String fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);
-		String fileProjectStr = this.project.concat(EXT);
+		var fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);
+		var fileProjectStr = this.project.concat(EXT);
 
-		File fileDefault = new File(pathStr.concat(BAR).concat(fileDefaultStr));
+		var fileDefault = new File(pathStr.concat(BAR).concat(fileDefaultStr));
 		if (fileDefault.exists()) {
-			String lines = new String(Files.readAllBytes(fileDefault.toPath()));
+			var lines = new String(Files.readAllBytes(fileDefault.toPath()));
 			configs.put(APPLICATION, new ConfigItem(lines));
 		}
 
-		File fileProject = new File(pathStr.concat(BAR).concat(fileProjectStr));
+		var fileProject = new File(pathStr.concat(BAR).concat(fileProjectStr));
 		if (fileProject.exists()) {
-			String linesProject = new String(Files.readAllBytes(fileProject.toPath()));
+			var linesProject = new String(Files.readAllBytes(fileProject.toPath()));
 			configs.put(PROJECT, new ConfigItem(linesProject));
 		}
 	}

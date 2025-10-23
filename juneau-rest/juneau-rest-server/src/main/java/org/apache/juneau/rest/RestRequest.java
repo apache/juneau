@@ -177,8 +177,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Converts an Accept-Language value entry to a Locale.
 	 */
 	private static Locale toLocale(String lang) {
-		String country = "";
-		int i = lang.indexOf('-');
+		var country = "";
+		var i = lang.indexOf('-');
 		if (i > -1) {
 			country = lang.substring(i + 1).trim();
 			lang = lang.substring(0, i).trim();
@@ -604,7 +604,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public String getContextPath() {
-		String cp = context.getUriContext();
+		var cp = context.getUriContext();
 		return cp == null ? inner.getContextPath() : cp;
 	}
 
@@ -846,8 +846,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public Locale getLocale() {
-		Locale best = inner.getLocale();
-		String h = headers.get("Accept-Language").asString().orElse(null);
+		var best = inner.getLocale();
+		var h = headers.get("Accept-Language").asString().orElse(null);
 		if (h != null) {
 			StringRanges sr = StringRanges.of(h);
 			float qValue = 0;
@@ -927,7 +927,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public Optional<Operation> getOperationSwagger() {
 
-		Optional<Swagger> swagger = getSwagger();
+		var swagger = getSwagger();
 		if (! swagger.isPresent())
 			return Optional.empty();
 
@@ -1194,10 +1194,10 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return The request line of this request.
 	 */
 	public RequestLine getRequestLine() {
-		String x = inner.getProtocol();
-		int i = x.indexOf('/');
-		int j = x.indexOf('.', i);
-		ProtocolVersion pv = new ProtocolVersion(x.substring(0, i), parseInt(x.substring(i + 1, j)), parseInt(x.substring(j + 1)));
+		var x = inner.getProtocol();
+		var i = x.indexOf('/');
+		var j = x.indexOf('.', i);
+		var pv = new ProtocolVersion(x.substring(0, i), parseInt(x.substring(i + 1, j)), parseInt(x.substring(j + 1)));
 		return new BasicRequestLine(inner.getMethod(), inner.getRequestURI(), pv);
 	}
 
@@ -1213,8 +1213,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public String getServletPath() {
-		String cp = context.getUriContext();
-		String sp = inner.getServletPath();
+		var cp = context.getUriContext();
+		var sp = inner.getServletPath();
 		return cp == null || ! sp.startsWith(cp) ? sp : sp.substring(cp.length());
 	}
 
@@ -1268,7 +1268,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
 	public Optional<TimeZone> getTimeZone() {
-		String tz = headers.get("Time-Zone").asString().orElse(null);
+		var tz = headers.get("Time-Zone").asString().orElse(null);
 		if (tz != null)
 			return Utils.opt(TimeZone.getTimeZone(tz));
 		return Optional.empty();
@@ -1287,7 +1287,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return A new URI.
 	 */
 	public URI getUri(boolean includeQuery, Map<String,Object> addQueryParams) {
-		String uri = inner.getRequestURI();
+		var uri = inner.getRequestURI();
 		if (includeQuery || addQueryParams != null) {
 			StringBuilder sb = new StringBuilder(uri);
 			RequestQueryParams rq = this.queryParams.copy();
@@ -1490,7 +1490,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		StringBuilder sb = new StringBuilder("\n").append(getRequestLine()).append("\n");
+		var sb = new StringBuilder("\n").append(getRequestLine()).append("\n");
 		sb.append("---Headers---\n");
 		getHeaders().forEach(x -> sb.append("\t").append(x).append("\n"));
 		String m = getMethod();

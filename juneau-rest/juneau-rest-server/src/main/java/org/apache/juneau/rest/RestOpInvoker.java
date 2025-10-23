@@ -53,7 +53,7 @@ public class RestOpInvoker extends MethodInvoker {
 	 * @throws Throwable If an error occurred during either parameter resolution or method invocation.
 	 */
 	public void invoke(RestOpSession opSession) throws Throwable {
-		Object[] args = new Object[opArgs.length];
+		var args = new Object[opArgs.length];
 		for (int i = 0; i < opArgs.length; i++) {
 			ParamInfo pi = inner().getParam(i);
 			try {

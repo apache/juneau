@@ -145,11 +145,11 @@ public class Namespace {
 	 * @return The namespace object.
 	 */
 	public static Namespace of(String name, String uri) {
-		String key = name + ":" + uri;
-		Namespace n = CACHE.get(key);
+		var key = name + ":" + uri;
+		var n = CACHE.get(key);
 		if (n == null) {
 			n = new Namespace(key, name, uri);
-			Namespace n2 = CACHE.putIfAbsent(key, n);
+			var n2 = CACHE.putIfAbsent(key, n);
 			return (n2 == null ? n : n2);
 		}
 		return n;

@@ -56,7 +56,7 @@ public class SpringBeanStore extends BeanStore {
 	@Override
 	public <T> Optional<T> getBean(Class<T> c) {
 		try {
-			Optional<T> o = super.getBean(c);
+			var o = super.getBean(c);
 			if (o.isPresent())
 				return o;
 			if (appContext.isPresent()) {
@@ -71,11 +71,11 @@ public class SpringBeanStore extends BeanStore {
 	@Override
 	public <T> Optional<T> getBean(Class<T> c, String name) {
 		try {
-			Optional<T> o = super.getBean(c, name);
+			var o = super.getBean(c, name);
 			if (o.isPresent())
 				return o;
 			if (appContext.isPresent()) {
-				ApplicationContext ctx = appContext.get();
+				var ctx = appContext.get();
 				if (name != null)
 					return opt(ctx.containsBean(name) ? appContext.get().getBean(name, c) : null);
 				return opt(appContext.get().getBean(c));
@@ -102,7 +102,7 @@ public class SpringBeanStore extends BeanStore {
 	@Override
 	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> c) {
 		try {
-			Stream<BeanStoreEntry<T>> o = super.stream(c);
+			var o = super.stream(c);
 			if (appContext.isPresent())
 				o = Stream.concat(o, appContext.get().getBeansOfType(c).entrySet().stream().map(x -> BeanStoreEntry.create(c, () -> x.getValue(), x.getKey())));
 			return o;

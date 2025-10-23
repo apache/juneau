@@ -366,6 +366,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
 		assertArgNotNull("value", value);
 		security = CollectionUtils.listb(Map.class).to((List)security).addAny(value).build();
@@ -385,6 +386,7 @@ public class Operation extends SwaggerElement {
 	 * 	between the security requirements).
 	 * @return This object.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Operation addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
 		Map<String,List<String>> m = CollectionUtils.map();

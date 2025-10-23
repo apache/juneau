@@ -21,5 +21,13 @@ package org.apache.juneau.common.utils;
  */
 public interface Converter {
 
+	/**
+	 * Converts the specified object to the specified type.
+	 *
+	 * @param <T> The type to convert to.
+	 * @param type The type to convert to.
+	 * @param o The object to convert.
+	 * @return The converted object, or <jk>null</jk> if the conversion is not possible.
+	 */
 	<T> T convertTo(Class<T> type, Object o);
 }

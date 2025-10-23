@@ -51,7 +51,7 @@ public class UonAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Uon> ai, Context.Builder b) {
-			Uon a = ai.inner();
+			var a = ai.inner();
 			if (ArrayUtils.isEmptyArray(a.on()) && ArrayUtils.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(copy(a, vr()));

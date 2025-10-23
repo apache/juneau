@@ -103,6 +103,7 @@ public class AsciiSet {
 	public static AsciiSet.Builder create() {
 		return new Builder();
 	}
+
 	/**
 	 * Creates an ASCII set with the specified characters.
 	 *
@@ -112,6 +113,7 @@ public class AsciiSet {
 	public static AsciiSet of(String chars) {
 		return new Builder().chars(chars).build();
 	}
+
 	private final boolean[] store;
 
 	AsciiSet(boolean[] store) {

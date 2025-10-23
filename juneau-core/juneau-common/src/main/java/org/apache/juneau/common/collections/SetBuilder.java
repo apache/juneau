@@ -64,6 +64,15 @@ public class SetBuilder<E> {
 		this.elementType = elementType;
 	}
 
+	/**
+	 * Specifies the set to append to.
+	 *
+	 * <p>
+	 * If not specified, uses a new {@link LinkedHashSet}.
+	 *
+	 * @param set The set to append to.
+	 * @return This object.
+	 */
 	public SetBuilder<E> to(Set<E> set) {
 		this.set = set;
 		return this;
@@ -161,15 +170,15 @@ public class SetBuilder<E> {
 		return this;
 	}
 
-    /**
-     * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
-     *
-     * @param values Converters to register. Ignored if {@code null}.
-     * @return This object.
-     */
-    public SetBuilder<E> converters(Converter...values) {
-    	if (values.length == 0)
-    		return this;
+	/**
+	 * Registers value converters that can adapt incoming values in {@link #addAny(Object...)}.
+	 *
+	 * @param values Converters to register. Ignored if {@code null}.
+	 * @return This object.
+	 */
+	public SetBuilder<E> converters(Converter...values) {
+		if (values.length == 0)
+			return this;
 		if (converters == null)
 			converters = new ArrayList<>();
 		converters.addAll(Arrays.asList(values));
@@ -204,15 +213,15 @@ public class SetBuilder<E> {
 	 *
 	 * @return A set conforming to the settings on this builder.
 	 */
-    /**
-     * Builds the set.
-     *
-     * <p>
-     * Applies sorting/unmodifiable/sparse options.
-     *
-     * @return The built set or {@code null} if {@link #sparse()} is set and the set is empty.
-     */
-    public Set<E> build() {
+	/**
+	 * Builds the set.
+	 *
+	 * <p>
+	 * Applies sorting/unmodifiable/sparse options.
+	 *
+	 * @return The built set or {@code null} if {@link #sparse()} is set and the set is empty.
+	 */
+	public Set<E> build() {
 		if (sparse) {
 			if (set != null && set.isEmpty())
 				set = null;

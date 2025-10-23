@@ -139,13 +139,13 @@ public class RestResponse extends HttpServletResponseWrapper {
 		this.opContext = opContext;
 		responseBeanMeta = opContext.getResponseMeta();
 
-		RestContext context = session.getContext();
+		var context = session.getContext();
 
 		try {
-			String passThroughHeaders = request.getHeaderParam("x-response-headers").orElse(null);
+			var passThroughHeaders = request.getHeaderParam("x-response-headers").orElse(null);
 			if (passThroughHeaders != null) {
-				JsonMap m = context.getPartParser().getPartSession().parse(HEADER, null, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
-				for (Map.Entry<String,Object> e : m.entrySet())
+				var m = context.getPartParser().getPartSession().parse(HEADER, null, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
+				for (var e : m.entrySet())
 					addHeader(e.getKey(), resolveUris(e.getValue()));
 			}
 		} catch (Exception e1) {
@@ -153,8 +153,8 @@ public class RestResponse extends HttpServletResponseWrapper {
 		}
 
 		// Find acceptable charset
-		String h = request.getHeaderParam("accept-charset").orElse(null);
-		Charset charset = null;
+		var h = request.getHeaderParam("accept-charset").orElse(null);
+		var charset = (Charset)null;
 		if (h == null)
 			charset = opContext.getDefaultCharset();
 		else
@@ -205,11 +205,11 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (header == null) {
 			// Do nothing.
 		} else if (header instanceof BasicUriHeader) {
-			BasicUriHeader x = (BasicUriHeader)header;
+			var x = (BasicUriHeader)header;
 			addHeader(x.getName(), resolveUris(x.getValue()));
 		} else if (header instanceof SerializedHeader) {
-			SerializedHeader x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
-			addHeader(x.getName(), resolveUris(x.getValue()));
+			var x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
+				addHeader(x.getName(), resolveUris(x.getValue()));
 		} else {
 			addHeader(header.getName(), header.getValue());
 		}
@@ -276,7 +276,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return The request character encoding converted to a {@link Charset}.
 	 */
 	public Charset getCharset() {
-		String s = getCharacterEncoding();
+		var s = getCharacterEncoding();
 		return s == null ? null : Charset.forName(s);
 	}
 
@@ -317,8 +317,8 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (responseBeanMeta != null)
 			contentSchema = Utils.opt(responseBeanMeta.getSchema());
 		else {
-			ResponseBeanMeta rbm = opContext.getResponseBeanMeta(getContent(Object.class));
-			if (rbm != null)
+			var rbm = opContext.getResponseBeanMeta(getContent(Object.class));
+				if (rbm != null)
 				contentSchema = Utils.opt(rbm.getSchema());
 			else
 				contentSchema = Utils.opte();
@@ -379,11 +379,11 @@ public class RestResponse extends HttpServletResponseWrapper {
 	public FinishableServletOutputStream getNegotiatedOutputStream() throws NotAcceptable, IOException {
 		if (os == null) {
 			Encoder encoder = null;
-			EncoderSet encoders = request.getOpContext().getEncoders();
-
-			String ae = request.getHeaderParam("Accept-Encoding").orElse(null);
+			var encoders = request.getOpContext().getEncoders();
+	
+			var ae = request.getHeaderParam("Accept-Encoding").orElse(null);
 			if (! (ae == null || ae.isEmpty())) {
-				EncoderMatch match = encoders.getEncoderMatch(ae);
+				var match = encoders.getEncoderMatch(ae);
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.
 					if (ae.matches(".*(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0).*")) {
@@ -391,14 +391,14 @@ public class RestResponse extends HttpServletResponseWrapper {
 					}
 				} else {
 					encoder = match.getEncoder();
-					String encoding = match.getEncoding().toString();
+					var encoding = match.getEncoding().toString();
 
 					// Some clients don't recognize identity as an encoding, so don't set it.
 					if (! encoding.equals("identity"))
 						setHeader("content-encoding", encoding);
+					}
 				}
-			}
-			ServletOutputStream sos = getOutputStream();
+			var sos = getOutputStream();
 			os = new FinishableServletOutputStream(encoder == null ? sos : encoder.getOutputStream(sos));
 		}
 		return os;
@@ -665,10 +665,10 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (header == null) {
 			// Do nothing.
 		} else if (header instanceof BasicUriHeader) {
-			BasicUriHeader x = (BasicUriHeader)header;
+			var x = (BasicUriHeader)header;
 			setHeader(x.getName(), resolveUris(x.getValue()));
 		} else if (header instanceof SerializedHeader) {
-			SerializedHeader x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
+			var x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
 			String v = x.getValue();
 			if (v != null && v.indexOf("://") != -1)
 				v = resolveUris(v);

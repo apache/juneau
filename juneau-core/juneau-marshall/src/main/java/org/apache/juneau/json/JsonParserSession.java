@@ -216,7 +216,7 @@ public class JsonParserSession extends ReaderParserSession {
 			return (T)opt(parseAnything(eType.getElementType(), r, outer, pMeta));
 
 		setCurrentClass(sType);
-		String wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
+		var wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
 
 		Object o = null;
 
@@ -276,10 +276,10 @@ public class JsonParserSession extends ReaderParserSession {
 				o = parseIntoCollection2(r, l, sType, pMeta);
 			}
 		} else if (builder != null) {
-			BeanMap m = toBeanMap(builder.create(this, eType));
+			var m = toBeanMap(builder.create(this, eType));
 			o = builder.build(this, parseIntoBeanMap2(r, m).getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
-			BeanMap m = newBeanMap(outer, sType.getInnerClass());
+			var m = newBeanMap(outer, sType.getInnerClass());
 			o = parseIntoBeanMap2(r, m).getBean();
 		} else if (sType.canCreateNewInstanceFromString(outer) && (c == '\'' || c == '"')) {
 			o = sType.newInstanceFromString(outer, parseString(r));
@@ -352,7 +352,7 @@ public class JsonParserSession extends ReaderParserSession {
 			c = r.read();
 			if (! VALID_BARE_CHARS.contains(c)) {
 				r.unread();
-				String s = r.getMarked().intern();
+				var s = r.getMarked().intern();
 				return s.equals("null") ? null : s;
 			}
 		}
@@ -368,7 +368,7 @@ public class JsonParserSession extends ReaderParserSession {
 		// S5: Looking for , or }
 
 		var state = S1;
-		String currAttr = "";
+		var currAttr = "";
 		int c = 0;
 		mark();
 		try {
@@ -525,7 +525,7 @@ public class JsonParserSession extends ReaderParserSession {
 
 		skipCommentsAndSpace(r);
 		var state = S1;
-		String currAttr = null;
+		var currAttr = (String)null;
 		int c = 0;
 		while (c != -1) {
 			c = r.read();

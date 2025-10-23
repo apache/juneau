@@ -94,7 +94,7 @@ public class App {
 	 */
 	@Bean
 	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
-		FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
+		var registration = new FilterRegistrationBean<>(filter);
 		registration.setEnabled(false);
 		return registration;
 	}

@@ -21,16 +21,12 @@ import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
-import java.io.Console;
-import java.net.*;
 import java.nio.file.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.jar.*;
 import java.util.logging.*;
-import java.util.logging.Formatter;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.reflect.*;
@@ -575,21 +571,21 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Try to get the manifest file if it wasn't already set.
 		// --------------------------------------------------------------------------------
-		ManifestFile manifest = builder.manifest;
+		var manifest = builder.manifest;
 		if (manifest == null) {
-			Manifest m = new Manifest();
+			var m = new Manifest();
 
 			// If running within an eclipse workspace, need to get it from the file system.
-			File f = resolveFile("META-INF/MANIFEST.MF");
+			var f = resolveFile("META-INF/MANIFEST.MF");
 			if (f.exists() && f.canRead()) {
-				try (FileInputStream fis = new FileInputStream(f)) {
+				try (var fis = new FileInputStream(f)) {
 					m.read(fis);
 				} catch (IOException e) {
 					throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f), e);
 				}
 			} else {
 				// Otherwise, read from manifest file in the jar file containing the main class.
-				URL url = getClass().getResource("META-INF/MANIFEST.MF");
+				var url = getClass().getResource("META-INF/MANIFEST.MF");
 				if (url != null) {
 					try {
 						m.read(url.openStream());
@@ -606,11 +602,11 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Try to resolve the configuration if not specified.
 		// --------------------------------------------------------------------------------
-		Config config = builder.config;
-		Config.Builder configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(MemoryStore.DEFAULT);
+		var config = builder.config;
+		var configBuilder = builder.configBuilder.varResolver(builder.varResolver.build()).store(MemoryStore.DEFAULT);
 		if (config == null) {
-			ConfigStore store = builder.configStore;
-			FileStore cfs = workingDir == null ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
+			var store = builder.configStore;
+			var cfs = workingDir == null ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
 			for (String name : getCandidateConfigNames()) {
 				if (store != null) {
 					if (store.exists(name)) {
@@ -640,7 +636,7 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		this.consoleEnabled = Utils.firstNonNull(builder.consoleEnabled, config.get("Console/enabled").asBoolean().orElse(false));
 		if (consoleEnabled) {
-			Console c = System.console();
+			var c = System.console();
 			this.consoleReader = Utils.firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
 			this.consoleWriter = Utils.firstNonNull(builder.consoleWriter, c == null ? new PrintWriter(System.out, true) : c.writer());
 
@@ -648,9 +644,8 @@ public class Microservice implements ConfigEventListener {
 				consoleCommandMap.put(cc.getName(), cc);
 			}
 			for (String s : config.get("Console/commands").asStringArray().orElse(new String[0])) {
-				ConsoleCommand cc;
 				try {
-					cc = (ConsoleCommand)Class.forName(s).getDeclaredConstructor().newInstance();
+					var cc = (ConsoleCommand)Class.forName(s).getDeclaredConstructor().newInstance();
 					consoleCommandMap.put(cc.getName(), cc);
 				} catch (Exception e) {
 					getConsoleWriter().println("Could not create console command '" + s + "', " + e.getLocalizedMessage());
@@ -659,8 +654,8 @@ public class Microservice implements ConfigEventListener {
 			consoleThread = new Thread("ConsoleThread") {
 				@Override /* Overridden from Thread */
 				public void run() {
-					Scanner in = getConsoleReader();
-					PrintWriter out = getConsoleWriter();
+					var in = getConsoleReader();
+					var out = getConsoleWriter();
 
 					out.println(messages.getString("ListOfAvailableCommands"));
 					for (ConsoleCommand cc : new TreeMap<>(getConsoleCommands()).values())
@@ -668,10 +663,9 @@ public class Microservice implements ConfigEventListener {
 					out.println();
 
 					while (true) {
-						String line = null;
 						out.append("> ").flush();
-						line = in.nextLine();
-						Args args = new Args(line);
+						var line = in.nextLine();
+						var args = new Args(line);
 						if (! args.isEmpty())
 							executeCommand(args, in, out);
 					}
@@ -699,7 +693,7 @@ public class Microservice implements ConfigEventListener {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void err(Messages mb, String messageKey, Object...args) {
-		String msg = mb.getString(messageKey, args);
+		var msg = mb.getString(messageKey, args);
 		if (consoleEnabled)
 			System.err.println(mb.getString(messageKey, args));  // NOT DEBUG
 		log(Level.SEVERE, msg);
@@ -716,7 +710,7 @@ public class Microservice implements ConfigEventListener {
 	 * @return <jk>true</jk> if the command returned <jk>true</jk> meaning the console thread should exit.
 	 */
 	public boolean executeCommand(Args args, Scanner in, PrintWriter out) {
-		ConsoleCommand cc = consoleCommandMap.get(args.getArg(0));
+		var cc = consoleCommandMap.get(args.getArg(0));
 		if (cc == null) {
 			out.println(messages.getString("UnknownCommand"));
 		} else {
@@ -741,13 +735,13 @@ public class Microservice implements ConfigEventListener {
 	 * @return The command output.
 	 */
 	public String executeCommand(String command, String input, Object...args) {
-		StringWriter sw = new StringWriter();
-		List<String> l = list();
+		var sw = new StringWriter();
+		var l = list();
 		l.add(command);
 		for (Object a : args)
 			l.add(Utils.s(a));
-		Args args2 = new Args(l.toArray(new String[l.size()]));
-		try (Scanner in = new Scanner(input); PrintWriter out = new PrintWriter(sw)) {
+		var args2 = new Args(l.toArray(new String[l.size()]));
+		try (var in = new Scanner(input); var out = new PrintWriter(sw)) {
 			executeCommand(args2, in, out);
 		}
 		return sw.toString();
@@ -947,7 +941,7 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Set system properties.
 		// --------------------------------------------------------------------------------
-		Set<String> spKeys = config.getKeys("SystemProperties");
+		var spKeys = config.getKeys("SystemProperties");
 		if (spKeys != null)
 			for (String key : spKeys)
 				System.setProperty(key, config.get("SystemProperties/" + key).orElse(null));
@@ -956,44 +950,44 @@ public class Microservice implements ConfigEventListener {
 		// Initialize logging.
 		// --------------------------------------------------------------------------------
 		this.logger = builder.logger;
-		LogConfig logConfig = builder.logConfig != null ? builder.logConfig : new LogConfig();
+		var logConfig = builder.logConfig != null ? builder.logConfig : new LogConfig();
 		if (this.logger == null) {
 			LogManager.getLogManager().reset();
 			this.logger = Logger.getLogger("");
-			String logFile = Utils.firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
+			var logFile = Utils.firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
 
 			if (isNotEmpty(logFile)) {
-				String logDir = Utils.firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
-				File logDirFile = resolveFile(logDir);
+				var logDir = Utils.firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
+				var logDirFile = resolveFile(logDir);
 				mkdirs(logDirFile, false);
 				logDir = logDirFile.getAbsolutePath();
 				System.setProperty("juneau.logDir", logDir);
 
-				boolean append = Utils.firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
-				int limit = Utils.firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024 * 1024));
-				int count = Utils.firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
+				var append = Utils.firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
+				var limit = Utils.firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024 * 1024));
+				var count = Utils.firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
 
-				FileHandler fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
+				var fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
 
-				Formatter f = logConfig.formatter;
+				var f = logConfig.formatter;
 				if (f == null) {
-					String format = config.get("Logging/format").orElse("[{date} {level}] {msg}%n");
-					String dateFormat = config.get("Logging/dateFormat").orElse("yyyy.MM.dd hh:mm:ss");
-					boolean useStackTraceHashes = config.get("Logging/useStackTraceHashes").asBoolean().orElse(false);
+					var format = config.get("Logging/format").orElse("[{date} {level}] {msg}%n");
+					var dateFormat = config.get("Logging/dateFormat").orElse("yyyy.MM.dd hh:mm:ss");
+					var useStackTraceHashes = config.get("Logging/useStackTraceHashes").asBoolean().orElse(false);
 					f = new LogEntryFormatter(format, dateFormat, useStackTraceHashes);
 				}
 				fh.setFormatter(f);
 				fh.setLevel(Utils.firstNonNull(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
 				logger.addHandler(fh);
 
-				ConsoleHandler ch = new ConsoleHandler();
+				var ch = new ConsoleHandler();
 				ch.setLevel(Utils.firstNonNull(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
 				ch.setFormatter(f);
 				logger.addHandler(ch);
 			}
 		}
 
-		JsonMap loggerLevels = config.get("Logging/levels").as(JsonMap.class).orElseGet(JsonMap::new);
+		var loggerLevels = config.get("Logging/levels").as(JsonMap.class).orElseGet(JsonMap::new);
 		for (String l : loggerLevels.keySet())
 			Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
 		for (String l : logConfig.levels.keySet())
@@ -1040,7 +1034,7 @@ public class Microservice implements ConfigEventListener {
 	 */
 	@SuppressWarnings("resource")
 	public void out(Messages mb, String messageKey, Object...args) {
-		String msg = mb.getString(messageKey, args);
+		var msg = mb.getString(messageKey, args);
 		if (consoleEnabled)
 			getConsoleWriter().println(msg);
 		log(Level.INFO, msg);
@@ -1121,11 +1115,11 @@ public class Microservice implements ConfigEventListener {
 		if (configName != null)
 			return Collections.singletonList(configName);
 
-		Args args = getArgs();
+		var args = getArgs();
 		if (getArgs().hasArg("configFile"))
 			return Collections.singletonList(args.getArg("configFile"));
 
-		ManifestFile manifest = getManifest();
+		var manifest = getManifest();
 		if (manifest.containsKey("Main-Config"))
 			return Collections.singletonList(manifest.getString("Main-Config"));
 
@@ -1160,7 +1154,7 @@ public class Microservice implements ConfigEventListener {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	protected void log(Level level, String message, Object...args) {
-		String msg = args.length == 0 ? message : MessageFormat.format(message, args);
+		var msg = args.length == 0 ? message : MessageFormat.format(message, args);
 		getLogger().log(level, msg);
 	}
 

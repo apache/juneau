@@ -57,7 +57,7 @@ public abstract class BasicSpringRestServlet extends SpringRestServlet implement
 
 	@Override /* Overridden from BasicRestConfig */
 	public HttpResource getFavIcon() {
-		String favIcon = getContext().getConfig().get("REST/favicon").orElse("images/juneau.png");
+		var favIcon = getContext().getConfig().get("REST/favicon").orElse("images/juneau.png");
 		return getHtdoc(favIcon, null);
 	}
 

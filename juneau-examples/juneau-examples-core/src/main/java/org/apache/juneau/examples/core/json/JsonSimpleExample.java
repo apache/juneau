@@ -44,38 +44,38 @@ public class JsonSimpleExample {
 		// Get a reference to a serializer - converting POJO to flat format
 		// Produces
 		// {"name":"name","id":"id"}
-		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT;
+		var jsonSerializer = JsonSerializer.DEFAULT;
 		// Get a reference to a parser - converts that flat format back into the POJO
-		JsonParser jsonParser = JsonParser.DEFAULT;
+		var jsonParser = JsonParser.DEFAULT;
 
-		Pojo pojo = new Pojo("id", "name");
+		var pojo = new Pojo("id", "name");
 
-		String flat = jsonSerializer.serialize(pojo);
+		var flat = jsonSerializer.serialize(pojo);
 		// Print out the created POJO in JSON format.
 		System.out.println(flat);
 
-		Pojo parse = jsonParser.parse(flat, Pojo.class);
+		var parse = jsonParser.parse(flat, Pojo.class);
 
 		assert parse.getId().equals(pojo.getId());
 		assert parse.getName().equals(pojo.getName());
 
 		// Produces
 		// {name:'name',id:'id'}
-		String json5 = Json5Serializer.DEFAULT.serialize(pojo);
+		var json5 = Json5Serializer.DEFAULT.serialize(pojo);
 		System.out.println(json5);
 
 		// Parse a JSON object (creates a generic JsonMap).
-		String json = "{name:'John Smith',age:21}";
+		var json = "{name:'John Smith',age:21}";
 		Map m1 = jsonParser.parse(json, Map.class);
 
 		// Parse a JSON string.
 		json = "'foobar'";
-		String s2 = jsonParser.parse(json, String.class);
+		var s2 = jsonParser.parse(json, String.class);
 
 		// Parse a JSON number as a Long or Float.
 		json = "123";
-		Long l3 = jsonParser.parse(json, Long.class);
-		Float f3 = jsonParser.parse(json, Float.class);
+		var l3 = jsonParser.parse(json, Long.class);
+		var f3 = jsonParser.parse(json, Float.class);
 
 		// The object above can be parsed thanks to the @Beanc(properties = id,name) annotation on Pojo
 		// Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.

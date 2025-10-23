@@ -69,7 +69,7 @@ public class HelloWorldResource extends BasicRestObject {
 	 */
 	@RestGet(path = "/*", summary = "Responds with \"Hello world!\"")
 	public String sayHello() {
-		String message = this.message;
+		var message = this.message;
 		if (messageProvider != null && messageProvider.isPresent())
 			message = messageProvider.get().get();
 		return message;

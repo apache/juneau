@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.examples.bean.atom;
 
-import org.apache.juneau.bean.atom.*;
 import org.apache.juneau.xml.*;
 
 /**
@@ -36,11 +35,11 @@ public class AtomXmlExample {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception {
 
-		Feed feed = AtomFeed.getAtomFeed();
+		var feed = AtomFeed.getAtomFeed();
 
 		// Example with no namespaces
 		// Create a serializer with readable output, no namespaces yet.
-		XmlSerializer s = XmlSerializer.create().sq().ws().build();
+		var s = XmlSerializer.create().sq().ws().build();
 
 		//Produces
 		/**
@@ -74,7 +73,7 @@ public class AtomXmlExample {
 		 *</feed>
 		 */
 		//Serialize to ATOM/XML
-		String atomXml = s.serialize(feed);
+		var atomXml = s.serialize(feed);
 
 		/**
 		 * Produces
@@ -106,7 +105,7 @@ public class AtomXmlExample {
 		 * </feed>
 		 */
 		// Create a serializer with readable output, no namespaces yet.
-		XmlSerializer ns = XmlSerializer.create().sq().ws().build();
+		var ns = XmlSerializer.create().sq().ws().build();
 
 		// Serialize to ATOM/XML
 		atomXml = ns.serialize(feed);

@@ -154,17 +154,17 @@ public class UonWriter extends SerializerWriter {
 		if (o == null)
 			return append("null");
 
-		String s = session.toString(o);
+		var s = session.toString(o);
 
-		boolean needsQuotes = (! plainTextParams) && UonUtils.needsQuotes(s);
+		var needsQuotes = (! plainTextParams) && UonUtils.needsQuotes(s);
 
-		AsciiSet unenc = (isTopAttrName ? unencodedCharsAttrName : unencodedChars);
-		AsciiSet esc = plainTextParams ? noChars : escapedChars;
+		var unenc = (isTopAttrName ? unencodedCharsAttrName : unencodedChars);
+		var esc = plainTextParams ? noChars : escapedChars;
 
 		if (needsQuotes)
 			w(quoteChar);
 		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
+			var c = s.charAt(i);
 			if (esc.contains(c))
 				w('~');
 			if ((! encodeChars) || unenc.contains(c))
@@ -173,18 +173,21 @@ public class UonWriter extends SerializerWriter {
 				if (c == ' ')
 					w('+');
 				else {
-					int p = s.codePointAt(i);
+					var p = s.codePointAt(i);
 					if (p < 0x0080)
 						appendHex(p);
 					else if (p < 0x0800) {
-						int p1 = p >>> 6;
+						var p1 = p >>> 6;
 						appendHex(p1 + 192).appendHex((p & 63) + 128);
 					} else if (p < 0x10000) {
-						int p1 = p >>> 6, p2 = p1 >>> 6;
+						var p1 = p >>> 6;
+						var p2 = p1 >>> 6;
 						appendHex(p2 + 224).appendHex((p1 & 63) + 128).appendHex((p & 63) + 128);
 					} else {
 						i++;  // Two-byte codepoint...skip past surrogate pair lower byte.
-						int p1 = p >>> 6, p2 = p1 >>> 6, p3 = p2 >>> 6;
+						var p1 = p >>> 6;
+						var p2 = p1 >>> 6;
+						var p3 = p2 >>> 6;
 						appendHex(p3 + 240).appendHex((p2 & 63) + 128).appendHex((p1 & 63) + 128).appendHex((p & 63) + 128);
 					}
 				}

@@ -71,10 +71,10 @@ public class PathReaderBuilder {
 	 * @throws IOException if an I/O error occurs opening the path
 	 */
 	public Reader build() throws IOException {
-		if (!allowNoFile && path == null) {
+		if (! allowNoFile && path == null) {
 			throw new IllegalStateException("No path");
 		}
-		if (!allowNoFile && !Files.exists(path)) {
+		if (! allowNoFile && ! Files.exists(path)) {
 			throw new NoSuchFileException(path.toString());
 		}
 		return allowNoFile ? new StringReader("") : Files.newBufferedReader(path, ofNullable(charset).orElse(Charset.defaultCharset()));

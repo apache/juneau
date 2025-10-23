@@ -128,7 +128,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			} else if (x instanceof SerializedPart) {
 				value = ((SerializedPart)x).copyWith(getPartSerializerSession(), null).getValue();
 			} else {
-				String v = x.getValue();
+				var v = x.getValue();
 				value = (isEmpty(v) && skipIfEmpty) ? null : v;
 			}
 		}
@@ -1639,7 +1639,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest queryCustom(Object value) {
 		try {
-			String q = null;
+			var q = (String)null;
 			if (value instanceof Reader)
 				q = read((Reader)value);
 			else if (value instanceof InputStream)

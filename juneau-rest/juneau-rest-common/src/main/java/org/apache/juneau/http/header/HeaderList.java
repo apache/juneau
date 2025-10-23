@@ -116,7 +116,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return A new instance.
 	 */
 	public static HeaderList ofPairs(String...pairs) {
-		HeaderList x = new HeaderList();
+		var x = new HeaderList();
 		if (pairs == null)
 			pairs = new String[0];
 		if (pairs.length % 2 != 0)
@@ -362,7 +362,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		if (rest == null)
 			return Utils.opt(first);
 
-		CharArrayBuffer sb = new CharArrayBuffer(128);
+		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
 		for (Header element : rest) {
 			sb.append(", ");
@@ -420,7 +420,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		if (rest == null)
 			return Utils.opt(HeaderBeanMeta.of(type).construct(name, first.getValue()));
 
-		CharArrayBuffer sb = new CharArrayBuffer(128);
+		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
 		for (Header element : rest) {
 			sb.append(", ");
@@ -477,7 +477,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public Optional<Header> getFirst(String name) {
 		for (int i = 0; i < size(); i++) {
-			Header x = get(i);
+			var x = get(i);
 			if (eq(x.getName(), name))
 				return Utils.opt(x);
 		}
@@ -495,7 +495,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public Optional<Header> getLast(String name) {
 		for (int i = size() - 1; i >= 0; i--) {
-			Header x = get(i);
+			var x = get(i);
 			if (eq(x.getName(), name))
 				return Utils.opt(x);
 		}
@@ -728,7 +728,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		if (value != null) {
 			boolean replaced = false;
 			for (int i = 0, j = size(); i < j; i++) {
-				Header x = get(i);
+				var x = get(i);
 				if (eq(x.getName(), value.getName())) {
 					if (replaced) {
 						remove(i);
@@ -777,7 +777,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			for (Header h : values) {
 				if (h != null) {
 					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
-						Header x = get(i2);
+						var x = get(i2);
 						if (eq(x.getName(), h.getName())) {
 							remove(i2);
 							j2--;
@@ -902,10 +902,10 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return A new header.
 	 */
 	private Header createPart(String name, Object value) {
-		boolean isResolving = varResolver != null;
+		var isResolving = varResolver != null;
 
 		if (value instanceof Supplier<?>) {
-			Supplier<?> value2 = (Supplier<?>)value;
+			var value2 = (Supplier<?>)value;
 			return isResolving ? new BasicHeader(name, resolver(value2)) : new BasicHeader(name, value2);
 		}
 		return isResolving ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);

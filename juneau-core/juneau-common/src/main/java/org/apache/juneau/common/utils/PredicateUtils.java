@@ -23,64 +23,63 @@ import java.util.function.*;
  */
 public final class PredicateUtils {
 
-    private PredicateUtils() {}
+	private PredicateUtils() {}
 
-    /**
-     * Returns a predicate that is the short-circuiting AND of the provided predicates.
-     *
-     * <p>
-     * {@code null} entries are ignored. If all entries are {@code null} or no predicates are provided,
-     * the returned predicate always returns {@code true}.
-     *
-     * @param <T> The input type of the predicate.
-     * @param predicates The predicates to combine.
-     * @return A composed predicate representing the logical AND.
-     */
-    @SafeVarargs
-    public static <T> Predicate<T> and(Predicate<T>...predicates) {
-        Predicate<T> result = t -> true;
-        if (predicates != null) {
-            for (Predicate<T> p : predicates) {
-                if (p != null)
-                    result = result.and(p);
-            }
-        }
-        return result;
-    }
+	/**
+	 * Returns a predicate that is the short-circuiting AND of the provided predicates.
+	 *
+	 * <p>
+	 * {@code null} entries are ignored. If all entries are {@code null} or no predicates are provided,
+	 * the returned predicate always returns {@code true}.
+	 *
+	 * @param <T> The input type of the predicate.
+	 * @param predicates The predicates to combine.
+	 * @return A composed predicate representing the logical AND.
+	 */
+	@SafeVarargs
+	public static <T> Predicate<T> and(Predicate<T>...predicates) {
+		Predicate<T> result = t -> true;
+		if (predicates != null) {
+			for (Predicate<T> p : predicates) {
+				if (p != null)
+					result = result.and(p);
+			}
+		}
+		return result;
+	}
 
-    /**
-     * Returns a predicate that is the short-circuiting OR of the provided predicates.
-     *
-     * <p>
-     * {@code null} entries are ignored. If all entries are {@code null} or no predicates are provided,
-     * the returned predicate always returns {@code false}.
-     *
-     * @param <T> The input type of the predicate.
-     * @param predicates The predicates to combine.
-     * @return A composed predicate representing the logical OR.
-     */
-    @SafeVarargs
-    public static <T> Predicate<T> or(Predicate<T>...predicates) {
-        Predicate<T> result = t -> false;
-        if (predicates != null) {
-            for (Predicate<T> p : predicates) {
-                if (p != null)
-                    result = result.or(p);
-            }
-        }
-        return result;
-    }
+	/**
+	 * Returns a predicate that is the short-circuiting OR of the provided predicates.
+	 *
+	 * <p>
+	 * {@code null} entries are ignored. If all entries are {@code null} or no predicates are provided,
+	 * the returned predicate always returns {@code false}.
+	 *
+	 * @param <T> The input type of the predicate.
+	 * @param predicates The predicates to combine.
+	 * @return A composed predicate representing the logical OR.
+	 */
+	@SafeVarargs
+	public static <T> Predicate<T> or(Predicate<T>...predicates) {
+		Predicate<T> result = t -> false;
+		if (predicates != null) {
+			for (Predicate<T> p : predicates) {
+				if (p != null)
+					result = result.or(p);
+			}
+		}
+		return result;
+	}
 
-    /**
-     * Returns a predicate that tests whether the input value is an instance of the specified type.
-     *
-     * @param <T> The target type to check for.
-     * @param type The class object representing the target type.
-     * @return A predicate that returns {@code true} if the value is an instance of {@code type}.
-     */
-    public static Predicate<?> isType(Class<?> type) {
-        return v -> type != null && type.isInstance(v);
-    }
+	/**
+	 * Returns a predicate that tests whether the input value is an instance of the specified type.
+	 *
+	 * @param type The class object representing the target type.
+	 * @return A predicate that returns {@code true} if the value is an instance of {@code type}.
+	 */
+	public static Predicate<?> isType(Class<?> type) {
+		return v -> type != null && type.isInstance(v);
+	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.

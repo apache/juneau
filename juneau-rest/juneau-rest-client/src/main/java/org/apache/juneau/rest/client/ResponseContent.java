@@ -242,7 +242,7 @@ public class ResponseContent implements HttpEntity {
 				}
 			}
 
-			String ct = firstNonEmpty(response.getHeader("Content-Type").orElse("text/plain"));
+			var ct = firstNonEmpty(response.getHeader("Content-Type").orElse("text/plain"));
 
 			if (parser == null)
 				parser = client.getMatchingParser(ct);
@@ -755,8 +755,8 @@ public class ResponseContent implements HttpEntity {
 	public Reader asReader() throws IOException {
 
 		// Figure out what the charset of the response is.
-		String cs = null;
-		String ct = getContentType().orElse(null);
+		var cs = (String)null;
+		var ct = getContentType().orElse(null);
 
 		// First look for "charset=" in Content-Type header of response.
 		if (ct != null)

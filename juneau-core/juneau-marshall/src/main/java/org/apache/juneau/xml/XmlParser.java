@@ -804,7 +804,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
-		XmlBeanMeta m = xmlBeanMetas.get(bm);
+		var m = xmlBeanMetas.get(bm);
 		if (m == null) {
 			m = new XmlBeanMeta(bm, this);
 			xmlBeanMetas.put(bm, m);
@@ -814,9 +814,9 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
-		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
+		var m = xmlBeanPropertyMetas.get(bpm);
 		if (m == null) {
-			BeanPropertyMeta dbpm = bpm.getDelegateFor();
+			var dbpm = bpm.getDelegateFor();
 			m = new XmlBeanPropertyMeta(dbpm, this);
 			xmlBeanPropertyMetas.put(bpm, m);
 		}
@@ -825,7 +825,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
-		XmlClassMeta m = xmlClassMetas.get(cm);
+		var m = xmlClassMetas.get(cm);
 		if (m == null) {
 			m = new XmlClassMeta(cm, this);
 			xmlClassMetas.put(cm, m);

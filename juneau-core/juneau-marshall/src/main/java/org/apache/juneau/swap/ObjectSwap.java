@@ -121,7 +121,7 @@ public abstract class ObjectSwap<T,S> {
 	 * Constructor.
 	 */
 	protected ObjectSwap() {
-		ClassInfo ci = ClassInfo.of(this.getClass());
+		var ci = ClassInfo.of(this.getClass());
 		normalClass = (Class<T>)ci.getParameterType(0, ObjectSwap.class);
 		swapClass = ci.getParameterType(1, ObjectSwap.class);
 		normalClassInfo = ClassInfo.of(normalClass);
@@ -267,7 +267,7 @@ public abstract class ObjectSwap<T,S> {
 		if (forMediaTypes == null)
 			return 1;
 		int i = 0;
-		MediaType mt = session.getMediaType();
+		var mt = session.getMediaType();
 		if (mt == null)
 			return 0;
 		if (forMediaTypes != null)

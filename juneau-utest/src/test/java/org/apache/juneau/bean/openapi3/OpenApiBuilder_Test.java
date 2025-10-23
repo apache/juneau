@@ -18,8 +18,6 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.openapi3.OpenApiBuilder.*;
-import static org.apache.juneau.common.utils.Utils.*;
-
 import java.net.*;
 
 import org.apache.juneau.*;

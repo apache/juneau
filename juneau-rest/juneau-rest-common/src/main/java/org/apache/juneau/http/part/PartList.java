@@ -103,7 +103,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return A new instance.
 	 */
 	public static PartList ofPairs(String...pairs) {
-		PartList x = new PartList();
+		var x = new PartList();
 		if (pairs == null)
 			pairs = new String[0];
 		if (pairs.length % 2 != 0)
@@ -347,7 +347,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		if (rest == null)
 			return Utils.opt(first);
 
-		CharArrayBuffer sb = new CharArrayBuffer(128);
+		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
 		for (NameValuePair element : rest) {
 			sb.append(',');
@@ -405,7 +405,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		if (rest == null)
 			return opt(PartBeanMeta.of(type).construct(name, first.getValue()));
 
-		CharArrayBuffer sb = new CharArrayBuffer(128);
+		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
 		for (NameValuePair element : rest) {
 			sb.append(',');
@@ -462,7 +462,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public Optional<NameValuePair> getFirst(String name) {
 		for (int i = 0; i < size(); i++) {
-			NameValuePair x = get(i);
+			var x = get(i);
 			if (eq(x.getName(), name))
 				return Utils.opt(x);
 		}
@@ -480,7 +480,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public Optional<NameValuePair> getLast(String name) {
 		for (int i = size() - 1; i >= 0; i--) {
-			NameValuePair x = get(i);
+			var x = get(i);
 			if (eq(x.getName(), name))
 				return Utils.opt(x);
 		}
@@ -705,7 +705,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			for (NameValuePair h : values) {
 				if (h != null) {
 					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
-						NameValuePair x = get(i2);
+						var x = get(i2);
 						if (eq(x.getName(), h.getName())) {
 							remove(i2);
 							j2--;
@@ -737,7 +737,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		if (value != null) {
 			boolean replaced = false;
 			for (int i = 0, j = size(); i < j; i++) {
-				NameValuePair x = get(i);
+				var x = get(i);
 				if (eq(x.getName(), value.getName())) {
 					if (replaced) {
 						remove(i);
@@ -884,10 +884,10 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	private NameValuePair createPart(String name, Object value) {
-		boolean isResolving = varResolver != null;
+		var isResolving = varResolver != null;
 
 		if (value instanceof Supplier<?>) {
-			Supplier<?> value2 = (Supplier<?>)value;
+			var value2 = (Supplier<?>)value;
 			return isResolving ? new BasicPart(name, resolver(value2)) : new BasicPart(name, value2);
 		}
 		return isResolving ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);

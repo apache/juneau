@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Version.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 class Version_Test extends TestBase {

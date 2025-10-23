@@ -3172,7 +3172,7 @@ public class StringUtils {
 	public static String toIsoDate(Calendar c) {
 		if (c == null) {
 			return null;
-	}
+		}
 		// Convert Calendar to ZonedDateTime and format as ISO8601 date (YYYY-MM-DD)
 		ZonedDateTime zdt = c.toInstant().atZone(c.getTimeZone().toZoneId());
 		return zdt.format(DateTimeFormatter.ISO_LOCAL_DATE);
