@@ -511,7 +511,7 @@
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * @param beanStore The bean store containing injectable beans for this logger.</em>
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<strong class="jxr_keyword">public</strong> <a name="CallLogger" href="../../../../../org/apache/juneau/rest/logger/CallLogger.html#CallLogger">CallLogger</a>(<a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		Builder builder = init(beanStore);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">var</strong> builder = init(beanStore);
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">this</strong>.logger = builder.logger;
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">this</strong>.thrownStore = builder.thrownStore;
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<strong class="jxr_keyword">this</strong>.normalRules = builder.normalRules.toArray(<strong class="jxr_keyword">new</strong> <a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a>[builder.normalRules.size()]);
@@ -547,35 +547,35 @@
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * @param res The servlet response.</em>
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> log(HttpServletRequest req, HttpServletResponse res) {
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		CallLoggerRule rule = getRule(req, res);
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">var</strong> rule = getRule(req, res);
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">if</strong> (! isEnabled(rule, req))
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		Level level = firstNonNull(rule.getLevel(), <strong class="jxr_keyword">this</strong>.level);
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<strong class="jxr_keyword">var</strong> level = firstNonNull(rule.getLevel(), <strong class="jxr_keyword">this</strong>.level);
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">if</strong> (level == Level.OFF)
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		Throwable e = castOrNull(req.getAttribute(<span class="jxr_string">"Exception"</span>), Throwable.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		Long execTime = castOrNull(req.getAttribute(<span class="jxr_string">"ExecTime"</span>), Long.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		CallLoggingDetail reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		CallLoggingDetail resd = firstNonNull(rule.getResponseDetail(), responseDetail);
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		String method = req.getMethod();
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 	
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">var</strong> e = castOrNull(req.getAttribute(<span class="jxr_string">"Exception"</span>), Throwable.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">var</strong> execTime = castOrNull(req.getAttribute(<span class="jxr_string">"ExecTime"</span>), Long.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 	
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">var</strong> reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">var</strong> resd = firstNonNull(rule.getResponseDetail(), responseDetail);
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">var</strong> method = req.getMethod();
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">int</strong> status = res.getStatus();
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		String uri = req.getRequestURI();
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">var</strong> uri = req.getRequestURI();
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 		byte[] reqContent = getRequestContent(req);
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 		byte[] resContent = getResponseContent(req, res);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 	
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">if</strong> (reqd != STATUS_LINE || resd != STATUS_LINE)
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 			sb.append(<span class="jxr_string">"\n=== HTTP Call (incoming) ======================================================\n"</span>);
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		ThrownStats sti = getThrownStats(e);
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">var</strong> sti = getThrownStats(e);
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		sb.append('[').append(status);
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 
@@ -593,7 +593,7 @@
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<strong class="jxr_keyword">if</strong> (reqd != STATUS_LINE || resd != STATUS_LINE) {
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 			<strong class="jxr_keyword">if</strong> (reqd.isOneOf(HEADER, ENTITY)) {
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 				String qs = req.getQueryString();
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 				<strong class="jxr_keyword">var</strong> qs = req.getQueryString();
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> 				<strong class="jxr_keyword">if</strong> (qs != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 					sb.append('?').append(qs);
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 			}
@@ -611,21 +611,21 @@
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 				sb.append(<span class="jxr_string">"\n\tExec time: "</span>).append(execTime).append(<span class="jxr_string">"ms"</span>);
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<strong class="jxr_keyword">if</strong> (reqd.isOneOf(HEADER, ENTITY)) {
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 				Enumeration&lt;String&gt; hh = req.getHeaderNames();
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 				<strong class="jxr_keyword">var</strong> hh = req.getHeaderNames();
 <a class="jxr_linenumber" name="L607" href="#L607">607</a> 				<strong class="jxr_keyword">if</strong> (hh.hasMoreElements()) {
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 					sb.append(<span class="jxr_string">"\n---Request Headers---"</span>);
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 					<strong class="jxr_keyword">while</strong> (hh.hasMoreElements()) {
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 						String h = hh.nextElement();
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 						<strong class="jxr_keyword">var</strong> h = hh.nextElement();
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 						sb.append(<span class="jxr_string">"\n\t"</span>).append(h).append(<span class="jxr_string">": "</span>).append(req.getHeader(h));
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 					}
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 				}
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 			}
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 			<strong class="jxr_keyword">if</strong> (resd.isOneOf(HEADER, ENTITY)) {
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 				Collection&lt;String&gt; hh = res.getHeaderNames();
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 				<strong class="jxr_keyword">var</strong> hh = res.getHeaderNames();
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 				<strong class="jxr_keyword">if</strong> (hh.size() &gt; 0) {
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 					sb.append(<span class="jxr_string">"\n---Response Headers---"</span>);
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 					<strong class="jxr_keyword">for</strong> (String h : hh) {
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : hh) {
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 						sb.append(<span class="jxr_string">"\n\t"</span>).append(h).append(<span class="jxr_string">": "</span>).append(res.getHeader(h));
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 					}
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 				}
@@ -769,8 +769,8 @@
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if logging is enabled for this request.</em>
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isEnabled(<a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a> rule, HttpServletRequest req) {
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		Enablement enabled = firstNonNull(rule.getEnabled(), <strong class="jxr_keyword">this</strong>.enabled);
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		Predicate&lt;HttpServletRequest&gt; enabledTest = firstNonNull(rule.getEnabledTest(), <strong class="jxr_keyword">this</strong>.enabledTest);
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		<strong class="jxr_keyword">var</strong> enabled = firstNonNull(rule.getEnabled(), <strong class="jxr_keyword">this</strong>.enabled);
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		<strong class="jxr_keyword">var</strong> enabledTest = firstNonNull(rule.getEnabledTest(), <strong class="jxr_keyword">this</strong>.enabledTest);
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 		<strong class="jxr_keyword">return</strong> enabled.isEnabled(enabledTest.test(req));
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 	}
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> 

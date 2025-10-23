@@ -205,7 +205,7 @@
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> getAnnotatedMethods(Supplier&lt;?&gt; resource, Class&lt;T&gt; annotation, Predicate&lt;T&gt; predicate) {
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 			Map&lt;String,Method&gt; x = CollectionUtils.map();
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			Object r = resource.get();
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">var</strong> r = resource.get();
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
@@ -214,17 +214,17 @@
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			MethodList x2 = MethodList.of(x.values());
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<strong class="jxr_keyword">var</strong> x2 = MethodList.of(x.values());
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">return</strong> x2;
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		}
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isRestBeanMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi) {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			RestInject x = mi.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">var</strong> x = mi.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">return</strong> x != <strong class="jxr_keyword">null</strong> &amp;&amp; x.methodScope().length == 0;
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		}
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isRestBeanMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, String name) {
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			RestInject x = mi.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">var</strong> x = mi.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">return</strong> x != <strong class="jxr_keyword">null</strong> &amp;&amp; x.methodScope().length == 0 &amp;&amp; x.name().equals(name);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		}
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
@@ -1736,8 +1736,8 @@
 <a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> 			initialized = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> 
 <a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> 			<strong class="jxr_keyword">this</strong>.resource = <strong class="jxr_keyword">new</strong> <a name="ResourceSupplier" href="../../../../org/apache/juneau/rest/ResourceSupplier.html#ResourceSupplier">ResourceSupplier</a>(resourceClass, resource);
-<a class="jxr_linenumber" name="L1731" href="#L1731">1731</a> 			Supplier&lt;?&gt; r = <strong class="jxr_keyword">this</strong>.resource;
-<a class="jxr_linenumber" name="L1732" href="#L1732">1732</a> 			Class&lt;?&gt; rc = resourceClass;
+<a class="jxr_linenumber" name="L1731" href="#L1731">1731</a> 			<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">this</strong>.resource;
+<a class="jxr_linenumber" name="L1732" href="#L1732">1732</a> 			<strong class="jxr_keyword">var</strong> rc = resourceClass;
 <a class="jxr_linenumber" name="L1733" href="#L1733">1733</a> 
 <a class="jxr_linenumber" name="L1734" href="#L1734">1734</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L1735" href="#L1735">1735</a> 			beanStore = createBeanStore(resource)
@@ -1752,7 +1752,7 @@
 <a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 				rootBeanStore = beanStore;
 <a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 				beanStore = BeanStore.of(rootBeanStore, r.get());
 <a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> 			}
-<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> 			BeanStore bs = beanStore;
+<a class="jxr_linenumber" name="L1747" href="#L1747">1747</a> 			<strong class="jxr_keyword">var</strong> bs = beanStore;
 <a class="jxr_linenumber" name="L1748" href="#L1748">1748</a> 
 <a class="jxr_linenumber" name="L1749" href="#L1749">1749</a> 			beanStore.add(BeanStore.<strong class="jxr_keyword">class</strong>, bs);
 <a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> 			varResolver = createVarResolver(bs, r, rc);
@@ -1760,7 +1760,7 @@
 <a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> 			config = beanStore.add(Config.<strong class="jxr_keyword">class</strong>, createConfig(bs, r, rc));
 <a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 			beanStore.add(VarResolver.<strong class="jxr_keyword">class</strong>, varResolver.bean(Config.<strong class="jxr_keyword">class</strong>, config).build());
 <a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 
-<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 			ClassInfo rci = ClassInfo.of(resourceClass);
+<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 			<strong class="jxr_keyword">var</strong> rci = ClassInfo.of(resourceClass);
 <a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 
 <a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 			<em class="jxr_comment">// Get @RestInject fields initialized with values.</em>
 <a class="jxr_linenumber" name="L1758" href="#L1758">1758</a> 			<em class="jxr_comment">// @formatter:off</em>
@@ -1777,8 +1777,8 @@
 <a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 
 <a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 			rci.forEachMethod(x -&gt; x.hasAnnotation(RestInject.<strong class="jxr_keyword">class</strong>), x -&gt; {
-<a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 				Class&lt;Object&gt; rt = x.getReturnType().<strong class="jxr_keyword">inner</strong>();
-<a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> 				String name = RestInjectAnnotation.name(x.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 				<strong class="jxr_keyword">var</strong> rt = x.getReturnType().&lt;Object&gt;<strong class="jxr_keyword">inner</strong>();
+<a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> 				<strong class="jxr_keyword">var</strong> name = RestInjectAnnotation.name(x.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L1774" href="#L1774">1774</a> 				<strong class="jxr_keyword">if</strong> (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
 <a class="jxr_linenumber" name="L1775" href="#L1775">1775</a> 					<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L1776" href="#L1776">1776</a> 					beanStore
@@ -1789,8 +1789,8 @@
 <a class="jxr_linenumber" name="L1781" href="#L1781">1781</a> 				}
 <a class="jxr_linenumber" name="L1782" href="#L1782">1782</a> 			});
 <a class="jxr_linenumber" name="L1783" href="#L1783">1783</a> 
-<a class="jxr_linenumber" name="L1784" href="#L1784">1784</a> 			VarResolverSession vrs = varResolver().build().createSession();
-<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a> 			AnnotationWorkList work = AnnotationWorkList.of(vrs, rci.getAnnotationList(CONTEXT_APPLY_FILTER));
+<a class="jxr_linenumber" name="L1784" href="#L1784">1784</a> 			<strong class="jxr_keyword">var</strong> vrs = varResolver().build().createSession();
+<a class="jxr_linenumber" name="L1785" href="#L1785">1785</a> 			<strong class="jxr_keyword">var</strong> work = AnnotationWorkList.of(vrs, rci.getAnnotationList(CONTEXT_APPLY_FILTER));
 <a class="jxr_linenumber" name="L1786" href="#L1786">1786</a> 
 <a class="jxr_linenumber" name="L1787" href="#L1787">1787</a> 			apply(work);
 <a class="jxr_linenumber" name="L1788" href="#L1788">1788</a> 			beanContext().apply(work);
@@ -2688,7 +2688,7 @@
 <a class="jxr_linenumber" name="L2680" href="#L2680">2680</a> <em class="jxr_javadoccomment">		 * @return The bean cast to that instance, or {@link Optional#empty()} if it's not the specified type.</em>
 <a class="jxr_linenumber" name="L2681" href="#L2681">2681</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2682" href="#L2682">2682</a> 		<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; resourceAs(Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L2683" href="#L2683">2683</a> 			Object r = resource().get();
+<a class="jxr_linenumber" name="L2683" href="#L2683">2683</a> 			<strong class="jxr_keyword">var</strong> r = resource().get();
 <a class="jxr_linenumber" name="L2684" href="#L2684">2684</a> 			<strong class="jxr_keyword">return</strong> opt(type.isInstance(r) ? type.<strong class="jxr_keyword">cast</strong>(r) : <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2685" href="#L2685">2685</a> 		}
 <a class="jxr_linenumber" name="L2686" href="#L2686">2686</a> 
@@ -3782,14 +3782,14 @@
 <a class="jxr_linenumber" name="L3774" href="#L3774">3774</a> 
 <a class="jxr_linenumber" name="L3775" href="#L3775">3775</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> runInitHooks(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) <strong class="jxr_keyword">throws</strong> ServletException {
 <a class="jxr_linenumber" name="L3776" href="#L3776">3776</a> 
-<a class="jxr_linenumber" name="L3777" href="#L3777">3777</a> 			Object r = resource.get();
+<a class="jxr_linenumber" name="L3777" href="#L3777">3777</a> 			<strong class="jxr_keyword">var</strong> r = resource.get();
 <a class="jxr_linenumber" name="L3778" href="#L3778">3778</a> 
-<a class="jxr_linenumber" name="L3779" href="#L3779">3779</a> 			Map&lt;String,MethodInfo&gt; map = CollectionUtils.map();
+<a class="jxr_linenumber" name="L3779" href="#L3779">3779</a> 			<strong class="jxr_keyword">var</strong> map = CollectionUtils.&lt;String,MethodInfo&gt;map();
 <a class="jxr_linenumber" name="L3780" href="#L3780">3780</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L3781" href="#L3781">3781</a> 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
 <a class="jxr_linenumber" name="L3782" href="#L3782">3782</a> 				y -&gt; y.hasAnnotation(RestInit.<strong class="jxr_keyword">class</strong>) &amp;&amp; ! y.hasArg(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>),
 <a class="jxr_linenumber" name="L3783" href="#L3783">3783</a> 				y -&gt; {
-<a class="jxr_linenumber" name="L3784" href="#L3784">3784</a> 					String sig = y.getSignature();
+<a class="jxr_linenumber" name="L3784" href="#L3784">3784</a> 					<strong class="jxr_keyword">var</strong> sig = y.getSignature();
 <a class="jxr_linenumber" name="L3785" href="#L3785">3785</a> 					<strong class="jxr_keyword">if</strong> (! map.containsKey(sig))
 <a class="jxr_linenumber" name="L3786" href="#L3786">3786</a> 						map.put(sig, y.accessible());
 <a class="jxr_linenumber" name="L3787" href="#L3787">3787</a> 				}
@@ -3884,7 +3884,7 @@
 <a class="jxr_linenumber" name="L3876" href="#L3876">3876</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L3877" href="#L3877">3877</a> 		<strong class="jxr_keyword">protected</strong> BeanCreator&lt;CallLogger&gt; createCallLogger(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L3878" href="#L3878">3878</a> 
-<a class="jxr_linenumber" name="L3879" href="#L3879">3879</a> 			BeanCreator&lt;CallLogger&gt; creator = beanStore.createBean(CallLogger.<strong class="jxr_keyword">class</strong>).type(BasicCallLogger.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L3879" href="#L3879">3879</a> 			<strong class="jxr_keyword">var</strong> creator = beanStore.createBean(CallLogger.<strong class="jxr_keyword">class</strong>).type(BasicCallLogger.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L3880" href="#L3880">3880</a> 
 <a class="jxr_linenumber" name="L3881" href="#L3881">3881</a> 			<em class="jxr_comment">// Specify the bean type if its set as a default.</em>
 <a class="jxr_linenumber" name="L3882" href="#L3882">3882</a> 			defaultClasses().get(CallLogger.<strong class="jxr_keyword">class</strong>).ifPresent(x -&gt; creator.type(x));
@@ -3914,14 +3914,14 @@
 <a class="jxr_linenumber" name="L3906" href="#L3906">3906</a> <em class="jxr_javadoccomment">		 * @return A new config.</em>
 <a class="jxr_linenumber" name="L3907" href="#L3907">3907</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L3908" href="#L3908">3908</a> 		<strong class="jxr_keyword">protected</strong> <a name="Config" href="../../../../org/apache/juneau/config/Config.html#Config">Config</a> createConfig(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource, Class&lt;?&gt; resourceClass) {
-<a class="jxr_linenumber" name="L3909" href="#L3909">3909</a> 
-<a class="jxr_linenumber" name="L3910" href="#L3910">3910</a> 			Value&lt;Config&gt; v = Value.empty();
+<a class="jxr_linenumber" name="L3909" href="#L3909">3909</a> 	
+<a class="jxr_linenumber" name="L3910" href="#L3910">3910</a> 			<strong class="jxr_keyword">var</strong> v = Value.&lt;Config&gt;empty();
 <a class="jxr_linenumber" name="L3911" href="#L3911">3911</a> 
 <a class="jxr_linenumber" name="L3912" href="#L3912">3912</a> 			<em class="jxr_comment">// Find our config file.  It's the last non-empty @RestResource(config).</em>
-<a class="jxr_linenumber" name="L3913" href="#L3913">3913</a> 			VarResolver vr = beanStore.getBean(VarResolver.<strong class="jxr_keyword">class</strong>).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"VarResolver not found."</span>));
-<a class="jxr_linenumber" name="L3914" href="#L3914">3914</a> 			Value&lt;String&gt; cfv = Value.empty();
+<a class="jxr_linenumber" name="L3913" href="#L3913">3913</a> 			<strong class="jxr_keyword">var</strong> vr = beanStore.getBean(VarResolver.<strong class="jxr_keyword">class</strong>).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"VarResolver not found."</span>));
+<a class="jxr_linenumber" name="L3914" href="#L3914">3914</a> 			<strong class="jxr_keyword">var</strong> cfv = Value.&lt;String&gt;empty();
 <a class="jxr_linenumber" name="L3915" href="#L3915">3915</a> 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.config()), x -&gt; cfv.set(vr.resolve(x.config())));
-<a class="jxr_linenumber" name="L3916" href="#L3916">3916</a> 			String cf = cfv.orElse(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L3916" href="#L3916">3916</a> 			<strong class="jxr_keyword">var</strong> cf = cfv.orElse(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L3917" href="#L3917">3917</a> 
 <a class="jxr_linenumber" name="L3918" href="#L3918">3918</a> 			<em class="jxr_comment">// If not specified or value is set to SYSTEM_DEFAULT, use system default config.</em>
 <a class="jxr_linenumber" name="L3919" href="#L3919">3919</a> 			<strong class="jxr_keyword">if</strong> (v.isEmpty() &amp;&amp; <span class="jxr_string">"SYSTEM_DEFAULT"</span>.equals(cf))
@@ -3955,7 +3955,7 @@
 <a class="jxr_linenumber" name="L3947" href="#L3947">3947</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L3948" href="#L3948">3948</a> 		<strong class="jxr_keyword">protected</strong> BeanCreator&lt;DebugEnablement&gt; createDebugEnablement(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L3949" href="#L3949">3949</a> 
-<a class="jxr_linenumber" name="L3950" href="#L3950">3950</a> 			BeanCreator&lt;DebugEnablement&gt; creator = beanStore.createBean(DebugEnablement.<strong class="jxr_keyword">class</strong>).type(BasicDebugEnablement.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L3950" href="#L3950">3950</a> 			<strong class="jxr_keyword">var</strong> creator = beanStore.createBean(DebugEnablement.<strong class="jxr_keyword">class</strong>).type(BasicDebugEnablement.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L3951" href="#L3951">3951</a> 
 <a class="jxr_linenumber" name="L3952" href="#L3952">3952</a> 			<em class="jxr_comment">// Specify the bean type if its set as a default.</em>
 <a class="jxr_linenumber" name="L3953" href="#L3953">3953</a> 			defaultClasses().get(DebugEnablement.<strong class="jxr_keyword">class</strong>).ifPresent(x -&gt; creator.type(x));
@@ -3980,8 +3980,8 @@
 <a class="jxr_linenumber" name="L3972" href="#L3972">3972</a> 		<strong class="jxr_keyword">protected</strong> <a name="NamedAttributeMap" href="../../../../org/apache/juneau/rest/httppart/NamedAttributeMap.html#NamedAttributeMap">NamedAttributeMap</a> createDefaultRequestAttributes(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L3973" href="#L3973">3973</a> 
 <a class="jxr_linenumber" name="L3974" href="#L3974">3974</a> 			<em class="jxr_comment">// Default value.</em>
-<a class="jxr_linenumber" name="L3975" href="#L3975">3975</a> 			Value&lt;NamedAttributeMap&gt; v = Value.of(NamedAttributeMap.create());
-<a class="jxr_linenumber" name="L3976" href="#L3976">3976</a> 
+<a class="jxr_linenumber" name="L3975" href="#L3975">3975</a> 			<strong class="jxr_keyword">var</strong> v = Value.of(NamedAttributeMap.create());
+<a class="jxr_linenumber" name="L3976" href="#L3976">3976</a> 	
 <a class="jxr_linenumber" name="L3977" href="#L3977">3977</a> 			beanStore.getBean(NamedAttributeMap.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"defaultRequestAttributes"</span>).ifPresent(x -&gt; v.set(x));
 <a class="jxr_linenumber" name="L3978" href="#L3978">3978</a> 
 <a class="jxr_linenumber" name="L3979" href="#L3979">3979</a> 			<em class="jxr_comment">// Replace with bean from:  @RestInject(name="defaultRequestAttributes") public [static] NamedAttributeMap xxx(&lt;args&gt;)</em>
@@ -4000,9 +4000,9 @@
 <a class="jxr_linenumber" name="L3992" href="#L3992">3992</a> <em class="jxr_javadoccomment">		 * @return A new default request headers sub-builder.</em>
 <a class="jxr_linenumber" name="L3993" href="#L3993">3993</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L3994" href="#L3994">3994</a> 		<strong class="jxr_keyword">protected</strong> <a name="HeaderList" href="../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> createDefaultRequestHeaders(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
-<a class="jxr_linenumber" name="L3995" href="#L3995">3995</a> 
+<a class="jxr_linenumber" name="L3995" href="#L3995">3995</a> 	
 <a class="jxr_linenumber" name="L3996" href="#L3996">3996</a> 			<em class="jxr_comment">// Default value.</em>
-<a class="jxr_linenumber" name="L3997" href="#L3997">3997</a> 			Value&lt;HeaderList&gt; v = Value.of(HeaderList.create());
+<a class="jxr_linenumber" name="L3997" href="#L3997">3997</a> 			<strong class="jxr_keyword">var</strong> v = Value.of(HeaderList.create());
 <a class="jxr_linenumber" name="L3998" href="#L3998">3998</a> 
 <a class="jxr_linenumber" name="L3999" href="#L3999">3999</a> 			<em class="jxr_comment">// Replace with bean from bean store.</em>
 <a class="jxr_linenumber" name="L4000" href="#L4000">4000</a> 			beanStore.getBean(HeaderList.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"defaultRequestHeaders"</span>).ifPresent(x -&gt; v.set(x));
@@ -4025,11 +4025,11 @@
 <a class="jxr_linenumber" name="L4017" href="#L4017">4017</a> 		<strong class="jxr_keyword">protected</strong> <a name="HeaderList" href="../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> createDefaultResponseHeaders(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4018" href="#L4018">4018</a> 
 <a class="jxr_linenumber" name="L4019" href="#L4019">4019</a> 			<em class="jxr_comment">// Default value.</em>
-<a class="jxr_linenumber" name="L4020" href="#L4020">4020</a> 			Value&lt;HeaderList&gt; v = Value.of(HeaderList.create());
-<a class="jxr_linenumber" name="L4021" href="#L4021">4021</a> 
+<a class="jxr_linenumber" name="L4020" href="#L4020">4020</a> 			<strong class="jxr_keyword">var</strong> v = Value.of(HeaderList.create());
+<a class="jxr_linenumber" name="L4021" href="#L4021">4021</a> 	
 <a class="jxr_linenumber" name="L4022" href="#L4022">4022</a> 			<em class="jxr_comment">// Replace with bean from bean store.</em>
 <a class="jxr_linenumber" name="L4023" href="#L4023">4023</a> 			beanStore.getBean(HeaderList.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"defaultResponseHeaders"</span>).ifPresent(x -&gt; v.set(x));
-<a class="jxr_linenumber" name="L4024" href="#L4024">4024</a> 
+<a class="jxr_linenumber" name="L4024" href="#L4024">4024</a> 	
 <a class="jxr_linenumber" name="L4025" href="#L4025">4025</a> 			<em class="jxr_comment">// Replace with bean from:  @RestInject(name="defaultResponseHeaders") public [static] HeaderList xxx(&lt;args&gt;)</em>
 <a class="jxr_linenumber" name="L4026" href="#L4026">4026</a> 			beanStore.createMethodFinder(HeaderList.<strong class="jxr_keyword">class</strong>).addBean(HeaderList.<strong class="jxr_keyword">class</strong>, v.get()).find(x -&gt; isRestBeanMethod(x, <span class="jxr_string">"defaultResponseHeaders"</span>)).run(x -&gt; v.set(x));
 <a class="jxr_linenumber" name="L4027" href="#L4027">4027</a> 
@@ -4048,8 +4048,8 @@
 <a class="jxr_linenumber" name="L4040" href="#L4040">4040</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> createDestroyMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4041" href="#L4041">4041</a> 
 <a class="jxr_linenumber" name="L4042" href="#L4042">4042</a> 			<em class="jxr_comment">// Default value.</em>
-<a class="jxr_linenumber" name="L4043" href="#L4043">4043</a> 			Value&lt;MethodList&gt; v = Value.of(getAnnotatedMethods(resource, RestDestroy.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>));
-<a class="jxr_linenumber" name="L4044" href="#L4044">4044</a> 
+<a class="jxr_linenumber" name="L4043" href="#L4043">4043</a> 			<strong class="jxr_keyword">var</strong> v = Value.of(getAnnotatedMethods(resource, RestDestroy.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="L4044" href="#L4044">4044</a> 	
 <a class="jxr_linenumber" name="L4045" href="#L4045">4045</a> 			<em class="jxr_comment">// Replace with bean from:  @RestInject(name="destroyMethods") public [static] MethodList xxx(&lt;args&gt;)</em>
 <a class="jxr_linenumber" name="L4046" href="#L4046">4046</a> 			beanStore.createMethodFinder(MethodList.<strong class="jxr_keyword">class</strong>).addBean(MethodList.<strong class="jxr_keyword">class</strong>, v.get()).find(x -&gt; isRestBeanMethod(x, <span class="jxr_string">"destroyMethods"</span>)).run(x -&gt; v.set(x));
 <a class="jxr_linenumber" name="L4047" href="#L4047">4047</a> 
@@ -4574,9 +4574,9 @@
 <a class="jxr_linenumber" name="L4566" href="#L4566">4566</a> 			<em class="jxr_comment">// Default value.</em>
 <a class="jxr_linenumber" name="L4567" href="#L4567">4567</a> 			Value&lt;RestOperations.Builder&gt; v = Value.of(RestOperations.create(beanStore));
 <a class="jxr_linenumber" name="L4568" href="#L4568">4568</a> 
-<a class="jxr_linenumber" name="L4569" href="#L4569">4569</a> 			ClassInfo rci = ClassInfo.of(resource.get());
+<a class="jxr_linenumber" name="L4569" href="#L4569">4569</a> 			<strong class="jxr_keyword">var</strong> rci = ClassInfo.of(resource.get());
 <a class="jxr_linenumber" name="L4570" href="#L4570">4570</a> 
-<a class="jxr_linenumber" name="L4571" href="#L4571">4571</a> 			Map&lt;String,MethodInfo&gt; initMap = CollectionUtils.map();
+<a class="jxr_linenumber" name="L4571" href="#L4571">4571</a> 			<strong class="jxr_keyword">var</strong> initMap = CollectionUtils.&lt;String,MethodInfo&gt;map();
 <a class="jxr_linenumber" name="L4572" href="#L4572">4572</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L4573" href="#L4573">4573</a> 			ClassInfo.ofProxy(resource.get()).forEachAllMethodParentFirst(
 <a class="jxr_linenumber" name="L4574" href="#L4574">4574</a> 				y -&gt; y.hasAnnotation(RestInit.<strong class="jxr_keyword">class</strong>) &amp;&amp; y.hasArg(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>),
@@ -4719,7 +4719,7 @@
 <a class="jxr_linenumber" name="L4711" href="#L4711">4711</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L4712" href="#L4712">4712</a> 		<strong class="jxr_keyword">protected</strong> BeanCreator&lt;StaticFiles&gt; createStaticFiles(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4713" href="#L4713">4713</a> 
-<a class="jxr_linenumber" name="L4714" href="#L4714">4714</a> 			BeanCreator&lt;StaticFiles&gt; creator = beanStore.createBean(StaticFiles.<strong class="jxr_keyword">class</strong>).type(BasicStaticFiles.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L4714" href="#L4714">4714</a> 			<strong class="jxr_keyword">var</strong> creator = beanStore.createBean(StaticFiles.<strong class="jxr_keyword">class</strong>).type(BasicStaticFiles.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L4715" href="#L4715">4715</a> 
 <a class="jxr_linenumber" name="L4716" href="#L4716">4716</a> 			<em class="jxr_comment">// Specify the bean type if its set as a default.</em>
 <a class="jxr_linenumber" name="L4717" href="#L4717">4717</a> 			defaultClasses().get(StaticFiles.<strong class="jxr_keyword">class</strong>).ifPresent(x -&gt; creator.type(x));
@@ -4768,7 +4768,7 @@
 <a class="jxr_linenumber" name="L4760" href="#L4760">4760</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L4761" href="#L4761">4761</a> 		<strong class="jxr_keyword">protected</strong> BeanCreator&lt;SwaggerProvider&gt; createSwaggerProvider(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4762" href="#L4762">4762</a> 
-<a class="jxr_linenumber" name="L4763" href="#L4763">4763</a> 			BeanCreator&lt;SwaggerProvider&gt; creator = beanStore.createBean(SwaggerProvider.<strong class="jxr_keyword">class</strong>).type(BasicSwaggerProvider.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L4763" href="#L4763">4763</a> 			<strong class="jxr_keyword">var</strong> creator = beanStore.createBean(SwaggerProvider.<strong class="jxr_keyword">class</strong>).type(BasicSwaggerProvider.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L4764" href="#L4764">4764</a> 
 <a class="jxr_linenumber" name="L4765" href="#L4765">4765</a> 			<em class="jxr_comment">// Specify the bean type if its set as a default.</em>
 <a class="jxr_linenumber" name="L4766" href="#L4766">4766</a> 			defaultClasses().get(SwaggerProvider.<strong class="jxr_keyword">class</strong>).ifPresent(x -&gt; creator.type(x));
@@ -5061,7 +5061,7 @@
 <a class="jxr_linenumber" name="L5053" href="#L5053">5053</a> 			restChildren = builder.restChildren(<strong class="jxr_keyword">this</strong>).build();
 <a class="jxr_linenumber" name="L5054" href="#L5054">5054</a> 			swaggerProvider = bs.add(SwaggerProvider.<strong class="jxr_keyword">class</strong>, builder.swaggerProvider().orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L5055" href="#L5055">5055</a> 
-<a class="jxr_linenumber" name="L5056" href="#L5056">5056</a> 			List&lt;RestOpContext&gt; opContexts = restOperations.getOpContexts();
+<a class="jxr_linenumber" name="L5056" href="#L5056">5056</a> 			<strong class="jxr_keyword">var</strong> opContexts = restOperations.getOpContexts();
 <a class="jxr_linenumber" name="L5057" href="#L5057">5057</a> 
 <a class="jxr_linenumber" name="L5058" href="#L5058">5058</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L5059" href="#L5059">5059</a> 			produces = builder.produces().orElseGet(
@@ -5158,7 +5158,7 @@
 <a class="jxr_linenumber" name="L5150" href="#L5150">5150</a> 			}
 <a class="jxr_linenumber" name="L5151" href="#L5151">5151</a> 
 <a class="jxr_linenumber" name="L5152" href="#L5152">5152</a> 			<em class="jxr_comment">// If this resource has child resources, try to recursively call them.</em>
-<a class="jxr_linenumber" name="L5153" href="#L5153">5153</a> 			Optional&lt;RestChildMatch&gt; childMatch = restChildren.findMatch(sb);
+<a class="jxr_linenumber" name="L5153" href="#L5153">5153</a> 			<strong class="jxr_keyword">var</strong> childMatch = restChildren.findMatch(sb);
 <a class="jxr_linenumber" name="L5154" href="#L5154">5154</a> 			<strong class="jxr_keyword">if</strong> (childMatch.isPresent()) {
 <a class="jxr_linenumber" name="L5155" href="#L5155">5155</a> 				UrlPathMatch uppm = childMatch.get().getPathMatch();
 <a class="jxr_linenumber" name="L5156" href="#L5156">5156</a> 				RestContext rc = childMatch.get().getChildContext();
@@ -5412,7 +5412,7 @@
 <a class="jxr_linenumber" name="L5404" href="#L5404">5404</a> <em class="jxr_javadoccomment">	 * @throws InternalServerError If no active request exists on the current thread.</em>
 <a class="jxr_linenumber" name="L5405" href="#L5405">5405</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L5406" href="#L5406">5406</a> 	<strong class="jxr_keyword">public</strong> <a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> getLocalSession() {
-<a class="jxr_linenumber" name="L5407" href="#L5407">5407</a> 		RestSession rc = localSession.get();
+<a class="jxr_linenumber" name="L5407" href="#L5407">5407</a> 		<strong class="jxr_keyword">var</strong> rc = localSession.get();
 <a class="jxr_linenumber" name="L5408" href="#L5408">5408</a> 		<strong class="jxr_keyword">if</strong> (rc == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L5409" href="#L5409">5409</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(<span class="jxr_string">"No active request on current thread."</span>);
 <a class="jxr_linenumber" name="L5410" href="#L5410">5410</a> 		<strong class="jxr_keyword">return</strong> rc;
@@ -5772,8 +5772,8 @@
 <a class="jxr_linenumber" name="L5764" href="#L5764">5764</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> postInit() <strong class="jxr_keyword">throws</strong> ServletException {
 <a class="jxr_linenumber" name="L5765" href="#L5765">5765</a> 		<strong class="jxr_keyword">if</strong> (initialized.get())
 <a class="jxr_linenumber" name="L5766" href="#L5766">5766</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L5767" href="#L5767">5767</a> 		Object resource = getResource();
-<a class="jxr_linenumber" name="L5768" href="#L5768">5768</a> 		MethodInfo mi = ClassInfo.of(getResource()).getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParamTypes(RestContext.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L5767" href="#L5767">5767</a> 		<strong class="jxr_keyword">var</strong> resource = getResource();
+<a class="jxr_linenumber" name="L5768" href="#L5768">5768</a> 		<strong class="jxr_keyword">var</strong> mi = ClassInfo.of(getResource()).getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParamTypes(RestContext.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L5769" href="#L5769">5769</a> 		<strong class="jxr_keyword">if</strong> (mi != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L5770" href="#L5770">5770</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5771" href="#L5771">5771</a> 				mi.accessible().invoke(resource, <strong class="jxr_keyword">this</strong>);
@@ -5866,7 +5866,7 @@
 <a class="jxr_linenumber" name="L5858" href="#L5858">5858</a> 		<strong class="jxr_keyword">if</strong> (t instanceof <a name="BasicHttpException" href="../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>)
 <a class="jxr_linenumber" name="L5859" href="#L5859">5859</a> 			<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L5860" href="#L5860">5860</a> 
-<a class="jxr_linenumber" name="L5861" href="#L5861">5861</a> 		ClassInfo ci = ClassInfo.of(t);
+<a class="jxr_linenumber" name="L5861" href="#L5861">5861</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(t);
 <a class="jxr_linenumber" name="L5862" href="#L5862">5862</a> 
 <a class="jxr_linenumber" name="L5863" href="#L5863">5863</a> 		<strong class="jxr_keyword">if</strong> (ci.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L5864" href="#L5864">5864</a> 			<strong class="jxr_keyword">return</strong> t;
@@ -5914,9 +5914,9 @@
 <a class="jxr_linenumber" name="L5906" href="#L5906">5906</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L5907" href="#L5907">5907</a> 	<strong class="jxr_keyword">protected</strong> <a name="RestOpArg" href="../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a>[] findRestOperationArgs(<a name="Method" href="../../../../org/apache/juneau/rest/annotation/Method.html#Method">Method</a> m, <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
 <a class="jxr_linenumber" name="L5908" href="#L5908">5908</a> 
-<a class="jxr_linenumber" name="L5909" href="#L5909">5909</a> 		MethodInfo mi = MethodInfo.of(m);
-<a class="jxr_linenumber" name="L5910" href="#L5910">5910</a> 		List&lt;ClassInfo&gt; pt = mi.getParamTypes();
-<a class="jxr_linenumber" name="L5911" href="#L5911">5911</a> 		RestOpArg[] ra = <strong class="jxr_keyword">new</strong> <a name="RestOpArg" href="../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a>[pt.size()];
+<a class="jxr_linenumber" name="L5909" href="#L5909">5909</a> 		<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(m);
+<a class="jxr_linenumber" name="L5910" href="#L5910">5910</a> 		<strong class="jxr_keyword">var</strong> pt = mi.getParamTypes();
+<a class="jxr_linenumber" name="L5911" href="#L5911">5911</a> 		<strong class="jxr_keyword">var</strong> ra = <strong class="jxr_keyword">new</strong> <a name="RestOpArg" href="../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a>[pt.size()];
 <a class="jxr_linenumber" name="L5912" href="#L5912">5912</a> 
 <a class="jxr_linenumber" name="L5913" href="#L5913">5913</a> 		beanStore = BeanStore.of(beanStore, getResource());
 <a class="jxr_linenumber" name="L5914" href="#L5914">5914</a> 
@@ -5982,16 +5982,16 @@
 <a class="jxr_linenumber" name="L5974" href="#L5974">5974</a> 
 <a class="jxr_linenumber" name="L5975" href="#L5975">5975</a> 		<strong class="jxr_keyword">int</strong> code = 500;
 <a class="jxr_linenumber" name="L5976" href="#L5976">5976</a> 
-<a class="jxr_linenumber" name="L5977" href="#L5977">5977</a> 		ClassInfo ci = ClassInfo.of(e);
-<a class="jxr_linenumber" name="L5978" href="#L5978">5978</a> 		StatusCode r = ci.getAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L5977" href="#L5977">5977</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(e);
+<a class="jxr_linenumber" name="L5978" href="#L5978">5978</a> 		<strong class="jxr_keyword">var</strong> r = ci.getAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L5979" href="#L5979">5979</a> 		<strong class="jxr_keyword">if</strong> (r != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L5980" href="#L5980">5980</a> 			<strong class="jxr_keyword">if</strong> (r.value().length &gt; 0)
 <a class="jxr_linenumber" name="L5981" href="#L5981">5981</a> 				code = r.value()[0];
 <a class="jxr_linenumber" name="L5982" href="#L5982">5982</a> 
-<a class="jxr_linenumber" name="L5983" href="#L5983">5983</a> 		BasicHttpException e2 = (e instanceof <a name="BasicHttpException" href="../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> ? (<a name="BasicHttpException" href="../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>)e : <strong class="jxr_keyword">new</strong> <a name="BasicHttpException" href="../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(code, e));
+<a class="jxr_linenumber" name="L5983" href="#L5983">5983</a> 		<strong class="jxr_keyword">var</strong> e2 = (e instanceof <a name="BasicHttpException" href="../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> ? (<a name="BasicHttpException" href="../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>)e : <strong class="jxr_keyword">new</strong> <a name="BasicHttpException" href="../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(code, e));
 <a class="jxr_linenumber" name="L5984" href="#L5984">5984</a> 
-<a class="jxr_linenumber" name="L5985" href="#L5985">5985</a> 		HttpServletRequest req = session.getRequest();
-<a class="jxr_linenumber" name="L5986" href="#L5986">5986</a> 		HttpServletResponse res = session.getResponse();
+<a class="jxr_linenumber" name="L5985" href="#L5985">5985</a> 		<strong class="jxr_keyword">var</strong> req = session.getRequest();
+<a class="jxr_linenumber" name="L5986" href="#L5986">5986</a> 		<strong class="jxr_keyword">var</strong> res = session.getResponse();
 <a class="jxr_linenumber" name="L5987" href="#L5987">5987</a> 
 <a class="jxr_linenumber" name="L5988" href="#L5988">5988</a> 		Throwable t = e2.getRootCause();
 <a class="jxr_linenumber" name="L5989" href="#L5989">5989</a> 		<strong class="jxr_keyword">if</strong> (t != <strong class="jxr_keyword">null</strong>) {
@@ -6038,10 +6038,10 @@
 <a class="jxr_linenumber" name="L6030" href="#L6030">6030</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception can be thrown.</em>
 <a class="jxr_linenumber" name="L6031" href="#L6031">6031</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L6032" href="#L6032">6032</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> handleNotFound(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L6033" href="#L6033">6033</a> 		String pathInfo = session.getPathInfo();
-<a class="jxr_linenumber" name="L6034" href="#L6034">6034</a> 		String methodUC = session.getMethod();
-<a class="jxr_linenumber" name="L6035" href="#L6035">6035</a> 		<strong class="jxr_keyword">int</strong> rc = session.getStatus();
-<a class="jxr_linenumber" name="L6036" href="#L6036">6036</a> 		String onPath = pathInfo == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">" on no pathInfo"</span> : String.format(<span class="jxr_string">" on path '%s'"</span>, pathInfo);
+<a class="jxr_linenumber" name="L6033" href="#L6033">6033</a> 		<strong class="jxr_keyword">var</strong> pathInfo = session.getPathInfo();
+<a class="jxr_linenumber" name="L6034" href="#L6034">6034</a> 		<strong class="jxr_keyword">var</strong> methodUC = session.getMethod();
+<a class="jxr_linenumber" name="L6035" href="#L6035">6035</a> 		<strong class="jxr_keyword">var</strong> rc = session.getStatus();
+<a class="jxr_linenumber" name="L6036" href="#L6036">6036</a> 		<strong class="jxr_keyword">var</strong> onPath = pathInfo == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">" on no pathInfo"</span> : String.format(<span class="jxr_string">" on path '%s'"</span>, pathInfo);
 <a class="jxr_linenumber" name="L6037" href="#L6037">6037</a> 		<strong class="jxr_keyword">if</strong> (rc == SC_NOT_FOUND)
 <a class="jxr_linenumber" name="L6038" href="#L6038">6038</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"Method ''{0}'' not found on resource with matching pattern{1}."</span>, methodUC, onPath);
 <a class="jxr_linenumber" name="L6039" href="#L6039">6039</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rc == SC_PRECONDITION_FAILED)
@@ -6107,7 +6107,7 @@
 <a class="jxr_linenumber" name="L6099" href="#L6099">6099</a> 			}
 <a class="jxr_linenumber" name="L6100" href="#L6100">6100</a> 		}
 <a class="jxr_linenumber" name="L6101" href="#L6101">6101</a> 
-<a class="jxr_linenumber" name="L6102" href="#L6102">6102</a> 		Object output = opSession.getResponse().getContent().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L6102" href="#L6102">6102</a> 		<strong class="jxr_keyword">var</strong> output = opSession.getResponse().getContent().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L6103" href="#L6103">6103</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotImplemented" href="../../../../org/apache/juneau/http/response/NotImplemented.html#NotImplemented">NotImplemented</a>(<span class="jxr_string">"No response processors found to process output of type ''{0}''"</span>, ClassUtils.className(output));
 <a class="jxr_linenumber" name="L6104" href="#L6104">6104</a> 	}
 <a class="jxr_linenumber" name="L6105" href="#L6105">6105</a> 

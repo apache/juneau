@@ -224,7 +224,7 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<strong class="jxr_keyword">return</strong> (T)opt(parseAnything(eType.getElementType(), r, <strong class="jxr_keyword">outer</strong>, pMeta));
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		setCurrentClass(sType);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		String wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">var</strong> wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		Object o = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
@@ -284,10 +284,10 @@
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 				o = parseIntoCollection2(r, l, sType, pMeta);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 			}
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (builder != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			BeanMap m = toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType));
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">var</strong> m = toBeanMap(builder.create(<strong class="jxr_keyword">this</strong>, eType));
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			o = builder.build(<strong class="jxr_keyword">this</strong>, parseIntoBeanMap2(r, m).getBean(), eType);
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.canCreateNewBean(<strong class="jxr_keyword">outer</strong>)) {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			BeanMap m = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass());
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">var</strong> m = newBeanMap(<strong class="jxr_keyword">outer</strong>, sType.getInnerClass());
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 			o = parseIntoBeanMap2(r, m).getBean();
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.canCreateNewInstanceFromString(<strong class="jxr_keyword">outer</strong>) &amp;&amp; (c == '\'' || c == '&quot;')) {
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			o = sType.newInstanceFromString(<strong class="jxr_keyword">outer</strong>, parseString(r));
@@ -360,7 +360,7 @@
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 			c = r.read();
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">if</strong> (! VALID_BARE_CHARS.contains(c)) {
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 				r.unread();
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 				String s = r.getMarked().intern();
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 				<strong class="jxr_keyword">var</strong> s = r.getMarked().intern();
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 				<strong class="jxr_keyword">return</strong> s.equals(<span class="jxr_string">"null"</span>) ? <strong class="jxr_keyword">null</strong> : s;
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 			}
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 		}
@@ -376,7 +376,7 @@
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<em class="jxr_comment">// S5: Looking for , or }</em>
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> state = S1;
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		String currAttr = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> currAttr = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">int</strong> c = 0;
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		mark();
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">try</strong> {
@@ -533,7 +533,7 @@
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 		skipCommentsAndSpace(r);
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">var</strong> state = S1;
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		String currAttr = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">var</strong> currAttr = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">int</strong> c = 0;
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">while</strong> (c != -1) {
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 			c = r.read();

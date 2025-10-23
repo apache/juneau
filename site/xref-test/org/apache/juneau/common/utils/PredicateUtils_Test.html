@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>      @Test
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">void</strong> and_empty_returnsTrue() {
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>          @SuppressWarnings(<span class="jxr_string">"unchecked"</span>) Predicate&lt;String&gt; p = PredicateUtils.and();
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>          Predicate&lt;String&gt; p = PredicateUtils.and();
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>          assertTrue(p.test(<span class="jxr_string">"x"</span>));
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      }
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
@@ -83,7 +83,7 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      @Test
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>      <strong class="jxr_keyword">void</strong> or_empty_returnsFalse() {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>          @SuppressWarnings(<span class="jxr_string">"unchecked"</span>) Predicate&lt;String&gt; p = PredicateUtils.or();
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          Predicate&lt;String&gt; p = PredicateUtils.or();
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>          assertFalse(p.test(<span class="jxr_string">"x"</span>));
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>      }
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  

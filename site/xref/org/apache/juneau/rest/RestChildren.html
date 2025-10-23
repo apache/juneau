@@ -152,7 +152,7 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * @return The child that best matches the call, or an empty {@link Optional} if a match could not be made.</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;RestChildMatch&gt; findMatch(RestSession.Builder builder) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		String pi = builder.getPathInfoUndecoded();
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">var</strong> pi = builder.getPathInfoUndecoded();
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">if</strong> ((! children.isEmpty()) &amp;&amp; pi != <strong class="jxr_keyword">null</strong> &amp;&amp; ! pi.equals(<span class="jxr_string">"/"</span>)) {
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> rc : children.values()) {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				UrlPathMatcher upp = rc.getPathMatcher();

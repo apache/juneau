@@ -428,7 +428,7 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">if</strong> (needsT)
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 			in = in.replace(' ', 'T');
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		String result = <strong class="jxr_keyword">switch</strong>(state) {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		String result = <strong class="jxr_keyword">switch</strong> (state) {
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">case</strong> S1 -&gt; in + <span class="jxr_string">"-01-01T00:00:00"</span>;
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">case</strong> S2 -&gt; in + <span class="jxr_string">"-01T00:00:00"</span>;
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">case</strong> S3 -&gt; in + <span class="jxr_string">"T00:00:00"</span>;
@@ -690,7 +690,7 @@
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 * @see ChronoField</em>
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ChronoField toChronoField(ChronoUnit unit) {
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong>(unit) {
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (unit) {
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 			<strong class="jxr_keyword">case</strong> YEARS -&gt; ChronoField.YEAR;
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 			<strong class="jxr_keyword">case</strong> MONTHS -&gt; ChronoField.MONTH_OF_YEAR;
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 			<strong class="jxr_keyword">case</strong> DAYS -&gt; ChronoField.DAY_OF_MONTH;
@@ -715,7 +715,7 @@
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 * @see ChronoUnit</em>
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ChronoUnit toChronoUnit(ChronoField field) {
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong>(field) {
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (field) {
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 			<strong class="jxr_keyword">case</strong> YEAR -&gt; ChronoUnit.YEARS;
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 			<strong class="jxr_keyword">case</strong> MONTH_OF_YEAR -&gt; ChronoUnit.MONTHS;
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 			<strong class="jxr_keyword">case</strong> DAY_OF_MONTH -&gt; ChronoUnit.DAYS;
@@ -740,7 +740,7 @@
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">	 * @see Calendar</em>
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> toCalendarField(ChronoField field) {
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong>(field) {
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (field) {
 <a class="jxr_linenumber" name="L736" href="#L736">736</a> 			<strong class="jxr_keyword">case</strong> YEAR -&gt; Calendar.YEAR;
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> 			<strong class="jxr_keyword">case</strong> MONTH_OF_YEAR -&gt; Calendar.MONTH;
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 			<strong class="jxr_keyword">case</strong> DAY_OF_MONTH -&gt; Calendar.DAY_OF_MONTH;

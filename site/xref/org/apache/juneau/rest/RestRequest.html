@@ -185,8 +185,8 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_comment">	 * Converts an Accept-Language value entry to a Locale.</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Locale toLocale(String lang) {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		String country = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">int</strong> i = lang.indexOf('-');
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> country = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> i = lang.indexOf('-');
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">if</strong> (i &gt; -1) {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			country = lang.substring(i + 1).trim();
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			lang = lang.substring(0, i).trim();
@@ -612,7 +612,7 @@
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 	@Override
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 	<strong class="jxr_keyword">public</strong> String getContextPath() {
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		String cp = context.getUriContext();
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">var</strong> cp = context.getUriContext();
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<strong class="jxr_keyword">return</strong> cp == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">inner</strong>.getContextPath() : cp;
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 	}
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 
@@ -854,8 +854,8 @@
 <a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L847" href="#L847">847</a> 	@Override
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> 	<strong class="jxr_keyword">public</strong> Locale getLocale() {
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> 		Locale best = <strong class="jxr_keyword">inner</strong>.getLocale();
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> 		String h = headers.get(<span class="jxr_string">"Accept-Language"</span>).asString().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 		<strong class="jxr_keyword">var</strong> best = <strong class="jxr_keyword">inner</strong>.getLocale();
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 		<strong class="jxr_keyword">var</strong> h = headers.get(<span class="jxr_string">"Accept-Language"</span>).asString().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> 		<strong class="jxr_keyword">if</strong> (h != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 			StringRanges sr = StringRanges.of(h);
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 			<strong class="jxr_keyword">float</strong> qValue = 0;
@@ -935,7 +935,7 @@
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L928" href="#L928">928</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;Operation&gt; getOperationSwagger() {
 <a class="jxr_linenumber" name="L929" href="#L929">929</a> 
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		Optional&lt;Swagger&gt; swagger = getSwagger();
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">var</strong> swagger = getSwagger();
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">if</strong> (! swagger.isPresent())
 <a class="jxr_linenumber" name="L932" href="#L932">932</a> 			<strong class="jxr_keyword">return</strong> Optional.empty();
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 
@@ -1202,10 +1202,10 @@
 <a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> <em class="jxr_javadoccomment">	 * @return The request line of this request.</em>
 <a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 	<strong class="jxr_keyword">public</strong> RequestLine getRequestLine() {
-<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 		String x = <strong class="jxr_keyword">inner</strong>.getProtocol();
-<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		<strong class="jxr_keyword">int</strong> i = x.indexOf('/');
-<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		<strong class="jxr_keyword">int</strong> j = x.indexOf('.', i);
-<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 		ProtocolVersion pv = <strong class="jxr_keyword">new</strong> ProtocolVersion(x.substring(0, i), parseInt(x.substring(i + 1, j)), parseInt(x.substring(j + 1)));
+<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">inner</strong>.getProtocol();
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		<strong class="jxr_keyword">var</strong> i = x.indexOf('/');
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		<strong class="jxr_keyword">var</strong> j = x.indexOf('.', i);
+<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 		<strong class="jxr_keyword">var</strong> pv = <strong class="jxr_keyword">new</strong> ProtocolVersion(x.substring(0, i), parseInt(x.substring(i + 1, j)), parseInt(x.substring(j + 1)));
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BasicRequestLine(<strong class="jxr_keyword">inner</strong>.getMethod(), <strong class="jxr_keyword">inner</strong>.getRequestURI(), pv);
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 	}
 <a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 
@@ -1221,8 +1221,8 @@
 <a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 	@Override
 <a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 	<strong class="jxr_keyword">public</strong> String getServletPath() {
-<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 		String cp = context.getUriContext();
-<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 		String sp = <strong class="jxr_keyword">inner</strong>.getServletPath();
+<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 		<strong class="jxr_keyword">var</strong> cp = context.getUriContext();
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 		<strong class="jxr_keyword">var</strong> sp = <strong class="jxr_keyword">inner</strong>.getServletPath();
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 		<strong class="jxr_keyword">return</strong> cp == <strong class="jxr_keyword">null</strong> || ! sp.startsWith(cp) ? sp : sp.substring(cp.length());
 <a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 	}
 <a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 
@@ -1276,7 +1276,7 @@
 <a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> <em class="jxr_javadoccomment">	 * @return The parsed header on the request, never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;TimeZone&gt; getTimeZone() {
-<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		String tz = headers.get(<span class="jxr_string">"Time-Zone"</span>).asString().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		<strong class="jxr_keyword">var</strong> tz = headers.get(<span class="jxr_string">"Time-Zone"</span>).asString().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 		<strong class="jxr_keyword">if</strong> (tz != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 			<strong class="jxr_keyword">return</strong> Utils.opt(TimeZone.getTimeZone(tz));
 <a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 		<strong class="jxr_keyword">return</strong> Optional.empty();
@@ -1295,7 +1295,7 @@
 <a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> <em class="jxr_javadoccomment">	 * @return A new URI.</em>
 <a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 	<strong class="jxr_keyword">public</strong> URI getUri(<strong class="jxr_keyword">boolean</strong> includeQuery, Map&lt;String,Object&gt; addQueryParams) {
-<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 		String uri = <strong class="jxr_keyword">inner</strong>.getRequestURI();
+<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 		<strong class="jxr_keyword">var</strong> uri = <strong class="jxr_keyword">inner</strong>.getRequestURI();
 <a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 		<strong class="jxr_keyword">if</strong> (includeQuery || addQueryParams != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 			StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(uri);
 <a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 			RequestQueryParams rq = <strong class="jxr_keyword">this</strong>.queryParams.copy();
@@ -1498,7 +1498,7 @@
 <a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 
 <a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"\n"</span>).append(getRequestLine()).append(<span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"\n"</span>).append(getRequestLine()).append(<span class="jxr_string">"\n"</span>);
 <a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 		sb.append(<span class="jxr_string">"---Headers---\n"</span>);
 <a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 		getHeaders().forEach(x -&gt; sb.append(<span class="jxr_string">"\t"</span>).append(x).append(<span class="jxr_string">"\n"</span>));
 <a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 		String m = getMethod();

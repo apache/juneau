@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap() {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		ClassInfo ci = ClassInfo.of(<strong class="jxr_keyword">this</strong>.getClass());
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(<strong class="jxr_keyword">this</strong>.getClass());
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		normalClass = (Class&lt;T&gt;)ci.getParameterType(0, ObjectSwap.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		swapClass = ci.getParameterType(1, ObjectSwap.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		normalClassInfo = ClassInfo.of(normalClass);
@@ -275,7 +275,7 @@
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">if</strong> (forMediaTypes == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">return</strong> 1;
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		MediaType mt = session.getMediaType();
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">var</strong> mt = session.getMediaType();
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">if</strong> (mt == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">return</strong> 0;
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">if</strong> (forMediaTypes != <strong class="jxr_keyword">null</strong>)

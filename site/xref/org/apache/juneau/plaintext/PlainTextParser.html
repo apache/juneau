@@ -651,7 +651,7 @@
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 	<strong class="jxr_keyword">public</strong> <a name="PlainTextBeanPropertyMeta" href="../../../../org/apache/juneau/plaintext/PlainTextBeanPropertyMeta.html#PlainTextBeanPropertyMeta">PlainTextBeanPropertyMeta</a> getPlainTextBeanPropertyMeta(BeanPropertyMeta bpm) {
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 			<strong class="jxr_keyword">return</strong> PlainTextBeanPropertyMeta.DEFAULT;
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		PlainTextBeanPropertyMeta m = plainTextBeanPropertyMetas.get(bpm);
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">var</strong> m = plainTextBeanPropertyMetas.get(bpm);
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 			m = <strong class="jxr_keyword">new</strong> <a name="PlainTextBeanPropertyMeta" href="../../../../org/apache/juneau/plaintext/PlainTextBeanPropertyMeta.html#PlainTextBeanPropertyMeta">PlainTextBeanPropertyMeta</a>(bpm.getDelegateFor(), <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 			plainTextBeanPropertyMetas.put(bpm, m);
@@ -661,7 +661,7 @@
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 	@Override <em class="jxr_comment">/* Overridden from PlainTextMetaProvider */</em>
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 	<strong class="jxr_keyword">public</strong> <a name="PlainTextClassMeta" href="../../../../org/apache/juneau/plaintext/PlainTextClassMeta.html#PlainTextClassMeta">PlainTextClassMeta</a> getPlainTextClassMeta(ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		PlainTextClassMeta m = plainTextClassMetas.get(cm);
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">var</strong> m = plainTextClassMetas.get(cm);
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 			m = <strong class="jxr_keyword">new</strong> <a name="PlainTextClassMeta" href="../../../../org/apache/juneau/plaintext/PlainTextClassMeta.html#PlainTextClassMeta">PlainTextClassMeta</a>(cm, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 			plainTextClassMetas.put(cm, m);

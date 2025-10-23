@@ -61,7 +61,7 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * @throws Throwable If an error occurred during either parameter resolution or method invocation.</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> invoke(<a name="RestOpSession" href="../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		Object[] args = <strong class="jxr_keyword">new</strong> Object[opArgs.length];
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> Object[opArgs.length];
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; opArgs.length; i++) {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  			ParamInfo pi = <strong class="jxr_keyword">inner</strong>().getParam(i);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  			<strong class="jxr_keyword">try</strong> {

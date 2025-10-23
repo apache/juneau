@@ -1077,7 +1077,7 @@
 <a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/swagger/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setRequiredProperties(String...value) {
-<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 		setRequiredProperties(CollectionUtils.setb(String.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 		setRequiredProperties(CollectionUtils.setb(String.<strong class="jxr_keyword">class</strong>).sparse().addAny((Object[])value).build());
 <a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 	}
 <a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 

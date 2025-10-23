@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	}
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addToRepo() <strong class="jxr_keyword">throws</strong> IOException, NoFilepatternException, GitAPIException {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		AddCommand add = git.add();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> add = git.add();
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		add.addFilepattern(<span class="jxr_string">"."</span>).call();
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
@@ -76,10 +76,10 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> pushToRepo() <strong class="jxr_keyword">throws</strong> IOException, JGitInternalException, InvalidRemoteException, GitAPIException {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		PushCommand pc = git.push();
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> pc = git.push();
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		pc.setCredentialsProvider(cp).setForce(<strong class="jxr_keyword">true</strong>).setPushAll();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			Iterator&lt;PushResult&gt; it = pc.call().iterator();
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">var</strong> it = pc.call().iterator();
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">if</strong> (it.hasNext()) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  				System.out.println(it.next().toString());
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			}

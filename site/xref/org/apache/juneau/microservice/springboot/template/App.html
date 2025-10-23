@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Bean
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> FilterRegistrationBean&lt;HiddenHttpMethodFilter&gt; registration(HiddenHttpMethodFilter filter) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		FilterRegistrationBean&lt;HiddenHttpMethodFilter&gt; registration = <strong class="jxr_keyword">new</strong> FilterRegistrationBean&lt;&gt;(filter);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> registration = <strong class="jxr_keyword">new</strong> FilterRegistrationBean&lt;&gt;(filter);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		registration.setEnabled(false);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">return</strong> registration;
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}

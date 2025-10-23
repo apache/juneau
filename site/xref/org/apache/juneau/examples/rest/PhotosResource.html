@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	@RestDelete(<span class="jxr_string">"/{id}"</span>)
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">public</strong> <a name="Ok" href="../../../../../org/apache/juneau/http/response/Ok.html#Ok">Ok</a> deletePhoto(@Path(<span class="jxr_string">"id"</span>) <strong class="jxr_keyword">int</strong> id) <strong class="jxr_keyword">throws</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a> {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		Photo p = photos.remove(id);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> p = photos.remove(id);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"Photo not found"</span>);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">return</strong> Ok.OK;
@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	@RestGet(path = <span class="jxr_string">"/{id}"</span>, serializers = ImageSerializer.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">public</strong> BufferedImage getPhoto(@Path(<span class="jxr_string">"id"</span>) <strong class="jxr_keyword">int</strong> id) <strong class="jxr_keyword">throws</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a> {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		Photo p = photos.get(id);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> p = photos.get(id);
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"Photo not found"</span>);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">return</strong> p.image;
@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	@RestPost(path = <span class="jxr_string">"/"</span>, parsers = ImageParser.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">public</strong> Photo setPhoto(@Content BufferedImage image) {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">int</strong> id = photos.size();
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		Photo p = <strong class="jxr_keyword">new</strong> Photo(id, image);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">new</strong> Photo(id, image);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		photos.put(id, p);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">return</strong> p;
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}

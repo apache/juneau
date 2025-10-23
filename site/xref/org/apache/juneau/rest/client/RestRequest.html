@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x instanceof <a name="SerializedPart" href="../../../../../org/apache/juneau/http/part/SerializedPart.html#SerializedPart">SerializedPart</a>) {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 				value = ((<a name="SerializedPart" href="../../../../../org/apache/juneau/http/part/SerializedPart.html#SerializedPart">SerializedPart</a>)x).copyWith(getPartSerializerSession(), <strong class="jxr_keyword">null</strong>).getValue();
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 				String v = x.getValue();
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 				<strong class="jxr_keyword">var</strong> v = x.getValue();
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 				value = (isEmpty(v) &amp;&amp; skipIfEmpty) ? <strong class="jxr_keyword">null</strong> : v;
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			}
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}
@@ -1647,7 +1647,7 @@
 <a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> 	<strong class="jxr_keyword">public</strong> <a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> queryCustom(Object value) {
 <a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> 			String q = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> 			<strong class="jxr_keyword">var</strong> q = (String)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> 			<strong class="jxr_keyword">if</strong> (value instanceof Reader)
 <a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> 				q = read((Reader)value);
 <a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof InputStream)

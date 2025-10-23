@@ -3180,7 +3180,7 @@
 <a class="jxr_linenumber" name="L3172" href="#L3172">3172</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toIsoDate(Calendar c) {
 <a class="jxr_linenumber" name="L3173" href="#L3173">3173</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L3174" href="#L3174">3174</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L3175" href="#L3175">3175</a> 	}
+<a class="jxr_linenumber" name="L3175" href="#L3175">3175</a> 		}
 <a class="jxr_linenumber" name="L3176" href="#L3176">3176</a> 		<em class="jxr_comment">// Convert Calendar to ZonedDateTime and format as ISO8601 date (YYYY-MM-DD)</em>
 <a class="jxr_linenumber" name="L3177" href="#L3177">3177</a> 		ZonedDateTime zdt = c.toInstant().atZone(c.getTimeZone().toZoneId());
 <a class="jxr_linenumber" name="L3178" href="#L3178">3178</a> 		<strong class="jxr_keyword">return</strong> zdt.format(DateTimeFormatter.ISO_LOCAL_DATE);

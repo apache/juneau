@@ -51,15 +51,15 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Override
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		Config config = Config.create().name(<span class="jxr_string">"juneau-server-config.cfg"</span>).build();
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">var</strong> config = Config.create().name(<span class="jxr_string">"juneau-server-config.cfg"</span>).build();
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		String pathStr = config.get(<span class="jxr_string">"GitServer/pathLocal"</span>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> pathStr = config.get(<span class="jxr_string">"GitServer/pathLocal"</span>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		String git = config.get(<span class="jxr_string">"GitServer/gitRemote"</span>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> git = config.get(<span class="jxr_string">"GitServer/gitRemote"</span>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		GitControl gitControl = <strong class="jxr_keyword">new</strong> GitControl(pathStr, git);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">var</strong> gitControl = <strong class="jxr_keyword">new</strong> GitControl(pathStr, git);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		File path = <strong class="jxr_keyword">new</strong> File(pathStr);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> path = <strong class="jxr_keyword">new</strong> File(pathStr);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">if</strong> (path.isDirectory()) {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  			gitControl.pullFromRepo();
@@ -70,18 +70,18 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		gitControl.branch(branch);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		gitControl.pullFromRepo();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		String fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		String fileProjectStr = <strong class="jxr_keyword">this</strong>.project.concat(EXT);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> fileProjectStr = <strong class="jxr_keyword">this</strong>.project.concat(EXT);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		File fileDefault = <strong class="jxr_keyword">new</strong> File(pathStr.concat(BAR).concat(fileDefaultStr));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> fileDefault = <strong class="jxr_keyword">new</strong> File(pathStr.concat(BAR).concat(fileDefaultStr));
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">if</strong> (fileDefault.exists()) {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			String lines = <strong class="jxr_keyword">new</strong> String(Files.readAllBytes(fileDefault.toPath()));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">var</strong> lines = <strong class="jxr_keyword">new</strong> String(Files.readAllBytes(fileDefault.toPath()));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			configs.put(APPLICATION, <strong class="jxr_keyword">new</strong> <a name="ConfigItem" href="../../../../../../org/apache/juneau/server/config/repository/ConfigItem.html#ConfigItem">ConfigItem</a>(lines));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		}
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		File fileProject = <strong class="jxr_keyword">new</strong> File(pathStr.concat(BAR).concat(fileProjectStr));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> fileProject = <strong class="jxr_keyword">new</strong> File(pathStr.concat(BAR).concat(fileProjectStr));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">if</strong> (fileProject.exists()) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			String linesProject = <strong class="jxr_keyword">new</strong> String(Files.readAllBytes(fileProject.toPath()));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">var</strong> linesProject = <strong class="jxr_keyword">new</strong> String(Files.readAllBytes(fileProject.toPath()));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			configs.put(PROJECT, <strong class="jxr_keyword">new</strong> <a name="ConfigItem" href="../../../../../../org/apache/juneau/server/config/repository/ConfigItem.html#ConfigItem">ConfigItem</a>(linesProject));
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		}
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}

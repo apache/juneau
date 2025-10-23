@@ -29,32 +29,31 @@
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> javax.imageio.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Example serializer that converts {@link BufferedImage} objects to byte streams.</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/Marshalling" target="alexandria_uri">https://juneau.apache.org/docs/topics/Marshalling</a>"&gt;Marshalling&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  @SuppressWarnings(<span class="jxr_string">"javadoc"</span>)
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ImageSerializer" href="../../../../../org/apache/juneau/examples/serializer/ImageSerializer.html#ImageSerializer">ImageSerializer</a> <strong class="jxr_keyword">extends</strong> <a name="OutputStreamSerializer" href="../../../../../org/apache/juneau/serializer/OutputStreamSerializer.html#OutputStreamSerializer">OutputStreamSerializer</a> {
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> <a name="ImageSerializer" href="../../../../../org/apache/juneau/examples/serializer/ImageSerializer.html#ImageSerializer">ImageSerializer</a>() {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">super</strong>(create().produces(<span class="jxr_string">"image/png,image/jpeg"</span>));
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	}
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@Override
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerSession" href="../../../../../org/apache/juneau/serializer/SerializerSession.html#SerializerSession">SerializerSession</a> session, <a name="SerializerPipe" href="../../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> pipe, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		RenderedImage image = (RenderedImage)o;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		MediaType mediaType = session.getMediaType();
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">try</strong> (OutputStream os = pipe.getOutputStream()) {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			ImageIO.write(image, mediaType.getType(), os);
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		}
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  }
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Example serializer that converts {@link BufferedImage} objects to byte streams.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/Marshalling" target="alexandria_uri">https://juneau.apache.org/docs/topics/Marshalling</a>"&gt;Marshalling&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  @SuppressWarnings(<span class="jxr_string">"javadoc"</span>)
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ImageSerializer" href="../../../../../org/apache/juneau/examples/serializer/ImageSerializer.html#ImageSerializer">ImageSerializer</a> <strong class="jxr_keyword">extends</strong> <a name="OutputStreamSerializer" href="../../../../../org/apache/juneau/serializer/OutputStreamSerializer.html#OutputStreamSerializer">OutputStreamSerializer</a> {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">public</strong> <a name="ImageSerializer" href="../../../../../org/apache/juneau/examples/serializer/ImageSerializer.html#ImageSerializer">ImageSerializer</a>() {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">super</strong>(create().produces(<span class="jxr_string">"image/png,image/jpeg"</span>));
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	}
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Override
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerSession" href="../../../../../org/apache/juneau/serializer/SerializerSession.html#SerializerSession">SerializerSession</a> session, <a name="SerializerPipe" href="../../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> pipe, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">var</strong> image = (RenderedImage)o;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">var</strong> mediaType = session.getMediaType();
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = pipe.getOutputStream()) {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			ImageIO.write(image, mediaType.getType(), os);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		}
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

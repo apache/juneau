@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Override <em class="jxr_comment">/* Overridden from TemporalAccessor */</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> &lt;R&gt; R query(TemporalQuery&lt;R&gt; query) {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		R r = <strong class="jxr_keyword">inner</strong>.query(query);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">inner</strong>.query(query);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">if</strong> (r != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">return</strong> r;

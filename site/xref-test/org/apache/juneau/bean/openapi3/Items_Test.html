@@ -26,497 +26,496 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bean.openapi3.OpenApiBuilder.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.net.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Testcase for {@link Items}.</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">class</strong> <a name="Items_Test" href="../../../../../org/apache/juneau/bean/openapi3/Items_Test.html#Items_Test">Items_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	@Nested <strong class="jxr_keyword">class</strong> A_basicTests <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Items&gt; TESTER =
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			testBean(
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  				bean()
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  					.setCollectionFormat(<span class="jxr_string">"a"</span>)
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  					.setDefault(<span class="jxr_string">"b"</span>)
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  					.setEnum(list(<span class="jxr_string">"c1"</span>, <span class="jxr_string">"c2"</span>))
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  					.setExclusiveMaximum(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  					.setExclusiveMinimum(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  					.setFormat(<span class="jxr_string">"d"</span>)
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  					.setItems(bean().setType(<span class="jxr_string">"e"</span>))
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  					.setMaxItems(1)
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  					.setMaxLength(2)
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  					.setMaximum(3)
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  					.setMinItems(4)
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  					.setMinLength(5)
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  					.setMinimum(6)
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  					.setMultipleOf(7)
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  					.setPattern(<span class="jxr_string">"f"</span>)
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  					.setRef(<span class="jxr_string">"g"</span>)
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  					.setType(<span class="jxr_string">"h"</span>)
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  					.setUniqueItems(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			)
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.props(<span class="jxr_string">"collectionFormat,default,enum,exclusiveMaximum,exclusiveMinimum,format,items{type},maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,ref,type,uniqueItems"</span>)
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.vals(<span class="jxr_string">"a,b,[c1,c2],true,true,d,{e},3,1,2,6,4,5,7,f,g,h,true"</span>)
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			.json(<span class="jxr_string">"{'$ref':'g',collectionFormat:'a','default':'b','enum':['c1','c2'],exclusiveMaximum:true,exclusiveMinimum:true,format:'d',items:{type:'e'},maxItems:1,maxLength:2,maximum:3,minItems:4,minLength:5,minimum:6,multipleOf:7,pattern:'f',type:'h',uniqueItems:true}"</span>)
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			.string(<span class="jxr_string">"{'$ref':'g','collectionFormat':'a','default':'b','enum':['c1','c2'],'exclusiveMaximum':true,'exclusiveMinimum':true,'format':'d','items':{'type':'e'},'maxItems':1,'maxLength':2,'maximum':3,'minItems':4,'minLength':5,'minimum':6,'multipleOf':7,'pattern':'f','type':'h','uniqueItems':true}"</span>.replace('\'','&quot;'))
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		@Test <strong class="jxr_keyword">void</strong> a01_gettersAndSetters() {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			TESTER.assertGettersAndSetters();
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		}
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		@Test <strong class="jxr_keyword">void</strong> a02_copy() {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			TESTER.assertCopy();
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		}
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		@Test <strong class="jxr_keyword">void</strong> a03_toJson() {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			TESTER.assertToJson();
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		}
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		@Test <strong class="jxr_keyword">void</strong> a04_fromJson() {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			TESTER.assertFromJson();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		}
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		@Test <strong class="jxr_keyword">void</strong> a05_roundTrip() {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			TESTER.assertRoundTrip();
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		}
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		@Test <strong class="jxr_keyword">void</strong> a06_toString() {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			TESTER.assertToString();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		}
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		@Test <strong class="jxr_keyword">void</strong> a07_keySet() {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			assertList(TESTER.bean().keySet(), <span class="jxr_string">"$ref"</span>, <span class="jxr_string">"collectionFormat"</span>, <span class="jxr_string">"default"</span>, <span class="jxr_string">"enum"</span>, <span class="jxr_string">"exclusiveMaximum"</span>, <span class="jxr_string">"exclusiveMinimum"</span>, <span class="jxr_string">"format"</span>, <span class="jxr_string">"items"</span>, <span class="jxr_string">"maxItems"</span>, <span class="jxr_string">"maxLength"</span>, <span class="jxr_string">"maximum"</span>, <span class="jxr_string">"minItems"</span>, <span class="jxr_string">"minLength"</span>, <span class="jxr_string">"minimum"</span>, <span class="jxr_string">"multipleOf"</span>, <span class="jxr_string">"pattern"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"uniqueItems"</span>);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		}
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		@Test <strong class="jxr_keyword">void</strong> a08_nullParameters() {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">var</strong> x = bean();
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.get(<strong class="jxr_keyword">null</strong>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.set(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"value"</span>));
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		}
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		@Test <strong class="jxr_keyword">void</strong> a08b_getSetRef() {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<em class="jxr_comment">// Test get/set with "$ref" property to cover switch branches</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">var</strong> x = bean();
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			x.set(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/MyItem"</span>);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			assertEquals(<span class="jxr_string">"#/components/schemas/MyItem"</span>, x.get(<span class="jxr_string">"$ref"</span>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			assertEquals(<span class="jxr_string">"#/components/schemas/MyItem"</span>, x.getRef());
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		}
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		@Test <strong class="jxr_keyword">void</strong> a09_addMethods() {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			assertBean(
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				bean()
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 					.addEnum(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>),
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<span class="jxr_string">"enum"</span>,
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 				<span class="jxr_string">"[a1,a2]"</span>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		@Test <strong class="jxr_keyword">void</strong> a10_asMap() {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			assertBean(
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 				bean()
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 					.setType(<span class="jxr_string">"a"</span>)
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 					.set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>)
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 					.asMap(),
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 				<span class="jxr_string">"type,x1"</span>,
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 				<span class="jxr_string">"a,x1a"</span>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			);
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		}
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		@Test <strong class="jxr_keyword">void</strong> a11_extraKeys() {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">var</strong> x = bean().set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>).set(<span class="jxr_string">"x2"</span>, <span class="jxr_string">"x2a"</span>);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			assertList(x.extraKeys(), <span class="jxr_string">"x1"</span>, <span class="jxr_string">"x2"</span>);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			assertEmpty(bean().extraKeys());
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		}
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		@Test <strong class="jxr_keyword">void</strong> a12_getItemsProperty() {
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">var</strong> x = bean().setItems(bean().setType(<span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			assertBean(x.get(<span class="jxr_string">"items"</span>, Items.<strong class="jxr_keyword">class</strong>), <span class="jxr_string">"type"</span>, <span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		@Test <strong class="jxr_keyword">void</strong> a13_strictMode() {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; bean().strict().set(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>));
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			assertDoesNotThrow(() -&gt; bean().set(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>));
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			assertFalse(bean().isStrict());
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			assertTrue(bean().strict().isStrict());
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			assertFalse(bean().strict(false).isStrict());
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">var</strong> x = bean().strict();
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">var</strong> y = bean();
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='invalid', valid values=['string','number','integer','boolean','array']"</span>, () -&gt; x.setType(<span class="jxr_string">"invalid"</span>));
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"string"</span>));
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"number"</span>));
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"integer"</span>));
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"boolean"</span>));
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"array"</span>));
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			assertDoesNotThrow(() -&gt; y.setType(<span class="jxr_string">"invalid"</span>));
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setCollectionFormat(String).  Value='invalid', valid values=[csv, ssv, tsv, pipes, multi]"</span>, () -&gt; x.setCollectionFormat(<span class="jxr_string">"invalid"</span>));
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"csv"</span>));
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"ssv"</span>));
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"tsv"</span>));
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"pipes"</span>));
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"multi"</span>));
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			assertDoesNotThrow(() -&gt; y.setCollectionFormat(<span class="jxr_string">"invalid"</span>));
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Nested <strong class="jxr_keyword">class</strong> B_emptyTests <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Items&gt; TESTER =
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			testBean(bean())
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			.props(<span class="jxr_string">"type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,ref"</span>)
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			.vals(<span class="jxr_string">"&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;"</span>)
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			.json(<span class="jxr_string">"{}"</span>)
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			.string(<span class="jxr_string">"{}"</span>)
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		;
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		@Test <strong class="jxr_keyword">void</strong> b01_gettersAndSetters() {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			TESTER.assertGettersAndSetters();
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		}
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		@Test <strong class="jxr_keyword">void</strong> b02_copy() {
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			TESTER.assertCopy();
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		@Test <strong class="jxr_keyword">void</strong> b03_toJson() {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			TESTER.assertToJson();
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		}
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		@Test <strong class="jxr_keyword">void</strong> b04_fromJson() {
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			TESTER.assertFromJson();
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		}
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		@Test <strong class="jxr_keyword">void</strong> b05_roundTrip() {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			TESTER.assertRoundTrip();
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		}
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		@Test <strong class="jxr_keyword">void</strong> b06_toString() {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			TESTER.assertToString();
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		}
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		@Test <strong class="jxr_keyword">void</strong> b07_keySet() {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			assertEmpty(TESTER.bean().keySet());
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		}
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	@Nested <strong class="jxr_keyword">class</strong> C_extraProperties <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Items&gt; TESTER =
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			testBean(
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				bean()
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 					.set(<span class="jxr_string">"additionalItems"</span>, schemaInfo(<span class="jxr_string">"a"</span>))
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 					.set(<span class="jxr_string">"allOf"</span>, list(schemaInfo(<span class="jxr_string">"b1"</span>), schemaInfo(<span class="jxr_string">"b2"</span>)))
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 					.set(<span class="jxr_string">"collectionFormat"</span>, <span class="jxr_string">"c"</span>)
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					.set(<span class="jxr_string">"default"</span>, <span class="jxr_string">"d"</span>)
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 					.set(<span class="jxr_string">"discriminator"</span>, <span class="jxr_string">"e"</span>)
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 					.set(<span class="jxr_string">"enum"</span>, list(<span class="jxr_string">"f1"</span>, <span class="jxr_string">"f2"</span>))
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 					.set(<span class="jxr_string">"example"</span>, <span class="jxr_string">"g"</span>)
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 					.set(<span class="jxr_string">"exclusiveMaximum"</span>, <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					.set(<span class="jxr_string">"exclusiveMinimum"</span>, <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 					.set(<span class="jxr_string">"externalDocs"</span>, externalDocumentation().setUrl(URI.create(<span class="jxr_string">"h"</span>)))
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 					.set(<span class="jxr_string">"format"</span>, <span class="jxr_string">"i"</span>)
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 					.set(<span class="jxr_string">"items"</span>, bean().setType(<span class="jxr_string">"j"</span>))
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 					.set(<span class="jxr_string">"maxItems"</span>, 1)
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 					.set(<span class="jxr_string">"maxLength"</span>, 2)
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 					.set(<span class="jxr_string">"maxProperties"</span>, 3)
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					.set(<span class="jxr_string">"maximum"</span>, 4)
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 					.set(<span class="jxr_string">"minItems"</span>, 5)
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 					.set(<span class="jxr_string">"minLength"</span>, 6)
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 					.set(<span class="jxr_string">"minProperties"</span>, 7)
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 					.set(<span class="jxr_string">"minimum"</span>, 8)
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					.set(<span class="jxr_string">"multipleOf"</span>, 9)
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 					.set(<span class="jxr_string">"pattern"</span>, <span class="jxr_string">"k"</span>)
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					.set(<span class="jxr_string">"properties"</span>, map(<span class="jxr_string">"l1"</span>, schemaInfo(<span class="jxr_string">"l2"</span>)))
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 					.set(<span class="jxr_string">"readOnly"</span>, <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					.set(<span class="jxr_string">"required"</span>, list(<span class="jxr_string">"m1"</span>, <span class="jxr_string">"m2"</span>))
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 					.set(<span class="jxr_string">"title"</span>, <span class="jxr_string">"n"</span>)
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 					.set(<span class="jxr_string">"type"</span>, <span class="jxr_string">"o"</span>)
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 					.set(<span class="jxr_string">"uniqueItems"</span>, <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					.set(<span class="jxr_string">"xml"</span>, xml().setName(<span class="jxr_string">"p"</span>))
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 					.set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>)
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 					.set(<span class="jxr_string">"x2"</span>, <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			)
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			.props(<span class="jxr_string">"additionalItems{type},allOf{#{type}},collectionFormat,default,discriminator,enum{#{toString}},example,exclusiveMaximum,exclusiveMinimum,externalDocs{url},format,items{type},maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,pattern,properties{l1{type}},readOnly,required{#{toString}},title,type,uniqueItems,xml{name},x1,x2"</span>)
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			.vals(<span class="jxr_string">"{a},{[{b1},{b2}]},c,d,e,{[{f1},{f2}]},g,true,true,{h},i,{j},1,2,3,4,5,6,7,8,9,k,{{l2}},true,{[{m1},{m2}]},n,o,true,{p},x1a,&lt;null&gt;"</span>)
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			.json(<span class="jxr_string">"{additionalItems:{type:'a'},allOf:[{type:'b1'},{type:'b2'}],collectionFormat:'c','default':'d',discriminator:'e','enum':['f1','f2'],example:'g',exclusiveMaximum:true,exclusiveMinimum:true,externalDocs:{url:'h'},format:'i',items:{type:'j'},maxItems:1,maxLength:2,maxProperties:3,maximum:4,minItems:5,minLength:6,minProperties:7,minimum:8,multipleOf:9,pattern:'k',properties:{l1:{type:'l2'}},readOnly:true,required:['m1','m2'],title:'n',type:'o',uniqueItems:true,x1:'x1a',xml:{name:'p'}}"</span>)
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			.string(<span class="jxr_string">"{'additionalItems':{'type':'a'},'allOf':[{'type':'b1'},{'type':'b2'}],'collectionFormat':'c','default':'d','discriminator':'e','enum':['f1','f2'],'example':'g','exclusiveMaximum':true,'exclusiveMinimum':true,'externalDocs':{'url':'h'},'format':'i','items':{'type':'j'},'maxItems':1,'maxLength':2,'maxProperties':3,'maximum':4,'minItems':5,'minLength':6,'minProperties':7,'minimum':8,'multipleOf':9,'pattern':'k','properties':{'l1':{'type':'l2'}},'readOnly':true,'required':['m1','m2'],'title':'n','type':'o','uniqueItems':true,'x1':'x1a','xml':{'name':'p'}}"</span>.replace('\'', '&quot;'))
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		;
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		@Test <strong class="jxr_keyword">void</strong> c01_gettersAndSetters() {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			TESTER.assertGettersAndSetters();
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		}
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		@Test <strong class="jxr_keyword">void</strong> c02_copy() {
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			TESTER.assertCopy();
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		}
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		@Test <strong class="jxr_keyword">void</strong> c03_toJson() {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			TESTER.assertToJson();
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		}
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		@Test <strong class="jxr_keyword">void</strong> c04_fromJson() {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			TESTER.assertFromJson();
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		}
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		@Test <strong class="jxr_keyword">void</strong> c05_roundTrip() {
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			TESTER.assertRoundTrip();
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		}
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		@Test <strong class="jxr_keyword">void</strong> c06_toString() {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			TESTER.assertToString();
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		}
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		@Test <strong class="jxr_keyword">void</strong> c07_keySet() {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			assertList(TESTER.bean().keySet(), <span class="jxr_string">"additionalItems"</span>, <span class="jxr_string">"allOf"</span>, <span class="jxr_string">"collectionFormat"</span>, <span class="jxr_string">"default"</span>, <span class="jxr_string">"discriminator"</span>, <span class="jxr_string">"enum"</span>, <span class="jxr_string">"example"</span>, <span class="jxr_string">"exclusiveMaximum"</span>, <span class="jxr_string">"exclusiveMinimum"</span>, <span class="jxr_string">"externalDocs"</span>, <span class="jxr_string">"format"</span>, <span class="jxr_string">"items"</span>, <span class="jxr_string">"maxItems"</span>, <span class="jxr_string">"maxLength"</span>, <span class="jxr_string">"maxProperties"</span>, <span class="jxr_string">"maximum"</span>, <span class="jxr_string">"minItems"</span>, <span class="jxr_string">"minLength"</span>, <span class="jxr_string">"minProperties"</span>, <span class="jxr_string">"minimum"</span>, <span class="jxr_string">"multipleOf"</span>, <span class="jxr_string">"pattern"</span>, <span class="jxr_string">"properties"</span>, <span class="jxr_string">"readOnly"</span>, <span class="jxr_string">"required"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"uniqueItems"</span>, <span class="jxr_string">"x1"</span>, <span class="jxr_string">"x2"</span>, <span class="jxr_string">"xml"</span>);
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		}
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		@Test <strong class="jxr_keyword">void</strong> c08_get() {
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			assertMapped(
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 				TESTER.bean(), (obj,prop) -&gt; obj.get(prop, Object.<strong class="jxr_keyword">class</strong>),
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 				<span class="jxr_string">"additionalItems{type},allOf{#{type}},collectionFormat,default,discriminator,enum{#{toString}},example,exclusiveMaximum,exclusiveMinimum,externalDocs{url},format,items{type},maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,pattern,properties{l1{type}},readOnly,required{#{toString}},title,type,uniqueItems,xml{name},x1,x2"</span>,
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 				<span class="jxr_string">"{a},{[{b1},{b2}]},c,d,e,{[{f1},{f2}]},g,true,true,{h},i,{j},1,2,3,4,5,6,7,8,9,k,{{l2}},true,{[{m1},{m2}]},n,o,true,{p},x1a,&lt;null&gt;"</span>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		}
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			assertMapped(
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				TESTER.bean(), (obj,prop) -&gt; simpleClassNameOf(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				<span class="jxr_string">"additionalItems,allOf,collectionFormat,default,discriminator,enum,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,pattern,properties,readOnly,required,title,type,uniqueItems,xml,x1,x2"</span>,
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 				<span class="jxr_string">"SchemaInfo,ArrayList,String,String,String,ArrayList,String,Boolean,Boolean,ExternalDocumentation,String,Items,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,String,LinkedHashMap,Boolean,ArrayList,String,String,Boolean,Xml,String,&lt;null&gt;"</span>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		}
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		@Test <strong class="jxr_keyword">void</strong> c10_nullPropertyValue() {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;bean().get(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;bean().get(<strong class="jxr_keyword">null</strong>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;bean().set(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		}
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	@Nested <strong class="jxr_keyword">class</strong> D_refs <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		@Test <strong class="jxr_keyword">void</strong> d01_resolveRefs_basic() {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				.setComponents(components().setSchemas(Map.of(
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 					<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>)
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 				)));
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			assertBean(
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 				<span class="jxr_string">"type"</span>,
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 				<span class="jxr_string">"string"</span>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			);
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		}
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		@Test <strong class="jxr_keyword">void</strong> d02_resolveRefs_nestedItems() {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 				.setComponents(components().setSchemas(Map.of(
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 					<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>),
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 					<span class="jxr_string">"MyArray"</span>, schemaInfo().setType(<span class="jxr_string">"array"</span>).setItems(items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>))
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 				)));
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			assertBean(
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyArray"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 				<span class="jxr_string">"type,items{type}"</span>,
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				<span class="jxr_string">"array,{string}"</span>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		}
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		@Test <strong class="jxr_keyword">void</strong> d03_resolveRefs_maxDepth() {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				.setComponents(components().setSchemas(Map.of(
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 					<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>),
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 					<span class="jxr_string">"MyArray"</span>, schemaInfo().setType(<span class="jxr_string">"array"</span>).setItems(items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>))
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 				)));
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			assertBean(
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyArray"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 1),
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 				<span class="jxr_string">"type,items{ref}"</span>,
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 				<span class="jxr_string">"array,{#/components/schemas/MyItem}"</span>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		}
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		@Test <strong class="jxr_keyword">void</strong> d04_resolveRefsWithRef() {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 				.setComponents(components().setSchemas(Map.of(
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 					<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>)
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 				)));
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			assertBean(
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<span class="jxr_string">"type"</span>,
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 				<span class="jxr_string">"string"</span>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			);
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			refStack.add(<span class="jxr_string">"#/components/schemas/MyItem"</span>);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<em class="jxr_comment">// With ref stack contains.</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			assertBean(
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>).resolveRefs(openApi, refStack, 10),
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 				<span class="jxr_string">"ref"</span>,
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 				<span class="jxr_string">"#/components/schemas/MyItem"</span>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			);
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<em class="jxr_comment">// With max depth.</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			assertBean(
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 0),
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 				<span class="jxr_string">"ref"</span>,
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 				<span class="jxr_string">"#/components/schemas/MyItem"</span>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<em class="jxr_comment">// With properties.</em>
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			assertBean(
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 				items()
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 					.set(<span class="jxr_string">"properties"</span>, JsonMap.of(<span class="jxr_string">"prop1"</span>, JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/MyItem"</span>)))
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 					.resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 				<span class="jxr_string">"properties{prop1{type}}"</span>,
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 				<span class="jxr_string">"{{string}}"</span>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<em class="jxr_comment">// With items.</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertBean(
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 				items().setItems(items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>)).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				<span class="jxr_string">"items{type}"</span>,
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 				<span class="jxr_string">"{string}"</span>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<em class="jxr_comment">// Examle null.</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			assertBean(
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				items().set(<span class="jxr_string">"example"</span>, <span class="jxr_string">"test"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 				<span class="jxr_string">"example"</span>,
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 				<span class="jxr_string">"&lt;null&gt;"</span>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			);
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<em class="jxr_comment">// Without ref.</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			assertBean(
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 				items().setType(<span class="jxr_string">"string"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 				<span class="jxr_string">"type,example"</span>,
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 				<span class="jxr_string">"string,&lt;null&gt;"</span>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<em class="jxr_comment">// With null items.</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			assertBean(
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 				items().setType(<span class="jxr_string">"string"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10), <em class="jxr_comment">// items is null</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 				<span class="jxr_string">"type,items,example"</span>,
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 				<span class="jxr_string">"string,&lt;null&gt;,&lt;null&gt;"</span>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			);
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<em class="jxr_comment">// With null properties.</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			assertBean(
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 				items().setType(<span class="jxr_string">"string"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10), <em class="jxr_comment">// no properties set</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 				<span class="jxr_string">"type,example"</span>,
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 				<span class="jxr_string">"string,&lt;null&gt;"</span>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			);
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		}
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		@Test <strong class="jxr_keyword">void</strong> d04_resolveRefs_noRefNoItems() {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<em class="jxr_comment">// Test resolveRefs when both ref and items are null (covers the missing branch)</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 				.setComponents(components().setSchemas(map(<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>))));
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">var</strong> items = bean()
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 				.setType(<span class="jxr_string">"string"</span>)
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 				.setFormat(<span class="jxr_string">"text"</span>);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">var</strong> result = items.resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<em class="jxr_comment">// Should return the same object unchanged</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			assertSame(items, result);
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			assertEquals(<span class="jxr_string">"string"</span>, result.getType());
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			assertEquals(<span class="jxr_string">"text"</span>, result.getFormat());
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		}
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		@Test <strong class="jxr_keyword">void</strong> d05_resolveRefs_circularReference() {
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<em class="jxr_comment">// Test circular reference detection in extra attributes</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 				.setComponents(components().setSchemas(map(
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 					<span class="jxr_string">"Item1"</span>, schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/Item2"</span>),
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 					<span class="jxr_string">"Item2"</span>, schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/Item1"</span>)
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 				)));
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			refStack.add(<span class="jxr_string">"#/components/schemas/Item1"</span>);
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">var</strong> item = items()
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 				.setType(<span class="jxr_string">"object"</span>)
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 				.set(<span class="jxr_string">"properties"</span>, JsonMap.of(<span class="jxr_string">"prop1"</span>, JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/Item1"</span>)));
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">var</strong> result = item.resolveRefs(openApi, refStack, 10);
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<em class="jxr_comment">// Should return object with unresolved circular ref in properties</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			assertSame(item, result);
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		}
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		@Test <strong class="jxr_keyword">void</strong> d06_resolveRefs_maxDepthDirect() {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			<em class="jxr_comment">// Test max depth directly</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 				.setComponents(components().setSchemas(map(<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>))));
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			refStack.add(<span class="jxr_string">"dummy1"</span>);
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			refStack.add(<span class="jxr_string">"dummy2"</span>);
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			refStack.add(<span class="jxr_string">"dummy3"</span>);
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">var</strong> item = items()
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 				.setType(<span class="jxr_string">"object"</span>)
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 				.set(<span class="jxr_string">"properties"</span>, JsonMap.of(<span class="jxr_string">"prop1"</span>, JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/MyItem"</span>)));
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			<strong class="jxr_keyword">var</strong> result = item.resolveRefs(openApi, refStack, 3);
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			<em class="jxr_comment">// Should return object with unresolved ref due to max depth</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			assertSame(item, result);
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		}
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		@Test <strong class="jxr_keyword">void</strong> d07_resolveRefs_withJsonList() {
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			<em class="jxr_comment">// Test resolveRefs with JsonList to cover the instanceof JsonList branch</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 				.setComponents(components().setSchemas(map(<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>))));
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 			<strong class="jxr_keyword">var</strong> item = items()
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 				.setType(<span class="jxr_string">"object"</span>)
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 				.set(<span class="jxr_string">"someList"</span>, JsonList.of(JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/MyItem"</span>)));
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">var</strong> result = item.resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10);
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<em class="jxr_comment">// JsonList should have its refs resolved</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			assertSame(item, result);
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		}
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		@Test <strong class="jxr_keyword">void</strong> d08_resolveRefs_withPrimitiveValue() {
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 			<em class="jxr_comment">// Test resolveRefs with primitive values (not JsonMap or JsonList) to cover the false branch</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 				.setComponents(components().setSchemas(map(<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>))));
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">var</strong> item = items()
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 				.setType(<span class="jxr_string">"object"</span>)
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 				.set(<span class="jxr_string">"someString"</span>, <span class="jxr_string">"plain string value"</span>)
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 				.set(<span class="jxr_string">"someNumber"</span>, 42)
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 				.set(<span class="jxr_string">"someBoolean"</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			<strong class="jxr_keyword">var</strong> result = item.resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10);
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<em class="jxr_comment">// Primitive values should be unchanged</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 			assertSame(item, result);
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			assertEquals(<span class="jxr_string">"plain string value"</span>, item.get(<span class="jxr_string">"someString"</span>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			assertEquals(42, item.get(<span class="jxr_string">"someNumber"</span>, Integer.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 			assertEquals(<strong class="jxr_keyword">true</strong>, item.get(<span class="jxr_string">"someBoolean"</span>, Boolean.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		}
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	}
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<em class="jxr_comment">// Helper methods</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Items bean() {
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<strong class="jxr_keyword">return</strong> items();
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	}
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> }
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Testcase for {@link Items}.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> <a name="Items_Test" href="../../../../../org/apache/juneau/bean/openapi3/Items_Test.html#Items_Test">Items_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	@Nested <strong class="jxr_keyword">class</strong> A_basicTests <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Items&gt; TESTER =
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  			testBean(
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  				bean()
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  					.setCollectionFormat(<span class="jxr_string">"a"</span>)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  					.setDefault(<span class="jxr_string">"b"</span>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  					.setEnum(list(<span class="jxr_string">"c1"</span>, <span class="jxr_string">"c2"</span>))
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  					.setExclusiveMaximum(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  					.setExclusiveMinimum(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  					.setFormat(<span class="jxr_string">"d"</span>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  					.setItems(bean().setType(<span class="jxr_string">"e"</span>))
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  					.setMaxItems(1)
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  					.setMaxLength(2)
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  					.setMaximum(3)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  					.setMinItems(4)
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  					.setMinLength(5)
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  					.setMinimum(6)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  					.setMultipleOf(7)
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  					.setPattern(<span class="jxr_string">"f"</span>)
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  					.setRef(<span class="jxr_string">"g"</span>)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  					.setType(<span class="jxr_string">"h"</span>)
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  					.setUniqueItems(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			)
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			.props(<span class="jxr_string">"collectionFormat,default,enum,exclusiveMaximum,exclusiveMinimum,format,items{type},maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,ref,type,uniqueItems"</span>)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.vals(<span class="jxr_string">"a,b,[c1,c2],true,true,d,{e},3,1,2,6,4,5,7,f,g,h,true"</span>)
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.json(<span class="jxr_string">"{'$ref':'g',collectionFormat:'a','default':'b','enum':['c1','c2'],exclusiveMaximum:true,exclusiveMinimum:true,format:'d',items:{type:'e'},maxItems:1,maxLength:2,maximum:3,minItems:4,minLength:5,minimum:6,multipleOf:7,pattern:'f',type:'h',uniqueItems:true}"</span>)
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			.string(<span class="jxr_string">"{'$ref':'g','collectionFormat':'a','default':'b','enum':['c1','c2'],'exclusiveMaximum':true,'exclusiveMinimum':true,'format':'d','items':{'type':'e'},'maxItems':1,'maxLength':2,'maximum':3,'minItems':4,'minLength':5,'minimum':6,'multipleOf':7,'pattern':'f','type':'h','uniqueItems':true}"</span>.replace('\'','&quot;'))
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		@Test <strong class="jxr_keyword">void</strong> a01_gettersAndSetters() {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			TESTER.assertGettersAndSetters();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		}
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		@Test <strong class="jxr_keyword">void</strong> a02_copy() {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			TESTER.assertCopy();
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		@Test <strong class="jxr_keyword">void</strong> a03_toJson() {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			TESTER.assertToJson();
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		}
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		@Test <strong class="jxr_keyword">void</strong> a04_fromJson() {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			TESTER.assertFromJson();
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		@Test <strong class="jxr_keyword">void</strong> a05_roundTrip() {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			TESTER.assertRoundTrip();
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		@Test <strong class="jxr_keyword">void</strong> a06_toString() {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			TESTER.assertToString();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		}
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		@Test <strong class="jxr_keyword">void</strong> a07_keySet() {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			assertList(TESTER.bean().keySet(), <span class="jxr_string">"$ref"</span>, <span class="jxr_string">"collectionFormat"</span>, <span class="jxr_string">"default"</span>, <span class="jxr_string">"enum"</span>, <span class="jxr_string">"exclusiveMaximum"</span>, <span class="jxr_string">"exclusiveMinimum"</span>, <span class="jxr_string">"format"</span>, <span class="jxr_string">"items"</span>, <span class="jxr_string">"maxItems"</span>, <span class="jxr_string">"maxLength"</span>, <span class="jxr_string">"maximum"</span>, <span class="jxr_string">"minItems"</span>, <span class="jxr_string">"minLength"</span>, <span class="jxr_string">"minimum"</span>, <span class="jxr_string">"multipleOf"</span>, <span class="jxr_string">"pattern"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"uniqueItems"</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		}
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		@Test <strong class="jxr_keyword">void</strong> a08_nullParameters() {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<strong class="jxr_keyword">var</strong> x = bean();
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.get(<strong class="jxr_keyword">null</strong>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.set(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		@Test <strong class="jxr_keyword">void</strong> a08b_getSetRef() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<em class="jxr_comment">// Test get/set with "$ref" property to cover switch branches</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<strong class="jxr_keyword">var</strong> x = bean();
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			x.set(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/MyItem"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			assertEquals(<span class="jxr_string">"#/components/schemas/MyItem"</span>, x.get(<span class="jxr_string">"$ref"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			assertEquals(<span class="jxr_string">"#/components/schemas/MyItem"</span>, x.getRef());
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		}
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		@Test <strong class="jxr_keyword">void</strong> a09_addMethods() {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			assertBean(
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				bean()
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 					.addEnum(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>),
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				<span class="jxr_string">"enum"</span>,
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<span class="jxr_string">"[a1,a2]"</span>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		@Test <strong class="jxr_keyword">void</strong> a10_asMap() {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			assertBean(
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 				bean()
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 					.setType(<span class="jxr_string">"a"</span>)
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 					.set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>)
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 					.asMap(),
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 				<span class="jxr_string">"type,x1"</span>,
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 				<span class="jxr_string">"a,x1a"</span>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		@Test <strong class="jxr_keyword">void</strong> a11_extraKeys() {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">var</strong> x = bean().set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>).set(<span class="jxr_string">"x2"</span>, <span class="jxr_string">"x2a"</span>);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			assertList(x.extraKeys(), <span class="jxr_string">"x1"</span>, <span class="jxr_string">"x2"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			assertEmpty(bean().extraKeys());
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		}
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		@Test <strong class="jxr_keyword">void</strong> a12_getItemsProperty() {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">var</strong> x = bean().setItems(bean().setType(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			assertBean(x.get(<span class="jxr_string">"items"</span>, Items.<strong class="jxr_keyword">class</strong>), <span class="jxr_string">"type"</span>, <span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		@Test <strong class="jxr_keyword">void</strong> a13_strictMode() {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; bean().strict().set(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			assertDoesNotThrow(() -&gt; bean().set(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			assertFalse(bean().isStrict());
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			assertTrue(bean().strict().isStrict());
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			assertFalse(bean().strict(false).isStrict());
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">var</strong> x = bean().strict();
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">var</strong> y = bean();
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='invalid', valid values=['string','number','integer','boolean','array']"</span>, () -&gt; x.setType(<span class="jxr_string">"invalid"</span>));
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"string"</span>));
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"number"</span>));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"integer"</span>));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"boolean"</span>));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			assertDoesNotThrow(() -&gt; x.setType(<span class="jxr_string">"array"</span>));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			assertDoesNotThrow(() -&gt; y.setType(<span class="jxr_string">"invalid"</span>));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setCollectionFormat(String).  Value='invalid', valid values=[csv, ssv, tsv, pipes, multi]"</span>, () -&gt; x.setCollectionFormat(<span class="jxr_string">"invalid"</span>));
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"csv"</span>));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"ssv"</span>));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"tsv"</span>));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"pipes"</span>));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			assertDoesNotThrow(() -&gt; x.setCollectionFormat(<span class="jxr_string">"multi"</span>));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			assertDoesNotThrow(() -&gt; y.setCollectionFormat(<span class="jxr_string">"invalid"</span>));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Nested <strong class="jxr_keyword">class</strong> B_emptyTests <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Items&gt; TESTER =
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			testBean(bean())
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			.props(<span class="jxr_string">"type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,ref"</span>)
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			.vals(<span class="jxr_string">"&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;"</span>)
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			.json(<span class="jxr_string">"{}"</span>)
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			.string(<span class="jxr_string">"{}"</span>)
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		@Test <strong class="jxr_keyword">void</strong> b01_gettersAndSetters() {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			TESTER.assertGettersAndSetters();
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		}
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		@Test <strong class="jxr_keyword">void</strong> b02_copy() {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			TESTER.assertCopy();
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		}
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		@Test <strong class="jxr_keyword">void</strong> b03_toJson() {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			TESTER.assertToJson();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		@Test <strong class="jxr_keyword">void</strong> b04_fromJson() {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			TESTER.assertFromJson();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		}
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		@Test <strong class="jxr_keyword">void</strong> b05_roundTrip() {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			TESTER.assertRoundTrip();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		}
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		@Test <strong class="jxr_keyword">void</strong> b06_toString() {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			TESTER.assertToString();
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		}
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		@Test <strong class="jxr_keyword">void</strong> b07_keySet() {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			assertEmpty(TESTER.bean().keySet());
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	@Nested <strong class="jxr_keyword">class</strong> C_extraProperties <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Items&gt; TESTER =
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			testBean(
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				bean()
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 					.set(<span class="jxr_string">"additionalItems"</span>, schemaInfo(<span class="jxr_string">"a"</span>))
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 					.set(<span class="jxr_string">"allOf"</span>, list(schemaInfo(<span class="jxr_string">"b1"</span>), schemaInfo(<span class="jxr_string">"b2"</span>)))
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 					.set(<span class="jxr_string">"collectionFormat"</span>, <span class="jxr_string">"c"</span>)
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 					.set(<span class="jxr_string">"default"</span>, <span class="jxr_string">"d"</span>)
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					.set(<span class="jxr_string">"discriminator"</span>, <span class="jxr_string">"e"</span>)
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 					.set(<span class="jxr_string">"enum"</span>, list(<span class="jxr_string">"f1"</span>, <span class="jxr_string">"f2"</span>))
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 					.set(<span class="jxr_string">"example"</span>, <span class="jxr_string">"g"</span>)
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 					.set(<span class="jxr_string">"exclusiveMaximum"</span>, <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 					.set(<span class="jxr_string">"exclusiveMinimum"</span>, <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					.set(<span class="jxr_string">"externalDocs"</span>, externalDocumentation().setUrl(URI.create(<span class="jxr_string">"h"</span>)))
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 					.set(<span class="jxr_string">"format"</span>, <span class="jxr_string">"i"</span>)
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 					.set(<span class="jxr_string">"items"</span>, bean().setType(<span class="jxr_string">"j"</span>))
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 					.set(<span class="jxr_string">"maxItems"</span>, 1)
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 					.set(<span class="jxr_string">"maxLength"</span>, 2)
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 					.set(<span class="jxr_string">"maxProperties"</span>, 3)
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 					.set(<span class="jxr_string">"maximum"</span>, 4)
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					.set(<span class="jxr_string">"minItems"</span>, 5)
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 					.set(<span class="jxr_string">"minLength"</span>, 6)
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 					.set(<span class="jxr_string">"minProperties"</span>, 7)
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 					.set(<span class="jxr_string">"minimum"</span>, 8)
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 					.set(<span class="jxr_string">"multipleOf"</span>, 9)
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					.set(<span class="jxr_string">"pattern"</span>, <span class="jxr_string">"k"</span>)
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 					.set(<span class="jxr_string">"properties"</span>, map(<span class="jxr_string">"l1"</span>, schemaInfo(<span class="jxr_string">"l2"</span>)))
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					.set(<span class="jxr_string">"readOnly"</span>, <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 					.set(<span class="jxr_string">"required"</span>, list(<span class="jxr_string">"m1"</span>, <span class="jxr_string">"m2"</span>))
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					.set(<span class="jxr_string">"title"</span>, <span class="jxr_string">"n"</span>)
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 					.set(<span class="jxr_string">"type"</span>, <span class="jxr_string">"o"</span>)
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 					.set(<span class="jxr_string">"uniqueItems"</span>, <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 					.set(<span class="jxr_string">"xml"</span>, xml().setName(<span class="jxr_string">"p"</span>))
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					.set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>)
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 					.set(<span class="jxr_string">"x2"</span>, <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			)
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			.props(<span class="jxr_string">"additionalItems{type},allOf{#{type}},collectionFormat,default,discriminator,enum{#{toString}},example,exclusiveMaximum,exclusiveMinimum,externalDocs{url},format,items{type},maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,pattern,properties{l1{type}},readOnly,required{#{toString}},title,type,uniqueItems,xml{name},x1,x2"</span>)
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			.vals(<span class="jxr_string">"{a},{[{b1},{b2}]},c,d,e,{[{f1},{f2}]},g,true,true,{h},i,{j},1,2,3,4,5,6,7,8,9,k,{{l2}},true,{[{m1},{m2}]},n,o,true,{p},x1a,&lt;null&gt;"</span>)
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			.json(<span class="jxr_string">"{additionalItems:{type:'a'},allOf:[{type:'b1'},{type:'b2'}],collectionFormat:'c','default':'d',discriminator:'e','enum':['f1','f2'],example:'g',exclusiveMaximum:true,exclusiveMinimum:true,externalDocs:{url:'h'},format:'i',items:{type:'j'},maxItems:1,maxLength:2,maxProperties:3,maximum:4,minItems:5,minLength:6,minProperties:7,minimum:8,multipleOf:9,pattern:'k',properties:{l1:{type:'l2'}},readOnly:true,required:['m1','m2'],title:'n',type:'o',uniqueItems:true,x1:'x1a',xml:{name:'p'}}"</span>)
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			.string(<span class="jxr_string">"{'additionalItems':{'type':'a'},'allOf':[{'type':'b1'},{'type':'b2'}],'collectionFormat':'c','default':'d','discriminator':'e','enum':['f1','f2'],'example':'g','exclusiveMaximum':true,'exclusiveMinimum':true,'externalDocs':{'url':'h'},'format':'i','items':{'type':'j'},'maxItems':1,'maxLength':2,'maxProperties':3,'maximum':4,'minItems':5,'minLength':6,'minProperties':7,'minimum':8,'multipleOf':9,'pattern':'k','properties':{'l1':{'type':'l2'}},'readOnly':true,'required':['m1','m2'],'title':'n','type':'o','uniqueItems':true,'x1':'x1a','xml':{'name':'p'}}"</span>.replace('\'', '&quot;'))
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		@Test <strong class="jxr_keyword">void</strong> c01_gettersAndSetters() {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			TESTER.assertGettersAndSetters();
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		@Test <strong class="jxr_keyword">void</strong> c02_copy() {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			TESTER.assertCopy();
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		}
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		@Test <strong class="jxr_keyword">void</strong> c03_toJson() {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			TESTER.assertToJson();
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		}
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		@Test <strong class="jxr_keyword">void</strong> c04_fromJson() {
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			TESTER.assertFromJson();
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		}
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		@Test <strong class="jxr_keyword">void</strong> c05_roundTrip() {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			TESTER.assertRoundTrip();
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		}
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		@Test <strong class="jxr_keyword">void</strong> c06_toString() {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			TESTER.assertToString();
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		}
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		@Test <strong class="jxr_keyword">void</strong> c07_keySet() {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			assertList(TESTER.bean().keySet(), <span class="jxr_string">"additionalItems"</span>, <span class="jxr_string">"allOf"</span>, <span class="jxr_string">"collectionFormat"</span>, <span class="jxr_string">"default"</span>, <span class="jxr_string">"discriminator"</span>, <span class="jxr_string">"enum"</span>, <span class="jxr_string">"example"</span>, <span class="jxr_string">"exclusiveMaximum"</span>, <span class="jxr_string">"exclusiveMinimum"</span>, <span class="jxr_string">"externalDocs"</span>, <span class="jxr_string">"format"</span>, <span class="jxr_string">"items"</span>, <span class="jxr_string">"maxItems"</span>, <span class="jxr_string">"maxLength"</span>, <span class="jxr_string">"maxProperties"</span>, <span class="jxr_string">"maximum"</span>, <span class="jxr_string">"minItems"</span>, <span class="jxr_string">"minLength"</span>, <span class="jxr_string">"minProperties"</span>, <span class="jxr_string">"minimum"</span>, <span class="jxr_string">"multipleOf"</span>, <span class="jxr_string">"pattern"</span>, <span class="jxr_string">"properties"</span>, <span class="jxr_string">"readOnly"</span>, <span class="jxr_string">"required"</span>, <span class="jxr_string">"title"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"uniqueItems"</span>, <span class="jxr_string">"x1"</span>, <span class="jxr_string">"x2"</span>, <span class="jxr_string">"xml"</span>);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		}
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		@Test <strong class="jxr_keyword">void</strong> c08_get() {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			assertMapped(
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				TESTER.bean(), (obj,prop) -&gt; obj.get(prop, Object.<strong class="jxr_keyword">class</strong>),
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 				<span class="jxr_string">"additionalItems{type},allOf{#{type}},collectionFormat,default,discriminator,enum{#{toString}},example,exclusiveMaximum,exclusiveMinimum,externalDocs{url},format,items{type},maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,pattern,properties{l1{type}},readOnly,required{#{toString}},title,type,uniqueItems,xml{name},x1,x2"</span>,
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 				<span class="jxr_string">"{a},{[{b1},{b2}]},c,d,e,{[{f1},{f2}]},g,true,true,{h},i,{j},1,2,3,4,5,6,7,8,9,k,{{l2}},true,{[{m1},{m2}]},n,o,true,{p},x1a,&lt;null&gt;"</span>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		}
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			assertMapped(
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				TESTER.bean(), (obj,prop) -&gt; simpleClassNameOf(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				<span class="jxr_string">"additionalItems,allOf,collectionFormat,default,discriminator,enum,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,pattern,properties,readOnly,required,title,type,uniqueItems,xml,x1,x2"</span>,
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				<span class="jxr_string">"SchemaInfo,ArrayList,String,String,String,ArrayList,String,Boolean,Boolean,ExternalDocumentation,String,Items,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,String,LinkedHashMap,Boolean,ArrayList,String,String,Boolean,Xml,String,&lt;null&gt;"</span>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		}
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		@Test <strong class="jxr_keyword">void</strong> c10_nullPropertyValue() {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;bean().get(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;bean().get(<strong class="jxr_keyword">null</strong>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;bean().set(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		}
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	@Nested <strong class="jxr_keyword">class</strong> D_refs <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		@Test <strong class="jxr_keyword">void</strong> d01_resolveRefs_basic() {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 				.setComponents(components().setSchemas(Map.of(
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 					<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>)
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				)));
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			assertBean(
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 				<span class="jxr_string">"type"</span>,
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 				<span class="jxr_string">"string"</span>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		}
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Test <strong class="jxr_keyword">void</strong> d02_resolveRefs_nestedItems() {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 				.setComponents(components().setSchemas(Map.of(
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 					<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>),
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 					<span class="jxr_string">"MyArray"</span>, schemaInfo().setType(<span class="jxr_string">"array"</span>).setItems(items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>))
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 				)));
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			assertBean(
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyArray"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 				<span class="jxr_string">"type,items{type}"</span>,
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 				<span class="jxr_string">"array,{string}"</span>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		}
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		@Test <strong class="jxr_keyword">void</strong> d03_resolveRefs_maxDepth() {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 				.setComponents(components().setSchemas(Map.of(
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 					<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>),
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 					<span class="jxr_string">"MyArray"</span>, schemaInfo().setType(<span class="jxr_string">"array"</span>).setItems(items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>))
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 				)));
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			assertBean(
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyArray"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 1),
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 				<span class="jxr_string">"type,items{ref}"</span>,
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 				<span class="jxr_string">"array,{#/components/schemas/MyItem}"</span>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		}
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		@Test <strong class="jxr_keyword">void</strong> d04_resolveRefsWithRef() {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 				.setComponents(components().setSchemas(Map.of(
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 					<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>)
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 				)));
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			assertBean(
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				<span class="jxr_string">"type"</span>,
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<span class="jxr_string">"string"</span>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			refStack.add(<span class="jxr_string">"#/components/schemas/MyItem"</span>);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<em class="jxr_comment">// With ref stack contains.</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			assertBean(
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>).resolveRefs(openApi, refStack, 10),
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 				<span class="jxr_string">"ref"</span>,
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 				<span class="jxr_string">"#/components/schemas/MyItem"</span>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<em class="jxr_comment">// With max depth.</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			assertBean(
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 				items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 0),
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 				<span class="jxr_string">"ref"</span>,
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 				<span class="jxr_string">"#/components/schemas/MyItem"</span>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<em class="jxr_comment">// With properties.</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			assertBean(
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 				items()
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 					.set(<span class="jxr_string">"properties"</span>, JsonMap.of(<span class="jxr_string">"prop1"</span>, JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/MyItem"</span>)))
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 					.resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				<span class="jxr_string">"properties{prop1{type}}"</span>,
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 				<span class="jxr_string">"{{string}}"</span>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<em class="jxr_comment">// With items.</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			assertBean(
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 				items().setItems(items().setRef(<span class="jxr_string">"#/components/schemas/MyItem"</span>)).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<span class="jxr_string">"items{type}"</span>,
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				<span class="jxr_string">"{string}"</span>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<em class="jxr_comment">// Examle null.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			assertBean(
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 				items().set(<span class="jxr_string">"example"</span>, <span class="jxr_string">"test"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				<span class="jxr_string">"example"</span>,
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 				<span class="jxr_string">"&lt;null&gt;"</span>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<em class="jxr_comment">// Without ref.</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			assertBean(
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 				items().setType(<span class="jxr_string">"string"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 				<span class="jxr_string">"type,example"</span>,
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 				<span class="jxr_string">"string,&lt;null&gt;"</span>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<em class="jxr_comment">// With null items.</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			assertBean(
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 				items().setType(<span class="jxr_string">"string"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10), <em class="jxr_comment">// items is null</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 				<span class="jxr_string">"type,items,example"</span>,
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 				<span class="jxr_string">"string,&lt;null&gt;,&lt;null&gt;"</span>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			<em class="jxr_comment">// With null properties.</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			assertBean(
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 				items().setType(<span class="jxr_string">"string"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10), <em class="jxr_comment">// no properties set</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 				<span class="jxr_string">"type,example"</span>,
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 				<span class="jxr_string">"string,&lt;null&gt;"</span>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		}
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		@Test <strong class="jxr_keyword">void</strong> d04_resolveRefs_noRefNoItems() {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			<em class="jxr_comment">// Test resolveRefs when both ref and items are null (covers the missing branch)</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 				.setComponents(components().setSchemas(map(<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>))));
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">var</strong> items = bean()
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 				.setType(<span class="jxr_string">"string"</span>)
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 				.setFormat(<span class="jxr_string">"text"</span>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">var</strong> result = items.resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<em class="jxr_comment">// Should return the same object unchanged</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			assertSame(items, result);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			assertEquals(<span class="jxr_string">"string"</span>, result.getType());
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			assertEquals(<span class="jxr_string">"text"</span>, result.getFormat());
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		@Test <strong class="jxr_keyword">void</strong> d05_resolveRefs_circularReference() {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<em class="jxr_comment">// Test circular reference detection in extra attributes</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 				.setComponents(components().setSchemas(map(
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 					<span class="jxr_string">"Item1"</span>, schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/Item2"</span>),
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 					<span class="jxr_string">"Item2"</span>, schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/Item1"</span>)
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				)));
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			refStack.add(<span class="jxr_string">"#/components/schemas/Item1"</span>);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">var</strong> item = items()
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 				.setType(<span class="jxr_string">"object"</span>)
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 				.set(<span class="jxr_string">"properties"</span>, JsonMap.of(<span class="jxr_string">"prop1"</span>, JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/Item1"</span>)));
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">var</strong> result = item.resolveRefs(openApi, refStack, 10);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<em class="jxr_comment">// Should return object with unresolved circular ref in properties</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			assertSame(item, result);
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		}
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		@Test <strong class="jxr_keyword">void</strong> d06_resolveRefs_maxDepthDirect() {
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<em class="jxr_comment">// Test max depth directly</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 				.setComponents(components().setSchemas(map(<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>))));
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			refStack.add(<span class="jxr_string">"dummy1"</span>);
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			refStack.add(<span class="jxr_string">"dummy2"</span>);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			refStack.add(<span class="jxr_string">"dummy3"</span>);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			<strong class="jxr_keyword">var</strong> item = items()
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 				.setType(<span class="jxr_string">"object"</span>)
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 				.set(<span class="jxr_string">"properties"</span>, JsonMap.of(<span class="jxr_string">"prop1"</span>, JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/MyItem"</span>)));
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			<strong class="jxr_keyword">var</strong> result = item.resolveRefs(openApi, refStack, 3);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			<em class="jxr_comment">// Should return object with unresolved ref due to max depth</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			assertSame(item, result);
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		}
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		@Test <strong class="jxr_keyword">void</strong> d07_resolveRefs_withJsonList() {
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			<em class="jxr_comment">// Test resolveRefs with JsonList to cover the instanceof JsonList branch</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 				.setComponents(components().setSchemas(map(<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>))));
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			<strong class="jxr_keyword">var</strong> item = items()
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 				.setType(<span class="jxr_string">"object"</span>)
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 				.set(<span class="jxr_string">"someList"</span>, JsonList.of(JsonMap.of(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"#/components/schemas/MyItem"</span>)));
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">var</strong> result = item.resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10);
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<em class="jxr_comment">// JsonList should have its refs resolved</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			assertSame(item, result);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		}
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		@Test <strong class="jxr_keyword">void</strong> d08_resolveRefs_withPrimitiveValue() {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<em class="jxr_comment">// Test resolveRefs with primitive values (not JsonMap or JsonList) to cover the false branch</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 				.setComponents(components().setSchemas(map(<span class="jxr_string">"MyItem"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>))));
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">var</strong> item = items()
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 				.setType(<span class="jxr_string">"object"</span>)
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 				.set(<span class="jxr_string">"someString"</span>, <span class="jxr_string">"plain string value"</span>)
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 				.set(<span class="jxr_string">"someNumber"</span>, 42)
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 				.set(<span class="jxr_string">"someBoolean"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 			<strong class="jxr_keyword">var</strong> result = item.resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			<em class="jxr_comment">// Primitive values should be unchanged</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			assertSame(item, result);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 			assertEquals(<span class="jxr_string">"plain string value"</span>, item.get(<span class="jxr_string">"someString"</span>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			assertEquals(42, item.get(<span class="jxr_string">"someNumber"</span>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			assertEquals(<strong class="jxr_keyword">true</strong>, item.get(<span class="jxr_string">"someBoolean"</span>, Boolean.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		}
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	}
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<em class="jxr_comment">// Helper methods</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Items bean() {
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">return</strong> items();
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	}
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

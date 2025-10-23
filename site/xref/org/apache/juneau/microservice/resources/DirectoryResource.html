@@ -148,8 +148,8 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">public</strong> Set&lt;FileResource&gt; getFiles() {
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">if</strong> (f.isFile() || ! includeChildren)
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			Set&lt;FileResource&gt; s = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(<strong class="jxr_keyword">new</strong> FileResourceComparator());
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">for</strong> (File fc : f.listFiles())
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(<strong class="jxr_keyword">new</strong> FileResourceComparator());
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> fc : f.listFiles())
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 				s.add(<strong class="jxr_keyword">new</strong> FileResource(fc, (path != <strong class="jxr_keyword">null</strong> ? (path + '/') : <span class="jxr_string">""</span>) + urlEncode(fc.getName()), false));
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		}
@@ -257,7 +257,7 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 	)
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">public</strong> FileResource getFile(RestRequest req, @Path(<span class="jxr_string">"/*"</span>) String path) <strong class="jxr_keyword">throws</strong> NotFound, Exception {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		File dir = getFile(path);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">var</strong> dir = getFile(path);
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		req.setAttribute(<span class="jxr_string">"fullPath"</span>, dir.getAbsolutePath());
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FileResource(dir, path, <strong class="jxr_keyword">true</strong>);
@@ -276,9 +276,9 @@
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">if</strong> (! allowUploads)
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MethodNotAllowed" href="../../../../../org/apache/juneau/http/response/MethodNotAllowed.html#MethodNotAllowed">MethodNotAllowed</a>(<span class="jxr_string">"PUT not enabled"</span>);
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		File f = getFile(path);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">var</strong> f = getFile(path);
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">try</strong> (OutputStream os = <strong class="jxr_keyword">new</strong> BufferedOutputStream(<strong class="jxr_keyword">new</strong> FileOutputStream(f))) {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = <strong class="jxr_keyword">new</strong> BufferedOutputStream(<strong class="jxr_keyword">new</strong> FileOutputStream(f))) {
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			pipe(is, os);
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e);
@@ -309,9 +309,9 @@
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">if</strong> (! allowDeletes)
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="MethodNotAllowed" href="../../../../../org/apache/juneau/http/response/MethodNotAllowed.html#MethodNotAllowed">MethodNotAllowed</a>(<span class="jxr_string">"DELETE not enabled"</span>);
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">if</strong> (f.isDirectory()) {
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			File[] files = f.listFiles();
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			<strong class="jxr_keyword">var</strong> files = f.listFiles();
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">if</strong> (files != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				<strong class="jxr_keyword">for</strong> (File fc : files)
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> fc : files)
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 					deleteFile(fc);
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 			}
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		}
@@ -322,7 +322,7 @@
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">private</strong> File getFile(String path) <strong class="jxr_keyword">throws</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a> {
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">if</strong> (path == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">return</strong> rootDir;
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		File f = <strong class="jxr_keyword">new</strong> File(rootDir.getAbsolutePath() + '/' + path);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> File(rootDir.getAbsolutePath() + '/' + path);
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">if</strong> (f.exists())
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<strong class="jxr_keyword">return</strong> f;
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"File not found."</span>);

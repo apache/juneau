@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	@Override
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; c) {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			Optional&lt;T&gt; o = <strong class="jxr_keyword">super</strong>.getBean(c);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			<strong class="jxr_keyword">var</strong> o = <strong class="jxr_keyword">super</strong>.getBean(c);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">if</strong> (o.isPresent())
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  				<strong class="jxr_keyword">return</strong> o;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">if</strong> (appContext.isPresent()) {
@@ -79,11 +79,11 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Override
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; c, String name) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			Optional&lt;T&gt; o = <strong class="jxr_keyword">super</strong>.getBean(c, name);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">var</strong> o = <strong class="jxr_keyword">super</strong>.getBean(c, name);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">if</strong> (o.isPresent())
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  				<strong class="jxr_keyword">return</strong> o;
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">if</strong> (appContext.isPresent()) {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  				ApplicationContext ctx = appContext.get();
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  				<strong class="jxr_keyword">var</strong> ctx = appContext.get();
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  				<strong class="jxr_keyword">if</strong> (name != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  					<strong class="jxr_keyword">return</strong> opt(ctx.containsBean(name) ? appContext.get().getBean(name, c) : <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  				<strong class="jxr_keyword">return</strong> opt(appContext.get().getBean(c));
@@ -110,7 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Override
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Stream&lt;BeanStoreEntry&lt;T&gt;&gt; stream(Class&lt;T&gt; c) {
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			Stream&lt;BeanStoreEntry&lt;T&gt;&gt; o = <strong class="jxr_keyword">super</strong>.stream(c);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">var</strong> o = <strong class="jxr_keyword">super</strong>.stream(c);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<strong class="jxr_keyword">if</strong> (appContext.isPresent())
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 				o = Stream.concat(o, appContext.get().getBeansOfType(c).entrySet().stream().map(x -&gt; BeanStoreEntry.create(c, () -&gt; x.getValue(), x.getKey())));
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">return</strong> o;

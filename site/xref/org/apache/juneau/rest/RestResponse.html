@@ -147,13 +147,13 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">this</strong>.opContext = opContext;
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		responseBeanMeta = opContext.getResponseMeta();
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		RestContext context = session.getContext();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> context = session.getContext();
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			String passThroughHeaders = request.getHeaderParam(<span class="jxr_string">"x-response-headers"</span>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">var</strong> passThroughHeaders = request.getHeaderParam(<span class="jxr_string">"x-response-headers"</span>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">if</strong> (passThroughHeaders != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				JsonMap m = context.getPartParser().getPartSession().parse(HEADER, <strong class="jxr_keyword">null</strong>, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,Object&gt; e : m.entrySet())
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">var</strong> m = context.getPartParser().getPartSession().parse(HEADER, <strong class="jxr_keyword">null</strong>, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : m.entrySet())
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 					addHeader(e.getKey(), resolveUris(e.getValue()));
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			}
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e1) {
@@ -161,8 +161,8 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		}
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<em class="jxr_comment">// Find acceptable charset</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		String h = request.getHeaderParam(<span class="jxr_string">"accept-charset"</span>).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		Charset charset = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> h = request.getHeaderParam(<span class="jxr_string">"accept-charset"</span>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> charset = (Charset)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">if</strong> (h == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			charset = opContext.getDefaultCharset();
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">else</strong>
@@ -213,11 +213,11 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">if</strong> (header == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<em class="jxr_comment">// Do nothing.</em>
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (header instanceof <a name="BasicUriHeader" href="../../../../org/apache/juneau/http/header/BasicUriHeader.html#BasicUriHeader">BasicUriHeader</a>) {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			BasicUriHeader x = (<a name="BasicUriHeader" href="../../../../org/apache/juneau/http/header/BasicUriHeader.html#BasicUriHeader">BasicUriHeader</a>)header;
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<strong class="jxr_keyword">var</strong> x = (<a name="BasicUriHeader" href="../../../../org/apache/juneau/http/header/BasicUriHeader.html#BasicUriHeader">BasicUriHeader</a>)header;
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 			addHeader(x.getName(), resolveUris(x.getValue()));
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (header instanceof <a name="SerializedHeader" href="../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>) {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			SerializedHeader x = ((<a name="SerializedHeader" href="../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>)header).copyWith(request.getPartSerializerSession(), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			addHeader(x.getName(), resolveUris(x.getValue()));
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">var</strong> x = ((<a name="SerializedHeader" href="../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>)header).copyWith(request.getPartSerializerSession(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 				addHeader(x.getName(), resolveUris(x.getValue()));
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 			addHeader(header.getName(), header.getValue());
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		}
@@ -284,7 +284,7 @@
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * @return The request character encoding converted to a {@link Charset}.</em>
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">public</strong> Charset getCharset() {
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		String s = getCharacterEncoding();
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">var</strong> s = getCharacterEncoding();
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">return</strong> s == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Charset.forName(s);
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 	}
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 
@@ -325,8 +325,8 @@
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">if</strong> (responseBeanMeta != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 			contentSchema = Utils.opt(responseBeanMeta.getSchema());
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			ResponseBeanMeta rbm = opContext.getResponseBeanMeta(getContent(Object.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">if</strong> (rbm != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">var</strong> rbm = opContext.getResponseBeanMeta(getContent(Object.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 				<strong class="jxr_keyword">if</strong> (rbm != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 				contentSchema = Utils.opt(rbm.getSchema());
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 				contentSchema = Utils.opte();
@@ -387,11 +387,11 @@
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<strong class="jxr_keyword">public</strong> <a name="FinishableServletOutputStream" href="../../../../org/apache/juneau/rest/util/FinishableServletOutputStream.html#FinishableServletOutputStream">FinishableServletOutputStream</a> getNegotiatedOutputStream() <strong class="jxr_keyword">throws</strong> NotAcceptable, IOException {
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">if</strong> (os == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 			Encoder encoder = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			EncoderSet encoders = request.getOpContext().getEncoders();
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			String ae = request.getHeaderParam(<span class="jxr_string">"Accept-Encoding"</span>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">var</strong> encoders = request.getOpContext().getEncoders();
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">var</strong> ae = request.getHeaderParam(<span class="jxr_string">"Accept-Encoding"</span>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">if</strong> (! (ae == <strong class="jxr_keyword">null</strong> || ae.isEmpty())) {
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 				EncoderMatch match = encoders.getEncoderMatch(ae);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 				<strong class="jxr_keyword">var</strong> match = encoders.getEncoderMatch(ae);
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 				<strong class="jxr_keyword">if</strong> (match == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 					<em class="jxr_comment">// Identity should always match unless "identity;q=0" or "*;q=0" is specified.</em>
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 					<strong class="jxr_keyword">if</strong> (ae.matches(<span class="jxr_string">".*(identity|&#92;&#92;*)&#92;&#92;s*;&#92;&#92;s*q&#92;&#92;s*=&#92;&#92;s*(0(?!&#92;&#92;.)|0&#92;&#92;.0).*"</span>)) {
@@ -399,14 +399,14 @@
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 					}
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 					encoder = match.getEncoder();
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 					String encoding = match.getEncoding().toString();
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 					<strong class="jxr_keyword">var</strong> encoding = match.getEncoding().toString();
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 					<em class="jxr_comment">// Some clients don't recognize identity as an encoding, so don't set it.</em>
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 					<strong class="jxr_keyword">if</strong> (! encoding.equals(<span class="jxr_string">"identity"</span>))
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 						setHeader(<span class="jxr_string">"content-encoding"</span>, encoding);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 				}
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			}
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			ServletOutputStream sos = getOutputStream();
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 					}
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 				}
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">var</strong> sos = getOutputStream();
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 			os = <strong class="jxr_keyword">new</strong> <a name="FinishableServletOutputStream" href="../../../../org/apache/juneau/rest/util/FinishableServletOutputStream.html#FinishableServletOutputStream">FinishableServletOutputStream</a>(encoder == <strong class="jxr_keyword">null</strong> ? sos : encoder.getOutputStream(sos));
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 		}
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">return</strong> os;
@@ -673,10 +673,10 @@
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<strong class="jxr_keyword">if</strong> (header == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 			<em class="jxr_comment">// Do nothing.</em>
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (header instanceof <a name="BasicUriHeader" href="../../../../org/apache/juneau/http/header/BasicUriHeader.html#BasicUriHeader">BasicUriHeader</a>) {
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			BasicUriHeader x = (<a name="BasicUriHeader" href="../../../../org/apache/juneau/http/header/BasicUriHeader.html#BasicUriHeader">BasicUriHeader</a>)header;
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 			<strong class="jxr_keyword">var</strong> x = (<a name="BasicUriHeader" href="../../../../org/apache/juneau/http/header/BasicUriHeader.html#BasicUriHeader">BasicUriHeader</a>)header;
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 			setHeader(x.getName(), resolveUris(x.getValue()));
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (header instanceof <a name="SerializedHeader" href="../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>) {
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 			SerializedHeader x = ((<a name="SerializedHeader" href="../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>)header).copyWith(request.getPartSerializerSession(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 			<strong class="jxr_keyword">var</strong> x = ((<a name="SerializedHeader" href="../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>)header).copyWith(request.getPartSerializerSession(), <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> 			String v = x.getValue();
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> 			<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong> &amp;&amp; v.indexOf(<span class="jxr_string">"://"</span>) != -1)
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 				v = resolveUris(v);

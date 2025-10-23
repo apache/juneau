@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * @return A new instance.</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> ofPairs(String...pairs) {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		PartList x = <strong class="jxr_keyword">new</strong> <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a>();
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a>();
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">if</strong> (pairs == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			pairs = <strong class="jxr_keyword">new</strong> String[0];
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (pairs.length % 2 != 0)
@@ -355,7 +355,7 @@
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">rest</strong> == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">return</strong> Utils.opt(first);
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		CharArrayBuffer sb = <strong class="jxr_keyword">new</strong> CharArrayBuffer(128);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> CharArrayBuffer(128);
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		sb.append(first.getValue());
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair element : <strong class="jxr_keyword">rest</strong>) {
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 			sb.append(',');
@@ -413,7 +413,7 @@
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">rest</strong> == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<strong class="jxr_keyword">return</strong> opt(PartBeanMeta.of(type).construct(name, first.getValue()));
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		CharArrayBuffer sb = <strong class="jxr_keyword">new</strong> CharArrayBuffer(128);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> CharArrayBuffer(128);
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 		sb.append(first.getValue());
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair element : <strong class="jxr_keyword">rest</strong>) {
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 			sb.append(',');
@@ -470,7 +470,7 @@
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;NameValuePair&gt; getFirst(String name) {
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; size(); i++) {
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			NameValuePair x = get(i);
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			<strong class="jxr_keyword">var</strong> x = get(i);
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name))
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 				<strong class="jxr_keyword">return</strong> Utils.opt(x);
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 		}
@@ -488,7 +488,7 @@
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;NameValuePair&gt; getLast(String name) {
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = size() - 1; i &gt;= 0; i--) {
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			NameValuePair x = get(i);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<strong class="jxr_keyword">var</strong> x = get(i);
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name))
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 				<strong class="jxr_keyword">return</strong> Utils.opt(x);
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 		}
@@ -713,7 +713,7 @@
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 			<strong class="jxr_keyword">for</strong> (NameValuePair h : values) {
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 				<strong class="jxr_keyword">if</strong> (h != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i2 = 0, j2 = size(); i2 &lt; j2; i2++) {
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 						NameValuePair x = get(i2);
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 						<strong class="jxr_keyword">var</strong> x = get(i2);
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> 						<strong class="jxr_keyword">if</strong> (eq(x.getName(), h.getName())) {
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 							remove(i2);
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 							j2--;
@@ -745,7 +745,7 @@
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> 		<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 			<strong class="jxr_keyword">boolean</strong> replaced = false;
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = size(); i &lt; j; i++) {
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 				NameValuePair x = get(i);
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 				<strong class="jxr_keyword">var</strong> x = get(i);
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> 				<strong class="jxr_keyword">if</strong> (eq(x.getName(), value.getName())) {
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> 					<strong class="jxr_keyword">if</strong> (replaced) {
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 						remove(i);
@@ -892,10 +892,10 @@
 <a class="jxr_linenumber" name="L884" href="#L884">884</a> 	}
 <a class="jxr_linenumber" name="L885" href="#L885">885</a> 
 <a class="jxr_linenumber" name="L886" href="#L886">886</a> 	<strong class="jxr_keyword">private</strong> NameValuePair createPart(String name, Object value) {
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> 		<strong class="jxr_keyword">boolean</strong> isResolving = varResolver != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 		<strong class="jxr_keyword">var</strong> isResolving = varResolver != <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L888" href="#L888">888</a> 
 <a class="jxr_linenumber" name="L889" href="#L889">889</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Supplier&lt;?&gt;) {
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> 			Supplier&lt;?&gt; value2 = (Supplier&lt;?&gt;)value;
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 			<strong class="jxr_keyword">var</strong> value2 = (Supplier&lt;?&gt;)value;
 <a class="jxr_linenumber" name="L891" href="#L891">891</a> 			<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, resolver(value2)) : <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, value2);
 <a class="jxr_linenumber" name="L892" href="#L892">892</a> 		}
 <a class="jxr_linenumber" name="L893" href="#L893">893</a> 		<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, resolver(value)) : <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, value);

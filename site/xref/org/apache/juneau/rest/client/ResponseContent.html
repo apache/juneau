@@ -250,7 +250,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 				}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 			}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			String ct = firstNonEmpty(response.getHeader(<span class="jxr_string">"Content-Type"</span>).orElse(<span class="jxr_string">"text/plain"</span>));
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">var</strong> ct = firstNonEmpty(response.getHeader(<span class="jxr_string">"Content-Type"</span>).orElse(<span class="jxr_string">"text/plain"</span>));
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">if</strong> (parser == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 				parser = client.getMatchingParser(ct);
@@ -763,8 +763,8 @@
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 	<strong class="jxr_keyword">public</strong> Reader asReader() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> 
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<em class="jxr_comment">// Figure out what the charset of the response is.</em>
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		String cs = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		String ct = getContentType().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">var</strong> cs = (String)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">var</strong> ct = getContentType().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 		<em class="jxr_comment">// First look for "charset=" in Content-Type header of response.</em>
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 		<strong class="jxr_keyword">if</strong> (ct != <strong class="jxr_keyword">null</strong>)

@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Writer encodeAttrName(Writer w, Object value) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">return</strong> w.append(<span class="jxr_string">"_x0000_"</span>);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		String s = value.toString();
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> s = value.toString();
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (needsAttrNameEncoding(s)) {
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length(); i++) {
@@ -231,7 +231,7 @@
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String encodeElementName(Object value) {
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"_x0000_"</span>;
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		String s = value.toString();
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> s = value.toString();
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty())
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"_xE000_"</span>;
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 
@@ -331,7 +331,7 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String escapeText(Object value) {
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"_x0000_"</span>;
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		String s = value.toString();
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> s = value.toString();
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">if</strong> (! needsTextEncoding(s))

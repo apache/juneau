@@ -812,7 +812,7 @@
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 	@Override <em class="jxr_comment">/* Overridden from XmlMetaProvider */</em>
 <a class="jxr_linenumber" name="L806" href="#L806">806</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlBeanMeta" href="../../../../org/apache/juneau/xml/XmlBeanMeta.html#XmlBeanMeta">XmlBeanMeta</a> getXmlBeanMeta(BeanMeta&lt;?&gt; bm) {
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		XmlBeanMeta m = xmlBeanMetas.get(bm);
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		<strong class="jxr_keyword">var</strong> m = xmlBeanMetas.get(bm);
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 			m = <strong class="jxr_keyword">new</strong> <a name="XmlBeanMeta" href="../../../../org/apache/juneau/xml/XmlBeanMeta.html#XmlBeanMeta">XmlBeanMeta</a>(bm, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 			xmlBeanMetas.put(bm, m);
@@ -822,9 +822,9 @@
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> 	@Override <em class="jxr_comment">/* Overridden from XmlMetaProvider */</em>
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlBeanPropertyMeta" href="../../../../org/apache/juneau/xml/XmlBeanPropertyMeta.html#XmlBeanPropertyMeta">XmlBeanPropertyMeta</a> getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">var</strong> m = xmlBeanPropertyMetas.get(bpm);
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> 			BeanPropertyMeta dbpm = bpm.getDelegateFor();
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 			<strong class="jxr_keyword">var</strong> dbpm = bpm.getDelegateFor();
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 			m = <strong class="jxr_keyword">new</strong> <a name="XmlBeanPropertyMeta" href="../../../../org/apache/juneau/xml/XmlBeanPropertyMeta.html#XmlBeanPropertyMeta">XmlBeanPropertyMeta</a>(dbpm, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> 			xmlBeanPropertyMetas.put(bpm, m);
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> 		}
@@ -833,7 +833,7 @@
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> 
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> 	@Override <em class="jxr_comment">/* Overridden from XmlMetaProvider */</em>
 <a class="jxr_linenumber" name="L827" href="#L827">827</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlClassMeta" href="../../../../org/apache/juneau/xml/XmlClassMeta.html#XmlClassMeta">XmlClassMeta</a> getXmlClassMeta(ClassMeta&lt;?&gt; cm) {
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		XmlClassMeta m = xmlClassMetas.get(cm);
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		<strong class="jxr_keyword">var</strong> m = xmlClassMetas.get(cm);
 <a class="jxr_linenumber" name="L829" href="#L829">829</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 			m = <strong class="jxr_keyword">new</strong> <a name="XmlClassMeta" href="../../../../org/apache/juneau/xml/XmlClassMeta.html#XmlClassMeta">XmlClassMeta</a>(cm, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L831" href="#L831">831</a> 			xmlClassMetas.put(cm, m);
