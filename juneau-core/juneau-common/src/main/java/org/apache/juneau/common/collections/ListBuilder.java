@@ -25,23 +25,91 @@ import java.util.*;
 import org.apache.juneau.common.utils.*;
 
 /**
- * Builder for lists with fluent convenience methods.
+ * A fluent builder for constructing {@link List} instances with various configuration options.
  *
  * <p>
- * Supports adding single/multiple values, collections, arbitrary inputs (arrays/collections/convertible values),
- * optional sorting/comparators, sparse output (return null when empty), and unmodifiable output.
+ * This builder provides a flexible and type-safe way to construct lists with support for adding elements,
+ * collections, arrays, sorting, and applying modifiers like unmodifiable or sparse modes. It's particularly
+ * useful when you need to construct lists dynamically with conditional elements or from multiple sources.
  *
- * @param <E> The element type
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Fluent API - all methods return <c>this</c> for method chaining
+ * 	<li>Multiple add methods - single elements, varargs, collections, arrays
+ * 	<li>Arbitrary input support - automatic type conversion with {@link #addAny(Object...)}
+ * 	<li>Conditional adding - {@link #addIf(boolean, Object)} for conditional elements
+ * 	<li>Sorting support - natural order or custom {@link Comparator}
+ * 	<li>Sparse mode - return <jk>null</jk> for empty lists
+ * 	<li>Unmodifiable mode - create immutable lists
+ * 	<li>Custom converters - type conversion via {@link Converter}
+ * </ul>
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Basic usage</jc>
+ * 	List&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.add(<js>"apple"</js>, <js>"banana"</js>, <js>"cherry"</js>)
+ * 		.build();
+ *
+ * 	<jc>// With sorting</jc>
+ * 	List&lt;Integer&gt; <jv>sorted</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 		.add(3, 1, 4, 1, 5, 9, 2, 6)
+ * 		.sorted()
+ * 		.build();
+ *
+ * 	<jc>// Conditional elements</jc>
+ * 	List&lt;String&gt; <jv>filtered</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.add(<js>"always"</js>)
+ * 		.addIf(<jv>includeOptional</jv>, <js>"optional"</js>)
+ * 		.build();
+ *
+ * 	<jc>// Immutable list</jc>
+ * 	List&lt;String&gt; <jv>immutable</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.add(<js>"read"</js>, <js>"only"</js>)
+ * 		.unmodifiable()
+ * 		.build();
+ *
+ * 	<jc>// Sparse mode - returns null when empty</jc>
+ * 	List&lt;String&gt; <jv>maybeNull</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.sparse()
+ * 		.build();  <jc>// Returns null, not empty list</jc>
+ *
+ * 	<jc>// From multiple sources</jc>
+ * 	List&lt;Integer&gt; <jv>existing</jv> = Arrays.asList(1, 2, 3);
+ * 	List&lt;Integer&gt; <jv>combined</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 		.addAll(<jv>existing</jv>)
+ * 		.add(4, 5, 6)
+ * 		.build();
+ * </p>
+ *
+ * <h5 class='section'>Thread Safety:</h5>
+ * <p>
+ * This class is <b>not thread-safe</b>. Each builder instance should be used by a single thread or
+ * properly synchronized.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonCollections">juneau-common-collections</a>
+ * 	<li class='jc'>{@link MapBuilder}
+ * 	<li class='jc'>{@link SetBuilder}
+ * </ul>
+ *
+ * @param <E> The element type.
  */
 public class ListBuilder<E> {
 
 	/**
-	 * Static creator.
+	 * Creates a new list builder for the specified element type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+	 * 		.add(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>)
+	 * 		.build();
+	 * </p>
 	 *
 	 * @param <E> The element type.
-	 * @param elementType The element type.
-	 * @param elementTypeArgs Optional element type arguments.
-	 * @return A new builder.
+	 * @param elementType The element type class. Required for type-safe operations.
+	 * @return A new list builder instance.
 	 */
 	public static <E> ListBuilder<E> create(Class<E> elementType) {
 		return new ListBuilder<>(elementType);
@@ -138,23 +206,37 @@ public class ListBuilder<E> {
 	}
 
 	/**
-	 * Adds arbitrary values to this list.
+	 * Adds arbitrary values to this list with automatic type conversion.
 	 *
 	 * <p>
-	 * Objects can be any of the following:
-	 * <ul>
-	 * 	<li>The same type or convertible to the element type of this list.
-	 * 	<li>Collections or arrays of anything on this list.
+	 * This method provides flexible input handling by automatically converting and flattening various input types:
+	 * <ul class='spaced-list'>
+	 * 	<li>Direct instances of the element type - added as-is
+	 * 	<li>Collections - recursively flattened and elements converted
+	 * 	<li>Arrays - recursively flattened and elements converted
+	 * 	<li>Convertible types - converted using registered {@link Converter}s
 	 * </ul>
 	 *
-	 * @param values The values to add.
-	 * @return This object.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Mix different input types</jc>
+	 * 	List&lt;Integer&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+	 * 		.addAny(1, 2, 3)                           <jc>// Direct values</jc>
+	 * 		.addAny(Arrays.asList(4, 5, 6))            <jc>// Collection</jc>
+	 * 		.addAny(<jk>new int</jk>[]{7, 8, 9})                 <jc>// Array</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param values The values to add. <jk>null</jk> values are ignored.
+	 * @return This object for method chaining.
+	 * @throws IllegalStateException if element type is unknown.
+	 * @throws RuntimeException if a value cannot be converted to the element type.
 	 */
 	public ListBuilder<E> addAny(Object...values) {
 		if (elementType == null)
 			throw new IllegalStateException("Unknown element type. Cannot use this method.");
 		if (values != null) {
-			for (Object o : values) {
+			for (var o : values) {
 				if (o != null) {
 					if (o instanceof Collection) {
 						((Collection<?>)o).forEach(x -> addAny(x));

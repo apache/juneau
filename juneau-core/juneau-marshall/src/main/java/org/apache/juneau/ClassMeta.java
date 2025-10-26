@@ -95,7 +95,7 @@ public class ClassMeta<T> implements Type {
 		Field exampleField;
 		String example;
 		Mutater<String,T> stringMutater;
-		BiMap.Builder<Object,String> enumValues;
+		BidiMap.Builder<Object,String> enumValues;
 
 		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
 			this.innerClass = innerClass;
@@ -433,7 +433,7 @@ public class ClassMeta<T> implements Type {
 			if (cc == ENUM) {
 				Class<? extends Enum> ec = (Class<? extends Enum<?>>)c;
 				boolean useEnumNames = bc != null && bc.isUseEnumNames();
-				enumValues = BiMap.create();
+				enumValues = BidiMap.create();
 				enumValues.unmodifiable();
 				stream(ec.getEnumConstants()).forEach(x -> enumValues.add(x, useEnumNames ? x.name() : x.toString()));
 			}
@@ -604,7 +604,7 @@ public class ClassMeta<T> implements Type {
 
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 
-	private final BiMap<Object,String> enumValues;
+	private final BidiMap<Object,String> enumValues;
 
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 

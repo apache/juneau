@@ -16,29 +16,76 @@
  */
 package org.apache.juneau.common.collections;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-
 import org.apache.juneau.common.function.*;
+import org.apache.juneau.common.utils.*;
 
 /**
- * A simple settable boolean value.
+ * A simple mutable boolean flag.
+ *
+ * <p>
+ * This class provides a thread-unsafe alternative to {@link java.util.concurrent.atomic.AtomicBoolean} for cases
+ * where atomic operations are not required. It is useful in situations where you need to pass a mutable boolean
+ * reference to lambdas, inner classes, or methods.
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>
+ * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link java.util.concurrent.atomic.AtomicBoolean} instead.
+ * 	<li class='note'>
+ * 		This class supports only two states (<c>true</c>/<c>false</c>). If you need to represent three states
+ * 		(<c>true</c>/<c>false</c>/<c>null</c>), use {@link BooleanValue} instead.
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create a flag to track if an operation was performed</jc>
+ * 	Flag <jv>processed</jv> = Flag.<jsm>create</jsm>();
+ *
+ * 	<jc>// Use in a lambda</jc>
+ * 	list.forEach(<jv>x</jv> -&gt; {
+ * 		<jk>if</jk> (<jv>x</jv>.needsProcessing()) {
+ * 			<jv>processed</jv>.set();
+ * 			process(<jv>x</jv>);
+ * 		}
+ * 	});
+ *
+ * 	<jk>if</jk> (<jv>processed</jv>.isSet()) {
+ * 		<jsm>log</jsm>(<js>"Processing completed"</js>);
+ * 	}
+ * </p>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonCollections">juneau-common-collections</a>
+ * 	<li class='jc'>{@link BooleanValue}
+ * </ul>
  */
 public class Flag {
 
 	/**
-	 * Creates a boolean value initialized to <jk>false</jk>.
+	 * Creates a new flag initialized to <jk>false</jk>.
 	 *
-	 * @return A new boolean value.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
+	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isUnset());
+	 * </p>
+	 *
+	 * @return A new flag.
 	 */
 	public static Flag create() {
 		return of(false);
 	}
 
 	/**
-	 * Creates a boolean value with the specified initial state.
+	 * Creates a new flag with the specified initial state.
 	 *
-	 * @param value The initial state of the value.
-	 * @return A new boolean value.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isSet());
+	 * </p>
+	 *
+	 * @param value The initial state of the flag.
+	 * @return A new flag.
 	 */
 	public static Flag of(boolean value) {
 		return new Flag(value);
@@ -51,81 +98,127 @@ public class Flag {
 	}
 
 	/**
-	 * Sets the boolean value to <jk>true</jk> and returns the value before it was set.
+	 * Sets the flag to <jk>true</jk> and returns the previous value.
 	 *
-	 * @return The previous value.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
+	 * 	<jk>boolean</jk> <jv>wasSet</jv> = <jv>flag</jv>.getAndSet();  <jc>// Returns false, flag is now true</jc>
+	 * 	<jk>boolean</jk> <jv>wasSet2</jv> = <jv>flag</jv>.getAndSet(); <jc>// Returns true, flag remains true</jc>
+	 * </p>
+	 *
+	 * @return The value before it was set to <jk>true</jk>.
 	 */
 	public boolean getAndSet() {
-		boolean b = value;
+		var b = value;
 		value = true;
 		return b;
 	}
 
 	/**
-	 * Sets the boolean value to <jk>false</jk> and returns the value before it was set.
+	 * Sets the flag to <jk>false</jk> and returns the previous value.
 	 *
-	 * @return The previous value.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	<jk>boolean</jk> <jv>wasSet</jv> = <jv>flag</jv>.getAndUnset();  <jc>// Returns true, flag is now false</jc>
+	 * 	<jk>boolean</jk> <jv>wasSet2</jv> = <jv>flag</jv>.getAndUnset(); <jc>// Returns false, flag remains false</jc>
+	 * </p>
+	 *
+	 * @return The value before it was set to <jk>false</jk>.
 	 */
 	public boolean getAndUnset() {
-		boolean v = value;
+		var v = value;
 		value = false;
 		return v;
 	}
 
 	/**
-	 * Runs a snippet of code if the boolean value is <jk>false</jk>.
+	 * Executes a code snippet if the flag is <jk>false</jk>.
+	 *
+	 * <p>
+	 * This method is useful for conditional execution based on the flag state, particularly in lambda expressions
+	 * or method chains.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	BoolValue <jv>flag</jv> = BoolValue.<jsm>create</jsm>();
-	 * 	...
-	 * 	<jv>flag</jv>.ifNotSet(()-&gt;<jsm>doSomething</jsm>());
+	 * <p class='bjava'>
+	 * 	Flag <jv>initialized</jv> = Flag.<jsm>create</jsm>();
+	 *
+	 * 	<jc>// Initialize only once</jc>
+	 * 	<jv>initialized</jv>.ifNotSet(() -&gt; {
+	 * 		<jsm>initialize</jsm>();
+	 * 		<jv>initialized</jv>.set();
+	 * 	});
 	 * </p>
 	 *
-	 * @param snippet The snippet of code to run.
+	 * @param snippet The code snippet to execute if the flag is <jk>false</jk>.
 	 * @return This object.
 	 */
 	public Flag ifNotSet(Snippet snippet) {
 		if (! value)
-			runSnippet(snippet);
+			Utils.safe(snippet);
 		return this;
 	}
 
 	/**
-	 * Runs a snippet of code if the boolean value is <jk>true</jk>.
+	 * Executes a code snippet if the flag is <jk>true</jk>.
+	 *
+	 * <p>
+	 * This method is useful for conditional execution based on the flag state, particularly in lambda expressions
+	 * or method chains.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	BoolValue <jv>flag</jv> = BoolValue.<jsm>create</jsm>();
-	 * 	...
-	 * 	<jv>flag</jv>.ifSet(()-&gt;<jsm>doSomething</jsm>());
+	 * <p class='bjava'>
+	 * 	Flag <jv>hasErrors</jv> = Flag.<jsm>create</jsm>();
+	 *
+	 * 	<jc>// Log only if errors occurred</jc>
+	 * 	<jv>hasErrors</jv>.ifSet(() -&gt; <jsm>logErrors</jsm>());
 	 * </p>
 	 *
-	 * @param snippet The snippet of code to run.
+	 * @param snippet The code snippet to execute if the flag is <jk>true</jk>.
 	 * @return This object.
 	 */
 	public Flag ifSet(Snippet snippet) {
 		if (value)
-			runSnippet(snippet);
+			Utils.safe(snippet);
 		return this;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the boolean value is <jk>true</jk>.
+	 * Returns <jk>true</jk> if the flag is set.
 	 *
-	 * @return <jk>true</jk> if the boolean value is <jk>true</jk>.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isSet());
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if the flag is set, <jk>false</jk> otherwise.
 	 */
 	public boolean isSet() { return value; }
 
 	/**
-	 * Returns <jk>true</jk> if the boolean value is <jk>false</jk>.
+	 * Returns <jk>true</jk> if the flag is not set.
 	 *
-	 * @return <jk>true</jk> if the boolean value is <jk>false</jk>.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
+	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isUnset());
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if the flag is not set, <jk>false</jk> otherwise.
 	 */
 	public boolean isUnset() { return ! value; }
 
 	/**
-	 * Sets the boolean value to <jk>true</jk>.
+	 * Sets the flag to <jk>true</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
+	 * 	<jv>flag</jv>.set();
+	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isSet());
+	 * </p>
 	 *
 	 * @return This object.
 	 */
@@ -135,9 +228,21 @@ public class Flag {
 	}
 
 	/**
-	 * Sets the boolean value to <jk>true</jk> if the value is <jk>true</jk>.
+	 * Sets the flag to <jk>true</jk> if the specified value is <jk>true</jk>.
 	 *
-	 * @param value The value to set.
+	 * <p>
+	 * This method uses a logical OR operation, so once the flag is set, it remains set regardless of subsequent
+	 * calls with <jk>false</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
+	 * 	<jv>flag</jv>.setIf(<jk>false</jk>);  <jc>// Flag remains false</jc>
+	 * 	<jv>flag</jv>.setIf(<jk>true</jk>);   <jc>// Flag becomes true</jc>
+	 * 	<jv>flag</jv>.setIf(<jk>false</jk>);  <jc>// Flag remains true</jc>
+	 * </p>
+	 *
+	 * @param value If <jk>true</jk>, the flag will be set to <jk>true</jk>.
 	 * @return This object.
 	 */
 	public Flag setIf(boolean value) {
@@ -146,22 +251,19 @@ public class Flag {
 	}
 
 	/**
-	 * Sets the boolean value to <jk>false</jk>.
+	 * Sets the flag to <jk>false</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	<jv>flag</jv>.unset();
+	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isUnset());
+	 * </p>
 	 *
 	 * @return This object.
 	 */
 	public Flag unset() {
 		value = false;
 		return this;
-	}
-
-	private static void runSnippet(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (Error | RuntimeException e) {
-			throw e;
-		} catch (Throwable e) {
-			throw asRuntimeException(e);
-		}
 	}
 }

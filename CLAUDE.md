@@ -61,6 +61,63 @@ public void method() {
 <TAB>public void method() {
 ```
 
+#### Exception Handling
+When throwing exceptions in Java code:
+
+1. **Use `ThrowableUtils` methods** instead of direct exception constructors:
+   - Use `illegalArg(String message, Object... args)` for `IllegalArgumentException`
+   - Use `runtimeException(String message, Object... args)` for generic `RuntimeException`
+   - Add static import: `import static org.apache.juneau.common.utils.ThrowableUtils.*;`
+
+2. **Use MessageFormat-style placeholders** with `ThrowableUtils` methods:
+   - Use `{0}`, `{1}`, etc. for parameter placeholders
+   - Escape single quotes with `''` (e.g., `"Value ''{0}'' is invalid"`)
+   - Pass arguments as varargs after the message string
+
+**Examples:**
+```java
+// WRONG - Direct exception constructor
+throw new IllegalArgumentException("Value '" + value + "' is invalid");
+
+// CORRECT - ThrowableUtils with MessageFormat
+throw illegalArg("Value ''{0}'' is invalid", value);
+
+// WRONG - String concatenation
+throw new RuntimeException("Failed to process " + name + " with id " + id);
+
+// CORRECT - ThrowableUtils with multiple arguments
+throw runtimeException("Failed to process {0} with id {1}", name, id);
+```
+
+#### Local Variable Type Inference
+When declaring local variables in Java code:
+
+1. **Use the `var` keyword** whenever the type is obvious from the right-hand side:
+   - Initializers with constructor calls: `var map = new HashMap<String,Integer>();`
+   - Method calls with clear return types: `var list = getList();`
+   - Stream operations: `var result = stream.collect(toList());`
+   - Enhanced for loops: `for (var entry : map.entrySet())`
+
+2. **Keep explicit types** when:
+   - The type is not obvious from the initializer: `InputStream stream = getStream();`
+   - Readability would suffer: `boolean hasNext = iterator.hasNext();` (better than `var hasNext`)
+   - Generic type parameters need to be preserved on left side: `List<String> list = new ArrayList<>();`
+
+**Examples:**
+```java
+// WRONG - Redundant type declaration
+Map<String,Integer> map = new HashMap<String,Integer>();
+List<String> keys = map.keySet();
+
+// CORRECT - Use var
+var map = new HashMap<String,Integer>();
+var keys = map.keySet();
+
+// CORRECT - Keep explicit type when not obvious
+InputStream stream = resource.getStream();
+boolean isEmpty = list.isEmpty();
+```
+
 ### 2. Testing Standards
 - Ensure comprehensive test coverage for all changes
 - Follow the established unit testing patterns

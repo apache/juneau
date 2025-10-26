@@ -23,26 +23,98 @@ import java.util.function.*;
 import org.apache.juneau.common.utils.*;
 
 /**
- * Represents a simple settable value.
+ * A generic mutable value wrapper.
  *
  * <p>
- * Similar to an {@link Optional} but mutable.
+ * This class provides a simple way to wrap any object type in a mutable container, making it useful for passing
+ * mutable references to lambdas, inner classes, and methods. It is similar to {@link Optional} but allows the
+ * value to be changed after creation.
+ *
+ * <p>
+ * The class supports method chaining through fluent setters and provides various convenience methods for working
+ * with the wrapped value, including mapping, conditional execution, and default value handling.
+ *
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Mutable value container with fluent API
+ * 	<li>Optional-like methods: {@link #get()}, {@link #orElse(Object)}, {@link #ifPresent(Consumer)}, {@link #map(Function)}
+ * 	<li>Atomic-like operations: {@link #getAndSet(Object)}, {@link #getAndUnset()}
+ * 	<li>Listener support for value changes via {@link ValueListener}
+ * 	<li>Method chaining for all setter operations
+ * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>
- * 	<li class='warn'>This class is not thread safe.
+ * 	<li class='warn'>
+ * 		This class is <b>not thread-safe</b>. For concurrent access, consider using atomic classes like
+ * 		{@link java.util.concurrent.atomic.AtomicReference}.
+ * </ul>
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Basic usage</jc>
+ * 	Value&lt;String&gt; <jv>name</jv> = Value.<jsm>of</jsm>(<js>"John"</js>);
+ * 	<jv>name</jv>.set(<js>"Jane"</js>);
+ * 	String <jv>result</jv> = <jv>name</jv>.get();  <jc>// Returns "Jane"</jc>
+ *
+ * 	<jc>// Use in lambda (effectively final variable)</jc>
+ * 	Value&lt;String&gt; <jv>result</jv> = Value.<jsm>empty</jsm>();
+ * 	list.forEach(<jv>x</jv> -&gt; {
+ * 		<jk>if</jk> (<jv>x</jv>.matches(criteria)) {
+ * 			<jv>result</jv>.set(<jv>x</jv>);
+ * 		}
+ * 	});
+ *
+ * 	<jc>// With default values</jc>
+ * 	Value&lt;String&gt; <jv>optional</jv> = Value.<jsm>empty</jsm>();
+ * 	String <jv>value</jv> = <jv>optional</jv>.orElse(<js>"default"</js>);  <jc>// Returns "default"</jc>
+ *
+ * 	<jc>// Mapping values</jc>
+ * 	Value&lt;Integer&gt; <jv>number</jv> = Value.<jsm>of</jsm>(5);
+ * 	Value&lt;String&gt; <jv>text</jv> = <jv>number</jv>.map(Object::toString);  <jc>// Value of "5"</jc>
+ *
+ * 	<jc>// With listener for change notification</jc>
+ * 	Value&lt;String&gt; <jv>monitored</jv> = Value.<jsm>of</jsm>(<js>"initial"</js>)
+ * 		.listener(<jv>newValue</jv> -&gt; <jsm>log</jsm>(<js>"Value changed to: "</js> + <jv>newValue</jv>));
+ * 	<jv>monitored</jv>.set(<js>"updated"</js>);  <jc>// Triggers listener</jc>
+ * </p>
+ *
+ * <h5 class='section'>Specialized Value Classes:</h5>
+ * <p>
+ * For primitive types and common use cases, specialized subclasses are available with additional convenience methods:
+ * <ul class='spaced-list'>
+ * 	<li>{@link IntegerValue} - For mutable integers with {@code getAndIncrement()}
+ * 	<li>{@link LongValue} - For mutable longs with {@code getAndIncrement()}
+ * 	<li>{@link ShortValue} - For mutable shorts with {@code getAndIncrement()}
+ * 	<li>{@link FloatValue} - For mutable floats
+ * 	<li>{@link DoubleValue} - For mutable doubles
+ * 	<li>{@link CharValue} - For mutable characters
+ * 	<li>{@link BooleanValue} - For nullable booleans with {@code isTrue()}/{@code isNotTrue()}
+ * 	<li>{@link Flag} - For non-nullable boolean flags (true/false only, no null state)
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonCollections">juneau-common-collections</a>
+ * 	<li class='jc'>{@link ValueListener}
+ * 	<li class='jc'>{@link IntegerValue}
+ * 	<li class='jc'>{@link BooleanValue}
+ * 	<li class='jc'>{@link Flag}
  * </ul>
  *
  * @param <T> The value type.
  */
 public class Value<T> {
 	/**
-	 * Static creator.
+	 * Creates a new empty value (with <c>null</c> as the initial value).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>empty</jsm>();
+	 * 	<jsm>assertNull</jsm>(<jv>value</jv>.get());
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isEmpty());
+	 * </p>
 	 *
 	 * @param <T> The value type.
-	 * @return An empty {@link Value} object.
+	 * @return A new empty {@link Value} object.
 	 */
 	public static <T> Value<T> empty() {
 		return new Value<>(null);
@@ -59,11 +131,17 @@ public class Value<T> {
 	}
 
 	/**
-	 * Static creator.
+	 * Creates a new value with the specified initial value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	<jsm>assertEquals</jsm>(<js>"hello"</js>, <jv>value</jv>.get());
+	 * </p>
 	 *
 	 * @param <T> The value type.
-	 * @param object The object being wrapped.
-	 * @return A new {@link Value} object.
+	 * @param object The object being wrapped. Can be <jk>null</jk>.
+	 * @return A new {@link Value} object containing the specified value.
 	 */
 	public static <T> Value<T> of(T object) {
 		return new Value<>(object);
@@ -76,7 +154,7 @@ public class Value<T> {
 	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
 	 */
 	public static Type unwrap(Type t) {
-		Type x = ClassUtils.getParameterType(t);
+		var x = ClassUtils.getParameterType(t);
 		return x != null ? x : t;
 	}
 
@@ -107,20 +185,58 @@ public class Value<T> {
 	}
 
 	/**
-	 * Returns the value and then unsets it.
+	 * Returns the current value and then unsets it (sets to <jk>null</jk>).
 	 *
-	 * @return The value before it was unset.
+	 * <p>
+	 * This is useful for "consuming" a value, ensuring it can only be retrieved once.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"data"</js>);
+	 * 	String <jv>result</jv> = <jv>value</jv>.getAndUnset();  <jc>// Returns "data"</jc>
+	 * 	<jsm>assertNull</jsm>(<jv>value</jv>.get());           <jc>// Value is now null</jc>
+	 * </p>
+	 *
+	 * @return The value before it was unset, or <jk>null</jk> if it was already <jk>null</jk>.
 	 */
 	public T getAndUnset() {
-		T t2 = t;
+		var t2 = t;
 		t = null;
 		return t2;
 	}
 
 	/**
-	 * If a value is present, invoke the specified consumer with the value, otherwise do nothing.
+	 * Returns the current value and then sets it to the specified value.
 	 *
-	 * @param consumer Block to be executed if a value is present.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"old"</js>);
+	 * 	String <jv>oldValue</jv> = <jv>value</jv>.getAndSet(<js>"new"</js>);  <jc>// Returns "old"</jc>
+	 * 	String <jv>newValue</jv> = <jv>value</jv>.get();                   <jc>// Returns "new"</jc>
+	 * </p>
+	 *
+	 * @param t The new value.
+	 * @return The value before it was set.
+	 */
+	public T getAndSet(T t) {
+		var t2 = this.t;
+		set(t);
+		return t2;
+	}
+
+	/**
+	 * If a value is present (not <jk>null</jk>), invokes the specified consumer with the value, otherwise does nothing.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	<jv>value</jv>.ifPresent(<jsm>System.out</jsm>::<jv>println</jv>);  <jc>// Prints "hello"</jc>
+	 *
+	 * 	Value&lt;String&gt; <jv>empty</jv> = Value.<jsm>empty</jsm>();
+	 * 	<jv>empty</jv>.ifPresent(<jsm>System.out</jsm>::<jv>println</jv>);  <jc>// Does nothing</jc>
+	 * </p>
+	 *
+	 * @param consumer Block to be executed if a value is present. Must not be <jk>null</jk>.
 	 */
 	public void ifPresent(Consumer<? super T> consumer) {
 		if (t != null)
@@ -142,10 +258,53 @@ public class Value<T> {
 	public boolean isPresent() { return get() != null; }
 
 	/**
-	 * Adds a listener for this value.
+	 * Checks if the current value equals the specified value using {@link org.apache.juneau.common.utils.Utils#eq(Object, Object)}.
 	 *
-	 * @param listener The new listener for this value.
-	 * @return This object.
+	 * <p>
+	 * This method uses {@code Utils.eq()} for equality comparison, which handles <jk>null</jk> values safely
+	 * and performs deep equality checks for arrays and collections.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(<js>"hello"</js>));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(<js>"world"</js>));
+	 *
+	 * 	<jc>// Handles null values safely</jc>
+	 * 	Value&lt;String&gt; <jv>empty</jv> = Value.<jsm>empty</jsm>();
+	 * 	<jsm>assertTrue</jsm>(<jv>empty</jv>.is(<jk>null</jk>));
+	 * 	<jsm>assertFalse</jsm>(<jv>empty</jv>.is(<js>"test"</js>));
+	 *
+	 * 	<jc>// Works with any type</jc>
+	 * 	Value&lt;Integer&gt; <jv>number</jv> = Value.<jsm>of</jsm>(42);
+	 * 	<jsm>assertTrue</jsm>(<jv>number</jv>.is(42));
+	 * 	<jsm>assertFalse</jsm>(<jv>number</jv>.is(43));
+	 * </p>
+	 *
+	 * @param other The value to compare with. Can be <jk>null</jk>.
+	 * @return <jk>true</jk> if the values are equal according to {@link org.apache.juneau.common.utils.Utils#eq(Object, Object)}.
+	 */
+	public boolean is(T other) {
+		return Utils.eq(t, other);
+	}
+
+	/**
+	 * Registers a listener that will be called whenever the value is changed via {@link #set(Object)}.
+	 *
+	 * <p>
+	 * Only one listener can be registered at a time. Calling this method again will replace the previous listener.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"initial"</js>);
+	 * 	<jv>value</jv>.listener(<jv>newValue</jv> -&gt; <jsm>log</jsm>(<js>"Changed to: "</js> + <jv>newValue</jv>));
+	 *
+	 * 	<jv>value</jv>.set(<js>"updated"</js>);  <jc>// Triggers listener, logs "Changed to: updated"</jc>
+	 * </p>
+	 *
+	 * @param listener The listener to be called on value changes. Can be <jk>null</jk> to remove the listener.
+	 * @return This object for method chaining.
+	 * @see ValueListener
 	 */
 	public Value<T> listener(ValueListener<T> listener) {
 		this.listener = listener;
@@ -153,16 +312,32 @@ public class Value<T> {
 	}
 
 	/**
-	 * Applies a mapping function against the contents of this value.
+	 * Applies a mapping function to the value if present, returning a new {@link Value} with the result.
+	 *
+	 * <p>
+	 * If this value is empty (<jk>null</jk>), returns an empty value without applying the mapper.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>name</jv> = Value.<jsm>of</jsm>(<js>"john"</js>);
+	 * 	Value&lt;String&gt; <jv>upper</jv> = <jv>name</jv>.map(String::toUpperCase);
+	 * 	<jsm>assertEquals</jsm>(<js>"JOHN"</js>, <jv>upper</jv>.get());
+	 *
+	 * 	Value&lt;Integer&gt; <jv>length</jv> = <jv>name</jv>.map(String::length);
+	 * 	<jsm>assertEquals</jsm>(4, <jv>length</jv>.get());
+	 *
+	 * 	Value&lt;String&gt; <jv>empty</jv> = Value.<jsm>empty</jsm>();
+	 * 	Value&lt;Integer&gt; <jv>result</jv> = <jv>empty</jv>.map(String::length);  <jc>// Returns empty Value</jc>
+	 * </p>
 	 *
 	 * @param <T2> The mapped value type.
-	 * @param mapper The mapping function.
-	 * @return The mapped value.
+	 * @param mapper The mapping function to apply. Must not be <jk>null</jk>.
+	 * @return A new {@link Value} containing the mapped result, or an empty value if this value is empty.
 	 */
 	public <T2> Value<T2> map(Function<? super T,T2> mapper) {
 		if (t != null)
-			return Value.of(mapper.apply(t));
-		return Value.empty();
+			return of(mapper.apply(t));
+		return empty();
 	}
 
 	/**
@@ -210,8 +385,18 @@ public class Value<T> {
 	/**
 	 * Sets the value.
 	 *
-	 * @param t The new value.
-	 * @return This object.
+	 * <p>
+	 * If a {@link ValueListener} is registered, it will be notified of the change.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>empty</jsm>();
+	 * 	<jv>value</jv>.set(<js>"hello"</js>).set(<js>"world"</js>);  <jc>// Method chaining</jc>
+	 * 	<jsm>assertEquals</jsm>(<js>"world"</js>, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param t The new value. Can be <jk>null</jk>.
+	 * @return This object for method chaining.
 	 */
 	public Value<T> set(T t) {
 		this.t = t;
@@ -221,10 +406,21 @@ public class Value<T> {
 	}
 
 	/**
-	 * Sets the value if it's not already set.
+	 * Sets the value only if it is currently empty (<jk>null</jk>).
 	 *
-	 * @param t The new value.
-	 * @return This object.
+	 * <p>
+	 * If the value is already set, this method does nothing.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>empty</jsm>();
+	 * 	<jv>value</jv>.setIfEmpty(<js>"first"</js>);   <jc>// Sets value to "first"</jc>
+	 * 	<jv>value</jv>.setIfEmpty(<js>"second"</js>);  <jc>// Does nothing, value remains "first"</jc>
+	 * 	<jsm>assertEquals</jsm>(<js>"first"</js>, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param t The new value. Can be <jk>null</jk>.
+	 * @return This object for method chaining.
 	 */
 	public Value<T> setIfEmpty(T t) {
 		if (isEmpty())

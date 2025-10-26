@@ -14,24 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.common.function;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.*;
+import java.util.function.*;
 
-import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
-import org.junit.jupiter.api.*;
+/**
+ * A function that takes in 5 arguments.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * </ul>
+ *
+ * @param <A> The first argument.
+ * @param <B> The second argument.
+ * @param <C> The third argument.
+ * @param <D> The fourth argument.
+ * @param <E> The fifth argument.
+ * @param <R> The return type.
+ */
+@SuppressWarnings("javadoc")
+@FunctionalInterface
+public interface Function5<A,B,C,D,E,R> {
 
-class ValueTest extends TestBase {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Value defined on parent class.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	public static class A extends Value<A1>{}
-	public static class A1 {}
-
-	@Test void a01_testSubclass() {
-		assertEquals(A1.class, ClassUtils.getParameterType(A.class));
+	default <V> Function5<A,B,C,D,E,V> andThen(Function<? super R,? extends V> after) {
+		Objects.requireNonNull(after);
+		return (A a, B b, C c, D d, E e) -> after.apply(apply(a, b, c, d, e));
 	}
+
+	R apply(A a, B b, C c, D d, E e);
 }

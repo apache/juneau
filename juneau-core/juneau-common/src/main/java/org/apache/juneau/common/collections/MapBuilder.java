@@ -21,14 +21,80 @@ import java.util.*;
 import org.apache.juneau.common.utils.*;
 
 /**
- * Builder for maps with fluent convenience methods.
+ * A fluent builder for constructing {@link Map} instances with various configuration options.
  *
  * <p>
- * Supports adding entries and other maps, arbitrary inputs (maps/convertible values), optional sorting by key,
- * sparse output (return null when empty), and unmodifiable output.
+ * This builder provides a flexible and type-safe way to construct maps with support for adding entries,
+ * other maps, sorting by keys, and applying modifiers like unmodifiable or sparse modes. It's particularly
+ * useful when constructing maps dynamically from multiple sources or with conditional entries.
  *
- * @param <K> Key type.
- * @param <V> Value type.
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Fluent API - all methods return <c>this</c> for method chaining
+ * 	<li>Multiple add methods - single entries, pairs, other maps
+ * 	<li>Arbitrary input support - automatic type conversion with {@link #addAny(Object...)}
+ * 	<li>Pair adding - {@link #addPairs(Object...)} for varargs key-value pairs
+ * 	<li>Sorting support - natural key order or custom {@link Comparator}
+ * 	<li>Sparse mode - return <jk>null</jk> for empty maps
+ * 	<li>Unmodifiable mode - create immutable maps
+ * 	<li>Custom converters - type conversion via {@link Converter}
+ * </ul>
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Basic usage</jc>
+ * 	Map&lt;String,Integer&gt; <jv>map</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 		.add(<js>"one"</js>, 1)
+ * 		.add(<js>"two"</js>, 2)
+ * 		.add(<js>"three"</js>, 3)
+ * 		.build();
+ *
+ * 	<jc>// Using pairs</jc>
+ * 	Map&lt;String,String&gt; <jv>props</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+ * 		.addPairs(<js>"host"</js>, <js>"localhost"</js>, <js>"port"</js>, <js>"8080"</js>)
+ * 		.build();
+ *
+ * 	<jc>// With sorting by key</jc>
+ * 	Map&lt;String,Integer&gt; <jv>sorted</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 		.add(<js>"zebra"</js>, 3)
+ * 		.add(<js>"apple"</js>, 1)
+ * 		.add(<js>"banana"</js>, 2)
+ * 		.sorted()
+ * 		.build();  <jc>// Returns TreeMap with natural key order</jc>
+ *
+ * 	<jc>// Immutable map</jc>
+ * 	Map&lt;String,String&gt; <jv>config</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+ * 		.add(<js>"env"</js>, <js>"prod"</js>)
+ * 		.add(<js>"region"</js>, <js>"us-west"</js>)
+ * 		.unmodifiable()
+ * 		.build();
+ *
+ * 	<jc>// From multiple sources</jc>
+ * 	Map&lt;String,Integer&gt; <jv>existing</jv> = Map.of(<js>"a"</js>, 1, <js>"b"</js>, 2);
+ * 	Map&lt;String,Integer&gt; <jv>combined</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 		.addAll(<jv>existing</jv>)
+ * 		.add(<js>"c"</js>, 3)
+ * 		.build();
+ *
+ * 	<jc>// Sparse mode - returns null when empty</jc>
+ * 	Map&lt;String,String&gt; <jv>maybeNull</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+ * 		.sparse()
+ * 		.build();  <jc>// Returns null, not empty map</jc>
+ * </p>
+ *
+ * <h5 class='section'>Thread Safety:</h5>
+ * <p>
+ * This class is <b>not thread-safe</b>. Each builder instance should be used by a single thread or
+ * properly synchronized.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonCollections">juneau-common-collections</a>
+ * 	<li class='jc'>{@link ListBuilder}
+ * 	<li class='jc'>{@link SetBuilder}
+ * </ul>
+ *
+ * @param <K> The key type.
+ * @param <V> The value type.
  */
 public class MapBuilder<K,V> {
 
@@ -128,7 +194,7 @@ public class MapBuilder<K,V> {
 	public MapBuilder<K,V> addAny(Object...values) {
 		if (keyType == null || valueType == null)
 			throw new IllegalStateException("Unknown key and value types. Cannot use this method.");
-		for (Object o : values) {
+		for (var o : values) {
 			if (o != null) {
 				if (o instanceof Map) {
 					((Map<Object,Object>)o).forEach((k, v) -> add(toType(keyType, k), toType(valueType, v)));

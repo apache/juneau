@@ -30,6 +30,12 @@
 - [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
 - [ ] TODO-28 Remove dependencies on jakarta.xml.bind-api.
 - [ ] TODO-29 Finish setting up SonarQube analysis in git workflow.
+- [ ] TODO-31 Cache should extend from ConcurrentHashMap.
+- [ ] TODO-32 TupleXFunction classes are redundant. Replace them with FunctionX.
+- [ ] TODO-33 Figure out if BidiMap needs an unmodifiable mode or if it can just be wrapped in an unmodifiable wrapper.
+- [ ] TODO-34 CharValue should have the following methods: is(char), isAny(char...), isAny(String). Determine if there are other useful methods that can be added to the XValue classes.
+- [ ] TODO-35 Replace instances of Objects.requireNonNull with assertArgNotNull.
+- [ ] TODO-36 Replace instances of Object.equals with Utils.eq.
 
 ## Framework Improvements
 

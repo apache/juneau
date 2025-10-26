@@ -25,13 +25,82 @@ import java.util.*;
 import org.apache.juneau.common.utils.*;
 
 /**
- * Builder for sets with fluent convenience methods.
+ * A fluent builder for constructing {@link Set} instances with various configuration options.
  *
  * <p>
- * Supports adding single/multiple values, collections, arbitrary inputs (arrays/collections/convertible values),
- * optional sorting/comparators, sparse output (return null when empty), and unmodifiable output.
+ * This builder provides a flexible and type-safe way to construct sets with support for adding elements,
+ * collections, arrays, sorting, and applying modifiers like unmodifiable or sparse modes. Sets automatically
+ * handle duplicates - adding the same element multiple times will result in only one occurrence in the final set.
  *
- * @param <E> The element type
+ * <h5 class='section'>Features:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>Fluent API - all methods return <c>this</c> for method chaining
+ * 	<li>Multiple add methods - single elements, varargs, collections, arrays
+ * 	<li>Arbitrary input support - automatic type conversion with {@link #addAny(Object...)}
+ * 	<li>Conditional adding - {@link #addIf(boolean, Object)} for conditional elements
+ * 	<li>Sorting support - natural order or custom {@link Comparator}
+ * 	<li>Sparse mode - return <jk>null</jk> for empty sets
+ * 	<li>Unmodifiable mode - create immutable sets
+ * 	<li>Custom converters - type conversion via {@link Converter}
+ * 	<li>Automatic deduplication - duplicate elements are automatically removed
+ * </ul>
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Basic usage</jc>
+ * 	Set&lt;String&gt; <jv>set</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.add(<js>"apple"</js>, <js>"banana"</js>, <js>"cherry"</js>)
+ * 		.build();
+ *
+ * 	<jc>// Automatic deduplication</jc>
+ * 	Set&lt;Integer&gt; <jv>unique</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 		.add(1, 2, 3, 2, 1)  <jc>// Duplicates ignored</jc>
+ * 		.build();  <jc>// Contains: 1, 2, 3</jc>
+ *
+ * 	<jc>// With sorting</jc>
+ * 	Set&lt;String&gt; <jv>sorted</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.add(<js>"zebra"</js>, <js>"apple"</js>, <js>"banana"</js>)
+ * 		.sorted()
+ * 		.build();  <jc>// Returns TreeSet in natural order</jc>
+ *
+ * 	<jc>// Conditional elements</jc>
+ * 	Set&lt;String&gt; <jv>features</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.add(<js>"basic"</js>)
+ * 		.addIf(<jv>hasPremium</jv>, <js>"premium"</js>)
+ * 		.addIf(<jv>hasEnterprise</jv>, <js>"enterprise"</js>)
+ * 		.build();
+ *
+ * 	<jc>// Immutable set</jc>
+ * 	Set&lt;String&gt; <jv>immutable</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.add(<js>"read"</js>, <js>"only"</js>)
+ * 		.unmodifiable()
+ * 		.build();
+ *
+ * 	<jc>// From multiple sources</jc>
+ * 	Set&lt;Integer&gt; <jv>existing</jv> = Set.of(1, 2, 3);
+ * 	Set&lt;Integer&gt; <jv>combined</jv> = SetBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
+ * 		.addAll(<jv>existing</jv>)
+ * 		.add(4, 5, 6)
+ * 		.build();
+ *
+ * 	<jc>// Sparse mode - returns null when empty</jc>
+ * 	Set&lt;String&gt; <jv>maybeNull</jv> = SetBuilder.<jsm>create</jsm>(String.<jk>class</jk>)
+ * 		.sparse()
+ * 		.build();  <jc>// Returns null, not empty set</jc>
+ * </p>
+ *
+ * <h5 class='section'>Thread Safety:</h5>
+ * <p>
+ * This class is <b>not thread-safe</b>. Each builder instance should be used by a single thread or
+ * properly synchronized.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonCollections">juneau-common-collections</a>
+ * 	<li class='jc'>{@link ListBuilder}
+ * 	<li class='jc'>{@link MapBuilder}
+ * </ul>
+ *
+ * @param <E> The element type.
  */
 public class SetBuilder<E> {
 
@@ -99,7 +168,7 @@ public class SetBuilder<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	public SetBuilder<E> add(E...values) {
-		for (E v : values)
+		for (var v : values)
 			add(v);
 		return this;
 	}
@@ -141,7 +210,7 @@ public class SetBuilder<E> {
 		if (elementType == null)
 			throw new IllegalStateException("Unknown element type. Cannot use this method.");
 		if (values != null) {
-			for (Object o : values) {
+			for (var o : values) {
 				if (o != null) {
 					if (o instanceof Collection) {
 						((Collection<?>)o).forEach(x -> addAny(x));

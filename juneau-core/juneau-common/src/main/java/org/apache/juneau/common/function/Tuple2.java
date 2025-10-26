@@ -44,6 +44,7 @@ public class Tuple2<A,B> {
 
 	private final A a;
 	private final B b;
+	private final int hashCode;
 
 	/**
 	 * Constructor.
@@ -54,6 +55,7 @@ public class Tuple2<A,B> {
 	public Tuple2(A a, B b) {
 		this.a = a;
 		this.b = b;
+		this.hashCode = HashCode.of(a, b);
 	}
 
 	@Override /* Overridden from Object */
@@ -77,6 +79,6 @@ public class Tuple2<A,B> {
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return HashCode.of(a, b);
+		return hashCode;
 	}
 }

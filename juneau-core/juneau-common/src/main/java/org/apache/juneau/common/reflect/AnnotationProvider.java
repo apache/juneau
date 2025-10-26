@@ -43,11 +43,11 @@ public interface AnnotationProvider {
 	AnnotationProvider DEFAULT = new AnnotationProvider() {
 
 		// @formatter:off
-		private final TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Class::getAnnotationsByType);
-		private final TwoKeyConcurrentHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Class::getDeclaredAnnotationsByType);
-		private final TwoKeyConcurrentHashMap<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Method::getAnnotationsByType);
-		private final TwoKeyConcurrentHashMap<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Field::getAnnotationsByType);
-		private final TwoKeyConcurrentHashMap<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new TwoKeyConcurrentHashMap<>(DISABLE_ANNOTATION_CACHING, Constructor::getAnnotationsByType);
+		private final Concurrent2KeyHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = new Concurrent2KeyHashMap<>(DISABLE_ANNOTATION_CACHING, Class::getAnnotationsByType);
+		private final Concurrent2KeyHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new Concurrent2KeyHashMap<>(DISABLE_ANNOTATION_CACHING, Class::getDeclaredAnnotationsByType);
+		private final Concurrent2KeyHashMap<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache = new Concurrent2KeyHashMap<>(DISABLE_ANNOTATION_CACHING, Method::getAnnotationsByType);
+		private final Concurrent2KeyHashMap<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = new Concurrent2KeyHashMap<>(DISABLE_ANNOTATION_CACHING, Field::getAnnotationsByType);
+		private final Concurrent2KeyHashMap<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new Concurrent2KeyHashMap<>(DISABLE_ANNOTATION_CACHING, Constructor::getAnnotationsByType);
 		// @formatter:on
 
 		@Override /* Overridden from MetaProvider */

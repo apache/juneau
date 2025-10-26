@@ -14,15 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
 import org.junit.jupiter.api.*;
 
-class KeywordStoreTest extends TestBase {
+class KeywordSet_Test extends TestBase {
 
 	//====================================================================================================
 	// test - Basic tests
@@ -43,3 +42,4 @@ class KeywordStoreTest extends TestBase {
 		assertFalse(ks.contains("aA"));
 	}
 }
+

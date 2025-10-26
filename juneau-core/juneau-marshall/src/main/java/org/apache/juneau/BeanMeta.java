@@ -256,7 +256,7 @@ public class BeanMeta<T> {
 						if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 						constructorArgs = new String[x.getParamCount()];
-						IntValue i = IntValue.create();
+						IntegerValue i = IntegerValue.create();
 						x.forEachParam(null, pi -> {
 							String pn = pi.getName();
 							if (pn == null)
@@ -279,7 +279,7 @@ public class BeanMeta<T> {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 							constructorArgs = new String[x.getParamCount()];
-							IntValue i = IntValue.create();
+							IntegerValue i = IntegerValue.create();
 							x.forEachParam(null, y -> {
 								String pn = y.getName();
 								if (pn == null)

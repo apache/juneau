@@ -1648,7 +1648,7 @@ public class BeanSession extends ContextSession {
 			return null;
 		ClassMeta<?> componentType = type.isArgs() ? object() : type.getElementType();
 		Object array = Array.newInstance(componentType.getInnerClass(), list.size());
-		IntValue i = IntValue.create();
+		IntegerValue i = IntegerValue.create();
 		list.forEach(x -> {
 			Object x2 = x;
 			if (! type.getInnerClass().isInstance(x)) {

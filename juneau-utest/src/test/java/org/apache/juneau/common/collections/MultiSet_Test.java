@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,10 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.collections.*;
 import org.junit.jupiter.api.*;
 
-class MultiSetTest extends TestBase {
+class MultiSet_Test extends TestBase {
 
 	@Test void doTest() {
 		List<String> l1, l2;
@@ -122,3 +121,4 @@ class MultiSetTest extends TestBase {
 		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().remove());
 	}
 }
+

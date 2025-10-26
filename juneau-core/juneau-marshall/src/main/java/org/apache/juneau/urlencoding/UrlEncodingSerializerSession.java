@@ -203,7 +203,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
 		Map<Integer,Object> m = new TreeMap<>();
-		IntValue i = IntValue.create();
+		IntegerValue i = IntegerValue.create();
 		c.forEach(o -> m.put(i.getAndIncrement(), o));
 		return m;
 	}
