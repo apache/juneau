@@ -1656,7 +1656,7 @@
 <a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> 		ClassMeta&lt;?&gt; componentType = type.isArgs() ? object() : type.getElementType();
 <a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 		Object array = Array.newInstance(componentType.getInnerClass(), list.size());
-<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 		IntValue i = IntValue.create();
+<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 		IntegerValue i = IntegerValue.create();
 <a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 		list.forEach(x -&gt; {
 <a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 			Object x2 = x;
 <a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 			<strong class="jxr_keyword">if</strong> (! type.getInnerClass().isInstance(x)) {

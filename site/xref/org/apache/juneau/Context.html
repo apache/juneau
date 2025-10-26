@@ -766,11 +766,11 @@
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> debug;
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ReflectionMap&lt;Annotation&gt; annotationMap;
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TwoKeyConcurrentHashMap&lt;Class&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; classAnnotationCache;
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TwoKeyConcurrentHashMap&lt;Class&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; declaredClassAnnotationCache;
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TwoKeyConcurrentHashMap&lt;Method,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; methodAnnotationCache;
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TwoKeyConcurrentHashMap&lt;Field,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; fieldAnnotationCache;
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TwoKeyConcurrentHashMap&lt;Constructor&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; constructorAnnotationCache;
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Class&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; classAnnotationCache;
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Class&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; declaredClassAnnotationCache;
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Method,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; methodAnnotationCache;
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Field,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; fieldAnnotationCache;
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Constructor&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; constructorAnnotationCache;
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 * Constructor for this class.</em>
@@ -811,12 +811,12 @@
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 			}
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 		});
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 		<strong class="jxr_keyword">this</strong>.annotationMap = rmb.build();
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<strong class="jxr_keyword">boolean</strong> disabled = Boolean.getBoolean(<span class="jxr_string">"juneau.disableAnnotationCaching"</span>);
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		classAnnotationCache = <strong class="jxr_keyword">new</strong> TwoKeyConcurrentHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		declaredClassAnnotationCache = <strong class="jxr_keyword">new</strong> TwoKeyConcurrentHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2)));
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		methodAnnotationCache = <strong class="jxr_keyword">new</strong> TwoKeyConcurrentHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		fieldAnnotationCache = <strong class="jxr_keyword">new</strong> TwoKeyConcurrentHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		constructorAnnotationCache = <strong class="jxr_keyword">new</strong> TwoKeyConcurrentHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<strong class="jxr_keyword">var</strong> disabled = Boolean.getBoolean(<span class="jxr_string">"juneau.disableAnnotationCaching"</span>);
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		classAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		declaredClassAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2)));
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		methodAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		fieldAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		constructorAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 	}
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 	<em class="jxr_javadoccomment">/**</em>

@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		Field exampleField;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		String example;
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		Mutater&lt;String,T&gt; stringMutater;
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		BiMap.Builder&lt;Object,String&gt; enumValues;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		BidiMap.Builder&lt;Object,String&gt; enumValues;
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		ClassMetaBuilder(Class&lt;T&gt; innerClass, BeanContext beanContext, ObjectSwap&lt;T,?&gt;[] swaps, ObjectSwap&lt;?,?&gt;[] childSwaps) {
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<strong class="jxr_keyword">this</strong>.innerClass = innerClass;
@@ -441,7 +441,7 @@
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">if</strong> (cc == ENUM) {
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 				Class&lt;? <strong class="jxr_keyword">extends</strong> Enum&gt; ec = (Class&lt;? <strong class="jxr_keyword">extends</strong> Enum&lt;?&gt;&gt;)c;
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 				<strong class="jxr_keyword">boolean</strong> useEnumNames = bc != <strong class="jxr_keyword">null</strong> &amp;&amp; bc.isUseEnumNames();
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				enumValues = BiMap.create();
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				enumValues = BidiMap.create();
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 				enumValues.unmodifiable();
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 				stream(ec.getEnumConstants()).forEach(x -&gt; enumValues.add(x, useEnumNames ? x.name() : x.toString()));
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 			}
@@ -612,7 +612,7 @@
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Optional&lt;?&gt;&gt; properties = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BiMap&lt;Object,String&gt; enumValues;
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BidiMap&lt;Object,String&gt; enumValues;
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="SimpleReadWriteLock" href="../../../org/apache/juneau/common/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a> lock = <strong class="jxr_keyword">new</strong> <a name="SimpleReadWriteLock" href="../../../org/apache/juneau/common/utils/SimpleReadWriteLock.html#SimpleReadWriteLock">SimpleReadWriteLock</a>(false);
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 

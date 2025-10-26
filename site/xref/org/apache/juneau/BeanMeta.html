@@ -264,7 +264,7 @@
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 						<strong class="jxr_keyword">if</strong> (constructorArgs.length != 0)
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor."</span>);
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 						constructorArgs = <strong class="jxr_keyword">new</strong> String[x.getParamCount()];
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 						IntValue i = IntValue.create();
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 						IntegerValue i = IntegerValue.create();
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 						x.forEachParam(<strong class="jxr_keyword">null</strong>, pi -&gt; {
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 							String pn = pi.getName();
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 							<strong class="jxr_keyword">if</strong> (pn == <strong class="jxr_keyword">null</strong>)
@@ -287,7 +287,7 @@
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 							<strong class="jxr_keyword">if</strong> (constructorArgs.length != 0)
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor."</span>);
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 							constructorArgs = <strong class="jxr_keyword">new</strong> String[x.getParamCount()];
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 							IntValue i = IntValue.create();
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 							IntegerValue i = IntegerValue.create();
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 							x.forEachParam(<strong class="jxr_keyword">null</strong>, y -&gt; {
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 								String pn = y.getName();
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 								<strong class="jxr_keyword">if</strong> (pn == <strong class="jxr_keyword">null</strong>)
