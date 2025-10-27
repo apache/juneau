@@ -25,9 +25,9 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.annotation;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Utility classes and methods for the {@link Items @Items} annotation.</em>
@@ -454,12 +454,12 @@
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 		Impl(Builder b) {
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">super</strong>(b);
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">this</strong>.$ref = b.$ref;
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">default</strong> = ArrayUtils.copyOf(b._<strong class="jxr_keyword">default</strong>);
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">this</strong>._enum = ArrayUtils.copyOf(b._enum);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">this</strong>._<strong class="jxr_keyword">default</strong> = copyOf(b._<strong class="jxr_keyword">default</strong>);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">this</strong>._enum = copyOf(b._enum);
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">this</strong>.cf = b.cf;
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 			<strong class="jxr_keyword">this</strong>.collectionFormat = b.collectionFormat;
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<strong class="jxr_keyword">this</strong>.df = ArrayUtils.copyOf(b.df);
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">this</strong>.e = ArrayUtils.copyOf(b.e);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<strong class="jxr_keyword">this</strong>.df = copyOf(b.df);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">this</strong>.e = copyOf(b.e);
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">this</strong>.emax = b.emax;
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">this</strong>.emin = b.emin;
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">this</strong>.exclusiveMaximum = b.exclusiveMaximum;
