@@ -19,6 +19,7 @@ package org.apache.juneau.junit.bct;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -740,7 +741,7 @@ public class BasicBeanConverter implements BeanConverter {
 	public Object getProperty(Object object, String name) {
 		var o = swap(object);
 		return propertyExtractors.stream().filter(x -> x.canExtract(this, o, name)).findFirst()
-			.orElseThrow(() -> new RuntimeException(f("Could not find extractor for object of type {0}", o.getClass().getName()))).extract(this, o, name);
+			.orElseThrow(() -> runtimeException("Could not find extractor for object of type {0}", o.getClass().getName())).extract(this, o, name);
 	}
 
 	@Override
@@ -761,7 +762,7 @@ public class BasicBeanConverter implements BeanConverter {
 			return arrayToList(o);
 		var o2 = o;
 		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2))
-			.orElseThrow(() -> new IllegalArgumentException(f("Object of type {0} could not be converted to a list.", scn(o2))));
+			.orElseThrow(() -> illegalArg("Object of type {0} could not be converted to a list.", scn(o2)));
 	}
 
 	@Override

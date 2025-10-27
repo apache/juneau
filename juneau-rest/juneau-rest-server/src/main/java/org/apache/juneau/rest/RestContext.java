@@ -969,11 +969,11 @@ public class RestContext extends Context {
 		 * 	<li class='jm'>{@link #config()}
 		 * </ul>
 		 *
-		 * @param config The new config file.
+		 * @param value The new config file.
 		 * @return This object.
 		 */
-		public Builder config(Config config) {
-			this.config = config;
+		public Builder config(Config value) {
+			this.config = value;
 			return this;
 		}
 

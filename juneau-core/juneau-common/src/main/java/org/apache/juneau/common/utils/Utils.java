@@ -387,6 +387,39 @@ public class Utils {
 	}
 
 	/**
+	 * Tests two annotations for equality using the criteria presented in the {@link java.lang.annotation.Annotation#equals(Object)} API docs.
+	 *
+	 * <p>
+	 * This method delegates to {@link AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)}
+	 * to ensure proper annotation comparison according to the annotation equality contract.
+	 *
+	 * @param a1 Annotation 1.
+	 * @param a2 Annotation 2.
+	 * @return <jk>true</jk> if the two annotations are equal or both are <jk>null</jk>.
+	 * @see AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
+	 */
+	public static boolean eq(java.lang.annotation.Annotation a1, java.lang.annotation.Annotation a2) {
+		return AnnotationUtils.equals(a1, a2);
+	}
+
+	/**
+	 * Tests two annotations for inequality using the criteria presented in the {@link java.lang.annotation.Annotation#equals(Object)} API docs.
+	 *
+	 * <p>
+	 * This method is the negation of {@link #eq(java.lang.annotation.Annotation, java.lang.annotation.Annotation)},
+	 * which delegates to {@link AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)}.
+	 *
+	 * @param a1 Annotation 1.
+	 * @param a2 Annotation 2.
+	 * @return <jk>true</jk> if the two annotations are not equal.
+	 * @see #eq(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
+	 * @see AnnotationUtils#equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation)
+	 */
+	public static boolean ne(java.lang.annotation.Annotation a1, java.lang.annotation.Annotation a2) {
+		return !eq(a1, a2);
+	}
+
+	/**
 	 * Tests two strings for case-insensitive equality, but gracefully handles nulls.
 	 *
 	 * @param s1 String 1.
@@ -520,13 +553,25 @@ public class Utils {
 	}
 
 	/**
-	 * Shortcut for calling {@link Objects#hash(Object...)}.
+	 * Calculates a hash code for the specified values.
+	 *
+	 * <p>
+	 * This method handles annotations specially by delegating to {@link AnnotationUtils#hash(Annotation)}
+	 * to ensure consistent hashing according to the {@link java.lang.annotation.Annotation#hashCode()} contract.
+	 * For non-annotation values, it uses {@link Objects#hashCode(Object)}.
 	 *
 	 * @param values The values to hash.
 	 * @return A hash code value for the given values.
+	 * @see AnnotationUtils#hash(Annotation)
 	 */
 	public static final int hash(Object...values) {
-		return Objects.hash(values);
+		if (values == null)
+			return 0;
+		var result = 1;
+		for (var value : values) {
+			result = 31 * result + (value instanceof java.lang.annotation.Annotation ? AnnotationUtils.hash((java.lang.annotation.Annotation)value) : Objects.hashCode(value));
+		}
+		return result;
 	}
 
 	/**

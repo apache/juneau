@@ -174,26 +174,26 @@ public class Messages extends ResourceBundle {
 		/**
 		 * Specifies the locale.
 		 *
-		 * @param locale
+		 * @param value
 		 * 	The locale.
 		 * 	If <jk>null</jk>, the default locale is used.
 		 * @return This object.
 		 */
-		public Builder locale(Locale locale) {
-			this.locale = locale == null ? Locale.getDefault() : locale;
+		public Builder locale(Locale value) {
+			this.locale = value == null ? Locale.getDefault() : value;
 			return this;
 		}
 
 		/**
 		 * Specifies the locale.
 		 *
-		 * @param locale
+		 * @param value
 		 * 	The locale.
 		 * 	If <jk>null</jk>, the default locale is used.
 		 * @return This object.
 		 */
-		public Builder locale(String locale) {
-			return locale(locale == null ? null : Locale.forLanguageTag(locale));
+		public Builder locale(String value) {
+			return locale(value == null ? null : Locale.forLanguageTag(value));
 		}
 
 		/**
@@ -222,24 +222,24 @@ public class Messages extends ResourceBundle {
 		/**
 		 * Specifies the bundle name (e.g. <js>"Messages"</js>).
 		 *
-		 * @param name
+		 * @param value
 		 * 	The bundle name.
 		 * 	<br>If <jk>null</jk>, the forClass class name is used.
 		 * @return This object.
 		 */
-		public Builder name(String name) {
-			this.name = isEmpty(name) ? forClass.getSimpleName() : name;
+		public Builder name(String value) {
+			this.name = isEmpty(value) ? forClass.getSimpleName() : value;
 			return this;
 		}
 
 		/**
 		 * Adds a parent bundle.
 		 *
-		 * @param parent The parent bundle.  Can be <jk>null</jk>.
+		 * @param value The parent bundle.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder parent(Messages parent) {
-			this.parent = parent;
+		public Builder parent(Messages value) {
+			this.parent = value;
 			return this;
 		}
 

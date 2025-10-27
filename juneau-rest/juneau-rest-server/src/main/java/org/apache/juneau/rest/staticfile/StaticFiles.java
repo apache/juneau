@@ -153,22 +153,22 @@ public interface StaticFiles extends FileFinder {
 		/**
 		 * Replaces the MIME types registry used for determining content types.
 		 *
-		 * @param mimeTypes The new MIME types registry.
+		 * @param value The new MIME types registry.
 		 * @return This object.
 		 */
-		public Builder mimeTypes(MimeTypeDetector mimeTypes) {
-			this.mimeTypes = mimeTypes;
+		public Builder mimeTypes(MimeTypeDetector value) {
+			this.mimeTypes = value;
 			return this;
 		}
 
 		/**
 		 * Adds a file system directory to the lookup paths.
 		 *
-		 * @param path The directory path.
+		 * @param value The directory path.
 		 * @return This object.
 		 */
-		public Builder path(Path path) {
-			fileFinder.path(path);
+		public Builder path(Path value) {
+			fileFinder.path(value);
 			return this;
 		}
 

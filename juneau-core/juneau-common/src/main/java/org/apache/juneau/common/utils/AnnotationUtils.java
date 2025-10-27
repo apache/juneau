@@ -65,7 +65,7 @@ public class AnnotationUtils {
 	 * @throws RuntimeException if an {@code Exception} is encountered during annotation member access
 	 * @throws IllegalStateException if an annotation method invocation returns {@code null}
 	 */
-	public static int hashCode(Annotation a) {
+	public static int hash(Annotation a) {
 		return getAnnotationMethods(a.annotationType()).mapToInt(x -> hashMember(x.getName(), safeSupplier(() -> x.invoke(a)))).sum();
 	}
 
@@ -73,7 +73,7 @@ public class AnnotationUtils {
 		if (a1.length != a2.length)
 			return false;
 		for (int i = 0; i < a1.length; i++)
-			if (! equals(a1[i], a2[i]))
+			if (ne(a1[i], a2[i]))
 				return false;
 		return true;
 	}
@@ -131,7 +131,7 @@ public class AnnotationUtils {
 		if (isArray(value))
 			return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);
 		if (value instanceof Annotation)
-			return part1 ^ hashCode((Annotation)value);
+			return part1 ^ hash((Annotation)value);
 		return part1 ^ value.hashCode();
 	}
 
@@ -143,7 +143,7 @@ public class AnnotationUtils {
 		if (type.isArray())
 			return arrayMemberEquals(type.getComponentType(), o1, o2);
 		if (type.isAnnotation())
-			return equals((Annotation)o1, (Annotation)o2);
+			return eq((Annotation)o1, (Annotation)o2);
 		return o1.equals(o2);
 	}
 }

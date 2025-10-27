@@ -40,25 +40,25 @@ public class AsciiSet {
 		/**
 		 * Adds a set of characters to this set.
 		 *
-		 * @param chars The characters to keep in this store.
+		 * @param value The characters to keep in this store.
 		 * @return This object.
 		 */
-		public Builder chars(char...chars) {
-			for (var i = 0; i < chars.length; i++)
-				if (chars[i] < 128)
-					store[chars[i]] = true;
+		public Builder chars(char...value) {
+			for (var i = 0; i < value.length; i++)
+				if (value[i] < 128)
+					store[value[i]] = true;
 			return this;
 		}
 
 		/**
 		 * Adds a set of characters to this set.
 		 *
-		 * @param chars The characters to keep in this store.
+		 * @param value The characters to keep in this store.
 		 * @return This object.
 		 */
-		public AsciiSet.Builder chars(String chars) {
-			for (var i = 0; i < chars.length(); i++) {
-				var c = chars.charAt(i);
+		public AsciiSet.Builder chars(String value) {
+			for (var i = 0; i < value.length(); i++) {
+				var c = value.charAt(i);
 				if (c < 128)
 					store[c] = true;
 			}
@@ -82,11 +82,11 @@ public class AsciiSet {
 		/**
 		 * Shortcut for calling multiple ranges.
 		 *
-		 * @param s Strings of the form "A-Z" where A and Z represent the first and last characters in the range.
+		 * @param value Strings of the form "A-Z" where A and Z represent the first and last characters in the range.
 		 * @return This object.
 		 */
-		public AsciiSet.Builder ranges(String...s) {
-			for (var ss : s) {
+		public AsciiSet.Builder ranges(String...value) {
+			for (var ss : value) {
 				if (ss.length() != 3 || ss.charAt(1) != '-')
 					throw new IllegalArgumentException("Value passed to ranges() must be 3 characters");
 				range(ss.charAt(0), ss.charAt(2));
@@ -107,11 +107,11 @@ public class AsciiSet {
 	/**
 	 * Creates an ASCII set with the specified characters.
 	 *
-	 * @param chars The characters to keep in this store.
+	 * @param value The characters to keep in this store.
 	 * @return A new object.
 	 */
-	public static AsciiSet of(String chars) {
-		return new Builder().chars(chars).build();
+	public static AsciiSet of(String value) {
+		return new Builder().chars(value).build();
 	}
 
 	private final boolean[] store;
@@ -123,26 +123,26 @@ public class AsciiSet {
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
 	 *
-	 * @param c The character to check.
+	 * @param value The character to check.
 	 * @return <jk>true</jk> if the specified character is in this store.
 	 */
-	public boolean contains(char c) {
-		if (c > 127)
+	public boolean contains(char value) {
+		if (value > 127)
 			return false;
-		return store[c];
+		return store[value];
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified string contains at least one character in this set.
 	 *
-	 * @param s The string to test.
+	 * @param value The string to test.
 	 * @return <jk>true</jk> if the string is not null and contains at least one character in this set.
 	 */
-	public boolean contains(CharSequence s) {
-		if (s == null)
+	public boolean contains(CharSequence value) {
+		if (value == null)
 			return false;
-		for (var i = 0; i < s.length(); i++)
-			if (contains(s.charAt(i)))
+		for (var i = 0; i < value.length(); i++)
+			if (contains(value.charAt(i)))
 				return true;
 		return false;
 	}
@@ -150,29 +150,29 @@ public class AsciiSet {
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
 	 *
-	 * @param c The character to check.
+	 * @param value The character to check.
 	 * @return <jk>true</jk> if the specified character is in this store.
 	 */
-	public boolean contains(int c) {
-		if (c < 0 || c > 127)
+	public boolean contains(int value) {
+		if (value < 0 || value > 127)
 			return false;
-		return store[c];
+		return store[value];
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified string contains only characters in this set.
 	 *
-	 * @param s The string to test.
+	 * @param value The string to test.
 	 * @return
 	 * 	<jk>true</jk> if the string contains only characters in this set.
 	 * 	<br>Nulls always return <jk>false</jk>.
 	 * 	<br>Blanks always return <jk>true</jk>.
 	 */
-	public boolean containsOnly(String s) {
-		if (s == null)
+	public boolean containsOnly(String value) {
+		if (value == null)
 			return false;
-		for (var i = 0; i < s.length(); i++)
-			if (! contains(s.charAt(i)))
+		for (var i = 0; i < value.length(); i++)
+			if (! contains(value.charAt(i)))
 				return false;
 		return true;
 	}

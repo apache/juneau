@@ -121,11 +121,11 @@ public class FileWriterBuilder {
 	/**
 	 * Sets the file being written to.
 	 *
-	 * @param file The file being written to.
+	 * @param value The file being written to.
 	 * @return This object.
 	 */
-	public FileWriterBuilder file(File file) {
-		this.file = file;
+	public FileWriterBuilder file(File value) {
+		this.file = value;
 		return this;
 	}
 

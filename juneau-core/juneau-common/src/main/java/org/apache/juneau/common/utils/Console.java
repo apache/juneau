@@ -22,8 +22,9 @@ import java.text.*;
 
 /**
  * A utility for logging formatted messages to the console.
- * Uses the {@link Json5} marshaller for serializing objects so any
- * POJOs can be used as format arguments.
+ *
+ * <p>
+ * Uses {@link java.text.MessageFormat} for formatting messages with arguments.
  */
 public class Console {
 
@@ -31,7 +32,7 @@ public class Console {
 	 * Prints a message with arguments to {@link System#err}.
 	 *
 	 * <p>
-	 * Arguments are automatically converted to strings using the {@link Json5} marshaller.
+	 * Arguments are formatted using {@link java.text.MessageFormat}.
 	 *
 	 * <p>
 	 * Useful for debug messages.
@@ -42,41 +43,17 @@ public class Console {
 	 * </p>
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through the {@link Json5} marshaller.
+	 * @param args The arguments sent to the formatter.
 	 */
 	public static final void err(String msg, Object...args) {
-		System.err.println(format(msg, args));  // NOT DEBUG
-	}
-
-	/**
-	 * Formats a message with arguments.
-	 *
-	 * <p>
-	 * Arguments are automatically converted to strings using the {@link Json5} marshaller.
-	 *
-	 * <p>
-	 * Useful for debug messages.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	String <jv>msg</jv> = Console.<jsm>format</jsm>(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
-	 * </p>
-	 *
-	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through the {@link Json5} marshaller.
-	 * @return This object.
-	 */
-	public static final String format(String msg, Object...args) {
-		for (int i = 0; i < args.length; i++)
-			args[i] = s(args[i]);
-		return MessageFormat.format(msg, args);
+		System.err.println(f(msg, args));  // NOT DEBUG
 	}
 
 	/**
 	 * Prints a message with arguments to {@link System#out}.
 	 *
 	 * <p>
-	 * Arguments are automatically converted to strings using the {@link Json5} marshaller.
+	 * Arguments are formatted using {@link java.text.MessageFormat}.
 	 *
 	 * <p>
 	 * Useful for debug messages.
@@ -87,9 +64,9 @@ public class Console {
 	 * </p>
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through the {@link Json5} marshaller.
+	 * @param args The arguments sent to the formatter.
 	 */
 	public static final void out(String msg, Object...args) {
-		System.out.println(format(msg, args));
+		System.out.println(f(msg, args));
 	}
 }

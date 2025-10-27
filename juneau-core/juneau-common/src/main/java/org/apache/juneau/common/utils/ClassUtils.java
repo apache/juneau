@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -113,8 +114,7 @@ public class ClassUtils {
 	 * @throws IllegalArgumentException If the class is not a subclass of the parameterized type or if the index is invalid.
 	 */
 	public static Class<?> getParameterType(Class<?> c, int index, Class<?> pt) {
-		AssertionUtils.assertArgNotNull("pt", pt);
-		AssertionUtils.assertArgNotNull("c", c);
+		assertArgsNotNull("pt", pt, "c", c);
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();

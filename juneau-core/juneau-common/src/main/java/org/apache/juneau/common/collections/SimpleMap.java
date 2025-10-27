@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -184,9 +185,8 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@SuppressWarnings("unchecked")
 	public SimpleMap(K[] keys, V[] values) {
-		AssertionUtils.assertArgNotNull("keys", keys);
-		AssertionUtils.assertArgNotNull("values", values);
-		AssertionUtils.assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
+		assertArgsNotNull("keys", keys, "values", values);
+		assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
 
 		this.keys = keys;
 		this.values = values;

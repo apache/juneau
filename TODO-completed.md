@@ -101,6 +101,60 @@ This file contains TODO items that have been completed and moved from TODO.md.
   - **Status**: COMPLETED
   - **Details**: Added `isEmpty(CharSequence)` method that delegates to `StringUtils.isEmpty(CharSequence)`, along with `isBlank(CharSequence)` and `isNotEmpty(CharSequence)` overloads. Also added overloads for `isEmpty(Collection)`, `isEmpty(Map)`, `isNotEmpty(Collection)`, and `isNotEmpty(Map)`. All methods include comprehensive Javadocs.
 
+## Code Style and Consistency
+
+- **TODO-30** ✅ Ensure all Builder methods are consistently using "value" as setter parameter names when it's a single parameter and it's obvious what property is being set.
+  - **Status**: COMPLETED
+  - **Details**: Updated 13 single-parameter builder methods across 7 files to use "value" as the parameter name:
+    - `FileReaderBuilder.file(File)`, `FileWriterBuilder.file(File)`, `AsciiSet.Builder.chars(String)`
+    - `Messages.Builder.locale(Locale)`, `Messages.Builder.locale(String)`, `Messages.Builder.name(String)`, `Messages.Builder.parent(Messages)`
+    - `FileFinder.Builder.path(Path)`, `BeanPropertyMeta.Builder.beanRegistry(BeanRegistry)`, `BeanPropertyMeta.Builder.delegateFor(BeanPropertyMeta)`, `BeanPropertyMeta.Builder.overrideValue(Object)`
+    - `RestContext.Builder.config(Config)`, `StaticFiles.Builder.mimeTypes(MimeTypeDetector)`, `StaticFiles.Builder.path(Path)`
+  - **Note**: RestClient/MockRestClient builder methods with Apache HttpClient technical parameters (proxy, sslContext, retryHandler, etc.) were intentionally kept with descriptive names for clarity. User also updated additional methods in `AsciiSet`, `FileFinder`, and `BeanPropertyMeta` for consistency.
+
+- **TODO-38** ✅ Find methods in com.sfdc.irs.Utils that don't exist in org.apache.juneau.common.utils.Utils and come up with a plan to add ones that make sense.
+  - **Status**: COMPLETED
+  - **Details**: Reviewed methods in `com.sfdc.irs.Utils` and determined that all generally useful utility methods have already been added to `org.apache.juneau.common.utils.Utils` or other appropriate `XUtils` classes. Methods remaining in `com.sfdc.irs.Utils` are either specific to IRS functionality or have equivalent implementations already available in Juneau's utility classes.
+
+- **TODO-55** ✅ Replace multiple instances of assertArgNotNull with assertArgsNotNull.
+  - **Status**: COMPLETED
+  - **Details**: Replaced 8 occurrences across 3 files:
+    - `BctAssertions.java`: 6 methods with consecutive calls (assertBean, assertBeans, assertContains, assertContainsAll, assertList, assertMapped)
+    - `ClassUtils.java`: 1 method (getParameterType)
+    - `SimpleMap.java`: 1 constructor
+    All changes compile and all tests pass.
+
+- **TODO-56** ✅ Rename AnnotationUtils.hashCode to hash.
+  - **Status**: COMPLETED
+  - **Details**: Already completed before this task was added.
+
+- **TODO-57** ✅ Add method Utils.eq(Annotation, Annotation) that calls AnnotationUtils.equals.
+  - **Status**: COMPLETED
+  - **Details**: Added an overload of `Utils.eq()` specifically for annotations that delegates to `AnnotationUtils.equals()` to ensure proper annotation comparison according to the annotation equality contract defined in {@link java.lang.annotation.Annotation#equals(Object)}. Also added corresponding `Utils.ne(Annotation, Annotation)` method for inequality checks.
+
+- **TODO-58** ✅ Update Utils.hash to use AnnotationUtils.hash() for calculating hashes of annotations.
+  - **Status**: COMPLETED
+  - **Details**: Updated `Utils.hash()` to check if values are annotations and use `AnnotationUtils.hash()` for them, maintaining the standard hash calculation algorithm (31 * result + element hash) for consistency with `Objects.hash()`.
+
+- **TODO-59** ✅ Move ClassUtils.cn and scn to Utils.
+  - **Status**: COMPLETED
+  - **Details**: Already completed before this task was added.
+
+- **TODO-61** ✅ Console.format seems to duplicate Utils.f. Let's remove it.
+  - **Status**: COMPLETED
+  - **Details**: Removed the `Console.format()` method which was duplicating functionality already provided by `Utils.f()`. Updated `Console.err()` and `Console.out()` to call `Utils.f()` directly instead. Also corrected outdated javadocs that incorrectly claimed the class used Json5 marshalling when it actually just called `toString()` on arguments - now properly documents the use of `MessageFormat`.
+
+- **TODO-62** ✅ ResourceBundleUtils.empty() appears to be unused. Let's remove it if so.
+  - **Status**: COMPLETED
+  - **Details**: Already completed before this task was added.
+
+- **TODO-63** ✅ Look for places in code where ThrowableUtils.illegalArg and runtimeException can be used.
+  - **Status**: COMPLETED
+  - **Details**: Replaced 2 instances in `BasicBeanConverter.java`:
+    - Line 743: `new RuntimeException(f("Could not find extractor..."))` → `runtimeException("Could not find extractor...")`
+    - Line 765: `new IllegalArgumentException(f("Object of type {0} could not be converted to a list."))` → `illegalArg("Object of type {0} could not be converted to a list.")`
+    Added static import for `ThrowableUtils` methods. These utility methods provide cleaner syntax and consistent exception creation with formatted messages.
+
 ## Notes
 
 Items are marked as completed when:

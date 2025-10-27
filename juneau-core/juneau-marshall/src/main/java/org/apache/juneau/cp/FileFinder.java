@@ -142,12 +142,12 @@ public interface FileFinder {
 		/**
 		 * Adds a file system directory to the lookup paths.
 		 *
-		 * @param path The path relative to the working directory.  Must not be <jk>null</jk>
+		 * @param value The path relative to the working directory.  Must not be <jk>null</jk>
 		 * @return This object.
 		 */
-		public Builder dir(String path) {
-			assertArgNotNull("path", path);
-			return path(Paths.get(".").resolve(path));
+		public Builder dir(String value) {
+			assertArgNotNull("value", value);
+			return path(Paths.get(".").resolve(value));
 		}
 
 		/**
@@ -185,11 +185,11 @@ public interface FileFinder {
 		/**
 		 * Adds a file system directory to the lookup paths.
 		 *
-		 * @param path The directory path.
+		 * @param value The directory path.
 		 * @return This object.
 		 */
-		public Builder path(Path path) {
-			roots.add(new LocalDir(path));
+		public Builder path(Path value) {
+			roots.add(new LocalDir(value));
 			return this;
 		}
 

@@ -101,11 +101,11 @@ public class FileReaderBuilder {
 	/**
 	 * Sets the file being written from.
 	 *
-	 * @param file The file being written from.
+	 * @param value The file being written from.
 	 * @return This object.
 	 */
-	public FileReaderBuilder file(File file) {
-		this.file = file;
+	public FileReaderBuilder file(File value) {
+		this.file = value;
 		return this;
 	}
 
