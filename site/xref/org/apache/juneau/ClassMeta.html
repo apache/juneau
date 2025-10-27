@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		Setter parentPropertyMethod = <strong class="jxr_keyword">null</strong>, namePropertyMethod = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		ConstructorInfo noArgConstructor = <strong class="jxr_keyword">null</strong>, stringConstructor = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		Object primitiveDefault = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		Map&lt;String,Method&gt; publicMethods = CollectionUtils.map();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		Map&lt;String,Method&gt; publicMethods = map();
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		ClassMeta&lt;?&gt; keyType = <strong class="jxr_keyword">null</strong>, valueType = <strong class="jxr_keyword">null</strong>, elementType = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		String typePropertyName = <strong class="jxr_keyword">null</strong>, notABeanReason = <strong class="jxr_keyword">null</strong>, dictionaryName = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		Throwable initException = <strong class="jxr_keyword">null</strong>;
@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 			BeanFilter beanFilter = findBeanFilter(bc);
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			CollectionUtils.addAll(<strong class="jxr_keyword">this</strong>.swaps, swaps);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			addAll(<strong class="jxr_keyword">this</strong>.swaps, swaps);
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">if</strong> (nn(bc))
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<strong class="jxr_keyword">this</strong>.builderSwap = BuilderSwap.findSwapFromObjectClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());

@@ -25,13 +25,13 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.openapi3;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * A map of possible out-of-band callbacks related to the parent operation.</em>
@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">public</strong> <a name="Callback" href="../../../../../org/apache/juneau/bean/openapi3/Callback.html#Callback">Callback</a>(<a name="Callback" href="../../../../../org/apache/juneau/bean/openapi3/Callback.html#Callback">Callback</a> copyFrom) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">super</strong>(copyFrom);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">this</strong>.callbacks = CollectionUtils.copyOf(copyFrom.callbacks);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">this</strong>.callbacks = copyOf(copyFrom.callbacks);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Override <em class="jxr_comment">/* Overridden from OpenApiElement */</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> s = CollectionUtils.setb(String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			.addIf(nn(callbacks), <span class="jxr_string">"callbacks"</span>)
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 			.build();
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<em class="jxr_comment">// @formatter:on</em>
@@ -152,7 +152,7 @@
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">public</strong> <a name="Callback" href="../../../../../org/apache/juneau/bean/openapi3/Callback.html#Callback">Callback</a> set(String property, Object value) {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"callbacks"</span> -&gt; setCallbacks(toMap(value, String.<strong class="jxr_keyword">class</strong>, PathItem.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"callbacks"</span> -&gt; setCallbacks(toMapBuilder(value, String.<strong class="jxr_keyword">class</strong>, PathItem.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">default</strong> -&gt; {
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 				<strong class="jxr_keyword">super</strong>.set(property, value);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				yield <strong class="jxr_keyword">this</strong>;

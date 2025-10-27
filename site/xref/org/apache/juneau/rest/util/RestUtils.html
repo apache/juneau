@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="RestUtils" href="../../../../../org/apache/juneau/rest/util/RestUtils.html#RestUtils">RestUtils</a> {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;Integer,String&gt; httpMsgs = CollectionUtils.mapb(Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;Integer,String&gt; httpMsgs = mapb(Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		.unmodifiable()
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		.add(100, <span class="jxr_string">"Continue"</span>)
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		.add(101, <span class="jxr_string">"Switching Protocols"</span>)
@@ -271,7 +271,7 @@
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			Map&lt;String,String[]&gt; m = map;
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 				m = CollectionUtils.map();
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 				m = map();
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">if</strong> (qs == <strong class="jxr_keyword">null</strong> || ((qs instanceof CharSequence) &amp;&amp; isEmpty(s(qs))))
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 				<strong class="jxr_keyword">return</strong> m;
@@ -506,7 +506,7 @@
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 		List&lt;String&gt; list = list();
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 		<strong class="jxr_keyword">for</strong> (String l : content) {
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"INHERIT"</span>.equals(l)) {
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 				CollectionUtils.addAll(list, parentContent);
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 				addAll(list, parentContent);
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"NONE"</span>.equals(l)) {
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[0];
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 			} <strong class="jxr_keyword">else</strong> {
@@ -523,7 +523,7 @@
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 		List&lt;String&gt; list = list();
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 		<strong class="jxr_keyword">for</strong> (String l : links) {
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"INHERIT"</span>.equals(l))
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 				CollectionUtils.addAll(list, parentLinks);
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 				addAll(list, parentLinks);
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (l.indexOf('[') != -1 &amp;&amp; INDEXED_LINK_PATTERN.matcher(l).matches()) {
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 				Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 				lm.matches();

@@ -26,14 +26,14 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.util.Arrays.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpMethod.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.utest.utils.Constants.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpMethod.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.utest.utils.Constants.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.html.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.json.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.msgpack.*;
@@ -1728,9 +1728,9 @@
 <a class="jxr_linenumber" name="L1720" href="#L1720">1720</a> 		ABean[][][] x2n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> 		<strong class="jxr_keyword">var</strong> x3 = alist(x2,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> 		List&lt;ABean[][][]&gt; x3n = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> 		<strong class="jxr_keyword">var</strong> x4 = CollectionUtils.map(<span class="jxr_string">"foo"</span>,ABean.get());
+<a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> 		<strong class="jxr_keyword">var</strong> x4 = map(<span class="jxr_string">"foo"</span>,ABean.get());
 <a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> 		Map&lt;String,ABean&gt; x4n = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> 		<strong class="jxr_keyword">var</strong> x5 = CollectionUtils.map(<span class="jxr_string">"foo"</span>,x3);
+<a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> 		<strong class="jxr_keyword">var</strong> x5 = map(<span class="jxr_string">"foo"</span>,x3);
 <a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> 		Map&lt;String,List&lt;ABean[][][]&gt;&gt; x5n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> 		assertDoesNotThrow(()-&gt;input.proxy.setMultiParamsBean(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 <a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> 	}
@@ -1743,9 +1743,9 @@
 <a class="jxr_linenumber" name="L1735" href="#L1735">1735</a> 		SwappedObject[][][] x2n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1736" href="#L1736">1736</a> 		<strong class="jxr_keyword">var</strong> x3 = alist(x2,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1737" href="#L1737">1737</a> 		List&lt;SwappedObject[][][]&gt; x3n = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1738" href="#L1738">1738</a> 		<strong class="jxr_keyword">var</strong> x4 = CollectionUtils.map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>());
+<a class="jxr_linenumber" name="L1738" href="#L1738">1738</a> 		<strong class="jxr_keyword">var</strong> x4 = map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>());
 <a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> 		Map&lt;SwappedObject,SwappedObject&gt; x4n = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> 		<strong class="jxr_keyword">var</strong> x5 = CollectionUtils.map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),x3);
+<a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> 		<strong class="jxr_keyword">var</strong> x5 = map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),x3);
 <a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> 		Map&lt;SwappedObject,List&lt;SwappedObject[][][]&gt;&gt; x5n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> 		assertDoesNotThrow(()-&gt;input.proxy.setMultiParamsSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 <a class="jxr_linenumber" name="L1743" href="#L1743">1743</a> 	}
@@ -1758,9 +1758,9 @@
 <a class="jxr_linenumber" name="L1750" href="#L1750">1750</a> 		ImplicitSwappedObject[][][] x2n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1751" href="#L1751">1751</a> 		<strong class="jxr_keyword">var</strong> x3 = alist(x2,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1752" href="#L1752">1752</a> 		List&lt;ImplicitSwappedObject[][][]&gt; x3n = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 		<strong class="jxr_keyword">var</strong> x4 = CollectionUtils.map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>());
+<a class="jxr_linenumber" name="L1753" href="#L1753">1753</a> 		<strong class="jxr_keyword">var</strong> x4 = map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>());
 <a class="jxr_linenumber" name="L1754" href="#L1754">1754</a> 		Map&lt;ImplicitSwappedObject,ImplicitSwappedObject&gt; x4n = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 		<strong class="jxr_keyword">var</strong> x5 = CollectionUtils.map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),x3);
+<a class="jxr_linenumber" name="L1755" href="#L1755">1755</a> 		<strong class="jxr_keyword">var</strong> x5 = map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),x3);
 <a class="jxr_linenumber" name="L1756" href="#L1756">1756</a> 		Map&lt;ImplicitSwappedObject,List&lt;ImplicitSwappedObject[][][]&gt;&gt; x5n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1757" href="#L1757">1757</a> 		assertDoesNotThrow(()-&gt;input.proxy.setMultiParamsImplicitSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 <a class="jxr_linenumber" name="L1758" href="#L1758">1758</a> 	}
@@ -1773,9 +1773,9 @@
 <a class="jxr_linenumber" name="L1765" href="#L1765">1765</a> 		TestEnum[][][] x2n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1766" href="#L1766">1766</a> 		<strong class="jxr_keyword">var</strong> x3 = alist(x2,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 		List&lt;TestEnum[][][]&gt; x3n = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 		<strong class="jxr_keyword">var</strong> x4 = CollectionUtils.map(TestEnum.ONE,TestEnum.TWO);
+<a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 		<strong class="jxr_keyword">var</strong> x4 = map(TestEnum.ONE,TestEnum.TWO);
 <a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 		Map&lt;TestEnum,TestEnum&gt; x4n = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 		<strong class="jxr_keyword">var</strong> x5 = CollectionUtils.map(TestEnum.ONE,x3);
+<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 		<strong class="jxr_keyword">var</strong> x5 = map(TestEnum.ONE,x3);
 <a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 		Map&lt;TestEnum,List&lt;TestEnum[][][]&gt;&gt; x5n = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 		assertDoesNotThrow(()-&gt;input.proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 <a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> 	}

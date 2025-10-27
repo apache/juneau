@@ -24,12 +24,12 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.stats;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshaller.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">this</strong>.guid = x.guid;
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">this</strong>.thrownClass = x.thrownClass;
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">this</strong>.firstMessage = x.firstMessage;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">this</strong>.stackTrace = x.stackTrace == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : u(CollectionUtils.copyOf(x.stackTrace));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">this</strong>.stackTrace = x.stackTrace == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : u(copyOf(x.stackTrace));
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">this</strong>.causedBy = opt(x.causedBy.isPresent() ? x.causedBy.get().clone() : <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">this</strong>.hash = x.hash;
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">this</strong>.count = <strong class="jxr_keyword">new</strong> AtomicInteger(x.count.get());
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">this</strong>.guid = <strong class="jxr_keyword">new</strong> Random().nextLong();
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">this</strong>.thrownClass = builder.throwable.getClass();
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">this</strong>.firstMessage = builder.throwable.getMessage();
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">this</strong>.stackTrace = builder.stackTrace == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : u(CollectionUtils.copyOf(builder.stackTrace));
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">this</strong>.stackTrace = builder.stackTrace == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : u(copyOf(builder.stackTrace));
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">this</strong>.causedBy = opt(builder.causedBy);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">this</strong>.hash = builder.hash;
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">this</strong>.count = <strong class="jxr_keyword">new</strong> AtomicInteger(0);

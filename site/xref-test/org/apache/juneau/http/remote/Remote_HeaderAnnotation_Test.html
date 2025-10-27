@@ -25,17 +25,17 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.http.remote;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.math.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.math.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.RestRequest;
@@ -724,9 +724,9 @@
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 	}
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> K2a {
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		@Header <strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; getA() { <strong class="jxr_keyword">return</strong> CollectionUtils.mapb(String.<strong class="jxr_keyword">class</strong>,Object.<strong class="jxr_keyword">class</strong>).add(<span class="jxr_string">"a1"</span>,<span class="jxr_string">"v1"</span>).add(<span class="jxr_string">"a2"</span>,123).add(<span class="jxr_string">"a3"</span>,<strong class="jxr_keyword">null</strong>).add(<span class="jxr_string">"a4"</span>,<span class="jxr_string">""</span>).build(); }
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		@Header <strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; getA() { <strong class="jxr_keyword">return</strong> mapb(String.<strong class="jxr_keyword">class</strong>,Object.<strong class="jxr_keyword">class</strong>).add(<span class="jxr_string">"a1"</span>,<span class="jxr_string">"v1"</span>).add(<span class="jxr_string">"a2"</span>,123).add(<span class="jxr_string">"a3"</span>,<strong class="jxr_keyword">null</strong>).add(<span class="jxr_string">"a4"</span>,<span class="jxr_string">""</span>).build(); }
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> 		@Header(<span class="jxr_string">"*"</span>) <strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; getB() { <strong class="jxr_keyword">return</strong> map(<span class="jxr_string">"b1"</span>,<span class="jxr_string">"true"</span>,<span class="jxr_string">"b2"</span>,<span class="jxr_string">"123"</span>,<span class="jxr_string">"b3"</span>,<span class="jxr_string">"null"</span>); }
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		@Header(name=<span class="jxr_string">"*"</span>) @Schema(aev=<strong class="jxr_keyword">true</strong>) <strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; getC() { <strong class="jxr_keyword">return</strong> CollectionUtils.mapb(String.<strong class="jxr_keyword">class</strong>,Object.<strong class="jxr_keyword">class</strong>).add(<span class="jxr_string">"c1"</span>,<span class="jxr_string">"v1"</span>).add(<span class="jxr_string">"c2"</span>,123).add(<span class="jxr_string">"c3"</span>,<strong class="jxr_keyword">null</strong>).add(<span class="jxr_string">"c4"</span>,<span class="jxr_string">""</span>).build(); }
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		@Header(name=<span class="jxr_string">"*"</span>) @Schema(aev=<strong class="jxr_keyword">true</strong>) <strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; getC() { <strong class="jxr_keyword">return</strong> mapb(String.<strong class="jxr_keyword">class</strong>,Object.<strong class="jxr_keyword">class</strong>).add(<span class="jxr_string">"c1"</span>,<span class="jxr_string">"v1"</span>).add(<span class="jxr_string">"c2"</span>,123).add(<span class="jxr_string">"c3"</span>,<strong class="jxr_keyword">null</strong>).add(<span class="jxr_string">"c4"</span>,<span class="jxr_string">""</span>).build(); }
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> 		@Header(<span class="jxr_string">"*"</span>) <strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; getD() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 	}
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 

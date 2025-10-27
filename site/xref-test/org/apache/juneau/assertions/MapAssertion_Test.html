@@ -24,9 +24,9 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.assertions;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.assertions.AssertionPredicates.ne;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.assertions.AssertionPredicates.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.assertions.Assertions.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
@@ -163,7 +163,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> x1 = map(1,2);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> x1a = map(1,2);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> x2 = map(2,3);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Object.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Integer.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		test(x1).is(x1);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		test(x1).is(x1a);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		test(nil).is(nil);
@@ -183,7 +183,7 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> x1 = map(1,2);
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">var</strong> x1a = map(1,2);
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> x2 = map(3,4);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Object.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Integer.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		test(x1).isNot(x2);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		test(x1).isNot(nil);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		test(nil).isNot(x1);
@@ -195,7 +195,7 @@
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> x1 = map(1,2);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> x1a = map(1,2);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> x2 = map(3,4);
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Object.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Integer.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		test(x1).isAny(x1a, x2);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertThrown(()-&gt;test(x1).isAny(x2)).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[{3=4}]'.  Actual='{1=2}'."</span>);
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertThrown(()-&gt;test(x1).isAny()).asMessage().asOneLine().is(<span class="jxr_string">"Expected value not found.  Expect='[]'.  Actual='{1=2}'."</span>);
@@ -206,7 +206,7 @@
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> x1 = map(1,2);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> x1a = map(1,2);
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> x2 = map(3,4);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Object.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Integer.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		test(x1).isNotAny(x2);
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		test(x1).isNotAny();
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		test(nil).isNotAny(x2);
@@ -217,7 +217,7 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@Test <strong class="jxr_keyword">void</strong> ca08_isSame() {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">var</strong> x1 = map(1,2);
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> x1a = map(1,2);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Object.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> nil = nmap(Integer.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		test(x1).isSame(x1);
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		test(nil).isSame(nil);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertThrown(()-&gt;test(x1).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='{1=2}(LinkedHashMap@*)'.  Actual='{1=2}(LinkedHashMap@*)'."</span>);

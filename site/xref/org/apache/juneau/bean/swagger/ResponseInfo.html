@@ -25,13 +25,13 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.swagger;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Describes a single response from an API operation.</em>
@@ -110,8 +110,8 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">this</strong>.description = copyFrom.description;
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">this</strong>.schema = copyFrom.schema == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : copyFrom.schema.copy();
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">this</strong>.examples = CollectionUtils.copyOf(copyFrom.examples);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">this</strong>.headers = CollectionUtils.copyOf(copyFrom.headers, HeaderInfo::copy);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">this</strong>.examples = copyOf(copyFrom.examples);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">this</strong>.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -127,7 +127,7 @@
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseInfo" href="../../../../../org/apache/juneau/bean/swagger/ResponseInfo.html#ResponseInfo">ResponseInfo</a> addExample(String mimeType, Object example) {
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertArgNotNull(<span class="jxr_string">"mimeType"</span>, mimeType);
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertArgNotNull(<span class="jxr_string">"example"</span>, example);
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		examples = CollectionUtils.mapb(String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>).to(examples).sparse().add(mimeType, example).build();
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		examples = mapb(String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>).to(examples).sparse().add(mimeType, example).build();
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseInfo" href="../../../../../org/apache/juneau/bean/swagger/ResponseInfo.html#ResponseInfo">ResponseInfo</a> addHeader(String name, <a name="HeaderInfo" href="../../../../../org/apache/juneau/bean/swagger/HeaderInfo.html#HeaderInfo">HeaderInfo</a> header) {
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertArgNotNull(<span class="jxr_string">"name"</span>, name);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertArgNotNull(<span class="jxr_string">"header"</span>, header);
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		headers = CollectionUtils.mapb(String.<strong class="jxr_keyword">class</strong>, HeaderInfo.<strong class="jxr_keyword">class</strong>).to(headers).add(name, header).build();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		headers = mapb(String.<strong class="jxr_keyword">class</strong>, HeaderInfo.<strong class="jxr_keyword">class</strong>).to(headers).add(name, header).build();
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> s = CollectionUtils.setb(String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			.addIf(nn(description), <span class="jxr_string">"description"</span>)
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 			.addIf(nn(examples), <span class="jxr_string">"examples"</span>)
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			.addIf(nn(headers), <span class="jxr_string">"headers"</span>)
@@ -281,8 +281,8 @@
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"description"</span> -&gt; setDescription(s(value));
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"examples"</span> -&gt; setExamples(toMap(value, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>).sparse().build());
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"headers"</span> -&gt; setHeaders(toMap(value, String.<strong class="jxr_keyword">class</strong>, HeaderInfo.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"examples"</span> -&gt; setExamples(toMapBuilder(value, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"headers"</span> -&gt; setHeaders(toMapBuilder(value, String.<strong class="jxr_keyword">class</strong>, HeaderInfo.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"schema"</span> -&gt; setSchema(toType(value, SchemaInfo.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">default</strong> -&gt; {
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 				<strong class="jxr_keyword">super</strong>.set(property, value);
@@ -322,7 +322,7 @@
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseInfo" href="../../../../../org/apache/juneau/bean/swagger/ResponseInfo.html#ResponseInfo">ResponseInfo</a> setExamples(Map&lt;String,Object&gt; value) {
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		examples = CollectionUtils.copyOf(value);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		examples = copyOf(value);
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
@@ -338,7 +338,7 @@
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseInfo" href="../../../../../org/apache/juneau/bean/swagger/ResponseInfo.html#ResponseInfo">ResponseInfo</a> setHeaders(Map&lt;String,HeaderInfo&gt; value) {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		headers = CollectionUtils.copyOf(value);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		headers = copyOf(value);
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 	}
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 

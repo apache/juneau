@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.assertions.AssertionPredicates.ne;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.assertions.Assertions.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.eq;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
@@ -182,21 +182,21 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Test <strong class="jxr_keyword">void</strong> ca01_exists() {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> x = Utils.&lt;A&gt;alist();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> x = CollectionUtils.&lt;A&gt;alist();
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> nil = (List&lt;A&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		test(x).isExists().isExists();
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;test(nil).isExists(), <span class="jxr_string">"Value was null."</span>);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@Test <strong class="jxr_keyword">void</strong> ca02_isNull() {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> x = Utils.&lt;A&gt;alist();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> x = CollectionUtils.&lt;A&gt;alist();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> nil = (List&lt;A&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		test(nil).isNull();
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;test(x).isNull(), <span class="jxr_string">"Value was not null."</span>);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	@Test <strong class="jxr_keyword">void</strong> ca03_isNotNull() {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> x = Utils.&lt;A&gt;alist();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> x = CollectionUtils.&lt;A&gt;alist();
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> nil = (List&lt;A&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		test(x).isNotNull();
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;test(nil).isNotNull(), <span class="jxr_string">"Value was null."</span>);
@@ -345,7 +345,7 @@
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 	}
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 	@Test <strong class="jxr_keyword">void</strong> cb01_isEmpty() {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">var</strong> x1 = Utils.&lt;A&gt;alist();
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">var</strong> x1 = CollectionUtils.&lt;A&gt;alist();
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">var</strong> x2 = alist(A1);
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">var</strong> nil = (List&lt;A&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 		test(x1).isEmpty();
@@ -354,7 +354,7 @@
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 	@Test <strong class="jxr_keyword">void</strong> cb02_isNotEmpty() {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">var</strong> x1 = Utils.&lt;A&gt;alist();
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">var</strong> x1 = CollectionUtils.&lt;A&gt;alist();
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> x2 = alist(A1);
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> nil = (List&lt;A&gt;)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		test(x2).isNotEmpty();

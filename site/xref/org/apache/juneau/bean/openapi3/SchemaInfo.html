@@ -25,14 +25,14 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.openapi3;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Allows the definition of input and output data types.</em>
@@ -163,12 +163,12 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">this</strong>.items = copyFrom.items == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : copyFrom.items.copy();
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">this</strong>.xml = copyFrom.xml == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : copyFrom.xml.copy();
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">this</strong>.externalDocs = copyFrom.externalDocs == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : copyFrom.externalDocs.copy();
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">this</strong>._enum = CollectionUtils.copyOf(copyFrom._enum);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">this</strong>.allOf = CollectionUtils.copyOf(copyFrom.allOf);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">this</strong>.required = CollectionUtils.copyOf(copyFrom.required);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">this</strong>.anyOf = CollectionUtils.copyOf(copyFrom.anyOf);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">this</strong>.oneOf = CollectionUtils.copyOf(copyFrom.oneOf);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">this</strong>.properties = CollectionUtils.copyOf(copyFrom.properties, SchemaInfo::copy);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">this</strong>._enum = copyOf(copyFrom._enum);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">this</strong>.allOf = copyOf(copyFrom.allOf);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">this</strong>.required = copyOf(copyFrom.required);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">this</strong>.anyOf = copyOf(copyFrom.anyOf);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">this</strong>.oneOf = copyOf(copyFrom.oneOf);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">this</strong>.properties = copyOf(copyFrom.properties, SchemaInfo::copy);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">this</strong>.additionalProperties = copyFrom.additionalProperties == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : copyFrom.additionalProperties.copy();
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">this</strong>.not = copyFrom.not == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : copyFrom.not.copy();
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
@@ -197,7 +197,7 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> addAllOf(Object...values) {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		allOf = CollectionUtils.listb(Object.<strong class="jxr_keyword">class</strong>).to(allOf).sparse().addAny(values).build();
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		allOf = listb(Object.<strong class="jxr_keyword">class</strong>).to(allOf).sparse().addAny(values).build();
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 
@@ -225,7 +225,7 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> addAnyOf(Object...values) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		anyOf = CollectionUtils.listb(Object.<strong class="jxr_keyword">class</strong>).to(anyOf).sparse().addAny(values).build();
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		anyOf = listb(Object.<strong class="jxr_keyword">class</strong>).to(anyOf).sparse().addAny(values).build();
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> addEnum(Object...values) {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		_enum = CollectionUtils.listb(Object.<strong class="jxr_keyword">class</strong>).to(_enum).sparse().addAny(values).build();
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		_enum = listb(Object.<strong class="jxr_keyword">class</strong>).to(_enum).sparse().addAny(values).build();
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 	}
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 
@@ -281,7 +281,7 @@
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> addOneOf(Object...values) {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		oneOf = CollectionUtils.listb(Object.<strong class="jxr_keyword">class</strong>).to(oneOf).sparse().addAny(values).build();
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		oneOf = listb(Object.<strong class="jxr_keyword">class</strong>).to(oneOf).sparse().addAny(values).build();
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 
@@ -307,7 +307,7 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> addRequired(String...values) {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		required = CollectionUtils.listb(String.<strong class="jxr_keyword">class</strong>).to(required).sparse().add(values).build();
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		required = listb(String.<strong class="jxr_keyword">class</strong>).to(required).sparse().add(values).build();
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
@@ -626,7 +626,7 @@
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">var</strong> s = CollectionUtils.setb(String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 			.addIf(nn(ref), <span class="jxr_string">"$ref"</span>)
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 			.addIf(nn(additionalProperties), <span class="jxr_string">"additionalProperties"</span>)
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 			.addIf(nn(allOf), <span class="jxr_string">"allOf"</span>)
@@ -714,13 +714,13 @@
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {  <em class="jxr_comment">// NOSONAR</em>
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"$ref"</span> -&gt; setRef(value);
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"additionalProperties"</span> -&gt; setAdditionalProperties(toType(value, SchemaInfo.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"allOf"</span> -&gt; setAllOf(toList(value, Object.<strong class="jxr_keyword">class</strong>).sparse().build());
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"anyOf"</span> -&gt; setAnyOf(toList(value, Object.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"allOf"</span> -&gt; setAllOf(listb(Object.<strong class="jxr_keyword">class</strong>).addAny(value).sparse().build());
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"anyOf"</span> -&gt; setAnyOf(listb(Object.<strong class="jxr_keyword">class</strong>).addAny(value).sparse().build());
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"default"</span> -&gt; setDefault(value);
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"deprecated"</span> -&gt; setDeprecated(toBoolean(value));
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"description"</span> -&gt; setDescription(s(value));
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"discriminator"</span> -&gt; setDiscriminator(toType(value, Discriminator.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"enum"</span> -&gt; setEnum(toList(value, Object.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"enum"</span> -&gt; setEnum(listb(Object.<strong class="jxr_keyword">class</strong>).addAny(value).sparse().build());
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"example"</span> -&gt; setExample(value);
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"exclusiveMaximum"</span> -&gt; setExclusiveMaximum(toBoolean(value));
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"exclusiveMinimum"</span> -&gt; setExclusiveMinimum(toBoolean(value));
@@ -738,11 +738,11 @@
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"multipleOf"</span> -&gt; setMultipleOf(toNumber(value));
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"not"</span> -&gt; setNot(toType(value, SchemaInfo.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"nullable"</span> -&gt; setNullable(toBoolean(value));
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"oneOf"</span> -&gt; setOneOf(toList(value, Object.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"oneOf"</span> -&gt; setOneOf(listb(Object.<strong class="jxr_keyword">class</strong>).addAny(value).sparse().build());
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"pattern"</span> -&gt; setPattern(s(value));
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"properties"</span> -&gt; setProperties(toMap(value, String.<strong class="jxr_keyword">class</strong>, SchemaInfo.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"properties"</span> -&gt; setProperties(toMapBuilder(value, String.<strong class="jxr_keyword">class</strong>, SchemaInfo.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L736" href="#L736">736</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"readOnly"</span> -&gt; setReadOnly(toBoolean(value));
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"required"</span> -&gt; setRequired(toList(value, String.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"required"</span> -&gt; setRequired(listb(String.<strong class="jxr_keyword">class</strong>).addAny(value).sparse().build());
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"title"</span> -&gt; setTitle(s(value));
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"type"</span> -&gt; setType(s(value));
 <a class="jxr_linenumber" name="L740" href="#L740">740</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"uniqueItems"</span> -&gt; setUniqueItems(toBoolean(value));
@@ -777,7 +777,7 @@
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setAllOf(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		allOf = CollectionUtils.toList(value);
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		allOf = toList(value);
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 	}
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 
@@ -790,7 +790,7 @@
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setAnyOf(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		anyOf = CollectionUtils.toList(value);
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		anyOf = toList(value);
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 	}
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 
@@ -858,7 +858,7 @@
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setEnum(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		_enum = CollectionUtils.toList(value);
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		_enum = toList(value);
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 	}
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 
@@ -1104,7 +1104,7 @@
 <a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setOneOf(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		oneOf = CollectionUtils.toList(value);
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		oneOf = toList(value);
 <a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 	}
 <a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 
@@ -1133,7 +1133,7 @@
 <a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setProperties(Map&lt;String,SchemaInfo&gt; value) {
-<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 		properties = CollectionUtils.copyOf(value);
+<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 		properties = copyOf(value);
 <a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 	}
 <a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 
@@ -1183,7 +1183,7 @@
 <a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setRequired(Collection&lt;String&gt; value) {
-<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 		required = CollectionUtils.toList(value);
+<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 		required = toList(value);
 <a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 	}
 <a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 

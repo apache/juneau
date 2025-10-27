@@ -25,15 +25,15 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.openapi3;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * Describes a single response from an API operation.</em>
@@ -104,9 +104,9 @@
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">super</strong>(copyFrom);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">this</strong>.description = copyFrom.description;
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">this</strong>.headers = CollectionUtils.copyOf(copyFrom.headers, HeaderInfo::copy);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">this</strong>.content = CollectionUtils.copyOf(copyFrom.content, MediaType::copy);
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">this</strong>.links = CollectionUtils.copyOf(copyFrom.links, Link::copy);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">this</strong>.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">this</strong>.content = copyOf(copyFrom.content, MediaType::copy);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">this</strong>.links = copyOf(copyFrom.links, Link::copy);
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -119,7 +119,7 @@
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">public</strong> <a name="Response" href="../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> addContent(String key, <a name="MediaType" href="../../../../../org/apache/juneau/bean/openapi3/MediaType.html#MediaType">MediaType</a> value) {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertArgNotNull(<span class="jxr_string">"key"</span>, key);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertArgNotNull(<span class="jxr_string">"value"</span>, value);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		content = CollectionUtils.mapb(String.<strong class="jxr_keyword">class</strong>, MediaType.<strong class="jxr_keyword">class</strong>).to(content).sparse().add(key, value).build();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		content = mapb(String.<strong class="jxr_keyword">class</strong>, MediaType.<strong class="jxr_keyword">class</strong>).to(content).sparse().add(key, value).build();
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">public</strong> <a name="Response" href="../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> addHeader(String key, <a name="HeaderInfo" href="../../../../../org/apache/juneau/bean/openapi3/HeaderInfo.html#HeaderInfo">HeaderInfo</a> value) {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertArgNotNull(<span class="jxr_string">"key"</span>, key);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertArgNotNull(<span class="jxr_string">"value"</span>, value);
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		headers = CollectionUtils.mapb(String.<strong class="jxr_keyword">class</strong>, HeaderInfo.<strong class="jxr_keyword">class</strong>).to(headers).sparse().add(key, value).build();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		headers = mapb(String.<strong class="jxr_keyword">class</strong>, HeaderInfo.<strong class="jxr_keyword">class</strong>).to(headers).sparse().add(key, value).build();
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">public</strong> <a name="Response" href="../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> addLink(String key, <a name="Link" href="../../../../../org/apache/juneau/bean/openapi3/Link.html#Link">Link</a> value) {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertArgNotNull(<span class="jxr_string">"key"</span>, key);
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertArgNotNull(<span class="jxr_string">"value"</span>, value);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		links = CollectionUtils.mapb(String.<strong class="jxr_keyword">class</strong>, Link.<strong class="jxr_keyword">class</strong>).to(links).sparse().add(key, value).build();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		links = mapb(String.<strong class="jxr_keyword">class</strong>, Link.<strong class="jxr_keyword">class</strong>).to(links).sparse().add(key, value).build();
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
@@ -238,7 +238,7 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 	@Override <em class="jxr_comment">/* Overridden from OpenApiElement */</em>
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> s = CollectionUtils.setb(String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> s = setb(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			.addIf(nn(content), <span class="jxr_string">"content"</span>)
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			.addIf(nn(description), <span class="jxr_string">"description"</span>)
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 			.addIf(nn(headers), <span class="jxr_string">"headers"</span>)
@@ -251,10 +251,10 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">public</strong> <a name="Response" href="../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> set(String property, Object value) {
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"content"</span> -&gt; setContent(toMap(value, String.<strong class="jxr_keyword">class</strong>, MediaType.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"content"</span> -&gt; setContent(toMapBuilder(value, String.<strong class="jxr_keyword">class</strong>, MediaType.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"description"</span> -&gt; setDescription(s(value));
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"headers"</span> -&gt; setHeaders(toMap(value, String.<strong class="jxr_keyword">class</strong>, HeaderInfo.<strong class="jxr_keyword">class</strong>).sparse().build());
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"links"</span> -&gt; setLinks(toMap(value, String.<strong class="jxr_keyword">class</strong>, Link.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"headers"</span> -&gt; setHeaders(toMapBuilder(value, String.<strong class="jxr_keyword">class</strong>, HeaderInfo.<strong class="jxr_keyword">class</strong>).sparse().build());
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"links"</span> -&gt; setLinks(toMapBuilder(value, String.<strong class="jxr_keyword">class</strong>, Link.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">default</strong> -&gt; {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 				<strong class="jxr_keyword">super</strong>.set(property, value);
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 				yield <strong class="jxr_keyword">this</strong>;
@@ -271,7 +271,7 @@
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<strong class="jxr_keyword">public</strong> <a name="Response" href="../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> setContent(Map&lt;String,MediaType&gt; value) {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		content = CollectionUtils.copyOf(value);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		content = copyOf(value);
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	}
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 
@@ -304,7 +304,7 @@
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">public</strong> <a name="Response" href="../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> setHeaders(Map&lt;String,HeaderInfo&gt; value) {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		headers = CollectionUtils.copyOf(value);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		headers = copyOf(value);
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 	}
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 
@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">public</strong> <a name="Response" href="../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> setLinks(Map&lt;String,Link&gt; value) {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		links = CollectionUtils.copyOf(value);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		links = copyOf(value);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 	}
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 

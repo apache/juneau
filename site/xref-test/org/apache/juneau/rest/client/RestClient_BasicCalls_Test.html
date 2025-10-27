@@ -25,382 +25,383 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpEntities.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpParts.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpResources.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.header.ContentType.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.http.client.utils.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.part.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshaller.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.httppart.*;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.*;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.servlet.*;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.utest.utils.*;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">class</strong> <a name="RestClient_BasicCalls_Test" href="../../../../../org/apache/juneau/rest/client/RestClient_BasicCalls_Test.html#RestClient_BasicCalls_Test">RestClient_BasicCalls_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ABean {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">static</strong> ABean get() {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> ABean();
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			x.f = 1;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		}
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		@Override
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			<strong class="jxr_keyword">return</strong> Json5.of(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		}
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ABean bean = ABean.get();
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	@Rest
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> BasicRestObject {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean getBean() { <strong class="jxr_keyword">return</strong> bean; }
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean postBean(@Content ABean b) { <strong class="jxr_keyword">return</strong> b; }
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean putBean(@Content ABean b) { <strong class="jxr_keyword">return</strong> b; }
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean patchBean(@Content ABean b) { <strong class="jxr_keyword">return</strong> b; }
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean deleteBean() { <strong class="jxr_keyword">return</strong> bean; }
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean optionsBean() { <strong class="jxr_keyword">return</strong> bean; }
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean headBean() { <strong class="jxr_keyword">return</strong> bean; }
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		@RestOp(path=<span class="jxr_string">"/checkHeader"</span>) <strong class="jxr_keyword">public</strong> String[] postHeader(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.RestRequest req) { <strong class="jxr_keyword">return</strong> req.getHeaders().getAll(req.getHeaderParam(<span class="jxr_string">"Check"</span>).orElse(<strong class="jxr_keyword">null</strong>)).stream().map(RequestHeader::getValue).toArray(String[]::<strong class="jxr_keyword">new</strong>); }
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		@RestOp(path=<span class="jxr_string">"/"</span>,method=<span class="jxr_string">"*"</span>) <strong class="jxr_keyword">public</strong> Reader echoMethod(@Method String method) { <strong class="jxr_keyword">return</strong> reader(method); }
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		x.get().run().assertContent(<span class="jxr_string">"GET"</span>);
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		x.get(<span class="jxr_string">"/"</span>).run().assertContent(<span class="jxr_string">"GET"</span>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		x.get(<span class="jxr_string">""</span>).run().assertContent(<span class="jxr_string">"GET"</span>);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		x.put(<span class="jxr_string">"/"</span>,<strong class="jxr_keyword">null</strong>).run().assertContent(<span class="jxr_string">"PUT"</span>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		x.post(<span class="jxr_string">"/"</span>,<strong class="jxr_keyword">null</strong>).run().assertContent(<span class="jxr_string">"POST"</span>);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		x.delete(<span class="jxr_string">"/"</span>).run().assertContent(<span class="jxr_string">"DELETE"</span>);
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		x.formPost(<span class="jxr_string">"/"</span>).run().assertContent(<span class="jxr_string">"POST"</span>);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a02_get() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		client().build().get(<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Method does not support content entity."</span>, ()-&gt;client().build().get(<span class="jxr_string">"/bean"</span>).content(bean).run());
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	}
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	@Test <strong class="jxr_keyword">void</strong> a03_get_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			x.get(url).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		}
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Test <strong class="jxr_keyword">void</strong> a04_put() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		client().build().put(<span class="jxr_string">"/bean"</span>,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		client().build().put(<span class="jxr_string">"/bean"</span>,MutableSupplier.of(bean)).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).content(MutableSupplier.of(bean)).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Test <strong class="jxr_keyword">void</strong> a05_put_bodyString() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		client().build().put(<span class="jxr_string">"/bean"</span>,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).contentString(<span class="jxr_string">"{f:1}"</span>).json5().run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).contentString(<span class="jxr_string">""</span>).json5().run().assertContent(<span class="jxr_string">"{f:0}"</span>);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).contentString(<strong class="jxr_keyword">null</strong>).json5().run().assertContent(<span class="jxr_string">"null"</span>);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>  	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a06_put_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			x.put(url,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			x.put(url,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			x.put(url).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		}
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Test <strong class="jxr_keyword">void</strong> a07_put_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			reader(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			inputStream(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			stringResource(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			bean,
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			stringEntity(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> body : bodies) {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put(<span class="jxr_string">"/bean"</span>,body).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		}
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@Test <strong class="jxr_keyword">void</strong> a08_post() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		client().build().post(<span class="jxr_string">"/bean"</span>,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		client().build().post(<span class="jxr_string">"/bean"</span>).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	}
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	@Test <strong class="jxr_keyword">void</strong> a09_post_stringBody() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		client().build().post(<span class="jxr_string">"/bean"</span>,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	@Test <strong class="jxr_keyword">void</strong> a10_post_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			x.post(url,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			x.post(url,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			x.post(url).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		}
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Test <strong class="jxr_keyword">void</strong> a11_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			reader(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			inputStream(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			stringResource(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			bean,
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			stringEntity(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> body : bodies) {
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post(<span class="jxr_string">"/bean"</span>,body).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@Test <strong class="jxr_keyword">void</strong> a12_delete() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		client().build().delete(<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	@Test <strong class="jxr_keyword">void</strong> a13_delete_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			x.delete(url).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		}
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	@Test <strong class="jxr_keyword">void</strong> a14_options() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		client().build().options(<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	@Test <strong class="jxr_keyword">void</strong> a15_options_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		);
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			x.options(url).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		}
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@Test <strong class="jxr_keyword">void</strong> a16_head() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		client().build().head(<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	@Test <strong class="jxr_keyword">void</strong> a17_head_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			x.head(url).run().assertContent(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		}
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	@Test <strong class="jxr_keyword">void</strong> a18_formPost() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		client().build().formPost(<span class="jxr_string">"/bean"</span>,bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		client().build().formPost(<span class="jxr_string">"/bean"</span>,bean).content(bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		client().build().post(<span class="jxr_string">"/bean"</span>).urlEnc().formDataBean(bean).content(bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		client().build().post(<span class="jxr_string">"/bean"</span>).urlEnc().content(bean).formDataBean(bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	@Test <strong class="jxr_keyword">void</strong> a19_formPost_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			x.formPost(url,bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		}
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Test <strong class="jxr_keyword">void</strong> a20_formPost_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		Supplier&lt;Object&gt;
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			s1 = () -&gt; reader(<span class="jxr_string">"f=1"</span>),
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			s2 = () -&gt; inputStream(<span class="jxr_string">"f=1"</span>);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<em class="jxr_comment">/*[ 0]*/</em> bean,
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<em class="jxr_comment">/*[ 1]*/</em> parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>),
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<em class="jxr_comment">/*[ 2]*/</em> <strong class="jxr_keyword">new</strong> NameValuePair[]{part(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)},
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<em class="jxr_comment">/*[ 3]*/</em> stringEntity(<span class="jxr_string">"f=1"</span>, ContentType.APPLICATION_FORM_URLENCODED),
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<em class="jxr_comment">/*[ 4]*/</em> stringEntity(<span class="jxr_string">"f=1"</span>, <strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<em class="jxr_comment">/*[ 5]*/</em> part(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>),
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<em class="jxr_comment">/*[ 6]*/</em> stringResource(<span class="jxr_string">"f=1"</span>),
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<em class="jxr_comment">/*[ 7]*/</em> stringResource(<span class="jxr_string">"f=1"</span>),
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<em class="jxr_comment">/*[ 8]*/</em> stringResource(<span class="jxr_string">"f=1"</span>).setContentType(APPLICATION_FORM_URLENCODED),
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<em class="jxr_comment">/*[ 9]*/</em> stringResource(<span class="jxr_string">"f=1"</span>).setContentType(APPLICATION_FORM_URLENCODED),
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<em class="jxr_comment">/*[14]*/</em> s1,
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<em class="jxr_comment">/*[15]*/</em> s2
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; bodies.size(); i++) {
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			client().header(<span class="jxr_string">"Check"</span>,<span class="jxr_string">"Content-Type"</span>).accept(<span class="jxr_string">"application/json5"</span>).build().formPost(<span class="jxr_string">"/checkHeader"</span>,bodies.get(i)).run().assertContent().setMsg(<span class="jxr_string">"Body {0} failed"</span>,i).asString().isMatches(<span class="jxr_string">"['application/x-www-form-urlencoded*']"</span>);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			client().build().formPost(<span class="jxr_string">"/bean"</span>,bodies.get(i)).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent().setMsg(<span class="jxr_string">"Body {0} failed"</span>,<span class="jxr_string">"#"</span>+i).is(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		}
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	@Test <strong class="jxr_keyword">void</strong> a21_formPostPairs() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		client().build().formPostPairs(<span class="jxr_string">"/bean"</span>,<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	@Test <strong class="jxr_keyword">void</strong> a22_patch() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		client().build().patch(<span class="jxr_string">"/bean"</span>,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		client().build().patch(<span class="jxr_string">"/bean"</span>).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> a23_patch_fromString() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		client().build().patch(<span class="jxr_string">"/bean"</span>,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	@Test <strong class="jxr_keyword">void</strong> a24_patch_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			reader(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			inputStream(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			stringResource(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			bean,
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			stringEntity(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		);
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> body : bodies) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			x.patch(<span class="jxr_string">"/bean"</span>,body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		}
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	}
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	@Test <strong class="jxr_keyword">void</strong> a25_patch_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			x.patch(url,bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		}
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	}
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	@Test <strong class="jxr_keyword">void</strong> a26_request_PATCH() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		client().build().request(<span class="jxr_string">"patch"</span>,<span class="jxr_string">"/bean"</span>,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		client().build().request(<span class="jxr_string">"patch"</span>,<span class="jxr_string">"/bean"</span>).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	@Test <strong class="jxr_keyword">void</strong> a27_request_PATCH_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			reader(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			inputStream(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			stringResource(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			bean,
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			stringEntity(<span class="jxr_string">"{f:1}"</span>),
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		);
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> body : bodies) {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			x.request(<span class="jxr_string">"patch"</span>,<span class="jxr_string">"/bean"</span>,body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		}
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	@Test <strong class="jxr_keyword">void</strong> a28_request_PATCH_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			x.request(<span class="jxr_string">"patch"</span>,url,bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		}
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@Test <strong class="jxr_keyword">void</strong> a29_request_GET() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		client().build().request(<span class="jxr_string">"get"</span>,<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	@Test <strong class="jxr_keyword">void</strong> a30_request_GET_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">var</strong> urls = list(
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<span class="jxr_string">"/bean"</span>,
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		);
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			x.request(<span class="jxr_string">"get"</span>,url).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		}
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	}
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<em class="jxr_comment">// Helper methods.</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> NameValuePair part(String name, Object val) {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">return</strong> basicPart(name, val);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	}
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> PartList parts(String...pairs) {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">return</strong> partList(pairs);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient.Builder client() {
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).json5();
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> }
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpEntities.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpParts.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpResources.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.header.ContentType.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.http.client.utils.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.part.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshaller.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.httppart.*;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.*;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.servlet.*;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.utest.utils.*;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">class</strong> <a name="RestClient_BasicCalls_Test" href="../../../../../org/apache/juneau/rest/client/RestClient_BasicCalls_Test.html#RestClient_BasicCalls_Test">RestClient_BasicCalls_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ABean {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">static</strong> ABean get() {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> ABean();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			x.f = 1;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		@Override
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			<strong class="jxr_keyword">return</strong> Json5.of(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		}
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ABean bean = ABean.get();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Rest
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> BasicRestObject {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean getBean() { <strong class="jxr_keyword">return</strong> bean; }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean postBean(@Content ABean b) { <strong class="jxr_keyword">return</strong> b; }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean putBean(@Content ABean b) { <strong class="jxr_keyword">return</strong> b; }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean patchBean(@Content ABean b) { <strong class="jxr_keyword">return</strong> b; }
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean deleteBean() { <strong class="jxr_keyword">return</strong> bean; }
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean optionsBean() { <strong class="jxr_keyword">return</strong> bean; }
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		@RestOp(path=<span class="jxr_string">"/bean"</span>) <strong class="jxr_keyword">public</strong> ABean headBean() { <strong class="jxr_keyword">return</strong> bean; }
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		@RestOp(path=<span class="jxr_string">"/checkHeader"</span>) <strong class="jxr_keyword">public</strong> String[] postHeader(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.RestRequest req) { <strong class="jxr_keyword">return</strong> req.getHeaders().getAll(req.getHeaderParam(<span class="jxr_string">"Check"</span>).orElse(<strong class="jxr_keyword">null</strong>)).stream().map(RequestHeader::getValue).toArray(String[]::<strong class="jxr_keyword">new</strong>); }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		@RestOp(path=<span class="jxr_string">"/"</span>,method=<span class="jxr_string">"*"</span>) <strong class="jxr_keyword">public</strong> Reader echoMethod(@Method String method) { <strong class="jxr_keyword">return</strong> reader(method); }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		x.get().run().assertContent(<span class="jxr_string">"GET"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		x.get(<span class="jxr_string">"/"</span>).run().assertContent(<span class="jxr_string">"GET"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		x.get(<span class="jxr_string">""</span>).run().assertContent(<span class="jxr_string">"GET"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		x.put(<span class="jxr_string">"/"</span>,<strong class="jxr_keyword">null</strong>).run().assertContent(<span class="jxr_string">"PUT"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		x.post(<span class="jxr_string">"/"</span>,<strong class="jxr_keyword">null</strong>).run().assertContent(<span class="jxr_string">"POST"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		x.delete(<span class="jxr_string">"/"</span>).run().assertContent(<span class="jxr_string">"DELETE"</span>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		x.formPost(<span class="jxr_string">"/"</span>).run().assertContent(<span class="jxr_string">"POST"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test <strong class="jxr_keyword">void</strong> a02_get() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		client().build().get(<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Method does not support content entity."</span>, ()-&gt;client().build().get(<span class="jxr_string">"/bean"</span>).content(bean).run());
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	@Test <strong class="jxr_keyword">void</strong> a03_get_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			x.get(url).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> a04_put() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		client().build().put(<span class="jxr_string">"/bean"</span>,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		client().build().put(<span class="jxr_string">"/bean"</span>,MutableSupplier.of(bean)).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).content(MutableSupplier.of(bean)).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a05_put_bodyString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		client().build().put(<span class="jxr_string">"/bean"</span>,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).contentString(<span class="jxr_string">"{f:1}"</span>).json5().run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).contentString(<span class="jxr_string">""</span>).json5().run().assertContent(<span class="jxr_string">"{f:0}"</span>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		client().build().put(<span class="jxr_string">"/bean"</span>).contentString(<strong class="jxr_keyword">null</strong>).json5().run().assertContent(<span class="jxr_string">"null"</span>);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>  	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Test <strong class="jxr_keyword">void</strong> a06_put_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			x.put(url,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			x.put(url,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			x.put(url).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		}
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	@Test <strong class="jxr_keyword">void</strong> a07_put_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			reader(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			inputStream(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			stringResource(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			bean,
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			stringEntity(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> body : bodies) {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put(<span class="jxr_string">"/bean"</span>,body).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		}
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> a08_post() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		client().build().post(<span class="jxr_string">"/bean"</span>,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		client().build().post(<span class="jxr_string">"/bean"</span>).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> a09_post_stringBody() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		client().build().post(<span class="jxr_string">"/bean"</span>,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> a10_post_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			x.post(url,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			x.post(url,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			x.post(url).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		}
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Test <strong class="jxr_keyword">void</strong> a11_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			reader(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			inputStream(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			stringResource(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			bean,
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			stringEntity(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> body : bodies) {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post(<span class="jxr_string">"/bean"</span>,body).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> a12_delete() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		client().build().delete(<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	@Test <strong class="jxr_keyword">void</strong> a13_delete_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			x.delete(url).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	@Test <strong class="jxr_keyword">void</strong> a14_options() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		client().build().options(<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@Test <strong class="jxr_keyword">void</strong> a15_options_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			x.options(url).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	@Test <strong class="jxr_keyword">void</strong> a16_head() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		client().build().head(<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	}
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	@Test <strong class="jxr_keyword">void</strong> a17_head_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			x.head(url).run().assertContent(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@Test <strong class="jxr_keyword">void</strong> a18_formPost() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		client().build().formPost(<span class="jxr_string">"/bean"</span>,bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		client().build().formPost(<span class="jxr_string">"/bean"</span>,bean).content(bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		client().build().post(<span class="jxr_string">"/bean"</span>).urlEnc().formDataBean(bean).content(bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		client().build().post(<span class="jxr_string">"/bean"</span>).urlEnc().content(bean).formDataBean(bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	}
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	@Test <strong class="jxr_keyword">void</strong> a19_formPost_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			x.formPost(url,bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		}
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	}
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	@Test <strong class="jxr_keyword">void</strong> a20_formPost_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		Supplier&lt;Object&gt;
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			s1 = () -&gt; reader(<span class="jxr_string">"f=1"</span>),
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			s2 = () -&gt; inputStream(<span class="jxr_string">"f=1"</span>);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<em class="jxr_comment">/*[ 0]*/</em> bean,
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<em class="jxr_comment">/*[ 1]*/</em> parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>),
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<em class="jxr_comment">/*[ 2]*/</em> <strong class="jxr_keyword">new</strong> NameValuePair[]{part(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)},
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<em class="jxr_comment">/*[ 3]*/</em> stringEntity(<span class="jxr_string">"f=1"</span>, ContentType.APPLICATION_FORM_URLENCODED),
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<em class="jxr_comment">/*[ 4]*/</em> stringEntity(<span class="jxr_string">"f=1"</span>, <strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<em class="jxr_comment">/*[ 5]*/</em> part(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>),
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<em class="jxr_comment">/*[ 6]*/</em> stringResource(<span class="jxr_string">"f=1"</span>),
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<em class="jxr_comment">/*[ 7]*/</em> stringResource(<span class="jxr_string">"f=1"</span>),
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<em class="jxr_comment">/*[ 8]*/</em> stringResource(<span class="jxr_string">"f=1"</span>).setContentType(APPLICATION_FORM_URLENCODED),
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<em class="jxr_comment">/*[ 9]*/</em> stringResource(<span class="jxr_string">"f=1"</span>).setContentType(APPLICATION_FORM_URLENCODED),
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<em class="jxr_comment">/*[14]*/</em> s1,
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<em class="jxr_comment">/*[15]*/</em> s2
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; bodies.size(); i++) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			client().header(<span class="jxr_string">"Check"</span>,<span class="jxr_string">"Content-Type"</span>).accept(<span class="jxr_string">"application/json5"</span>).build().formPost(<span class="jxr_string">"/checkHeader"</span>,bodies.get(i)).run().assertContent().setMsg(<span class="jxr_string">"Body {0} failed"</span>,i).asString().isMatches(<span class="jxr_string">"['application/x-www-form-urlencoded*']"</span>);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			client().build().formPost(<span class="jxr_string">"/bean"</span>,bodies.get(i)).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent().setMsg(<span class="jxr_string">"Body {0} failed"</span>,<span class="jxr_string">"#"</span>+i).is(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		}
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test <strong class="jxr_keyword">void</strong> a21_formPostPairs() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		client().build().formPostPairs(<span class="jxr_string">"/bean"</span>,<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	@Test <strong class="jxr_keyword">void</strong> a22_patch() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		client().build().patch(<span class="jxr_string">"/bean"</span>,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		client().build().patch(<span class="jxr_string">"/bean"</span>).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> a23_patch_fromString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		client().build().patch(<span class="jxr_string">"/bean"</span>,<span class="jxr_string">"{f:1}"</span>,APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@Test <strong class="jxr_keyword">void</strong> a24_patch_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			reader(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			inputStream(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			stringResource(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			bean,
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			stringEntity(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> body : bodies) {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			x.patch(<span class="jxr_string">"/bean"</span>,body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		}
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	}
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Test <strong class="jxr_keyword">void</strong> a25_patch_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			x.patch(url,bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		}
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	}
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	@Test <strong class="jxr_keyword">void</strong> a26_request_PATCH() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		client().build().request(<span class="jxr_string">"patch"</span>,<span class="jxr_string">"/bean"</span>,bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		client().build().request(<span class="jxr_string">"patch"</span>,<span class="jxr_string">"/bean"</span>).content(bean).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	}
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	@Test <strong class="jxr_keyword">void</strong> a27_request_PATCH_exhaustiveBodyTypes() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> bodies = list(
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			reader(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			inputStream(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			stringResource(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			bean,
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			stringEntity(<span class="jxr_string">"{f:1}"</span>),
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			parts(<span class="jxr_string">"f"</span>,<span class="jxr_string">"1"</span>)
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> body : bodies) {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			x.request(<span class="jxr_string">"patch"</span>,<span class="jxr_string">"/bean"</span>,body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	@Test <strong class="jxr_keyword">void</strong> a28_request_PATCH_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			x.request(<span class="jxr_string">"patch"</span>,url,bean).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		}
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	}
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	@Test <strong class="jxr_keyword">void</strong> a29_request_GET() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		client().build().request(<span class="jxr_string">"get"</span>,<span class="jxr_string">"/bean"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	}
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	@Test <strong class="jxr_keyword">void</strong> a30_request_GET_exhaustiveUrls() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> urls = list(
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<strong class="jxr_keyword">new</strong> URIBuilder(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			java.net.URI.create(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			url(<span class="jxr_string">"http://localhost/bean"</span>),
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<span class="jxr_string">"/bean"</span>,
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"/bean"</span>)
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">var</strong> x = client().build();
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> url : urls) {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			x.request(<span class="jxr_string">"get"</span>,url).accept(<span class="jxr_string">"application/json5"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		}
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<em class="jxr_comment">// Helper methods.</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> NameValuePair part(String name, Object val) {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">return</strong> basicPart(name, val);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> PartList parts(String...pairs) {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">return</strong> partList(pairs);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient.Builder client() {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).json5();
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

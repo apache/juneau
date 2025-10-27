@@ -25,21 +25,21 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.html;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.svl.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.utils.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.xml.*;
@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern INDEXED_LINK_PATTERN = Pattern.compile(<span class="jxr_string">"(?s)(&#92;&#92;S*)&#92;&#92;[(&#92;&#92;d+)&#92;&#92;]&#92;&#92;:(.*)"</span>);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; List&lt;T&gt; copy(List&lt;T&gt; s) {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">return</strong> s == <strong class="jxr_keyword">null</strong> || s.isEmpty() ? <strong class="jxr_keyword">null</strong> : CollectionUtils.copyOf(s);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">return</strong> s == <strong class="jxr_keyword">null</strong> || s.isEmpty() ? <strong class="jxr_keyword">null</strong> : copyOf(s);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		}
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; List&lt;T&gt; copy(T[] s) {
@@ -1574,7 +1574,7 @@
 <a class="jxr_linenumber" name="L1566" href="#L1566">1566</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L1567" href="#L1567">1567</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L1568" href="#L1568">1568</a> 		<strong class="jxr_keyword">public</strong> Builder widgets(Class&lt;? <strong class="jxr_keyword">extends</strong> HtmlWidget&gt;...values) {
-<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 			CollectionUtils.addAll(widgets(), values);
+<a class="jxr_linenumber" name="L1569" href="#L1569">1569</a> 			addAll(widgets(), values);
 <a class="jxr_linenumber" name="L1570" href="#L1570">1570</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1571" href="#L1571">1571</a> 		}
 <a class="jxr_linenumber" name="L1572" href="#L1572">1572</a> 
@@ -1672,7 +1672,7 @@
 <a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 		nowrap = builder.nowrap;
 <a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 		resolveBodyVars = builder.resolveBodyVars;
 <a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 		template = builder.template;
-<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 		widgets = builder.widgets == <strong class="jxr_keyword">null</strong> ? Collections.emptyList() : CollectionUtils.copyOf(builder.widgets);
+<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 		widgets = builder.widgets == <strong class="jxr_keyword">null</strong> ? Collections.emptyList() : copyOf(builder.widgets);
 <a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 
 <a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 		templateBean = newInstance(template);
 <a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 		widgetMap = <strong class="jxr_keyword">new</strong> <a name="HtmlWidgetMap" href="../../../../org/apache/juneau/html/HtmlWidgetMap.html#HtmlWidgetMap">HtmlWidgetMap</a>();
