@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.common.function;
 
-import java.util.function.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 
-import org.apache.juneau.common.utils.*;
+import java.util.function.*;
 
 /**
  * A function that takes in 5 arguments.
@@ -38,7 +38,7 @@ import org.apache.juneau.common.utils.*;
 public interface Function5<A,B,C,D,E,R> {
 
 	default <V> Function5<A,B,C,D,E,V> andThen(Function<? super R,? extends V> after) {
-		AssertionUtils.assertArgNotNull("after", after);
+		assertArgNotNull("after", after);
 		return (A a, B b, C c, D d, E e) -> after.apply(apply(a, b, c, d, e));
 	}
 

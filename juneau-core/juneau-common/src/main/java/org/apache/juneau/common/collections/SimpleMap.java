@@ -23,8 +23,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.common.utils.*;
-
 /**
  * A lightweight, fixed-size map implementation backed by parallel key and value arrays.
  *
@@ -193,7 +191,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 		this.values = values;
 		entries = (SimpleMapEntry[])Array.newInstance(SimpleMapEntry.class, keys.length);
 		for (var i = 0; i < keys.length; i++) {
-			AssertionUtils.assertArg(nn(keys[i]), "Keys array cannot contain a null value.");
+			assertArg(nn(keys[i]), "Keys array cannot contain a null value.");
 			entries[i] = new SimpleMapEntry(i);
 		}
 	}

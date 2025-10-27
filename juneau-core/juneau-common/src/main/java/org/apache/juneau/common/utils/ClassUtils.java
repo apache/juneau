@@ -122,16 +122,16 @@ public class ClassUtils {
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			AssertionUtils.assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
 
-		AssertionUtils.assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
+		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
 
 		ParameterizedType cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
-		AssertionUtils.assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
+		assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
 		Type actualType = cpt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.concurrent.atomic.*;
@@ -375,7 +376,7 @@ public class Cache2<K1,K2,V> extends ConcurrentHashMap2Key<K1,K2,V> {
 	 */
 	@Override /* ConcurrentHashMap2Key */
 	public V get(K1 key1, K2 key2) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2);
+		assertArgsNotNull("key1", key1, "key2", key2);
 		return get(key1, key2, () -> supplier.apply(key1, key2));
 	}
 
@@ -421,7 +422,7 @@ public class Cache2<K1,K2,V> extends ConcurrentHashMap2Key<K1,K2,V> {
 	 * @throws IllegalArgumentException if key1 or key2 is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, java.util.function.Supplier<V> supplier) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2);
+		assertArgsNotNull("key1", key1, "key2", key2);
 		if (disableCaching)
 			return supplier.get();
 		V v = super.get(key1, key2);

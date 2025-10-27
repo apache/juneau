@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.util.concurrent.*;
 
 import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A thread-safe concurrent hash map that uses composite five-part keys for lookups.
@@ -122,7 +123,7 @@ public class ConcurrentHashMap5Key<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap<T
 	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		return super.get(Tuple5.of(key1, key2, key3, key4, key5));
 	}
 
@@ -139,7 +140,7 @@ public class ConcurrentHashMap5Key<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap<T
 	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
 	public V put(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5, V value) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		return super.put(Tuple5.of(key1, key2, key3, key4, key5), value);
 	}
 }

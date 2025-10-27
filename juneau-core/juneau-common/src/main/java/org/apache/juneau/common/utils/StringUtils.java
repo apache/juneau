@@ -18,6 +18,7 @@ package org.apache.juneau.common.utils;
 
 import static java.lang.Character.*;
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -155,7 +156,7 @@ public class StringUtils {
 
 		var bIn = in.getBytes(IOUtils.UTF8);
 
-		AssertionUtils.assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
+		assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
 
 		// Strip out any trailing '=' filler characters.
 		var inLength = bIn.length;
@@ -1936,7 +1937,7 @@ public class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static int parseIntWithSuffix(String s) {
-		AssertionUtils.assertArgNotNull("s", s);
+		assertArgNotNull("s", s);
 		var m = multiplier(s);
 		if (m == 1)
 			return Integer.decode(s);
@@ -2012,7 +2013,7 @@ public class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static long parseLongWithSuffix(String s) {
-		AssertionUtils.assertArgNotNull("s", s);
+		assertArgNotNull("s", s);
 		var m = multiplier2(s);
 		if (m == 1)
 			return Long.decode(s);

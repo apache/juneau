@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -193,7 +194,7 @@ public class FileUtils {
 	 * @throws RuntimeException if directory could not be created.
 	 */
 	public static File mkdirs(File f, boolean clean) {
-		AssertionUtils.assertArgNotNull("f", f);
+		assertArgNotNull("f", f);
 		if (f.exists()) {
 			if (clean) {
 				if (! delete(f))
@@ -215,7 +216,7 @@ public class FileUtils {
 	 * @return The directory.
 	 */
 	public static File mkdirs(String path, boolean clean) {
-		AssertionUtils.assertArgNotNull("path", path);
+		assertArgNotNull("path", path);
 		return mkdirs(new File(path), clean);
 	}
 

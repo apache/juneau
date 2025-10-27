@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.concurrent.atomic.*;
@@ -205,7 +206,7 @@ public class Cache5<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap5Key<K1,K2,K3,K4,
 	 */
 	@Override /* ConcurrentHashMap5Key */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		return get(key1, key2, key3, key4, key5, () -> supplier.apply(key1, key2, key3, key4, key5));
 	}
 
@@ -222,7 +223,7 @@ public class Cache5<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap5Key<K1,K2,K3,K4,
 	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, K4 key4, K5 key5, java.util.function.Supplier<V> supplier) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3, "key4", key4, "key5", key5);
 		if (disableCaching)
 			return supplier.get();
 		V v = super.get(key1, key2, key3, key4, key5);

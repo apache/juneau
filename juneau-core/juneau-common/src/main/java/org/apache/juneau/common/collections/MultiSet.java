@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.common.collections;
 
-import java.util.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 
-import org.apache.juneau.common.utils.*;
+import java.util.*;
 
 /**
  * A composite set that presents multiple collections as a single unified set.
@@ -129,9 +129,9 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 */
 	@SafeVarargs
 	public MultiSet(Collection<E>...c) {
-		AssertionUtils.assertArgNotNull("c", c);
+		assertArgNotNull("c", c);
 		for (var cc : c)
-			AssertionUtils.assertArgNotNull("c", cc);
+			assertArgNotNull("c", cc);
 		l = c;
 	}
 

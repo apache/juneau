@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.concurrent.atomic.*;
@@ -209,7 +210,7 @@ public class Cache3<K1,K2,K3,V> extends ConcurrentHashMap3Key<K1,K2,K3,V> {
 	 */
 	@Override /* ConcurrentHashMap3Key */
 	public V get(K1 key1, K2 key2, K3 key3) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		return get(key1, key2, key3, () -> supplier.apply(key1, key2, key3));
 	}
 
@@ -224,7 +225,7 @@ public class Cache3<K1,K2,K3,V> extends ConcurrentHashMap3Key<K1,K2,K3,V> {
 	 * @throws IllegalArgumentException if any key is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, K3 key3, java.util.function.Supplier<V> supplier) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		if (disableCaching)
 			return supplier.get();
 		V v = super.get(key1, key2, key3);

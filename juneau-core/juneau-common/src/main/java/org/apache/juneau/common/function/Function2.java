@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.common.function;
 
-import java.util.function.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 
-import org.apache.juneau.common.utils.*;
+import java.util.function.*;
 
 /**
  * A function that takes in 2 arguments.
@@ -35,7 +35,7 @@ import org.apache.juneau.common.utils.*;
 public interface Function2<A,B,R> {
 
 	default <V> Function2<A,B,V> andThen(Function<? super R,? extends V> after) {
-		AssertionUtils.assertArgNotNull("after", after);
+		assertArgNotNull("after", after);
 		return (A a, B b) -> after.apply(apply(a, b));
 	}
 

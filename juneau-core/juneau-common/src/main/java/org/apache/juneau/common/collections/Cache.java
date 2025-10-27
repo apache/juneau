@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.concurrent.*;
@@ -339,7 +340,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	@SuppressWarnings("unchecked")
 	@Override /* ConcurrentHashMap */
 	public V get(Object key) {
-		AssertionUtils.assertArgNotNull("key", key);
+		assertArgNotNull("key", key);
 		return get((K)key, () -> supplier.apply((K)key));
 	}
 
@@ -383,7 +384,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
 	public V get(K key, Supplier<V> supplier) {
-		AssertionUtils.assertArgNotNull("key", key);
+		assertArgNotNull("key", key);
 		if (disableCaching)
 			return supplier.get();
 		V v = super.get(key);
@@ -416,7 +417,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	 */
 	@Override /* ConcurrentHashMap */
 	public V put(K key, V value) {
-		AssertionUtils.assertArgNotNull("key", key);
+		assertArgNotNull("key", key);
 		return super.put(key, value);
 	}
 

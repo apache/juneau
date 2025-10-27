@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.nio.file.*;
@@ -86,8 +87,8 @@ public class MimeTypeDetector {
 		 * @throws IllegalArgumentException If name or type is null or blank.
 		 */
 		public Builder addFileType(String name, String type) {
-			AssertionUtils.assertArgNotNullOrBlank("name", name);
-			AssertionUtils.assertArgNotNullOrBlank("type", type);
+			assertArgNotNullOrBlank("name", name);
+			assertArgNotNullOrBlank("type", type);
 			fileMap.put(name, type);
 			return this;
 		}
@@ -101,8 +102,8 @@ public class MimeTypeDetector {
 		 * @throws IllegalArgumentException If ext or type is null or blank.
 		 */
 		public Builder addExtensionType(String ext, String type) {
-			AssertionUtils.assertArgNotNullOrBlank("ext", ext);
-			AssertionUtils.assertArgNotNullOrBlank("type", type);
+			assertArgNotNullOrBlank("ext", ext);
+			assertArgNotNullOrBlank("type", type);
 			extMap.put(ext.toLowerCase(), type);
 			return this;
 		}

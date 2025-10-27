@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.text.*;
@@ -128,7 +130,7 @@ public class Utils {
 			return null;  // NOSONAR
 		}
 
-		AssertionUtils.assertArg(isArray(array), "Input must be an array but was {0}", array.getClass().getName());
+		assertArg(isArray(array), "Input must be an array but was {0}", array.getClass().getName());
 
 		var componentType = array.getClass().getComponentType();
 		var length = Array.getLength(array);
@@ -1150,7 +1152,7 @@ public class Utils {
 	 * @see #arrayToList(Object)
 	 */
 	public static final List<?> toList(Object o) {  // NOSONAR
-		AssertionUtils.assertArgNotNull("o", o);
+		assertArgNotNull("o", o);
 		if (o instanceof List<?> o2)
 			return o2;
 		if (o instanceof Iterable<?> o2)
@@ -1176,7 +1178,7 @@ public class Utils {
 	 * @return A new stream.
 	 */
 	public static Stream<Object> toStream(Object array) {
-		AssertionUtils.assertArg(isArray(array), "Arg was not an array.  Type: {0}", array.getClass().getName());
+		assertArg(isArray(array), "Arg was not an array.  Type: {0}", array.getClass().getName());
 		var length = Array.getLength(array);
 		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -376,7 +377,7 @@ public class DateUtils {
 	 * @return The padded string.
 	 */
 	public static String toValidIso8601DT(String in) {
-		AssertionUtils.assertArgNotNull("in", in);
+		assertArgNotNull("in", in);
 
 		in = in.trim();
 

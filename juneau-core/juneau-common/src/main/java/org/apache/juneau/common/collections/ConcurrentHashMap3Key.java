@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.util.concurrent.*;
 
 import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A thread-safe concurrent hash map that uses composite three-part keys for lookups.
@@ -138,7 +139,7 @@ public class ConcurrentHashMap3Key<K1,K2,K3,V> extends ConcurrentHashMap<Tuple3<
 	 * @throws IllegalArgumentException if key1, key2, or key3 is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, K3 key3) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		return super.get(Tuple3.of(key1, key2, key3));
 	}
 
@@ -153,7 +154,7 @@ public class ConcurrentHashMap3Key<K1,K2,K3,V> extends ConcurrentHashMap<Tuple3<
 	 * @throws IllegalArgumentException if key1, key2, or key3 is <jk>null</jk>.
 	 */
 	public V put(K1 key1, K2 key2, K3 key3, V value) {
-		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
+		assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
 		return super.put(Tuple3.of(key1, key2, key3), value);
 	}
 }

@@ -1,6 +1,7 @@
 package org.apache.juneau.common.utils;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -681,7 +682,7 @@ public class CollectionUtils {
 	 * @return The new set.
 	 */
 	public static <T> Set<T> toSet(final T[] array) {
-		AssertionUtils.assertArgNotNull("array", array);
+		assertArgNotNull("array", array);
 		return new AbstractSet<>() {
 
 			@Override /* Overridden from Set */
@@ -726,7 +727,7 @@ public class CollectionUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E> E[] combine(E[]...arrays) {
-		AssertionUtils.assertArgNotNull("arrays", arrays);
+		assertArgNotNull("arrays", arrays);
 		int l = 0;
 		E[] a1 = null;
 		for (E[] a : arrays) {
