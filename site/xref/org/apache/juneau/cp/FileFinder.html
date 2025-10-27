@@ -150,12 +150,12 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">		 * Adds a file system directory to the lookup paths.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">		 * @param path The path relative to the working directory.  Must not be &lt;jk&gt;null&lt;/jk&gt;</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">		 * @param value The path relative to the working directory.  Must not be &lt;jk&gt;null&lt;/jk&gt;</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">public</strong> Builder dir(String path) {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			assertArgNotNull(<span class="jxr_string">"path"</span>, path);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">return</strong> path(Paths.get(<span class="jxr_string">"."</span>).resolve(path));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">public</strong> Builder dir(String value) {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			assertArgNotNull(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">return</strong> path(Paths.get(<span class="jxr_string">"."</span>).resolve(value));
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -193,11 +193,11 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">		 * Adds a file system directory to the lookup paths.</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">		 * @param path The directory path.</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">		 * @param value The directory path.</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">public</strong> Builder path(Path path) {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			roots.add(<strong class="jxr_keyword">new</strong> <a name="LocalDir" href="../../../../org/apache/juneau/cp/LocalDir.html#LocalDir">LocalDir</a>(path));
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">public</strong> Builder path(Path value) {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			roots.add(<strong class="jxr_keyword">new</strong> <a name="LocalDir" href="../../../../org/apache/juneau/cp/LocalDir.html#LocalDir">LocalDir</a>(value));
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		}
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 

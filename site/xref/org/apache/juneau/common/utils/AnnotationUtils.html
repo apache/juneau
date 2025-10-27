@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * @throws RuntimeException if an {@code Exception} is encountered during annotation member access</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * @throws IllegalStateException if an annotation method invocation returns {@code null}</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> hashCode(Annotation a) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> hash(Annotation a) {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">return</strong> getAnnotationMethods(a.annotationType()).mapToInt(x -&gt; hashMember(x.getName(), safeSupplier(() -&gt; x.invoke(a)))).sum();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (a1.length != a2.length)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; a1.length; i++)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">if</strong> (! equals(a1[i], a2[i]))
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">if</strong> (ne(a1[i], a2[i]))
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
@@ -139,7 +139,7 @@
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">if</strong> (isArray(value))
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">return</strong> part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Annotation)
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">return</strong> part1 ^ hashCode((Annotation)value);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">return</strong> part1 ^ hash((Annotation)value);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">return</strong> part1 ^ value.hashCode();
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 
@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">if</strong> (type.isArray())
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">return</strong> arrayMemberEquals(type.getComponentType(), o1, o2);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">if</strong> (type.isAnnotation())
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">return</strong> equals((Annotation)o1, (Annotation)o2);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">return</strong> eq((Annotation)o1, (Annotation)o2);
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">return</strong> o1.equals(o2);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> }
