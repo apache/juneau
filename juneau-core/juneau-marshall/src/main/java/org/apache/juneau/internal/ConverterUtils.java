@@ -18,6 +18,8 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;

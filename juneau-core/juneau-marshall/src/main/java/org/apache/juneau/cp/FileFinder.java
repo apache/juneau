@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -130,7 +131,7 @@ public interface FileFinder {
 		 * @return This object.
 		 */
 		public Builder cp(Class<?> c, String path, boolean recursive) {
-			Utils.assertArgNotNull("c", c);
+			assertArgNotNull("c", c);
 			while (c != null) {
 				roots.add(new LocalDir(c, path));
 				c = recursive ? c.getSuperclass() : null;
@@ -145,7 +146,7 @@ public interface FileFinder {
 		 * @return This object.
 		 */
 		public Builder dir(String path) {
-			Utils.assertArgNotNull("path", path);
+			assertArgNotNull("path", path);
 			return path(Paths.get(".").resolve(path));
 		}
 

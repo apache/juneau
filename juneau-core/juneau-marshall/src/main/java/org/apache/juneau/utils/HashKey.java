@@ -17,6 +17,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
@@ -51,7 +52,7 @@ public class HashKey {
 		if (array.length != x.array.length)
 			return false;
 		for (int i = 0; i < array.length; i++)
-			if (! Objects.equals(array[i], x.array[i]))
+			if (! eq(array[i], x.array[i]))
 				return false;
 		return true;
 	}

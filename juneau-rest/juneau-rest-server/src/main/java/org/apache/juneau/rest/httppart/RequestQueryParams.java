@@ -18,6 +18,7 @@ package org.apache.juneau.rest.httppart;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.toList;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -195,7 +196,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return This object.
 	 */
 	public RequestQueryParams add(NameValuePair...parameters) {
-		Utils.assertArgNotNull("parameters", parameters);
+		assertArgNotNull("parameters", parameters);
 		for (NameValuePair p : parameters)
 			if (p != null)
 				add(p.getName(), p.getValue());
@@ -214,7 +215,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return This object.
 	 */
 	public RequestQueryParams add(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
+		assertArgNotNull("name", name);
 		add(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
@@ -315,7 +316,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return <jk>true</jk> if the parameter with any of the specified names are present.
 	 */
 	public boolean containsAny(String...names) {
-		Utils.assertArgNotNull("names", names);
+		assertArgNotNull("names", names);
 		for (String n : names)
 			if (stream(n).findAny().isPresent())
 				return true;
@@ -393,7 +394,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
 	public RequestQueryParam getFirst(String name) {
-		Utils.assertArgNotNull("name", name);
+		assertArgNotNull("name", name);
 		return stream(name).findFirst().orElseGet(() -> new RequestQueryParam(req, name, null).parser(parser));
 	}
 
@@ -408,7 +409,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return The parameter.  Never <jk>null</jk>.
 	 */
 	public RequestQueryParam getLast(String name) {
-		Utils.assertArgNotNull("name", name);
+		assertArgNotNull("name", name);
 		Value<RequestQueryParam> v = Value.empty();
 		stream(name).forEach(x -> v.set(x));
 		return v.orElseGet(() -> new RequestQueryParam(req, name, null).parser(parser));
@@ -485,7 +486,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return This object.
 	 */
 	public RequestQueryParams remove(String name) {
-		Utils.assertArgNotNull("name", name);
+		assertArgNotNull("name", name);
 		removeIf(x -> eq(x.getName(), name));
 		return this;
 	}
@@ -501,7 +502,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return This object.
 	 */
 	public RequestQueryParams set(NameValuePair...parameters) {
-		Utils.assertArgNotNull("headers", parameters);
+		assertArgNotNull("headers", parameters);
 		for (NameValuePair p : parameters)
 			remove(p);
 		for (NameValuePair p : parameters)
@@ -524,7 +525,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return This object.
 	 */
 	public RequestQueryParams set(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
+		assertArgNotNull("name", name);
 		set(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}

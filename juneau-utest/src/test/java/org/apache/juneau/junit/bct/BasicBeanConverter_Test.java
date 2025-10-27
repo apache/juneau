@@ -547,11 +547,11 @@ class BasicBeanConverter_Test extends TestBase {
 			);
 
 			assertEquals("[{John},{Jane}]",
-				converter.getNested(people, Utils.tokenize("#{name}").get(0)));
+				converter.getNested(people, BctUtils.tokenize("#{name}").get(0)));
 			assertEquals("[{30},{25}]",
-				converter.getNested(people, Utils.tokenize("#{age}").get(0)));
+				converter.getNested(people, BctUtils.tokenize("#{age}").get(0)));
 			assertEquals("[{John,30},{Jane,25}]",
-				converter.getNested(people, Utils.tokenize("#{name,age}").get(0)));
+				converter.getNested(people, BctUtils.tokenize("#{name,age}").get(0)));
 		}
 
 		@Test
@@ -563,13 +563,13 @@ class BasicBeanConverter_Test extends TestBase {
 			obj.put("nullKey", null);
 
 			// Case 1: e == null (property value is null) and no nested tokens
-			assertEquals("<null>", converter.getNested(obj, Utils.tokenize("nullKey").get(0)));
+			assertEquals("<null>", converter.getNested(obj, BctUtils.tokenize("nullKey").get(0)));
 
 			// Case 2: e != null but token has no nested content
-			assertEquals("value", converter.getNested(obj, Utils.tokenize("key").get(0)));
+			assertEquals("value", converter.getNested(obj, BctUtils.tokenize("key").get(0)));
 
 			// Case 3: e == null and token has nested content (should still return early)
-			assertEquals("<null>", converter.getNested(obj, Utils.tokenize("nullKey{nested}").get(0)));
+			assertEquals("<null>", converter.getNested(obj, BctUtils.tokenize("nullKey{nested}").get(0)));
 		}
 
 		@Test

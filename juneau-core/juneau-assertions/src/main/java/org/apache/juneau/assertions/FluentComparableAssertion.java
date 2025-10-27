@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.serializer.*;
 
@@ -156,8 +157,8 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	public R isBetween(Comparable lower, Comparable upper) throws AssertionError {
 		isExists();
-		Utils.assertArgNotNull("lower", lower);
-		Utils.assertArgNotNull("upper", upper);
+		assertArgNotNull("lower", lower);
+		assertArgNotNull("upper", upper);
 		isLte(upper);
 		isGte(lower);
 		return returns();
@@ -172,7 +173,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	@SuppressWarnings("unchecked")
 	public R isGt(Comparable value) throws AssertionError {
-		Utils.assertArgNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (value().compareTo(value) <= 0)
 			throw error(MSG_valueWasNotGreaterThanExpected, value, value());
 		return returns();
@@ -187,7 +188,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	@SuppressWarnings("unchecked")
 	public R isGte(Comparable value) throws AssertionError {
-		Utils.assertArgNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (value().compareTo(value) < 0)
 			throw error(MSG_valueWasNotGreaterOrEqualsToExpected, value, value());
 		return returns();
@@ -202,7 +203,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	@SuppressWarnings("unchecked")
 	public R isLt(Comparable value) throws AssertionError {
-		Utils.assertArgNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (value().compareTo(value) >= 0)
 			throw error(MSG_valueWasNotLessThanExpected, value, value());
 		return returns();
@@ -217,7 +218,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	 */
 	@SuppressWarnings("unchecked")
 	public R isLte(Comparable value) throws AssertionError {
-		Utils.assertArgNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (value().compareTo(value) > 0)
 			throw error(MSG_valueWasNotLessOrEqualsToExpected, value, value());
 		return returns();

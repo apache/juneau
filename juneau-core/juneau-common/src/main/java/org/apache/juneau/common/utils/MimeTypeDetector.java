@@ -84,8 +84,8 @@ public class MimeTypeDetector {
 		 * @throws IllegalArgumentException If name or type is null or blank.
 		 */
 		public Builder addFileType(String name, String type) {
-			Utils.assertArgNotNullOrBlank("name", name);
-			Utils.assertArgNotNullOrBlank("type", type);
+			AssertionUtils.assertArgNotNullOrBlank("name", name);
+			AssertionUtils.assertArgNotNullOrBlank("type", type);
 			fileMap.put(name, type);
 			return this;
 		}
@@ -99,8 +99,8 @@ public class MimeTypeDetector {
 		 * @throws IllegalArgumentException If ext or type is null or blank.
 		 */
 		public Builder addExtensionType(String ext, String type) {
-			Utils.assertArgNotNullOrBlank("ext", ext);
-			Utils.assertArgNotNullOrBlank("type", type);
+			AssertionUtils.assertArgNotNullOrBlank("ext", ext);
+			AssertionUtils.assertArgNotNullOrBlank("type", type);
 			extMap.put(ext.toLowerCase(), type);
 			return this;
 		}
@@ -256,7 +256,7 @@ public class MimeTypeDetector {
 		var cacheBuilder = Cache.of(String.class, String.class).maxSize(builder.cacheSize);
 
 		if (builder.cacheDisabled) {
-			cacheBuilder.disabled();
+			cacheBuilder.disableCaching();
 		}
 		if (builder.cacheLogOnExit) {
 			cacheBuilder.logOnExit();

@@ -18,7 +18,9 @@ package org.apache.juneau.junit.bct;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.junit.bct.Utils.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.junit.bct.BctUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -26,6 +28,8 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * Default implementation of {@link BeanConverter} for Bean-Centric Test (BCT) object conversion.
@@ -529,49 +533,49 @@ public class BasicBeanConverter implements BeanConverter {
 
 	/**
 	 * Setting key for the string representation of null values.
-	 * 
+	 *
 	 * <p>Default value: <js>"&lt;null&gt;"</js></p>
-	 * 
+	 *
 	 * <p>This setting controls how null values are displayed when stringified.
 	 * Used by the converter when encountering null objects during conversion.</p>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 */
 	public static final String SETTING_nullValue = "nullValue";
 
 	/**
 	 * Setting key for the special property name that returns the object itself.
-	 * 
+	 *
 	 * <p>Default value: <js>"&lt;self&gt;"</js></p>
-	 * 
+	 *
 	 * <p>This setting defines the property name that, when accessed, returns the
 	 * object itself rather than a property of the object. Useful for self-referential
 	 * property access in nested object navigation.</p>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 */
 	public static final String SETTING_selfValue = "selfValue";
 
 	/**
 	 * Setting key for the delimiter between collection elements and map entries.
-	 * 
+	 *
 	 * <p>Default value: <js>","</js></p>
-	 * 
+	 *
 	 * <p>This setting controls the separator used between elements when converting
 	 * collections, arrays, and maps to string representations.</p>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 */
 	public static final String SETTING_fieldSeparator = "fieldSeparator";
 
 	/**
 	 * Setting key for the prefix character(s) used around collection content.
-	 * 
+	 *
 	 * <p>Default value: <js>"["</js></p>
-	 * 
+	 *
 	 * <p>This setting defines the opening bracket or prefix used when displaying
 	 * collection and array contents in string format.</p>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 * @see #SETTING_collectionSuffix
 	 */
@@ -579,12 +583,12 @@ public class BasicBeanConverter implements BeanConverter {
 
 	/**
 	 * Setting key for the suffix character(s) used around collection content.
-	 * 
+	 *
 	 * <p>Default value: <js>"]"</js></p>
-	 * 
+	 *
 	 * <p>This setting defines the closing bracket or suffix used when displaying
 	 * collection and array contents in string format.</p>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 * @see #SETTING_collectionPrefix
 	 */
@@ -592,12 +596,12 @@ public class BasicBeanConverter implements BeanConverter {
 
 	/**
 	 * Setting key for the prefix character(s) used around map content.
-	 * 
+	 *
 	 * <p>Default value: <js>"{"</js></p>
-	 * 
+	 *
 	 * <p>This setting defines the opening brace or prefix used when displaying
 	 * map contents in string format.</p>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 * @see #SETTING_mapSuffix
 	 */
@@ -605,12 +609,12 @@ public class BasicBeanConverter implements BeanConverter {
 
 	/**
 	 * Setting key for the suffix character(s) used around map content.
-	 * 
+	 *
 	 * <p>Default value: <js>"}"</js></p>
-	 * 
+	 *
 	 * <p>This setting defines the closing brace or suffix used when displaying
 	 * map contents in string format.</p>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 * @see #SETTING_mapPrefix
 	 */
@@ -618,24 +622,24 @@ public class BasicBeanConverter implements BeanConverter {
 
 	/**
 	 * Setting key for the separator between map keys and values.
-	 * 
+	 *
 	 * <p>Default value: <js>"="</js></p>
-	 * 
+	 *
 	 * <p>This setting controls the separator used between keys and values when
 	 * converting map entries to string representations (e.g., "key=value").</p>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 */
 	public static final String SETTING_mapEntrySeparator = "mapEntrySeparator";
 
 	/**
 	 * Setting key for the DateTimeFormatter used for calendar objects.
-	 * 
+	 *
 	 * <p>Default value: <jsf>ISO_INSTANT</jsf></p>
-	 * 
+	 *
 	 * <p>This setting defines the date/time format used when converting Calendar
 	 * objects to string representations. Must be a valid DateTimeFormatter instance.</p>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 * @see java.time.format.DateTimeFormatter
 	 */
@@ -643,9 +647,9 @@ public class BasicBeanConverter implements BeanConverter {
 
 	/**
 	 * Setting key for the format used when displaying class names.
-	 * 
+	 *
 	 * <p>Default value: <js>"simple"</js></p>
-	 * 
+	 *
 	 * <p>This setting controls how class names are displayed in string representations.
 	 * Valid values are:</p>
 	 * <ul>
@@ -653,7 +657,7 @@ public class BasicBeanConverter implements BeanConverter {
 	 *    <li><js>"canonical"</js> - Canonical class name (e.g., "java.lang.String")</li>
 	 *    <li><js>"full"</js> - Full class name with package (e.g., "java.lang.String")</li>
 	 * </ul>
-	 * 
+	 *
 	 * @see Builder#addSetting(String, Object)
 	 */
 	public static final String SETTING_classNameFormat = "classNameFormat";

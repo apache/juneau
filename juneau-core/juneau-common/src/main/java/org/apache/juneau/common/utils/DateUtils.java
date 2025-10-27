@@ -375,7 +375,7 @@ public class DateUtils {
 	 * @return The padded string.
 	 */
 	public static String toValidIso8601DT(String in) {
-		Utils.assertArgNotNull("in", in);
+		AssertionUtils.assertArgNotNull("in", in);
 
 		in = in.trim();
 

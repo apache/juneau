@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.common.utils.*;
@@ -59,7 +60,7 @@ public class EntityTag {
 	 * @throws IllegalArgumentException If attempting to set an invalid entity tag value.
 	 */
 	public EntityTag(String value) {
-		Utils.assertArgNotNull("value", value);
+		assertArgNotNull("value", value);
 
 		value = StringUtils.trim(emptyIfNull(value));
 		isWeak = value.startsWith("W/");

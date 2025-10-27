@@ -17,13 +17,17 @@
 package org.apache.juneau.junit.bct;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.junit.bct.Utils.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.utils.*;
 import org.opentest4j.*;
 
 /**
@@ -404,8 +408,8 @@ public class BctAssertions {
 			actualStrings.add(tokens.stream().map(x -> converter.getNested(o, x)).collect(joining(",")));
 		}
 
-		throw assertEqualsFailed(Stream.of(expected).map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
-			actualStrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
+		throw assertEqualsFailed(Stream.of(expected).map(StringUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
+			actualStrings.stream().map(StringUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")),
 			args.getMessage("{0} bean assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
@@ -554,7 +558,7 @@ public class BctAssertions {
 			}
 		}
 
-		throw assertEqualsFailed(missingSubstrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "\"", "\"")), Utils.escapeForJava(a),
+		throw assertEqualsFailed(missingSubstrings.stream().map(StringUtils::escapeForJava).collect(joining("\", \"", "\"", "\"")), escapeForJava(a),
 			args.getMessage("{0} substring assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
@@ -711,8 +715,8 @@ public class BctAssertions {
 		if (errors.size() == 1)
 			throw errors.get(0);
 
-		throw assertEqualsFailed(Stream.of(expected).map(converter::stringify).map(Utils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
-			actualStrings.stream().map(Utils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
+		throw assertEqualsFailed(Stream.of(expected).map(converter::stringify).map(StringUtils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
+			actualStrings.stream().map(StringUtils::escapeForJava).collect(joining("\", \"", "[\"", "\"]")),
 			args.getMessage("{0} list assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 

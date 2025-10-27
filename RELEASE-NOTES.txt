@@ -26,6 +26,51 @@ Release Notes - Juneau - Version 9.2.0
         For example: org.apache.juneau.http.annotation.Path.
         The current use case is for developers to further annotate their code with documentation.
 
+** New Features - Multi-Key Cache and Concurrent Map Classes
+
+    * Renamed multi-key concurrent map classes for better consistency:
+        - Concurrent2KeyHashMap -> ConcurrentHashMap2Key
+        - Concurrent3KeyHashMap -> ConcurrentHashMap3Key
+        - Concurrent4KeyHashMap -> ConcurrentHashMap4Key
+        - Concurrent5KeyHashMap -> ConcurrentHashMap5Key
+
+    * Refactored ConcurrentHashMapXKey classes to remove caching functionality:
+        - Removed 'disabled' and 'supplier' parameters from constructors
+        - Now pure multi-key concurrent hash maps extending ConcurrentHashMap
+        - Added null key validation (throws IllegalArgumentException for null keys)
+        - Simplified get() and put() methods to use Tuple classes directly
+
+    * New Cache classes extending ConcurrentHashMap for single-key caching:
+        - Cache extends ConcurrentHashMap<K,V>
+        - Provides builder pattern with configurable options
+        - Features: disableCaching, maxSize, logOnExit, default supplier
+        - Support for both default supplier and per-call supplier override
+        - Built-in cache hit tracking via getCacheHits()
+        - Automatic cache eviction when maxSize is exceeded
+
+    * New multi-key Cache classes for composite key caching:
+        - Cache2<K1,K2,V> extends ConcurrentHashMap2Key<K1,K2,V>
+        - Cache3<K1,K2,K3,V> extends ConcurrentHashMap3Key<K1,K2,K3,V>
+        - Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V>
+        - Cache5<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap5Key<K1,K2,K3,K4,K5,V>
+        - Each supports builder pattern with same features as Cache
+        - Default suppliers use FunctionX interfaces (Function2, Function3, etc.)
+        - Null key validation for all key components
+
+    * Example usage:
+        Cache2<ClassLoader,Class<?>,ClassMeta> metaCache = Cache2
+            .of(ClassLoader.class, Class.class, ClassMeta.class)
+            .maxSize(500)
+            .supplier((cl, clazz) -> computeMeta(cl, clazz))
+            .build();
+
+        ClassMeta meta = metaCache.get(classLoader, MyClass.class);
+
+    * Migration notes:
+        - Code using Concurrent2KeyHashMap with disabled/supplier should migrate to Cache2
+        - Code using ConcurrentXKeyHashMap without caching features requires no changes
+        - Null keys are no longer allowed (previously bypassed cache, now throws exception)
+
 Release Notes - Juneau - Version 9.1.0
 
 ** Changes

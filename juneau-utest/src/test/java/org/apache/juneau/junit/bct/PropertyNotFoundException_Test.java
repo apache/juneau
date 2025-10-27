@@ -80,7 +80,7 @@ class PropertyNotFoundException_Test extends TestBase {
 
 			// This should throw PropertyNotFoundException
 			PropertyNotFoundException ex = assertThrows(PropertyNotFoundException.class, () -> {
-				converter.getNested(bean, Utils.tokenize("nonExistentProperty").get(0));
+				converter.getNested(bean, BctUtils.tokenize("nonExistentProperty").get(0));
 			});
 
 			assertTrue(ex.getMessage().contains("nonExistentProperty"));

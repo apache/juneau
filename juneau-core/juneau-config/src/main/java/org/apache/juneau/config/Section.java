@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.config;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.beans.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -99,7 +101,7 @@ public class Section {
 	 * @throws ParseException Unknown property was encountered in section.
 	 */
 	public <T> Optional<T> asBean(Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
-		Utils.assertArgNotNull("c", c);
+		assertArgNotNull("c", c);
 
 		if (! isPresent())
 			return Utils.opte();
@@ -182,7 +184,7 @@ public class Section {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> asInterface(final Class<T> c) {
-		Utils.assertArgNotNull("c", c);
+		assertArgNotNull("c", c);
 
 		if (! c.isInterface())
 			throw new IllegalArgumentException("Class '" + c.getName() + "' passed to toInterface() is not an interface.");
@@ -237,7 +239,7 @@ public class Section {
 	 * @throws UnsupportedOperationException If configuration is read only.
 	 */
 	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
-		Utils.assertArgNotNull("bean", bean);
+		assertArgNotNull("bean", bean);
 		if (! isPresent())
 			throw new IllegalArgumentException("Section '" + name + "' not found in configuration.");
 

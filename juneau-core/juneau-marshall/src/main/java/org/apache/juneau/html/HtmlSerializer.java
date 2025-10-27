@@ -1554,12 +1554,12 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	protected JsonMap properties() {
 		// @formatter:off
 		return filteredMap()
-			.append("uriAnchorText", uriAnchorText)
+			.append("addBeanTypesHtml", addBeanTypesHtml)
+			.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
 			.append("detectLabelParameters", detectLabelParameters)
 			.append("detectLinksInStrings", detectLinksInStrings)
 			.append("labelParameter", labelParameter)
-			.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
-			.append("addBeanTypesHtml", addBeanTypesHtml);
+			.append("uriAnchorText", uriAnchorText);
 		// @formatter:on
 	}
 }

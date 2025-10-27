@@ -19,6 +19,7 @@ package org.apache.juneau.common.collections;
 import java.util.concurrent.*;
 
 import org.apache.juneau.common.function.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * A thread-safe concurrent hash map that uses composite three-part keys for lookups.
@@ -32,16 +33,13 @@ import org.apache.juneau.common.function.*;
  * <ul class='spaced-list'>
  * 	<li><b>Three-Part Keys:</b> Values are indexed by a triplet of keys (K1, K2, K3) instead of a single key
  * 	<li><b>Thread-Safe:</b> Inherits all thread-safety guarantees from {@link ConcurrentHashMap}
- * 	<li><b>Null Keys Supported:</b> All key parts can be <jk>null</jk>
- * 	<li><b>Optional Caching:</b> Can be disabled to always invoke a supplier function instead of caching
- * 	<li><b>Supplier Integration:</b> Optionally provides automatic value computation via a {@link Function3}
  * </ul>
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a map for caching translations by language, country, and key</jc>
- * 	Concurrent3KeyHashMap&lt;String,String,String,String&gt; <jv>translations</jv> =
- * 		<jk>new</jk> Concurrent3KeyHashMap&lt;&gt;();
+ * 	ConcurrentHashMap3Key&lt;String,String,String,String&gt; <jv>translations</jv> =
+ * 		<jk>new</jk> ConcurrentHashMap3Key&lt;&gt;();
  *
  * 	<jc>// Store a value</jc>
  * 	<jv>translations</jv>.put(<js>"en"</js>, <js>"US"</js>, <js>"greeting"</js>, <js>"Hello"</js>);
@@ -54,8 +52,8 @@ import org.apache.juneau.common.function.*;
  * <h5 class='section'>With Supplier:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a map that automatically loads translations</jc>
- * 	Concurrent3KeyHashMap&lt;String,String,String,String&gt; <jv>cache</jv> =
- * 		<jk>new</jk> Concurrent3KeyHashMap&lt;&gt;(<jk>false</jk>, (lang, country, key) -&gt;
+ * 	ConcurrentHashMap3Key&lt;String,String,String,String&gt; <jv>cache</jv> =
+ * 		<jk>new</jk> ConcurrentHashMap3Key&lt;&gt;(<jk>false</jk>, (lang, country, key) -&gt;
  * 			translationService.load(lang, country, key)
  * 		);
  *
@@ -72,8 +70,8 @@ import org.apache.juneau.common.function.*;
  *
  * <p class='bjava'>
  * 	<jc>// Create a disabled cache (useful for testing)</jc>
- * 	Concurrent3KeyHashMap&lt;String,String,String,String&gt; <jv>cache</jv> =
- * 		<jk>new</jk> Concurrent3KeyHashMap&lt;&gt;(<jk>true</jk>, (lang, country, key) -&gt;
+ * 	ConcurrentHashMap3Key&lt;String,String,String,String&gt; <jv>cache</jv> =
+ * 		<jk>new</jk> ConcurrentHashMap3Key&lt;&gt;(<jk>true</jk>, (lang, country, key) -&gt;
  * 			translationService.load(lang, country, key)
  * 		);
  *
@@ -114,9 +112,9 @@ import org.apache.juneau.common.function.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link Concurrent2KeyHashMap}
- * 	<li class='jc'>{@link Concurrent4KeyHashMap}
- * 	<li class='jc'>{@link Concurrent5KeyHashMap}
+ * 	<li class='jc'>{@link ConcurrentHashMap2Key}
+ * 	<li class='jc'>{@link ConcurrentHashMap4Key}
+ * 	<li class='jc'>{@link ConcurrentHashMap5Key}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">Overview &gt; juneau-common</a>
  * </ul>
  *
@@ -126,63 +124,36 @@ import org.apache.juneau.common.function.*;
  * @param <V> The value type.
  * @serial exclude
  */
-public class Concurrent3KeyHashMap<K1,K2,K3,V> extends ConcurrentHashMap<Tuple3<K1,K2,K3>,V> {
+public class ConcurrentHashMap3Key<K1,K2,K3,V> extends ConcurrentHashMap<Tuple3<K1,K2,K3>,V> {
 
 	private static final long serialVersionUID = 1L;
-	private final boolean disabled;
-	private final Function3<K1,K2,K3,V> supplier;
-
-	/**
-	 * Constructs a new Concurrent3KeyHashMap with caching enabled and no supplier.
-	 */
-	public Concurrent3KeyHashMap() {
-		this(false, null);
-	}
-
-	/**
-	 * Constructs a new Concurrent3KeyHashMap with optional caching and supplier.
-	 *
-	 * @param disabled If <jk>true</jk>, the map doesn't cache values.
-	 * @param supplier Optional supplier function for automatic value computation.
-	 */
-	public Concurrent3KeyHashMap(boolean disabled, Function3<K1,K2,K3,V> supplier) {
-		this.disabled = disabled;
-		this.supplier = supplier;
-	}
 
 	/**
 	 * Retrieves the value associated with the specified three-part key.
 	 *
-	 * @param key1 First key component. Can be <jk>null</jk>.
-	 * @param key2 Second key component. Can be <jk>null</jk>.
-	 * @param key3 Third key component. Can be <jk>null</jk>.
+	 * @param key1 First key component. Must not be <jk>null</jk>.
+	 * @param key2 Second key component. Must not be <jk>null</jk>.
+	 * @param key3 Third key component. Must not be <jk>null</jk>.
 	 * @return The value associated with the key, or <jk>null</jk> if not found.
+	 * @throws IllegalArgumentException if key1, key2, or key3 is <jk>null</jk>.
 	 */
 	public V get(K1 key1, K2 key2, K3 key3) {
-		if (disabled)
-			return (supplier == null ? null : supplier.apply(key1, key2, key3));
-		var key = Tuple3.of(key1, key2, key3);
-		var v = super.get(key);
-		if (v == null && supplier != null) {
-			v = supplier.apply(key1, key2, key3);
-			super.put(key, v);
-		}
-		return v;
+		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
+		return super.get(Tuple3.of(key1, key2, key3));
 	}
 
 	/**
 	 * Associates the specified value with the specified three-part key in this map.
 	 *
-	 * @param key1 First key component. Can be <jk>null</jk>.
-	 * @param key2 Second key component. Can be <jk>null</jk>.
-	 * @param key3 Third key component. Can be <jk>null</jk>.
+	 * @param key1 First key component. Must not be <jk>null</jk>.
+	 * @param key2 Second key component. Must not be <jk>null</jk>.
+	 * @param key3 Third key component. Must not be <jk>null</jk>.
 	 * @param value The value to associate with the key.
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
+	 * @throws IllegalArgumentException if key1, key2, or key3 is <jk>null</jk>.
 	 */
 	public V put(K1 key1, K2 key2, K3 key3, V value) {
-		if (disabled)
-			return null;
-		var key = Tuple3.of(key1, key2, key3);
-		return super.put(key, value);
+		AssertionUtils.assertArgsNotNull("key1", key1, "key2", key2, "key3", key3);
+		return super.put(Tuple3.of(key1, key2, key3), value);
 	}
 }

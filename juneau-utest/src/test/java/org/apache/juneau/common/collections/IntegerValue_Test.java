@@ -97,6 +97,66 @@ class IntegerValue_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// increment/decrement tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void b05_increment() {
+		var a = IntegerValue.of(5);
+		a.increment();
+		assertEquals(6, a.get());
+	}
+
+	@Test
+	void b06_decrement() {
+		var a = IntegerValue.of(5);
+		a.decrement();
+		assertEquals(4, a.get());
+	}
+
+	@Test
+	void b07_incrementAndGet() {
+		var a = IntegerValue.of(5);
+		assertEquals(6, a.incrementAndGet());
+		assertEquals(6, a.get());
+	}
+
+	@Test
+	void b08_decrementAndGet() {
+		var a = IntegerValue.of(5);
+		assertEquals(4, a.decrementAndGet());
+		assertEquals(4, a.get());
+	}
+
+	@Test
+	void b09_add() {
+		var a = IntegerValue.of(10);
+		a.add(5);
+		assertEquals(15, a.get());
+	}
+
+	@Test
+	void b10_addAndGet() {
+		var a = IntegerValue.of(10);
+		assertEquals(15, a.addAndGet(5));
+		assertEquals(15, a.get());
+	}
+
+	@Test
+	void b11_is() {
+		var a = IntegerValue.of(42);
+		assertTrue(a.is(42));
+		assertFalse(a.is(43));
+	}
+
+	@Test
+	void b12_isAny() {
+		var a = IntegerValue.of(5);
+		assertTrue(a.isAny(3, 5, 7));
+		assertFalse(a.isAny(1, 2));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Inherited Value<Integer> functionality tests
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -189,6 +249,27 @@ class IntegerValue_Test extends TestBase {
 		var c = a.map(x -> x * 2);
 		assertNull(c.get());
 		assertFalse(c.isPresent());
+	}
+
+	@Test
+	void c10_setIf() {
+		var a = IntegerValue.of(10);
+		a.setIf(true, 20);
+		assertEquals(20, a.get());
+
+		a.setIf(false, 30);
+		assertEquals(20, a.get());  // Should not change
+	}
+
+	@Test
+	void c11_update() {
+		var a = IntegerValue.of(10);
+		a.update(x -> x * 2);
+		assertEquals(20, a.get());
+
+		a.set(null);
+		a.update(x -> x * 2);  // Should be no-op
+		assertNull(a.get());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

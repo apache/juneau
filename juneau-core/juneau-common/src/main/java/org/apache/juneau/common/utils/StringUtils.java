@@ -39,6 +39,8 @@ import java.util.regex.*;
 import java.util.stream.*;
 import java.util.zip.*;
 
+import org.apache.juneau.common.collections.*;
+
 /**
  * Reusable string utility methods.
  */
@@ -48,6 +50,20 @@ public class StringUtils {
 	 * Predicate check to filter out null and empty strings.
 	 */
 	public static final Predicate<String> NOT_EMPTY = Utils::isNotEmpty;
+
+	/**
+	 * Thread-local cache of MessageFormat objects for improved performance.
+	 * 
+	 * <p>MessageFormat objects are not thread-safe, so we use a ThreadLocal cache
+	 * to ensure each thread has its own set of cached formatters. This avoids:
+	 * <ul>
+	 *   <li>Repeated parsing of the same patterns</li>
+	 *   <li>Thread synchronization overhead</li>
+	 *   <li>Object allocation for frequently used patterns</li>
+	 * </ul>
+	 */
+	private static final ThreadLocal<Cache<String,MessageFormat>> MESSAGE_FORMAT_CACHE = 
+		ThreadLocal.withInitial(() -> Cache.of(String.class, MessageFormat.class).maxSize(100).build());
 
 	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
 
@@ -139,7 +155,7 @@ public class StringUtils {
 
 		var bIn = in.getBytes(IOUtils.UTF8);
 
-		assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
+		AssertionUtils.assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
 
 		// Strip out any trailing '=' filler characters.
 		var inLength = bIn.length;
@@ -312,8 +328,8 @@ public class StringUtils {
 			gos.write(contents.getBytes());
 			gos.finish();
 			gos.flush();
+			return baos.toByteArray();
 		}
-		return baos.toByteArray();
 	}
 
 	/**
@@ -540,6 +556,71 @@ public class StringUtils {
 	}
 
 	/**
+	 * Escapes a string for safe inclusion in Java source code.
+	 *
+	 * <p>This method converts special characters to their Java escape sequences and
+	 * converts non-printable ASCII characters to Unicode escape sequences.
+	 *
+	 * <h5 class='section'>Escape mappings:</h5>
+	 * <ul>
+	 *   <li>{@code "} → {@code \"}</li>
+	 *   <li>{@code \} → {@code \\}</li>
+	 *   <li>{@code \n} → {@code \\n}</li>
+	 *   <li>{@code \r} → {@code \\r}</li>
+	 *   <li>{@code \t} → {@code \\t}</li>
+	 *   <li>{@code \f} → {@code \\f}</li>
+	 *   <li>{@code \b} → {@code \\b}</li>
+	 *   <li>Non-printable characters → {@code \\uXXXX}</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <jk>var</jk> <jv>escaped</jv> = <jsm>escapeForJava</jsm>(<js>"Hello\nWorld\"Test\""</js>);
+	 *   <jc>// Returns: "Hello\\nWorld\\\"Test\\\""</jc>
+	 * </p>
+	 *
+	 * @param s The string to escape.
+	 * @return The escaped string safe for Java source code, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String escapeForJava(String s) {
+		if (s == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var c : s.toCharArray()) {
+			switch (c) {
+			case '\"':
+				sb.append("\\\"");
+				break;
+			case '\\':
+				sb.append("\\\\");
+				break;
+			case '\n':
+				sb.append("\\n");
+				break;
+			case '\r':
+				sb.append("\\r");
+				break;
+			case '\t':
+				sb.append("\\t");
+				break;
+			case '\f':
+				sb.append("\\f");
+				break;
+			case '\b':
+				sb.append("\\b");
+				break;
+			default:
+				if (c < 0x20 || c > 0x7E) {
+					sb.append(String.format("\\u%04x", (int)c));
+				} else {
+					sb.append(c);
+				}
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
 	 * Returns the first character in the specified string.
 	 *
 	 * @param s The string to check.
@@ -617,6 +698,14 @@ public class StringUtils {
 	/**
 	 * Similar to {@link MessageFormat#format(String, Object...)} except allows you to specify POJO arguments.
 	 *
+	 * <p>This method uses a thread-local cache of {@link MessageFormat} objects for improved performance
+	 * when the same patterns are used repeatedly. The cache is limited to 100 entries per thread to prevent
+	 * unbounded growth.
+	 *
+	 * <p>For arguments with format types (e.g., {@code {0,number,#.##}}), the original argument is preserved
+	 * to allow proper formatting. For simple placeholders (e.g., {@code {0}}), arguments are converted to
+	 * readable strings using {@link #convertToReadable(Object)}.
+	 *
 	 * @param pattern The string pattern.
 	 * @param args The arguments.
 	 * @return The formatted string.
@@ -624,15 +713,27 @@ public class StringUtils {
 	public static String format(String pattern, Object...args) {
 		if (args == null || args.length == 0)
 			return pattern;
-		var args2 = new Object[args.length];
-		for (var i = 0; i < args.length; i++)
-			args2[i] = convertToReadable(args[i]);
 
 		var c = countChars(pattern, '\'');
 		if (c % 2 != 0)
 			throw new AssertionError("Dangling single quote found in pattern: " + pattern);
 
-		return MessageFormat.format(pattern, args2);
+		// Get or create a cached MessageFormat for this pattern (thread-safe via ThreadLocal)
+		var cache = MESSAGE_FORMAT_CACHE.get();
+		var mf = cache.get(pattern, () -> new MessageFormat(pattern));
+		
+		// Determine which arguments have format types and need to preserve their original type
+		var formats = mf.getFormatsByArgumentIndex();
+		
+		var args2 = new Object[args.length];
+		for (var i = 0; i < args.length; i++) {
+			// If there's a Format specified for this index, keep the original argument
+			// Otherwise, convert to readable string for better output
+			var hasFormat = i < formats.length && formats[i] != null;
+			args2[i] = hasFormat ? args[i] : convertToReadable(args[i]);
+		}
+
+		return mf.format(args2);
 	}
 
 	/**
@@ -1834,7 +1935,7 @@ public class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static int parseIntWithSuffix(String s) {
-		assertArgNotNull("s", s);
+		AssertionUtils.assertArgNotNull("s", s);
 		var m = multiplier(s);
 		if (m == 1)
 			return Integer.decode(s);
@@ -1910,7 +2011,7 @@ public class StringUtils {
 	 * @return The parsed value.
 	 */
 	public static long parseLongWithSuffix(String s) {
-		assertArgNotNull("s", s);
+		AssertionUtils.assertArgNotNull("s", s);
 		var m = multiplier2(s);
 		if (m == 1)
 			return Long.decode(s);

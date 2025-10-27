@@ -427,7 +427,7 @@ public class TestUtils extends Utils2 {
 	 *
 	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
 	 * <p class='bjava'>
-	 * 	<jc>// Non-String, non-Predicate objects use Objects.equals() comparison</jc>
+	 * 	<jc>// Non-String, non-Predicate objects use Utils.eq() comparison</jc>
 	 * 	assertList(List.of(1, 2, 3), 1, 2, 3); <jc>// Integer objects</jc>
 	 * 	assertList(List.of(<jv>myBean1</jv>, <jv>myBean2</jv>), <jv>myBean1</jv>, <jv>myBean2</jv>); <jc>// Custom objects</jc>
 	 * </p>

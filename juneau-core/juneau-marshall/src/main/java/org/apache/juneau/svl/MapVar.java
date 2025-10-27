@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.common.utils.*;
@@ -41,7 +43,7 @@ public abstract class MapVar extends DefaultingVar {
 	 */
 	public MapVar(String name, Map m) {
 		super(name);
-		Utils.assertArgNotNull("m", m);
+		assertArgNotNull("m", m);
 		this.m = m;
 	}
 

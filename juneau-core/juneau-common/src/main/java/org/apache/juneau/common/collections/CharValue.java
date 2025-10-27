@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 /**
  * A simple mutable character value.
  *
@@ -87,5 +89,188 @@ public class CharValue extends Value<Character> {
 	 */
 	public CharValue(Character value) {
 		super(value);
+	}
+
+	/**
+	 * Increments the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	<jv>value</jv>.increment();
+	 * 	<jsm>assertEquals</jsm>('B', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public CharValue increment() {
+		var v = get();
+		set((char)((v == null ? 0 : v) + 1));
+		return this;
+	}
+
+	/**
+	 * Decrements the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	<jv>value</jv>.decrement();
+	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public CharValue decrement() {
+		var v = get();
+		set((char)((v == null ? 0 : v) - 1));
+		return this;
+	}
+
+	/**
+	 * Increments the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.incrementAndGet();  <jc>// Returns 'B'</jc>
+	 * 	<jsm>assertEquals</jsm>('B', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @return The incremented value.
+	 */
+	public Character incrementAndGet() {
+		var v = get();
+		var result = (char)((v == null ? 0 : v) + 1);
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Decrements the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.decrementAndGet();  <jc>// Returns 'A'</jc>
+	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @return The decremented value.
+	 */
+	public Character decrementAndGet() {
+		var v = get();
+		var result = (char)((v == null ? 0 : v) - 1);
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Adds the specified value to the current value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	<jv>value</jv>.add((<jk>char</jk>)5);
+	 * 	<jsm>assertEquals</jsm>('F', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return This object.
+	 */
+	public CharValue add(Character x) {
+		var v = get();
+		set((char)((v == null ? 0 : v) + (x == null ? 0 : x)));
+		return this;
+	}
+
+	/**
+	 * Adds the specified value to the current value and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>char</jk>)5);  <jc>// Returns 'F'</jc>
+	 * 	<jsm>assertEquals</jsm>('F', <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return The new value after addition.
+	 */
+	public Character addAndGet(Character x) {
+		var v = get();
+		var result = (char)((v == null ? 0 : v) + (x == null ? 0 : x));
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Checks if the current value is equal to the specified character.
+	 *
+	 * <p>
+	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('A');
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is('A'));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is('B'));
+	 * </p>
+	 *
+	 * @param value The character to compare to.
+	 * @return <jk>true</jk> if the current value is equal to the specified character.
+	 */
+	public boolean is(Character value) {
+		return eq(get(), value);
+	}
+
+	/**
+	 * Checks if the current value matches any of the specified characters.
+	 *
+	 * <p>
+	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison of each character.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny('A', 'B', 'C'));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny('X', 'Y'));
+	 * </p>
+	 *
+	 * @param values The characters to compare to.
+	 * @return <jk>true</jk> if the current value matches any of the specified characters.
+	 */
+	public boolean isAny(Character... values) {
+		var current = get();
+		for (var value : values)
+			if (eq(current, value))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Checks if the current value matches any character in the specified string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	CharValue <jv>value</jv> = CharValue.<jsm>of</jsm>('B');
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(<js>"ABC"</js>));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(<js>"XYZ"</js>));
+	 *
+	 * 	<jc>// Null/empty string returns false</jc>
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny((<jk>null</jk>));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(<js>""</js>));
+	 * </p>
+	 *
+	 * @param values The string containing characters to compare to.
+	 * @return <jk>true</jk> if the current value matches any character in the string.
+	 */
+	public boolean isAny(String values) {
+		if (values == null || values.isEmpty())
+			return false;
+		var current = get();
+		if (current == null)
+			return false;
+		return values.indexOf(current) >= 0;
 	}
 }

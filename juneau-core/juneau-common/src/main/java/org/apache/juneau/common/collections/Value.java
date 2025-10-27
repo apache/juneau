@@ -428,6 +428,128 @@ public class Value<T> {
 		return this;
 	}
 
+	/**
+	 * Sets the value only if the specified condition is <jk>true</jk>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"old"</js>);
+	 * 	<jv>value</jv>.setIf(<jk>true</jk>, <js>"new"</js>);   <jc>// Sets to "new"</jc>
+	 * 	<jv>value</jv>.setIf(<jk>false</jk>, <js>"newer"</js>);  <jc>// Does nothing</jc>
+	 * 	<jsm>assertEquals</jsm>(<js>"new"</js>, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param condition The condition to check.
+	 * @param t The value to set if condition is <jk>true</jk>.
+	 * @return This object.
+	 */
+	public Value<T> setIf(boolean condition, T t) {
+		if (condition)
+			set(t);
+		return this;
+	}
+
+	/**
+	 * Updates the value in-place using the specified function.
+	 *
+	 * <p>
+	 * If the current value is <jk>null</jk>, this is a no-op.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	<jv>value</jv>.update(String::toUpperCase);
+	 * 	<jsm>assertEquals</jsm>(<js>"HELLO"</js>, <jv>value</jv>.get());
+	 *
+	 * 	<jc>// No-op when null</jc>
+	 * 	Value&lt;String&gt; <jv>empty</jv> = Value.<jsm>empty</jsm>();
+	 * 	<jv>empty</jv>.update(String::toUpperCase);  <jc>// Does nothing</jc>
+	 * 	<jsm>assertNull</jsm>(<jv>empty</jv>.get());
+	 * </p>
+	 *
+	 * @param updater The function to apply to the current value. Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Value<T> update(Function<T,T> updater) {
+		if (t != null)
+			set(updater.apply(t));
+		return this;
+	}
+
+	/**
+	 * If a value is present, and the value matches the given predicate, returns a {@link Value} describing the
+	 * value, otherwise returns an empty {@link Value}.
+	 *
+	 * <p>
+	 * This method is analogous to {@link java.util.Optional#filter(Predicate)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Value&lt;String&gt; <jv>filtered</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 3);
+	 * 	<jsm>assertTrue</jsm>(<jv>filtered</jv>.isPresent());
+	 *
+	 * 	Value&lt;String&gt; <jv>filtered2</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 10);
+	 * 	<jsm>assertFalse</jsm>(<jv>filtered2</jv>.isPresent());
+	 * </p>
+	 *
+	 * @param predicate The predicate to apply to the value, if present. Must not be <jk>null</jk>.
+	 * @return A {@link Value} describing the value if it is present and matches the predicate, otherwise an empty {@link Value}.
+	 */
+	public Value<T> filter(Predicate<? super T> predicate) {
+		if (t == null)
+			return Value.empty();
+		return predicate.test(t) ? this : Value.empty();
+	}
+
+	/**
+	 * If a value is present, returns the result of applying the given {@link Value}-bearing mapping function to
+	 * the value, otherwise returns an empty {@link Value}.
+	 *
+	 * <p>
+	 * This method is similar to {@link #map(Function)}, but the mapping function returns a {@link Value} rather
+	 * than a simple value. This is analogous to {@link java.util.Optional#flatMap(Function)}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Value&lt;String&gt; <jv>value</jv> = Value.<jsm>of</jsm>(<js>"hello"</js>);
+	 * 	Value&lt;Integer&gt; <jv>length</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Value.<jsm>of</jsm>(<jv>s</jv>.length()));
+	 * 	<jsm>assertEquals</jsm>(5, <jv>length</jv>.get());
+	 *
+	 * 	<jc>// Returns empty if mapper returns empty</jc>
+	 * 	Value&lt;String&gt; <jv>empty</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Value.<jsm>empty</jsm>());
+	 * 	<jsm>assertFalse</jsm>(<jv>empty</jv>.isPresent());
+	 * </p>
+	 *
+	 * @param <T2> The type of value in the {@link Value} returned by the mapping function.
+	 * @param mapper The mapping function to apply to the value, if present. Must not be <jk>null</jk>.
+	 * @return The result of applying the {@link Value}-bearing mapping function to the value if present,
+	 *         otherwise an empty {@link Value}.
+	 */
+	public <T2> Value<T2> flatMap(Function<? super T, ? extends Value<? extends T2>> mapper) {
+		if (t == null)
+			return Value.empty();
+		var result = mapper.apply(t);
+		@SuppressWarnings("unchecked")
+		var cast = (Value<T2>) result;
+		return cast;
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Value))
+			return false;
+		Value<?> other = (Value<?>) obj;
+		return t == null ? other.t == null : t.equals(other.t);
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return t == null ? 0 : t.hashCode();
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return "Value(" + t + ")";

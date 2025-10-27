@@ -393,14 +393,14 @@ public class CallLoggerRule {
 		// @formatter:off
 		return filteredMap()
 			.append("codeFilter", statusFilter)
-			.append("exceptionFilter", exceptionFilter)
-			.append("requestFilter", requestFilter)
-			.append("responseFilter", responseFilter)
-			.append("level", level)
-			.append("requestDetail", requestDetail)
-			.append("responseDetail", responseDetail)
 			.append("enabled", enabled)
 			.append("enabledTest", enabledTest)
+			.append("exceptionFilter", exceptionFilter)
+			.append("level", level)
+			.append("requestDetail", requestDetail)
+			.append("requestFilter", requestFilter)
+			.append("responseDetail", responseDetail)
+			.append("responseFilter", responseFilter)
 			.asReadableString();
 		// @formatter:off
 	}

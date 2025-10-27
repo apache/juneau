@@ -293,14 +293,14 @@ public class ListBuilder<E> {
 	 */
 	public List<E> build() {
 		if (sparse) {
-			if (list != null && list.isEmpty())
+			if (nn(list) && list.isEmpty())
 				list = null;
 		} else {
 			if (list == null)
 				list = new ArrayList<>(0);
 		}
-		if (list != null) {
-			if (comparator != null)
+		if (nn(list)) {
+			if (nn(comparator))
 				Collections.sort(list, comparator);
 			if (unmodifiable)
 				list = unmodifiableList(list);

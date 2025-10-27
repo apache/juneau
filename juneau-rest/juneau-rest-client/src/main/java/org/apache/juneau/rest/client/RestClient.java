@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client;
 import static java.lang.Character.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -2068,7 +2069,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder errorCodes(Predicate<Integer> value) {
-			errorCodes = Utils.assertArgNotNull("value", value);
+			errorCodes = assertArgNotNull("value", value);
 			return this;
 		}
 
@@ -6810,7 +6811,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
 	 * </ul>
-	
+
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param rootUrl The URI of the REST interface.

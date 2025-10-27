@@ -324,7 +324,7 @@ class PropertyExtractor_Test extends TestBase {
 
 			// Test that the custom extractor works
 			var bean = new TestBean("test", 42);
-			var result = customConverter.getNested(bean, Utils.tokenize("customProp").get(0));
+			var result = customConverter.getNested(bean, BctUtils.tokenize("customProp").get(0));
 
 			// Should get our custom result
 			assertEquals("CUSTOM[TestBean.customProp]", result);
@@ -365,8 +365,8 @@ class PropertyExtractor_Test extends TestBase {
 			// Test that each extractor handles its specific properties
 			var bean = new TestBean("test", 42);
 
-			assertEquals("FIRST_EXTRACTOR", converter.getNested(bean, Utils.tokenize("first").get(0)));
-			assertEquals("SECOND_EXTRACTOR", converter.getNested(bean, Utils.tokenize("second").get(0)));
+			assertEquals("FIRST_EXTRACTOR", converter.getNested(bean, BctUtils.tokenize("first").get(0)));
+			assertEquals("SECOND_EXTRACTOR", converter.getNested(bean, BctUtils.tokenize("second").get(0)));
 		}
 
 		@Test
@@ -391,11 +391,11 @@ class PropertyExtractor_Test extends TestBase {
 			var bean = new TestBean("test", 42);
 
 			// Custom property should use our extractor
-			assertEquals("CUSTOM_VALUE", converter.getNested(bean, Utils.tokenize("custom").get(0)));
+			assertEquals("CUSTOM_VALUE", converter.getNested(bean, BctUtils.tokenize("custom").get(0)));
 
 			// Regular properties should use default extractors
-			assertEquals("test", converter.getNested(bean, Utils.tokenize("name").get(0)));
-			assertEquals("42", converter.getNested(bean, Utils.tokenize("value").get(0)));
+			assertEquals("test", converter.getNested(bean, BctUtils.tokenize("name").get(0)));
+			assertEquals("42", converter.getNested(bean, BctUtils.tokenize("value").get(0)));
 		}
 	}
 

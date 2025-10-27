@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.bean.openapi3;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 

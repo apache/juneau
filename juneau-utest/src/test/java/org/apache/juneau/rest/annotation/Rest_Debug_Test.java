@@ -537,11 +537,11 @@ public class Rest_Debug_Test extends TestBase {
 
 	@Rest(
 		callLogger=CaptureLogger.class,
-		debugOn=""
-			+ "C1.b1=false,C1.b2=false,C1.b3=FALSE,C1.b4=FALSE,C1.b5=FALSE,C1.b6=FALSE,"
-			+ " C1.c1 , C1.c2 = true , C1.c3 = TRUE , C1.c4 = TRUE , C1.c5 = TRUE , C1.c6 = TRUE , "
-			+ "C1.d1=conditional,C1.d2=conditional,C1.d3=CONDITIONAL,C1.d4=CONDITIONAL,C1.d5=CONDITIONAL,C1.d6=CONDITIONAL,"
-			+ "C1.e1=foo,C1.e2,C1.e3=foo,C1.e4=foo,C1.e5=foo,C1.e6=foo,"
+		debugOn="""
+			C1.b1=false,C1.b2=false,C1.b3=FALSE,C1.b4=FALSE,C1.b5=FALSE,C1.b6=FALSE,\
+			 C1.c1 , C1.c2 = true , C1.c3 = TRUE , C1.c4 = TRUE , C1.c5 = TRUE , C1.c6 = TRUE , \
+			C1.d1=conditional,C1.d2=conditional,C1.d3=CONDITIONAL,C1.d4=CONDITIONAL,C1.d5=CONDITIONAL,C1.d6=CONDITIONAL,\
+			C1.e1=foo,C1.e2,C1.e3=foo,C1.e4=foo,C1.e5=foo,C1.e6=foo,"""
 	)
 	public static class C1 implements BasicUniversalConfig {
 
@@ -870,11 +870,12 @@ public class Rest_Debug_Test extends TestBase {
 	}
 	@Rest(
 		callLogger=CaptureLogger.class,
-		debugOn="$S{C2DebugEnabled},"
-			+ "C2.b1=false,C2.b2=false,C2.b3=FALSE,C2.b4=FALSE,C2.b5=FALSE,C2.b6=FALSE,"
-			+ " C2.c1 , C2.c2 = true , C2.c3 = TRUE , C2.c4 = TRUE , C2.c5 = TRUE , C2.c6 = TRUE , "
-			+ "C2.d1=conditional,C2.d2=conditional,C2.d3=CONDITIONAL,C2.d4=CONDITIONAL,C2.d5=CONDITIONAL,C2.d6=CONDITIONAL,"
-			+ "C2.e1=foo,C2.e2=,C2.e3=foo,C2.e4=foo,C2.e5=foo,C2.e6=foo,"
+		debugOn="""
+			$S{C2DebugEnabled},\
+			C2.b1=false,C2.b2=false,C2.b3=FALSE,C2.b4=FALSE,C2.b5=FALSE,C2.b6=FALSE,\
+			 C2.c1 , C2.c2 = true , C2.c3 = TRUE , C2.c4 = TRUE , C2.c5 = TRUE , C2.c6 = TRUE , \
+			C2.d1=conditional,C2.d2=conditional,C2.d3=CONDITIONAL,C2.d4=CONDITIONAL,C2.d5=CONDITIONAL,C2.d6=CONDITIONAL,\
+			C2.e1=foo,C2.e2=,C2.e3=foo,C2.e4=foo,C2.e5=foo,C2.e6=foo,"""
 	)
 	public static class C2 implements BasicUniversalConfig {
 

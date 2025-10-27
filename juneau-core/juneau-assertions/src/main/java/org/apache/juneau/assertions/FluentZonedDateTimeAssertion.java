@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.serializer.*;
 
@@ -168,7 +169,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(ZonedDateTime value, ChronoUnit precision) throws AssertionError {
-		Utils.assertArgNotNull("precision", precision);
+		assertArgNotNull("precision", precision);
 		var v = orElse(null);
 		if (valueIsNull() && value == null)
 			return returns();
@@ -188,7 +189,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(ZonedDateTime value) throws AssertionError {
-		Utils.assertArgNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (!(value().isAfter(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
@@ -210,7 +211,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(ZonedDateTime value) throws AssertionError {
-		Utils.assertArgNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (!(value().isBefore(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
@@ -234,8 +235,8 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public R isBetween(ZonedDateTime lower, ZonedDateTime upper) throws AssertionError {
 		isExists();
-		Utils.assertArgNotNull("lower", lower);
-		Utils.assertArgNotNull("upper", upper);
+		assertArgNotNull("lower", lower);
+		assertArgNotNull("upper", upper);
 		isLte(upper);
 		isGte(lower);
 		return returns();

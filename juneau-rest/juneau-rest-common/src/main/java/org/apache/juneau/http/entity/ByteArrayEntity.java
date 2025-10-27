@@ -16,11 +16,12 @@
  */
 package org.apache.juneau.http.entity;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -162,7 +163,7 @@ public class ByteArrayEntity extends BasicHttpEntity {
 
 	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
-		Utils.assertArgNotNull("out", out);
+		assertArgNotNull("out", out);
 		out.write(content());
 	}
 

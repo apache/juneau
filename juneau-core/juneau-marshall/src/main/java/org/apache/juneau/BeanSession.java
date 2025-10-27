@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -1107,9 +1108,9 @@ public class BeanSession extends ContextSession {
 	 * class.
 	 */
 	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
-		Utils.assertArgNotNull("o", o);
-		Utils.assertArgNotNull("c", c);
-		Utils.assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", ClassUtils.className(c), ClassUtils.className(o), 0);
+		assertArgNotNull("o", o);
+		assertArgNotNull("c", c);
+		assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", ClassUtils.className(c), ClassUtils.className(o), 0);
 
 		ClassMeta cm = getClassMeta(c);
 
@@ -1587,7 +1588,7 @@ public class BeanSession extends ContextSession {
 	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
 	 */
 	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
-		Utils.assertArgNotNull("classes", classes);
+		assertArgNotNull("classes", classes);
 		ClassMeta[] cm = new ClassMeta<?>[classes.length];
 		for (int i = 0; i < classes.length; i++)
 			cm[i] = getClassMeta(classes[i]);

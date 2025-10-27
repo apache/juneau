@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.concurrent.atomic.*;
 
 /**
@@ -107,5 +109,162 @@ public class ShortValue extends Value<Short> {
 		var v = get();
 		set(v == null ? 1 : (short)(v + 1));
 		return v == null ? 0 : v;
+	}
+
+	/**
+	 * Increments the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jv>counter</jv>.increment();
+	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public ShortValue increment() {
+		var v = get();
+		set((short)((v == null ? 0 : v) + 1));
+		return this;
+	}
+
+	/**
+	 * Decrements the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jv>counter</jv>.decrement();
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public ShortValue decrement() {
+		var v = get();
+		set((short)((v == null ? 0 : v) - 1));
+		return this;
+	}
+
+	/**
+	 * Increments the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
+	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return The incremented value.
+	 */
+	public Short incrementAndGet() {
+		var v = get();
+		var result = (short)((v == null ? 0 : v) + 1);
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Decrements the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>counter</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return The decremented value.
+	 */
+	public Short decrementAndGet() {
+		var v = get();
+		var result = (short)((v == null ? 0 : v) - 1);
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Adds the specified value to the current value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)10);
+	 * 	<jv>value</jv>.add((<jk>short</jk>)5);
+	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return This object.
+	 */
+	public ShortValue add(Short x) {
+		var v = get();
+		set((short)((v == null ? 0 : v) + (x == null ? 0 : x)));
+		return this;
+	}
+
+	/**
+	 * Adds the specified value to the current value and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)10);
+	 * 	<jk>short</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>short</jk>)5);  <jc>// Returns 15</jc>
+	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return The new value after addition.
+	 */
+	public Short addAndGet(Short x) {
+		var v = get();
+		var result = (short)((v == null ? 0 : v) + (x == null ? 0 : x));
+		set(result);
+		return result;
+	}
+
+	/**
+	 * Checks if the current value is equal to the specified value.
+	 *
+	 * <p>
+	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)42);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is((<jk>short</jk>)42));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is((<jk>short</jk>)43));
+	 * </p>
+	 *
+	 * @param value The value to compare to.
+	 * @return <jk>true</jk> if the current value is equal to the specified value.
+	 */
+	public boolean is(Short value) {
+		return eq(get(), value);
+	}
+
+	/**
+	 * Checks if the current value matches any of the specified values.
+	 *
+	 * <p>
+	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison of each value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	ShortValue <jv>value</jv> = ShortValue.<jsm>of</jsm>((<jk>short</jk>)5);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny((<jk>short</jk>)3, (<jk>short</jk>)5, (<jk>short</jk>)7));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny((<jk>short</jk>)1, (<jk>short</jk>)2));
+	 * </p>
+	 *
+	 * @param values The values to compare to.
+	 * @return <jk>true</jk> if the current value matches any of the specified values.
+	 */
+	public boolean isAny(Short... values) {
+		var current = get();
+		for (var value : values)
+			if (eq(current, value))
+				return true;
+		return false;
 	}
 }

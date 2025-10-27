@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
@@ -101,7 +103,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public BasicHeader(String name, Object value) {
-		Utils.assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");
+		assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");
 		this.name = name;
 		this.value = value instanceof Supplier ? null : value;
 		this.stringValue = Utils.s(value);
@@ -121,7 +123,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicHeader(String name, Supplier<Object> value) {
-		Utils.assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");
+		assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");
 		this.name = name;
 		this.value = null;
 		this.stringValue = null;

@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.common.function;
 
-import java.util.*;
 import java.util.function.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * A function that takes in 4 arguments.
@@ -36,7 +37,7 @@ import java.util.function.*;
 public interface Function4<A,B,C,D,R> {
 
 	default <V> Function4<A,B,C,D,V> andThen(Function<? super R,? extends V> after) {
-		Objects.requireNonNull(after);
+		AssertionUtils.assertArgNotNull("after", after);
 		return (A a, B b, C c, D d) -> after.apply(apply(a, b, c, d));
 	}
 

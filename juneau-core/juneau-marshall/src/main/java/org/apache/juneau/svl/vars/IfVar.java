@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.svl.vars;
 
-import org.apache.juneau.common.utils.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import org.apache.juneau.svl.*;
 
 /**
@@ -66,7 +67,7 @@ public class IfVar extends MultipartVar {
 
 	@Override /* Overridden from MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
-		Utils.assertArg(args.length >= 2 && args.length <= 3, "Invalid number of arguments passed to $IF var.  Must be either $IF{booleanArg,thenValue} or $IF{booleanArg,thenValue,elseValue}");
+		assertArg(args.length >= 2 && args.length <= 3, "Invalid number of arguments passed to $IF var.  Must be either $IF{booleanArg,thenValue} or $IF{booleanArg,thenValue,elseValue}");
 
 		String b = args[0].toLowerCase();
 		if ("1".equals(b) || "t".equals(b) || "true".equals(b))

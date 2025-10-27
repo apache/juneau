@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.entity;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 
 import java.io.*;
@@ -23,7 +24,6 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -191,7 +191,7 @@ public class StreamEntity extends BasicHttpEntity {
 	 */
 	@Override
 	public void writeTo(OutputStream out) throws IOException {
-		Utils.assertArgNotNull("out", out);
+		assertArgNotNull("out", out);
 
 		if (isCached()) {
 			out.write(asBytes());

@@ -27,7 +27,7 @@ class Tuple3Function_Test extends TestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		Tuple3Function<Integer,Integer,Integer,Integer> x = (a,b,c)->a+b+c;
+		Function3<Integer,Integer,Integer,Integer> x = (a,b,c)->a+b+c;
 		assertEquals(6, x.apply(1,2,3));
 	}
 }

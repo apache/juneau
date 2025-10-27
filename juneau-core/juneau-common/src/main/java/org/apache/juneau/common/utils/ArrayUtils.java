@@ -75,7 +75,7 @@ public class ArrayUtils {
 	 * @return The new set.
 	 */
 	public static <T> Set<T> asSet(final T[] array) {
-		Utils.assertArgNotNull("array", array);
+		AssertionUtils.assertArgNotNull("array", array);
 		return new AbstractSet<>() {
 
 			@Override /* Overridden from Set */
@@ -120,7 +120,7 @@ public class ArrayUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E> E[] combine(E[]...arrays) {
-		Utils.assertArgNotNull("arrays", arrays);
+		AssertionUtils.assertArgNotNull("arrays", arrays);
 		int l = 0;
 		E[] a1 = null;
 		for (E[] a : arrays) {

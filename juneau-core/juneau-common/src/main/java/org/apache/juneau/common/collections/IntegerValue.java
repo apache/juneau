@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 /**
  * A simple mutable integer value.
  *
@@ -116,5 +118,153 @@ public class IntegerValue extends Value<Integer> {
 		var result = v == null ? 0 : v;
 		set(result + 1);
 		return result;
+	}
+
+	/**
+	 * Increments the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
+	 * 	<jv>counter</jv>.increment();
+	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public IntegerValue increment() {
+		set(get() + 1);
+		return this;
+	}
+
+	/**
+	 * Decrements the value by 1.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
+	 * 	<jv>counter</jv>.decrement();
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public IntegerValue decrement() {
+		set(get() - 1);
+		return this;
+	}
+
+	/**
+	 * Increments the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
+	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
+	 * 	<jsm>assertEquals</jsm>(6, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return The incremented value.
+	 */
+	public Integer incrementAndGet() {
+		set(get() + 1);
+		return get();
+	}
+
+	/**
+	 * Decrements the value by 1 and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>counter</jv> = IntegerValue.<jsm>of</jsm>(5);
+	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
+	 * 	<jsm>assertEquals</jsm>(4, <jv>counter</jv>.get());
+	 * </p>
+	 *
+	 * @return The decremented value.
+	 */
+	public Integer decrementAndGet() {
+		set(get() - 1);
+		return get();
+	}
+
+	/**
+	 * Adds the specified value to the current value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(10);
+	 * 	<jv>value</jv>.add(5);
+	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return This object.
+	 */
+	public IntegerValue add(Integer x) {
+		set(get() + (x == null ? 0 : x));
+		return this;
+	}
+
+	/**
+	 * Adds the specified value to the current value and returns the new value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(10);
+	 * 	<jk>int</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5);  <jc>// Returns 15</jc>
+	 * 	<jsm>assertEquals</jsm>(15, <jv>value</jv>.get());
+	 * </p>
+	 *
+	 * @param x The value to add.
+	 * @return The new value after addition.
+	 */
+	public Integer addAndGet(Integer x) {
+		set(get() + (x == null ? 0 : x));
+		return get();
+	}
+
+	/**
+	 * Checks if the current value is equal to the specified value.
+	 *
+	 * <p>
+	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(42);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(42));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(43));
+	 * </p>
+	 *
+	 * @param value The value to compare to.
+	 * @return <jk>true</jk> if the current value is equal to the specified value.
+	 */
+	public boolean is(Integer value) {
+		return eq(get(), value);
+	}
+
+	/**
+	 * Checks if the current value matches any of the specified values.
+	 *
+	 * <p>
+	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison of each value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	IntegerValue <jv>value</jv> = IntegerValue.<jsm>of</jsm>(5);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(3, 5, 7));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(1, 2));
+	 * </p>
+	 *
+	 * @param values The values to compare to.
+	 * @return <jk>true</jk> if the current value matches any of the specified values.
+	 */
+	public boolean isAny(Integer... values) {
+		var current = get();
+		for (var value : values)
+			if (eq(current, value))
+				return true;
+		return false;
 	}
 }

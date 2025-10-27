@@ -29,14 +29,16 @@ import org.apache.juneau.common.utils.*;
  *
  * <h5 class='section'>Overview:</h5>
  * <p>
- * This class provides a thread-safe, concurrent cache implementation backed by a {@link ConcurrentHashMap}.
- * It's designed for caching expensive-to-compute or frequently-accessed objects to improve performance.
+ * This class extends {@link ConcurrentHashMap} to provide a thread-safe caching layer with automatic
+ * value computation, cache eviction, and statistics tracking. It's designed for caching expensive-to-compute
+ * or frequently-accessed objects to improve performance.
  *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
  * 	<li>Thread-safe concurrent access without external synchronization
  * 	<li>Automatic cache eviction when maximum size is reached
  * 	<li>Lazy computation via {@link Supplier} pattern
+ * 	<li>Default supplier support for simplified access
  * 	<li>Built-in hit/miss statistics tracking
  * 	<li>Optional logging of cache statistics on JVM shutdown
  * 	<li>Can be disabled entirely via builder or system property
@@ -44,14 +46,18 @@ import org.apache.juneau.common.utils.*;
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- * 	<jc>// Create a cache for compiled patterns</jc>
+ * 	<jc>// Create a cache with default supplier</jc>
  * 	Cache&lt;String,Pattern&gt; <jv>patternCache</jv> = Cache
  * 		.<jsm>of</jsm>(String.<jk>class</jk>, Pattern.<jk>class</jk>)
  * 		.maxSize(100)
+ * 		.supplier(Pattern::compile)
  * 		.build();
  *
- * 	<jc>// Retrieve from cache, computing if necessary</jc>
- * 	Pattern <jv>pattern</jv> = <jv>patternCache</jv>.get(<js>"[a-z]+"</js>, () -&gt; Pattern.compile(<js>"[a-z]+"</js>));
+ * 	<jc>// Retrieve using default supplier</jc>
+ * 	Pattern <jv>pattern1</jv> = <jv>patternCache</jv>.get(<js>"[a-z]+"</js>);
+ *
+ * 	<jc>// Or override the supplier</jc>
+ * 	Pattern <jv>pattern2</jv> = <jv>patternCache</jv>.get(<js>"[0-9]+"</js>, () -&gt; Pattern.compile(<js>"[0-9]+"</js>, Pattern.CASE_INSENSITIVE));
  * </p>
  *
  * <h5 class='section'>Cache Behavior:</h5>
@@ -107,7 +113,7 @@ import org.apache.juneau.common.utils.*;
  * 	<jc>// Disabled cache for testing</jc>
  * 	Cache&lt;String,Object&gt; <jv>disabledCache</jv> = Cache
  * 		.<jsm>of</jsm>(String.<jk>class</jk>, Object.<jk>class</jk>)
- * 		.disabled()
+ * 		.disableCaching()
  * 		.build();
  * </p>
  *
@@ -119,7 +125,9 @@ import org.apache.juneau.common.utils.*;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-public class Cache<K,V> {
+public class Cache<K,V> extends ConcurrentHashMap<K,V> {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Builder for creating configured {@link Cache} instances.
@@ -142,13 +150,14 @@ public class Cache<K,V> {
 	 * @param <V> The value type.
 	 */
 	public static class Builder<K,V> {
-		boolean disabled, logOnExit;
+		boolean disableCaching, logOnExit;
 		int maxSize;
 		Class<V> type;
+		Function<K,V> supplier;
 
 		Builder(Class<V> type) {
 			this.type = type;
-			disabled = env("juneau.cache.disable", false);
+			disableCaching = env("juneau.cache.disable", false);
 			maxSize = env("juneau.cache.maxSize", 1000);
 			logOnExit = env("juneau.cache.logOnExit", false);
 		}
@@ -166,8 +175,8 @@ public class Cache<K,V> {
 		 * Disables caching entirely.
 		 *
 		 * <p>
-		 * When disabled, the {@link Cache#get(Object, Supplier)} method will always invoke the supplier
-		 * and never store or retrieve values from the cache.
+		 * When disabled, the {@link Cache#get(Object)} and {@link Cache#get(Object, Supplier)} methods
+		 * will always invoke the supplier and never store or retrieve values from the cache.
 		 *
 		 * <p>
 		 * This is useful for:
@@ -179,8 +188,8 @@ public class Cache<K,V> {
 		 *
 		 * @return This object for method chaining.
 		 */
-		public Builder<K,V> disabled() {
-			disabled = true;
+		public Builder<K,V> disableCaching() {
+			disableCaching = true;
 			return this;
 		}
 
@@ -236,6 +245,32 @@ public class Cache<K,V> {
 			maxSize = value;
 			return this;
 		}
+
+		/**
+		 * Specifies the default supplier function for computing values when keys are not found.
+		 *
+		 * <p>
+		 * This supplier will be used by {@link Cache#get(Object)} when a key is not in the cache.
+		 * Individual lookups can override this supplier using {@link Cache#get(Object, Supplier)}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	Cache&lt;String,Pattern&gt; <jv>cache</jv> = Cache
+		 * 		.<jsm>of</jsm>(String.<jk>class</jk>, Pattern.<jk>class</jk>)
+		 * 		.supplier(Pattern::compile)
+		 * 		.build();
+		 *
+		 * 	<jc>// Uses default supplier</jc>
+		 * 	Pattern <jv>p</jv> = <jv>cache</jv>.get(<js>"[a-z]+"</js>);
+		 * </p>
+		 *
+		 * @param value The default supplier function. Can be <jk>null</jk>.
+		 * @return This object for method chaining.
+		 */
+		public Builder<K,V> supplier(Function<K,V> value) {
+			supplier = value;
+			return this;
+		}
 	}
 
 	/**
@@ -260,7 +295,8 @@ public class Cache<K,V> {
 	}
 
 	private final int maxSize;
-	private final ConcurrentHashMap<K,V> cache;
+	private final boolean disableCaching;
+	private final Function<K,V> supplier;
 	private final AtomicInteger cacheHits = new AtomicInteger();
 
 	/**
@@ -269,15 +305,46 @@ public class Cache<K,V> {
 	 * @param builder The builder containing configuration settings.
 	 */
 	protected Cache(Builder<K,V> builder) {
-		cache = builder.disabled ? null : new ConcurrentHashMap<>();
-		maxSize = builder.maxSize;
+		this.maxSize = builder.maxSize;
+		this.disableCaching = builder.disableCaching;
+		this.supplier = builder.supplier;
 		if (builder.logOnExit) {
-			SystemUtils.shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + cache.size());
+			SystemUtils.shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
 
 	/**
-	 * Retrieves a cached value by key, computing it if necessary.
+	 * Retrieves a cached value by key using the default supplier.
+	 *
+	 * <p>
+	 * This method uses the default supplier configured via {@link Builder#supplier(Function)}.
+	 * If no default supplier was configured, this method will throw a {@link NullPointerException}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Cache&lt;String,Pattern&gt; <jv>cache</jv> = Cache
+	 * 		.<jsm>of</jsm>(String.<jk>class</jk>, Pattern.<jk>class</jk>)
+	 * 		.supplier(Pattern::compile)
+	 * 		.build();
+	 *
+	 * 	<jc>// Uses default supplier</jc>
+	 * 	Pattern <jv>p</jv> = <jv>cache</jv>.get(<js>"[0-9]+"</js>);
+	 * </p>
+	 *
+	 * @param key The cache key. Must not be <jk>null</jk>.
+	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
+	 * @throws NullPointerException if no default supplier was configured.
+	 * @throws IllegalArgumentException if key is <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override /* ConcurrentHashMap */
+	public V get(Object key) {
+		AssertionUtils.assertArgNotNull("key", key);
+		return get((K)key, () -> supplier.apply((K)key));
+	}
+
+	/**
+	 * Retrieves a cached value by key, computing it if necessary using the provided supplier.
 	 *
 	 * <p>
 	 * This method implements the cache-aside pattern:
@@ -291,7 +358,6 @@ public class Cache<K,V> {
 	 * <h5 class='section'>Behavior:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>If the cache is disabled, always invokes the supplier without caching
-	 * 	<li>If the key is <jk>null</jk>, bypasses the cache and invokes the supplier
 	 * 	<li>If the cache exceeds {@link Builder#maxSize(int)}, clears all entries before storing the new value
 	 * 	<li>Thread-safe: Multiple threads can safely call this method concurrently
 	 * 	<li>The supplier may be called multiple times for the same key in concurrent scenarios
@@ -311,19 +377,21 @@ public class Cache<K,V> {
 	 * 	<jsm>assert</jsm> <jv>p1</jv> == <jv>p2</jv>;  <jc>// Same instance</jc>
 	 * </p>
 	 *
-	 * @param key The cache key. If <jk>null</jk>, the supplier is always invoked without caching.
+	 * @param key The cache key. Must not be <jk>null</jk>.
 	 * @param supplier The supplier to compute the value if it's not in the cache. Must not be <jk>null</jk>.
 	 * @return The cached or computed value. May be <jk>null</jk> if the supplier returns <jk>null</jk>.
+	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
 	public V get(K key, Supplier<V> supplier) {
-		if (cache == null || key == null)
+		AssertionUtils.assertArgNotNull("key", key);
+		if (disableCaching)
 			return supplier.get();
-		V v = cache.get(key);
+		V v = super.get(key);
 		if (v == null) {
-			if (cache.size() > maxSize)
-				cache.clear();
+			if (size() > maxSize)
+				clear();
 			v = supplier.get();
-			cache.putIfAbsent(key, v);
+			putIfAbsent(key, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}
@@ -331,61 +399,33 @@ public class Cache<K,V> {
 	}
 
 	/**
-	 * Returns the current number of entries stored in this cache.
+	 * Associates the specified value with the specified key in this cache.
 	 *
-	 * <p>
-	 * This value represents the number of unique keys currently cached. It corresponds to
-	 * cache misses, as each cache miss results in a new entry being added.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Cache&lt;String,Pattern&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(String.<jk>class</jk>, Pattern.<jk>class</jk>).build();
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>Returns 0 if the cache is disabled
-	 * 	<li>The value may change between calls in multi-threaded environments
-	 * 	<li>When combined with {@link #getCacheHits()}, can be used to calculate hit ratio
-	 * </ul>
+	 * 	Pattern <jv>pattern</jv> = Pattern.compile(<js>"[0-9]+"</js>);
+	 * 	<jv>cache</jv>.put(<js>"digits"</js>, <jv>pattern</jv>);
+	 * </p>
 	 *
-	 * @return The current number of cached entries, or 0 if the cache is disabled.
+	 * @param key The cache key. Must not be <jk>null</jk>.
+	 * @param value The value to associate with the key.
+	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping for the key.
+	 * @throws IllegalArgumentException if key is <jk>null</jk>.
 	 */
-	public int size() {
-		return cache == null ? 0 : cache.size();
-	}
-
-	/**
-	 * Removes all entries from this cache.
-	 *
-	 * <p>
-	 * This operation is atomic and thread-safe. After calling this method, all subsequent
-	 * {@link #get(Object, Supplier)} calls will invoke their suppliers to recompute values.
-	 *
-	 * <h5 class='section'>Use Cases:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>Free memory when the cache is no longer needed
-	 * 	<li>Force fresh computation after underlying data has changed
-	 * 	<li>Reset cache state during testing
-	 * 	<li>Implement custom eviction policies
-	 * </ul>
-	 *
-	 * <p>
-	 * If the cache is disabled, this method has no effect.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul>
-	 * 	<li>This method does <em>not</em> reset the {@link #getCacheHits()} counter
-	 * 	<li>Safe to call from multiple threads simultaneously
-	 * </ul>
-	 */
-	public void clear() {
-		if (cache != null) {
-			cache.clear();
-		}
+	@Override /* ConcurrentHashMap */
+	public V put(K key, V value) {
+		AssertionUtils.assertArgNotNull("key", key);
+		return super.put(key, value);
 	}
 
 	/**
 	 * Returns the total number of cache hits since this cache was created.
 	 *
 	 * <p>
-	 * A cache hit occurs when {@link #get(Object, Supplier)} finds an existing cached value
-	 * for the requested key, avoiding the need to invoke the supplier.
+	 * A cache hit occurs when {@link #get(Object)} or {@link #get(Object, Supplier)} finds an existing
+	 * cached value for the requested key, avoiding the need to invoke the supplier.
 	 *
 	 * <h5 class='section'>Cache Effectiveness:</h5>
 	 * <p>

@@ -758,17 +758,18 @@ public abstract class Context implements AnnotationProvider {
 	final boolean debug;
 
 	private final ReflectionMap<Annotation> annotationMap;
-	private final Concurrent2KeyHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache;
-	private final Concurrent2KeyHashMap<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache;
-	private final Concurrent2KeyHashMap<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache;
-	private final Concurrent2KeyHashMap<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache;
-	private final Concurrent2KeyHashMap<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache;
+	private final Cache2<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache;
+	private final Cache2<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache;
+	private final Cache2<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache;
+	private final Cache2<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache;
+	private final Cache2<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache;
 
 	/**
 	 * Constructor for this class.
 	 *
 	 * @param builder The builder for this class.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Context(Builder builder) {
 		init(builder);
 		debug = builder.debug;
@@ -804,11 +805,11 @@ public abstract class Context implements AnnotationProvider {
 		});
 		this.annotationMap = rmb.build();
 		var disabled = Boolean.getBoolean("juneau.disableAnnotationCaching");
-		classAnnotationCache = new Concurrent2KeyHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-		declaredClassAnnotationCache = new Concurrent2KeyHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2)));
-		methodAnnotationCache = new Concurrent2KeyHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-		fieldAnnotationCache = new Concurrent2KeyHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-		constructorAnnotationCache = new Concurrent2KeyHashMap<>(disabled, (k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		classAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
+		declaredClassAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2))).build();
+		methodAnnotationCache = (Cache2)Cache2.of(Method.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
+		fieldAnnotationCache = (Cache2)Cache2.of(Field.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
+		constructorAnnotationCache = (Cache2)Cache2.of(Constructor.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
 	}
 
 	/**

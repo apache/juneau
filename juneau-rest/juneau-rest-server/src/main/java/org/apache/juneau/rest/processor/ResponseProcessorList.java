@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.processor;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -58,7 +59,7 @@ public class ResponseProcessorList {
 		 * @throws IllegalArgumentException if any class does not extend from {@link ResponseProcessor}.
 		 */
 		public Builder add(Class<?>...values) {
-			CollectionUtils.addAll(entries, (Object[])Utils.assertClassArrayArgIsType("values", ResponseProcessor.class, values));
+			CollectionUtils.addAll(entries, (Object[])assertClassArrayArgIsType("values", ResponseProcessor.class, values));
 			return this;
 		}
 

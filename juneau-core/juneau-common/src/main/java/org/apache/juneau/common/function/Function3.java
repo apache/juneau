@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.common.function;
 
-import java.util.*;
 import java.util.function.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * A function that takes in 3 arguments.
@@ -35,7 +36,7 @@ import java.util.function.*;
 public interface Function3<A,B,C,R> {
 
 	default <V> Function3<A,B,C,V> andThen(Function<? super R,? extends V> after) {
-		Objects.requireNonNull(after);
+		AssertionUtils.assertArgNotNull("after", after);
 		return (A a, B b, C c) -> after.apply(apply(a, b, c));
 	}
 

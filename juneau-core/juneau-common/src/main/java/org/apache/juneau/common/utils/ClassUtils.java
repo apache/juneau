@@ -112,8 +112,8 @@ public class ClassUtils {
 	 */
 	@SuppressWarnings("null")
 	public static Class<?> getParameterType(Class<?> c, int index, Class<?> pt) {
-		Utils.assertArgNotNull("pt", pt);
-		Utils.assertArgNotNull("c", c);
+		AssertionUtils.assertArgNotNull("pt", pt);
+		AssertionUtils.assertArgNotNull("c", c);
 
 		// We need to make up a mapping of type names.
 		Map<Type,Type> typeMap = new HashMap<>();
@@ -121,16 +121,16 @@ public class ClassUtils {
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			Utils.assertArg(cc != null, "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+			AssertionUtils.assertArg(cc != null, "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
 
-		Utils.assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
+		AssertionUtils.assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
 
 		ParameterizedType cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
-		Utils.assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
+		AssertionUtils.assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
 		Type actualType = cpt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))

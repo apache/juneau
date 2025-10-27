@@ -16,12 +16,11 @@
  */
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 
 import java.io.*;
 import java.nio.file.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Identifies a file located either on the classpath or file system.
@@ -47,8 +46,8 @@ public class LocalFile {
 	 * @param clazzPath The path relative to the class.  Must be a non-null normalized relative path.
 	 */
 	public LocalFile(Class<?> clazz, String clazzPath) {
-		this.clazz = Utils.assertArgNotNull("clazz", clazz);
-		this.clazzPath = Utils.assertArgNotNull("clazzPath", clazzPath);
+		this.clazz = assertArgNotNull("clazz", clazz);
+		this.clazzPath = assertArgNotNull("clazzPath", clazzPath);
 		this.path = null;
 		int i = clazzPath.lastIndexOf('/');
 		this.name = i == -1 ? clazzPath : clazzPath.substring(i + 1);
@@ -62,7 +61,7 @@ public class LocalFile {
 	public LocalFile(Path path) {
 		this.clazz = null;
 		this.clazzPath = null;
-		this.path = Utils.assertArgNotNull("path", path);
+		this.path = assertArgNotNull("path", path);
 		this.name = path.getFileName().toString();
 	}
 

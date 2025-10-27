@@ -194,12 +194,12 @@ public class MemoryStore extends ConfigStore {
 		// This is a no-op.
 		if (eq(expectedContents, newContents))
 			return null;
-
+	
 		var currentContents = read(name);
-
-		if (expectedContents != null && ! eq(currentContents, expectedContents))
+	
+		if (nn(expectedContents) && ne(currentContents, expectedContents))
 			return currentContents;
-
+	
 		update(name, newContents);
 
 		return null;

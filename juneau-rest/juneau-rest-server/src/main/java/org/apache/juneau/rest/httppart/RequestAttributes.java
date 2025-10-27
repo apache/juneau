@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.httppart;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -189,7 +190,7 @@ public class RequestAttributes {
 	 * @return <jk>true</jk> if the parameters with the specified names are present.
 	 */
 	public boolean contains(String...names) {
-		Utils.assertArgNotNull("names", names);
+		assertArgNotNull("names", names);
 		for (String n : names)
 			if (sreq.getAttribute(n) == null)
 				return false;
@@ -203,7 +204,7 @@ public class RequestAttributes {
 	 * @return <jk>true</jk> if the attribute with any of the specified names are present.
 	 */
 	public boolean containsAny(String...names) {
-		Utils.assertArgNotNull("names", names);
+		assertArgNotNull("names", names);
 		for (String n : names)
 			if (sreq.getAttribute(n) != null)
 				return true;
@@ -254,7 +255,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes remove(String...name) {
-		Utils.assertArgNotNull("name", name);
+		assertArgNotNull("name", name);
 		for (String n : name) {
 			sreq.removeAttribute(n);
 		}
@@ -268,7 +269,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes set(NamedAttribute...attributes) {
-		Utils.assertArgNotNull("attributes", attributes);
+		assertArgNotNull("attributes", attributes);
 		for (NamedAttribute p : attributes)
 			set(p);
 		return this;
@@ -284,7 +285,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes set(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
+		assertArgNotNull("name", name);
 		sreq.setAttribute(name, value);
 		return this;
 	}

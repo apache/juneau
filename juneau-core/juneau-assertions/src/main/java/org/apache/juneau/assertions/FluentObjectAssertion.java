@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -331,7 +332,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isExactType(Class<?> type) throws AssertionError {
-		Utils.assertArgNotNull("parent", type);
+		assertArgNotNull("parent", type);
 		if (value().getClass() != type)
 			throw error(MSG_unexpectedType, className(type), className(value));
 		return returns();
@@ -503,7 +504,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isType(Class<?> parent) throws AssertionError {
-		Utils.assertArgNotNull("parent", parent);
+		assertArgNotNull("parent", parent);
 		if (!ClassInfo.of(value()).isChildOf(parent))
 			throw error(MSG_unexpectedType, className(parent), className(value));
 		return returns();

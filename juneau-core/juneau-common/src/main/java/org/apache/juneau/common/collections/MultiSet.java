@@ -129,9 +129,9 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 */
 	@SafeVarargs
 	public MultiSet(Collection<E>...c) {
-		Utils.assertArgNotNull("c", c);
+		AssertionUtils.assertArgNotNull("c", c);
 		for (var cc : c)
-			Utils.assertArgNotNull("c", cc);
+			AssertionUtils.assertArgNotNull("c", cc);
 		l = c;
 	}
 

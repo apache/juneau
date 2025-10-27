@@ -126,4 +126,39 @@ public class DoubleValue extends Value<Double> {
 		}
 		return Math.abs(v - other) <= precision;
 	}
+
+	/**
+	 * Checks if the current value matches any of the specified values within the given precision.
+	 *
+	 * <p>
+	 * This method handles <jk>null</jk> values safely and performs precision-based equality comparison
+	 * for each value using absolute difference.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	DoubleValue <jv>value</jv> = DoubleValue.<jsm>of</jsm>(3.14159);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(0.01, 2.5, 3.15, 5.0));   <jc>// Matches 3.15 within 0.01</jc>
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(0.001, 1.0, 2.0, 5.0));  <jc>// No match within 0.001</jc>
+	 *
+	 * 	<jc>// Empty array returns false</jc>
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(0.01));
+	 * </p>
+	 *
+	 * @param precision The maximum allowed difference for equality. Must be non-negative and is the first parameter.
+	 * @param values The values to compare to.
+	 * @return <jk>true</jk> if the current value matches any of the specified values within the precision.
+	 * @throws IllegalArgumentException if precision is negative.
+	 */
+	public boolean isAny(double precision, double... values) {
+		if (precision < 0) {
+			throw new IllegalArgumentException("Precision must be non-negative");
+		}
+		var v = get();
+		if (v == null)
+			return false;
+		for (var value : values)
+			if (Math.abs(v - value) <= precision)
+				return true;
+		return false;
+	}
 }

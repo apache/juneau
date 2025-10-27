@@ -1,5 +1,7 @@
 # TODO List
 
+This file tracks pending tasks for the Apache Juneau project. For completed items, see [TODO-completed.md](TODO-completed.md).
+
 ## Issues to Fix
 
 - [ ] TODO-3 Figure out why CallLogger and ThrownStore objects are not automatically injected into REST classes in spring boot.
@@ -9,33 +11,27 @@
 - [ ] TODO-5 Fields should be alphabetized.
 - [ ] TODO-6 Investigate if there are any other W3 or RFC specifications that would make good candidates for new bean modules.
 - [ ] TODO-12 Tests for Spring Boot testing.
-- [ ] TODO-13 Search for places in code that should be using new try-with-return syntax.
 - [ ] TODO-14 The name parameter on annotations like Query when used on method parameters should be optional if parameter names are persisted in the bytecode.
 - [ ] TODO-15 It appears StringUtils is going to become a commonly-used external class. Let's see if we can enhance it with commonly used string utility methods.
-- [ ] TODO-16 Search for calls to filteredMap() with the following pattern and alphabetize the lines:
-		return filteredMap()
-			.append("addBeanTypes", addBeanTypes)
-			.append("keepNullProperties", keepNullProperties)
-			.append("trimEmptyCollections", trimEmptyCollections)
-			.append("trimEmptyMaps", trimEmptyMaps)
-			.append("trimStrings", trimStrings)
-			.append("sortCollections", sortCollections)
-			.append("sortMaps", sortMaps)
-			.append("addRootType", addRootType)
-			.append("uriContext", uriContext)
-			.append("uriResolution", uriResolution)
-			.append("uriRelativity", uriRelativity)
-			.append("listener", listener);
-- [ ] TODO-18 Look for places where we concatenate strings across multiple lines and determine if they can use Java multiline strings.
 - [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
-- [ ] TODO-28 Remove dependencies on jakarta.xml.bind-api.
 - [ ] TODO-29 Finish setting up SonarQube analysis in git workflow.
-- [ ] TODO-31 Cache should extend from ConcurrentHashMap.
-- [ ] TODO-32 TupleXFunction classes are redundant. Replace them with FunctionX.
-- [ ] TODO-33 Figure out if BidiMap needs an unmodifiable mode or if it can just be wrapped in an unmodifiable wrapper.
-- [ ] TODO-34 CharValue should have the following methods: is(char), isAny(char...), isAny(String). Determine if there are other useful methods that can be added to the XValue classes.
-- [ ] TODO-35 Replace instances of Objects.requireNonNull with assertArgNotNull.
-- [ ] TODO-36 Replace instances of Object.equals with Utils.eq.
+- [ ] TODO-37 Find and replace all instances of "x != null" with "nn(x)".
+- [ ] TODO-38 Find methods in com.sfdc.irs.Utils that don't exist in org.apache.juneau.common.utils.Utils and come up with a plan to add ones that make sense (e.g. they're not tied to other code in com.sfdc.irs and they don't already have equivalents in other XUtils classes).
+- [ ] TODO-39 Use static imports for all method calls to AnnotationUtils.
+- [ ] TODO-40 Use static imports for all method calls to ArrayUtils.
+- [ ] TODO-41 Use static imports for all method calls to AssertionUtils.
+- [ ] TODO-42 Use static imports for all method calls to ClassUtils.
+- [ ] TODO-43 Use static imports for all method calls to CollectionUtils.
+- [ ] TODO-44 Use static imports for all method calls to DateUtils.
+- [ ] TODO-45 Use static imports for all method calls to FileUtils.
+- [ ] TODO-46 Use static imports for all method calls to IOUtils.
+- [ ] TODO-47 Use static imports for all method calls to PredicateUtils.
+- [ ] TODO-48 Use static imports for all method calls to ResourceBundleUtils.
+- [ ] TODO-49 Use static imports for all method calls to StringUtils.
+- [ ] TODO-50 Use static imports for all method calls to SystemUtils.
+- [ ] TODO-51 Use static imports for all method calls to ThrowableUtils.
+- [ ] TODO-52 Use static imports for all method calls to Utils.
+- [ ] TODO-53 Use static imports for all method calls to BctUtils.
 
 ## Framework Improvements
 
@@ -61,4 +57,4 @@ This TODO list tracks specific issues that need to be addressed in the Juneau pr
 
 ## Code Style and Consistency
 
-- [ ] TODO-30 Ensure all Builder methods are consistently using "value" as setter parameter names.
+- [ ] TODO-30 Ensure all Builder methods are consistently using "value" as setter parameter names when it's a single parameter and it's obvious what property is being set.

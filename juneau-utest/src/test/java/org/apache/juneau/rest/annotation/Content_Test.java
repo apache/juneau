@@ -769,27 +769,27 @@ class Content_Test extends TestBase {
 
 	@Test void g01_multiPartParameterKeysOnCollections() throws Exception {
 		var g = MockRestClient.build(G.class);
-		var in = ""
-			+ "f01=a&f01=b"
-			+ "&f02=c&f02=d"
-			+ "&f03=1&f03=2"
-			+ "&f04=3&f04=4"
-			+ "&f05=@(e,f)&f05=@(g,h)"
-			+ "&f06=@(i,j)&f06=@(k,l)"
-			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
-			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
-			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
-			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
-			+ "&f11=a&f11=b"
-			+ "&f12=c&f12=d"
-			+ "&f13=1&f13=2"
-			+ "&f14=3&f14=4"
-			+ "&f15=@(e,f)&f15=@(g,h)"
-			+ "&f16=@(i,j)&f16=@(k,l)"
-			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
-			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
-			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
-			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		var in = """
+			f01=a&f01=b\
+			&f02=c&f02=d\
+			&f03=1&f03=2\
+			&f04=3&f04=4\
+			&f05=@(e,f)&f05=@(g,h)\
+			&f06=@(i,j)&f06=@(k,l)\
+			&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)\
+			&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)\
+			&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))\
+			&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))\
+			&f11=a&f11=b\
+			&f12=c&f12=d\
+			&f13=1&f13=2\
+			&f14=3&f14=4\
+			&f15=@(e,f)&f15=@(g,h)\
+			&f16=@(i,j)&f16=@(k,l)\
+			&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)\
+			&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)\
+			&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))\
+			&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))""";
 		g.post("/", in, APPLICATION_FORM_URLENCODED)
 			.run()
 			.assertContent(in);
@@ -812,27 +812,27 @@ class Content_Test extends TestBase {
 
 	@Test void h01_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
 		var h = MockRestClient.build(H.class);
-		var in = ""
-			+ "f01=a&f01=b"
-			+ "&f02=c&f02=d"
-			+ "&f03=1&f03=2"
-			+ "&f04=3&f04=4"
-			+ "&f05=@(e,f)&f05=@(g,h)"
-			+ "&f06=@(i,j)&f06=@(k,l)"
-			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
-			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
-			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
-			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
-			+ "&f11=a&f11=b"
-			+ "&f12=c&f12=d"
-			+ "&f13=1&f13=2"
-			+ "&f14=3&f14=4"
-			+ "&f15=@(e,f)&f15=@(g,h)"
-			+ "&f16=@(i,j)&f16=@(k,l)"
-			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
-			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
-			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
-			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		var in = """
+			f01=a&f01=b\
+			&f02=c&f02=d\
+			&f03=1&f03=2\
+			&f04=3&f04=4\
+			&f05=@(e,f)&f05=@(g,h)\
+			&f06=@(i,j)&f06=@(k,l)\
+			&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)\
+			&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)\
+			&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))\
+			&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))\
+			&f11=a&f11=b\
+			&f12=c&f12=d\
+			&f13=1&f13=2\
+			&f14=3&f14=4\
+			&f15=@(e,f)&f15=@(g,h)\
+			&f16=@(i,j)&f16=@(k,l)\
+			&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)\
+			&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)\
+			&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))\
+			&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))""";
 		h.post("/", in, APPLICATION_FORM_URLENCODED)
 			.run()
 			.assertContent(in);
@@ -851,27 +851,27 @@ class Content_Test extends TestBase {
 
 	@Test void h02_multiPartParameterKeysOnCollections_usingExpandedParams() throws Exception {
 		var h2 = MockRestClient.build(H2.class);
-		var in = ""
-			+ "f01=a&f01=b"
-			+ "&f02=c&f02=d"
-			+ "&f03=1&f03=2"
-			+ "&f04=3&f04=4"
-			+ "&f05=@(e,f)&f05=@(g,h)"
-			+ "&f06=@(i,j)&f06=@(k,l)"
-			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
-			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
-			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
-			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
-			+ "&f11=a&f11=b"
-			+ "&f12=c&f12=d"
-			+ "&f13=1&f13=2"
-			+ "&f14=3&f14=4"
-			+ "&f15=@(e,f)&f15=@(g,h)"
-			+ "&f16=@(i,j)&f16=@(k,l)"
-			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
-			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
-			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
-			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		var in = """
+			f01=a&f01=b\
+			&f02=c&f02=d\
+			&f03=1&f03=2\
+			&f04=3&f04=4\
+			&f05=@(e,f)&f05=@(g,h)\
+			&f06=@(i,j)&f06=@(k,l)\
+			&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)\
+			&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)\
+			&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))\
+			&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))\
+			&f11=a&f11=b\
+			&f12=c&f12=d\
+			&f13=1&f13=2\
+			&f14=3&f14=4\
+			&f15=@(e,f)&f15=@(g,h)\
+			&f16=@(i,j)&f16=@(k,l)\
+			&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)\
+			&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)\
+			&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))\
+			&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))""";
 		h2.post("/", in, APPLICATION_FORM_URLENCODED)
 			.run()
 			.assertContent(in);

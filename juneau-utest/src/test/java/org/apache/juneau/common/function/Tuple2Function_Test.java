@@ -27,7 +27,7 @@ class Tuple2Function_Test extends TestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		Tuple2Function<Integer,Integer,Integer> x = (a,b)->a+b;
+		Function2<Integer,Integer,Integer> x = (a,b)->a+b;
 		assertEquals(3, x.apply(1,2));
 	}
 }

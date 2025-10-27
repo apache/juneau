@@ -292,14 +292,14 @@ public class SetBuilder<E> {
 	 */
 	public Set<E> build() {
 		if (sparse) {
-			if (set != null && set.isEmpty())
+			if (nn(set) && set.isEmpty())
 				set = null;
 		} else {
 			if (set == null)
 				set = new LinkedHashSet<>(0);
 		}
-		if (set != null) {
-			if (comparator != null) {
+		if (nn(set)) {
+			if (nn(comparator)) {
 				Set<E> s = new TreeSet<>(comparator);
 				s.addAll(set);
 				set = s;

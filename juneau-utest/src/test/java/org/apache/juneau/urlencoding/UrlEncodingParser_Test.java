@@ -609,27 +609,27 @@ class UrlEncodingParser_Test extends TestBase {
 	//====================================================================================================
 	@Test void a08_multiPartParametersOnBeansViaProperty() throws Exception {
 		var p2 = UrlEncodingParser.create().expandedParams().build();
-		var in = ""
-			+ "f01=a&f01=b"
-			+ "&f02=c&f02=d"
-			+ "&f03=1&f03=2"
-			+ "&f04=3&f04=4"
-			+ "&f05=@(e,f)&f05=@(g,h)"
-			+ "&f06=@(i,j)&f06=@(k,l)"
-			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
-			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
-			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
-			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
-			+ "&f11=a&f11=b"
-			+ "&f12=c&f12=d"
-			+ "&f13=1&f13=2"
-			+ "&f14=3&f14=4"
-			+ "&f15=@(e,f)&f15=@(g,h)"
-			+ "&f16=@(i,j)&f16=@(k,l)"
-			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
-			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
-			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
-			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		var in = """
+			f01=a&f01=b\
+			&f02=c&f02=d\
+			&f03=1&f03=2\
+			&f04=3&f04=4\
+			&f05=@(e,f)&f05=@(g,h)\
+			&f06=@(i,j)&f06=@(k,l)\
+			&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)\
+			&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)\
+			&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))\
+			&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))\
+			&f11=a&f11=b\
+			&f12=c&f12=d\
+			&f13=1&f13=2\
+			&f14=3&f14=4\
+			&f15=@(e,f)&f15=@(g,h)\
+			&f16=@(i,j)&f16=@(k,l)\
+			&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)\
+			&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)\
+			&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))\
+			&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))""";
 
 		var t = p2.parse(in, DTOs.B.class);
 		assertBean(t,
@@ -639,27 +639,27 @@ class UrlEncodingParser_Test extends TestBase {
 
 	@Test void a09_multiPartParametersOnBeansViaProperty_usingConfig() throws Exception {
 		var p2 = UrlEncodingParser.create().expandedParams().applyAnnotations(DTOs2.Annotations.class).build();
-		var in = ""
-			+ "f01=a&f01=b"
-			+ "&f02=c&f02=d"
-			+ "&f03=1&f03=2"
-			+ "&f04=3&f04=4"
-			+ "&f05=@(e,f)&f05=@(g,h)"
-			+ "&f06=@(i,j)&f06=@(k,l)"
-			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
-			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
-			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
-			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
-			+ "&f11=a&f11=b"
-			+ "&f12=c&f12=d"
-			+ "&f13=1&f13=2"
-			+ "&f14=3&f14=4"
-			+ "&f15=@(e,f)&f15=@(g,h)"
-			+ "&f16=@(i,j)&f16=@(k,l)"
-			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
-			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
-			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
-			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		var in = """
+			f01=a&f01=b\
+			&f02=c&f02=d\
+			&f03=1&f03=2\
+			&f04=3&f04=4\
+			&f05=@(e,f)&f05=@(g,h)\
+			&f06=@(i,j)&f06=@(k,l)\
+			&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)\
+			&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)\
+			&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))\
+			&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))\
+			&f11=a&f11=b\
+			&f12=c&f12=d\
+			&f13=1&f13=2\
+			&f14=3&f14=4\
+			&f15=@(e,f)&f15=@(g,h)\
+			&f16=@(i,j)&f16=@(k,l)\
+			&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)\
+			&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)\
+			&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))\
+			&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))""";
 
 		assertBean(p2.parse(in, DTOs2.B.class),
 			"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}",
@@ -671,27 +671,27 @@ class UrlEncodingParser_Test extends TestBase {
 	//====================================================================================================
 	@Test void a10_multiPartParametersOnBeansViaAnnotationOnClass() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT;
-		var in = ""
-			+ "f01=a&f01=b"
-			+ "&f02=c&f02=d"
-			+ "&f03=1&f03=2"
-			+ "&f04=3&f04=4"
-			+ "&f05=@(e,f)&f05=@(g,h)"
-			+ "&f06=@(i,j)&f06=@(k,l)"
-			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
-			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
-			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
-			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
-			+ "&f11=a&f11=b"
-			+ "&f12=c&f12=d"
-			+ "&f13=1&f13=2"
-			+ "&f14=3&f14=4"
-			+ "&f15=@(e,f)&f15=@(g,h)"
-			+ "&f16=@(i,j)&f16=@(k,l)"
-			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
-			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
-			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
-			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		var in = """
+			f01=a&f01=b\
+			&f02=c&f02=d\
+			&f03=1&f03=2\
+			&f04=3&f04=4\
+			&f05=@(e,f)&f05=@(g,h)\
+			&f06=@(i,j)&f06=@(k,l)\
+			&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)\
+			&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)\
+			&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))\
+			&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))\
+			&f11=a&f11=b\
+			&f12=c&f12=d\
+			&f13=1&f13=2\
+			&f14=3&f14=4\
+			&f15=@(e,f)&f15=@(g,h)\
+			&f16=@(i,j)&f16=@(k,l)\
+			&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)\
+			&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)\
+			&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))\
+			&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))""";
 
 		assertBean(p2.parse(in, DTOs.C.class),
 			"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}",
@@ -700,27 +700,27 @@ class UrlEncodingParser_Test extends TestBase {
 
 	@Test void a11_multiPartParametersOnBeansViaAnnotationOnClass_usingConfig() throws Exception {
 		var p2 = UrlEncodingParser.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.class).build();
-		var in = ""
-			+ "f01=a&f01=b"
-			+ "&f02=c&f02=d"
-			+ "&f03=1&f03=2"
-			+ "&f04=3&f04=4"
-			+ "&f05=@(e,f)&f05=@(g,h)"
-			+ "&f06=@(i,j)&f06=@(k,l)"
-			+ "&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)"
-			+ "&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)"
-			+ "&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))"
-			+ "&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))"
-			+ "&f11=a&f11=b"
-			+ "&f12=c&f12=d"
-			+ "&f13=1&f13=2"
-			+ "&f14=3&f14=4"
-			+ "&f15=@(e,f)&f15=@(g,h)"
-			+ "&f16=@(i,j)&f16=@(k,l)"
-			+ "&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)"
-			+ "&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)"
-			+ "&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))"
-			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
+		var in = """
+			f01=a&f01=b\
+			&f02=c&f02=d\
+			&f03=1&f03=2\
+			&f04=3&f04=4\
+			&f05=@(e,f)&f05=@(g,h)\
+			&f06=@(i,j)&f06=@(k,l)\
+			&f07=(a=a,b=1,c=true)&f07=(a=b,b=2,c=false)\
+			&f08=(a=a,b=1,c=true)&f08=(a=b,b=2,c=false)\
+			&f09=@((a=a,b=1,c=true))&f09=@((a=b,b=2,c=false))\
+			&f10=@((a=a,b=1,c=true))&f10=@((a=b,b=2,c=false))\
+			&f11=a&f11=b\
+			&f12=c&f12=d\
+			&f13=1&f13=2\
+			&f14=3&f14=4\
+			&f15=@(e,f)&f15=@(g,h)\
+			&f16=@(i,j)&f16=@(k,l)\
+			&f17=(a=a,b=1,c=true)&f17=(a=b,b=2,c=false)\
+			&f18=(a=a,b=1,c=true)&f18=(a=b,b=2,c=false)\
+			&f19=@((a=a,b=1,c=true))&f19=@((a=b,b=2,c=false))\
+			&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))""";
 
 		assertBean(p2.parse(in, DTOs2.C.class),
 			"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}",

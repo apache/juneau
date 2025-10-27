@@ -56,12 +56,10 @@ public class Introspectable implements RestConverter {
 	/**
 	 * Swagger parameters for this converter.
 	 */
-	// @formatter:off
-	public static final String SWAGGER_PARAMS = ""
-		+ "{in:'query',name:'invokeMethod',description:' The Java method name, optionally with arguments if necessary to differentiate between methods.',examples:{example:'toString'}},"
-		+ "{in:'query',name:'invokeArgs',description:'The arguments as an array.',examples:{example:'foo,bar'}}"
-	;
-	// @formatter:on
+	public static final String SWAGGER_PARAMS = """
+		{in:'query',name:'invokeMethod',description:' The Java method name, optionally with arguments if necessary to differentiate between methods.',examples:{example:'toString'}},
+		{in:'query',name:'invokeArgs',description:'The arguments as an array.',examples:{example:'foo,bar'}}
+		""";
 
 	@Override /* Overridden from RestConverter */
 	@SuppressWarnings({ "unchecked", "rawtypes" })

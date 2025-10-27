@@ -17,7 +17,7 @@
 package org.apache.juneau.junit.bct;
 
 import static java.lang.Integer.*;
-import static org.apache.juneau.junit.bct.Utils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;

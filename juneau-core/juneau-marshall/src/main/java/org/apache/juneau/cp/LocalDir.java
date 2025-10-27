@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.net.*;
@@ -51,7 +52,7 @@ public class LocalDir {
 	 * 	</ul>
 	 */
 	public LocalDir(Class<?> clazz, String clazzPath) {
-		this.clazz = Utils.assertArgNotNull("clazz", clazz);
+		this.clazz = assertArgNotNull("clazz", clazz);
 		this.clazzPath = "/".equals(clazzPath) ? "/" : StringUtils.nullIfEmpty(trimTrailingSlashes(clazzPath));
 		this.path = null;
 		this.hashCode = HashCode.of(clazz, clazzPath);
@@ -65,7 +66,7 @@ public class LocalDir {
 	public LocalDir(Path path) {
 		this.clazz = null;
 		this.clazzPath = null;
-		this.path = Utils.assertArgNotNull("path", path);
+		this.path = assertArgNotNull("path", path);
 		this.hashCode = path.hashCode();
 	}
 

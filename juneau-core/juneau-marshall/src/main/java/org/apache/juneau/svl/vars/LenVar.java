@@ -16,9 +16,10 @@
  */
 package org.apache.juneau.svl.vars;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.util.regex.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -62,7 +63,7 @@ public class LenVar extends MultipartVar {
 
 	@Override /* Overridden from MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
-		Utils.assertArg(args.length <= 2, "Invalid number of arguments passed to $LN var.  Must have 1 or 2 arguments.");
+		assertArg(args.length <= 2, "Invalid number of arguments passed to $LN var.  Must have 1 or 2 arguments.");
 
 		int len = 0;
 		String stringArg = args[0];

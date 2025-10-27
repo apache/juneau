@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.common.utils.*;
@@ -275,14 +277,14 @@ public class MapBuilder<K,V> {
 	 */
 	public Map<K,V> build() {
 		if (sparse) {
-			if (map != null && map.isEmpty())
+			if (nn(map) && map.isEmpty())
 				map = null;
 		} else {
 			if (map == null)
 				map = new LinkedHashMap<>();
 		}
-		if (map != null) {
-			if (comparator != null) {
+		if (nn(map)) {
+			if (nn(comparator)) {
 				Map<K,V> m2 = new TreeMap<>(comparator);
 				m2.putAll(map);
 				map = m2;

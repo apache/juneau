@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.time.temporal.*;
 import java.util.*;
@@ -212,7 +214,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isAfter(Date value) throws AssertionError {
-		Utils.assertArgNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (!(value().after(value)))
 			throw error(MSG_valueWasNotAfterExpected, value, value());
 		return returns();
@@ -234,7 +236,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isBefore(Date value) throws AssertionError {
-		Utils.assertArgNotNull("value", value);
+		assertArgNotNull("value", value);
 		if (!(value().before(value)))
 			throw error(MSG_valueWasNotBeforeExpected, value, value());
 		return returns();
@@ -258,8 +260,8 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 */
 	public R isBetween(Date lower, Date upper) throws AssertionError {
 		isExists();
-		Utils.assertArgNotNull("lower", lower);
-		Utils.assertArgNotNull("upper", upper);
+		assertArgNotNull("lower", lower);
+		assertArgNotNull("upper", upper);
 		isLte(upper);
 		isGte(lower);
 		return returns();

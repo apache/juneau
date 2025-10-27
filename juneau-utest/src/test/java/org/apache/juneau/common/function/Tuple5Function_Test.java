@@ -27,7 +27,7 @@ class Tuple5Function_Test extends TestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		Tuple5Function<Integer,Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d,e)->a+b+c+d+e;
+		Function5<Integer,Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d,e)->a+b+c+d+e;
 		assertEquals(15, x.apply(1,2,3,4,5));
 	}
 }

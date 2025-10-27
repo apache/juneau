@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.concurrent.atomic.*;
 
 /**
@@ -127,4 +129,52 @@ public class BooleanValue extends Value<Boolean> {
 	 * @return <c>true</c> if the value is not set to <c>true</c>, <c>false</c> otherwise.
 	 */
 	public boolean isNotTrue() { return ! isTrue(); }
+
+	/**
+	 * Checks if the current value is equal to the specified value.
+	 *
+	 * <p>
+	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(<jk>true</jk>));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.is(<jk>false</jk>));
+	 *
+	 * 	<jc>// Handles null safely</jc>
+	 * 	BooleanValue <jv>empty</jv> = BooleanValue.<jsm>of</jsm>(<jk>null</jk>);
+	 * 	<jsm>assertTrue</jsm>(<jv>empty</jv>.is(<jk>null</jk>));
+	 * </p>
+	 *
+	 * @param value The value to compare to.
+	 * @return <jk>true</jk> if the current value is equal to the specified value.
+	 */
+	public boolean is(Boolean value) {
+		return eq(get(), value);
+	}
+
+	/**
+	 * Checks if the current value matches any of the specified values.
+	 *
+	 * <p>
+	 * Uses {@link Utils#eq(Object, Object)} for deep equality comparison of each value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	BooleanValue <jv>value</jv> = BooleanValue.<jsm>of</jsm>(<jk>true</jk>);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(<jk>true</jk>, <jk>null</jk>));
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(<jk>false</jk>));
+	 * </p>
+	 *
+	 * @param values The values to compare to.
+	 * @return <jk>true</jk> if the current value matches any of the specified values.
+	 */
+	public boolean isAny(Boolean... values) {
+		var current = get();
+		for (var value : values)
+			if (eq(current, value))
+				return true;
+		return false;
+	}
 }

@@ -127,4 +127,39 @@ public class FloatValue extends Value<Float> {
 		}
 		return Math.abs(v - other) <= precision;
 	}
+
+	/**
+	 * Checks if the current value matches any of the specified values within the given precision.
+	 *
+	 * <p>
+	 * This method handles <jk>null</jk> values safely and performs precision-based equality comparison
+	 * for each value using absolute difference.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	FloatValue <jv>value</jv> = FloatValue.<jsm>of</jsm>(3.14f);
+	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(0.01f, 2.5f, 3.15f, 5.0f));   <jc>// Matches 3.15f within 0.01</jc>
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(0.001f, 1.0f, 2.0f, 5.0f));  <jc>// No match within 0.001</jc>
+	 *
+	 * 	<jc>// Empty array returns false</jc>
+	 * 	<jsm>assertFalse</jsm>(<jv>value</jv>.isAny(0.01f));
+	 * </p>
+	 *
+	 * @param precision The maximum allowed difference for equality. Must be non-negative and is the first parameter.
+	 * @param values The values to compare to.
+	 * @return <jk>true</jk> if the current value matches any of the specified values within the precision.
+	 * @throws IllegalArgumentException if precision is negative.
+	 */
+	public boolean isAny(float precision, float... values) {
+		if (precision < 0) {
+			throw new IllegalArgumentException("Precision must be non-negative");
+		}
+		var v = get();
+		if (v == null)
+			return false;
+		for (var value : values)
+			if (Math.abs(v - value) <= precision)
+				return true;
+		return false;
+	}
 }

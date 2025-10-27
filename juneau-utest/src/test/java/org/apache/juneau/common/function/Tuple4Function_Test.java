@@ -27,7 +27,7 @@ class Tuple4Function_Test extends TestBase {
 	// Basic tests.
 	//------------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() {
-		Tuple4Function<Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d)->a+b+c+d;
+		Function4<Integer,Integer,Integer,Integer,Integer> x = (a,b,c,d)->a+b+c+d;
 		assertEquals(10, x.apply(1,2,3,4));
 	}
 }

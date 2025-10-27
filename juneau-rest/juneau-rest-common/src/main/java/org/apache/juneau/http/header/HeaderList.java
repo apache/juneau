@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -322,10 +323,10 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
 	 */
 	public <T> Optional<T> get(Class<T> type) {
-		Utils.assertArgNotNull("type", type);
+		assertArgNotNull("type", type);
 
 		String name = HeaderBeanMeta.of(type).getSchema().getName();
-		Utils.assertArg(name != null, "Header name could not be found on bean type ''{0}''", type.getName());
+		assertArg(name != null, "Header name could not be found on bean type ''{0}''", type.getName());
 
 		return get(name, type);
 	}

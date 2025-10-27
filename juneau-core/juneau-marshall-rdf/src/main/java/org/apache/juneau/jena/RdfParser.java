@@ -1601,12 +1601,12 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	protected JsonMap properties() {
 		// @formatter:off
 		return filteredMap()
-			.append("trimWhitespace", trimWhitespace)
-			.append("looseCollections", looseCollections)
-			.append("language", language)
-			.append("juneauNs", juneauNs)
+			.append("collectionFormat", collectionFormat)
 			.append("juneauBpNs", juneauBpNs)
-			.append("collectionFormat", collectionFormat);
+			.append("juneauNs", juneauNs)
+			.append("language", language)
+			.append("looseCollections", looseCollections)
+			.append("trimWhitespace", trimWhitespace);
 		// @formatter:on
 	}
 }

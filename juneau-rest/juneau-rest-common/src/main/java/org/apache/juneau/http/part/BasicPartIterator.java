@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.util.*;
 
 import org.apache.http.*;
@@ -48,7 +50,7 @@ public class BasicPartIterator implements PartIterator {
 	 * @param caseInsensitive Use case-insensitive matching for part name.
 	 */
 	public BasicPartIterator(NameValuePair[] parts, String name, boolean caseInsensitive) {
-		this.entries = Utils.assertArgNotNull("parts", parts);
+		this.entries = assertArgNotNull("parts", parts);
 		this.name = name;
 		this.caseInsensitive = caseInsensitive;
 		this.currentIndex = findNext(-1);

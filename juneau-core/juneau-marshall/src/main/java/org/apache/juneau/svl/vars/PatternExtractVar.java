@@ -16,9 +16,10 @@
  */
 package org.apache.juneau.svl.vars;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 import java.util.regex.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -65,7 +66,7 @@ public class PatternExtractVar extends MultipartVar {
 
 	@Override /* Overridden from MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
-		Utils.assertArg(args.length == 3, "Invalid number of arguments passed to $PE var.  Must have 3 arguments.");
+		assertArg(args.length == 3, "Invalid number of arguments passed to $PE var.  Must have 3 arguments.");
 
 		String stringArg = args[0];
 		String pattern = args[1];

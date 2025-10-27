@@ -36,6 +36,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>5.13.4</version>

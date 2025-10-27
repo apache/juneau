@@ -36,7 +36,24 @@ import org.apache.juneau.common.reflect.*;
 /**
  * Common utility methods.
  *
- * <p>This class contains various static utility methods for working with collections, strings, objects, and other common operations.
+ * <p>
+ * This class contains various static utility methods for working with collections, strings, objects, and other common operations.
+ *
+ * <h5 class='section'>Features:</h5>
+ * <ul>
+ *   <li><b>Collections:</b> Array and list creation, conversion, and manipulation
+ *   <li><b>Strings:</b> Formatting, comparison, and null-safe operations
+ *   <li><b>Objects:</b> Equality checking, casting, and null handling
+ *   <li><b>Environment:</b> System property and environment variable access
+ *   <li><b>Optionals:</b> Enhanced Optional operations and conversions
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5>
+ * <ul>
+ *   <li class='jc'>{@link AssertionUtils} - For argument validation and assertion methods
+ *   <li class='jc'>{@link StringUtils} - For additional string manipulation utilities
+ *   <li class='link'><a class="doclink" href='../../../../../index.html#juneau-common.utils'>Overview &gt; juneau-common.utils</a>
+ * </ul>
  */
 public class Utils {
 
@@ -116,7 +133,7 @@ public class Utils {
 			return null;  // NOSONAR
 		}
 
-		assertArg(isArray(array), "Input must be an array but was {0}", array.getClass().getName());
+		AssertionUtils.assertArg(isArray(array), "Input must be an array but was {0}", array.getClass().getName());
 
 		var componentType = array.getClass().getComponentType();
 		var length = Array.getLength(array);
@@ -176,103 +193,6 @@ public class Utils {
 	}
 
 	/**
-	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.internal.ArgUtils.*;
-	 *
-	 *	<jk>public</jk> String setFoo(List&lt;String&gt; <jv>foo</jv>) {
-	 *		<jsm>assertArg</jsm>(<jv>foo</jv> != <jk>null</jk> &amp;&amp; ! <jv>foo</jv>.isEmpty(), <js>"'foo' cannot be null or empty."</js>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param expression The boolean expression to check.
-	 * @param msg The exception message.
-	 * @param args The exception message args.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
-		if (! expression)
-			throw new IllegalArgumentException(MessageFormat.format(msg, args));
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.internal.ArgUtils.*;
-	 *
-	 *	<jk>public</jk> String setFoo(String <jv>foo</jv>) {
-	 *		<jsm>assertArgNotNull</jsm>(<js>"foo"</js>, <jv>foo</jv>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param <T> The argument data type.
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same argument.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static final <T> T assertArgNotNull(String name, T o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
-		return o;
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified string is <jk>null</jk> or blank.
-	 *
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same object.
-	 * @throws IllegalArgumentException Thrown if the specified string is <jk>null</jk> or blank.
-	 */
-	@SuppressWarnings("null")
-	public static final String assertArgNotNullOrBlank(String name, String o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
-		assertArg(! o.isBlank(), "Argument ''{0}'' cannot be blank.", name);
-		return o;
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
-	 *
-	 * @param <E> The element type.
-	 * @param name The argument name.
-	 * @param type The expected parent class.
-	 * @param value The array value being checked.
-	 * @return The value cast to the specified array type.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
-		for (var i = 0; i < value.length; i++)
-			if (! type.isAssignableFrom(value[i]))
-				throw new IllegalArgumentException("Arg " + name + " did not have arg of type " + type.getName() + " at index " + i + ": " + value[i].getName());
-		return (Class<E>[])value;
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified varargs array or any of its elements are <jk>null</jk>.
-	 *
-	 * @param <T> The element type.
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same object.
-	 * @throws IllegalArgumentException Thrown if the specified varargs array or any of its elements are <jk>null</jk>.
-	 */
-	@SuppressWarnings("null")
-	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
-		for (int i = 0; i < o.length; i++)
-			assertArg(o[i] != null, "Argument ''{0}'' parameter {1} cannot be null.", name, i);
-		return o;
-	}
-
-	/**
 	 * Casts an object to a specific type if it's an instance of that type.
 	 *
 	 * @param <T> The type to cast to.
@@ -306,6 +226,26 @@ public class Utils {
 	 */
 	public static String classNameOf(Object o) {
 		return o == null ? null : o.getClass().getName();
+	}
+
+	/**
+	 * Returns the simple class name of an object, or <jk>null</jk> if the object is <jk>null</jk>.
+	 *
+	 * <p>This method provides a safe way to get type information for debugging and logging.
+	 * It handles <jk>null</jk> values gracefully by returning <jk>null</jk> instead of throwing an exception.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <jk>var</jk> <jv>type</jv> = <jsm>simpleClassName</jsm>(<js>"hello"</js>);        <jc>// "String"</jc>
+	 *   <jv>type</jv> = <jsm>simpleClassName</jsm>(<jk>new</jk> ArrayList()); <jc>// "ArrayList"</jc>
+	 *   <jv>type</jv> = <jsm>simpleClassName</jsm>(<jk>null</jk>);            <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param o The object to get the type name for.
+	 * @return The simple class name of the object, or <jk>null</jk> if the object is <jk>null</jk>.
+	 */
+	public static String simpleClassName(Object o) {
+		return o == null ? null : o.getClass().getSimpleName();
 	}
 
 	/**
@@ -522,6 +462,70 @@ public class Utils {
 				if (tt != null)
 					return tt;
 		return null;
+	}
+
+	/**
+	 * Converts a string containing glob-style wildcard characters to a regular expression {@link java.util.regex.Pattern}.
+	 *
+	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
+	 * <ul>
+	 *   <li>{@code *} matches any sequence of characters (including none)</li>
+	 *   <li>{@code ?} matches exactly one character</li>
+	 *   <li>All other characters are treated literally</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"user_*_temp"</js>);
+	 *   <jk>boolean</jk> <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_alice_temp"</js>).matches();  <jc>// true</jc>
+	 *   <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_bob_temp"</js>).matches();    <jc>// true</jc>
+	 *   <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"admin_alice_temp"</js>).matches(); <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param s The glob-style wildcard pattern string.
+	 * @return A compiled {@link java.util.regex.Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
+	 */
+	public static java.util.regex.Pattern getGlobMatchPattern(String s) {
+		return getGlobMatchPattern(s, 0);
+	}
+
+	/**
+	 * Converts a string containing glob-style wildcard characters to a regular expression {@link java.util.regex.Pattern} with flags.
+	 *
+	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
+	 * <ul>
+	 *   <li>{@code *} matches any sequence of characters (including none)</li>
+	 *   <li>{@code ?} matches exactly one character</li>
+	 *   <li>All other characters are treated literally</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <jc>// Case-insensitive matching</jc>
+	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"USER_*"</js>, Pattern.<jsf>CASE_INSENSITIVE</jsf>);
+	 *   <jk>boolean</jk> <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_alice"</js>).matches();  <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param s The glob-style wildcard pattern string.
+	 * @param flags Regular expression flags (see {@link java.util.regex.Pattern} constants).
+	 * @return A compiled {@link java.util.regex.Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
+	 */
+	public static java.util.regex.Pattern getGlobMatchPattern(String s, int flags) {
+		if (s == null)
+			return null;
+		var sb = new StringBuilder();
+		sb.append("\\Q");
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '*')
+				sb.append("\\E").append(".*").append("\\Q");
+			else if (c == '?')
+				sb.append("\\E").append(".").append("\\Q");
+			else
+				sb.append(c);
+		}
+		sb.append("\\E");
+		return java.util.regex.Pattern.compile(sb.toString(), flags);
 	}
 
 	/**
@@ -803,6 +807,28 @@ public class Utils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 *
+	 * <p>
+	 * Equivalent to <c><jv>o</jv> != <jk>null</jk></c>, but with a more readable method name.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.common.utils.Utils.*;
+	 *
+	 * 	<jk>if</jk> (<jsm>nn</jsm>(<jv>myObject</jv>)) {
+	 * 		<jc>// Do something with non-null object</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 */
+	public static boolean nn(Object o) {
+		return o != null;
+	}
+
+	/**
 	 * Tests two strings for non-equality ignoring case, but gracefully handles nulls.
 	 *
 	 * @param s1 String 1.
@@ -1049,6 +1075,54 @@ public class Utils {
 	}
 
 	/**
+	 * Safely converts an object to its string representation, handling any exceptions that may occur.
+	 *
+	 * <p>This method provides a fail-safe way to call {@code toString()} on any object, ensuring that
+	 * exceptions thrown by problematic {@code toString()} implementations don't propagate up the call stack.
+	 * Instead, it returns a descriptive error message containing the exception type and message.</p>
+	 *
+	 * <h5 class='section'>Exception Handling:</h5>
+	 * <p>If the object's {@code toString()} method throws any {@code Throwable}, this method catches it
+	 * and returns a formatted string in the form: {@code "<ExceptionType>: <exception message>"}.</p>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Normal case - returns object's toString() result</jc>
+	 *    String <jv>result</jv> = <jsm>safeToString</jsm>(<js>"Hello"</js>);
+	 *    <jc>// result = "Hello"</jc>
+	 *
+	 *    <jc>// Exception case - returns formatted error message</jc>
+	 *    Object <jv>problematic</jv> = <jk>new</jk> Object() {
+	 *       <ja>@Override</ja>
+	 *       <jk>public</jk> String toString() {
+	 *          <jk>throw new</jk> RuntimeException(<js>"Cannot convert"</js>);
+	 *       }
+	 *    };
+	 *    String <jv>result</jv> = <jsm>safeToString</jsm>(<jv>problematic</jv>);
+	 *    <jc>// result = "RuntimeException: Cannot convert"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Use Cases:</h5>
+	 * <ul>
+	 *    <li><b>Object stringification in converters:</b> Safe conversion of arbitrary objects to strings</li>
+	 *    <li><b>Debugging and logging:</b> Ensures log statements never fail due to toString() exceptions</li>
+	 *    <li><b>Error handling:</b> Graceful degradation when objects have problematic string representations</li>
+	 *    <li><b>Third-party object integration:</b> Safe handling of objects from external libraries</li>
+	 * </ul>
+	 *
+	 * @param o The object to convert to a string. May be any object including <jk>null</jk>.
+	 * @return The string representation of the object, or a formatted error message if toString() throws an exception.
+	 *    Returns <js>"null"</js> if the object is <jk>null</jk>.
+	 */
+	public static String safeToString(Object o) {
+		try {
+			return o.toString();
+		} catch (Throwable t) { // NOSONAR
+			return simpleClassName(t) + ": " + t.getMessage();
+		}
+	}
+
+	/**
 	 * Helper method for creating StringBuilder objects.
 	 *
 	 * @param value The string value to wrap in a StringBuilder.
@@ -1136,7 +1210,7 @@ public class Utils {
 	 * @see #arrayToList(Object)
 	 */
 	public static final List<?> toList(Object o) {  // NOSONAR
-		assertArgNotNull("o", o);
+		AssertionUtils.assertArgNotNull("o", o);
 		if (o instanceof List<?> o2)
 			return o2;
 		if (o instanceof Iterable<?> o2)
@@ -1162,7 +1236,7 @@ public class Utils {
 	 * @return A new stream.
 	 */
 	public static Stream<Object> toStream(Object array) {
-		assertArg(isArray(array), "Arg was not an array.  Type: {0}", array.getClass().getName());
+		AssertionUtils.assertArg(isArray(array), "Arg was not an array.  Type: {0}", array.getClass().getName());
 		var length = Array.getLength(array);
 		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}

@@ -182,15 +182,15 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@SuppressWarnings("unchecked")
 	public SimpleMap(K[] keys, V[] values) {
-		Utils.assertArgNotNull("keys", keys);
-		Utils.assertArgNotNull("values", values);
-		Utils.assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
+		AssertionUtils.assertArgNotNull("keys", keys);
+		AssertionUtils.assertArgNotNull("values", values);
+		AssertionUtils.assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
 
 		this.keys = keys;
 		this.values = values;
 		entries = (SimpleMapEntry[])Array.newInstance(SimpleMapEntry.class, keys.length);
 		for (var i = 0; i < keys.length; i++) {
-			Utils.assertArg(keys[i] != null, "Keys array cannot contain a null value.");
+			AssertionUtils.assertArg(keys[i] != null, "Keys array cannot contain a null value.");
 			entries[i] = new SimpleMapEntry(i);
 		}
 	}

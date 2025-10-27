@@ -191,5 +191,196 @@ class Value_Test extends TestBase {
 		assertFalse(v.is("initial"), "Should not equal old value after set");
 		assertTrue(v.is("updated"), "Should equal new value after set");
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// filter(Predicate)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void d01_filter_passing() {
+		var v = Value.of("hello");
+		var filtered = v.filter(s -> s.length() > 3);
+		assertTrue(filtered.isPresent());
+		assertEquals("hello", filtered.get());
+	}
+
+	@Test
+	void d02_filter_failing() {
+		var v = Value.of("hello");
+		var filtered = v.filter(s -> s.length() > 10);
+		assertFalse(filtered.isPresent());
+	}
+
+	@Test
+	void d03_filter_empty() {
+		Value<String> v = Value.empty();
+		var filtered = v.filter(s -> s.length() > 3);
+		assertFalse(filtered.isPresent());
+	}
+
+	@Test
+	void d04_filter_chain() {
+		var v = Value.of(100);
+		var filtered = v.filter(x -> x > 50).filter(x -> x < 150);
+		assertTrue(filtered.isPresent());
+		assertEquals(100, filtered.get());
+	}
+
+	@Test
+	void d05_filter_chainFails() {
+		var v = Value.of(100);
+		var filtered = v.filter(x -> x > 50).filter(x -> x < 80);
+		assertFalse(filtered.isPresent());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// flatMap(Function)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void e01_flatMap_basic() {
+		var v = Value.of("hello");
+		var mapped = v.flatMap(s -> Value.of(s.length()));
+		assertTrue(mapped.isPresent());
+		assertEquals(5, mapped.get());
+	}
+
+	@Test
+	void e02_flatMap_toEmpty() {
+		var v = Value.of("hello");
+		var mapped = v.flatMap(s -> Value.empty());
+		assertFalse(mapped.isPresent());
+	}
+
+	@Test
+	void e03_flatMap_fromEmpty() {
+		Value<String> v = Value.empty();
+		var mapped = v.flatMap(s -> Value.of(s.length()));
+		assertFalse(mapped.isPresent());
+	}
+
+	@Test
+	void e04_flatMap_chain() {
+		var v = Value.of("hello");
+		var mapped = v.flatMap(s -> Value.of(s.length()))
+			.flatMap(n -> Value.of(n * 2));
+		assertTrue(mapped.isPresent());
+		assertEquals(10, mapped.get());
+	}
+
+	@Test
+	void e05_flatMap_withFilter() {
+		var v = Value.of("hello");
+		var result = v.filter(s -> s.length() > 3)
+			.flatMap(s -> Value.of(s.toUpperCase()));
+		assertTrue(result.isPresent());
+		assertEquals("HELLO", result.get());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// equals(Object)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void f01_equals_sameValue() {
+		var v1 = Value.of("hello");
+		var v2 = Value.of("hello");
+		assertEquals(v1, v2);
+	}
+
+	@Test
+	void f02_equals_differentValue() {
+		var v1 = Value.of("hello");
+		var v2 = Value.of("world");
+		assertNotEquals(v1, v2);
+	}
+
+	@Test
+	void f03_equals_bothEmpty() {
+		var v1 = Value.empty();
+		var v2 = Value.empty();
+		assertEquals(v1, v2);
+	}
+
+	@Test
+	void f04_equals_oneEmpty() {
+		var v1 = Value.of("hello");
+		var v2 = Value.empty();
+		assertNotEquals(v1, v2);
+	}
+
+	@Test
+	void f05_equals_sameReference() {
+		var v = Value.of("hello");
+		assertEquals(v, v);
+	}
+
+	@Test
+	void f06_equals_null() {
+		var v = Value.of("hello");
+		assertNotEquals(null, v);
+	}
+
+	@Test
+	void f07_equals_differentType() {
+		var v = Value.of("hello");
+		assertNotEquals("hello", v);
+	}
+
+	@Test
+	void f08_equals_integers() {
+		var v1 = Value.of(42);
+		var v2 = Value.of(42);
+		var v3 = Value.of(43);
+		assertEquals(v1, v2);
+		assertNotEquals(v1, v3);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// hashCode()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void g01_hashCode_consistent() {
+		var v = Value.of("hello");
+		assertEquals(v.hashCode(), v.hashCode());
+	}
+
+	@Test
+	void g02_hashCode_equalValues() {
+		var v1 = Value.of("hello");
+		var v2 = Value.of("hello");
+		assertEquals(v1.hashCode(), v2.hashCode());
+	}
+
+	@Test
+	void g03_hashCode_empty() {
+		var v = Value.empty();
+		assertEquals(0, v.hashCode());
+	}
+
+	@Test
+	void g04_hashCode_afterSet() {
+		var v = Value.of("hello");
+		var hash1 = v.hashCode();
+		v.set("world");
+		var hash2 = v.hashCode();
+		assertNotEquals(hash1, hash2);
+	}
+
+	@Test
+	void g05_hashCode_nullValue() {
+		var v = Value.of(null);
+		assertEquals(0, v.hashCode());
+	}
+
+	@Test
+	void g06_hashCode_useInHashMap() {
+		var map = new java.util.HashMap<Value<String>, String>();
+		var key1 = Value.of("key");
+		var key2 = Value.of("key");
+		map.put(key1, "value");
+		assertEquals("value", map.get(key2), "HashMap should work with Value's hashCode and equals");
+	}
 }
 

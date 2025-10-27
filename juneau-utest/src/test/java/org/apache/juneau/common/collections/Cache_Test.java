@@ -97,27 +97,12 @@ class Cache_Test extends TestBase {
 	// Null key handling
 	//====================================================================================================
 
-	@Test void a04_nullKey_bypassesCache() {
+	@Test void a04_nullKey_throwsException() {
 		var cache = Cache.of(String.class, String.class).build();
-		var callCount = new AtomicInteger();
 
-		// First call with null key
-		var result1 = cache.get(null, () -> {
-			callCount.incrementAndGet();
-			return "value" + callCount.get();
-		});
-
-		// Second call with null key
-		var result2 = cache.get(null, () -> {
-			callCount.incrementAndGet();
-			return "value" + callCount.get();
-		});
-
-		assertEquals("value1", result1);
-		assertEquals("value2", result2);
-		assertEquals(2, callCount.get()); // Supplier called twice
-		assertEquals(0, cache.size()); // Nothing cached
-		assertEquals(0, cache.getCacheHits());
+		// Null keys are not allowed and throw IllegalArgumentException
+		assertThrows(IllegalArgumentException.class, () -> cache.get(null, () -> "value"));
+		assertThrows(IllegalArgumentException.class, () -> cache.get(null));
 	}
 
 	//====================================================================================================
@@ -224,7 +209,7 @@ class Cache_Test extends TestBase {
 
 	@Test void a10_disabled_neverCaches() {
 		var cache = Cache.of(String.class, String.class)
-			.disabled()
+			.disableCaching()
 			.build();
 		var callCount = new AtomicInteger();
 
@@ -247,7 +232,7 @@ class Cache_Test extends TestBase {
 
 	@Test void a11_disabled_sizeAlwaysZero() {
 		var cache = Cache.of(String.class, Integer.class)
-			.disabled()
+			.disableCaching()
 			.build();
 
 		cache.get("one", () -> 1);
@@ -259,7 +244,7 @@ class Cache_Test extends TestBase {
 
 	@Test void a12_disabled_clearHasNoEffect() {
 		var cache = Cache.of(String.class, Integer.class)
-			.disabled()
+			.disableCaching()
 			.build();
 
 		cache.clear(); // Should not throw
@@ -281,7 +266,7 @@ class Cache_Test extends TestBase {
 	@Test void a14_builder_chaining() {
 		var cache = Cache.of(String.class, String.class)
 			.maxSize(100)
-			.disabled()
+			.disableCaching()
 			.build();
 
 		// Disabled takes precedence
