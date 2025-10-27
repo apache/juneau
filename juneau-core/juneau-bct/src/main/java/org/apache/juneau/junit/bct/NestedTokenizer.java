@@ -19,6 +19,7 @@ package org.apache.juneau.junit.bct;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.eq;
 import static org.apache.juneau.junit.bct.NestedTokenizer.ParseState.*;
 
 import java.util.*;

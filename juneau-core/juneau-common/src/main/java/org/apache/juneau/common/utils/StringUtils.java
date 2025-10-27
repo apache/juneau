@@ -3850,6 +3850,254 @@ public class StringUtils {
 		return ESCAPE_SETS.computeIfAbsent(c, key -> AsciiSet.create().chars(key, '\\').build());
 	}
 
+	//------------------------------------------------------------------------------------------------------------------
+	// Additional utility methods
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Converts the string to lowercase if not null.
+	 *
+	 * @param s The string to convert.
+	 * @return The lowercase string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static String lc(String s) {
+		return s == null ? null : s.toLowerCase();
+	}
+
+	/**
+	 * Converts the string to uppercase if not null.
+	 *
+	 * @param s The string to convert.
+	 * @return The uppercase string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static String uc(String s) {
+		return s == null ? null : s.toUpperCase();
+	}
+
+	/**
+	 * Tests two objects for case-insensitive string equality.
+	 *
+	 * <p>Converts both objects to strings using {@link Object#toString()} before comparison.
+	 *
+	 * @param a Object 1.
+	 * @param b Object 2.
+	 * @return <jk>true</jk> if both objects are equal ignoring case.
+	 */
+	public static boolean eqic(Object a, Object b) {
+		if (a == null && b == null)
+			return true;
+		if (a == null || b == null)
+			return false;
+		return a.toString().equalsIgnoreCase(b.toString());
+	}
+
+	/**
+	 * Adds the appropriate indefinite article ('a' or 'an') before a word.
+	 *
+	 * <p>Uses a simple vowel-based rule: 'an' if the word starts with a vowel, 'a' otherwise.
+	 *
+	 * @param subject The word to articlize.
+	 * @return The word with 'a' or 'an' prepended.
+	 */
+	public static String articlized(String subject) {
+		var vowels = AsciiSet.of("AEIOUaeiou");
+		return (vowels.contains(subject.charAt(0)) ? "an " : "a ") + subject;
+	}
+
+	/**
+	 * Returns the first non-blank string in the array.
+	 *
+	 * @param vals The strings to check.
+	 * @return The first non-blank string, or <jk>null</jk> if all values were blank or <jk>null</jk>.
+	 */
+	public static String firstNonBlank(String...vals) {
+		for (String v : vals) {
+			if (isNotBlank(v))
+				return v;
+		}
+		return null;
+	}
+
+	/**
+	 * Converts a comma-delimited string to a list.
+	 *
+	 * @param s The comma-delimited string.
+	 * @return A new modifiable list. Never <jk>null</jk>.
+	 */
+	public static List<String> cdlToList(String s) {
+		return split(s);
+	}
+
+	/**
+	 * Combines values into a simple comma-delimited string.
+	 *
+	 * @param values The values to join.
+	 * @return A comma-delimited string.
+	 */
+	public static String join(String...values) {
+		return join(values, ',');
+	}
+
+	/**
+	 * Combines collection values into a simple comma-delimited string.
+	 *
+	 * @param values The values to join.
+	 * @return A comma-delimited string.
+	 */
+	public static String join(Collection<?> values) {
+		return joine(new ArrayList<>(values), ',');
+	}
+
+	/**
+	 * Null-safe not-contains check for multiple string values.
+	 *
+	 * @param s The string to search.
+	 * @param values The values to search for.
+	 * @return <jk>true</jk> if the string does not contain any of the values.
+	 */
+	public static boolean notContains(String s, String...values) {
+		return ! contains(s, values);
+	}
+
+	/**
+	 * Converts a comma-delimited string to a set.
+	 *
+	 * @param s The comma-delimited string.
+	 * @return A new {@link LinkedHashSet}. Never <jk>null</jk>.
+	 */
+	public static LinkedHashSet<String> cdlToSet(String s) {
+		return split(s).stream().collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+
+	/**
+	 * Takes a supplier of any type and returns a {@link Supplier}{@code <String>}.
+	 *
+	 * <p>Useful when passing arguments to loggers.
+	 *
+	 * @param s The supplier.
+	 * @return A string supplier that calls {@link #readable(Object)} on the supplied value.
+	 */
+	public static Supplier<String> stringSupplier(Supplier<?> s) {
+		return () -> readable(s.get());
+	}
+
+	/**
+	 * Converts an arbitrary object to a readable string format suitable for debugging and testing.
+	 *
+	 * <p>This method provides intelligent formatting for various Java types, recursively processing
+	 * nested structures to create human-readable representations. It's extensively used throughout
+	 * the Juneau framework for test assertions and debugging output.</p>
+	 *
+	 * <h5 class='section'>Type-Specific Formatting:</h5>
+	 * <ul>
+	 * 	<li><b>null:</b> Returns <js>null</js></li>
+	 * 	<li><b>Optional:</b> Recursively formats the contained value (or <js>null</js> if empty)</li>
+	 * 	<li><b>Collections:</b> Formats as <js>"[item1,item2,item3]"</js> with comma-separated elements</li>
+	 * 	<li><b>Maps:</b> Formats as <js>"{key1=value1,key2=value2}"</js> with comma-separated entries</li>
+	 * 	<li><b>Map.Entry:</b> Formats as <js>"key=value"</js></li>
+	 * 	<li><b>Arrays:</b> Converts to list format <js>"[item1,item2,item3]"</js></li>
+	 * 	<li><b>Iterables/Iterators/Enumerations:</b> Converts to list and formats recursively</li>
+	 * 	<li><b>GregorianCalendar:</b> Formats as ISO instant timestamp</li>
+	 * 	<li><b>Date:</b> Formats as ISO instant string (e.g., <js>"2023-12-25T10:30:00Z"</js>)</li>
+	 * 	<li><b>InputStream:</b> Converts to hexadecimal representation</li>
+	 * 	<li><b>Reader:</b> Reads content and returns as string</li>
+	 * 	<li><b>File:</b> Reads file content and returns as string</li>
+	 * 	<li><b>byte[]:</b> Converts to hexadecimal representation</li>
+	 * 	<li><b>Enum:</b> Returns the enum name via {@link Enum#name()}</li>
+	 * 	<li><b>All other types:</b> Uses {@link Object#toString()}</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Collections</jc>
+	 * 	readable(List.of("a", "b", "c")) <jc>// Returns: "[a,b,c]"</jc>
+	 * 	readable(Set.of(1, 2, 3)) <jc>// Returns: "[1,2,3]" (order may vary)</jc>
+	 *
+	 * 	<jc>// Maps</jc>
+	 * 	readable(Map.of("foo", "bar", "baz", 123)) <jc>// Returns: "{foo=bar,baz=123}"</jc>
+	 *
+	 * 	<jc>// Arrays</jc>
+	 * 	readable(new int[]{1, 2, 3}) <jc>// Returns: "[1,2,3]"</jc>
+	 * 	readable(new String[]{"a", "b"}) <jc>// Returns: "[a,b]"</jc>
+	 *
+	 * 	<jc>// Nested structures</jc>
+	 * 	readable(List.of(Map.of("x", 1), Set.of("a", "b"))) <jc>// Returns: "[{x=1},[a,b]]"</jc>
+	 *
+	 * 	<jc>// Special types</jc>
+	 * 	readable(Optional.of("test")) <jc>// Returns: "test"</jc>
+	 * 	readable(Optional.empty()) <jc>// Returns: null</jc>
+	 * 	readable(new Date(1640995200000L)) <jc>// Returns: "2022-01-01T00:00:00Z"</jc>
+	 * 	readable(MyEnum.FOO) <jc>// Returns: "FOO"</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Recursive Processing:</h5>
+	 * <p>The method recursively processes nested structures, so complex objects containing
+	 * collections, maps, and arrays are fully flattened into readable format. This makes it
+	 * ideal for test assertions where you need to compare complex object structures.</p>
+	 *
+	 * <h5 class='section'>Error Handling:</h5>
+	 * <p>IO operations (reading files, streams) are wrapped in safe() calls, converting
+	 * any exceptions to RuntimeExceptions. Binary data (InputStreams, byte arrays) is
+	 * converted to hexadecimal representation for readability.</p>
+	 *
+	 * @param o The object to convert to readable format. Can be <jk>null</jk>.
+	 * @return A readable string representation of the object, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static String readable(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Optional<?> o2)
+			return readable(o2.orElse(null));
+		if (o instanceof Collection<?> o2)
+			return o2.stream().map(StringUtils::readable).collect(Collectors.joining(",", "[", "]"));
+		if (o instanceof Map<?,?> o2)
+			return o2.entrySet().stream().map(StringUtils::readable).collect(Collectors.joining(",", "{", "}"));
+		if (o instanceof Map.Entry<?,?> o2)
+			return readable(o2.getKey()) + '=' + readable(o2.getValue());
+		if (o instanceof Iterable<?> o2)
+			return readable(toList(o2));
+		if (o instanceof Iterator<?> o2)
+			return readable(toList(o2));
+		if (o instanceof Enumeration<?> o2)
+			return readable(toList(o2));
+		if (o instanceof GregorianCalendar o2)
+			return o2.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
+		if (o instanceof Date o2)
+			return o2.toInstant().toString();
+		if (o instanceof InputStream o2)
+			return toHex(o2);
+		if (o instanceof Reader o2)
+			return safe(() -> IOUtils.read(o2));
+		if (o instanceof File o2)
+			return safe(() -> IOUtils.read(o2));
+		if (o instanceof byte[] o2)
+			return toHex(o2);
+		if (o instanceof Enum o2)
+			return o2.name();
+		if (o instanceof Class o2)
+			return o2.getSimpleName();
+		if (o instanceof Executable o2) {
+			var sb = new StringBuilder(64);
+			sb.append(o2 instanceof Constructor ? o2.getDeclaringClass().getSimpleName() : o2.getName()).append('(');
+			Class<?>[] pt = o2.getParameterTypes();
+			for (int i = 0; i < pt.length; i++) {
+				if (i > 0)
+					sb.append(',');
+				sb.append(pt[i].getSimpleName());
+			}
+			sb.append(')');
+			return sb.toString();
+		}
+		if (isArray(o)) {
+			var l = list();
+			for (var i = 0; i < Array.getLength(o); i++) {
+				l.add(Array.get(o, i));
+			}
+			return readable(l);
+		}
+		return o.toString();
+	}
+
 	/**
 	 * Constructor.
 	 */

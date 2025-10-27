@@ -208,7 +208,7 @@ class OAuthFlow_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
 				"authorizationUrl,refreshUrl,scopes,tokenUrl,x1,x2",
 				"String,String,LinkedHashMap,String,String,<null>"
 			);

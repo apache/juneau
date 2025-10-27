@@ -210,7 +210,7 @@ class Encoding_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
 				"allowReserved,contentType,explode,headers,style,x1,x2",
 				"Boolean,String,Boolean,LinkedHashMap,String,String,<null>"
 			);

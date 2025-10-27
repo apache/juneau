@@ -16,14 +16,9 @@
  */
 package org.apache.juneau.common.utils;
 
-import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.utils.StringUtils.*;
-
-import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.text.*;
-import java.time.format.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -218,35 +213,6 @@ public class Utils {
 		return null;
 	}
 
-	/**
-	 * Gets the fully qualified class name of the specified object.
-	 *
-	 * @param o The object to get the class name for.
-	 * @return The fully qualified class name, or <jk>null</jk> if the object is <jk>null</jk>.
-	 */
-	public static String classNameOf(Object o) {
-		return o == null ? null : o.getClass().getName();
-	}
-
-	/**
-	 * Returns the simple class name of an object, or <jk>null</jk> if the object is <jk>null</jk>.
-	 *
-	 * <p>This method provides a safe way to get type information for debugging and logging.
-	 * It handles <jk>null</jk> values gracefully by returning <jk>null</jk> instead of throwing an exception.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 *   <jk>var</jk> <jv>type</jv> = <jsm>simpleClassName</jsm>(<js>"hello"</js>);        <jc>// "String"</jc>
-	 *   <jv>type</jv> = <jsm>simpleClassName</jsm>(<jk>new</jk> ArrayList()); <jc>// "ArrayList"</jc>
-	 *   <jv>type</jv> = <jsm>simpleClassName</jsm>(<jk>null</jk>);            <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param o The object to get the type name for.
-	 * @return The simple class name of the object, or <jk>null</jk> if the object is <jk>null</jk>.
-	 */
-	public static String simpleClassName(Object o) {
-		return o == null ? null : o.getClass().getSimpleName();
-	}
 
 	/**
 	 * Compares two objects for equality.
@@ -538,10 +504,10 @@ public class Utils {
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Lazy evaluation - string is only formatted if assertion fails</jc>
-	 * 	assertTrue(condition, fms(<js>"Expected {0} but got {1}"</js>, expected, actual));
+	 * 	assertTrue(condition, fs(<js>"Expected {0} but got {1}"</js>, expected, actual));
 	 *
 	 * 	<jc>// Can be used anywhere a Supplier&lt;String&gt; is expected</jc>
-	 * 	Supplier&lt;String&gt; <jv>messageSupplier</jv> = fms(<js>"Processing item {0} of {1}"</js>, i, total);
+	 * 	Supplier&lt;String&gt; <jv>messageSupplier</jv> = fs(<js>"Processing item {0} of {1}"</js>, i, total);
 	 * </p>
 	 *
 	 * @param pattern The message pattern using <js>{0}</js>, <js>{1}</js>, etc. placeholders.
@@ -549,7 +515,7 @@ public class Utils {
 	 * @return A {@link Supplier} that will format the string when {@code get()} is called.
 	 * @see StringUtils#format(String, Object...)
 	 */
-	public static Supplier<String> fms(String pattern, Object...args) {
+	public static Supplier<String> fs(String pattern, Object...args) {
 		return () -> StringUtils.format(pattern, args);
 	}
 
@@ -627,13 +593,37 @@ public class Utils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified collection is <jk>null</jk> or empty.
+	 *
+	 * @param o The collection to check.
+	 * @return <jk>true</jk> if the specified collection is <jk>null</jk> or empty.
+	 */
+	public static boolean isEmpty(Collection<?> o) {
+		if (o == null)
+			return true;
+		return o.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified map is <jk>null</jk> or empty.
+	 *
+	 * @param o The map to check.
+	 * @return <jk>true</jk> if the specified map is <jk>null</jk> or empty.
+	 */
+	public static boolean isEmpty(Map<?,?> o) {
+		if (o == null)
+			return true;
+		return o.isEmpty();
+	}
+
+	/**
 	 * Returns <jk>true</jk> if string is <jk>null</jk> or empty.
 	 *
 	 * @param o The string to check.
 	 * @return <jk>true</jk> if string is <jk>null</jk> or empty.
 	 */
-	public static boolean isEmpty(String o) {
-		return o == null || o.isEmpty();
+	public static boolean isEmpty(CharSequence o) {
+		return StringUtils.isEmpty(o);
 	}
 
 	/**
@@ -642,8 +632,8 @@ public class Utils {
 	 * @param s The string to check.
 	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
 	 */
-	public static boolean isEmptyOrBlank(String s) {
-		return s == null || s.trim().isEmpty();
+	public static boolean isBlank(CharSequence s) {
+		return StringUtils.isBlank(s);
 	}
 
 	/**
@@ -670,12 +660,32 @@ public class Utils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 *
+	 * @param value The collection to check.
+	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 */
+	public static boolean isNotEmpty(Collection<?> value) {
+		return ! isEmpty(value);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 *
+	 * @param value The map to check.
+	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 */
+	public static boolean isNotEmpty(Map<?,?> value) {
+		return ! isEmpty(value);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if string is not <jk>null</jk> and not empty.
 	 *
 	 * @param o The string to check.
 	 * @return <jk>true</jk> if string is not <jk>null</jk> and not empty.
 	 */
-	public static boolean isNotEmpty(String o) {
+	public static boolean isNotEmpty(CharSequence o) {
 		return ! isEmpty(o);
 	}
 
@@ -895,121 +905,16 @@ public class Utils {
 	}
 
 	/**
-	 * Converts an arbitrary object to a readable string format suitable for debugging and testing.
+	 * Shortcut for calling {@link StringUtils#readable(Object)}.
 	 *
-	 * <p>This method provides intelligent formatting for various Java types, recursively processing
-	 * nested structures to create human-readable representations. It's extensively used throughout
-	 * the Juneau framework for test assertions and debugging output.</p>
-	 *
-	  * <h5 class='section'>Type-Specific Formatting:</h5>
-	 * <ul>
-	 * 	<li><b>null:</b> Returns <js>null</js></li>
-	 * 	<li><b>Optional:</b> Recursively formats the contained value (or <js>null</js> if empty)</li>
-	 * 	<li><b>Collections:</b> Formats as <js>"[item1,item2,item3]"</js> with comma-separated elements</li>
-	 * 	<li><b>Maps:</b> Formats as <js>"{key1=value1,key2=value2}"</js> with comma-separated entries</li>
-	 * 	<li><b>Map.Entry:</b> Formats as <js>"key=value"</js></li>
-	 * 	<li><b>Arrays:</b> Converts to list format <js>"[item1,item2,item3]"</js></li>
-	 * 	<li><b>Iterables/Iterators/Enumerations:</b> Converts to list and formats recursively</li>
-	 * 	<li><b>GregorianCalendar:</b> Formats as ISO instant timestamp</li>
-	 * 	<li><b>Date:</b> Formats as ISO instant string (e.g., <js>"2023-12-25T10:30:00Z"</js>)</li>
-	 * 	<li><b>InputStream:</b> Converts to hexadecimal representation</li>
-	 * 	<li><b>Reader:</b> Reads content and returns as string</li>
-	 * 	<li><b>File:</b> Reads file content and returns as string</li>
-	 * 	<li><b>byte[]:</b> Converts to hexadecimal representation</li>
-	 * 	<li><b>Enum:</b> Returns the enum name via {@link Enum#name()}</li>
-	 * 	<li><b>All other types:</b> Uses {@link Object#toString()}</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Collections</jc>
-	 * 	r(List.of("a", "b", "c")) <jc>// Returns: "[a,b,c]"</jc>
-	 * 	r(Set.of(1, 2, 3)) <jc>// Returns: "[1,2,3]" (order may vary)</jc>
-	 *
-	 * 	<jc>// Maps</jc>
-	 * 	r(Map.of("foo", "bar", "baz", 123)) <jc>// Returns: "{foo=bar,baz=123}"</jc>
-	 *
-	 * 	<jc>// Arrays</jc>
-	 * 	r(new int[]{1, 2, 3}) <jc>// Returns: "[1,2,3]"</jc>
-	 * 	r(new String[]{"a", "b"}) <jc>// Returns: "[a,b]"</jc>
-	 *
-	 * 	<jc>// Nested structures</jc>
-	 * 	r(List.of(Map.of("x", 1), Set.of("a", "b"))) <jc>// Returns: "[{x=1},[a,b]]"</jc>
-	 *
-	  * 	<jc>// Special types</jc>
-	 * 	r(Optional.of("test")) <jc>// Returns: "test"</jc>
-	 * 	r(Optional.empty()) <jc>// Returns: null</jc>
-	 * 	r(new Date(1640995200000L)) <jc>// Returns: "2022-01-01T00:00:00Z"</jc>
-	 * 	r(MyEnum.FOO) <jc>// Returns: "FOO"</jc>
-	 * </p>
-	 *
-	 * <h5 class='section'>Recursive Processing:</h5>
-	 * <p>The method recursively processes nested structures, so complex objects containing
-	 * collections, maps, and arrays are fully flattened into readable format. This makes it
-	 * ideal for test assertions where you need to compare complex object structures.</p>
-	 *
-	 * <h5 class='section'>Error Handling:</h5>
-	 * <p>IO operations (reading files, streams) are wrapped in safe() calls, converting
-	 * any exceptions to RuntimeExceptions. Binary data (InputStreams, byte arrays) is
-	 * converted to hexadecimal representation for readability.</p>
+	 * <p>Converts an arbitrary object to a readable string format suitable for debugging and testing.
 	 *
 	 * @param o The object to convert to readable format. Can be <jk>null</jk>.
 	 * @return A readable string representation of the object, or <jk>null</jk> if the input was <jk>null</jk>.
-	 * @see #safe(ThrowingSupplier)
+	 * @see StringUtils#readable(Object)
 	 */
 	public static String r(Object o) {
-		if (o == null)
-			return null;
-		if (o instanceof Optional<?> o2)
-			return r(o2.orElse(null));
-		if (o instanceof Collection<?> o2)
-			return o2.stream().map(Utils::r).collect(joining(",", "[", "]"));
-		if (o instanceof Map<?,?> o2)
-			return o2.entrySet().stream().map(Utils::r).collect(joining(",", "{", "}"));
-		if (o instanceof Map.Entry<?,?> o2)
-			return r(o2.getKey()) + '=' + r(o2.getValue());
-		if (o instanceof Iterable<?> o2)
-			return r(toList(o2));
-		if (o instanceof Iterator<?> o2)
-			return r(toList(o2));
-		if (o instanceof Enumeration<?> o2)
-			return r(toList(o2));
-		if (o instanceof GregorianCalendar o2)
-			return o2.toZonedDateTime().format(DateTimeFormatter.ISO_INSTANT);
-		if (o instanceof Date o2)
-			return o2.toInstant().toString();
-		if (o instanceof InputStream o2)
-			return toHex(o2);
-		if (o instanceof Reader o2)
-			return safe(() -> IOUtils.read(o2));
-		if (o instanceof File o2)
-			return safe(() -> IOUtils.read(o2));
-		if (o instanceof byte[] o2)
-			return toHex(o2);
-		if (o instanceof Enum o2)
-			return o2.name();
-		if (o instanceof Class o2)
-			return o2.getSimpleName();
-		if (o instanceof Executable o2) {
-			var sb = new StringBuilder(64);
-			sb.append(o2 instanceof Constructor ? o2.getDeclaringClass().getSimpleName() : o2.getName()).append('(');
-			Class<?>[] pt = o2.getParameterTypes();
-			for (int i = 0; i < pt.length; i++) {
-				if (i > 0)
-					sb.append(',');
-				sb.append(pt[i].getSimpleName());
-			}
-			sb.append(')');
-			return sb.toString();
-		}
-		if (isArray(o)) {
-			var l = list();
-			for (var i = 0; i < Array.getLength(o); i++) {
-				l.add(Array.get(o, i));
-			}
-			return r(l);
-		}
-		return o.toString();
+		return StringUtils.readable(o);
 	}
 
 	/**
@@ -1118,7 +1023,7 @@ public class Utils {
 		try {
 			return o.toString();
 		} catch (Throwable t) { // NOSONAR
-			return simpleClassName(t) + ": " + t.getMessage();
+			return scn(t) + ": " + t.getMessage();
 		}
 	}
 
@@ -1142,16 +1047,6 @@ public class Utils {
 	@SafeVarargs
 	public static <T> LinkedHashSet<T> set(T...values) {  // NOSONAR
 		return new LinkedHashSet<>(Arrays.asList(values));
-	}
-
-	/**
-	 * Gets the simple class name of the specified object.
-	 *
-	 * @param o The object to get the simple class name for.
-	 * @return The simple class name, or <jk>null</jk> if the object is <jk>null</jk>.
-	 */
-	public static String simpleClassNameOf(Object o) {
-		return o == null ? null : o.getClass().getSimpleName();
 	}
 
 	/**
@@ -1227,7 +1122,7 @@ public class Utils {
 			return o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());
 		if (isArray(o))
 			return arrayToList(o);
-		throw ThrowableUtils.runtimeException("Could not convert object of type {0} to a list", classNameOf(o));
+		throw ThrowableUtils.runtimeException("Could not convert object of type {0} to a list", cn(o));
 	}
 
 	/**
@@ -1353,5 +1248,105 @@ public class Utils {
 		if (o instanceof Optional)
 			o = unwrap(((Optional<?>)o).orElse(null));
 		return o;
+	}
+
+	/**
+	 * Shortcut for calling {@link ClassUtils#className(Object)}.
+	 *
+	 * @param value The object to get the class name for.
+	 * @return The name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String cn(Object value) {
+		return ClassUtils.className(value);
+	}
+
+	/**
+	 * Shortcut for calling {@link ClassUtils#simpleClassName(Object)}.
+	 *
+	 * @param value The object to get the simple class name for.
+	 * @return The simple name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String scn(Object value) {
+		return ClassUtils.simpleClassName(value);
+	}
+
+	/**
+	 * Converts an object to a boolean.
+	 *
+	 * @param val The object to convert.
+	 * @return The boolean value, or <jk>false</jk> if the value was <jk>null</jk>.
+	 */
+	public static boolean b(Object val) {
+		return opt(val).map(Object::toString).map(Boolean::valueOf).orElse(false);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified number is inclusively between the two values.
+	 *
+	 * @param n The number to check.
+	 * @param lower The lower bound (inclusive).
+	 * @param higher The upper bound (inclusive).
+	 * @return <jk>true</jk> if the number is between the bounds.
+	 */
+	public static boolean isBetween(int n, int lower, int higher) {
+		return n >= lower && n <= higher;
+	}
+
+	/**
+	 * Same as {@link Integer#parseInt(String)} but removes any underscore characters first.
+	 *
+	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000_000"</js>).
+	 *
+	 * @param value The string to parse.
+	 * @return The parsed integer value.
+	 * @throws NumberFormatException If the string cannot be parsed.
+	 * @throws NullPointerException If the string is <jk>null</jk>.
+	 */
+	public static int parseInt(String value) {
+		return Integer.parseInt(removeUnderscores(value));
+	}
+
+	/**
+	 * Same as {@link Long#parseLong(String)} but removes any underscore characters first.
+	 *
+	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000_000"</js>).
+	 *
+	 * @param value The string to parse.
+	 * @return The parsed long value.
+	 * @throws NumberFormatException If the string cannot be parsed.
+	 * @throws NullPointerException If the string is <jk>null</jk>.
+	 */
+	public static long parseLong(String value) {
+		return Long.parseLong(removeUnderscores(value));
+	}
+
+	/**
+	 * Same as {@link Float#parseFloat(String)} but removes any underscore characters first.
+	 *
+	 * <p>Allows for better readability of numeric literals (e.g., <js>"1_000.5"</js>).
+	 *
+	 * @param value The string to parse.
+	 * @return The parsed float value.
+	 * @throws NumberFormatException If the string cannot be parsed.
+	 * @throws NullPointerException If the string is <jk>null</jk>.
+	 */
+	public static float parseFloat(String value) {
+		return Float.parseFloat(removeUnderscores(value));
+	}
+
+	private static String removeUnderscores(String value) {
+		if (value == null)
+			throw new NullPointerException("Trying to parse null string.");
+		return StringUtils.notContains(value, '_') ? value : value.replace("_", "");
+	}
+
+	/**
+	 * Shortcut for calling {@link StringUtils#stringSupplier(Supplier)}.
+	 *
+	 * @param s The supplier.
+	 * @return A string supplier that calls {@link #r(Object)} on the supplied value.
+	 */
+	public static Supplier<String> ss(Supplier<?> s) {
+		return StringUtils.stringSupplier(s);
 	}
 }

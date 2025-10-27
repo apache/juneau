@@ -288,7 +288,7 @@ class SchemaInfo_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
 				"additionalItems,additionalProperties,allOf,anyOf,default,description,discriminator,enum,example,exclusiveMaximum,exclusiveMinimum,externalDocs,format,items,maxItems,maxLength,maxProperties,maximum,minItems,minLength,minProperties,minimum,multipleOf,not,nullable,oneOf,pattern,properties,readOnly,required,title,type,uniqueItems,writeOnly,xml,x1,x2",
 				"SchemaInfo,SchemaInfo,ArrayList,ArrayList,String,String,Discriminator,ArrayList,String,Boolean,Boolean,ExternalDocumentation,String,Items,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,SchemaInfo,Boolean,ArrayList,String,LinkedHashMap,Boolean,ArrayList,String,String,Boolean,Boolean,Xml,String,<null>"
 			);

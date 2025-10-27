@@ -247,4 +247,22 @@ public class AssertionUtils {
 		return o;
 	}
 
+	/**
+	 * Throws an {@link AssertionError} if the specified actual value is not one of the expected values.
+	 *
+	 * @param <T> The value type.
+	 * @param actual The actual value.
+	 * @param expected The expected values.
+	 * @return The actual value if it matches one of the expected values.
+	 * @throws AssertionError if the value is not one of the expected values.
+	 */
+	@SafeVarargs
+	public static final <T> T assertOneOf(T actual, T...expected) {
+		for (T e : expected) {
+			if (eq(actual, e))
+				return actual;
+		}
+		throw new AssertionError("Invalid value specified: " + actual);
+	}
+
 }

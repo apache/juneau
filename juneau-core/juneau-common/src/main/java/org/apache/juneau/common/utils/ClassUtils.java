@@ -232,16 +232,6 @@ public class ClassUtils {
 	}
 
 	/**
-	 * Shortcut for calling {@link #className(Object)}.
-	 *
-	 * @param value The object to get the class name for.
-	 * @return The name of the class or <jk>null</jk> if the value was null.
-	 */
-	public static String cn(Object value) {
-		return className(value);
-	}
-
-	/**
 	 * Returns the simple (non-qualified) class name for the specified object.
 	 *
 	 * @param value The object to get the simple class name for.
@@ -249,16 +239,6 @@ public class ClassUtils {
 	 */
 	public static String simpleClassName(Object value) {
 		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getSimpleName() : value.getClass().getSimpleName();
-	}
-
-	/**
-	 * Shortcut for calling {@link #simpleClassName(Object)}.
-	 *
-	 * @param value The object to get the simple class name for.
-	 * @return The simple name of the class or <jk>null</jk> if the value was null.
-	 */
-	public static String scn(Object value) {
-		return simpleClassName(value);
 	}
 
 	/**

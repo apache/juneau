@@ -40,29 +40,6 @@ import org.opentest4j.*;
  */
 public class BctUtils {
 
-	// Convenience aliases for common utility methods
-
-	/**
-	 * Alias for {@link org.apache.juneau.common.utils.Utils#fms(String, Object...)}.
-	 *
-	 * @param msg The message pattern.
-	 * @param args The message arguments.
-	 * @return A supplier that returns the formatted message.
-	 */
-	public static Supplier<String> fs(String msg, Object...args) {
-		return fms(msg, args);
-	}
-
-	/**
-	 * Alias for {@link org.apache.juneau.common.utils.Utils#simpleClassName(Object)}.
-	 *
-	 * @param o The object to get the type name for.
-	 * @return The simple class name of the object, or <jk>null</jk> if the object is <jk>null</jk>.
-	 */
-	public static String t(Object o) {
-		return simpleClassName(o);
-	}
-
 	// BCT-specific methods
 
 	/**

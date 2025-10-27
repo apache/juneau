@@ -277,7 +277,7 @@ class OpenApi_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
 				"components,externalDocs,info,openapi,paths,security,servers,tags,x1,x2",
 				"Components,ExternalDocumentation,Info,String,TreeMap,ArrayList,ArrayList,ArrayList,String,<null>"
 			);

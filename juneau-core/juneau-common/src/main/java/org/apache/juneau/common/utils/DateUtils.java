@@ -221,7 +221,7 @@ public class DateUtils {
 	 * @see #toIso8601(Calendar)
 	 */
 	public static Calendar fromIso8601Calendar(String s) {
-		if (isEmptyOrBlank(s))
+		if (isBlank(s))
 			return null;
 		return GregorianCalendar.from(fromIso8601(s));
 	}
@@ -289,7 +289,7 @@ public class DateUtils {
 	 * @see ZonedDateTime
 	 */
 	public static ZonedDateTime fromIso8601(String s) {
-		if (isEmptyOrBlank(s))
+		if (isBlank(s))
 			return null;
 		String validDate = toValidIso8601DT(s);
 		return ZonedDateTime.parse(validDate, DateTimeFormatter.ISO_DATE_TIME);
@@ -743,5 +743,44 @@ public class DateUtils {
 			case MILLI_OF_SECOND -> Calendar.MILLISECOND;
 			default -> Calendar.MILLISECOND;
 		};
+	}
+
+	/**
+	 * Adds or subtracts a number of days from the specified calendar.
+	 *
+	 * <p>Creates a clone of the calendar before modifying it.
+	 *
+	 * @param c The calendar to modify.
+	 * @param days The number of days to add (positive) or subtract (negative).
+	 * @return A cloned calendar with the updated date, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static Calendar addSubtractDays(Calendar c, int days) {
+		return opt(c)
+			.map(x -> (Calendar)x.clone())
+			.map(x -> add(x, Calendar.DATE, days))
+			.orElse(null);
+	}
+
+	/**
+	 * Adds to a field of a calendar.
+	 *
+	 * @param c The calendar to modify.
+	 * @param field The calendar field to modify (e.g., {@link Calendar#DATE}, {@link Calendar#MONTH}).
+	 * @param amount The amount to add.
+	 * @return The same calendar with the field modified.
+	 */
+	public static Calendar add(Calendar c, int field, int amount) {
+		c.add(field, amount);
+		return c;
+	}
+
+	/**
+	 * Converts a calendar to a {@link ZonedDateTime}.
+	 *
+	 * @param c The calendar to convert.
+	 * @return An {@link Optional} containing the {@link ZonedDateTime}, or empty if the input was <jk>null</jk>.
+	 */
+	public static Optional<ZonedDateTime> toZonedDateTime(Calendar c) {
+		return opt(c).map(GregorianCalendar.class::cast).map(GregorianCalendar::toZonedDateTime);
 	}
 }

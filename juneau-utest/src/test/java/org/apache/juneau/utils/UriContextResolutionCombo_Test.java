@@ -1095,83 +1095,83 @@ class UriContextResolutionCombo_Test extends TestBase {
 	@MethodSource("testers")
 	void a01_testAbsoluteResource(Tester t) {
 		var x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-		assertEquals(t.results.aResource, x, fms("{0}: testAbsolute() failed", t.label));
+		assertEquals(t.results.aResource, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_testAppendAbsoluteResource(Tester t) {
 		var x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		assertString(t.results.aResource, x, fms("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.aResource, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a03_testAbsolutePathInfo(Tester t) {
 		var x = UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-		assertEquals(t.results.aPathInfo, x, fms("{0}: testAbsolute() failed", t.label));
+		assertEquals(t.results.aPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a04_testAppendAbsolutePathInfo(Tester t) {
 		var x = UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		assertString(t.results.aPathInfo, x, fms("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.aPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a05_testRootRelativeResource(Tester t) {
 		var x = UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-		assertEquals(t.results.rrResource, x, fms("{0}: testAbsolute() failed", t.label));
+		assertEquals(t.results.rrResource, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a06_testAppendRootRelativeResource(Tester t) {
 		var x = UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		assertString(t.results.rrResource, x, fms("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.rrResource, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a07_testRootRelativePathInfo(Tester t) {
 		var x = UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-		assertEquals(t.results.rrPathInfo, x, fms("{0}: testAbsolute() failed", t.label));
+		assertEquals(t.results.rrPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a08_testAppendRootRelativePathInfo(Tester t) {
 		var x = UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		assertString(t.results.rrPathInfo, x, fms("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.rrPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a09_testNoneResource(Tester t) {
 		var x = UriResolver.of(NONE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-		assertEquals(t.results.nResource, x, fms("{0}: testAbsolute() failed", t.label));
+		assertEquals(t.results.nResource, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a10_testAppendNoneResource(Tester t) {
 		var x = UriResolver.of(NONE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		assertString(t.results.nResource, x, fms("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.nResource, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a11_testNonePathInfo(Tester t) {
 		var x = UriResolver.of(NONE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-		assertEquals(t.results.nPathInfo, x, fms("{0}: testAbsolute() failed", t.label));
+		assertEquals(t.results.nPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a12_testAppendNonePathInfo(Tester t) {
 		var x = UriResolver.of(NONE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(new StringBuilder(), t.input.uri);
-		assertString(t.results.nPathInfo, x, fms("{0}: testAbsolute() failed", t.label));
+		assertString(t.results.nPathInfo, x, fs("{0}: testAbsolute() failed", t.label));
 	}
 }

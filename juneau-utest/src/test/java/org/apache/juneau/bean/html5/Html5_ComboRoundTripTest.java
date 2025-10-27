@@ -34,7 +34,7 @@ import org.apache.juneau.common.utils.*;
 @SuppressWarnings({})
 class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 
-	private static final B btag = b("bbb");
+	private static final B btag = HtmlBuilder.b("bbb");
 
 	private static A a2(Object ref, Object...children) {
 		return HtmlBuilder.a(ref, children);

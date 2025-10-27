@@ -19,6 +19,7 @@ package org.apache.juneau.common.utils;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * Various utility methods for creating and working with throwables.
@@ -140,5 +141,22 @@ public class ThrowableUtils {
 	 */
 	public static RuntimeException runtimeException(String msg, Object...args) {
 		return new RuntimeException(args.length == 0 ? msg : f(msg, args));
+	}
+
+	/**
+	 * Searches through the cause chain of an exception to find an exception of the specified type.
+	 *
+	 * @param <T> The cause type.
+	 * @param e The exception to search.
+	 * @param cause The cause type to search for.
+	 * @return An {@link Optional} containing the cause if found, or empty if not found.
+	 */
+	public static <T extends Throwable> Optional<T> findCause(Throwable e, Class<T> cause) {
+		while (nn(e)) {
+			if (cause.isInstance(e))
+				return Optional.of(cause.cast(e));
+			e = e.getCause();
+		}
+		return Optional.empty();
 	}
 }

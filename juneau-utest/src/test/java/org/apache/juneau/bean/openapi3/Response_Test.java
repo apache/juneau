@@ -294,7 +294,7 @@ class Response_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
 				"content,description,headers,links,x1,x2",
 				"LinkedHashMap,String,LinkedHashMap,LinkedHashMap,String,<null>"
 			);

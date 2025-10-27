@@ -332,7 +332,7 @@ class Operation_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
 				"callbacks,deprecated,description,externalDocs,operationId,parameters,requestBody,responses,security,servers,summary,tags,x1,x2",
 				"LinkedHashMap,Boolean,String,ExternalDocumentation,String,ArrayList,RequestBodyInfo,LinkedHashMap,ArrayList,ArrayList,String,ArrayList,String,<null>"
 			);

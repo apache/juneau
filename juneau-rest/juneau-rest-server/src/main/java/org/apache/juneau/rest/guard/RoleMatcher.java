@@ -237,7 +237,7 @@ public class RoleMatcher {
 	}
 
 	private Exp parse(String expression) throws ParseException {
-		if (isEmptyOrBlank(expression))
+		if (isBlank(expression))
 			return new Never();
 
 		expression = expression.trim();

@@ -604,7 +604,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		if (val == null)
 			return false;
 		if (val instanceof CharSequence val2)
-			return ! isBlank(val2);
+			return ! Utils.isBlank(val2);
 		return false;
 	}
 

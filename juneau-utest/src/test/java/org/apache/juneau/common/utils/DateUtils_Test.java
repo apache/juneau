@@ -763,4 +763,80 @@ class DateUtils_Test extends TestBase {
 			assertEquals(10, zdt.getDayOfMonth());
 		}
 	}
+
+	//====================================================================================================
+	// addSubtractDays / add / toZonedDateTime
+	//====================================================================================================
+	@Test
+	void test_addSubtractDays() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(2024, Calendar.JANUARY, 15, 0, 0, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+
+		Calendar result = DateUtils.addSubtractDays(cal, 10);
+		assertNotNull(result);
+		assertNotSame(cal, result); // Should be a clone
+		assertEquals(25, result.get(Calendar.DAY_OF_MONTH));
+
+		result = DateUtils.addSubtractDays(cal, -5);
+		assertNotNull(result);
+		assertEquals(10, result.get(Calendar.DAY_OF_MONTH));
+
+		// Null calendar
+		assertNull(DateUtils.addSubtractDays(null, 10));
+	}
+
+	@Test
+	void test_add() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(2024, Calendar.JANUARY, 15, 12, 30, 45);
+		cal.set(Calendar.MILLISECOND, 0);
+
+		// Add days
+		Calendar result = DateUtils.add(cal, Calendar.DAY_OF_MONTH, 5);
+		assertSame(cal, result); // Returns same instance
+		assertEquals(20, cal.get(Calendar.DAY_OF_MONTH));
+
+		// Add months
+		cal.set(2024, Calendar.JANUARY, 15, 0, 0, 0);
+		DateUtils.add(cal, Calendar.MONTH, 2);
+		assertEquals(Calendar.MARCH, cal.get(Calendar.MONTH));
+
+		// Add hours
+		cal.set(2024, Calendar.JANUARY, 15, 10, 0, 0);
+		DateUtils.add(cal, Calendar.HOUR_OF_DAY, 5);
+		assertEquals(15, cal.get(Calendar.HOUR_OF_DAY));
+	}
+
+	@Test
+	void test_toZonedDateTime() {
+		Calendar cal = new GregorianCalendar(2024, Calendar.JANUARY, 15, 12, 30, 45);
+		
+		Optional<ZonedDateTime> result = DateUtils.toZonedDateTime(cal);
+		assertTrue(result.isPresent());
+		
+		ZonedDateTime zdt = result.get();
+		assertEquals(2024, zdt.getYear());
+		assertEquals(1, zdt.getMonthValue());
+		assertEquals(15, zdt.getDayOfMonth());
+		assertEquals(12, zdt.getHour());
+		assertEquals(30, zdt.getMinute());
+		assertEquals(45, zdt.getSecond());
+
+		// Null calendar
+		assertFalse(DateUtils.toZonedDateTime(null).isPresent());
+	}
+
+	@Test
+	void test_toZonedDateTime_preservesTimezone() {
+		TimeZone tz = TimeZone.getTimeZone("America/New_York");
+		Calendar cal = new GregorianCalendar(tz);
+		cal.set(2024, Calendar.JANUARY, 15, 12, 30, 45);
+		
+		Optional<ZonedDateTime> result = DateUtils.toZonedDateTime(cal);
+		assertTrue(result.isPresent());
+		
+		ZonedDateTime zdt = result.get();
+		assertEquals(tz.toZoneId(), zdt.getZone());
+	}
 }

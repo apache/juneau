@@ -1011,13 +1011,13 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void a41_isBlank() {
-		assertTrue(isBlank(null));
-		assertTrue(isBlank(""));
-		assertTrue(isBlank("   "));
-		assertTrue(isBlank("\t\n"));
-		assertFalse(isBlank("hello"));
-		assertFalse(isBlank(" hello "));
-		assertFalse(isBlank("a"));
+		assertTrue(StringUtils.isBlank(null));
+		assertTrue(StringUtils.isBlank(""));
+		assertTrue(StringUtils.isBlank("   "));
+		assertTrue(StringUtils.isBlank("\t\n"));
+		assertFalse(StringUtils.isBlank("hello"));
+		assertFalse(StringUtils.isBlank(" hello "));
+		assertFalse(StringUtils.isBlank("a"));
 	}
 
 	@Test void a42_isNotBlank() {
@@ -1318,5 +1318,183 @@ class StringUtils_Test extends TestBase {
 		assertEquals("hELLO wORLD", swapCase("Hello World"));
 		assertEquals("abc123XYZ", swapCase("ABC123xyz"));
 		assertEquals("123", swapCase("123"));
+	}
+
+	//====================================================================================================
+	// lc / uc
+	//====================================================================================================
+	@Test void a77_lc() {
+		assertNull(lc(null));
+		assertEquals("", lc(""));
+		assertEquals("hello", lc("HELLO"));
+		assertEquals("hello world", lc("Hello World"));
+	}
+
+	@Test void a78_uc() {
+		assertNull(uc(null));
+		assertEquals("", uc(""));
+		assertEquals("HELLO", uc("hello"));
+		assertEquals("HELLO WORLD", uc("Hello World"));
+	}
+
+	//====================================================================================================
+	// eqic
+	//====================================================================================================
+	@Test void a79_eqic() {
+		assertTrue(eqic(null, null));
+		assertFalse(eqic("test", null));
+		assertFalse(eqic(null, "test"));
+		assertTrue(eqic("test", "TEST"));
+		assertTrue(eqic("TEST", "test"));
+		assertTrue(eqic("Test", "test"));
+		assertFalse(eqic("test", "other"));
+		assertTrue(eqic(123, "123"));
+		assertTrue(eqic("123", 123));
+	}
+
+	//====================================================================================================
+	// articlized
+	//====================================================================================================
+	@Test void a80_articlized() {
+		assertEquals("an apple", articlized("apple"));
+		assertEquals("an Apple", articlized("Apple"));
+		assertEquals("a banana", articlized("banana"));
+		assertEquals("a Banana", articlized("Banana"));
+		assertEquals("an elephant", articlized("elephant"));
+		assertEquals("an island", articlized("island"));
+		assertEquals("an orange", articlized("orange"));
+		assertEquals("an umbrella", articlized("umbrella"));
+	}
+
+	//====================================================================================================
+	// obfuscate
+	//====================================================================================================
+	@Test void a81_obfuscate() {
+		assertEquals("*", obfuscate(null));
+		assertEquals("*", obfuscate(""));
+		assertEquals("*", obfuscate("a"));
+		assertEquals("p*", obfuscate("pa"));
+		assertEquals("p*******", obfuscate("password"));
+		assertEquals("1*****", obfuscate("123456"));
+	}
+
+	//====================================================================================================
+	// firstNonEmpty / firstNonBlank
+	//====================================================================================================
+	@Test void a82_firstNonEmpty() {
+		assertEquals("test", firstNonEmpty("test"));
+		assertEquals("test", firstNonEmpty(null, "test"));
+		assertEquals("test", firstNonEmpty("", "test"));
+		assertEquals("test", firstNonEmpty(null, "", "test"));
+		assertNull(firstNonEmpty());
+		assertNull(firstNonEmpty((String)null));
+		assertNull(firstNonEmpty(null, null));
+		assertNull(firstNonEmpty("", ""));
+		assertEquals(" ", firstNonEmpty(" "));
+	}
+
+	@Test void a83_firstNonBlank() {
+		assertEquals("test", firstNonBlank("test"));
+		assertEquals("test", firstNonBlank(null, "test"));
+		assertEquals("test", firstNonBlank("", "test"));
+		assertEquals("test", firstNonBlank(" ", "test"));
+		assertEquals("test", firstNonBlank(null, "", " ", "test"));
+		assertNull(firstNonBlank());
+		assertNull(firstNonBlank((String)null));
+		assertNull(firstNonBlank(null, null));
+		assertNull(firstNonBlank("", ""));
+		assertNull(firstNonBlank(" ", "  "));
+	}
+
+	//====================================================================================================
+	// cdlToList / cdlToSet
+	//====================================================================================================
+	@Test void a86_cdlToList() {
+		assertEquals(List.of("a", "b", "c"), cdlToList("a,b,c"));
+		assertEquals(List.of("a", "b", "c"), cdlToList(" a , b , c "));
+		assertEquals(List.of(), cdlToList(null));
+		assertEquals(List.of(), cdlToList(""));
+		assertEquals(List.of("a"), cdlToList("a"));
+	}
+
+	@Test void a87_cdlToSet() {
+		assertEquals(new LinkedHashSet<>(List.of("a", "b", "c")), cdlToSet("a,b,c"));
+		assertEquals(new LinkedHashSet<>(List.of("a", "b", "c")), cdlToSet(" a , b , c "));
+		assertEquals(new LinkedHashSet<>(), cdlToSet(null));
+		assertEquals(new LinkedHashSet<>(), cdlToSet(""));
+		assertEquals(new LinkedHashSet<>(List.of("a")), cdlToSet("a"));
+	}
+
+	//====================================================================================================
+	// join
+	//====================================================================================================
+	@Test void a88_join_varargs() {
+		assertEquals("a,b,c", join("a", "b", "c"));
+		assertEquals("a", join("a"));
+		assertEquals("", join());
+	}
+
+	@Test void a89_join_collection() {
+		assertEquals("a,b,c", join(List.of("a", "b", "c")));
+		assertEquals("1,2,3", join(List.of(1, 2, 3)));
+		assertEquals("a", join(List.of("a")));
+		assertEquals("", join(List.of()));
+	}
+
+	//====================================================================================================
+	// contains / notContains
+	//====================================================================================================
+	@Test void a90_contains_strings() {
+		assertTrue(contains("test", "te"));
+		assertTrue(contains("test", "st"));
+		assertTrue(contains("test", "test"));
+		assertTrue(contains("test", "te", "xx"));
+		assertFalse(contains("test", "xx"));
+		assertFalse(contains("test", "xx", "yy"));
+		assertFalse(contains(null, "test"));
+		assertFalse(contains("test", (String[])null));
+	}
+
+	@Test void a91_contains_chars() {
+		assertTrue(contains("test", 't'));
+		assertTrue(contains("test", 'e'));
+		assertTrue(contains("test", 't', 'x'));
+		assertFalse(contains("test", 'x'));
+		assertFalse(contains("test", 'x', 'y'));
+		assertFalse(contains(null, 't'));
+		assertFalse(contains("test", (char[])null));
+	}
+
+	@Test void a92_notContains_strings() {
+		assertFalse(notContains("test", "te"));
+		assertTrue(notContains("test", "xx"));
+		assertTrue(notContains(null, "test"));
+	}
+
+	@Test void a93_notContains_chars() {
+		assertFalse(notContains("test", 't'));
+		assertTrue(notContains("test", 'x'));
+		assertTrue(notContains(null, 't'));
+	}
+
+	//====================================================================================================
+	// stringSupplier
+	//====================================================================================================
+	@Test void a94_stringSupplier() {
+		assertEquals("test", stringSupplier(() -> "test").get());
+		assertEquals("[1,2,3]", stringSupplier(() -> List.of(1, 2, 3)).get());
+		assertNull(stringSupplier(() -> null).get());
+	}
+
+	//====================================================================================================
+	// readable
+	//====================================================================================================
+	@Test void a95_readable() {
+		assertNull(readable(null));
+		assertEquals("[a,b,c]", readable(List.of("a", "b", "c")));
+		assertEquals("{foo=bar}", readable(Map.of("foo", "bar")));
+		assertEquals("[1,2,3]", readable(new int[]{1, 2, 3}));
+		assertEquals("test", readable(Optional.of("test")));
+		assertNull(readable(Optional.empty()));
 	}
 }

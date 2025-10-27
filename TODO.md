@@ -74,8 +74,8 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-61 Console.format seems to duplicate Utils.f. Let's remove it.
 - [ ] TODO-62 ResourceBundleUtils.empty() appears to be unused. Let's remove it if so.
 - [ ] TODO-63 Look for places in code where ThrowableUtils.illegalArg and runtimeException can be used.
-- [ ] TODO-64 Add a Utils.nn(Object...) that validates that all parameters are not null.
-- [ ] TODO-65 Add Utils.isEmpty(CharSequence) which redirects to StringUtils.isEmpty(CharSequence).
+- [x] TODO-64 Add a Utils.nn(Object...) that validates that all parameters are not null. **COMPLETE** - Added varargs `nn(Object...)` method that returns true if all parameters are not null. Method includes comprehensive Javadoc with examples. Search of codebase found no existing patterns of `nn(x) && nn(y)` chains to consolidate, likely because TODO-37's systematic replacements converted compound null checks individually.
+- [x] TODO-65 Add Utils.isEmpty(CharSequence) which redirects to StringUtils.isEmpty(CharSequence). **COMPLETE** - Added `isEmpty(CharSequence)` method that delegates to `StringUtils.isEmpty(CharSequence)`, along with `isBlank(CharSequence)` and `isNotEmpty(CharSequence)` overloads. Also added overloads for `isEmpty(Collection)`, `isEmpty(Map)`, `isNotEmpty(Collection)`, and `isNotEmpty(Map)`. All methods include comprehensive Javadocs.
 
 ## Framework Improvements
 

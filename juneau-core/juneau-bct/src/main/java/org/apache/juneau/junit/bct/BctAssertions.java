@@ -698,7 +698,7 @@ public class BctAssertions {
 					}
 				} else {
 					if (ne(e, x)) {
-						errors.add(assertEqualsFailed(e, x, args.getMessage("Element at index {0} did not match.  ==> expected: <{1}({2})> but was: <{3}({4})>", i, e, t(e), x, t(x))));
+						errors.add(assertEqualsFailed(e, x, args.getMessage("Element at index {0} did not match.  ==> expected: <{1}({2})> but was: <{3}({4})>", i, e, scn(e), x, scn(x))));
 					}
 				}
 			}

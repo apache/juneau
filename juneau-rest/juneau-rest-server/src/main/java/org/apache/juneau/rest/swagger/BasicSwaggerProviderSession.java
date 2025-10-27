@@ -702,7 +702,7 @@ public class BasicSwaggerProviderSession {
 	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.
 	 */
 	private static JsonMap fixSwaggerExtensions(JsonMap om) {
-		Predicate<Object> nn = Utils::isNotNull;
+		Predicate<Object> nn = Utils::nn;
 		// @formatter:off
 		om
 			.appendIf(nn, "discriminator", om.remove("x-discriminator"))

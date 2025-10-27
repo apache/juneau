@@ -1012,13 +1012,13 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void a41_isBlank() {
-		assertTrue(isBlank(null));
-		assertTrue(isBlank(""));
-		assertTrue(isBlank("   "));
-		assertTrue(isBlank("\t\n"));
-		assertFalse(isBlank("hello"));
-		assertFalse(isBlank(" hello "));
-		assertFalse(isBlank("a"));
+		assertTrue(StringUtils.isBlank(null));
+		assertTrue(StringUtils.isBlank(""));
+		assertTrue(StringUtils.isBlank("   "));
+		assertTrue(StringUtils.isBlank("\t\n"));
+		assertFalse(StringUtils.isBlank("hello"));
+		assertFalse(StringUtils.isBlank(" hello "));
+		assertFalse(StringUtils.isBlank("a"));
 	}
 
 	@Test void a42_isNotBlank() {

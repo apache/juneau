@@ -203,7 +203,7 @@ class Xml_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
 				"attribute,name,namespace,prefix,wrapped,x1,x2",
 				"Boolean,String,String,String,Boolean,String,<null>"
 			);

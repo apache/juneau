@@ -57,6 +57,50 @@ This file contains TODO items that have been completed and moved from TODO.md.
     - `TestUtils.java`: Updated documentation comment to reflect the use of `Utils.eq()`.
     - Note: `Utils.eq()` implementation itself correctly uses `Objects.equals()` as a fallback, which was not changed.
 
+- **TODO-37** ✅ Find and replace all instances of "x != null" with "nn(x)".
+  - **Status**: COMPLETED
+  - **Details**: Replaced approximately 1965+ instances of `!= null` with `nn()` across production code in juneau-core, juneau-rest, juneau-bean, and juneau-microservice modules (~98.6% reduction from initial ~1992). Includes:
+    - Simple variable checks: 120+ variable names covering common patterns
+    - Multi-variable expressions: `type != null && onClass != null`, `beanContext != null && beanContext.cmCache != null`, etc.
+    - Field access patterns: `e.value != null`, `meta.dynaProperty != null`, `builder.xxx != null`, `p.xxx != null`, `n.uri != null`, etc.
+    - Method call patterns: 30+ getter methods (`getDescription()`, `getUrl()`, `getTags()`, `getName()`, `getVersion()`, etc.)
+    - Ternary expressions: `value != null ? ...`, `builder != null ? ...`, `c != null ? c.getName() : ...`, etc.
+    - Array elements: `store[c] != null`, `vars[i] != null`, etc.
+    - Return statements: `return value != null`, `return o != null`, `return nn(getPackage())`, etc.
+    - Compound expressions: `&& authority != null`, `|| field != null`, `while (pc != null &&`, etc.
+    - Boolean methods: `isAbstract()`, `isInterface()`, `isPrimitive()`, etc. all converted to use `nn(c)`
+    - Lambda expressions: `x -> m.get(x.inner()) != null` → `x -> nn(m.get(x.inner()))`
+    - Builder patterns: `.addIf(variable != null, ...)` → `.addIf(nn(variable), ...)` for 80+ common fields across OpenAPI/Swagger beans
+    - Conservative ternary replacements: simple safe patterns only (including path, partParser, schema, getName, getSimpleName patterns)
+    - Method call chains: `cm.getSwap(this) != null`, `beanFilter.getBeanDictionary() != null`, etc.
+    - Variable assignments: `var isResolving = varResolver != null`, `boolean isLoaded = content != null`, etc.
+    - While loops: `while (e != null)`, `while (c != null)`, `while (type != null && ...)`, `} while (t != null && ...)`, `while ((key = watchService.take()) != null)`, etc.
+    - Else if patterns: 10+ else-if compound expressions
+    - Field assignments: `this.def = mergedFormData != null &&`, `this.def = mergedHeader != null &&`, etc.
+    - Additional compound expressions: 100+ patterns with logical operators (&&, ||)
+    - Boolean variable assignments: `boolean encodeEn = elementName != null`, `boolean cr = o != null && ...`, `descriptionAdded |= description != null`, etc.
+    - Complex multi-condition patterns: including validation checks, filters, type checks, getter chains, annotation checks, etc.
+    - OpenAPI/Swagger getter patterns: `pathItem.getDelete() != null`, `pathItem.getGet() != null`, etc. (all HTTP methods)
+    - Type checking patterns: `v != null && ! valueType.getInnerClass().isInstance(v)`, `arg != null && pt.isParentOf(arg.getClass())`, etc.
+    - Stream filter lambdas: `filter(x -> x != null && ...)` → `filter(x -> nn(x) && ...)`
+    - Complex nested ternaries: `nn(ed) && nn(ed.getDescription()) ? ed.getDescription() : (ed != null ? ed.getUrl() : null)` → `... (nn(ed) ? ed.getUrl() : null)`
+    - Annotation chains: `m.getAnnotation(Deprecated.class) != null || m.getDeclaringClass().getAnnotation(Deprecated.class) != null` → `nn(...) || nn(...)`
+    - Constructor/method reflection patterns: `c.getPublicConstructor(...) != null` → `nn(c.getPublicConstructor(...))`
+  - **Final Result**: Only 27 instances remain (down from initial ~1992), all intentionally preserved:
+    - 1 in `Utils.isNotNull()` method definition (must remain as-is)
+    - 7 in `AssertionPredicates` lambda test predicates (preserved for clarity in test expressions)
+    - 17 in `AssertionUtils` with `assertArg` statements (preserved for clarity in argument validation)
+    - 2 in `PartList` and `HeaderList` with `assertArg` statements (preserved for clarity)
+  - **Note**: Special care taken to preserve `Utils.isNotNull()` method definition by excluding `Utils.java` from all replacements.
+
+- **TODO-64** ✅ Add a Utils.nn(Object...) that validates that all parameters are not null.
+  - **Status**: COMPLETED
+  - **Details**: Added varargs `nn(Object...)` method that returns true if all parameters are not null. Method includes comprehensive Javadoc with examples. Search of codebase found no existing patterns of `nn(x) && nn(y)` chains to consolidate, likely because TODO-37's systematic replacements converted compound null checks individually.
+
+- **TODO-65** ✅ Add Utils.isEmpty(CharSequence) which redirects to StringUtils.isEmpty(CharSequence).
+  - **Status**: COMPLETED
+  - **Details**: Added `isEmpty(CharSequence)` method that delegates to `StringUtils.isEmpty(CharSequence)`, along with `isBlank(CharSequence)` and `isNotEmpty(CharSequence)` overloads. Also added overloads for `isEmpty(Collection)`, `isEmpty(Map)`, `isNotEmpty(Collection)`, and `isNotEmpty(Map)`. All methods include comprehensive Javadocs.
+
 ## Notes
 
 Items are marked as completed when:

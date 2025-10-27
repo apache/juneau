@@ -20,7 +20,6 @@ import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.junit.bct.BctUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -762,7 +761,7 @@ public class BasicBeanConverter implements BeanConverter {
 			return arrayToList(o);
 		var o2 = o;
 		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2))
-			.orElseThrow(() -> new IllegalArgumentException(f("Object of type {0} could not be converted to a list.", t(o2))));
+			.orElseThrow(() -> new IllegalArgumentException(f("Object of type {0} could not be converted to a list.", scn(o2))));
 	}
 
 	@Override

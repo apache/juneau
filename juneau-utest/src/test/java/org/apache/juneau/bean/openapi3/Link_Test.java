@@ -214,7 +214,7 @@ class Link_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
 				"description,operationId,operationRef,parameters,requestBody,server,x1,x2",
 				"String,String,String,LinkedHashMap,String,Server,String,<null>"
 			);

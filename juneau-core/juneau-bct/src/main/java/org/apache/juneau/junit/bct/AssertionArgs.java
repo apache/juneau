@@ -18,7 +18,6 @@ package org.apache.juneau.junit.bct;
 
 import static java.util.Optional.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.junit.bct.BctUtils.*;
 
 import java.text.*;
 import java.util.*;

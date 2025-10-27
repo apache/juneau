@@ -4117,7 +4117,7 @@ public class HttpPartSchema {
 			Predicate<Object> ne = x -> isNotEmpty(s(x));
 			Predicate<Boolean> nf = Utils::isTrue;
 			Predicate<Number> nm1 = Utils::isNotMinusOne;
-			Predicate<Object> nn = Utils::isNotNull;
+			Predicate<Object> nn = Utils::nn;
 			// @formatter:off
 			JsonMap m = new JsonMap()
 				.appendIf(ne, "name", name)

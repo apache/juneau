@@ -203,7 +203,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
 	public final JsonMap getLastLocation() {
-		Predicate<Object> nn = Utils::isNotNull;
+		Predicate<Object> nn = Utils::nn;
 		Predicate<Collection<?>> nec = Utils::isNotEmpty;
 		// @formatter:off
 		return JsonMap

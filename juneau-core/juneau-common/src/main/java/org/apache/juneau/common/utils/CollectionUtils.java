@@ -646,5 +646,28 @@ public class CollectionUtils {
 		return MapBuilder.create(keyType, valueType).converters(converters);
 	}
 
+	/**
+	 * Creates a new {@link TreeSet} containing a copy of the specified set.
+	 *
+	 * @param <T> The element type.
+	 * @param copyFrom The set to copy from.
+	 * @return A new {@link TreeSet}, or <jk>null</jk> if the set was <jk>null</jk>.
+	 */
+	public static <T> TreeSet<T> treeSet(Set<T> copyFrom) {
+		return copyFrom == null ? null : new TreeSet<>(copyFrom);
+	}
+
+	/**
+	 * Creates a new {@link TreeSet} containing the specified values.
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the set.
+	 * @return A new {@link TreeSet}, never <jk>null</jk>.
+	 */
+	@SafeVarargs
+	public static <T> TreeSet<T> treeSet(T...values) {
+		return new TreeSet<>(Arrays.asList(values));
+	}
+
 	private CollectionUtils() {}
 }

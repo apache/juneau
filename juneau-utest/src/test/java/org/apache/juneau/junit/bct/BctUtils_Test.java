@@ -71,51 +71,6 @@ class BctUtils_Test extends TestBase {
 	}
 
 	// ====================================================================================================
-	// Convenience Alias Tests
-	// ====================================================================================================
-
-	@Test
-	@DisplayName("fs() - Supplier creation")
-	void b01_fsSupplierCreation() {
-		var supplier = fs("Test {0} with {1}", "value", 42);
-		assertNotNull(supplier);
-		assertEquals("Test value with 42", supplier.get());
-
-		// Should be reusable
-		assertEquals("Test value with 42", supplier.get());
-	}
-
-	@Test
-	@DisplayName("fs() - No parameters supplier")
-	void b02_fsNoParameters() {
-		var supplier = fs("Simple message");
-		assertEquals("Simple message", supplier.get());
-	}
-
-	@Test
-	@DisplayName("t() - Various object types")
-	void c01_tVariousTypes() {
-		assertEquals("String", t("test"));
-		assertEquals("Integer", t(42));
-		assertEquals("ArrayList", t(new java.util.ArrayList<>()));
-		assertEquals("Double", t(3.14));
-	}
-
-	@Test
-	@DisplayName("t() - Null input")
-	void c02_tNullInput() {
-		assertNull(t(null));
-	}
-
-	@Test
-	@DisplayName("t() - Array types")
-	void c03_tArrayTypes() {
-		assertEquals("String[]", t(new String[]{"a", "b"}));
-		assertEquals("int[]", t(new int[]{1, 2, 3}));
-		assertEquals("Object[]", t(new Object[]{1, "test", true}));
-	}
-
-	// ====================================================================================================
 	// Tokenization Tests
 	// ====================================================================================================
 

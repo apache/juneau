@@ -208,7 +208,7 @@ class Info_Test extends TestBase {
 
 		@Test void c09_getTypes() {
 			assertMapped(
-				TESTER.bean(), (obj,prop) -> simpleClassNameOf(obj.get(prop, Object.class)),
+				TESTER.bean(), (obj,prop) -> scn(obj.get(prop, Object.class)),
 				"contact,description,license,siteName,termsOfService,title,version,x1,x2",
 				"Contact,String,License,String,String,String,String,String,<null>"
 			);

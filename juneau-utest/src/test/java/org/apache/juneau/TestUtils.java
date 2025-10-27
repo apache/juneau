@@ -499,7 +499,7 @@ public class TestUtils extends Utils2 {
 
 	public static void assertEqualsAll(Object...values) {
 		for (var i = 1; i < values.length; i++) {
-			assertEquals(values[0], values[i], fms("Elements at index {0} and {1} did not match. {0}={2}, {1}={3}", 0, i, r(values[0]), r(values[i])));
+			assertEquals(values[0], values[i], fs("Elements at index {0} and {1} did not match. {0}={2}, {1}={3}", 0, i, r(values[0]), r(values[i])));
 		}
 	}
 
@@ -615,7 +615,7 @@ public class TestUtils extends Utils2 {
 	public static void assertNotEqualsAny(Object actual, Object...values) {
 		assertNotNull(actual, "Value was null.");
 		for (var i = 0; i < values.length; i++) {
-			assertNotEquals(values[i], actual, fms("Element at index {0} unexpectedly matched.  expected={1}, actual={2}", i, values[i], s(actual)));
+			assertNotEquals(values[i], actual, fs("Element at index {0} unexpectedly matched.  expected={1}, actual={2}", i, values[i], s(actual)));
 		}
 	}
 
@@ -678,21 +678,21 @@ public class TestUtils extends Utils2 {
 
 	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {
 		var messages = getMessages(t);
-		assertTrue(messages.contains(expectedSubstring), fms("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
+		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
 		return t;
 	}
 
 	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, List<String> expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {
 		var exception = Assertions.assertThrows(expectedType, executable);
 		var messages = getMessages(exception);
-		expectedSubstrings.stream().forEach(x -> assertTrue(messages.contains(x), fms("Expected message to contain: {0}.\nActual:\n{1}", x, messages)));
+		expectedSubstrings.stream().forEach(x -> assertTrue(messages.contains(x), fs("Expected message to contain: {0}.\nActual:\n{1}", x, messages)));
 		return exception;
 	}
 
 	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
 		var exception = Assertions.assertThrows(expectedType, executable);
 		var messages = getMessages(exception);
-		assertTrue(messages.contains(expectedSubstring), fms("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
+		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
 		return exception;
 	}
 
@@ -803,7 +803,7 @@ public class TestUtils extends Utils2 {
 				m.setAccessible(true);
 				return m.invoke(o);
 			}
-			throw ThrowableUtils.runtimeException("Property {0} not found on object of type {1}", name, classNameOf(o));
+			throw ThrowableUtils.runtimeException("Property {0} not found on object of type {1}", name, cn(o));
 		});
 	}
 
