@@ -130,16 +130,16 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">while</strong> (pt != cc.getSuperclass()) {
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 			extractTypes(typeMap, cc);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			cc = cc.getSuperclass();
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			AssertionUtils.assertArg(nn(cc), <span class="jxr_string">"Class ''{0}'' is not a subclass of parameterized type ''{1}''"</span>, c.getSimpleName(), pt.getSimpleName());
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			assertArg(nn(cc), <span class="jxr_string">"Class ''{0}'' is not a subclass of parameterized type ''{1}''"</span>, c.getSimpleName(), pt.getSimpleName());
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		}
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		Type gsc = cc.getGenericSuperclass();
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		AssertionUtils.assertArg(gsc instanceof ParameterizedType, <span class="jxr_string">"Class ''{0}'' is not a parameterized type"</span>, pt.getSimpleName());
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertArg(gsc instanceof ParameterizedType, <span class="jxr_string">"Class ''{0}'' is not a parameterized type"</span>, pt.getSimpleName());
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		ParameterizedType cpt = (ParameterizedType)gsc;
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		Type[] atArgs = cpt.getActualTypeArguments();
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		AssertionUtils.assertArg(index &lt; atArgs.length, <span class="jxr_string">"Invalid type index. index={0}, argsLength={1}"</span>, index, atArgs.length);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertArg(index &lt; atArgs.length, <span class="jxr_string">"Invalid type index. index={0}, argsLength={1}"</span>, index, atArgs.length);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		Type actualType = cpt.getActualTypeArguments()[index];
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">if</strong> (typeMap.containsKey(actualType))
