@@ -983,7 +983,7 @@ public class BasicSwaggerProviderSession {
 		}
 		if (o instanceof JsonMap)
 			return (JsonMap)o;
-		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", ClassUtils.className(o));
+		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", cn(o));
 	}
 
 	private JsonMap parseMap(String o, String location, Object...args) throws ParseException {

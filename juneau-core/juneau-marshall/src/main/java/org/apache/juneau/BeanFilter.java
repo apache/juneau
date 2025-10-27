@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -89,15 +90,15 @@ public class BeanFilter {
 					writeOnlyProperties(x.writeOnlyProperties(), x.wo());
 				if (isNotEmpty(x.typeName()))
 					typeName(x.typeName());
-				if (ClassUtils.isNotVoid(x.propertyNamer()))
+				if (isNotVoid(x.propertyNamer()))
 					propertyNamer(x.propertyNamer());
-				if (ClassUtils.isNotVoid(x.interfaceClass()))
+				if (isNotVoid(x.interfaceClass()))
 					interfaceClass(x.interfaceClass());
-				if (ClassUtils.isNotVoid(x.stopClass()))
+				if (isNotVoid(x.stopClass()))
 					stopClass(x.stopClass());
-				if (ClassUtils.isNotVoid(x.interceptor()))
+				if (isNotVoid(x.interceptor()))
 					interceptor(x.interceptor());
-				if (ClassUtils.isNotVoid(x.implClass()))
+				if (isNotVoid(x.implClass()))
 					implClass(x.implClass());
 				if (isNotEmptyArray(x.dictionary()))
 					dictionary(x.dictionary());

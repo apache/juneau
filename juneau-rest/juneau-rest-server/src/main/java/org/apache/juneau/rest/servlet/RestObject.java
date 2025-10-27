@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.servlet;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.text.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
@@ -103,7 +105,7 @@ public abstract class RestObject {
 		RestContext c = context.get();
 		Logger logger = c == null ? null : c.getLogger();
 		if (logger == null)
-			logger = Logger.getLogger(ClassUtils.className(this));
+			logger = Logger.getLogger(cn(this));
 		logger.log(level, cause, msg);
 	}
 

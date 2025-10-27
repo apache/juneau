@@ -16,13 +16,12 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * A generic mutable value wrapper.
@@ -156,7 +155,7 @@ public class Value<T> {
 	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
 	 */
 	public static Type unwrap(Type t) {
-		var x = ClassUtils.getParameterType(t);
+		var x = getParameterType(t);
 		return nn(x) ? x : t;
 	}
 

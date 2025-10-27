@@ -24,7 +24,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -221,7 +220,7 @@ public class IfRange extends BasicDateHeader {
 			} else if (o instanceof ZonedDateTime) {
 				return RFC_1123_DATE_TIME.format((ZonedDateTime)o);
 			}
-			throw new BasicRuntimeException("Invalid object type returned by supplier: {0}", ClassUtils.className(o));
+			throw new BasicRuntimeException("Invalid object type returned by supplier: {0}", cn(o));
 		}
 		if (nn(value))
 			return s(value);

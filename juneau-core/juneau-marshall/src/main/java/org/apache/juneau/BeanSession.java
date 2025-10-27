@@ -1110,7 +1110,7 @@ public class BeanSession extends ContextSession {
 	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
 		assertArgNotNull("o", o);
 		assertArgNotNull("c", c);
-		assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", ClassUtils.className(c), ClassUtils.className(o), 0);
+		assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", cn(c), cn(o), 0);
 
 		ClassMeta cm = getClassMeta(c);
 

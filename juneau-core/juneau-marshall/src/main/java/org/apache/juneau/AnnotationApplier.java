@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -265,7 +266,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return An optional containing the specified value.
 	 */
 	protected <T> Optional<Class<T>> type(Class<T> in) {
-		return opt(in).filter(ClassUtils.NOT_VOID);
+		return opt(in).filter(NOT_VOID);
 	}
 
 	/**

@@ -654,7 +654,7 @@ public abstract class Context implements AnnotationProvider {
 				);
 				// @formatter:on
 				if (cci == null)
-					throw new BasicRuntimeException("Public constructor not found: {0}({1})", ClassUtils.className(type), ClassUtils.className(this));
+					throw new BasicRuntimeException("Public constructor not found: {0}({1})", cn(type), cn(this));
 				CONTEXT_CONSTRUCTORS.put(type, cci);
 			}
 			return cci;
@@ -800,7 +800,7 @@ public abstract class Context implements AnnotationProvider {
 				}
 
 			} catch (Exception e) {
-				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.", ClassUtils.className(a));
+				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.", cn(a));
 			}
 		});
 		this.annotationMap = rmb.build();

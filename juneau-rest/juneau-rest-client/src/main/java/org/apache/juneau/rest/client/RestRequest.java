@@ -46,7 +46,6 @@ import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.HttpHeaders;
@@ -2515,7 +2514,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
 		} else if (nn(value)) {
-			throw new BasicRuntimeException("Invalid value type for header arg ''{0}'': {1}", name, ClassUtils.className(value));
+			throw new BasicRuntimeException("Invalid value type for header arg ''{0}'': {1}", name, cn(value));
 		}
 
 		if (skipIfEmpty)
@@ -2550,7 +2549,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, PATH, serializer, schema, false)));
 		} else if (nn(value)) {
-			throw new BasicRuntimeException("Invalid value type for path arg ''{0}'': {1}", name, ClassUtils.className(value));
+			throw new BasicRuntimeException("Invalid value type for path arg ''{0}'': {1}", name, cn(value));
 		}
 
 		pathData.append(l);

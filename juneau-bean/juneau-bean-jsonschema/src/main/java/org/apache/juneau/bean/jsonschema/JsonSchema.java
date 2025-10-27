@@ -476,7 +476,7 @@ public class JsonSchema {
 			else if (type instanceof JsonTypeArray x)
 				this.typeJsonTypeArray = x;
 			else
-				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", ClassUtils.className(type));
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", cn(type));
 		}
 		return this;
 	}
@@ -816,7 +816,7 @@ public class JsonSchema {
 				this.itemsSchemaArray = x;
 				setMasterOn(this.itemsSchemaArray);
 			} else {
-				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", ClassUtils.className(items));
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", cn(items));
 			}
 		}
 		return this;
@@ -1058,8 +1058,7 @@ public class JsonSchema {
 				this.additionalItemsSchemaArray = x;
 				setMasterOn(this.additionalItemsSchemaArray);
 			} else {
-				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray",
-					ClassUtils.className(additionalItems));
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray", cn(additionalItems));
 			}
 		}
 		return this;
@@ -1318,8 +1317,7 @@ public class JsonSchema {
 				this.additionalPropertiesSchema = x;
 				setMasterOn(this.additionalPropertiesSchema);
 			} else
-				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema",
-					ClassUtils.className(additionalProperties));
+				throw new BeanRuntimeException(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema", cn(additionalProperties));
 		}
 		return this;
 	}

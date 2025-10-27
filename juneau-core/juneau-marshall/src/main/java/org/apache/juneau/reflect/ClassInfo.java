@@ -17,6 +17,7 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -160,7 +161,7 @@ public class ClassInfo {
 			return null;
 		if (t instanceof Class)
 			return of((Class<?>)t);
-		return new ClassInfo(ClassUtils.toClass(t), t);
+		return new ClassInfo(toClass(t), t);
 	}
 
 	/**

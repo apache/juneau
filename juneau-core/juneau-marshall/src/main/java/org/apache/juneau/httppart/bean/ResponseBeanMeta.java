@@ -17,6 +17,7 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.annotation.InvalidAnnotationException.*;
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
@@ -59,9 +60,9 @@ public class ResponseBeanMeta {
 
 		Builder apply(Response a) {
 			if (nn(a)) {
-				if (ClassUtils.isNotVoid(a.serializer()))
+				if (isNotVoid(a.serializer()))
 					partSerializer = a.serializer();
-				if (ClassUtils.isNotVoid(a.parser()))
+				if (isNotVoid(a.parser()))
 					partParser = a.parser();
 				schema.apply(a.schema());
 			}
@@ -77,7 +78,7 @@ public class ResponseBeanMeta {
 		}
 
 		Builder apply(Type t) {
-			Class<?> c = ClassUtils.toClass(t);
+			Class<?> c = toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			ClassInfo ci = cm.getInfo();
 			ci.forEachPublicMethod(x -> true, x -> {

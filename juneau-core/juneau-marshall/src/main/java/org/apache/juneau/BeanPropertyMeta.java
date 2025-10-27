@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -139,9 +140,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		private static ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
 			Class<?> c = s.value();
-			if (ClassUtils.isVoid(c))
+			if (isVoid(c))
 				c = s.impl();
-			if (ClassUtils.isVoid(c))
+			if (isVoid(c))
 				return null;
 			ClassInfo ci = ClassInfo.of(c);
 			if (ci.isChildOf(ObjectSwap.class)) {
@@ -173,20 +174,20 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		BeanPropertyMeta.Builder setExtraKeys(Method extraKeys) {
-			ClassUtils.setAccessible(extraKeys);
+			setAccessible(extraKeys);
 			this.extraKeys = extraKeys;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setField(Field field) {
-			ClassUtils.setAccessible(field);
+			setAccessible(field);
 			this.field = field;
 			this.innerField = field;
 			return this;
 		}
 
 		BeanPropertyMeta.Builder setGetter(Method getter) {
-			ClassUtils.setAccessible(getter);
+			setAccessible(getter);
 			this.getter = getter;
 			return this;
 		}
@@ -197,7 +198,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		BeanPropertyMeta.Builder setSetter(Method setter) {
-			ClassUtils.setAccessible(setter);
+			setAccessible(setter);
 			this.setter = setter;
 			return this;
 		}

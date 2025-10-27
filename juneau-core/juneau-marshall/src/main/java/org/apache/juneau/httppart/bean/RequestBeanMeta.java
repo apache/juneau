@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.httppart.bean;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
@@ -85,9 +86,9 @@ public class RequestBeanMeta {
 
 		Builder apply(Request a) {
 			if (nn(a)) {
-				if (ClassUtils.isNotVoid(a.serializer()))
+				if (isNotVoid(a.serializer()))
 					serializer.type(a.serializer());
-				if (ClassUtils.isNotVoid(a.parser()))
+				if (isNotVoid(a.parser()))
 					parser.type(a.parser());
 			}
 			return this;

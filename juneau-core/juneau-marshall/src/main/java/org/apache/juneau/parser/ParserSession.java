@@ -30,7 +30,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -889,7 +888,7 @@ public class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		throw new UnsupportedOperationException("Parser '" + ClassUtils.className(getClass()) + "' does not support this method.");
+		throw new UnsupportedOperationException("Parser '" + cn(getClass()) + "' does not support this method.");
 	}
 
 	/**
@@ -908,7 +907,7 @@ public class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		throw new UnsupportedOperationException("Parser '" + ClassUtils.className(getClass()) + "' does not support this method.");
+		throw new UnsupportedOperationException("Parser '" + cn(getClass()) + "' does not support this method.");
 	}
 
 	/**

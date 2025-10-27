@@ -178,7 +178,7 @@ public class RestOperations {
 		if (rc == 1)
 			throw new PreconditionFailed("Method ''{0}'' not found on resource on path ''{1}'' with matching matcher.", m, session.getPathInfo());
 
-		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", session.getPathInfo(), ClassUtils.className(session.getResource()));
+		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", session.getPathInfo(), cn(session.getResource()));
 	}
 
 	/**

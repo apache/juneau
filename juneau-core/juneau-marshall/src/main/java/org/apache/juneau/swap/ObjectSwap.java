@@ -22,7 +22,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -324,7 +323,7 @@ public abstract class ObjectSwap<T,S> {
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
 	public S swap(BeanSession session, T o, String template) throws Exception {
-		throw new SerializeException("Swap method not implemented on ObjectSwap ''{0}''", ClassUtils.className(this));
+		throw new SerializeException("Swap method not implemented on ObjectSwap ''{0}''", cn(this));
 	}
 
 	@Override /* Overridden from Object */
@@ -369,7 +368,7 @@ public abstract class ObjectSwap<T,S> {
 	 * @throws Exception If a problem occurred trying to convert the output.
 	 */
 	public T unswap(BeanSession session, S f, ClassMeta<?> hint, String template) throws Exception {
-		throw new ParseException("Unswap method not implemented on ObjectSwap ''{0}''", ClassUtils.className(this));
+		throw new ParseException("Unswap method not implemented on ObjectSwap ''{0}''", cn(this));
 	}
 
 	/**

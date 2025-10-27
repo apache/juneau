@@ -24,7 +24,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.reflect.*;
 
@@ -134,7 +133,7 @@ public class BeanRegistry {
 						if (x instanceof Class)
 							addClass((Class<?>)x);
 						else
-							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", ClassUtils.className(c));
+							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", cn(c));
 					});
 				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
@@ -146,13 +145,13 @@ public class BeanRegistry {
 						else if (isArray(v))
 							val = getTypedClassMeta(v);
 						else
-							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", ClassUtils.className(c), ClassUtils.className(v));
+							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", cn(c), cn(v));
 						addToMap(typeName, val);
 					});
 				} else {
 					Value<String> typeName = Value.empty();
 					ci.forEachAnnotation(beanContext, Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
-					addToMap(typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", ClassUtils.className(c))),
+					addToMap(typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", cn(c))),
 						beanContext.getClassMeta(c));
 				}
 			}

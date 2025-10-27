@@ -20,6 +20,7 @@ import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -2231,7 +2232,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder parserListener(Class<? extends ParserListener> value) {
-			if (ClassUtils.isNotVoid(value))
+			if (isNotVoid(value))
 				parsers.forEach(x -> x.listener(value));
 			return this;
 		}
@@ -3088,7 +3089,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder serializerListener(Class<? extends SerializerListener> value) {
-			if (ClassUtils.isNotVoid(value))
+			if (isNotVoid(value))
 				serializers.forEach(x -> x.listener(value));
 			return this;
 		}
@@ -3848,7 +3849,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			// Apply @Rest(beanStore).
-			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> ClassUtils.isNotVoid(x.beanStore()), x -> v.get().type(x.beanStore()));
+			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotVoid(x.beanStore()), x -> v.get().type(x.beanStore()));
 
 			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
 			// @formatter:off
@@ -5866,7 +5867,7 @@ public class RestContext extends Context {
 		if (ci.isChildOf(ParseException.class) || ci.is(InvalidDataConversionException.class))
 			return new BadRequest(t);
 
-		String n = ClassUtils.className(t);
+		String n = cn(t);
 
 		if (n.contains("AccessDenied") || n.contains("Unauthorized"))
 			return new Unauthorized(t);
@@ -6100,7 +6101,7 @@ public class RestContext extends Context {
 		}
 
 		var output = opSession.getResponse().getContent().orElse(null);
-		throw new NotImplemented("No response processors found to process output of type ''{0}''", ClassUtils.className(output));
+		throw new NotImplemented("No response processors found to process output of type ''{0}''", cn(output));
 	}
 
 	@Override /* Overridden from Context */

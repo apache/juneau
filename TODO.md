@@ -32,6 +32,8 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-53 Use static imports for all method calls to BctUtils.
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
 - [ ] TODO-66 There are two ArrayUtilsTest classes whose tests should be merged into CollectionUtils_Test.
+- [ ] TODO-67 Add to ThrowableUtils: unsupportedOp, ioException.
+- [ ] TODO-68 Replace BasicRuntimeException with ThrowableUtils.runtimeException.
 
 ## Framework Improvements
 

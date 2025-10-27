@@ -26,7 +26,6 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.reflect.*;
 
@@ -87,7 +86,7 @@ public class BasicPart implements NameValuePair, Headerable {
 			Map.Entry e = (Map.Entry)o;
 			return BasicPart.of(s(e.getKey()), e.getValue());
 		}
-		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", ClassUtils.className(o));
+		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", cn(o));
 	}
 
 	/**

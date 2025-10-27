@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.remote;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
@@ -75,7 +76,7 @@ public class RemoteMeta {
 				clientVersion = resolve(r.version());
 			if (isNotEmpty(r.versionHeader()))
 				versionHeader = resolve(r.versionHeader());
-			if (ClassUtils.isNotVoid(r.headerList())) {
+			if (isNotVoid(r.headerList())) {
 				try {
 					headers.append(r.headerList().getDeclaredConstructor().newInstance().getAll());
 				} catch (Exception e) {

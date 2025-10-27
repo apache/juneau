@@ -24,7 +24,6 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.Header;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
@@ -87,7 +86,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 						} else if (o2 instanceof NameValuePair) {
 							h = BasicHeader.of((NameValuePair)o2);
 						} else {
-							throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", ClassUtils.className(o2), n);
+							throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", cn(o2), n);
 						}
 						res.addHeader(h);
 					}
@@ -138,6 +137,6 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 			return alist((Object[])o);
 		if (o instanceof Collection)
 			return (Collection<?>)o;
-		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", ClassUtils.className(o));
+		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", cn(o));
 	}
 }

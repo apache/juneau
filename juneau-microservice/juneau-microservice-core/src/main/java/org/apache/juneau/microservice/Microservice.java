@@ -424,7 +424,7 @@ public class Microservice implements ConfigEventListener {
 			else if (value instanceof Class clazz)
 				this.manifest = new ManifestFile(clazz);
 			else
-				throw new BasicRuntimeException("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", ClassUtils.className(value));
+				throw new BasicRuntimeException("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", cn(value));
 
 			return this;
 		}

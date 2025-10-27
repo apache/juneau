@@ -23,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -97,7 +96,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	@SuppressWarnings("unchecked")
 	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (unswapMethod == null)
-			throw new ParseException("unswap() method not implement on surrogate class ''{1}'': {0}", ClassUtils.className(f), getNormalClass().getFullName());
+			throw new ParseException("unswap() method not implement on surrogate class ''{1}'': {0}", cn(f), getNormalClass().getFullName());
 		try {
 			return (T)unswapMethod.invoke(f);
 		} catch (Exception e) {

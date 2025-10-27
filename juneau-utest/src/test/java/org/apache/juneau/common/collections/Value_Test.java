@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class Value_Test extends TestBase {
@@ -33,7 +33,7 @@ class Value_Test extends TestBase {
 	public static class A1 {}
 
 	@Test void a01_testSubclass() {
-		assertEquals(A1.class, ClassUtils.getParameterType(A.class));
+		assertEquals(A1.class, getParameterType(A.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

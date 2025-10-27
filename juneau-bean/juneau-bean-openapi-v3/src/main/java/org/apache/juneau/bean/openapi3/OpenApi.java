@@ -249,7 +249,7 @@ public class OpenApi extends OpenApiElement {
 		try {
 			return new ObjectRest(this).get(ref.substring(1), c);
 		} catch (Exception e) {
-			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, ClassUtils.className(c));
+			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, cn(c));
 		}
 	}
 

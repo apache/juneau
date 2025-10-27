@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -56,7 +57,7 @@ public class ResponseCodeArg implements RestOpArg {
 	protected ResponseCodeArg(ParamInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
-		if (c != Value.class || ClassUtils.getParameterType(type) != Integer.class)
+		if (c != Value.class || getParameterType(type) != Integer.class)
 			throw new ArgException(paramInfo, "Type must be Value<Integer> on parameter annotated with @StatusCode annotation");
 	}
 

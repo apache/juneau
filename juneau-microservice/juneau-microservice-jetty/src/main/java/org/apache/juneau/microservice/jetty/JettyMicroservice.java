@@ -217,7 +217,7 @@ public class JettyMicroservice extends Microservice {
 			else if (jettyXml instanceof Reader reader)
 				this.jettyXml = read(reader);
 			else
-				throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object): {0}", ClassUtils.className(jettyXml));
+				throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object): {0}", cn(jettyXml));
 			this.jettyXmlResolveVars = resolveVars;
 			return this;
 		}
