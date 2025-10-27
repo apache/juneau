@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  	<em class="jxr_comment">// Basic tests.</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		Tuple3Function&lt;Integer,Integer,Integer,Integer&gt; x = (a,b,c)-&gt;a+b+c;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		Function3&lt;Integer,Integer,Integer,Integer&gt; x = (a,b,c)-&gt;a+b+c;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  		assertEquals(6, x.apply(1,2,3));
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	}
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  }

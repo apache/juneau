@@ -766,346 +766,347 @@
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> debug;
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ReflectionMap&lt;Annotation&gt; annotationMap;
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Class&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; classAnnotationCache;
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Class&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; declaredClassAnnotationCache;
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Method,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; methodAnnotationCache;
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Field,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; fieldAnnotationCache;
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Concurrent2KeyHashMap&lt;Constructor&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; constructorAnnotationCache;
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache2&lt;Class&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; classAnnotationCache;
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache2&lt;Class&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; declaredClassAnnotationCache;
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache2&lt;Method,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; methodAnnotationCache;
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache2&lt;Field,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; fieldAnnotationCache;
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache2&lt;Constructor&lt;?&gt;,Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;,Annotation[]&gt; constructorAnnotationCache;
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 * Constructor for this class.</em>
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this class.</em>
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 	<strong class="jxr_keyword">protected</strong> <a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a>(Builder builder) {
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 		init(builder);
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		debug = builder.debug;
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		annotations = Utils.opt(builder.annotations).orElseGet(Collections::emptyList);
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		ReflectionMap.Builder&lt;Annotation&gt; rmb = ReflectionMap.create(Annotation.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		annotations.forEach(a -&gt; {
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 				ClassInfo ci = ClassInfo.of(a.getClass());
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 				MethodInfo mi = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"onClass"</span>));
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 				<strong class="jxr_keyword">if</strong> (mi != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 					<strong class="jxr_keyword">if</strong> (! mi.getReturnType().is(Class[].<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array."</span>,
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 							a.getClass().getSimpleName());
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 					<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : (Class&lt;?&gt;[])mi.accessible().invoke(a))
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 						rmb.append(c.getName(), a);
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 				}
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 				mi = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"on"</span>));
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 				<strong class="jxr_keyword">if</strong> (mi != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 					<strong class="jxr_keyword">if</strong> (! mi.getReturnType().is(String[].<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array."</span>,
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 							a.getClass().getSimpleName());
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 					<strong class="jxr_keyword">for</strong> (String s : (String[])mi.accessible().invoke(a))
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 						rmb.append(s, a);
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 				}
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Invalid annotation @{0} used in BEAN_annotations property."</span>, ClassUtils.className(a));
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 			}
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		});
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		<strong class="jxr_keyword">this</strong>.annotationMap = rmb.build();
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<strong class="jxr_keyword">var</strong> disabled = Boolean.getBoolean(<span class="jxr_string">"juneau.disableAnnotationCaching"</span>);
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		classAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		declaredClassAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2)));
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		methodAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		fieldAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		constructorAnnotationCache = <strong class="jxr_keyword">new</strong> Concurrent2KeyHashMap&lt;&gt;(disabled, (k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 	}
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> <em class="jxr_javadoccomment">	 * Copy constructor.</em>
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> <em class="jxr_javadoccomment">	 * @param copyFrom The context to copy from.</em>
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> 	<strong class="jxr_keyword">protected</strong> <a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a>(<a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a> copyFrom) {
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> 		annotationMap = copyFrom.annotationMap;
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> 		annotations = copyFrom.annotations;
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 		debug = copyFrom.debug;
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 		classAnnotationCache = copyFrom.classAnnotationCache;
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 		declaredClassAnnotationCache = copyFrom.declaredClassAnnotationCache;
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 		methodAnnotationCache = copyFrom.methodAnnotationCache;
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		fieldAnnotationCache = copyFrom.fieldAnnotationCache;
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 		constructorAnnotationCache = copyFrom.constructorAnnotationCache;
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> 	}
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> 
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> <em class="jxr_javadoccomment">	 * Creates a builder from this context object.</em>
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> <em class="jxr_javadoccomment">	 * Builders are used to define new contexts (e.g. serializers, parsers) based on existing configurations.</em>
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">	 * @return A new Builder object.</em>
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented."</span>);
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> 	}
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> 
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">	 * Create a session builder based on the properties defined on this context.</em>
-<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 * Use this method for creating sessions where you want to override basic settings.</em>
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 * Otherwise, use {@link #getSession()} directly.</em>
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * @return A new session builder.</em>
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> 	<strong class="jxr_keyword">public</strong> ContextSession.Builder createSession() {
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented."</span>);
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 	}
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onClass))
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L860" href="#L860">860</a> 					<strong class="jxr_keyword">return</strong> a;
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L862" href="#L862">862</a> 	}
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> 
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L866" href="#L866">866</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onConstructor != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onConstructor))
-<a class="jxr_linenumber" name="L868" href="#L868">868</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> 					<strong class="jxr_keyword">return</strong> a;
-<a class="jxr_linenumber" name="L870" href="#L870">870</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L871" href="#L871">871</a> 	}
-<a class="jxr_linenumber" name="L872" href="#L872">872</a> 
-<a class="jxr_linenumber" name="L873" href="#L873">873</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L875" href="#L875">875</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onField != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onField))
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L878" href="#L878">878</a> 					<strong class="jxr_keyword">return</strong> a;
-<a class="jxr_linenumber" name="L879" href="#L879">879</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L880" href="#L880">880</a> 	}
-<a class="jxr_linenumber" name="L881" href="#L881">881</a> 
-<a class="jxr_linenumber" name="L882" href="#L882">882</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L883" href="#L883">883</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L884" href="#L884">884</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onMethod != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L885" href="#L885">885</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onMethod))
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> 					<strong class="jxr_keyword">return</strong> a;
-<a class="jxr_linenumber" name="L888" href="#L888">888</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 	}
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> 
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> 			<strong class="jxr_keyword">for</strong> (A a : declaredAnnotations(type, onClass))
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> 					<strong class="jxr_keyword">return</strong> a;
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 	}
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> 
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onClass))
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 				PredicateUtils.consumeIf(filter, action, a);
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	}
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onConstructor != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onConstructor))
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 				PredicateUtils.consumeIf(filter, action, a);
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 	}
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onField != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onField))
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 				PredicateUtils.consumeIf(filter, action, a);
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 	}
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onMethod != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onMethod))
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 				PredicateUtils.consumeIf(filter, action, a);
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 	}
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 			<strong class="jxr_keyword">for</strong> (A a : declaredAnnotations(type, onClass))
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 				PredicateUtils.consumeIf(filter, action, a);
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 	}
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 * Returns a session to use for this context.</em>
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 * Note that subclasses may opt to return a reusable non-modifiable session.</em>
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> <em class="jxr_javadoccomment">	 * @return A new session object.</em>
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<strong class="jxr_keyword">public</strong> <a name="ContextSession" href="../../../org/apache/juneau/ContextSession.html#ContextSession">ContextSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;getAnnotation(a,c)&lt;/c&gt; returns a non-null value.</em>
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation being checked for.</em>
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 * @param type The annotation being checked for.</em>
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 * @param onClass The class being checked on.</em>
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation exists on the specified class.</em>
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass) {
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		<strong class="jxr_keyword">return</strong> annotations(type, onClass).length &gt; 0;
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 	}
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;getAnnotation(a,c)&lt;/c&gt; returns a non-null value.</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation being checked for.</em>
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> <em class="jxr_javadoccomment">	 * @param type The annotation being checked for.</em>
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">	 * @param onConstructor The constructor being checked on.</em>
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation exists on the specified field.</em>
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor) {
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		<strong class="jxr_keyword">return</strong> annotations(type, onConstructor).length &gt; 0;
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 	}
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;getAnnotation(a,f)&lt;/c&gt; returns a non-null value.</em>
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation being checked for.</em>
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 * @param type The annotation being checked for.</em>
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 * @param onField The field being checked on.</em>
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation exists on the specified field.</em>
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type, Field onField) {
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		<strong class="jxr_keyword">return</strong> annotations(type, onField).length &gt; 0;
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 	}
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;getAnnotation(a,m)&lt;/c&gt; returns a non-null value.</em>
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation being checked for.</em>
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 * @param type The annotation being checked for.</em>
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 * @param onMethod The method being checked on.</em>
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation exists on the specified method.</em>
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type, Method onMethod) {
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<strong class="jxr_keyword">return</strong> annotations(type, onMethod).length &gt; 0;
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 	}
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 * Debug mode.</em>
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * @see Context.Builder#debug()</em>
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if debug mode is enabled.</em>
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDebug() { <strong class="jxr_keyword">return</strong> debug; }
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		A x = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onClass))
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 					x = a;
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 		<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 	}
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		A x = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onConstructor != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onConstructor))
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 					x = a;
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 	}
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		A x = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onField != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onField))
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 					x = a;
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 		<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 	}
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		A x = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onMethod != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onMethod))
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 					x = a;
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 		<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	}
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 		A x = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 			<strong class="jxr_keyword">for</strong> (A a : declaredAnnotations(type, onClass))
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 					x = a;
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 	}
-<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		<strong class="jxr_keyword">return</strong> Utils2.toPropertyMap(<strong class="jxr_keyword">this</strong>).asReadableString();
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 	}
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotations(Class&lt;A&gt; type, Class&lt;?&gt; onClass) {
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		<strong class="jxr_keyword">return</strong> (A[])classAnnotationCache.get(onClass, type);
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 	}
-<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 
-<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotations(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor) {
-<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 		<strong class="jxr_keyword">return</strong> (A[])constructorAnnotationCache.get(onConstructor, type);
-<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 	}
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 
-<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotations(Class&lt;A&gt; type, Field onField) {
-<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 		<strong class="jxr_keyword">return</strong> (A[])fieldAnnotationCache.get(onField, type);
-<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 	}
-<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 
-<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotations(Class&lt;A&gt; type, Method onMethod) {
-<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 		<strong class="jxr_keyword">return</strong> (A[])methodAnnotationCache.get(onMethod, type);
-<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 	}
-<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 
-<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] declaredAnnotations(Class&lt;A&gt; type, Class&lt;?&gt; onClass) {
-<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 		<strong class="jxr_keyword">return</strong> (A[])declaredClassAnnotationCache.get(onClass, type);
-<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 	}
-<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 
-<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> <em class="jxr_javadoccomment">	 * Perform optional initialization on builder before it is used.</em>
-<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> <em class="jxr_javadoccomment">	 * Default behavior is a no-op.</em>
-<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> <em class="jxr_javadoccomment">	 * @param builder The builder to initialize.</em>
-<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> init(Builder builder) {}
-<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 
-<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> <em class="jxr_javadoccomment">	 * Returns the properties on this bean as a map for debugging.</em>
-<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> <em class="jxr_javadoccomment">	 * @return The properties on this bean as a map for debugging.</em>
-<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
-<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"annotations"</span>, annotations, <span class="jxr_string">"debug"</span>, debug);
-<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 	}
-<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> }
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	<strong class="jxr_keyword">protected</strong> <a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a>(Builder builder) {
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		init(builder);
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		debug = builder.debug;
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		annotations = Utils.opt(builder.annotations).orElseGet(Collections::emptyList);
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		ReflectionMap.Builder&lt;Annotation&gt; rmb = ReflectionMap.create(Annotation.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		annotations.forEach(a -&gt; {
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 				ClassInfo ci = ClassInfo.of(a.getClass());
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 				MethodInfo mi = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"onClass"</span>));
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 				<strong class="jxr_keyword">if</strong> (mi != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 					<strong class="jxr_keyword">if</strong> (! mi.getReturnType().is(Class[].<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array."</span>,
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 							a.getClass().getSimpleName());
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 					<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : (Class&lt;?&gt;[])mi.accessible().invoke(a))
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 						rmb.append(c.getName(), a);
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 				}
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 				mi = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"on"</span>));
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 				<strong class="jxr_keyword">if</strong> (mi != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 					<strong class="jxr_keyword">if</strong> (! mi.getReturnType().is(String[].<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array."</span>,
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 							a.getClass().getSimpleName());
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 					<strong class="jxr_keyword">for</strong> (String s : (String[])mi.accessible().invoke(a))
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 						rmb.append(s, a);
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 				}
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Invalid annotation @{0} used in BEAN_annotations property."</span>, ClassUtils.className(a));
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 			}
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		});
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<strong class="jxr_keyword">this</strong>.annotationMap = rmb.build();
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		<strong class="jxr_keyword">var</strong> disabled = Boolean.getBoolean(<span class="jxr_string">"juneau.disableAnnotationCaching"</span>);
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		classAnnotationCache = (<a name="Cache2" href="../../../org/apache/juneau/common/collections/Cache2.html#Cache2">Cache2</a>)Cache2.of(Class.<strong class="jxr_keyword">class</strong>, Class.<strong class="jxr_keyword">class</strong>, Annotation[].<strong class="jxr_keyword">class</strong>).disableCaching(disabled).supplier((k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		declaredClassAnnotationCache = (<a name="Cache2" href="../../../org/apache/juneau/common/collections/Cache2.html#Cache2">Cache2</a>)Cache2.of(Class.<strong class="jxr_keyword">class</strong>, Class.<strong class="jxr_keyword">class</strong>, Annotation[].<strong class="jxr_keyword">class</strong>).disableCaching(disabled).supplier((k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2))).build();
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		methodAnnotationCache = (<a name="Cache2" href="../../../org/apache/juneau/common/collections/Cache2.html#Cache2">Cache2</a>)Cache2.of(Method.<strong class="jxr_keyword">class</strong>, Class.<strong class="jxr_keyword">class</strong>, Annotation[].<strong class="jxr_keyword">class</strong>).disableCaching(disabled).supplier((k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		fieldAnnotationCache = (<a name="Cache2" href="../../../org/apache/juneau/common/collections/Cache2.html#Cache2">Cache2</a>)Cache2.of(Field.<strong class="jxr_keyword">class</strong>, Class.<strong class="jxr_keyword">class</strong>, Annotation[].<strong class="jxr_keyword">class</strong>).disableCaching(disabled).supplier((k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		constructorAnnotationCache = (<a name="Cache2" href="../../../org/apache/juneau/common/collections/Cache2.html#Cache2">Cache2</a>)Cache2.of(Constructor.<strong class="jxr_keyword">class</strong>, Class.<strong class="jxr_keyword">class</strong>, Annotation[].<strong class="jxr_keyword">class</strong>).disableCaching(disabled).supplier((k1, k2) -&gt; annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	}
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 * Copy constructor.</em>
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 * @param copyFrom The context to copy from.</em>
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 	<strong class="jxr_keyword">protected</strong> <a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a>(<a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a> copyFrom) {
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 		annotationMap = copyFrom.annotationMap;
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 		annotations = copyFrom.annotations;
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 		debug = copyFrom.debug;
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 		classAnnotationCache = copyFrom.classAnnotationCache;
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 		declaredClassAnnotationCache = copyFrom.declaredClassAnnotationCache;
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		methodAnnotationCache = copyFrom.methodAnnotationCache;
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 		fieldAnnotationCache = copyFrom.fieldAnnotationCache;
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		constructorAnnotationCache = copyFrom.constructorAnnotationCache;
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 	}
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> <em class="jxr_javadoccomment">	 * Creates a builder from this context object.</em>
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> <em class="jxr_javadoccomment">	 * Builders are used to define new contexts (e.g. serializers, parsers) based on existing configurations.</em>
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">	 * @return A new Builder object.</em>
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented."</span>);
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 	}
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> 
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 * Create a session builder based on the properties defined on this context.</em>
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 * Use this method for creating sessions where you want to override basic settings.</em>
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 * Otherwise, use {@link #getSession()} directly.</em>
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 * @return A new session builder.</em>
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> 	<strong class="jxr_keyword">public</strong> ContextSession.Builder createSession() {
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented."</span>);
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 	}
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onClass))
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 					<strong class="jxr_keyword">return</strong> a;
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 	}
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onConstructor != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onConstructor))
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 					<strong class="jxr_keyword">return</strong> a;
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 	}
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onField != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onField))
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 					<strong class="jxr_keyword">return</strong> a;
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> 	}
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onMethod))
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 					<strong class="jxr_keyword">return</strong> a;
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 	}
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 			<strong class="jxr_keyword">for</strong> (A a : declaredAnnotations(type, onClass))
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 					<strong class="jxr_keyword">return</strong> a;
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 	}
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onClass))
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 				PredicateUtils.consumeIf(filter, action, a);
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	}
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onConstructor != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onConstructor))
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 				PredicateUtils.consumeIf(filter, action, a);
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 	}
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onField != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onField))
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 				PredicateUtils.consumeIf(filter, action, a);
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 	}
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onMethod))
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 				PredicateUtils.consumeIf(filter, action, a);
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 	}
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			<strong class="jxr_keyword">for</strong> (A a : declaredAnnotations(type, onClass))
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 				PredicateUtils.consumeIf(filter, action, a);
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 	}
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * Returns a session to use for this context.</em>
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 * Note that subclasses may opt to return a reusable non-modifiable session.</em>
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> <em class="jxr_javadoccomment">	 * @return A new session object.</em>
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 	<strong class="jxr_keyword">public</strong> <a name="ContextSession" href="../../../org/apache/juneau/ContextSession.html#ContextSession">ContextSession</a> getSession() { <strong class="jxr_keyword">return</strong> createSession().build(); }
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;getAnnotation(a,c)&lt;/c&gt; returns a non-null value.</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation being checked for.</em>
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 * @param type The annotation being checked for.</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 * @param onClass The class being checked on.</em>
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation exists on the specified class.</em>
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass) {
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 		<strong class="jxr_keyword">return</strong> annotations(type, onClass).length &gt; 0;
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 	}
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;getAnnotation(a,c)&lt;/c&gt; returns a non-null value.</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation being checked for.</em>
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">	 * @param type The annotation being checked for.</em>
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> <em class="jxr_javadoccomment">	 * @param onConstructor The constructor being checked on.</em>
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation exists on the specified field.</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor) {
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 		<strong class="jxr_keyword">return</strong> annotations(type, onConstructor).length &gt; 0;
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 	}
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;getAnnotation(a,f)&lt;/c&gt; returns a non-null value.</em>
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation being checked for.</em>
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 * @param type The annotation being checked for.</em>
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 * @param onField The field being checked on.</em>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation exists on the specified field.</em>
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type, Field onField) {
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 		<strong class="jxr_keyword">return</strong> annotations(type, onField).length &gt; 0;
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 	}
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if &lt;c&gt;getAnnotation(a,m)&lt;/c&gt; returns a non-null value.</em>
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 * @param &lt;A&gt; The annotation being checked for.</em>
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 * @param type The annotation being checked for.</em>
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 * @param onMethod The method being checked on.</em>
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the annotation exists on the specified method.</em>
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;A&gt; type, Method onMethod) {
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">return</strong> annotations(type, onMethod).length &gt; 0;
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	}
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * Debug mode.</em>
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * @see Context.Builder#debug()</em>
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if debug mode is enabled.</em>
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDebug() { <strong class="jxr_keyword">return</strong> debug; }
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		A x = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onClass))
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 					x = a;
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 	}
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		A x = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onConstructor != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onConstructor))
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 					x = a;
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 	}
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 		A x = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onField != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onField))
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 					x = a;
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 	}
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		A x = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onMethod))
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 					x = a;
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 	}
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		A x = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 			<strong class="jxr_keyword">for</strong> (A a : declaredAnnotations(type, onClass))
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 				<strong class="jxr_keyword">if</strong> (PredicateUtils.test(filter, a))
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 					x = a;
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 		<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 	}
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<strong class="jxr_keyword">return</strong> Utils2.toPropertyMap(<strong class="jxr_keyword">this</strong>).asReadableString();
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 	}
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotations(Class&lt;A&gt; type, Class&lt;?&gt; onClass) {
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 		<strong class="jxr_keyword">return</strong> (A[])classAnnotationCache.get(onClass, type);
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 	}
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotations(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor) {
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 		<strong class="jxr_keyword">return</strong> (A[])constructorAnnotationCache.get(onConstructor, type);
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 	}
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotations(Class&lt;A&gt; type, Field onField) {
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 		<strong class="jxr_keyword">return</strong> (A[])fieldAnnotationCache.get(onField, type);
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 	}
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotations(Class&lt;A&gt; type, Method onMethod) {
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 		<strong class="jxr_keyword">return</strong> (A[])methodAnnotationCache.get(onMethod, type);
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 	}
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] declaredAnnotations(Class&lt;A&gt; type, Class&lt;?&gt; onClass) {
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 		<strong class="jxr_keyword">return</strong> (A[])declaredClassAnnotationCache.get(onClass, type);
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 	}
+<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> <em class="jxr_javadoccomment">	 * Perform optional initialization on builder before it is used.</em>
+<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> <em class="jxr_javadoccomment">	 * Default behavior is a no-op.</em>
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> <em class="jxr_javadoccomment">	 * @param builder The builder to initialize.</em>
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> init(Builder builder) {}
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 
+<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> <em class="jxr_javadoccomment">	 * Returns the properties on this bean as a map for debugging.</em>
+<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> <em class="jxr_javadoccomment">	 * @return The properties on this bean as a map for debugging.</em>
+<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"annotations"</span>, annotations, <span class="jxr_string">"debug"</span>, debug);
+<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 	}
+<a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

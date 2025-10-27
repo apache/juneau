@@ -202,12 +202,12 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<em class="jxr_comment">// This is a no-op.</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (eq(expectedContents, newContents))
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> currentContents = read(name);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">if</strong> (expectedContents != <strong class="jxr_keyword">null</strong> &amp;&amp; ! eq(currentContents, expectedContents))
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">if</strong> (nn(expectedContents) &amp;&amp; ne(currentContents, expectedContents))
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">return</strong> currentContents;
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		update(name, newContents);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

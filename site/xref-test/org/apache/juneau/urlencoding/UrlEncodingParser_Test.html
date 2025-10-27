@@ -617,27 +617,27 @@
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 	@Test <strong class="jxr_keyword">void</strong> a08_multiPartParametersOnBeansViaProperty() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">var</strong> p2 = UrlEncodingParser.create().expandedParams().build();
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">""</span>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			+ <span class="jxr_string">"f01=a&amp;f01=b"</span>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			+ <span class="jxr_string">"&amp;f02=c&amp;f02=d"</span>
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			+ <span class="jxr_string">"&amp;f03=1&amp;f03=2"</span>
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			+ <span class="jxr_string">"&amp;f04=3&amp;f04=4"</span>
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			+ <span class="jxr_string">"&amp;f05=@(e,f)&amp;f05=@(g,h)"</span>
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			+ <span class="jxr_string">"&amp;f06=@(i,j)&amp;f06=@(k,l)"</span>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 			+ <span class="jxr_string">"&amp;f07=(a=a,b=1,c=true)&amp;f07=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			+ <span class="jxr_string">"&amp;f08=(a=a,b=1,c=true)&amp;f08=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			+ <span class="jxr_string">"&amp;f09=@((a=a,b=1,c=true))&amp;f09=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			+ <span class="jxr_string">"&amp;f10=@((a=a,b=1,c=true))&amp;f10=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			+ <span class="jxr_string">"&amp;f11=a&amp;f11=b"</span>
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			+ <span class="jxr_string">"&amp;f12=c&amp;f12=d"</span>
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			+ <span class="jxr_string">"&amp;f13=1&amp;f13=2"</span>
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			+ <span class="jxr_string">"&amp;f14=3&amp;f14=4"</span>
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			+ <span class="jxr_string">"&amp;f15=@(e,f)&amp;f15=@(g,h)"</span>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 			+ <span class="jxr_string">"&amp;f16=@(i,j)&amp;f16=@(k,l)"</span>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			+ <span class="jxr_string">"&amp;f17=(a=a,b=1,c=true)&amp;f17=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 			+ <span class="jxr_string">"&amp;f18=(a=a,b=1,c=true)&amp;f18=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			+ <span class="jxr_string">"&amp;f19=@((a=a,b=1,c=true))&amp;f19=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			+ <span class="jxr_string">"&amp;f20=@((a=a,b=1,c=true))&amp;f20=@((a=b,b=2,c=false))"</span>;
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			f01=a&amp;f01=b\
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			&amp;f02=c&amp;f02=d\
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			&amp;f03=1&amp;f03=2\
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			&amp;f04=3&amp;f04=4\
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			&amp;f05=@(e,f)&amp;f05=@(g,h)\
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			&amp;f06=@(i,j)&amp;f06=@(k,l)\
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 			&amp;f07=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f07=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			&amp;f08=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f08=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			&amp;f09=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f09=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			&amp;f10=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f10=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			&amp;f11=a&amp;f11=b\
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			&amp;f12=c&amp;f12=d\
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			&amp;f13=1&amp;f13=2\
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			&amp;f14=3&amp;f14=4\
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			&amp;f15=@(e,f)&amp;f15=@(g,h)\
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 			&amp;f16=@(i,j)&amp;f16=@(k,l)\
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			&amp;f17=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f17=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 			&amp;f18=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f18=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			&amp;f19=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f19=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			&amp;f20=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f20=@((a=b,b=2,c=false))<span class="jxr_string">""</span><span class="jxr_string">";
 <a class="jxr_linenumber" name="L633" href="#L633">633</a> 
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 		<strong class="jxr_keyword">var</strong> t = p2.parse(in, DTOs.B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 		assertBean(t,
@@ -647,27 +647,27 @@
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 	@Test <strong class="jxr_keyword">void</strong> a09_multiPartParametersOnBeansViaProperty_usingConfig() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">var</strong> p2 = UrlEncodingParser.create().expandedParams().applyAnnotations(DTOs2.Annotations.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">""</span>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 			+ <span class="jxr_string">"f01=a&amp;f01=b"</span>
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			+ <span class="jxr_string">"&amp;f02=c&amp;f02=d"</span>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			+ <span class="jxr_string">"&amp;f03=1&amp;f03=2"</span>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			+ <span class="jxr_string">"&amp;f04=3&amp;f04=4"</span>
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			+ <span class="jxr_string">"&amp;f05=@(e,f)&amp;f05=@(g,h)"</span>
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			+ <span class="jxr_string">"&amp;f06=@(i,j)&amp;f06=@(k,l)"</span>
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			+ <span class="jxr_string">"&amp;f07=(a=a,b=1,c=true)&amp;f07=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			+ <span class="jxr_string">"&amp;f08=(a=a,b=1,c=true)&amp;f08=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			+ <span class="jxr_string">"&amp;f09=@((a=a,b=1,c=true))&amp;f09=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			+ <span class="jxr_string">"&amp;f10=@((a=a,b=1,c=true))&amp;f10=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			+ <span class="jxr_string">"&amp;f11=a&amp;f11=b"</span>
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			+ <span class="jxr_string">"&amp;f12=c&amp;f12=d"</span>
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			+ <span class="jxr_string">"&amp;f13=1&amp;f13=2"</span>
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			+ <span class="jxr_string">"&amp;f14=3&amp;f14=4"</span>
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			+ <span class="jxr_string">"&amp;f15=@(e,f)&amp;f15=@(g,h)"</span>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			+ <span class="jxr_string">"&amp;f16=@(i,j)&amp;f16=@(k,l)"</span>
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			+ <span class="jxr_string">"&amp;f17=(a=a,b=1,c=true)&amp;f17=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			+ <span class="jxr_string">"&amp;f18=(a=a,b=1,c=true)&amp;f18=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			+ <span class="jxr_string">"&amp;f19=@((a=a,b=1,c=true))&amp;f19=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			+ <span class="jxr_string">"&amp;f20=@((a=a,b=1,c=true))&amp;f20=@((a=b,b=2,c=false))"</span>;
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 			f01=a&amp;f01=b\
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			&amp;f02=c&amp;f02=d\
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			&amp;f03=1&amp;f03=2\
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			&amp;f04=3&amp;f04=4\
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			&amp;f05=@(e,f)&amp;f05=@(g,h)\
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			&amp;f06=@(i,j)&amp;f06=@(k,l)\
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			&amp;f07=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f07=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			&amp;f08=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f08=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			&amp;f09=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f09=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			&amp;f10=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f10=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			&amp;f11=a&amp;f11=b\
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			&amp;f12=c&amp;f12=d\
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			&amp;f13=1&amp;f13=2\
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			&amp;f14=3&amp;f14=4\
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			&amp;f15=@(e,f)&amp;f15=@(g,h)\
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			&amp;f16=@(i,j)&amp;f16=@(k,l)\
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			&amp;f17=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f17=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			&amp;f18=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f18=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			&amp;f19=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f19=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			&amp;f20=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f20=@((a=b,b=2,c=false))<span class="jxr_string">""</span><span class="jxr_string">";
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 		assertBean(p2.parse(in, DTOs2.B.<strong class="jxr_keyword">class</strong>),
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 			<span class="jxr_string">"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}"</span>,
@@ -679,27 +679,27 @@
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> 	@Test <strong class="jxr_keyword">void</strong> a10_multiPartParametersOnBeansViaAnnotationOnClass() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<strong class="jxr_keyword">var</strong> p2 = UrlEncodingParser.DEFAULT;
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">""</span>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			+ <span class="jxr_string">"f01=a&amp;f01=b"</span>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			+ <span class="jxr_string">"&amp;f02=c&amp;f02=d"</span>
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 			+ <span class="jxr_string">"&amp;f03=1&amp;f03=2"</span>
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 			+ <span class="jxr_string">"&amp;f04=3&amp;f04=4"</span>
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 			+ <span class="jxr_string">"&amp;f05=@(e,f)&amp;f05=@(g,h)"</span>
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			+ <span class="jxr_string">"&amp;f06=@(i,j)&amp;f06=@(k,l)"</span>
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			+ <span class="jxr_string">"&amp;f07=(a=a,b=1,c=true)&amp;f07=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 			+ <span class="jxr_string">"&amp;f08=(a=a,b=1,c=true)&amp;f08=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 			+ <span class="jxr_string">"&amp;f09=@((a=a,b=1,c=true))&amp;f09=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			+ <span class="jxr_string">"&amp;f10=@((a=a,b=1,c=true))&amp;f10=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			+ <span class="jxr_string">"&amp;f11=a&amp;f11=b"</span>
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 			+ <span class="jxr_string">"&amp;f12=c&amp;f12=d"</span>
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 			+ <span class="jxr_string">"&amp;f13=1&amp;f13=2"</span>
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 			+ <span class="jxr_string">"&amp;f14=3&amp;f14=4"</span>
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			+ <span class="jxr_string">"&amp;f15=@(e,f)&amp;f15=@(g,h)"</span>
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			+ <span class="jxr_string">"&amp;f16=@(i,j)&amp;f16=@(k,l)"</span>
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 			+ <span class="jxr_string">"&amp;f17=(a=a,b=1,c=true)&amp;f17=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			+ <span class="jxr_string">"&amp;f18=(a=a,b=1,c=true)&amp;f18=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 			+ <span class="jxr_string">"&amp;f19=@((a=a,b=1,c=true))&amp;f19=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 			+ <span class="jxr_string">"&amp;f20=@((a=a,b=1,c=true))&amp;f20=@((a=b,b=2,c=false))"</span>;
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			f01=a&amp;f01=b\
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			&amp;f02=c&amp;f02=d\
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 			&amp;f03=1&amp;f03=2\
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 			&amp;f04=3&amp;f04=4\
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 			&amp;f05=@(e,f)&amp;f05=@(g,h)\
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			&amp;f06=@(i,j)&amp;f06=@(k,l)\
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			&amp;f07=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f07=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 			&amp;f08=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f08=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 			&amp;f09=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f09=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			&amp;f10=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f10=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			&amp;f11=a&amp;f11=b\
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 			&amp;f12=c&amp;f12=d\
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 			&amp;f13=1&amp;f13=2\
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 			&amp;f14=3&amp;f14=4\
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 			&amp;f15=@(e,f)&amp;f15=@(g,h)\
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			&amp;f16=@(i,j)&amp;f16=@(k,l)\
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 			&amp;f17=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f17=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			&amp;f18=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f18=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 			&amp;f19=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f19=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 			&amp;f20=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f20=@((a=b,b=2,c=false))<span class="jxr_string">""</span><span class="jxr_string">";
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 		assertBean(p2.parse(in, DTOs.C.<strong class="jxr_keyword">class</strong>),
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 			<span class="jxr_string">"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}"</span>,
@@ -708,27 +708,27 @@
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 	@Test <strong class="jxr_keyword">void</strong> a11_multiPartParametersOnBeansViaAnnotationOnClass_usingConfig() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 		<strong class="jxr_keyword">var</strong> p2 = UrlEncodingParser.DEFAULT.copy().applyAnnotations(DTOs2.Annotations.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">""</span>
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 			+ <span class="jxr_string">"f01=a&amp;f01=b"</span>
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 			+ <span class="jxr_string">"&amp;f02=c&amp;f02=d"</span>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 			+ <span class="jxr_string">"&amp;f03=1&amp;f03=2"</span>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 			+ <span class="jxr_string">"&amp;f04=3&amp;f04=4"</span>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 			+ <span class="jxr_string">"&amp;f05=@(e,f)&amp;f05=@(g,h)"</span>
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			+ <span class="jxr_string">"&amp;f06=@(i,j)&amp;f06=@(k,l)"</span>
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			+ <span class="jxr_string">"&amp;f07=(a=a,b=1,c=true)&amp;f07=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 			+ <span class="jxr_string">"&amp;f08=(a=a,b=1,c=true)&amp;f08=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 			+ <span class="jxr_string">"&amp;f09=@((a=a,b=1,c=true))&amp;f09=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 			+ <span class="jxr_string">"&amp;f10=@((a=a,b=1,c=true))&amp;f10=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 			+ <span class="jxr_string">"&amp;f11=a&amp;f11=b"</span>
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			+ <span class="jxr_string">"&amp;f12=c&amp;f12=d"</span>
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 			+ <span class="jxr_string">"&amp;f13=1&amp;f13=2"</span>
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 			+ <span class="jxr_string">"&amp;f14=3&amp;f14=4"</span>
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 			+ <span class="jxr_string">"&amp;f15=@(e,f)&amp;f15=@(g,h)"</span>
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 			+ <span class="jxr_string">"&amp;f16=@(i,j)&amp;f16=@(k,l)"</span>
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 			+ <span class="jxr_string">"&amp;f17=(a=a,b=1,c=true)&amp;f17=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 			+ <span class="jxr_string">"&amp;f18=(a=a,b=1,c=true)&amp;f18=(a=b,b=2,c=false)"</span>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 			+ <span class="jxr_string">"&amp;f19=@((a=a,b=1,c=true))&amp;f19=@((a=b,b=2,c=false))"</span>
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 			+ <span class="jxr_string">"&amp;f20=@((a=a,b=1,c=true))&amp;f20=@((a=b,b=2,c=false))"</span>;
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 			f01=a&amp;f01=b\
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 			&amp;f02=c&amp;f02=d\
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 			&amp;f03=1&amp;f03=2\
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 			&amp;f04=3&amp;f04=4\
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 			&amp;f05=@(e,f)&amp;f05=@(g,h)\
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			&amp;f06=@(i,j)&amp;f06=@(k,l)\
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			&amp;f07=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f07=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 			&amp;f08=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f08=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 			&amp;f09=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f09=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 			&amp;f10=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f10=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 			&amp;f11=a&amp;f11=b\
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			&amp;f12=c&amp;f12=d\
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 			&amp;f13=1&amp;f13=2\
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 			&amp;f14=3&amp;f14=4\
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 			&amp;f15=@(e,f)&amp;f15=@(g,h)\
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 			&amp;f16=@(i,j)&amp;f16=@(k,l)\
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 			&amp;f17=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f17=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 			&amp;f18=(a=a,b=1,c=<strong class="jxr_keyword">true</strong>)&amp;f18=(a=b,b=2,c=false)\
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 			&amp;f19=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f19=@((a=b,b=2,c=false))\
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 			&amp;f20=@((a=a,b=1,c=<strong class="jxr_keyword">true</strong>))&amp;f20=@((a=b,b=2,c=false))<span class="jxr_string">""</span><span class="jxr_string">";
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 		assertBean(p2.parse(in, DTOs2.C.<strong class="jxr_keyword">class</strong>),
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> 			<span class="jxr_string">"f01,f02,f03,f04,f05,f06,f07{#{a,b,c}},f08{#{a,b,c}},f09{#{#{a,b,c}}},f10{#{#{a,b,c}}},f11,f12,f13,f14,f15,f16,f17{#{a,b,c}},f18{#{a,b,c}},f19{#{#{a,b,c}}},f20{#{#{a,b,c}}}"</span>,

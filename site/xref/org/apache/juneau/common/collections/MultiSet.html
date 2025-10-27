@@ -137,9 +137,9 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">public</strong> <a name="MultiSet" href="../../../../../org/apache/juneau/common/collections/MultiSet.html#MultiSet">MultiSet</a>(Collection&lt;E&gt;...c) {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		Utils.assertArgNotNull(<span class="jxr_string">"c"</span>, c);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		AssertionUtils.assertArgNotNull(<span class="jxr_string">"c"</span>, c);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> cc : c)
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			Utils.assertArgNotNull(<span class="jxr_string">"c"</span>, cc);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			AssertionUtils.assertArgNotNull(<span class="jxr_string">"c"</span>, cc);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		l = c;
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 

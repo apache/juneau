@@ -24,9 +24,9 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.svl;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * Abstract superclass of all Simple Var Language variables.</em>
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * 	If &lt;jk&gt;false&lt;/jk&gt;, then the {@link #resolve(VarResolverSession, String)} method is implemented.</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <a name="Var" href="../../../../org/apache/juneau/svl/Var.html#Var">Var</a>(String name, <strong class="jxr_keyword">boolean</strong> streamed) {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		Utils.assertArgNotNull(<span class="jxr_string">"name"</span>, name);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertArgNotNull(<span class="jxr_string">"name"</span>, name);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">this</strong>.name = name;
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">this</strong>.streamed = streamed;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  

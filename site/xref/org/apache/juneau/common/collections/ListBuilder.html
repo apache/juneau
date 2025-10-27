@@ -301,14 +301,14 @@
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<strong class="jxr_keyword">public</strong> List&lt;E&gt; build() {
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">if</strong> (sparse) {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">if</strong> (list != <strong class="jxr_keyword">null</strong> &amp;&amp; list.isEmpty())
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">if</strong> (nn(list) &amp;&amp; list.isEmpty())
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 				list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">if</strong> (list == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 				list = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(0);
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		}
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">if</strong> (list != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">if</strong> (comparator != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">if</strong> (nn(list)) {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">if</strong> (nn(comparator))
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 				Collections.sort(list, comparator);
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">if</strong> (unmodifiable)
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 				list = unmodifiableList(list);

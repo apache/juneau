@@ -200,7 +200,7 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException if directory could not be created.</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File mkdirs(File f, <strong class="jxr_keyword">boolean</strong> clean) {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		Utils.assertArgNotNull(<span class="jxr_string">"f"</span>, f);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		AssertionUtils.assertArgNotNull(<span class="jxr_string">"f"</span>, f);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">if</strong> (f.exists()) {
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">if</strong> (clean) {
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 				<strong class="jxr_keyword">if</strong> (! delete(f))
@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * @return The directory.</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File mkdirs(String path, <strong class="jxr_keyword">boolean</strong> clean) {
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		Utils.assertArgNotNull(<span class="jxr_string">"path"</span>, path);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		AssertionUtils.assertArgNotNull(<span class="jxr_string">"path"</span>, path);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">return</strong> mkdirs(<strong class="jxr_keyword">new</strong> File(path), clean);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 

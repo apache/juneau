@@ -25,20 +25,20 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.http.response;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.assertions.Assertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpEntities.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.text.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.http.impl.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.http.params.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpEntities.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.text.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.http.impl.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.http.params.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
@@ -555,7 +555,7 @@
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 * @throws AssertionError If status code is not what was expected.</em>
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> assertStatusCode(HttpResponse response) <strong class="jxr_keyword">throws</strong> AssertionError {
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		Utils.assertArgNotNull(<span class="jxr_string">"response"</span>, response);
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		assertArgNotNull(<span class="jxr_string">"response"</span>, response);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">int</strong> expected = getStatusLine().getStatusCode();
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">int</strong> actual = response.getStatusLine().getStatusCode();
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 		assertInteger(actual).setMsg(<span class="jxr_string">"Unexpected status code.  Expected:[{0}], Actual:[{1}]"</span>, expected, actual).is(expected);

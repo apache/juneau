@@ -555,11 +555,11 @@
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 			);
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 			assertEquals(<span class="jxr_string">"[{John},{Jane}]"</span>,
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 				converter.getNested(people, Utils.tokenize(<span class="jxr_string">"#{name}"</span>).get(0)));
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 				converter.getNested(people, BctUtils.tokenize(<span class="jxr_string">"#{name}"</span>).get(0)));
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 			assertEquals(<span class="jxr_string">"[{30},{25}]"</span>,
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 				converter.getNested(people, Utils.tokenize(<span class="jxr_string">"#{age}"</span>).get(0)));
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 				converter.getNested(people, BctUtils.tokenize(<span class="jxr_string">"#{age}"</span>).get(0)));
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 			assertEquals(<span class="jxr_string">"[{John,30},{Jane,25}]"</span>,
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 				converter.getNested(people, Utils.tokenize(<span class="jxr_string">"#{name,age}"</span>).get(0)));
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 				converter.getNested(people, BctUtils.tokenize(<span class="jxr_string">"#{name,age}"</span>).get(0)));
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 		}
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 		@Test
@@ -571,13 +571,13 @@
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 			obj.put(<span class="jxr_string">"nullKey"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<em class="jxr_comment">// Case 1: e == null (property value is null) and no nested tokens</em>
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			assertEquals(<span class="jxr_string">"&lt;null&gt;"</span>, converter.getNested(obj, Utils.tokenize(<span class="jxr_string">"nullKey"</span>).get(0)));
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			assertEquals(<span class="jxr_string">"&lt;null&gt;"</span>, converter.getNested(obj, BctUtils.tokenize(<span class="jxr_string">"nullKey"</span>).get(0)));
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 			<em class="jxr_comment">// Case 2: e != null but token has no nested content</em>
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			assertEquals(<span class="jxr_string">"value"</span>, converter.getNested(obj, Utils.tokenize(<span class="jxr_string">"key"</span>).get(0)));
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			assertEquals(<span class="jxr_string">"value"</span>, converter.getNested(obj, BctUtils.tokenize(<span class="jxr_string">"key"</span>).get(0)));
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<em class="jxr_comment">// Case 3: e == null and token has nested content (should still return early)</em>
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			assertEquals(<span class="jxr_string">"&lt;null&gt;"</span>, converter.getNested(obj, Utils.tokenize(<span class="jxr_string">"nullKey{nested}"</span>).get(0)));
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			assertEquals(<span class="jxr_string">"&lt;null&gt;"</span>, converter.getNested(obj, BctUtils.tokenize(<span class="jxr_string">"nullKey{nested}"</span>).get(0)));
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 		}
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 		@Test

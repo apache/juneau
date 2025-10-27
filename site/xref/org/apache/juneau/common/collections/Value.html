@@ -436,11 +436,133 @@
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Value("</span> + t + <span class="jxr_string">")"</span>;
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> }
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * Sets the value only if the specified condition is &lt;jk&gt;true&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * 	Value&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Value.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"old"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;value&lt;/jv&gt;.setIf(&lt;jk&gt;true&lt;/jk&gt;, &lt;js&gt;"new"&lt;/js&gt;);   &lt;jc&gt;// Sets to "new"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;value&lt;/jv&gt;.setIf(&lt;jk&gt;false&lt;/jk&gt;, &lt;js&gt;"newer"&lt;/js&gt;);  &lt;jc&gt;// Does nothing&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"new"&lt;/js&gt;, &lt;jv&gt;value&lt;/jv&gt;.get());</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * @param condition The condition to check.</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * @param t The value to set if condition is &lt;jk&gt;true&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	<strong class="jxr_keyword">public</strong> Value&lt;T&gt; setIf(<strong class="jxr_keyword">boolean</strong> condition, T t) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">if</strong> (condition)
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			set(t);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	}
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * Updates the value in-place using the specified function.</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * If the current value is &lt;jk&gt;null&lt;/jk&gt;, this is a no-op.</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * 	Value&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Value.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;value&lt;/jv&gt;.update(String::toUpperCase);</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"HELLO"&lt;/js&gt;, &lt;jv&gt;value&lt;/jv&gt;.get());</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// No-op when null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * 	Value&amp;lt;String&amp;gt; &lt;jv&gt;empty&lt;/jv&gt; = Value.&lt;jsm&gt;empty&lt;/jsm&gt;();</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;empty&lt;/jv&gt;.update(String::toUpperCase);  &lt;jc&gt;// Does nothing&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;assertNull&lt;/jsm&gt;(&lt;jv&gt;empty&lt;/jv&gt;.get());</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * @param updater The function to apply to the current value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<strong class="jxr_keyword">public</strong> Value&lt;T&gt; update(Function&lt;T,T&gt; updater) {
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">if</strong> (t != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 			set(updater.apply(t));
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	}
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * If a value is present, and the value matches the given predicate, returns a {@link Value} describing the</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * value, otherwise returns an empty {@link Value}.</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * This method is analogous to {@link java.util.Optional#filter(Predicate)}.</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * 	Value&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Value.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * 	Value&amp;lt;String&amp;gt; &lt;jv&gt;filtered&lt;/jv&gt; = &lt;jv&gt;value&lt;/jv&gt;.filter(&lt;jv&gt;s&lt;/jv&gt; -&amp;gt; &lt;jv&gt;s&lt;/jv&gt;.length() &amp;gt; 3);</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;filtered&lt;/jv&gt;.isPresent());</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * 	Value&amp;lt;String&amp;gt; &lt;jv&gt;filtered2&lt;/jv&gt; = &lt;jv&gt;value&lt;/jv&gt;.filter(&lt;jv&gt;s&lt;/jv&gt; -&amp;gt; &lt;jv&gt;s&lt;/jv&gt;.length() &amp;gt; 10);</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;assertFalse&lt;/jsm&gt;(&lt;jv&gt;filtered2&lt;/jv&gt;.isPresent());</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * @param predicate The predicate to apply to the value, if present. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * @return A {@link Value} describing the value if it is present and matches the predicate, otherwise an empty {@link Value}.</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	<strong class="jxr_keyword">public</strong> Value&lt;T&gt; filter(Predicate&lt;? <strong class="jxr_keyword">super</strong> T&gt; predicate) {
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 			<strong class="jxr_keyword">return</strong> Value.empty();
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">return</strong> predicate.test(t) ? <strong class="jxr_keyword">this</strong> : Value.empty();
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	}
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 * If a value is present, returns the result of applying the given {@link Value}-bearing mapping function to</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * the value, otherwise returns an empty {@link Value}.</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 * This method is similar to {@link #map(Function)}, but the mapping function returns a {@link Value} rather</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 * than a simple value. This is analogous to {@link java.util.Optional#flatMap(Function)}.</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * 	Value&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Value.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * 	Value&amp;lt;Integer&amp;gt; &lt;jv&gt;length&lt;/jv&gt; = &lt;jv&gt;value&lt;/jv&gt;.flatMap(&lt;jv&gt;s&lt;/jv&gt; -&amp;gt; Value.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;s&lt;/jv&gt;.length()));</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;assertEquals&lt;/jsm&gt;(5, &lt;jv&gt;length&lt;/jv&gt;.get());</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Returns empty if mapper returns empty&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * 	Value&amp;lt;String&amp;gt; &lt;jv&gt;empty&lt;/jv&gt; = &lt;jv&gt;value&lt;/jv&gt;.flatMap(&lt;jv&gt;s&lt;/jv&gt; -&amp;gt; Value.&lt;jsm&gt;empty&lt;/jsm&gt;());</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * 	&lt;jsm&gt;assertFalse&lt;/jsm&gt;(&lt;jv&gt;empty&lt;/jv&gt;.isPresent());</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * @param &lt;T2&gt; The type of value in the {@link Value} returned by the mapping function.</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * @param mapper The mapping function to apply to the value, if present. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * @return The result of applying the {@link Value}-bearing mapping function to the value if present,</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 *         otherwise an empty {@link Value}.</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<strong class="jxr_keyword">public</strong> &lt;T2&gt; Value&lt;T2&gt; flatMap(Function&lt;? <strong class="jxr_keyword">super</strong> T, ? <strong class="jxr_keyword">extends</strong> Value&lt;? <strong class="jxr_keyword">extends</strong> T2&gt;&gt; mapper) {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			<strong class="jxr_keyword">return</strong> Value.empty();
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">var</strong> result = mapper.apply(t);
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">cast</strong> = (Value&lt;T2&gt;) result;
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">cast</strong>;
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 	}
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object obj) {
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == obj)
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">if</strong> (!(obj instanceof <a name="Value" href="../../../../../org/apache/juneau/common/collections/Value.html#Value">Value</a>))
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		Value&lt;?&gt; other = (Value&lt;?&gt;) obj;
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">return</strong> t == <strong class="jxr_keyword">null</strong> ? other.t == <strong class="jxr_keyword">null</strong> : t.equals(other.t);
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	}
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">return</strong> t == <strong class="jxr_keyword">null</strong> ? 0 : t.hashCode();
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	}
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Value("</span> + t + <span class="jxr_string">")"</span>;
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	}
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

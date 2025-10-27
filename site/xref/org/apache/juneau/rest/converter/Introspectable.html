@@ -64,31 +64,29 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * Swagger parameters for this converter.</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SWAGGER_PARAMS = <span class="jxr_string">""</span>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		+ <span class="jxr_string">"{in:'query',name:'invokeMethod',description:' The Java method name, optionally with arguments if necessary to differentiate between methods.',examples:{example:'toString'}},"</span>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		+ <span class="jxr_string">"{in:'query',name:'invokeArgs',description:'The arguments as an array.',examples:{example:'foo,bar'}}"</span>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	;
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Override <em class="jxr_comment">/* Overridden from RestConverter */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> Object convert(RestRequest req, Object o) <strong class="jxr_keyword">throws</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a> {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		String method = req.getQueryParam(<span class="jxr_string">"invokeMethod"</span>).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		String args = req.getQueryParam(<span class="jxr_string">"invokeArgs"</span>).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">if</strong> (method == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			BeanSession bs = req.getBeanSession();
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			ObjectSwap swap = bs.getClassMetaForObject(o).getSwap(bs);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">if</strong> (swap != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  				o = swap.swap(bs, o);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">return</strong> ObjectIntrospector.create(o, JsonParser.DEFAULT).invokeMethod(method, args);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e, <span class="jxr_string">"Error occurred trying to invoke method: {0}"</span>, e.getLocalizedMessage());
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		}
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String SWAGGER_PARAMS = <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		{in:'query',name:'invokeMethod',description:' The Java method name, optionally with arguments <strong class="jxr_keyword">if</strong> necessary to differentiate between methods.',examples:{example:'toString'}},
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		{in:'query',name:'invokeArgs',description:'The arguments as an array.',examples:{example:'foo,bar'}}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Override <em class="jxr_comment">/* Overridden from RestConverter */</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">public</strong> Object convert(RestRequest req, Object o) <strong class="jxr_keyword">throws</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a> {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		String method = req.getQueryParam(<span class="jxr_string">"invokeMethod"</span>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		String args = req.getQueryParam(<span class="jxr_string">"invokeArgs"</span>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">if</strong> (method == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			BeanSession bs = req.getBeanSession();
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			ObjectSwap swap = bs.getClassMetaForObject(o).getSwap(bs);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">if</strong> (swap != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  				o = swap.swap(bs, o);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">return</strong> ObjectIntrospector.create(o, JsonParser.DEFAULT).invokeMethod(method, args);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e, <span class="jxr_string">"Error occurred trying to invoke method: {0}"</span>, e.getLocalizedMessage());
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
