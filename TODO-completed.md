@@ -148,6 +148,18 @@ This file contains TODO items that have been completed and moved from TODO.md.
   - **Status**: COMPLETED
   - **Details**: Already completed before this task was added.
 
+- **TODO-60** ✅ There seems to be duplication in ArrayUtils and CollectionUtils. Let's merge ArrayUtils into CollectionUtils.
+  - **Status**: COMPLETED
+  - **Details**: Consolidated all array utility methods into `CollectionUtils` to eliminate duplication and provide a single location for both array and collection operations.
+    - Copied all 16 ArrayUtils methods to CollectionUtils (except the duplicate `last()` method which already existed)
+    - Deprecated the entire `ArrayUtils` class with `@Deprecated` annotation
+    - Updated class-level javadoc to direct users to `CollectionUtils`
+    - Made all `ArrayUtils` methods delegate to their `CollectionUtils` counterparts
+    - Added deprecation javadoc tags to all methods pointing to the new locations
+    - Added "Array utilities" section in `CollectionUtils` with comprehensive javadocs
+    Methods migrated: `last()`, `append()`, `asSet()`, `combine()`, `indexOf()`, `isEmptyArray()`, `isNotEmptyArray()`, `equals()`, `reverse()`, `toArray()`, `toList()`, `copyToList()`, `toObjectList()`, `toStringArray()`, `copyOf()`, `contains()`
+    This change maintains full backward compatibility while consolidating functionality.
+
 - **TODO-63** ✅ Look for places in code where ThrowableUtils.illegalArg and runtimeException can be used.
   - **Status**: COMPLETED
   - **Details**: Replaced 2 instances in `BasicBeanConverter.java`:

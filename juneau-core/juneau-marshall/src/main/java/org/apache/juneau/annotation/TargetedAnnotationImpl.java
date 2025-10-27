@@ -17,7 +17,7 @@
 package org.apache.juneau.annotation;
 
 
-import org.apache.juneau.common.utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
@@ -36,7 +36,7 @@ public class TargetedAnnotationImpl extends AnnotationImpl {
 	 */
 	public TargetedAnnotationImpl(TargetedAnnotationBuilder<?> b) {
 		super(b);
-		this.on = ArrayUtils.copyOf(b.on);
+		this.on = copyOf(b.on);
 	}
 
 	/**

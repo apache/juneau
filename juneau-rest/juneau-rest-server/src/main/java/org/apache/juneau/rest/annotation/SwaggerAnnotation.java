@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -166,10 +167,10 @@ public class SwaggerAnnotation {
 			this.contact = b.contact;
 			this.externalDocs = b.externalDocs;
 			this.license = b.license;
-			this.tags = ArrayUtils.copyOf(b.tags);
-			this.termsOfService = ArrayUtils.copyOf(b.termsOfService);
-			this.title = ArrayUtils.copyOf(b.title);
-			this.value = ArrayUtils.copyOf(b.value);
+			this.tags = copyOf(b.tags);
+			this.termsOfService = copyOf(b.termsOfService);
+			this.title = copyOf(b.title);
+			this.value = copyOf(b.value);
 			this.version = b.version;
 			postConstruct();
 		}

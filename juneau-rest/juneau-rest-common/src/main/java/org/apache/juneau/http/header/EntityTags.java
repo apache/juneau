@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -64,7 +65,7 @@ public class EntityTags {
 	 */
 	public EntityTags(EntityTag...value) {
 		this.string = StringUtils.join(value, ", ");
-		this.value = ArrayUtils.copyOf(value);
+		this.value = copyOf(value);
 	}
 
 	/**
@@ -86,7 +87,7 @@ public class EntityTags {
 	 * @return The entity tags in this object as an array.  Can be <jk>null</jk>.
 	 */
 	public EntityTag[] toArray() {
-		return ArrayUtils.copyOf(value);
+		return copyOf(value);
 	}
 
 	/**

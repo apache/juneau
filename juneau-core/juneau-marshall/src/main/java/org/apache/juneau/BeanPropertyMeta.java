@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -491,7 +492,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 					// Copy any existing array values into the temporary list.
 					Object oldArray = invokeGetter(bean, pName);
-					ArrayUtils.copyToList(oldArray, l);
+					copyToList(oldArray, l);
 				}
 
 				// Add new entry to our array.
@@ -1289,7 +1290,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @throws InvocationTargetException Thrown by method invocation.
 	 */
 	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Object array = ArrayUtils.toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
+		Object array = toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
 		invokeSetter(bean, name, array);
 	}
 

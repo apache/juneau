@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -452,7 +453,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setCollectionFormat(String value) {
-		if (isStrict() && ! ArrayUtils.contains(value, VALID_COLLECTION_FORMATS))
+		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
 			throw new BasicRuntimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_COLLECTION_FORMATS));
 		collectionFormat = value;
 		return this;
@@ -734,7 +735,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setType(String value) {
-		if (isStrict() && ! ArrayUtils.contains(value, VALID_TYPES))
+		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
 		type = value;
 		return this;

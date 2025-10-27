@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.lang.annotation.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
@@ -358,22 +359,22 @@ public class RestGetAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
-			this.converters = ArrayUtils.copyOf(b.converters);
+			this.converters = copyOf(b.converters);
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
-			this.defaultRequestQueryData = ArrayUtils.copyOf(b.defaultRequestQueryData);
-			this.defaultRequestAttributes = ArrayUtils.copyOf(b.defaultRequestAttributes);
-			this.defaultRequestHeaders = ArrayUtils.copyOf(b.defaultRequestHeaders);
-			this.defaultResponseHeaders = ArrayUtils.copyOf(b.defaultResponseHeaders);
-			this.encoders = ArrayUtils.copyOf(b.encoders);
-			this.guards = ArrayUtils.copyOf(b.guards);
-			this.matchers = ArrayUtils.copyOf(b.matchers);
-			this.path = ArrayUtils.copyOf(b.path);
-			this.produces = ArrayUtils.copyOf(b.produces);
+			this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
+			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
+			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
+			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
+			this.encoders = copyOf(b.encoders);
+			this.guards = copyOf(b.guards);
+			this.matchers = copyOf(b.matchers);
+			this.path = copyOf(b.path);
+			this.produces = copyOf(b.produces);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
-			this.serializers = ArrayUtils.copyOf(b.serializers);
+			this.serializers = copyOf(b.serializers);
 			this.summary = b.summary;
 			this.swagger = b.swagger;
 			this.value = b.value;

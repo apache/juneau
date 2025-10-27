@@ -18,13 +18,13 @@ package org.apache.juneau.jena.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -175,7 +175,7 @@ public class RdfAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Rdf> ai, RdfParser.Builder b) {
 			Rdf a = ai.inner();
-			if (ArrayUtils.isEmptyArray(a.on()) && ArrayUtils.isEmptyArray(a.onClass()))
+			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(copy(a, vr()));
 		}
@@ -198,7 +198,7 @@ public class RdfAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Rdf> ai, RdfSerializer.Builder b) {
 			Rdf a = ai.inner();
-			if (ArrayUtils.isEmptyArray(a.on()) && ArrayUtils.isEmptyArray(a.onClass()))
+			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(copy(a, vr()));
 		}

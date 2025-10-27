@@ -17,9 +17,9 @@
 package org.apache.juneau.annotation;
 
 
-import java.lang.annotation.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
-import org.apache.juneau.common.utils.*;
+import java.lang.annotation.*;
 
 /**
  * Utility classes and methods for the {@link Items @Items} annotation.
@@ -446,12 +446,12 @@ public class ItemsAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.$ref = b.$ref;
-			this._default = ArrayUtils.copyOf(b._default);
-			this._enum = ArrayUtils.copyOf(b._enum);
+			this._default = copyOf(b._default);
+			this._enum = copyOf(b._enum);
 			this.cf = b.cf;
 			this.collectionFormat = b.collectionFormat;
-			this.df = ArrayUtils.copyOf(b.df);
-			this.e = ArrayUtils.copyOf(b.e);
+			this.df = copyOf(b.df);
+			this.e = copyOf(b.e);
 			this.emax = b.emax;
 			this.emin = b.emin;
 			this.exclusiveMaximum = b.exclusiveMaximum;

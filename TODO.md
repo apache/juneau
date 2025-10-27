@@ -31,7 +31,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-52 Use static imports for all method calls to Utils.
 - [ ] TODO-53 Use static imports for all method calls to BctUtils.
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
-- [ ] TODO-60 There seems to be duplication in ArrayUtils and CollectionUtils. Let's merge ArrayUtils into CollectionUtils.
+- [ ] TODO-66 There are two ArrayUtilsTest classes whose tests should be merged into CollectionUtils_Test.
 
 ## Framework Improvements
 

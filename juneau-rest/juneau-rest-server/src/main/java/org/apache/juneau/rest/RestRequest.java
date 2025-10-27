@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest;
 
-import static java.lang.Integer.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;

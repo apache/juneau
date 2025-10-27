@@ -18,11 +18,11 @@ package org.apache.juneau.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -50,7 +50,7 @@ public class NamePropertyAnnotation {
 		@Override
 		public void apply(AnnotationInfo<NameProperty> ai, BeanContext.Builder b) {
 			NameProperty a = ai.inner();
-			if (ArrayUtils.isEmptyArray(a.on()))
+			if (isEmptyArray(a.on()))
 				return;
 			b.annotations(copy(a, vr()));
 		}

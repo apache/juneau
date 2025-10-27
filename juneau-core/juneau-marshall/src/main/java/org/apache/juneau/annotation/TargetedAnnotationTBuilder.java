@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.annotation;
 
-import java.lang.annotation.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
-import org.apache.juneau.common.utils.*;
+import java.lang.annotation.*;
 
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
@@ -49,7 +49,7 @@ public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>>
 	 */
 	public B on(Class<?>...value) {
 		for (Class<?> v : value)
-			on = ArrayUtils.append(on, v.getName());
+			on = append(on, v.getName());
 		return asThis();
 	}
 
@@ -62,7 +62,7 @@ public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>>
 	@SuppressWarnings("unchecked")
 	public B onClass(Class<?>...value) {
 		for (Class<?> v : value)
-			onClass = ArrayUtils.append(onClass, v);
+			onClass = append(onClass, v);
 		return asThis();
 	}
 }

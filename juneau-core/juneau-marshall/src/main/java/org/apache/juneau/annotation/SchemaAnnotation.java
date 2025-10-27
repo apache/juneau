@@ -18,6 +18,7 @@ package org.apache.juneau.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
@@ -55,7 +56,7 @@ public class SchemaAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Schema> ai, Context.Builder b) {
 			Schema a = ai.inner();
-			if (ArrayUtils.isEmptyArray(a.on()) && ArrayUtils.isEmptyArray(a.onClass()))
+			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
 		}
@@ -941,18 +942,18 @@ public class SchemaAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.$ref = b.$ref;
-			this._default = ArrayUtils.copyOf(b._default);
-			this._enum = ArrayUtils.copyOf(b._enum);
-			this.additionalProperties = ArrayUtils.copyOf(b.additionalProperties);
-			this.allOf = ArrayUtils.copyOf(b.allOf);
+			this._default = copyOf(b._default);
+			this._enum = copyOf(b._enum);
+			this.additionalProperties = copyOf(b.additionalProperties);
+			this.allOf = copyOf(b.allOf);
 			this.aev = b.aev;
 			this.allowEmptyValue = b.allowEmptyValue;
 			this.cf = b.cf;
 			this.collectionFormat = b.collectionFormat;
-			this.d = ArrayUtils.copyOf(b.d);
-			this.df = ArrayUtils.copyOf(b.df);
+			this.d = copyOf(b.d);
+			this.df = copyOf(b.df);
 			this.discriminator = b.discriminator;
-			this.e = ArrayUtils.copyOf(b.e);
+			this.e = copyOf(b.e);
 			this.emax = b.emax;
 			this.emin = b.emin;
 			this.exclusiveMaximum = b.exclusiveMaximum;
@@ -982,7 +983,7 @@ public class SchemaAnnotation {
 			this.multipleOf = b.multipleOf;
 			this.p = b.p;
 			this.pattern = b.pattern;
-			this.properties = ArrayUtils.copyOf(b.properties);
+			this.properties = copyOf(b.properties);
 			this.r = b.r;
 			this.readOnly = b.readOnly;
 			this.required = b.required;
@@ -994,7 +995,7 @@ public class SchemaAnnotation {
 			this.type = b.type;
 			this.ui = b.ui;
 			this.uniqueItems = b.uniqueItems;
-			this.xml = ArrayUtils.copyOf(b.xml);
+			this.xml = copyOf(b.xml);
 			// JSON Schema Draft 2020-12 fields
 			this.deprecatedProperty = b.deprecatedProperty;
 			this.$id = b.$id;
@@ -1002,18 +1003,18 @@ public class SchemaAnnotation {
 			this.contentEncoding = b.contentEncoding;
 			this.exclusiveMaximumValue = b.exclusiveMaximumValue;
 			this.exclusiveMinimumValue = b.exclusiveMinimumValue;
-			this._const = ArrayUtils.copyOf(b._const);
-			this.examples = ArrayUtils.copyOf(b.examples);
-			this.$comment = ArrayUtils.copyOf(b.$comment);
-			this.prefixItems = ArrayUtils.copyOf(b.prefixItems);
-			this.unevaluatedItems = ArrayUtils.copyOf(b.unevaluatedItems);
-			this.unevaluatedProperties = ArrayUtils.copyOf(b.unevaluatedProperties);
-			this.dependentSchemas = ArrayUtils.copyOf(b.dependentSchemas);
-			this.dependentRequired = ArrayUtils.copyOf(b.dependentRequired);
-			this._if = ArrayUtils.copyOf(b._if);
-			this._then = ArrayUtils.copyOf(b._then);
-			this._else = ArrayUtils.copyOf(b._else);
-			this.$defs = ArrayUtils.copyOf(b.$defs);
+			this._const = copyOf(b._const);
+			this.examples = copyOf(b.examples);
+			this.$comment = copyOf(b.$comment);
+			this.prefixItems = copyOf(b.prefixItems);
+			this.unevaluatedItems = copyOf(b.unevaluatedItems);
+			this.unevaluatedProperties = copyOf(b.unevaluatedProperties);
+			this.dependentSchemas = copyOf(b.dependentSchemas);
+			this.dependentRequired = copyOf(b.dependentRequired);
+			this._if = copyOf(b._if);
+			this._then = copyOf(b._then);
+			this._else = copyOf(b._else);
+			this.$defs = copyOf(b.$defs);
 			postConstruct();
 		}
 

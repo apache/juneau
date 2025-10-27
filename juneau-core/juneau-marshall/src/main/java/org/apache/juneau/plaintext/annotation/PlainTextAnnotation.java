@@ -18,12 +18,12 @@ package org.apache.juneau.plaintext.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -51,7 +51,7 @@ public class PlainTextAnnotation {
 		@Override
 		public void apply(AnnotationInfo<PlainText> ai, Context.Builder b) {
 			var a = ai.inner();
-			if (ArrayUtils.isEmptyArray(a.on()) && ArrayUtils.isEmptyArray(a.onClass()))
+			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(copy(a, vr()));
 		}

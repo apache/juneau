@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.beans.*;
@@ -98,7 +99,7 @@ public class BeanFilter {
 					interceptor(x.interceptor());
 				if (ClassUtils.isNotVoid(x.implClass()))
 					implClass(x.implClass());
-				if (ArrayUtils.isNotEmptyArray(x.dictionary()))
+				if (isNotEmptyArray(x.dictionary()))
 					dictionary(x.dictionary());
 				if (isNotEmpty(x.example()))
 					example(x.example());

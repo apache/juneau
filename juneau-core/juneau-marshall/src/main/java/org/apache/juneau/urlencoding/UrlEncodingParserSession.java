@@ -263,7 +263,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			parseIntoMap2(r, m, sType, c2);
 			c2.addAll(m.values());
 			if (sType.isArray())
-				o = ArrayUtils.toArray(c2, sType.getElementType().getInnerClass());
+				o = CollectionUtils.toArray(c2, sType.getElementType().getInnerClass());
 			else if (sType.isArgs())
 				o = c2.toArray(new Object[c2.size()]);
 			else

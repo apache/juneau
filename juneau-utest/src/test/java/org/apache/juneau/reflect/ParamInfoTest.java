@@ -18,6 +18,7 @@ package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.common.utils.CollectionUtils.toList;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +29,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -64,7 +64,7 @@ class ParamInfoTest extends TestBase {
 			if (t instanceof List)
 				return ((List<?>)t).stream().map(this).collect(Collectors.joining(","));
 			if (isArray(t))
-				return StreamSupport.stream(ArrayUtils.toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
+				return StreamSupport.stream(toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t instanceof MethodInfo)
 				return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getShortName();
 			if (t instanceof CA)

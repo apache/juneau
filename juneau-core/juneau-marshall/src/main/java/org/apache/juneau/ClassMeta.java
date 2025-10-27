@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -189,7 +190,7 @@ public class ClassMeta<T> implements Type {
 					&& x.isNotDeprecated()
 					&& x.hasReturnType(c)
 					&& x.hasParamTypes(String.class)
-					&& ArrayUtils.contains(x.getName(), fromStringMethodNames))
+					&& contains(x.getName(), fromStringMethodNames))
 			).map(MethodInfo::inner)
 			.orElse(null);
 			// @formatter:on

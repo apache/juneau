@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -383,7 +384,7 @@ public class Items extends SwaggerElement {
 		return switch (property) {
 			case "collectionFormat" -> setCollectionFormat(s(value));
 			case "default" -> setDefault(value);
-			case "enum" -> setEnum(toList(value, Object.class).sparse().build());
+			case "enum" -> setEnum(listb(Object.class).addAny(value).sparse().build());
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
 			case "format" -> setFormat(s(value));
@@ -425,7 +426,7 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items setCollectionFormat(String value) {
-		if (isStrict() && ! ArrayUtils.contains(value, VALID_COLLECTION_FORMATS))
+		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
 			throw new BasicRuntimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_COLLECTION_FORMATS));
 		collectionFormat = value;
 		return this;
@@ -678,7 +679,7 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items setType(String value) {
-		if (isStrict() && ! ArrayUtils.contains(value, VALID_TYPES))
+		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
 		type = value;
 		return this;

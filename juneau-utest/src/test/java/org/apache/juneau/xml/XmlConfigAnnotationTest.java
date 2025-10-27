@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.common.utils.CollectionUtils.toList;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +27,6 @@ import javax.xml.stream.events.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.xml.annotation.*;
@@ -45,7 +45,7 @@ class XmlConfigAnnotationTest extends TestBase {
 		if (t == null)
 			return null;
 		if (isArray(t))
-			return XmlConfigAnnotationTest.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
+			return XmlConfigAnnotationTest.TO_STRING.apply(toList(t, Object.class));
 		if (t instanceof AA)
 			return "AA";
 		if (t instanceof AB)

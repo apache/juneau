@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -446,28 +447,28 @@ public class RestOpAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
-			this.consumes = ArrayUtils.copyOf(b.consumes);
-			this.converters = ArrayUtils.copyOf(b.converters);
+			this.consumes = copyOf(b.consumes);
+			this.converters = copyOf(b.converters);
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
 			this.defaultContentType = b.defaultContentType;
-			this.defaultRequestFormData = ArrayUtils.copyOf(b.defaultRequestFormData);
-			this.defaultRequestQueryData = ArrayUtils.copyOf(b.defaultRequestQueryData);
-			this.defaultRequestAttributes = ArrayUtils.copyOf(b.defaultRequestAttributes);
-			this.defaultRequestHeaders = ArrayUtils.copyOf(b.defaultRequestHeaders);
-			this.defaultResponseHeaders = ArrayUtils.copyOf(b.defaultResponseHeaders);
-			this.encoders = ArrayUtils.copyOf(b.encoders);
-			this.guards = ArrayUtils.copyOf(b.guards);
-			this.matchers = ArrayUtils.copyOf(b.matchers);
+			this.defaultRequestFormData = copyOf(b.defaultRequestFormData);
+			this.defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
+			this.defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
+			this.defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
+			this.defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
+			this.encoders = copyOf(b.encoders);
+			this.guards = copyOf(b.guards);
+			this.matchers = copyOf(b.matchers);
 			this.maxInput = b.maxInput;
 			this.method = b.method;
-			this.parsers = ArrayUtils.copyOf(b.parsers);
-			this.path = ArrayUtils.copyOf(b.path);
-			this.produces = ArrayUtils.copyOf(b.produces);
+			this.parsers = copyOf(b.parsers);
+			this.path = copyOf(b.path);
+			this.produces = copyOf(b.produces);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
-			this.serializers = ArrayUtils.copyOf(b.serializers);
+			this.serializers = copyOf(b.serializers);
 			this.summary = b.summary;
 			this.swagger = b.swagger;
 			this.value = b.value;

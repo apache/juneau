@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -1342,11 +1342,11 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			return def;
 		String[] r = null;
 		if (s instanceof Collection)
-			r = ArrayUtils.toStringArray((Collection<?>)s);
+			r = toStringArray((Collection<?>)s);
 		else if (s instanceof String[])
 			r = (String[])s;
 		else if (s instanceof Object[])
-			r = ArrayUtils.toStringArray(alist((Object[])s));
+			r = toStringArray(alist((Object[])s));
 		else
 			r = StringUtils.splita(s(s));
 		return (r.length == 0 ? def : r);

@@ -32,19 +32,19 @@ class ArrayUtilsTest extends TestBase {
 	@Test void a01_appendArrayToArray() {
 		String[] s = {};
 
-		s = ArrayUtils.append(s, "a", "b");
+		s = CollectionUtils.append(s, "a", "b");
 		assertList(s, "a", "b");
 
-		s = ArrayUtils.append(s, "c");
+		s = CollectionUtils.append(s, "c");
 		assertList(s, "a", "b", "c");
 
-		s = ArrayUtils.append(s);
+		s = CollectionUtils.append(s);
 		assertList(s, "a", "b", "c");
 
-		var o = ArrayUtils.append((Object[])null);
+		var o = CollectionUtils.append((Object[])null);
 		assertEmpty(o);
 
-		s = ArrayUtils.append((String[])null, "a", "b");
+		s = CollectionUtils.append((String[])null, "a", "b");
 		assertList(s, "a", "b");
 	}
 
@@ -52,10 +52,10 @@ class ArrayUtilsTest extends TestBase {
 	// asSet(T[])
 	//====================================================================================================
 	@Test void a02_asSet() {
-		assertThrows(IllegalArgumentException.class, ()->ArrayUtils.asSet((String[])null));
+		assertThrows(IllegalArgumentException.class, ()->CollectionUtils.asSet((String[])null));
 
 		var s = a("a");
-		var i = ArrayUtils.asSet(s).iterator();
+		var i = CollectionUtils.asSet(s).iterator();
 		assertEquals("a", i.next());
 
 		assertThrows(UnsupportedOperationException.class, i::remove);
@@ -69,12 +69,12 @@ class ArrayUtilsTest extends TestBase {
 		var s1 = a("a");
 		var s2 = a("b");
 
-		assertList(ArrayUtils.combine(s1, s2), "a", "b");
-		assertList(ArrayUtils.combine(s1), "a");
-		assertList(ArrayUtils.combine(s2), "b");
-		assertList(ArrayUtils.combine(s1,null), "a");
-		assertList(ArrayUtils.combine(null,s2), "b");
-		assertNull(ArrayUtils.combine(null,null));
-		assertNull(ArrayUtils.combine());
+		assertList(CollectionUtils.combine(s1, s2), "a", "b");
+		assertList(CollectionUtils.combine(s1), "a");
+		assertList(CollectionUtils.combine(s2), "b");
+		assertList(CollectionUtils.combine(s1,null), "a");
+		assertList(CollectionUtils.combine(null,s2), "b");
+		assertNull(CollectionUtils.combine(null,null));
+		assertNull(CollectionUtils.combine());
 	}
 }

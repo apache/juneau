@@ -18,13 +18,13 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -52,7 +52,7 @@ public class StatusCodeAnnotation {
 		@Override
 		public void apply(AnnotationInfo<StatusCode> ai, BeanContext.Builder b) {
 			StatusCode a = ai.inner();
-			if (ArrayUtils.isEmptyArray(a.on()) && ArrayUtils.isEmptyArray(a.onClass()))
+			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
 		}

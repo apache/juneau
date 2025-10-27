@@ -20,6 +20,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.reflect.ReflectFlags.*;
+import static org.apache.juneau.common.utils.CollectionUtils.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -30,7 +31,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class ExecutableInfo_Test extends TestBase {
@@ -47,7 +47,7 @@ class ExecutableInfo_Test extends TestBase {
 			if (t instanceof List)
 				return ((List<?>)t).stream().map(this).collect(Collectors.joining(","));
 			if (isArray(t))
-				return StreamSupport.stream(ArrayUtils.toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
+				return StreamSupport.stream(toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t instanceof Annotation)
 				return "@" + ((Annotation)t).annotationType().getSimpleName() + "()";
 			if (t instanceof Class)

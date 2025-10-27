@@ -17,6 +17,7 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -24,7 +25,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -41,7 +41,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 
 	private static final Function<Object,String> TO_STRING = t -> {
 		if (isArray(t))
-			return HtmlDocConfigAnnotation_Test.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
+			return HtmlDocConfigAnnotation_Test.TO_STRING.apply(toList(t, Object.class));
 		if (t instanceof Collection)
 			return ((Collection<?>)t)
 				.stream()

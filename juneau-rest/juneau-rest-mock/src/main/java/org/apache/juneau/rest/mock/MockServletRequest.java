@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.mock;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -541,7 +542,7 @@ public class MockServletRequest implements HttpServletRequest {
 		if (nn(value)) {
 			String[] v1 = (value instanceof String[]) ? (String[])value : new String[] { value.toString() };
 			String[] v2 = headerMap.get(name);
-			String[] v3 = ArrayUtils.combine(v2, v1);
+			String[] v3 = combine(v2, v1);
 			headerMap.put(name, v3);
 		}
 		return this;

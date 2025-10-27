@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.annotation.QueryAnnotation.*;
@@ -25,7 +26,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
@@ -197,7 +197,7 @@ public class QueryArg implements RestOpArg {
 		if (multi) {
 			Collection c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());
 			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
-			return cm.isArray() ? ArrayUtils.toArray(c, cm.getElementType().getInnerClass()) : c;
+			return cm.isArray() ? toArray(c, cm.getElementType().getInnerClass()) : c;
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {

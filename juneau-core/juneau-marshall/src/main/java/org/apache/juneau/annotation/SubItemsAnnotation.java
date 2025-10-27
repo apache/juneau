@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.annotation;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
@@ -449,19 +450,19 @@ public class SubItemsAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.$ref = b.$ref;
-			this._default = ArrayUtils.copyOf(b._default);
-			this._enum = ArrayUtils.copyOf(b._enum);
+			this._default = copyOf(b._default);
+			this._enum = copyOf(b._enum);
 			this.cf = b.cf;
 			this.collectionFormat = b.collectionFormat;
-			this.df = ArrayUtils.copyOf(b.df);
-			this.e = ArrayUtils.copyOf(b.e);
+			this.df = copyOf(b.df);
+			this.e = copyOf(b.e);
 			this.emax = b.emax;
 			this.emin = b.emin;
 			this.exclusiveMaximum = b.exclusiveMaximum;
 			this.exclusiveMinimum = b.exclusiveMinimum;
 			this.f = b.f;
 			this.format = b.format;
-			this.items = ArrayUtils.copyOf(b.items);
+			this.items = copyOf(b.items);
 			this.max = b.max;
 			this.maxi = b.maxi;
 			this.maximum = b.maximum;

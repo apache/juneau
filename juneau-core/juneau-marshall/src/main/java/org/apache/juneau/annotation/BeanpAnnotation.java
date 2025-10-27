@@ -18,11 +18,11 @@ package org.apache.juneau.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -50,7 +50,7 @@ public class BeanpAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Beanp> ai, BeanContext.Builder b) {
 			Beanp a = ai.inner();
-			if (ArrayUtils.isEmptyArray(a.on()))
+			if (isEmptyArray(a.on()))
 				return;
 			b.annotations(copy(a, vr()));
 		}
@@ -211,10 +211,10 @@ public class BeanpAnnotation {
 
 		Impl(Builder b) {
 			super(b);
-			this.dictionary = ArrayUtils.copyOf(b.dictionary);
+			this.dictionary = copyOf(b.dictionary);
 			this.format = b.format;
 			this.name = b.name;
-			this.params = ArrayUtils.copyOf(b.params);
+			this.params = copyOf(b.params);
 			this.properties = b.properties;
 			this.ro = b.ro;
 			this.type = b.type;

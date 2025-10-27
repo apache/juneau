@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -220,7 +221,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override /* Map */
 	public Set<Map.Entry<K,V>> entrySet() {
-		return ArrayUtils.asSet(entries);
+		return asSet(entries);
 	}
 
 	/**
@@ -275,7 +276,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override /* Map */
 	public Set<K> keySet() {
-		return ArrayUtils.asSet(keys);
+		return asSet(keys);
 	}
 
 	/**

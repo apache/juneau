@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -484,7 +485,7 @@ public class RestUtils {
 			if (! b)
 				m.put(key, null);
 		} else if (b && nn(m.get(key))) {
-			m.put(key, ArrayUtils.append(m.get(key), val));
+			m.put(key, append(m.get(key), val));
 		} else {
 			m.put(key, new String[] { val });
 		}
