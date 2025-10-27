@@ -723,7 +723,7 @@
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 	<strong class="jxr_keyword">public</strong> <a name="ParameterInfo" href="../../../../../org/apache/juneau/bean/swagger/ParameterInfo.html#ParameterInfo">ParameterInfo</a> setEnum(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		_enum = CollectionUtils.setFrom(value);
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		_enum = CollectionUtils.toSet(value);
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> 	}
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> 

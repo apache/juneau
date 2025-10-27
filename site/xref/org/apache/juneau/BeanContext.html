@@ -260,10 +260,10 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			beanDictionary = CollectionUtils.listFrom(copyFrom.beanDictionary, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			swaps = CollectionUtils.listFrom(copyFrom.swaps, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			beanDictionary = CollectionUtils.toList(copyFrom.beanDictionary, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			swaps = CollectionUtils.toList(copyFrom.swaps, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			notBeanClasses = classSet(copyFrom.notBeanClasses, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			notBeanPackages = CollectionUtils.sortedSetFrom(copyFrom.notBeanPackages, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			notBeanPackages = CollectionUtils.toSortedSet(copyFrom.notBeanPackages, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -302,7 +302,7 @@
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 			beanDictionary = CollectionUtils.copyOf(copyFrom.beanDictionary);
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			swaps = CollectionUtils.copyOf(copyFrom.swaps);
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			notBeanClasses = classSet(copyFrom.notBeanClasses);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			notBeanPackages = CollectionUtils.sortedSetFrom(copyFrom.notBeanPackages);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			notBeanPackages = CollectionUtils.toSortedSet(copyFrom.notBeanPackages);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;

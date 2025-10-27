@@ -709,7 +709,7 @@
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setConsumes(Collection&lt;MediaType&gt; value) {
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		consumes = CollectionUtils.setFrom(value);
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		consumes = CollectionUtils.toSet(value);
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 	}
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 
@@ -808,7 +808,7 @@
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setParameters(Collection&lt;ParameterInfo&gt; value) {
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		parameters = CollectionUtils.listFrom(value);
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		parameters = CollectionUtils.toList(value);
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 	}
 <a class="jxr_linenumber" name="L806" href="#L806">806</a> 
@@ -840,7 +840,7 @@
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L833" href="#L833">833</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setProduces(Collection&lt;MediaType&gt; value) {
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> 		produces = CollectionUtils.setFrom(value);
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 		produces = CollectionUtils.toSet(value);
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> 	}
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 
@@ -896,7 +896,7 @@
 <a class="jxr_linenumber" name="L888" href="#L888">888</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L889" href="#L889">889</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setSchemes(Collection&lt;String&gt; value) {
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		schemes = CollectionUtils.setFrom(value);
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		schemes = CollectionUtils.toSet(value);
 <a class="jxr_linenumber" name="L892" href="#L892">892</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L893" href="#L893">893</a> 	}
 <a class="jxr_linenumber" name="L894" href="#L894">894</a> 
@@ -928,7 +928,7 @@
 <a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L921" href="#L921">921</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setSecurity(Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; value) {
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		security = CollectionUtils.listFrom(value);
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		security = CollectionUtils.toList(value);
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L925" href="#L925">925</a> 	}
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 
@@ -978,7 +978,7 @@
 <a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L972" href="#L972">972</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setTags(Collection&lt;String&gt; value) {
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		tags = CollectionUtils.setFrom(value);
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		tags = CollectionUtils.toSet(value);
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 	}
 <a class="jxr_linenumber" name="L976" href="#L976">976</a> 

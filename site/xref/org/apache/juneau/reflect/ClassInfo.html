@@ -2286,7 +2286,7 @@
 <a class="jxr_linenumber" name="L2278" href="#L2278">2278</a> 							m.put(f.getName(), f);
 <a class="jxr_linenumber" name="L2279" href="#L2279">2279</a> 					}
 <a class="jxr_linenumber" name="L2280" href="#L2280">2280</a> 				}
-<a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> 				List&lt;FieldInfo&gt; l = CollectionUtils.listFrom(m.values());
+<a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> 				List&lt;FieldInfo&gt; l = CollectionUtils.toList(m.values());
 <a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> 				l.sort(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> 				publicFields = l.toArray(<strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../org/apache/juneau/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> 			}

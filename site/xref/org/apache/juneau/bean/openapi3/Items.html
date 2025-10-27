@@ -478,7 +478,7 @@
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setEnum(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		_enum = CollectionUtils.listFrom(value);
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		_enum = CollectionUtils.toList(value);
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 

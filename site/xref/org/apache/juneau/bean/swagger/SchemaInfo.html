@@ -685,7 +685,7 @@
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/swagger/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setAllOf(Collection&lt;SchemaInfo&gt; value) {
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		allOf = CollectionUtils.setFrom(value);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		allOf = CollectionUtils.toSet(value);
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 	}
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 
@@ -755,7 +755,7 @@
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L749" href="#L749">749</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/swagger/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setEnum(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 		_enum = CollectionUtils.setFrom(value);
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 		_enum = CollectionUtils.toSet(value);
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 	}
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 
@@ -1065,7 +1065,7 @@
 <a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/swagger/SchemaInfo.html#SchemaInfo">SchemaInfo</a> setRequiredProperties(Collection&lt;String&gt; value) {
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 		requiredProperties = CollectionUtils.setFrom(value);
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 		requiredProperties = CollectionUtils.toSet(value);
 <a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 	}
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 

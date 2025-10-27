@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@Override <em class="jxr_comment">/* Map */</em>
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">public</strong> Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">return</strong> asSet(entries);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">return</strong> toSet(entries);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 	}
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -284,7 +284,7 @@
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 	@Override <em class="jxr_comment">/* Map */</em>
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">public</strong> Set&lt;K&gt; keySet() {
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">return</strong> asSet(keys);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">return</strong> toSet(keys);
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 	}
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<em class="jxr_javadoccomment">/**</em>

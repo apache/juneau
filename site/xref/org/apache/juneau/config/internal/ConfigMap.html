@@ -842,7 +842,7 @@
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 		}
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 		List&lt;Import&gt; irl = listOfSize(imports2.size());
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		CollectionUtils.forEachReverse(CollectionUtils.listFrom(imports2.values()), x -&gt; irl.add(<strong class="jxr_keyword">new</strong> Import(x).register(listeners)));
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		CollectionUtils.forEachReverse(CollectionUtils.toList(imports2.values()), x -&gt; irl.add(<strong class="jxr_keyword">new</strong> Import(x).register(listeners)));
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 		<strong class="jxr_keyword">this</strong>.imports.addAll(irl);
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> 
 <a class="jxr_linenumber" name="L840" href="#L840">840</a> 		<em class="jxr_comment">// Add [blank] section.</em>

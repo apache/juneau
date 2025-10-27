@@ -410,7 +410,7 @@
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletRequest */</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">public</strong> Enumeration&lt;String&gt; getParameterNames() { <strong class="jxr_keyword">return</strong> enumeration(CollectionUtils.listFrom(getParameterMap().keySet())); }
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">public</strong> Enumeration&lt;String&gt; getParameterNames() { <strong class="jxr_keyword">return</strong> enumeration(CollectionUtils.toList(getParameterMap().keySet())); }
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletRequest */</em>
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<strong class="jxr_keyword">public</strong> String[] getParameterValues(String name) {

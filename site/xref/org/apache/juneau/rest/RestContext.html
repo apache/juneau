@@ -5066,16 +5066,16 @@
 <a class="jxr_linenumber" name="L5058" href="#L5058">5058</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L5059" href="#L5059">5059</a> 			produces = builder.produces().orElseGet(
 <a class="jxr_linenumber" name="L5060" href="#L5060">5060</a> 				()-&gt;{
-<a class="jxr_linenumber" name="L5061" href="#L5061">5061</a> 					Set&lt;MediaType&gt; s = opContexts.isEmpty() ? emptySet() : CollectionUtils.setFrom(opContexts.get(0).getSerializers().getSupportedMediaTypes());
+<a class="jxr_linenumber" name="L5061" href="#L5061">5061</a> 					Set&lt;MediaType&gt; s = opContexts.isEmpty() ? emptySet() : CollectionUtils.toSet(opContexts.get(0).getSerializers().getSupportedMediaTypes());
 <a class="jxr_linenumber" name="L5062" href="#L5062">5062</a> 					opContexts.forEach(x -&gt; s.retainAll(x.getSerializers().getSupportedMediaTypes()));
-<a class="jxr_linenumber" name="L5063" href="#L5063">5063</a> 					<strong class="jxr_keyword">return</strong> u(CollectionUtils.listFrom(s));
+<a class="jxr_linenumber" name="L5063" href="#L5063">5063</a> 					<strong class="jxr_keyword">return</strong> u(CollectionUtils.toList(s));
 <a class="jxr_linenumber" name="L5064" href="#L5064">5064</a> 				}
 <a class="jxr_linenumber" name="L5065" href="#L5065">5065</a> 			);
 <a class="jxr_linenumber" name="L5066" href="#L5066">5066</a> 			consumes = builder.consumes().orElseGet(
 <a class="jxr_linenumber" name="L5067" href="#L5067">5067</a> 				()-&gt;{
-<a class="jxr_linenumber" name="L5068" href="#L5068">5068</a> 					Set&lt;MediaType&gt; s = opContexts.isEmpty() ? emptySet() : CollectionUtils.setFrom(opContexts.get(0).getParsers().getSupportedMediaTypes());
+<a class="jxr_linenumber" name="L5068" href="#L5068">5068</a> 					Set&lt;MediaType&gt; s = opContexts.isEmpty() ? emptySet() : CollectionUtils.toSet(opContexts.get(0).getParsers().getSupportedMediaTypes());
 <a class="jxr_linenumber" name="L5069" href="#L5069">5069</a> 					opContexts.forEach(x -&gt; s.retainAll(x.getParsers().getSupportedMediaTypes()));
-<a class="jxr_linenumber" name="L5070" href="#L5070">5070</a> 					<strong class="jxr_keyword">return</strong> u(CollectionUtils.listFrom(s));
+<a class="jxr_linenumber" name="L5070" href="#L5070">5070</a> 					<strong class="jxr_keyword">return</strong> u(CollectionUtils.toList(s));
 <a class="jxr_linenumber" name="L5071" href="#L5071">5071</a> 				}
 <a class="jxr_linenumber" name="L5072" href="#L5072">5072</a> 			);
 <a class="jxr_linenumber" name="L5073" href="#L5073">5073</a> 			<em class="jxr_comment">// @formatter:on</em>

@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		}
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<em class="jxr_comment">// We reverse the list and sort last to first.</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		List&lt;String&gt; columns = CollectionUtils.listFrom(sort.keySet());
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		List&lt;String&gt; columns = CollectionUtils.toList(sort.keySet());
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		Collections.reverse(columns);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		List&lt;SortEntry&gt; l3 = l;

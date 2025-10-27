@@ -515,7 +515,7 @@
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderInfo" href="../../../../../org/apache/juneau/bean/swagger/HeaderInfo.html#HeaderInfo">HeaderInfo</a> setEnum(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		_enum = CollectionUtils.setFrom(value);
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		_enum = CollectionUtils.toSet(value);
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 	}
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 

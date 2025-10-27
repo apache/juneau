@@ -276,7 +276,7 @@
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * @return This object</em>
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 	<strong class="jxr_keyword">public</strong> <a name="ServerVariable" href="../../../../../org/apache/juneau/bean/openapi3/ServerVariable.html#ServerVariable">ServerVariable</a> setEnum(Collection&lt;Object&gt; value) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		_enum = CollectionUtils.listFrom(value);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		_enum = CollectionUtils.toList(value);
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 
