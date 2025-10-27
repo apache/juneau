@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			disableJsonTags = ! copyFrom.addJsonTags;
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			enableNamespaces = copyFrom.enableNamespaces;
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			defaultNamespace = copyFrom.defaultNamespace;
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			namespaces = copyFrom.namespaces.length == 0 ? <strong class="jxr_keyword">null</strong> : Utils.list(copyFrom.namespaces);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			namespaces = copyFrom.namespaces.length == 0 ? <strong class="jxr_keyword">null</strong> : list(copyFrom.namespaces);
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			textNodeDelimiter = copyFrom.textNodeDelimiter;
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		}
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
@@ -1234,8 +1234,8 @@
 <a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 		addNamespaceUrlsToRoot = builder.addNamespaceUrisToRoot;
 <a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 		addBeanTypesXml = builder.addBeanTypesXml;
 <a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 		addJsonTags = ! builder.disableJsonTags;
-<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 		defaultNamespace = builder.defaultNamespace != <strong class="jxr_keyword">null</strong> ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
-<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 		namespaces = builder.namespaces != <strong class="jxr_keyword">null</strong> ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
+<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 		defaultNamespace = nn(builder.defaultNamespace) ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
+<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 		namespaces = nn(builder.namespaces) ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
 <a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 		textNodeDelimiter = builder.textNodeDelimiter;
 <a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 		addBeanTypes = addBeanTypesXml || <strong class="jxr_keyword">super</strong>.isAddBeanTypes();
 <a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 	}

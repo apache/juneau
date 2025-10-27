@@ -556,7 +556,7 @@
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> log(Level level, String msg, Throwable thrown) {
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 		LogRecord r = <strong class="jxr_keyword">new</strong> LogRecord(level, msg);
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">if</strong> (thrown != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">if</strong> (nn(thrown))
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 			r.setThrown(thrown);
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 		r.setLoggerName(logger.getName());
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">if</strong> (SHOW_SOURCE) {

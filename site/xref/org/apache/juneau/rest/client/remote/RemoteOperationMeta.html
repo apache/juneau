@@ -117,7 +117,7 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			mi.getParams().forEach(x -&gt; {
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 				RemoteOperationArg rma = RemoteOperationArg.create(x);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">if</strong> (rma != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">if</strong> (nn(rma)) {
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 					HttpPartType pt = rma.getPartType();
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 					<strong class="jxr_keyword">if</strong> (pt == HEADER)
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 						headerArgs.add(rma);
@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 						bodyArg = rma;
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 				}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 				RequestBeanMeta rmba = RequestBeanMeta.create(x, AnnotationWorkList.create());
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				<strong class="jxr_keyword">if</strong> (rmba != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				<strong class="jxr_keyword">if</strong> (nn(rmba)) {
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 					requestArgs.add(<strong class="jxr_keyword">new</strong> <a name="RemoteOperationBeanArg" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationBeanArg.html#RemoteOperationBeanArg">RemoteOperationBeanArg</a>(x.getIndex(), rmba));
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 				}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			});

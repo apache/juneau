@@ -189,7 +189,7 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">public</strong> ListBuilder&lt;E&gt; addAll(Collection&lt;E&gt; value) {
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">if</strong> (nn(value)) {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">if</strong> (list == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 				list = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;(value);
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">else</strong>
@@ -243,9 +243,9 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">public</strong> ListBuilder&lt;E&gt; addAny(Object...values) {
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">if</strong> (elementType == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Unknown element type. Cannot use this method."</span>);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">if</strong> (values != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">if</strong> (nn(values)) {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : values) {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 				<strong class="jxr_keyword">if</strong> (o != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 				<strong class="jxr_keyword">if</strong> (nn(o)) {
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 					<strong class="jxr_keyword">if</strong> (o instanceof Collection) {
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 						((Collection&lt;?&gt;)o).forEach(x -&gt; addAny(x));
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isArray(o)) {
@@ -254,13 +254,13 @@
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (elementType.isInstance(o)) {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 						add(elementType.<strong class="jxr_keyword">cast</strong>(o));
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 						<strong class="jxr_keyword">if</strong> (converters != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 							<strong class="jxr_keyword">var</strong> e = converters.stream().map(x -&gt; x.convertTo(elementType, o)).filter(x -&gt; x != <strong class="jxr_keyword">null</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 							<strong class="jxr_keyword">if</strong> (e != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 						<strong class="jxr_keyword">if</strong> (nn(converters)) {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 							<strong class="jxr_keyword">var</strong> e = converters.stream().map(x -&gt; x.convertTo(elementType, o)).filter(x -&gt; nn(x)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 							<strong class="jxr_keyword">if</strong> (nn(e)) {
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 								add(e);
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 							} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 								<strong class="jxr_keyword">var</strong> l = converters.stream().map(x -&gt; x.convertTo(List.<strong class="jxr_keyword">class</strong>, o)).filter(x -&gt; x != <strong class="jxr_keyword">null</strong>).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 								<strong class="jxr_keyword">if</strong> (l != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 								<strong class="jxr_keyword">var</strong> l = converters.stream().map(x -&gt; x.convertTo(List.<strong class="jxr_keyword">class</strong>, o)).filter(x -&gt; nn(x)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 								<strong class="jxr_keyword">if</strong> (nn(l))
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 									addAny(l);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 								<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 									<strong class="jxr_keyword">throw</strong> ThrowableUtils.runtimeException(<span class="jxr_string">"Object of type {0} could not be converted to type {1}"</span>, o.getClass().getName(), elementType);
@@ -322,7 +322,7 @@
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">public</strong> ListBuilder&lt;E&gt; copy() {
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">if</strong> (list != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">if</strong> (nn(list))
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 			list = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(list);
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 	}

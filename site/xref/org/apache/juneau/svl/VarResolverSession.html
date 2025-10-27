@@ -195,7 +195,7 @@
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			String <strong class="jxr_keyword">var</strong> = s.substring(1, s.indexOf('{'));
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 			String val = s.substring(s.indexOf('{') + 1, s.length() - 1);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			Var v = getVar(<strong class="jxr_keyword">var</strong>);
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">if</strong> (nn(v)) {
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 					<strong class="jxr_keyword">if</strong> (v.streamed) {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 						StringWriter sw = <strong class="jxr_keyword">new</strong> StringWriter();
@@ -434,7 +434,7 @@
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<strong class="jxr_keyword">protected</strong> <a name="Var" href="../../../../org/apache/juneau/svl/Var.html#Var">Var</a> getVar(String name) {
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		Var v = <strong class="jxr_keyword">this</strong>.context.getVarMap().get(name);
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">return</strong> v != <strong class="jxr_keyword">null</strong> &amp;&amp; v.canResolve(<strong class="jxr_keyword">this</strong>) ? v : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">return</strong> nn(v) &amp;&amp; v.canResolve(<strong class="jxr_keyword">this</strong>) ? v : <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 	}
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> }
 </pre>

@@ -2898,7 +2898,7 @@
 <a class="jxr_linenumber" name="L2890" href="#L2890">2890</a> 		<strong class="jxr_keyword">public</strong> Builder interceptors(Class&lt;?&gt;...values) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L2891" href="#L2891">2891</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : values) {
 <a class="jxr_linenumber" name="L2892" href="#L2892">2892</a> 				ClassInfo ci = ClassInfo.of(c);
-<a class="jxr_linenumber" name="L2893" href="#L2893">2893</a> 				<strong class="jxr_keyword">if</strong> (ci != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L2893" href="#L2893">2893</a> 				<strong class="jxr_keyword">if</strong> (nn(ci)) {
 <a class="jxr_linenumber" name="L2894" href="#L2894">2894</a> 					<strong class="jxr_keyword">if</strong> (ci.isChildOfAny(RestCallInterceptor.<strong class="jxr_keyword">class</strong>, HttpRequestInterceptor.<strong class="jxr_keyword">class</strong>, HttpResponseInterceptor.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L2895" href="#L2895">2895</a> 						interceptors(ci.newInstance());
 <a class="jxr_linenumber" name="L2896" href="#L2896">2896</a> 					<strong class="jxr_keyword">else</strong>
@@ -2961,7 +2961,7 @@
 <a class="jxr_linenumber" name="L2953" href="#L2953">2953</a> 			List&lt;RestCallInterceptor&gt; l = list();
 <a class="jxr_linenumber" name="L2954" href="#L2954">2954</a> 			<strong class="jxr_keyword">for</strong> (Object o : value) {
 <a class="jxr_linenumber" name="L2955" href="#L2955">2955</a> 				ClassInfo ci = ClassInfo.of(o);
-<a class="jxr_linenumber" name="L2956" href="#L2956">2956</a> 				<strong class="jxr_keyword">if</strong> (ci != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L2956" href="#L2956">2956</a> 				<strong class="jxr_keyword">if</strong> (nn(ci)) {
 <a class="jxr_linenumber" name="L2957" href="#L2957">2957</a> 					<strong class="jxr_keyword">if</strong> (! ci.isChildOfAny(HttpRequestInterceptor.<strong class="jxr_keyword">class</strong>, HttpResponseInterceptor.<strong class="jxr_keyword">class</strong>, RestCallInterceptor.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L2958" href="#L2958">2958</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Invalid object of type ''{0}'' passed to interceptors()."</span>, ci.getName());
 <a class="jxr_linenumber" name="L2959" href="#L2959">2959</a> 					<strong class="jxr_keyword">if</strong> (o instanceof HttpRequestInterceptor)
@@ -3296,7 +3296,7 @@
 <a class="jxr_linenumber" name="L3288" href="#L3288">3288</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L3289" href="#L3289">3289</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L3290" href="#L3290">3290</a> 		<strong class="jxr_keyword">public</strong> Builder marshaller(<a name="Marshaller" href="../../../../../org/apache/juneau/marshaller/Marshaller.html#Marshaller">Marshaller</a> value) {
-<a class="jxr_linenumber" name="L3291" href="#L3291">3291</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L3291" href="#L3291">3291</a> 			<strong class="jxr_keyword">if</strong> (nn(value))
 <a class="jxr_linenumber" name="L3292" href="#L3292">3292</a> 				serializer(value.getSerializer()).parser(value.getParser());
 <a class="jxr_linenumber" name="L3293" href="#L3293">3293</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L3294" href="#L3294">3294</a> 		}
@@ -3327,7 +3327,7 @@
 <a class="jxr_linenumber" name="L3319" href="#L3319">3319</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L3320" href="#L3320">3320</a> 		<strong class="jxr_keyword">public</strong> Builder marshallers(Marshaller...value) {
 <a class="jxr_linenumber" name="L3321" href="#L3321">3321</a> 			<strong class="jxr_keyword">for</strong> (<a name="Marshaller" href="../../../../../org/apache/juneau/marshaller/Marshaller.html#Marshaller">Marshaller</a> m : value)
-<a class="jxr_linenumber" name="L3322" href="#L3322">3322</a> 				<strong class="jxr_keyword">if</strong> (m != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L3322" href="#L3322">3322</a> 				<strong class="jxr_keyword">if</strong> (nn(m))
 <a class="jxr_linenumber" name="L3323" href="#L3323">3323</a> 					serializer(m.getSerializer()).parser(m.getParser());
 <a class="jxr_linenumber" name="L3324" href="#L3324">3324</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L3325" href="#L3325">3325</a> 		}
@@ -6047,7 +6047,7 @@
 <a class="jxr_linenumber" name="L6039" href="#L6039">6039</a> 			<strong class="jxr_keyword">return</strong> UrlEncodingSerializer.create().beanContext(beanContext());
 <a class="jxr_linenumber" name="L6040" href="#L6040">6040</a> 		}
 <a class="jxr_linenumber" name="L6041" href="#L6041">6041</a> 
-<a class="jxr_linenumber" name="L6042" href="#L6042">6042</a> 		<strong class="jxr_keyword">final</strong> CloseableHttpClient getHttpClient() { <strong class="jxr_keyword">return</strong> httpClient != <strong class="jxr_keyword">null</strong> ? httpClient : createHttpClient(); }
+<a class="jxr_linenumber" name="L6042" href="#L6042">6042</a> 		<strong class="jxr_keyword">final</strong> CloseableHttpClient getHttpClient() { <strong class="jxr_keyword">return</strong> nn(httpClient) ? httpClient : createHttpClient(); }
 <a class="jxr_linenumber" name="L6043" href="#L6043">6043</a> 	}
 <a class="jxr_linenumber" name="L6044" href="#L6044">6044</a> 
 <a class="jxr_linenumber" name="L6045" href="#L6045">6045</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="RestCallInterceptor" href="../../../../../org/apache/juneau/rest/client/RestCallInterceptor.html#RestCallInterceptor">RestCallInterceptor</a>[] EMPTY_REST_CALL_INTERCEPTORS = {};
@@ -6125,18 +6125,18 @@
 <a class="jxr_linenumber" name="L6117" href="#L6117">6117</a> 		rootUrl = builder.rootUrl;
 <a class="jxr_linenumber" name="L6118" href="#L6118">6118</a> 		errorCodes = builder.errorCodes;
 <a class="jxr_linenumber" name="L6119" href="#L6119">6119</a> 		connectionManager = builder.connectionManager;
-<a class="jxr_linenumber" name="L6120" href="#L6120">6120</a> 		console = builder.console != <strong class="jxr_keyword">null</strong> ? builder.console : System.err;
+<a class="jxr_linenumber" name="L6120" href="#L6120">6120</a> 		console = nn(builder.console) ? builder.console : System.err;
 <a class="jxr_linenumber" name="L6121" href="#L6121">6121</a> 		executorService = builder.executorService;
 <a class="jxr_linenumber" name="L6122" href="#L6122">6122</a> 		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
 <a class="jxr_linenumber" name="L6123" href="#L6123">6123</a> 		ignoreErrors = builder.ignoreErrors;
 <a class="jxr_linenumber" name="L6124" href="#L6124">6124</a> 		keepHttpClientOpen = builder.keepHttpClientOpen;
 <a class="jxr_linenumber" name="L6125" href="#L6125">6125</a> 		detectLeaks = builder.detectLeaks;
-<a class="jxr_linenumber" name="L6126" href="#L6126">6126</a> 		logger = builder.logger != <strong class="jxr_keyword">null</strong> ? builder.logger : Logger.getLogger(RestClient.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L6126" href="#L6126">6126</a> 		logger = nn(builder.logger) ? builder.logger : Logger.getLogger(RestClient.<strong class="jxr_keyword">class</strong>.getName());
 <a class="jxr_linenumber" name="L6127" href="#L6127">6127</a> 		logToConsole = builder.logToConsole || isDebug();
-<a class="jxr_linenumber" name="L6128" href="#L6128">6128</a> 		logRequests = builder.logRequests != <strong class="jxr_keyword">null</strong> ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
-<a class="jxr_linenumber" name="L6129" href="#L6129">6129</a> 		logRequestsLevel = builder.logRequestsLevel != <strong class="jxr_keyword">null</strong> ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
-<a class="jxr_linenumber" name="L6130" href="#L6130">6130</a> 		logRequestsPredicate = builder.logRequestsPredicate != <strong class="jxr_keyword">null</strong> ? builder.logRequestsPredicate : LOG_REQUESTS_PREDICATE_DEFAULT;
-<a class="jxr_linenumber" name="L6131" href="#L6131">6131</a> 		interceptors = builder.interceptors != <strong class="jxr_keyword">null</strong> ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
+<a class="jxr_linenumber" name="L6128" href="#L6128">6128</a> 		logRequests = nn(builder.logRequests) ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
+<a class="jxr_linenumber" name="L6129" href="#L6129">6129</a> 		logRequestsLevel = nn(builder.logRequestsLevel) ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
+<a class="jxr_linenumber" name="L6130" href="#L6130">6130</a> 		logRequestsPredicate = nn(builder.logRequestsPredicate) ? builder.logRequestsPredicate : LOG_REQUESTS_PREDICATE_DEFAULT;
+<a class="jxr_linenumber" name="L6131" href="#L6131">6131</a> 		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
 <a class="jxr_linenumber" name="L6132" href="#L6132">6132</a> 		serializers = builder.serializers().build();
 <a class="jxr_linenumber" name="L6133" href="#L6133">6133</a> 		parsers = builder.parsers().build();
 <a class="jxr_linenumber" name="L6134" href="#L6134">6134</a> 		partSerializer = builder.partSerializer().create();
@@ -6228,7 +6228,7 @@
 <a class="jxr_linenumber" name="L6220" href="#L6220">6220</a> 
 <a class="jxr_linenumber" name="L6221" href="#L6221">6221</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L6222" href="#L6222">6222</a> 			RestRequest req = request(method, uri, isNotEmpty(content));
-<a class="jxr_linenumber" name="L6223" href="#L6223">6223</a> 			<strong class="jxr_keyword">if</strong> (headers != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6223" href="#L6223">6223</a> 			<strong class="jxr_keyword">if</strong> (nn(headers))
 <a class="jxr_linenumber" name="L6224" href="#L6224">6224</a> 				JsonMap.ofJson(headers).forEach((k, v) -&gt; req.header(stringHeader(k, s(v))));
 <a class="jxr_linenumber" name="L6225" href="#L6225">6225</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(content))
 <a class="jxr_linenumber" name="L6226" href="#L6226">6226</a> 				req.contentString(content);
@@ -6251,9 +6251,9 @@
 <a class="jxr_linenumber" name="L6243" href="#L6243">6243</a> 		isClosed = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L6244" href="#L6244">6244</a> 		<strong class="jxr_keyword">if</strong> (! keepHttpClientOpen)
 <a class="jxr_linenumber" name="L6245" href="#L6245">6245</a> 			httpClient.close();
-<a class="jxr_linenumber" name="L6246" href="#L6246">6246</a> 		<strong class="jxr_keyword">if</strong> (executorService != <strong class="jxr_keyword">null</strong> &amp;&amp; executorServiceShutdownOnClose)
+<a class="jxr_linenumber" name="L6246" href="#L6246">6246</a> 		<strong class="jxr_keyword">if</strong> (nn(executorService) &amp;&amp; executorServiceShutdownOnClose)
 <a class="jxr_linenumber" name="L6247" href="#L6247">6247</a> 			executorService.shutdown();
-<a class="jxr_linenumber" name="L6248" href="#L6248">6248</a> 		<strong class="jxr_keyword">if</strong> (creationStack != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6248" href="#L6248">6248</a> 		<strong class="jxr_keyword">if</strong> (nn(creationStack))
 <a class="jxr_linenumber" name="L6249" href="#L6249">6249</a> 			closedStack = Thread.currentThread().getStackTrace();
 <a class="jxr_linenumber" name="L6250" href="#L6250">6250</a> 	}
 <a class="jxr_linenumber" name="L6251" href="#L6251">6251</a> 
@@ -6265,10 +6265,10 @@
 <a class="jxr_linenumber" name="L6257" href="#L6257">6257</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L6258" href="#L6258">6258</a> 			<strong class="jxr_keyword">if</strong> (! keepHttpClientOpen)
 <a class="jxr_linenumber" name="L6259" href="#L6259">6259</a> 				httpClient.close();
-<a class="jxr_linenumber" name="L6260" href="#L6260">6260</a> 			<strong class="jxr_keyword">if</strong> (executorService != <strong class="jxr_keyword">null</strong> &amp;&amp; executorServiceShutdownOnClose)
+<a class="jxr_linenumber" name="L6260" href="#L6260">6260</a> 			<strong class="jxr_keyword">if</strong> (nn(executorService) &amp;&amp; executorServiceShutdownOnClose)
 <a class="jxr_linenumber" name="L6261" href="#L6261">6261</a> 				executorService.shutdown();
 <a class="jxr_linenumber" name="L6262" href="#L6262">6262</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Throwable t) {}
-<a class="jxr_linenumber" name="L6263" href="#L6263">6263</a> 		<strong class="jxr_keyword">if</strong> (creationStack != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6263" href="#L6263">6263</a> 		<strong class="jxr_keyword">if</strong> (nn(creationStack))
 <a class="jxr_linenumber" name="L6264" href="#L6264">6264</a> 			closedStack = Thread.currentThread().getStackTrace();
 <a class="jxr_linenumber" name="L6265" href="#L6265">6265</a> 	}
 <a class="jxr_linenumber" name="L6266" href="#L6266">6266</a> 
@@ -6866,7 +6866,7 @@
 <a class="jxr_linenumber" name="L6858" href="#L6858">6858</a> 						<em class="jxr_comment">// Fall back to method-level default if parameter-level not set</em>
 <a class="jxr_linenumber" name="L6859" href="#L6859">6859</a> 						<strong class="jxr_keyword">if</strong> (def == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L6860" href="#L6860">6860</a> 							def = rom.getPathDefault(a.getName());
-<a class="jxr_linenumber" name="L6861" href="#L6861">6861</a> 						<strong class="jxr_keyword">if</strong> (def != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6861" href="#L6861">6861</a> 						<strong class="jxr_keyword">if</strong> (nn(def))
 <a class="jxr_linenumber" name="L6862" href="#L6862">6862</a> 							val = def;
 <a class="jxr_linenumber" name="L6863" href="#L6863">6863</a> 					}
 <a class="jxr_linenumber" name="L6864" href="#L6864">6864</a> 					rc.pathArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer));
@@ -6879,7 +6879,7 @@
 <a class="jxr_linenumber" name="L6871" href="#L6871">6871</a> 						<em class="jxr_comment">// Fall back to method-level default if parameter-level not set</em>
 <a class="jxr_linenumber" name="L6872" href="#L6872">6872</a> 						<strong class="jxr_keyword">if</strong> (def == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L6873" href="#L6873">6873</a> 							def = rom.getQueryDefault(a.getName());
-<a class="jxr_linenumber" name="L6874" href="#L6874">6874</a> 						<strong class="jxr_keyword">if</strong> (def != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6874" href="#L6874">6874</a> 						<strong class="jxr_keyword">if</strong> (nn(def))
 <a class="jxr_linenumber" name="L6875" href="#L6875">6875</a> 							val = def;
 <a class="jxr_linenumber" name="L6876" href="#L6876">6876</a> 					}
 <a class="jxr_linenumber" name="L6877" href="#L6877">6877</a> 					rc.queryArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
@@ -6892,7 +6892,7 @@
 <a class="jxr_linenumber" name="L6884" href="#L6884">6884</a> 						<em class="jxr_comment">// Fall back to method-level default if parameter-level not set</em>
 <a class="jxr_linenumber" name="L6885" href="#L6885">6885</a> 						<strong class="jxr_keyword">if</strong> (def == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L6886" href="#L6886">6886</a> 							def = rom.getFormDataDefault(a.getName());
-<a class="jxr_linenumber" name="L6887" href="#L6887">6887</a> 						<strong class="jxr_keyword">if</strong> (def != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6887" href="#L6887">6887</a> 						<strong class="jxr_keyword">if</strong> (nn(def))
 <a class="jxr_linenumber" name="L6888" href="#L6888">6888</a> 							val = def;
 <a class="jxr_linenumber" name="L6889" href="#L6889">6889</a> 					}
 <a class="jxr_linenumber" name="L6890" href="#L6890">6890</a> 					rc.formDataArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
@@ -6905,14 +6905,14 @@
 <a class="jxr_linenumber" name="L6897" href="#L6897">6897</a> 						<em class="jxr_comment">// Fall back to method-level default if parameter-level not set</em>
 <a class="jxr_linenumber" name="L6898" href="#L6898">6898</a> 						<strong class="jxr_keyword">if</strong> (def == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L6899" href="#L6899">6899</a> 							def = rom.getHeaderDefault(a.getName());
-<a class="jxr_linenumber" name="L6900" href="#L6900">6900</a> 						<strong class="jxr_keyword">if</strong> (def != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6900" href="#L6900">6900</a> 						<strong class="jxr_keyword">if</strong> (nn(def))
 <a class="jxr_linenumber" name="L6901" href="#L6901">6901</a> 							val = def;
 <a class="jxr_linenumber" name="L6902" href="#L6902">6902</a> 					}
 <a class="jxr_linenumber" name="L6903" href="#L6903">6903</a> 					rc.headerArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
 <a class="jxr_linenumber" name="L6904" href="#L6904">6904</a> 				});
 <a class="jxr_linenumber" name="L6905" href="#L6905">6905</a> 
 <a class="jxr_linenumber" name="L6906" href="#L6906">6906</a> 				<strong class="jxr_keyword">var</strong> ba = rom.getContentArg();
-<a class="jxr_linenumber" name="L6907" href="#L6907">6907</a> 				<strong class="jxr_keyword">if</strong> (ba != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L6907" href="#L6907">6907</a> 				<strong class="jxr_keyword">if</strong> (nn(ba)) {
 <a class="jxr_linenumber" name="L6908" href="#L6908">6908</a> 					<strong class="jxr_keyword">var</strong> val = args[ba.getIndex()];
 <a class="jxr_linenumber" name="L6909" href="#L6909">6909</a> 					<strong class="jxr_keyword">if</strong> (val == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L6910" href="#L6910">6910</a> 						<em class="jxr_comment">// Check parameter-level default first (9.2.0)</em>
@@ -6920,29 +6920,29 @@
 <a class="jxr_linenumber" name="L6912" href="#L6912">6912</a> 						<em class="jxr_comment">// Fall back to method-level default if parameter-level not set</em>
 <a class="jxr_linenumber" name="L6913" href="#L6913">6913</a> 						<strong class="jxr_keyword">if</strong> (def == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L6914" href="#L6914">6914</a> 							def = rom.getContentDefault();
-<a class="jxr_linenumber" name="L6915" href="#L6915">6915</a> 						<strong class="jxr_keyword">if</strong> (def != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6915" href="#L6915">6915</a> 						<strong class="jxr_keyword">if</strong> (nn(def))
 <a class="jxr_linenumber" name="L6916" href="#L6916">6916</a> 							val = def;
 <a class="jxr_linenumber" name="L6917" href="#L6917">6917</a> 					}
 <a class="jxr_linenumber" name="L6918" href="#L6918">6918</a> 					rc.content(val, ba.getSchema());
 <a class="jxr_linenumber" name="L6919" href="#L6919">6919</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L6920" href="#L6920">6920</a> 					<em class="jxr_comment">// Apply Content default if no parameter is present</em>
 <a class="jxr_linenumber" name="L6921" href="#L6921">6921</a> 					<strong class="jxr_keyword">var</strong> contentDef = rom.getContentDefault();
-<a class="jxr_linenumber" name="L6922" href="#L6922">6922</a> 					<strong class="jxr_keyword">if</strong> (contentDef != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L6922" href="#L6922">6922</a> 					<strong class="jxr_keyword">if</strong> (nn(contentDef))
 <a class="jxr_linenumber" name="L6923" href="#L6923">6923</a> 						rc.content(contentDef);
 <a class="jxr_linenumber" name="L6924" href="#L6924">6924</a> 				}
 <a class="jxr_linenumber" name="L6925" href="#L6925">6925</a> 
 <a class="jxr_linenumber" name="L6926" href="#L6926">6926</a> 				rom.forEachRequestArg(rmba -&gt; {
 <a class="jxr_linenumber" name="L6927" href="#L6927">6927</a> 					RequestBeanMeta rbm = rmba.getMeta();
 <a class="jxr_linenumber" name="L6928" href="#L6928">6928</a> 					<strong class="jxr_keyword">var</strong> bean = args[rmba.getIndex()];
-<a class="jxr_linenumber" name="L6929" href="#L6929">6929</a> 					<strong class="jxr_keyword">if</strong> (bean != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L6929" href="#L6929">6929</a> 					<strong class="jxr_keyword">if</strong> (nn(bean)) {
 <a class="jxr_linenumber" name="L6930" href="#L6930">6930</a> 						<strong class="jxr_keyword">for</strong> (<a name="RequestBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#RequestBeanPropertyMeta">RequestBeanPropertyMeta</a> p : rbm.getProperties()) {
-<a class="jxr_linenumber" name="L6931" href="#L6931">6931</a> 							<strong class="jxr_keyword">var</strong> val = Utils.safeSupplier(() -&gt; p.getGetter().invoke(bean));
+<a class="jxr_linenumber" name="L6931" href="#L6931">6931</a> 							<strong class="jxr_keyword">var</strong> val = safeSupplier(() -&gt; p.getGetter().invoke(bean));
 <a class="jxr_linenumber" name="L6932" href="#L6932">6932</a> 							<strong class="jxr_keyword">var</strong> pt = p.getPartType();
 <a class="jxr_linenumber" name="L6933" href="#L6933">6933</a> 							<strong class="jxr_keyword">var</strong> pn = p.getPartName();
 <a class="jxr_linenumber" name="L6934" href="#L6934">6934</a> 							HttpPartSchema schema = p.getSchema();
 <a class="jxr_linenumber" name="L6935" href="#L6935">6935</a> 							<strong class="jxr_keyword">if</strong> (pt == PATH)
 <a class="jxr_linenumber" name="L6936" href="#L6936">6936</a> 								rc.pathArg(pn, val, schema, p.getSerializer().orElse(partSerializer));
-<a class="jxr_linenumber" name="L6937" href="#L6937">6937</a> 							<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (val != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L6937" href="#L6937">6937</a> 							<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(val)) {
 <a class="jxr_linenumber" name="L6938" href="#L6938">6938</a> 								<strong class="jxr_keyword">if</strong> (pt == QUERY)
 <a class="jxr_linenumber" name="L6939" href="#L6939">6939</a> 									rc.queryArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
 <a class="jxr_linenumber" name="L6940" href="#L6940">6940</a> 								<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (pt == FORMDATA)
@@ -7106,7 +7106,7 @@
 <a class="jxr_linenumber" name="L7098" href="#L7098">7098</a> 				} <strong class="jxr_keyword">catch</strong> (Throwable e) {
 <a class="jxr_linenumber" name="L7099" href="#L7099">7099</a> 					<strong class="jxr_keyword">if</strong> (e instanceof <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a>) {
 <a class="jxr_linenumber" name="L7100" href="#L7100">7100</a> 						Throwable t = e.getCause();
-<a class="jxr_linenumber" name="L7101" href="#L7101">7101</a> 						<strong class="jxr_keyword">if</strong> (t != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L7101" href="#L7101">7101</a> 						<strong class="jxr_keyword">if</strong> (nn(t))
 <a class="jxr_linenumber" name="L7102" href="#L7102">7102</a> 							e = t;
 <a class="jxr_linenumber" name="L7103" href="#L7103">7103</a> 					}
 <a class="jxr_linenumber" name="L7104" href="#L7104">7104</a> 					<strong class="jxr_keyword">if</strong> (e instanceof RuntimeException)
@@ -7592,7 +7592,7 @@
 <a class="jxr_linenumber" name="L7584" href="#L7584">7584</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> finalize() <strong class="jxr_keyword">throws</strong> Throwable {
 <a class="jxr_linenumber" name="L7585" href="#L7585">7585</a> 		<strong class="jxr_keyword">if</strong> (detectLeaks &amp;&amp; ! isClosed &amp;&amp; ! keepHttpClientOpen) {
 <a class="jxr_linenumber" name="L7586" href="#L7586">7586</a> 			StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"WARNING:  RestClient garbage collected before it was finalized."</span>);  <em class="jxr_comment">// NOT DEBUG</em>
-<a class="jxr_linenumber" name="L7587" href="#L7587">7587</a> 			<strong class="jxr_keyword">if</strong> (creationStack != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L7587" href="#L7587">7587</a> 			<strong class="jxr_keyword">if</strong> (nn(creationStack)) {
 <a class="jxr_linenumber" name="L7588" href="#L7588">7588</a> 				sb.append(<span class="jxr_string">"\nCreation Stack:"</span>);  <em class="jxr_comment">// NOT DEBUG</em>
 <a class="jxr_linenumber" name="L7589" href="#L7589">7589</a> 				<strong class="jxr_keyword">for</strong> (StackTraceElement e : creationStack)
 <a class="jxr_linenumber" name="L7590" href="#L7590">7590</a> 					sb.append(<span class="jxr_string">"\n\t"</span> + e);  <em class="jxr_comment">// NOT DEBUG</em>
@@ -7714,7 +7714,7 @@
 <a class="jxr_linenumber" name="L7706" href="#L7706">7706</a> 		logger.log(level, t, msg(msg, args));
 <a class="jxr_linenumber" name="L7707" href="#L7707">7707</a> 		<strong class="jxr_keyword">if</strong> (logToConsole) {
 <a class="jxr_linenumber" name="L7708" href="#L7708">7708</a> 			console.println(msg(msg, args).get());
-<a class="jxr_linenumber" name="L7709" href="#L7709">7709</a> 			<strong class="jxr_keyword">if</strong> (t != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L7709" href="#L7709">7709</a> 			<strong class="jxr_keyword">if</strong> (nn(t))
 <a class="jxr_linenumber" name="L7710" href="#L7710">7710</a> 				t.printStackTrace(console);
 <a class="jxr_linenumber" name="L7711" href="#L7711">7711</a> 		}
 <a class="jxr_linenumber" name="L7712" href="#L7712">7712</a> 	}
@@ -7826,7 +7826,7 @@
 <a class="jxr_linenumber" name="L7818" href="#L7818">7818</a> 	<strong class="jxr_keyword">protected</strong> <a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> request(<a name="RestOperation" href="../../../../../org/apache/juneau/rest/client/RestOperation.html#RestOperation">RestOperation</a> op) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L7819" href="#L7819">7819</a> 		<strong class="jxr_keyword">if</strong> (isClosed) {
 <a class="jxr_linenumber" name="L7820" href="#L7820">7820</a> 			Exception e2 = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L7821" href="#L7821">7821</a> 			<strong class="jxr_keyword">if</strong> (closedStack != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L7821" href="#L7821">7821</a> 			<strong class="jxr_keyword">if</strong> (nn(closedStack)) {
 <a class="jxr_linenumber" name="L7822" href="#L7822">7822</a> 				e2 = <strong class="jxr_keyword">new</strong> Exception(<span class="jxr_string">"Creation stack:"</span>);
 <a class="jxr_linenumber" name="L7823" href="#L7823">7823</a> 				e2.setStackTrace(closedStack);
 <a class="jxr_linenumber" name="L7824" href="#L7824">7824</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a>(<strong class="jxr_keyword">null</strong>, e2, <span class="jxr_string">"RestClient.close() has already been called.  This client cannot be reused."</span>);
@@ -7921,7 +7921,7 @@
 <a class="jxr_linenumber" name="L7913" href="#L7913">7913</a> 	}
 <a class="jxr_linenumber" name="L7914" href="#L7914">7914</a> 
 <a class="jxr_linenumber" name="L7915" href="#L7915">7915</a> 	ExecutorService getExecutorService() {
-<a class="jxr_linenumber" name="L7916" href="#L7916">7916</a> 		<strong class="jxr_keyword">if</strong> (executorService != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L7916" href="#L7916">7916</a> 		<strong class="jxr_keyword">if</strong> (nn(executorService))
 <a class="jxr_linenumber" name="L7917" href="#L7917">7917</a> 			<strong class="jxr_keyword">return</strong> executorService;
 <a class="jxr_linenumber" name="L7918" href="#L7918">7918</a> 		<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L7919" href="#L7919">7919</a> 			executorService = <strong class="jxr_keyword">new</strong> ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, <strong class="jxr_keyword">new</strong> ArrayBlockingQueue&lt;&gt;(10));
@@ -7951,9 +7951,9 @@
 <a class="jxr_linenumber" name="L7943" href="#L7943">7943</a> 	Parser getMatchingParser(String mediaType) {
 <a class="jxr_linenumber" name="L7944" href="#L7944">7944</a> 		<strong class="jxr_keyword">if</strong> (parsers.isEmpty())
 <a class="jxr_linenumber" name="L7945" href="#L7945">7945</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L7946" href="#L7946">7946</a> 		<strong class="jxr_keyword">if</strong> (mediaType != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L7946" href="#L7946">7946</a> 		<strong class="jxr_keyword">if</strong> (nn(mediaType)) {
 <a class="jxr_linenumber" name="L7947" href="#L7947">7947</a> 			Parser p = parsers.getParser(mediaType);
-<a class="jxr_linenumber" name="L7948" href="#L7948">7948</a> 			<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L7948" href="#L7948">7948</a> 			<strong class="jxr_keyword">if</strong> (nn(p))
 <a class="jxr_linenumber" name="L7949" href="#L7949">7949</a> 				<strong class="jxr_keyword">return</strong> p;
 <a class="jxr_linenumber" name="L7950" href="#L7950">7950</a> 		}
 <a class="jxr_linenumber" name="L7951" href="#L7951">7951</a> 		List&lt;Parser&gt; l = parsers.getParsers();
@@ -7968,9 +7968,9 @@
 <a class="jxr_linenumber" name="L7960" href="#L7960">7960</a> 	Serializer getMatchingSerializer(String mediaType) {
 <a class="jxr_linenumber" name="L7961" href="#L7961">7961</a> 		<strong class="jxr_keyword">if</strong> (serializers.isEmpty())
 <a class="jxr_linenumber" name="L7962" href="#L7962">7962</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L7963" href="#L7963">7963</a> 		<strong class="jxr_keyword">if</strong> (mediaType != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L7963" href="#L7963">7963</a> 		<strong class="jxr_keyword">if</strong> (nn(mediaType)) {
 <a class="jxr_linenumber" name="L7964" href="#L7964">7964</a> 			Serializer s = serializers.getSerializer(mediaType);
-<a class="jxr_linenumber" name="L7965" href="#L7965">7965</a> 			<strong class="jxr_keyword">if</strong> (s != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L7965" href="#L7965">7965</a> 			<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L7966" href="#L7966">7966</a> 				<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L7967" href="#L7967">7967</a> 		}
 <a class="jxr_linenumber" name="L7968" href="#L7968">7968</a> 		List&lt;Serializer&gt; l = serializers.getSerializers();
@@ -7994,7 +7994,7 @@
 <a class="jxr_linenumber" name="L7986" href="#L7986">7986</a> 			<strong class="jxr_keyword">if</strong> (x instanceof URIBuilder)
 <a class="jxr_linenumber" name="L7987" href="#L7987">7987</a> 				<strong class="jxr_keyword">return</strong> ((URIBuilder)x).build();
 <a class="jxr_linenumber" name="L7988" href="#L7988">7988</a> 			String s = x == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : x.toString();
-<a class="jxr_linenumber" name="L7989" href="#L7989">7989</a> 			<strong class="jxr_keyword">if</strong> (rootUrl != <strong class="jxr_keyword">null</strong> &amp;&amp; ! absUrlPattern.matcher(s).matches()) {
+<a class="jxr_linenumber" name="L7989" href="#L7989">7989</a> 			<strong class="jxr_keyword">if</strong> (nn(rootUrl) &amp;&amp; ! absUrlPattern.matcher(s).matches()) {
 <a class="jxr_linenumber" name="L7990" href="#L7990">7990</a> 				<strong class="jxr_keyword">if</strong> (s.isEmpty())
 <a class="jxr_linenumber" name="L7991" href="#L7991">7991</a> 					s = rootUrl;
 <a class="jxr_linenumber" name="L7992" href="#L7992">7992</a> 				<strong class="jxr_keyword">else</strong> {

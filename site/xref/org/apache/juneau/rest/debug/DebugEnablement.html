@@ -26,12 +26,12 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.Enablement.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.Method;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.Method;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.*;
@@ -231,9 +231,9 @@
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">public</strong> <a name="DebugEnablement" href="../../../../../org/apache/juneau/rest/debug/DebugEnablement.html#DebugEnablement">DebugEnablement</a>(<a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		Builder builder = init(beanStore);
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">this</strong>.defaultEnablement = Utils.firstNonNull(builder.defaultEnablement, NEVER);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">this</strong>.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">this</strong>.enablementMap = builder.mapBuilder.build();
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">this</strong>.conditionalPredicate = Utils.firstNonNull(builder.conditional, x -&gt; <span class="jxr_string">"true"</span>.equalsIgnoreCase(x.getHeader(<span class="jxr_string">"Debug"</span>)));
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">this</strong>.conditionalPredicate = firstNonNull(builder.conditional, x -&gt; <span class="jxr_string">"true"</span>.equalsIgnoreCase(x.getHeader(<span class="jxr_string">"Debug"</span>)));
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -242,9 +242,9 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this enablement.</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">public</strong> <a name="DebugEnablement" href="../../../../../org/apache/juneau/rest/debug/DebugEnablement.html#DebugEnablement">DebugEnablement</a>(Builder builder) {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">this</strong>.defaultEnablement = Utils.firstNonNull(builder.defaultEnablement, NEVER);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">this</strong>.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">this</strong>.enablementMap = builder.mapBuilder.build();
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">this</strong>.conditionalPredicate = Utils.firstNonNull(builder.conditional, x -&gt; <span class="jxr_string">"true"</span>.equalsIgnoreCase(x.getHeader(<span class="jxr_string">"Debug"</span>)));
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">this</strong>.conditionalPredicate = firstNonNull(builder.conditional, x -&gt; <span class="jxr_string">"true"</span>.equalsIgnoreCase(x.getHeader(<span class="jxr_string">"Debug"</span>)));
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 

@@ -82,8 +82,8 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		@Override
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(Object o) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">if</strong> (isDesc)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  				<strong class="jxr_keyword">return</strong> Utils.compare(((SortEntry)o).sortVal, <strong class="jxr_keyword">this</strong>.sortVal);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">return</strong> Utils.compare(<strong class="jxr_keyword">this</strong>.sortVal, ((SortEntry)o).sortVal);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  				<strong class="jxr_keyword">return</strong> compare(((SortEntry)o).sortVal, <strong class="jxr_keyword">this</strong>.sortVal);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<strong class="jxr_keyword">return</strong> compare(<strong class="jxr_keyword">this</strong>.sortVal, ((SortEntry)o).sortVal);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		}
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">void</strong> setSort(String sortCol, <strong class="jxr_keyword">boolean</strong> isDesc) {
@@ -135,12 +135,12 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">if</strong> (type.isArray()) {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">int</strong> size = Array.getLength(input);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			l = Utils.listOfSize(size);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			l = listOfSize(size);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; size; i++)
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 				l.add(<strong class="jxr_keyword">new</strong> SortEntry(session, Array.get(input, i)));
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		} <strong class="jxr_keyword">else</strong> <em class="jxr_comment">/* isCollection() */</em> {
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			Collection c = (Collection)input;
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			l = Utils.listOfSize(c.size());
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			l = listOfSize(c.size());
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			List&lt;SortEntry&gt; l2 = l;
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			c.forEach(x -&gt; l2.add(<strong class="jxr_keyword">new</strong> SortEntry(session, x)));
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		}
@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 			Collections.sort(l3);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		});
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		List&lt;Object&gt; l2 = Utils.listOfSize(l.size());
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		List&lt;Object&gt; l2 = listOfSize(l.size());
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		l.forEach(x -&gt; l2.add(x.o));
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">return</strong> l2;

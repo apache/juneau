@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">public</strong> Builder&lt;V&gt; append(String key, V value) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">if</strong> (Utils.isEmpty(key))
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">if</strong> (isEmpty(key))
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid reflection signature: [{0}]"</span>, key);
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 				splitNames(key, k -&gt; {
@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">var</strong> c = f.getDeclaringClass();
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">return</strong> classMatches(simpleClassName, fullClassName, c) &amp;&amp; (Utils.eq(f.getName(), fieldName));
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">return</strong> classMatches(simpleClassName, fullClassName, c) &amp;&amp; (eq(f.getName(), fieldName));
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		@Override
@@ -340,7 +340,7 @@
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 		MethodEntry(String name, V value) {
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">int</strong> i = name.indexOf('(');
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">this</strong>.args = i == -1 ? <strong class="jxr_keyword">null</strong> : StringUtils.splitMethodArgs(name.substring(i + 1, name.length() - 1));
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">if</strong> (args != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">if</strong> (nn(args)) {
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; args.length; j++) {
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 					<em class="jxr_comment">// Strip off generic parameters.</em>
@@ -380,7 +380,7 @@
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">return</strong>
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 				classMatches(simpleClassName, fullClassName, c)
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 				&amp;&amp; (Utils.eq(m.getName(), methodName))
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 				&amp;&amp; (eq(m.getName(), methodName))
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 				&amp;&amp; (argsMatch(args, m.getParameterTypes()));
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 		}
@@ -445,7 +445,7 @@
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; args.length; i++) {
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">var</strong> n = names[i];
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">var</strong> a = args[i];
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">if</strong> (! (Utils.eq(n, a.getSimpleName()) || Utils.eq(n, a.getName())))
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">if</strong> (! (eq(n, a.getSimpleName()) || eq(n, a.getName())))
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
@@ -458,18 +458,18 @@
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<em class="jxr_comment">// c.getPackage() == "org.apache.juneau.a.rttests"</em>
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">var</strong> cSimple = c.getSimpleName();
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> cFull = c.getName();
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">if</strong> (Utils.eq(simpleName, cSimple) || Utils.eq(fullName, cFull) || <span class="jxr_string">"*"</span>.equals(simpleName))
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">if</strong> (eq(simpleName, cSimple) || eq(fullName, cFull) || <span class="jxr_string">"*"</span>.equals(simpleName))
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">if</strong> (cFull.indexOf('$') != -1) {
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">var</strong> p = c.getPackage();
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">if</strong> (nn(p))
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 				cFull = cFull.substring(p.getName().length() + 1);
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">if</strong> (Utils.eq(simpleName, cFull))
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">if</strong> (eq(simpleName, cFull))
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">int</strong> i = cFull.indexOf('$');
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 			<strong class="jxr_keyword">while</strong> (i != -1) {
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 				cFull = cFull.substring(i + 1);
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 				<strong class="jxr_keyword">if</strong> (Utils.eq(simpleName, cFull))
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 				<strong class="jxr_keyword">if</strong> (eq(simpleName, cFull))
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 				i = cFull.indexOf('$');
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			}
@@ -537,7 +537,7 @@
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<strong class="jxr_keyword">public</strong> V[] appendAll(Class&lt;?&gt; c, Class&lt;? <strong class="jxr_keyword">extends</strong> V&gt; ofType, V[] array) {
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">for</strong> (ClassEntry&lt;V&gt; e : classEntries)
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 					list = lazyAdd(array, list, e.value);
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">return</strong> lazyArray(array, list);
@@ -554,7 +554,7 @@
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 	<strong class="jxr_keyword">public</strong> V[] appendAll(Constructor&lt;?&gt; c, Class&lt;? <strong class="jxr_keyword">extends</strong> V&gt; ofType, V[] array) {
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<strong class="jxr_keyword">for</strong> (ConstructorEntry&lt;V&gt; e : constructorEntries)
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 					list = lazyAdd(array, list, e.value);
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">return</strong> lazyArray(array, list);
@@ -571,7 +571,7 @@
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 	<strong class="jxr_keyword">public</strong> V[] appendAll(Field f, Class&lt;? <strong class="jxr_keyword">extends</strong> V&gt; ofType, V[] array) {
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">for</strong> (FieldEntry&lt;V&gt; e : fieldEntries)
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			<strong class="jxr_keyword">if</strong> (e.matches(f) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			<strong class="jxr_keyword">if</strong> (e.matches(f) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 					list = lazyAdd(array, list, e.value);
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">return</strong> lazyArray(array, list);
@@ -588,7 +588,7 @@
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<strong class="jxr_keyword">public</strong> V[] appendAll(Method m, Class&lt;? <strong class="jxr_keyword">extends</strong> V&gt; ofType, V[] array) {
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">for</strong> (MethodEntry&lt;V&gt; e : methodEntries)
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 			<strong class="jxr_keyword">if</strong> (e.matches(m) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 			<strong class="jxr_keyword">if</strong> (e.matches(m) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 					list = lazyAdd(array, list, e.value);
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">return</strong> lazyArray(array, list);
@@ -615,8 +615,8 @@
 <a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">for</strong> (ClassEntry&lt;V&gt; e : classEntries)
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c))
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 					<strong class="jxr_keyword">return</strong> Utils.opt(e.value);
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">return</strong> Utils.opte();
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 					<strong class="jxr_keyword">return</strong> opt(e.value);
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">return</strong> opte();
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 	}
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -640,8 +640,8 @@
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> 		<strong class="jxr_keyword">for</strong> (ConstructorEntry&lt;V&gt; e : constructorEntries)
 <a class="jxr_linenumber" name="L633" href="#L633">633</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c))
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 					<strong class="jxr_keyword">return</strong> Utils.opt(e.value);
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">return</strong> Utils.opte();
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 					<strong class="jxr_keyword">return</strong> opt(e.value);
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">return</strong> opte();
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 	}
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -665,8 +665,8 @@
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">for</strong> (FieldEntry&lt;V&gt; e : fieldEntries)
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 			<strong class="jxr_keyword">if</strong> (e.matches(f))
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 					<strong class="jxr_keyword">return</strong> Utils.opt(e.value);
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">return</strong> Utils.opte();
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 					<strong class="jxr_keyword">return</strong> opt(e.value);
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">return</strong> opte();
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 	}
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -690,8 +690,8 @@
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 		<strong class="jxr_keyword">for</strong> (MethodEntry&lt;V&gt; e : methodEntries)
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 			<strong class="jxr_keyword">if</strong> (e.matches(m))
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 					<strong class="jxr_keyword">return</strong> Utils.opt(e.value);
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		<strong class="jxr_keyword">return</strong> Utils.opte();
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 					<strong class="jxr_keyword">return</strong> opt(e.value);
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		<strong class="jxr_keyword">return</strong> opte();
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 	}
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -703,7 +703,7 @@
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 	<strong class="jxr_keyword">public</strong> List&lt;V&gt; findAll(Class&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 		<strong class="jxr_keyword">for</strong> (ClassEntry&lt;V&gt; e : classEntries)
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 				list = lazyAdd(list, e.value);
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 		<strong class="jxr_keyword">return</strong> lazyList(list);
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 	}
@@ -718,7 +718,7 @@
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 	<strong class="jxr_keyword">public</strong> List&lt;V&gt; findAll(Class&lt;?&gt; c, Class&lt;? <strong class="jxr_keyword">extends</strong> V&gt; ofType) {
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">for</strong> (ClassEntry&lt;V&gt; e : classEntries)
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> 					list = lazyAdd(list, e.value);
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 		<strong class="jxr_keyword">return</strong> lazyList(list);
@@ -733,7 +733,7 @@
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 	<strong class="jxr_keyword">public</strong> List&lt;V&gt; findAll(Constructor&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L727" href="#L727">727</a> 		<strong class="jxr_keyword">for</strong> (ConstructorEntry&lt;V&gt; e : constructorEntries)
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> 				list = lazyAdd(list, e.value);
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 		<strong class="jxr_keyword">return</strong> lazyList(list);
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 	}
@@ -748,7 +748,7 @@
 <a class="jxr_linenumber" name="L740" href="#L740">740</a> 	<strong class="jxr_keyword">public</strong> List&lt;V&gt; findAll(Constructor&lt;?&gt; c, Class&lt;? <strong class="jxr_keyword">extends</strong> V&gt; ofType) {
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> 		<strong class="jxr_keyword">for</strong> (ConstructorEntry&lt;V&gt; e : constructorEntries)
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 			<strong class="jxr_keyword">if</strong> (e.matches(c) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
 <a class="jxr_linenumber" name="L745" href="#L745">745</a> 					list = lazyAdd(list, e.value);
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> 		<strong class="jxr_keyword">return</strong> lazyList(list);
@@ -763,7 +763,7 @@
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 	<strong class="jxr_keyword">public</strong> List&lt;V&gt; findAll(Field f) {
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">for</strong> (FieldEntry&lt;V&gt; e : fieldEntries)
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">if</strong> (e.matches(f) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">if</strong> (e.matches(f) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 				list = lazyAdd(list, e.value);
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 		<strong class="jxr_keyword">return</strong> lazyList(list);
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 	}
@@ -778,7 +778,7 @@
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> 	<strong class="jxr_keyword">public</strong> List&lt;V&gt; findAll(Field f, Class&lt;? <strong class="jxr_keyword">extends</strong> V&gt; ofType) {
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> 		<strong class="jxr_keyword">for</strong> (FieldEntry&lt;V&gt; e : fieldEntries)
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 			<strong class="jxr_keyword">if</strong> (e.matches(f) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 			<strong class="jxr_keyword">if</strong> (e.matches(f) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 					list = lazyAdd(list, e.value);
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 		<strong class="jxr_keyword">return</strong> lazyList(list);
@@ -793,7 +793,7 @@
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 	<strong class="jxr_keyword">public</strong> List&lt;V&gt; findAll(Method m) {
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<strong class="jxr_keyword">for</strong> (MethodEntry&lt;V&gt; e : methodEntries)
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 			<strong class="jxr_keyword">if</strong> (e.matches(m) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 			<strong class="jxr_keyword">if</strong> (e.matches(m) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> 				list = lazyAdd(list, e.value);
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 		<strong class="jxr_keyword">return</strong> lazyList(list);
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 	}
@@ -808,7 +808,7 @@
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> 	<strong class="jxr_keyword">public</strong> List&lt;V&gt; findAll(Method m, Class&lt;? <strong class="jxr_keyword">extends</strong> V&gt; ofType) {
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 		List&lt;V&gt; list = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 		<strong class="jxr_keyword">for</strong> (MethodEntry&lt;V&gt; e : methodEntries)
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 			<strong class="jxr_keyword">if</strong> (e.matches(m) &amp;&amp; e.value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 			<strong class="jxr_keyword">if</strong> (e.matches(m) &amp;&amp; nn(e.value))
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 				<strong class="jxr_keyword">if</strong> (ofType == <strong class="jxr_keyword">null</strong> || ofType.isInstance(e.value))
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 					list = lazyAdd(list, e.value);
 <a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<strong class="jxr_keyword">return</strong> lazyList(list);

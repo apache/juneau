@@ -24,17 +24,17 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.httppart;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartType.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.time.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.assertions.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartType.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.assertions.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.part.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.*;
@@ -130,16 +130,16 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">if</strong> (HttpParts.isHttpPart(partType, type)) {
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 				ConstructorInfo cc = HttpParts.getConstructor(type).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">if</strong> (cc != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">if</strong> (nn(cc)) {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 					<strong class="jxr_keyword">if</strong> (! isPresent())
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 						<strong class="jxr_keyword">return</strong> Utils.opte();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 						<strong class="jxr_keyword">return</strong> opte();
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 					<strong class="jxr_keyword">if</strong> (cc.hasParamTypes(String.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 						<strong class="jxr_keyword">return</strong> Utils.opt(cc.invoke(get()));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 						<strong class="jxr_keyword">return</strong> opt(cc.invoke(get()));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 					<strong class="jxr_keyword">if</strong> (cc.hasParamTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 						<strong class="jxr_keyword">return</strong> Utils.opt(cc.invoke(getName(), get()));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 						<strong class="jxr_keyword">return</strong> opt(cc.invoke(getName(), get()));
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 				}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			}
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">return</strong> Utils.opt(parser.parse(HEADER, schema, orElse(<strong class="jxr_keyword">null</strong>), type));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">return</strong> opt(parser.parse(HEADER, schema, orElse(<strong class="jxr_keyword">null</strong>), type));
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BadRequest" href="../../../../../org/apache/juneau/http/response/BadRequest.html#BadRequest">BadRequest</a>(e, <span class="jxr_string">"Could not parse {0} parameter ''{1}''."</span>, partType.toString().toLowerCase(), getName());
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		}
@@ -413,7 +413,7 @@
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.</em>
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;String&gt; asString() {
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">return</strong> Utils.opt(getValue());
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">return</strong> opt(getValue());
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<em class="jxr_javadoccomment">/**</em>

@@ -117,11 +117,11 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 				<strong class="jxr_keyword">var</strong> rt = m.getReturnType();
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 				<strong class="jxr_keyword">var</strong> mi = ci.getMethod(x -&gt; isUnswapMethod(bc, x, ci, rt));
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">if</strong> (mi != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">if</strong> (nn(mi))
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AutoListSwap" href="../../../../org/apache/juneau/swap/AutoListSwap.html#AutoListSwap">AutoListSwap</a>(bc, ci, m, mi, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 				<strong class="jxr_keyword">var</strong> cs = ci.getDeclaredConstructor(x -&gt; isUnswapConstructor(bc, x, rt));
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<strong class="jxr_keyword">if</strong> (cs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<strong class="jxr_keyword">if</strong> (nn(cs))
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AutoListSwap" href="../../../../org/apache/juneau/swap/AutoListSwap.html#AutoListSwap">AutoListSwap</a>(bc, ci, m, <strong class="jxr_keyword">null</strong>, cs);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="AutoListSwap" href="../../../../org/apache/juneau/swap/AutoListSwap.html#AutoListSwap">AutoListSwap</a>(bc, ci, m, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
@@ -196,9 +196,9 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<strong class="jxr_keyword">public</strong> T unswap(BeanSession session, List&lt;?&gt; o, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">if</strong> (unswapMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">if</strong> (nn(unswapMethod))
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 				<strong class="jxr_keyword">return</strong> (T)unswapMethod.invoke(<strong class="jxr_keyword">null</strong>, getMatchingArgs(unswapMethod.getParameterTypes(), session, o));
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">if</strong> (unswapConstructor != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">if</strong> (nn(unswapConstructor))
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">return</strong> (T)unswapConstructor.newInstance(o);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.unswap(session, o, hint);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {

@@ -359,7 +359,7 @@
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() {
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 				WatchKey key;
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 				<strong class="jxr_keyword">while</strong> ((key = watchService.take()) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 				<strong class="jxr_keyword">while</strong> (nn(key = watchService.take())) {
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> event : key.pollEvents()) {
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 						<strong class="jxr_keyword">var</strong> kind = event.kind();
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 						<strong class="jxr_keyword">if</strong> (kind != OVERFLOW)
@@ -428,7 +428,7 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 			dir.mkdirs();
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 			exts = StringUtils.split(extensions).toArray(String[]::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 			watcher = enableWatcher ? <strong class="jxr_keyword">new</strong> WatcherThread(dir, watcherSensitivity) : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">if</strong> (watcher != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">if</strong> (nn(watcher))
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 				watcher.start();
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
@@ -437,7 +437,7 @@
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 	@Override <em class="jxr_comment">/* Overridden from Closeable */</em>
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> close() {
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">if</strong> (watcher != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">if</strong> (nn(watcher))
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 			watcher.interrupt();
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 
@@ -459,7 +459,7 @@
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 		name = p.getFileName().toString();
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">var</strong> s = cache.get(name);
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">if</strong> (s != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 		dir.mkdirs();
@@ -499,7 +499,7 @@
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 		name = resolveName(name);
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<em class="jxr_comment">// This is a no-op.</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<strong class="jxr_keyword">if</strong> (Utils.eq(expectedContents, newContents))
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<strong class="jxr_keyword">if</strong> (eq(expectedContents, newContents))
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 		dir.mkdirs();
@@ -510,7 +510,7 @@
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">var</strong> exists = Files.exists(p);
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<em class="jxr_comment">// Don't create the file if we're not going to match.</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">if</strong> ((! exists) &amp;&amp; Utils.isNotEmpty(expectedContents))
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">if</strong> ((! exists) &amp;&amp; isNotEmpty(expectedContents))
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">if</strong> (isWritable(p)) {
@@ -529,7 +529,7 @@
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 							}
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 							currentContents = sb.toString();
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 						}
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 						<strong class="jxr_keyword">if</strong> (expectedContents != <strong class="jxr_keyword">null</strong> &amp;&amp; ! Utils.eq(currentContents, expectedContents)) {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 						<strong class="jxr_keyword">if</strong> (nn(expectedContents) &amp;&amp; ! eq(currentContents, expectedContents)) {
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 							<strong class="jxr_keyword">if</strong> (currentContents == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 								cache.remove(name);
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 							<strong class="jxr_keyword">else</strong>
@@ -582,7 +582,7 @@
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 		cache.remove(fn);
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">var</strong> newContents = read(fn);
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">if</strong> (! Utils.eq(oldContents, newContents)) {
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">if</strong> (! eq(oldContents, newContents)) {
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 			update(fn, newContents);
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 		}
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 	}

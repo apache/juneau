@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  					<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  						elements.put(p.getName(), p);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (xf == ATTRS) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					<strong class="jxr_keyword">if</strong> (attrsProperty != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					<strong class="jxr_keyword">if</strong> (nn(attrsProperty))
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Multiple instances of ATTRS properties defined on class.  Only one property can be designated as such."</span>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  					<strong class="jxr_keyword">if</strong> (! pcm.isMapOrBean())
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Invalid type for ATTRS property.  Only properties of type Map and bean can be used."</span>);
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT)) {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  					<strong class="jxr_keyword">if</strong> (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS) &amp;&amp; ! pcm.isCollectionOrArray())
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Invalid type for {0} property.  Only properties of type Collection and array can be used."</span>, xf);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  					<strong class="jxr_keyword">if</strong> (contentProperty != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  					<strong class="jxr_keyword">if</strong> (nn(contentProperty)) {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  						<strong class="jxr_keyword">if</strong> (xf == contentFormat)
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Multiple instances of {0} properties defined on class.  Only one property can be designated as such."</span>, xf);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"{0} and {1} properties found on the same bean.  Only one property can be designated as such."</span>, contentFormat, xf);
@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  				}
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  				<em class="jxr_comment">// Look for any properties that are collections with @Xml.childName specified.</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  				String n = mp.getXmlBeanPropertyMeta(p).getChildName();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				<strong class="jxr_keyword">if</strong> (n != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				<strong class="jxr_keyword">if</strong> (nn(n)) {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  					<strong class="jxr_keyword">if</strong> (collapsedProperties.containsKey(n) &amp;&amp; collapsedProperties.get(n) != p)
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Multiple properties found with the child name ''{0}''."</span>, n);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  					collapsedProperties.put(n, p);
@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		contentFormat = b.contentFormat;
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<em class="jxr_comment">// Do some validation.</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">if</strong> (contentProperty != <strong class="jxr_keyword">null</strong> || contentFormat == XmlFormat.VOID) {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">if</strong> (nn(contentProperty) || contentFormat == XmlFormat.VOID) {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">if</strong> (! elements.isEmpty())
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"{0} and ELEMENT properties found on the same bean.  These cannot be mixed."</span>, contentFormat);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">if</strong> (! collapsedProperties.isEmpty())
@@ -252,11 +252,11 @@
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * @return The property metadata.</em>
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">protected</strong> BeanPropertyMeta getPropertyMeta(String fieldName) {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">if</strong> (collapsedProperties != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">if</strong> (nn(collapsedProperties)) {
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 			BeanPropertyMeta bpm = collapsedProperties.get(fieldName);
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">if</strong> (bpm == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				bpm = collapsedProperties.get(<span class="jxr_string">"*"</span>);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">if</strong> (bpm != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">if</strong> (nn(bpm))
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 				<strong class="jxr_keyword">return</strong> bpm;
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		}
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">return</strong> getBeanMeta().getPropertyMeta(fieldName);

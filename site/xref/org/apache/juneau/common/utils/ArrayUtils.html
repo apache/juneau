@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">int</strong> l = 0;
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		E[] a1 = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">for</strong> (E[] a : arrays) {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">if</strong> (a1 == <strong class="jxr_keyword">null</strong> &amp;&amp; a != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">if</strong> (a1 == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(a))
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 				a1 = a;
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			l += (a == <strong class="jxr_keyword">null</strong> ? 0 : a.length);
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		}
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		E[] a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">int</strong> i = 0;
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">for</strong> (E[] aa : arrays)
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">if</strong> (aa != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">if</strong> (nn(aa))
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 				<strong class="jxr_keyword">for</strong> (E t : aa)
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 					a[i++] = t;
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">return</strong> a;
@@ -182,7 +182,7 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified array is not null and has a length greater than zero.</em>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isNotEmptyArray(Object[] array) {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">return</strong> array != <strong class="jxr_keyword">null</strong> &amp;&amp; array.length &gt; 0;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">return</strong> nn(array) &amp;&amp; array.length &gt; 0;
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">if</strong> (a1.length != a2.length)
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; a1.length; i++)
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">if</strong> (! Utils.eq(a1[i], a2[i]))
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">if</strong> (! eq(a1[i], a2[i]))
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
@@ -267,7 +267,7 @@
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List copyToList(Object array, List list) {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">if</strong> (array != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">if</strong> (nn(array)) {
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">int</strong> length = Array.getLength(array);
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; length; i++)
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 				list.add(Array.get(array, i));
@@ -306,7 +306,7 @@
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		String[] r = <strong class="jxr_keyword">new</strong> String[c.size()];
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">int</strong> i = 0;
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">for</strong> (Object o : c)
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			r[i++] = Utils.s(o);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			r[i++] = s(o);
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">return</strong> r;
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 

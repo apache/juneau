@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		}
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		Builder apply(Response a) {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">if</strong> (a != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">if</strong> (nn(a)) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  				<strong class="jxr_keyword">if</strong> (ClassUtils.isNotVoid(a.serializer()))
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  					partSerializer = a.serializer();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  				<strong class="jxr_keyword">if</strong> (ClassUtils.isNotVoid(a.parser()))
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		Builder apply(StatusCode a) {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">if</strong> (a != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">if</strong> (nn(a)) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  				<strong class="jxr_keyword">if</strong> (a.value().length &gt; 0)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  					code = a.value()[0];
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			}
@@ -185,8 +185,8 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 	ResponseBeanMeta(Builder b) {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">this</strong>.cm = b.cm;
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">this</strong>.code = b.code;
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">this</strong>.partSerializer = Utils.opt(b.partSerializer).map(x -&gt; HttpPartSerializer.creator().type(x).apply(b.annotations).create());
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">this</strong>.partParser = Utils.opt(b.partParser).map(x -&gt; HttpPartParser.creator().type(x).apply(b.annotations).create());
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">this</strong>.partSerializer = opt(b.partSerializer).map(x -&gt; HttpPartSerializer.creator().type(x).apply(b.annotations).create());
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">this</strong>.partParser = opt(b.partParser).map(x -&gt; HttpPartParser.creator().type(x).apply(b.annotations).create());
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">this</strong>.schema = b.schema.build();
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		Map&lt;String,ResponseBeanPropertyMeta&gt; properties = CollectionUtils.map();
@@ -202,9 +202,9 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">this</strong>.contentMethod = b.contentMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.contentMethod.schema(schema).build(partSerializer, partParser);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">this</strong>.statusMethod = b.statusMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.statusMethod.build(opte(), opte());
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">if</strong> (contentMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">if</strong> (nn(contentMethod))
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			properties.put(contentMethod.getGetter().getName(), contentMethod);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">if</strong> (statusMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">if</strong> (nn(statusMethod))
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 			properties.put(statusMethod.getGetter().getName(), statusMethod);
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">this</strong>.properties = u(properties);

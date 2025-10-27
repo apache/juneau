@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> javaMethod(Method value) {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">if</strong> (nn(value))
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 				javaMethod = value;
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		}
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> resolver(<a name="VarResolverSession" href="../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> value) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">if</strong> (nn(value))
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 				resolver = value;
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		}
@@ -190,7 +190,7 @@
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> schema(<a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> value) {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">if</strong> (nn(value))
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 				<strong class="jxr_keyword">this</strong>.schema = value;
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		}
@@ -204,7 +204,7 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> schemaDefault(<a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> value) {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong> &amp;&amp; schema == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">if</strong> (nn(value) &amp;&amp; schema == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 				<strong class="jxr_keyword">this</strong>.schema = value;
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		}
@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> uriContext(<a name="UriContext" href="../../../../org/apache/juneau/UriContext.html#UriContext">UriContext</a> value) {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">if</strong> (nn(value))
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 				uriContext = value;
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		}
@@ -779,296 +779,297 @@
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">	 * @param pMeta The current bean property being serialized.</em>
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> <em class="jxr_javadoccomment">	 * @return The bean dictionary name, or &lt;jk&gt;null&lt;/jk&gt; if a name could not be found.</em>
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String getBeanTypeName(<a name="SerializerSession" href="../../../../org/apache/juneau/serializer/SerializerSession.html#SerializerSession">SerializerSession</a> session, ClassMeta&lt;?&gt; eType, ClassMeta&lt;?&gt; aType, BeanPropertyMeta pMeta) {
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<strong class="jxr_keyword">if</strong> (eType == aType || ! (isAddBeanTypes() || (session.isRoot() &amp;&amp; isAddRootType())))
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		String eTypeTn = eType.getDictionaryName();
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		<em class="jxr_comment">// First see if it's defined on the actual type.</em>
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		String tn = aType.getDictionaryName();
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 		<strong class="jxr_keyword">if</strong> (tn != <strong class="jxr_keyword">null</strong> &amp;&amp; ! tn.equals(eTypeTn)) {
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 			<strong class="jxr_keyword">return</strong> tn;
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		}
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<em class="jxr_comment">// Then see if it's defined on the expected type.</em>
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<em class="jxr_comment">// The expected type might be an interface with mappings for implementation classes.</em>
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		BeanRegistry br = eType.getBeanRegistry();
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		<strong class="jxr_keyword">if</strong> (br != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 			tn = br.getTypeName(aType);
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 			<strong class="jxr_keyword">if</strong> (tn != <strong class="jxr_keyword">null</strong> &amp;&amp; ! tn.equals(eTypeTn))
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 				<strong class="jxr_keyword">return</strong> tn;
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		}
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 		<em class="jxr_comment">// Then look on the bean property.</em>
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		br = pMeta == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : pMeta.getBeanRegistry();
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		<strong class="jxr_keyword">if</strong> (br != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 			tn = br.getTypeName(aType);
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 			<strong class="jxr_keyword">if</strong> (tn != <strong class="jxr_keyword">null</strong> &amp;&amp; ! tn.equals(eTypeTn))
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 				<strong class="jxr_keyword">return</strong> tn;
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 		}
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<em class="jxr_comment">// Finally look in the session.</em>
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		br = getBeanRegistry();
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		<strong class="jxr_keyword">if</strong> (br != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 			tn = br.getTypeName(aType);
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 			<strong class="jxr_keyword">if</strong> (tn != <strong class="jxr_keyword">null</strong> &amp;&amp; ! tn.equals(eTypeTn))
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 				<strong class="jxr_keyword">return</strong> tn;
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		}
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 	}
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> <em class="jxr_javadoccomment">	 * Returns the parser-side expected type for the object.</em>
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 * The return value depends on the {@link Serializer.Builder#addRootType()} setting.</em>
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">	 * When disabled, the parser already knows the Java POJO type being parsed, so there is</em>
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">	 * no reason to add &lt;js&gt;"_type"&lt;/js&gt; attributes to the root-level object.</em>
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> <em class="jxr_javadoccomment">	 * @param o The object to get the expected type on.</em>
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> <em class="jxr_javadoccomment">	 * @return The expected type.</em>
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; getExpectedRootType(Object o) {
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		<strong class="jxr_keyword">if</strong> (isAddRootType())
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 			<strong class="jxr_keyword">return</strong> object();
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		ClassMeta&lt;?&gt; cm = getClassMetaForObject(o);
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		<strong class="jxr_keyword">if</strong> (cm != <strong class="jxr_keyword">null</strong> &amp;&amp; cm.isOptional())
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> 			<strong class="jxr_keyword">return</strong> cm.getElementType();
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		<strong class="jxr_keyword">return</strong> cm;
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> 	}
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> <em class="jxr_javadoccomment">	 * Returns the Java method that invoked this serializer.</em>
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">	 * When using the REST API, this is the Java method invoked by the REST call.</em>
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> <em class="jxr_javadoccomment">	 * Can be used to access annotations defined on the method or class.</em>
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">	 * @return The Java method that invoked this serializer.</em>
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	*/</em>
-<a class="jxr_linenumber" name="L843" href="#L843">843</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Method getJavaMethod() { <strong class="jxr_keyword">return</strong> javaMethod; }
-<a class="jxr_linenumber" name="L844" href="#L844">844</a> 
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 * URI context bean.</em>
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#uriContext(UriContext)</em>
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 * 	Bean used for resolution of URIs to absolute or root-relative form.</em>
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriContext" href="../../../../org/apache/juneau/UriContext.html#UriContext">UriContext</a> getUriContext() { <strong class="jxr_keyword">return</strong> ctx.getUriContext(); }
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> <em class="jxr_javadoccomment">	 * URI relativity.</em>
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#uriRelativity(UriRelativity)</em>
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> <em class="jxr_javadoccomment">	 * 	Defines what relative URIs are relative to when serializing any of the following:</em>
-<a class="jxr_linenumber" name="L860" href="#L860">860</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriRelativity" href="../../../../org/apache/juneau/UriRelativity.html#UriRelativity">UriRelativity</a> getUriRelativity() { <strong class="jxr_keyword">return</strong> ctx.getUriRelativity(); }
-<a class="jxr_linenumber" name="L862" href="#L862">862</a> 
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> <em class="jxr_javadoccomment">	 * URI resolution.</em>
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L866" href="#L866">866</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#uriResolution(UriResolution)</em>
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L868" href="#L868">868</a> <em class="jxr_javadoccomment">	 * 	Defines the resolution level for URIs when serializing URIs.</em>
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L870" href="#L870">870</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriResolution" href="../../../../org/apache/juneau/UriResolution.html#UriResolution">UriResolution</a> getUriResolution() { <strong class="jxr_keyword">return</strong> ctx.getUriResolution(); }
-<a class="jxr_linenumber" name="L871" href="#L871">871</a> 
-<a class="jxr_linenumber" name="L872" href="#L872">872</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L873" href="#L873">873</a> <em class="jxr_javadoccomment">	 * Returns the URI resolver.</em>
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L875" href="#L875">875</a> <em class="jxr_javadoccomment">	 * @return The URI resolver.</em>
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriResolver" href="../../../../org/apache/juneau/UriResolver.html#UriResolver">UriResolver</a> getUriResolver() { <strong class="jxr_keyword">return</strong> uriResolver; }
-<a class="jxr_linenumber" name="L878" href="#L878">878</a> 
-<a class="jxr_linenumber" name="L879" href="#L879">879</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L880" href="#L880">880</a> <em class="jxr_javadoccomment">	 * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</em>
-<a class="jxr_linenumber" name="L881" href="#L881">881</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L882" href="#L882">882</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#addBeanTypes()</em>
-<a class="jxr_linenumber" name="L883" href="#L883">883</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L884" href="#L884">884</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties added to beans if their type cannot be inferred</em>
-<a class="jxr_linenumber" name="L885" href="#L885">885</a> <em class="jxr_javadoccomment">	 * 	through reflection.</em>
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isAddBeanTypes() { <strong class="jxr_keyword">return</strong> ctx.isAddBeanTypes(); }
-<a class="jxr_linenumber" name="L888" href="#L888">888</a> 
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> <em class="jxr_javadoccomment">	 * Add type attribute to root nodes.</em>
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#addRootType()</em>
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if type property should be added to root node.</em>
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddRootType() { <strong class="jxr_keyword">return</strong> ctx.isAddRootType(); }
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> 
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> <em class="jxr_javadoccomment">	 * Don't trim null bean property values.</em>
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#keepNullProperties()</em>
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if null bean values are serialized to the output.</em>
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isKeepNullProperties() { <strong class="jxr_keyword">return</strong> ctx.isKeepNullProperties(); }
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> <em class="jxr_javadoccomment">	 * Sort arrays and collections alphabetically.</em>
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#sortCollections()</em>
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if arrays and collections are copied and sorted before serialization.</em>
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSortCollections() { <strong class="jxr_keyword">return</strong> ctx.isSortCollections(); }
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> <em class="jxr_javadoccomment">	 * Sort maps alphabetically.</em>
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#sortMaps()</em>
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if maps are copied and sorted before serialization.</em>
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSortMaps() { <strong class="jxr_keyword">return</strong> ctx.isSortMaps(); }
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> <em class="jxr_javadoccomment">	 * Trim empty lists and arrays.</em>
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#trimEmptyCollections()</em>
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if empty lists and arrays are not serialized to the output.</em>
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isTrimEmptyCollections() { <strong class="jxr_keyword">return</strong> ctx.isTrimEmptyCollections(); }
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 * Trim empty maps.</em>
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#trimEmptyMaps()</em>
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if empty map values are not serialized to the output.</em>
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isTrimEmptyMaps() { <strong class="jxr_keyword">return</strong> ctx.isTrimEmptyMaps(); }
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> <em class="jxr_javadoccomment">	 * Trim strings.</em>
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#trimStrings()</em>
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.</em>
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isTrimStrings() { <strong class="jxr_keyword">return</strong> ctx.isTrimStrings(); }
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">	 * Specialized warning when an exception is thrown while executing a bean getter.</em>
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">	 * @param p The bean map entry representing the bean property.</em>
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 * @param t The throwable that the bean getter threw.</em>
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * @throws SerializeException Thrown if ignoreInvocationExceptionOnGetters is false.</em>
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> onBeanGetterException(BeanPropertyMeta p, Throwable t) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 		<strong class="jxr_keyword">if</strong> (listener != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 			listener.onBeanGetterException(<strong class="jxr_keyword">this</strong>, t, p);
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		String prefix = (isDebug() ? getStack(false) + <span class="jxr_string">": "</span> : <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 		addWarning(<span class="jxr_string">"{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}"</span>, prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		<strong class="jxr_keyword">if</strong> (! isIgnoreInvocationExceptionsOnGetters())
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}"</span>, prefix, p.getName(), p.getBeanMeta().getClassMeta(),
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 				t.getLocalizedMessage()).initCause(t);
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 	}
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 * Logs a warning message.</em>
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 * @param t The throwable that was thrown (if there was one).</em>
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 * @param msg The warning message.</em>
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 	@Override
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> onError(Throwable t, String msg, Object...args) {
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		<strong class="jxr_keyword">if</strong> (listener != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 			listener.onError(<strong class="jxr_keyword">this</strong>, t, format(msg, args));
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 		<strong class="jxr_keyword">super</strong>.onError(t, msg, args);
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	}
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	@Override <em class="jxr_comment">/* Overridden from ContextSession */</em>
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"uriResolver"</span>, uriResolver);
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 	}
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> <em class="jxr_javadoccomment">	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link BeanRecursionException} inside {@link SerializeException}.</em>
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> <em class="jxr_javadoccomment">	 * @param attrName The attribute name.</em>
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> <em class="jxr_javadoccomment">	 * @param o The current object being traversed.</em>
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * @param eType The expected class type.</em>
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * 	The {@link ClassMeta} of the object so that &lt;c&gt;instanceof&lt;/c&gt; operations only need to be performed</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * 	once (since they can be expensive).</em>
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * @throws SerializeException If recursion occurred.</em>
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; push2(String attrName, Object o, ClassMeta&lt;?&gt; eType) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.push(attrName, o, eType);
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="BeanRecursionException" href="../../../../org/apache/juneau/BeanRecursionException.html#BeanRecursionException">BeanRecursionException</a> e) {
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		}
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 	}
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> <em class="jxr_javadoccomment">	 * Opposite of {@link #resolveUri(Object)}.</em>
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> <em class="jxr_javadoccomment">	 * Converts the URI to a value relative to the specified &lt;c&gt;relativeTo&lt;/c&gt; parameter.</em>
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> <em class="jxr_javadoccomment">	 * Both parameters can be any of the following:</em>
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link java.net.URI}</em>
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link java.net.URL}</em>
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link CharSequence}</em>
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> <em class="jxr_javadoccomment">	 * Both URIs can be any of the following forms:</em>
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"foo://foo"&lt;/js&gt; - Absolute URI.</em>
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"/foo"&lt;/js&gt; - Root-relative URI.</em>
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"/"&lt;/js&gt; - Root URI.</em>
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"context:/foo"&lt;/js&gt; - Context-root-relative URI.</em>
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"context:/"&lt;/js&gt; - Context-root URI.</em>
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"servlet:/foo"&lt;/js&gt; - Servlet-path-relative URI.</em>
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"servlet:/"&lt;/js&gt; - Servlet-path URI.</em>
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"request:/foo"&lt;/js&gt; - Request-path-relative URI.</em>
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"request:/"&lt;/js&gt; - Request-path URI.</em>
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"foo"&lt;/js&gt; - Path-info-relative URI.</em>
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;""&lt;/js&gt; - Path-info URI.</em>
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 * @param relativeTo The URI to relativize against.</em>
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">	 * @param uri The URI to relativize.</em>
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> <em class="jxr_javadoccomment">	 * @return The relativized URI.</em>
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String relativizeUri(Object relativeTo, Object uri) {
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		<strong class="jxr_keyword">return</strong> uriResolver.relativize(relativeTo, uri);
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 	}
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> <em class="jxr_javadoccomment">	 * Invokes the specified swap on the specified object if the swap is not null.</em>
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> <em class="jxr_javadoccomment">	 * @param swap The swap to invoke.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> <em class="jxr_javadoccomment">	 * @param o The input object.</em>
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> <em class="jxr_javadoccomment">	 * @return The swapped object.</em>
-<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> <em class="jxr_javadoccomment">	 * @throws SerializeException If swap method threw an exception.</em>
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 	<strong class="jxr_keyword">protected</strong> Object swap(ObjectSwap swap, Object o) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 			<strong class="jxr_keyword">if</strong> (swap == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 				<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 			<strong class="jxr_keyword">return</strong> swap.swap(<strong class="jxr_keyword">this</strong>, o);
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
-<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 		}
-<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 	}
-<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> }
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 	@SuppressWarnings(<span class="jxr_string">"null"</span>)
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String getBeanTypeName(<a name="SerializerSession" href="../../../../org/apache/juneau/serializer/SerializerSession.html#SerializerSession">SerializerSession</a> session, ClassMeta&lt;?&gt; eType, ClassMeta&lt;?&gt; aType, BeanPropertyMeta pMeta) {
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		<strong class="jxr_keyword">if</strong> (eType == aType || ! (isAddBeanTypes() || (session.isRoot() &amp;&amp; isAddRootType())))
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		String eTypeTn = eType.getDictionaryName();
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<em class="jxr_comment">// First see if it's defined on the actual type.</em>
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 		String tn = aType.getDictionaryName();
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		<strong class="jxr_keyword">if</strong> (nn(tn) &amp;&amp; ! tn.equals(eTypeTn)) {
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			<strong class="jxr_keyword">return</strong> tn;
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		}
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<em class="jxr_comment">// Then see if it's defined on the expected type.</em>
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		<em class="jxr_comment">// The expected type might be an interface with mappings for implementation classes.</em>
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		BeanRegistry br = eType.getBeanRegistry();
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		<strong class="jxr_keyword">if</strong> (nn(br)) {
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 			tn = br.getTypeName(aType);
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">if</strong> (nn(tn) &amp;&amp; ! tn.equals(eTypeTn))
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 				<strong class="jxr_keyword">return</strong> tn;
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		}
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		<em class="jxr_comment">// Then look on the bean property.</em>
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		br = pMeta == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : pMeta.getBeanRegistry();
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		<strong class="jxr_keyword">if</strong> (nn(br)) {
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 			tn = br.getTypeName(aType);
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 			<strong class="jxr_keyword">if</strong> (nn(tn) &amp;&amp; ! tn.equals(eTypeTn))
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 				<strong class="jxr_keyword">return</strong> tn;
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 		}
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<em class="jxr_comment">// Finally look in the session.</em>
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		br = getBeanRegistry();
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<strong class="jxr_keyword">if</strong> (nn(br)) {
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 			tn = br.getTypeName(aType);
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 			<strong class="jxr_keyword">if</strong> (nn(tn) &amp;&amp; ! tn.equals(eTypeTn))
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 				<strong class="jxr_keyword">return</strong> tn;
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		}
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	}
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 * Returns the parser-side expected type for the object.</em>
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">	 * The return value depends on the {@link Serializer.Builder#addRootType()} setting.</em>
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">	 * When disabled, the parser already knows the Java POJO type being parsed, so there is</em>
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 * no reason to add &lt;js&gt;"_type"&lt;/js&gt; attributes to the root-level object.</em>
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> <em class="jxr_javadoccomment">	 * @param o The object to get the expected type on.</em>
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> <em class="jxr_javadoccomment">	 * @return The expected type.</em>
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; getExpectedRootType(Object o) {
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 		<strong class="jxr_keyword">if</strong> (isAddRootType())
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 			<strong class="jxr_keyword">return</strong> object();
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		ClassMeta&lt;?&gt; cm = getClassMetaForObject(o);
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 		<strong class="jxr_keyword">if</strong> (nn(cm) &amp;&amp; cm.isOptional())
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 			<strong class="jxr_keyword">return</strong> cm.getElementType();
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		<strong class="jxr_keyword">return</strong> cm;
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 	}
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">	 * Returns the Java method that invoked this serializer.</em>
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> <em class="jxr_javadoccomment">	 * When using the REST API, this is the Java method invoked by the REST call.</em>
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">	 * Can be used to access annotations defined on the method or class.</em>
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	 * @return The Java method that invoked this serializer.</em>
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">	*/</em>
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Method getJavaMethod() { <strong class="jxr_keyword">return</strong> javaMethod; }
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> 
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 * URI context bean.</em>
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#uriContext(UriContext)</em>
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * 	Bean used for resolution of URIs to absolute or root-relative form.</em>
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriContext" href="../../../../org/apache/juneau/UriContext.html#UriContext">UriContext</a> getUriContext() { <strong class="jxr_keyword">return</strong> ctx.getUriContext(); }
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> <em class="jxr_javadoccomment">	 * URI relativity.</em>
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#uriRelativity(UriRelativity)</em>
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> <em class="jxr_javadoccomment">	 * 	Defines what relative URIs are relative to when serializing any of the following:</em>
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriRelativity" href="../../../../org/apache/juneau/UriRelativity.html#UriRelativity">UriRelativity</a> getUriRelativity() { <strong class="jxr_keyword">return</strong> ctx.getUriRelativity(); }
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> <em class="jxr_javadoccomment">	 * URI resolution.</em>
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#uriResolution(UriResolution)</em>
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> <em class="jxr_javadoccomment">	 * 	Defines the resolution level for URIs when serializing URIs.</em>
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriResolution" href="../../../../org/apache/juneau/UriResolution.html#UriResolution">UriResolution</a> getUriResolution() { <strong class="jxr_keyword">return</strong> ctx.getUriResolution(); }
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> <em class="jxr_javadoccomment">	 * Returns the URI resolver.</em>
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> <em class="jxr_javadoccomment">	 * @return The URI resolver.</em>
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="UriResolver" href="../../../../org/apache/juneau/UriResolver.html#UriResolver">UriResolver</a> getUriResolver() { <strong class="jxr_keyword">return</strong> uriResolver; }
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> <em class="jxr_javadoccomment">	 * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</em>
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#addBeanTypes()</em>
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;js&gt;"_type"&lt;/js&gt; properties added to beans if their type cannot be inferred</em>
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> <em class="jxr_javadoccomment">	 * 	through reflection.</em>
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isAddBeanTypes() { <strong class="jxr_keyword">return</strong> ctx.isAddBeanTypes(); }
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> <em class="jxr_javadoccomment">	 * Add type attribute to root nodes.</em>
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#addRootType()</em>
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if type property should be added to root node.</em>
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAddRootType() { <strong class="jxr_keyword">return</strong> ctx.isAddRootType(); }
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> <em class="jxr_javadoccomment">	 * Don't trim null bean property values.</em>
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#keepNullProperties()</em>
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if null bean values are serialized to the output.</em>
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isKeepNullProperties() { <strong class="jxr_keyword">return</strong> ctx.isKeepNullProperties(); }
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment">	 * Sort arrays and collections alphabetically.</em>
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#sortCollections()</em>
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if arrays and collections are copied and sorted before serialization.</em>
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSortCollections() { <strong class="jxr_keyword">return</strong> ctx.isSortCollections(); }
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> <em class="jxr_javadoccomment">	 * Sort maps alphabetically.</em>
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#sortMaps()</em>
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if maps are copied and sorted before serialization.</em>
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isSortMaps() { <strong class="jxr_keyword">return</strong> ctx.isSortMaps(); }
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 * Trim empty lists and arrays.</em>
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#trimEmptyCollections()</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if empty lists and arrays are not serialized to the output.</em>
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isTrimEmptyCollections() { <strong class="jxr_keyword">return</strong> ctx.isTrimEmptyCollections(); }
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 * Trim empty maps.</em>
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#trimEmptyMaps()</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if empty map values are not serialized to the output.</em>
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isTrimEmptyMaps() { <strong class="jxr_keyword">return</strong> ctx.isTrimEmptyMaps(); }
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">	 * Trim strings.</em>
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 * @see Serializer.Builder#trimStrings()</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.</em>
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isTrimStrings() { <strong class="jxr_keyword">return</strong> ctx.isTrimStrings(); }
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">	 * Specialized warning when an exception is thrown while executing a bean getter.</em>
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 * @param p The bean map entry representing the bean property.</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * @param t The throwable that the bean getter threw.</em>
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 * @throws SerializeException Thrown if ignoreInvocationExceptionOnGetters is false.</em>
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> onBeanGetterException(BeanPropertyMeta p, Throwable t) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 		<strong class="jxr_keyword">if</strong> (nn(listener))
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 			listener.onBeanGetterException(<strong class="jxr_keyword">this</strong>, t, p);
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 		String prefix = (isDebug() ? getStack(false) + <span class="jxr_string">": "</span> : <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		addWarning(<span class="jxr_string">"{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}"</span>, prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<strong class="jxr_keyword">if</strong> (! isIgnoreInvocationExceptionsOnGetters())
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}"</span>, prefix, p.getName(), p.getBeanMeta().getClassMeta(),
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 				t.getLocalizedMessage()).initCause(t);
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 	}
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 * Logs a warning message.</em>
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 * @param t The throwable that was thrown (if there was one).</em>
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 * @param msg The warning message.</em>
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 	@Override
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> onError(Throwable t, String msg, Object...args) {
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 		<strong class="jxr_keyword">if</strong> (nn(listener))
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 			listener.onError(<strong class="jxr_keyword">this</strong>, t, format(msg, args));
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 		<strong class="jxr_keyword">super</strong>.onError(t, msg, args);
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	}
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	@Override <em class="jxr_comment">/* Overridden from ContextSession */</em>
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"uriResolver"</span>, uriResolver);
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 	}
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> <em class="jxr_javadoccomment">	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link BeanRecursionException} inside {@link SerializeException}.</em>
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> <em class="jxr_javadoccomment">	 * @param attrName The attribute name.</em>
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * @param o The current object being traversed.</em>
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 * @param eType The expected class type.</em>
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * 	The {@link ClassMeta} of the object so that &lt;c&gt;instanceof&lt;/c&gt; operations only need to be performed</em>
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * 	once (since they can be expensive).</em>
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 * @throws SerializeException If recursion occurred.</em>
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; push2(String attrName, Object o, ClassMeta&lt;?&gt; eType) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.push(attrName, o, eType);
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="BeanRecursionException" href="../../../../org/apache/juneau/BeanRecursionException.html#BeanRecursionException">BeanRecursionException</a> e) {
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		}
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 	}
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> <em class="jxr_javadoccomment">	 * Opposite of {@link #resolveUri(Object)}.</em>
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> <em class="jxr_javadoccomment">	 * Converts the URI to a value relative to the specified &lt;c&gt;relativeTo&lt;/c&gt; parameter.</em>
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> <em class="jxr_javadoccomment">	 * Both parameters can be any of the following:</em>
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link java.net.URI}</em>
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link java.net.URL}</em>
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link CharSequence}</em>
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> <em class="jxr_javadoccomment">	 * Both URIs can be any of the following forms:</em>
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"foo://foo"&lt;/js&gt; - Absolute URI.</em>
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"/foo"&lt;/js&gt; - Root-relative URI.</em>
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"/"&lt;/js&gt; - Root URI.</em>
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"context:/foo"&lt;/js&gt; - Context-root-relative URI.</em>
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"context:/"&lt;/js&gt; - Context-root URI.</em>
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"servlet:/foo"&lt;/js&gt; - Servlet-path-relative URI.</em>
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"servlet:/"&lt;/js&gt; - Servlet-path URI.</em>
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"request:/foo"&lt;/js&gt; - Request-path-relative URI.</em>
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"request:/"&lt;/js&gt; - Request-path URI.</em>
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;"foo"&lt;/js&gt; - Path-info-relative URI.</em>
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;js&gt;""&lt;/js&gt; - Path-info URI.</em>
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">	 * @param relativeTo The URI to relativize against.</em>
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> <em class="jxr_javadoccomment">	 * @param uri The URI to relativize.</em>
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> <em class="jxr_javadoccomment">	 * @return The relativized URI.</em>
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> String relativizeUri(Object relativeTo, Object uri) {
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		<strong class="jxr_keyword">return</strong> uriResolver.relativize(relativeTo, uri);
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	}
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> <em class="jxr_javadoccomment">	 * Invokes the specified swap on the specified object if the swap is not null.</em>
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> <em class="jxr_javadoccomment">	 * @param swap The swap to invoke.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> <em class="jxr_javadoccomment">	 * @param o The input object.</em>
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> <em class="jxr_javadoccomment">	 * @return The swapped object.</em>
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> <em class="jxr_javadoccomment">	 * @throws SerializeException If swap method threw an exception.</em>
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 	<strong class="jxr_keyword">protected</strong> Object swap(ObjectSwap swap, Object o) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 			<strong class="jxr_keyword">if</strong> (swap == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 				<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			<strong class="jxr_keyword">return</strong> swap.swap(<strong class="jxr_keyword">this</strong>, o);
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(e);
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 		}
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 	}
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

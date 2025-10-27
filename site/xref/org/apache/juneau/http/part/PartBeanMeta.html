@@ -25,11 +25,11 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.http.part;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
@@ -160,12 +160,12 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		Class&lt;?&gt;[] pt = constructor.getParameterTypes();
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		Object[] args = <strong class="jxr_keyword">new</strong> Object[pt.length];
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">if</strong> (pt.length == 1) {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			args[0] = pt[0] == String.<strong class="jxr_keyword">class</strong> ? Utils.s(value) : value;
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			args[0] = pt[0] == String.<strong class="jxr_keyword">class</strong> ? s(value) : value;
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">if</strong> (name == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Constructor for type "</span> + type.getName() + <span class="jxr_string">" requires a name as the first argument."</span>);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			args[0] = name;
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			args[1] = pt[1] == String.<strong class="jxr_keyword">class</strong> ? Utils.s(value) : value;
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			args[1] = pt[1] == String.<strong class="jxr_keyword">class</strong> ? s(value) : value;
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		}
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">try</strong> {

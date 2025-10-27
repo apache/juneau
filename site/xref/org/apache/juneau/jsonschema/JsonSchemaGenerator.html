@@ -862,7 +862,7 @@
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 		addDescriptionsTo = builder.addDescriptionsTo == <strong class="jxr_keyword">null</strong> ? emptySet() : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(builder.addDescriptionsTo);
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 		ignoreTypes = builder.ignoreTypes == <strong class="jxr_keyword">null</strong> ? emptySet() : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(builder.ignoreTypes);
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		Set&lt;Pattern&gt; ignoreTypePatterns = Utils.set();
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		Set&lt;Pattern&gt; ignoreTypePatterns = set();
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 		ignoreTypes.forEach(y -&gt; StringUtils.split(y, x -&gt; ignoreTypePatterns.add(Pattern.compile(x.replace(<span class="jxr_string">"."</span>, <span class="jxr_string">"&#92;&#92;."</span>).replace(<span class="jxr_string">"*"</span>, <span class="jxr_string">".*"</span>)))));
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> 		<strong class="jxr_keyword">this</strong>.ignoreTypePatterns = ignoreTypePatterns.toArray(<strong class="jxr_keyword">new</strong> Pattern[ignoreTypePatterns.size()]);
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> 
@@ -893,7 +893,7 @@
 <a class="jxr_linenumber" name="L885" href="#L885">885</a> <em class="jxr_javadoccomment">	 * @return</em>
 <a class="jxr_linenumber" name="L886" href="#L886">886</a> <em class="jxr_javadoccomment">	 * 	Custom schema information for particular class types.</em>
 <a class="jxr_linenumber" name="L887" href="#L887">887</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L888" href="#L888">888</a> 	<strong class="jxr_keyword">public</strong> List&lt;Pattern&gt; getIgnoreTypes() { <strong class="jxr_keyword">return</strong> Utils.alist(ignoreTypePatterns); }
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 	<strong class="jxr_keyword">public</strong> List&lt;Pattern&gt; getIgnoreTypes() { <strong class="jxr_keyword">return</strong> alist(ignoreTypePatterns); }
 <a class="jxr_linenumber" name="L889" href="#L889">889</a> 
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> 	@Override
 <a class="jxr_linenumber" name="L891" href="#L891">891</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaBeanPropertyMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaBeanPropertyMeta.html#JsonSchemaBeanPropertyMeta">JsonSchemaBeanPropertyMeta</a> getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {

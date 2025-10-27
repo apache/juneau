@@ -25,14 +25,14 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.msgpack;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.IOUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.svl.*;
@@ -250,7 +250,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<em class="jxr_comment">// Swap if necessary</em>
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 		ObjectSwap swap = aType.getSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">if</strong> (swap != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">if</strong> (nn(swap)) {
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			o = swap(swap, o);
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			sType = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 
@@ -269,7 +269,7 @@
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			out.appendNumber((Number)o);
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isBean())
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 			serializeBeanMap(out, toBeanMap(o), typeName);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isUri() || (pMeta != <strong class="jxr_keyword">null</strong> &amp;&amp; pMeta.isUri()))
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isUri() || (nn(pMeta) &amp;&amp; pMeta.isUri()))
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 			out.appendString(resolveUri(o.toString()));
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isMap()) {
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (o instanceof <a name="BeanMap" href="../../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>)
@@ -296,17 +296,17 @@
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> serializeBeanMap(<a name="MsgPackOutputStream" href="../../../../org/apache/juneau/msgpack/MsgPackOutputStream.html#MsgPackOutputStream">MsgPackOutputStream</a> out, <strong class="jxr_keyword">final</strong> BeanMap&lt;?&gt; m, String typeName) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || x != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || nn(x);
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		List&lt;BeanPropertyValue&gt; values = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">if</strong> (typeName != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">if</strong> (nn(typeName)) {
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 			values.add(<strong class="jxr_keyword">new</strong> <a name="BeanPropertyValue" href="../../../../org/apache/juneau/BeanPropertyValue.html#BeanPropertyValue">BeanPropertyValue</a>(pm, pm.getName(), typeName, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		}
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -&gt; {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">if</strong> (thrown != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">if</strong> (nn(thrown)) {
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 				onBeanGetterException(pMeta, thrown);
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 			}
@@ -336,7 +336,7 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"unchecked"</span> })
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> serializeCollection(<a name="MsgPackOutputStream" href="../../../../org/apache/juneau/msgpack/MsgPackOutputStream.html#MsgPackOutputStream">MsgPackOutputStream</a> out, Collection c, ClassMeta&lt;?&gt; type) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 		ClassMeta&lt;?&gt; elementType = type.getElementType();
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		List&lt;Object&gt; l = Utils.listOfSize(c.size());
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		List&lt;Object&gt; l = listOfSize(c.size());
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 		c = sort(c);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 		l.addAll(c);
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		out.startArray(l.size());
@@ -352,7 +352,7 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<em class="jxr_comment">// The map size may change as we're iterating over it, so</em>
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<em class="jxr_comment">// grab a snapshot of the entries in a separate list.</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		List&lt;SimpleMapEntry&gt; entries = Utils.listOfSize(m.size());
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		List&lt;SimpleMapEntry&gt; entries = listOfSize(m.size());
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 		m.forEach((k, v) -&gt; entries.add(<strong class="jxr_keyword">new</strong> SimpleMapEntry(k, v)));
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 		out.startMap(entries.size());
@@ -367,7 +367,7 @@
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> willRecurse(<a name="BeanPropertyValue" href="../../../../org/apache/juneau/BeanPropertyValue.html#BeanPropertyValue">BeanPropertyValue</a> v) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 		ClassMeta&lt;?&gt; aType = push2(v.getName(), v.getValue(), v.getClassMeta());
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">if</strong> (aType != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">if</strong> (nn(aType))
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 			pop();
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">return</strong> aType == <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 	}

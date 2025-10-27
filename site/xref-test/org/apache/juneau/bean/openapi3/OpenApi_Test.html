@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			assertMapped(
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 				TESTER.bean(), (obj,prop) -&gt; simpleClassNameOf(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 				TESTER.bean(), (obj,prop) -&gt; scn(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 				<span class="jxr_string">"components,externalDocs,info,openapi,paths,security,servers,tags,x1,x2"</span>,
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 				<span class="jxr_string">"Components,ExternalDocumentation,Info,String,TreeMap,ArrayList,ArrayList,ArrayList,String,&lt;null&gt;"</span>
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 			);

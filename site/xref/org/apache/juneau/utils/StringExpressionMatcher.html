@@ -228,7 +228,7 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Always &lt;jk&gt;false&lt;/jk&gt; if the string is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(String input) {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">return</strong> input != <strong class="jxr_keyword">null</strong> &amp;&amp; exp.matches(input);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">return</strong> nn(input) &amp;&amp; exp.matches(input);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<strong class="jxr_keyword">private</strong> Exp parse(String expression) <strong class="jxr_keyword">throws</strong> ParseException {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">if</strong> (Utils.isEmptyOrBlank(expression))
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">if</strong> (isBlank(expression))
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Never();
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		expression = expression.trim();

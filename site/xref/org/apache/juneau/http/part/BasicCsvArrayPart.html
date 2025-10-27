@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">	 * @return A new {@link BasicCsvArrayPart} object, or &lt;jk&gt;null&lt;/jk&gt; if the name or value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="BasicCsvArrayPart" href="../../../../../org/apache/juneau/http/part/BasicCsvArrayPart.html#BasicCsvArrayPart">BasicCsvArrayPart</a> of(String name, String...value) {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">if</strong> (Utils.isEmpty(name) || value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">if</strong> (isEmpty(name) || value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BasicCsvArrayPart" href="../../../../../org/apache/juneau/http/part/BasicCsvArrayPart.html#BasicCsvArrayPart">BasicCsvArrayPart</a>(name, value);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * @return A new {@link BasicCsvArrayPart} object, or &lt;jk&gt;null&lt;/jk&gt; if the name or supplier is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="BasicCsvArrayPart" href="../../../../../org/apache/juneau/http/part/BasicCsvArrayPart.html#BasicCsvArrayPart">BasicCsvArrayPart</a> of(String name, Supplier&lt;String[]&gt; value) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (Utils.isEmpty(name) || value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (isEmpty(name) || value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BasicCsvArrayPart" href="../../../../../org/apache/juneau/http/part/BasicCsvArrayPart.html#BasicCsvArrayPart">BasicCsvArrayPart</a>(name, value);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * @return The part value as an array wrapped in an {@link Optional}.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;String[]&gt; asArray() {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">return</strong> Utils.opt(ArrayUtils.copyOf(value()));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">return</strong> opt(ArrayUtils.copyOf(value()));
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -140,7 +140,7 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * @return The part value as a {@link List} wrapped in an {@link Optional}.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;List&lt;String&gt;&gt; asList() {
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">return</strong> Utils.opt(toList());
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">return</strong> opt(toList());
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -160,9 +160,9 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this part contains the specified value.</em>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> contains(String val) {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">if</strong> (val != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">if</strong> (nn(val))
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">for</strong> (String v : value())
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				<strong class="jxr_keyword">if</strong> (Utils.eq(v, val))
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				<strong class="jxr_keyword">if</strong> (eq(v, val))
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
@@ -174,18 +174,18 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this part contains the specified value.</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> containsIgnoreCase(String val) {
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">if</strong> (val != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">if</strong> (nn(val))
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">for</strong> (String v : value())
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<strong class="jxr_keyword">if</strong> (Utils.eqic(v, val))
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<strong class="jxr_keyword">if</strong> (eqic(v, val))
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Override <em class="jxr_comment">/* Overridden from Header */</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">public</strong> String getValue() {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">if</strong> (supplier != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">if</strong> (nn(supplier))
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">return</strong> StringUtils.join(supplier.get(), ',');
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">if</strong> (stringValue != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">if</strong> (nn(stringValue))
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			stringValue = StringUtils.join(value, ',');
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">return</strong> stringValue;
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
@@ -201,7 +201,7 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">public</strong> String[] orElse(String[] other) {
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		String[] x = value();
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">return</strong> x != <strong class="jxr_keyword">null</strong> ? x : other;
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">return</strong> nn(x) ? x : other;
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -229,9 +229,9 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">private</strong> String[] value() {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">if</strong> (supplier != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">if</strong> (nn(supplier)) {
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 			String[] v = supplier.get();
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">return</strong> v != <strong class="jxr_keyword">null</strong> ? v : EMPTY;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">return</strong> nn(v) ? v : EMPTY;
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		}
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">return</strong> value;
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}

@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		Object output = res.getContent(Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">if</strong> (output == <strong class="jxr_keyword">null</strong> || ! (output.getClass().getAnnotation(Response.<strong class="jxr_keyword">class</strong>) != <strong class="jxr_keyword">null</strong> || res.getResponseBeanMeta() != <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">if</strong> (output == <strong class="jxr_keyword">null</strong> || ! (nn(output.getClass().getAnnotation(Response.<strong class="jxr_keyword">class</strong>)) || nn(res.getResponseBeanMeta())))
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  			<strong class="jxr_keyword">return</strong> NEXT;
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		ResponseBeanMeta rm = res.getResponseBeanMeta();
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  			rm = req.getOpContext().getResponseBeanMeta(output);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		ResponseBeanPropertyMeta stm = rm.getStatusMethod();
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (stm != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (nn(stm)) {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  				res.setStatus((<strong class="jxr_keyword">int</strong>)stm.getGetter().invoke(output));
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  						<strong class="jxr_keyword">if</strong> (o2 instanceof Map.Entry) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  							@SuppressWarnings(<span class="jxr_string">"rawtypes"</span>)
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  							Map.Entry x = (Map.Entry)o2;
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  							String k = Utils.s(x.getKey());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  							String k = s(x.getKey());
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  							h = <strong class="jxr_keyword">new</strong> <a name="SerializedHeader" href="../../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>(k, x.getValue(), hm.getSerializer().orElse(defaultPartSerializer).getPartSession(), ps.getProperty(k), <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  						} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o2 instanceof Header) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  							h = (Header)o2;
@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		ResponseBeanPropertyMeta bm = rm.getContentMethod();
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">if</strong> (bm != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">if</strong> (nn(bm)) {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			Method m = bm.getGetter();
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 				Class&lt;?&gt;[] pt = m.getParameterTypes();

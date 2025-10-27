@@ -1002,7 +1002,7 @@
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> 		fileCharset = builder.fileCharset;
 <a class="jxr_linenumber" name="L995" href="#L995">995</a> 		useWhitespace = builder.useWhitespace;
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		quoteCharValue = quoteCharOverride != <strong class="jxr_keyword">null</strong> ? quoteCharOverride : quoteChar != <strong class="jxr_keyword">null</strong> ? quoteChar : '&quot;';
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		quoteCharValue = nn(quoteCharOverride) ? quoteCharOverride : nn(quoteChar) ? quoteChar : '&quot;';
 <a class="jxr_linenumber" name="L998" href="#L998">998</a> 	}
 <a class="jxr_linenumber" name="L999" href="#L999">999</a> 
 <a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
@@ -1119,7 +1119,7 @@
 <a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> <em class="jxr_javadoccomment">	 * 	The character used for quoting attributes and values.</em>
 <a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 	<strong class="jxr_keyword">protected</strong> Character quoteChar() {
-<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 		<strong class="jxr_keyword">return</strong> quoteCharOverride != <strong class="jxr_keyword">null</strong> ? quoteCharOverride : quoteChar;
+<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 		<strong class="jxr_keyword">return</strong> nn(quoteCharOverride) ? quoteCharOverride : quoteChar;
 <a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 	}
 <a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> }
 </pre>

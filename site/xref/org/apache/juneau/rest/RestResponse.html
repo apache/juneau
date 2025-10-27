@@ -25,17 +25,17 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartType.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartType.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.encoders.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.*;
@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">var</strong> passThroughHeaders = request.getHeaderParam(<span class="jxr_string">"x-response-headers"</span>).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">if</strong> (passThroughHeaders != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">if</strong> (nn(passThroughHeaders)) {
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 				<strong class="jxr_keyword">var</strong> m = context.getPartParser().getPartSession().parse(HEADER, <strong class="jxr_keyword">null</strong>, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(JsonMap.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : m.entrySet())
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 					addHeader(e.getKey(), resolveUris(e.getValue()));
@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 						charset = opContext.getDefaultCharset();
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Charset.isSupported(r.getName()))
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 						charset = Charset.forName(r.getName());
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 					<strong class="jxr_keyword">if</strong> (charset != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 					<strong class="jxr_keyword">if</strong> (nn(charset))
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 						<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 				}
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			}
@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Override
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addHeader(String name, String value) {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">if</strong> (name != <strong class="jxr_keyword">null</strong> &amp;&amp; value != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">if</strong> (nn(name) &amp;&amp; nn(value)) {
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">if</strong> (name.equalsIgnoreCase(<span class="jxr_string">"Content-Type"</span>))
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 				setHeader(name, value);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">else</strong> {
@@ -264,9 +264,9 @@
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 	@Override
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> flushBuffer() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">if</strong> (w != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">if</strong> (nn(w))
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 			w.flush();
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">if</strong> (os != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">if</strong> (nn(os))
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			os.flush();
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">inner</strong>.flushBuffer();
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
@@ -320,16 +320,16 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * @return The schema of the response content, never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;HttpPartSchema&gt; getContentSchema() {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">if</strong> (contentSchema != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">if</strong> (nn(contentSchema))
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">return</strong> contentSchema;
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">if</strong> (responseBeanMeta != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			contentSchema = Utils.opt(responseBeanMeta.getSchema());
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">if</strong> (nn(responseBeanMeta))
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			contentSchema = opt(responseBeanMeta.getSchema());
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">var</strong> rbm = opContext.getResponseBeanMeta(getContent(Object.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 				<strong class="jxr_keyword">if</strong> (rbm != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 				contentSchema = Utils.opt(rbm.getSchema());
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 				<strong class="jxr_keyword">if</strong> (nn(rbm))
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 				contentSchema = opt(rbm.getSchema());
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 				contentSchema = Utils.opte();
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 				contentSchema = opte();
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		}
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">return</strong> contentSchema;
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 	}
@@ -388,7 +388,7 @@
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">if</strong> (os == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 			Encoder encoder = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">var</strong> encoders = request.getOpContext().getEncoders();
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">var</strong> ae = request.getHeaderParam(<span class="jxr_string">"Accept-Encoding"</span>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">if</strong> (! (ae == <strong class="jxr_keyword">null</strong> || ae.isEmpty())) {
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 				<strong class="jxr_keyword">var</strong> match = encoders.getEncoderMatch(ae);
@@ -455,7 +455,7 @@
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if {@link #getOutputStream()} has been called.</em>
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getOutputStreamCalled() { <strong class="jxr_keyword">return</strong> sos != <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getOutputStreamCalled() { <strong class="jxr_keyword">return</strong> nn(sos); }
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * Returns the metadata about this response.</em>
@@ -472,12 +472,12 @@
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * @return The matching serializer, never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;SerializerMatch&gt; getSerializerMatch() {
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">if</strong> (serializerMatch != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">if</strong> (nn(serializerMatch))
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">return</strong> serializerMatch;
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">if</strong> (serializer != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			serializerMatch = Utils.opt(<strong class="jxr_keyword">new</strong> <a name="SerializerMatch" href="../../../../org/apache/juneau/serializer/SerializerMatch.html#SerializerMatch">SerializerMatch</a>(getMediaType(), serializer));
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">if</strong> (nn(serializer)) {
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			serializerMatch = opt(<strong class="jxr_keyword">new</strong> <a name="SerializerMatch" href="../../../../org/apache/juneau/serializer/SerializerMatch.html#SerializerMatch">SerializerMatch</a>(getMediaType(), serializer));
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			serializerMatch = Utils.opt(opContext.getSerializers().getSerializerMatch(request.getHeaderParam(<span class="jxr_string">"Accept"</span>).orElse(<span class="jxr_string">"*/*"</span>)));
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			serializerMatch = opt(opContext.getSerializers().getSerializerMatch(request.getHeaderParam(<span class="jxr_string">"Accept"</span>).orElse(<span class="jxr_string">"*/*"</span>)));
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 		}
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">return</strong> serializerMatch;
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
@@ -508,7 +508,7 @@
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the response contains output.</em>
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasContent() {
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">return</strong> content != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">return</strong> nn(content);
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 	}
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -598,7 +598,7 @@
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 	<strong class="jxr_keyword">public</strong> <a name="RestResponse" href="../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> setContent(Object output) {
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">this</strong>.content = Utils.opt(output);
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">this</strong>.content = opt(output);
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 	}
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 
@@ -612,7 +612,7 @@
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 	<strong class="jxr_keyword">public</strong> <a name="RestResponse" href="../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> setContentSchema(<a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema) {
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">this</strong>.contentSchema = Utils.opt(schema);
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">this</strong>.contentSchema = opt(schema);
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 	}
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 
@@ -678,7 +678,7 @@
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (header instanceof <a name="SerializedHeader" href="../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>) {
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 			<strong class="jxr_keyword">var</strong> x = ((<a name="SerializedHeader" href="../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>)header).copyWith(request.getPartSerializerSession(), <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> 			String v = x.getValue();
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 			<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong> &amp;&amp; v.indexOf(<span class="jxr_string">"://"</span>) != -1)
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 			<strong class="jxr_keyword">if</strong> (nn(v) &amp;&amp; v.indexOf(<span class="jxr_string">"://"</span>) != -1)
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 				v = resolveUris(v);
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 			setHeader(x.getName(), v);
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 		} <strong class="jxr_keyword">else</strong> {
@@ -745,7 +745,7 @@
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> 		<strong class="jxr_keyword">if</strong> (name.equalsIgnoreCase(<span class="jxr_string">"Content-Type"</span>)) {
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 			<strong class="jxr_keyword">inner</strong>.setContentType(value);
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 			ContentType ct = contentType(value);
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 			<strong class="jxr_keyword">if</strong> (ct != <strong class="jxr_keyword">null</strong> &amp;&amp; ct.getParameter(<span class="jxr_string">"charset"</span>) != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 			<strong class="jxr_keyword">if</strong> (nn(ct) &amp;&amp; nn(ct.getParameter(<span class="jxr_string">"charset"</span>)))
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> 				<strong class="jxr_keyword">inner</strong>.setCharacterEncoding(ct.getParameter(<span class="jxr_string">"charset"</span>));
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 			<strong class="jxr_keyword">if</strong> (safeHeaders)
@@ -820,7 +820,7 @@
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 	<strong class="jxr_keyword">private</strong> Object getRawOutput() { <strong class="jxr_keyword">return</strong> content == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : content.orElse(<strong class="jxr_keyword">null</strong>); }
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 	<strong class="jxr_keyword">private</strong> <a name="FinishablePrintWriter" href="../../../../org/apache/juneau/rest/util/FinishablePrintWriter.html#FinishablePrintWriter">FinishablePrintWriter</a> getWriter(<strong class="jxr_keyword">boolean</strong> raw, <strong class="jxr_keyword">boolean</strong> autoflush) <strong class="jxr_keyword">throws</strong> NotAcceptable, IOException {
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">if</strong> (w != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">if</strong> (nn(w))
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> 			<strong class="jxr_keyword">return</strong> w;
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<em class="jxr_comment">// If plain text requested, override it now.</em>
@@ -839,7 +839,7 @@
 <a class="jxr_linenumber" name="L831" href="#L831">831</a> 	}
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 
 <a class="jxr_linenumber" name="L833" href="#L833">833</a> 	<strong class="jxr_keyword">private</strong> String resolveUris(Object value) {
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 		String s = Utils.s(value);
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 		String s = s(value);
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 		<strong class="jxr_keyword">return</strong> request.getUriResolver().resolve(s);
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 	}
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> }

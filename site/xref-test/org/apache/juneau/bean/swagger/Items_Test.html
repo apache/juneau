@@ -265,7 +265,7 @@
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 			assertMapped(
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				TESTER.bean(), (obj,prop) -&gt; simpleClassNameOf(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				TESTER.bean(), (obj,prop) -&gt; scn(obj.get(prop, Object.<strong class="jxr_keyword">class</strong>)),
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 				<span class="jxr_string">"collectionFormat,default,enum,exclusiveMaximum,exclusiveMinimum,format,items,maximum,maxItems,maxLength,minimum,minItems,minLength,multipleOf,pattern,$ref,type,uniqueItems,x1,x2"</span>,
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 				<span class="jxr_string">"String,String,LinkedHashSet,Boolean,Boolean,String,Items,Integer,Integer,Integer,Integer,Integer,Integer,Integer,String,String,String,Boolean,String,&lt;null&gt;"</span>
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 			);

@@ -206,7 +206,7 @@
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestQueryParams" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParams.html#RequestQueryParams">RequestQueryParams</a> add(NameValuePair...parameters) {
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertArgNotNull(<span class="jxr_string">"parameters"</span>, parameters);
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : parameters)
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">if</strong> (nn(p))
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 				add(p.getName(), p.getValue());
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
@@ -224,7 +224,7 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestQueryParams" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParams.html#RequestQueryParams">RequestQueryParams</a> add(String name, Object value) {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertArgNotNull(<span class="jxr_string">"name"</span>, name);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		add(<strong class="jxr_keyword">new</strong> <a name="RequestQueryParam" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParam.html#RequestQueryParam">RequestQueryParam</a>(req, name, Utils.s(value)).parser(parser));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		add(<strong class="jxr_keyword">new</strong> <a name="RequestQueryParam" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParam.html#RequestQueryParam">RequestQueryParam</a>(req, name, s(value)).parser(parser));
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
@@ -243,7 +243,7 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : pairs) {
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 			String name = p.getName();
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			Stream&lt;RequestQueryParam&gt; l = stream(name);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">boolean</strong> hasAllBlanks = l.allMatch(x -&gt; Utils.isEmpty(x.getValue()));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">boolean</strong> hasAllBlanks = l.allMatch(x -&gt; StringUtils.isEmpty(x.getValue()));
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">if</strong> (hasAllBlanks) {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 				removeAll(getAll(name));
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 				add(<strong class="jxr_keyword">new</strong> <a name="RequestQueryParam" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParam.html#RequestQueryParam">RequestQueryParam</a>(req, name, vs.resolve(p.getValue())));
@@ -534,7 +534,7 @@
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestQueryParams" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParams.html#RequestQueryParams">RequestQueryParams</a> set(String name, Object value) {
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 		assertArgNotNull(<span class="jxr_string">"name"</span>, name);
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		set(<strong class="jxr_keyword">new</strong> <a name="RequestQueryParam" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParam.html#RequestQueryParam">RequestQueryParam</a>(req, name, Utils.s(value)).parser(parser));
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		set(<strong class="jxr_keyword">new</strong> <a name="RequestQueryParam" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParam.html#RequestQueryParam">RequestQueryParam</a>(req, name, s(value)).parser(parser));
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 	}
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 
@@ -567,11 +567,9 @@
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 	}
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> eq(String s1, String s2) {
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">if</strong> (caseSensitive)
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			<strong class="jxr_keyword">return</strong> Utils.eq(s1, s2);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">return</strong> Utils.eqic(s1, s2);
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	}
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> }
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">return</strong> Utils.eq(! caseSensitive, s1, s2);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	}
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

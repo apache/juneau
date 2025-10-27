@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">this</strong>.map = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">this</strong>.reverseMap = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		beanContext.getBeanDictionary().forEach(<strong class="jxr_keyword">this</strong>::addClass);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (parent != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (nn(parent))
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			parent.map.forEach(<strong class="jxr_keyword">this</strong>::addToMap);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : classes)
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			addClass(c);
@@ -88,11 +88,11 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">if</strong> (isEmpty || typeName == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		ClassMeta&lt;?&gt; cm = map.get(typeName);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">if</strong> (cm != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">if</strong> (nn(cm))
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">return</strong> cm;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">if</strong> (typeName.charAt(typeName.length() - 1) == '^') {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			cm = getClassMeta(typeName.substring(0, typeName.length() - 1));
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">if</strong> (cm != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">if</strong> (nn(cm)) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  				cm = beanContext.getClassMeta(Array.newInstance(cm.innerClass, 1).getClass());
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  				map.put(typeName, cm);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			}
@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this dictionary has an entry for the specified type name.</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasName(String typeName) {
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">return</strong> getClassMeta(typeName) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">return</strong> nn(getClassMeta(typeName));
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Override
@@ -134,7 +134,7 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addClass(Class&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">if</strong> (c != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">if</strong> (nn(c)) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 				ClassInfo ci = ClassInfo.of(c);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 				<strong class="jxr_keyword">if</strong> (ci.isChildOf(Collection.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 					Collection&lt;?&gt; cc = BeanCreator.of(Collection.<strong class="jxr_keyword">class</strong>).type(c).run();
@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ci.isChildOf(Map.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 					Map&lt;?,?&gt; m = BeanCreator.of(Map.<strong class="jxr_keyword">class</strong>).type(c).run();
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 					m.forEach((k, v) -&gt; {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 						String typeName = Utils.s(k);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 						String typeName = s(k);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 						ClassMeta&lt;?&gt; val = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 						<strong class="jxr_keyword">if</strong> (v instanceof Type)
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 							val = beanContext.getClassMeta((Type)v);

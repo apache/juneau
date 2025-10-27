@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@SafeVarargs
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; addAll(List&lt;E&gt; value, E...entries) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">if</strong> (entries != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">if</strong> (nn(entries)) {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  				value = list(entries);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">else</strong>
@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * @return The set.</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; addAll(List&lt;E&gt; value, List&lt;E&gt; entries) {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">if</strong> (entries != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">if</strong> (nn(entries)) {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  				value = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(entries);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">else</strong>
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@SafeVarargs
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; addAll(Set&lt;E&gt; value, E...entries) {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">if</strong> (entries != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">if</strong> (nn(entries)) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  				value = set(entries);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">else</strong>
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; SortedSet&lt;E&gt; addAll(SortedSet&lt;E&gt; value, E...entries) {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">if</strong> (entries != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">if</strong> (nn(entries)) {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 				value = sortedSet(entries);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">else</strong>
@@ -449,7 +449,7 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; prependAll(List&lt;E&gt; value, E...entries) {
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">if</strong> (entries != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">if</strong> (nn(entries)) {
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 				value = list(entries);
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">else</strong>
@@ -654,8 +654,31 @@
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">return</strong> MapBuilder.create(keyType, valueType).converters(converters);
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 	}
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	<strong class="jxr_keyword">private</strong> <a name="CollectionUtils" href="../../../../../org/apache/juneau/common/utils/CollectionUtils.html#CollectionUtils">CollectionUtils</a>() {}
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> }
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 * Creates a new {@link TreeSet} containing a copy of the specified set.</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">	 * @param copyFrom The set to copy from.</em>
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 * @return A new {@link TreeSet}, or &lt;jk&gt;null&lt;/jk&gt; if the set was &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; TreeSet&lt;T&gt; treeSet(Set&lt;T&gt; copyFrom) {
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">return</strong> copyFrom == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(copyFrom);
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	}
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">	 * Creates a new {@link TreeSet} containing the specified values.</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The element type.</em>
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">	 * @param values The values to add to the set.</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * @return A new {@link TreeSet}, never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	@SafeVarargs
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; TreeSet&lt;T&gt; treeSet(T...values) {
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(Arrays.asList(values));
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	}
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	<strong class="jxr_keyword">private</strong> <a name="CollectionUtils" href="../../../../../org/apache/juneau/common/utils/CollectionUtils.html#CollectionUtils">CollectionUtils</a>() {}
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

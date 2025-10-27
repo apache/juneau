@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicResource" href="../../../../../org/apache/juneau/http/resource/BasicResource.html#BasicResource">BasicResource</a> addHeader(String name, String value) {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">if</strong> (name != <strong class="jxr_keyword">null</strong> &amp;&amp; value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">if</strong> (nn(name) &amp;&amp; nn(value))
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			headers.append(name, value);
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicResource" href="../../../../../org/apache/juneau/http/resource/BasicResource.html#BasicResource">BasicResource</a> addHeaders(Header...values) {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">for</strong> (Header h : values) {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">if</strong> (h != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">if</strong> (nn(h)) {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 				String n = h.getName();
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 				String v = h.getValue();
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(n)) {
@@ -389,7 +389,7 @@
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicResource" href="../../../../../org/apache/juneau/http/resource/BasicResource.html#BasicResource">BasicResource</a> setHeader(String name, String value) {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">if</strong> (name != <strong class="jxr_keyword">null</strong> &amp;&amp; value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">if</strong> (nn(name) &amp;&amp; nn(value))
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 			headers.set(name, value);
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
@@ -402,7 +402,7 @@
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicResource" href="../../../../../org/apache/juneau/http/resource/BasicResource.html#BasicResource">BasicResource</a> setHeaders(Header...values) {
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">for</strong> (Header h : values) {
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">if</strong> (h != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">if</strong> (nn(h)) {
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 				String n = h.getName();
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 				String v = h.getValue();
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(n)) {

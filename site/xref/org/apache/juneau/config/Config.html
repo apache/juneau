@@ -461,7 +461,7 @@
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">var</strong> l = CollectionUtils.listOf(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">var</strong> s = System.getProperty(<span class="jxr_string">"juneau.configFile"</span>);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">if</strong> (s != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">if</strong> (nn(s)) {
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 			l.add(s);
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 		}
@@ -519,7 +519,7 @@
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : getCandidateSystemDefaultConfigNames()) {
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">var</strong> config = find(n);
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">if</strong> (config != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">if</strong> (nn(config)) {
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 				<strong class="jxr_keyword">if</strong> (! DISABLE_AUTO_SYSTEM_PROPS)
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 					config.setSystemProperties();
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 				<strong class="jxr_keyword">return</strong> config;
@@ -616,7 +616,7 @@
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> section : configMap.getSections()) {
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> key : configMap.getKeys(section)) {
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 				<strong class="jxr_keyword">var</strong> ce = configMap.getEntry(section, key);
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 				<strong class="jxr_keyword">if</strong> (ce.getModifiers() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 				<strong class="jxr_keyword">if</strong> (nn(ce.getModifiers())) {
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 					<strong class="jxr_keyword">var</strong> mods2 = ce.getModifiers();
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 					<strong class="jxr_keyword">var</strong> value = ce.getValue();
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; mods2.length(); i++) {
@@ -664,7 +664,7 @@
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this section contains the specified key and the key has a non-blank value.</em>
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> exists(String key) {
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">return</strong> Utils.isNotEmpty(get(key).as(String.<strong class="jxr_keyword">class</strong>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">return</strong> isNotEmpty(get(key).as(String.<strong class="jxr_keyword">class</strong>).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 	}
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -720,7 +720,7 @@
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 * @return The section bean, never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 	<strong class="jxr_keyword">public</strong> <a name="Section" href="../../../../org/apache/juneau/config/Section.html#Section">Section</a> getSection(String name) {
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Section" href="../../../../org/apache/juneau/config/Section.html#Section">Section</a>(<strong class="jxr_keyword">this</strong>, configMap, Utils.emptyIfNull(name));
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Section" href="../../../../org/apache/juneau/config/Section.html#Section">Section</a>(<strong class="jxr_keyword">this</strong>, configMap, emptyIfNull(name));
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 	}
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -764,7 +764,7 @@
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> <em class="jxr_javadoccomment">	 * @throws SerializeException Value could not be serialized.</em>
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 	<strong class="jxr_keyword">public</strong> <a name="Config" href="../../../../org/apache/juneau/config/Config.html#Config">Config</a> load(Map&lt;String,Map&lt;String,Object&gt;&gt; m) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">if</strong> (m != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">if</strong> (nn(m))
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : m.entrySet()) {
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 				setSection(e.getKey(), <strong class="jxr_keyword">null</strong>, e.getValue());
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 			}
@@ -1053,7 +1053,7 @@
 <a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		checkWrite();
 <a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 		configMap.setSection(section(name), preLines);
 <a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		<strong class="jxr_keyword">if</strong> (contents != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		<strong class="jxr_keyword">if</strong> (nn(contents))
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : contents.entrySet())
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 				set(section(name) + '/' + e.getKey(), e.getValue());
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 
@@ -1141,7 +1141,7 @@
 <a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 
 <a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String section(String section) {
 <a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 		assertArgNotNull(<span class="jxr_string">"section"</span>, section);
-<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 		<strong class="jxr_keyword">if</strong> (Utils.isEmpty(section))
+<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 		<strong class="jxr_keyword">if</strong> (StringUtils.isEmpty(section))
 <a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 		<strong class="jxr_keyword">return</strong> section;
 <a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> 	}
@@ -1201,7 +1201,7 @@
 <a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 	}
 <a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 
 <a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 	String applyMods(String mods, String x) {
-<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 		<strong class="jxr_keyword">if</strong> (mods != <strong class="jxr_keyword">null</strong> &amp;&amp; x != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 		<strong class="jxr_keyword">if</strong> (nn(mods) &amp;&amp; nn(x))
 <a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; mods.length(); i++)
 <a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 				x = getMod(mods.charAt(i)).doApply(x);
 <a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		<strong class="jxr_keyword">return</strong> x;
@@ -1222,7 +1222,7 @@
 <a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 	}
 <a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 
 <a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 	String removeMods(String mods, String x) {
-<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 		<strong class="jxr_keyword">if</strong> (mods != <strong class="jxr_keyword">null</strong> &amp;&amp; x != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 		<strong class="jxr_keyword">if</strong> (nn(mods) &amp;&amp; nn(x))
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = mods.length() - 1; i &gt; -1; i--)
 <a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 				x = getMod(mods.charAt(i)).doRemove(x);
 <a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 		<strong class="jxr_keyword">return</strong> x;

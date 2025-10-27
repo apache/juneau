@@ -504,7 +504,7 @@
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">protected</strong> File resolveFile(String path) {
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 			<strong class="jxr_keyword">if</strong> (Paths.get(path).isAbsolute())
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(path);
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">if</strong> (workingDir != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">if</strong> (nn(workingDir))
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(workingDir, path);
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(path);
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 		}
@@ -574,7 +574,7 @@
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">this</strong>.workingDir = builder.workingDir;
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">this</strong>.configName = builder.configName;
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">this</strong>.args = builder.args != <strong class="jxr_keyword">null</strong> ? builder.args : <strong class="jxr_keyword">new</strong> <a name="Args" href="../../../../org/apache/juneau/collections/Args.html#Args">Args</a>(<strong class="jxr_keyword">new</strong> String[0]);
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">this</strong>.args = nn(builder.args) ? builder.args : <strong class="jxr_keyword">new</strong> <a name="Args" href="../../../../org/apache/juneau/collections/Args.html#Args">Args</a>(<strong class="jxr_keyword">new</strong> String[0]);
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<em class="jxr_comment">// --------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<em class="jxr_comment">// Try to get the manifest file if it wasn't already set.</em>
@@ -594,7 +594,7 @@
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 				<em class="jxr_comment">// Otherwise, read from manifest file in the jar file containing the main class.</em>
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 				<strong class="jxr_keyword">var</strong> url = getClass().getResource(<span class="jxr_string">"META-INF/MANIFEST.MF"</span>);
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				<strong class="jxr_keyword">if</strong> (url != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				<strong class="jxr_keyword">if</strong> (nn(url)) {
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 						m.read(url.openStream());
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {
@@ -616,7 +616,7 @@
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 			<strong class="jxr_keyword">var</strong> store = builder.configStore;
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 			<strong class="jxr_keyword">var</strong> cfs = workingDir == <strong class="jxr_keyword">null</strong> ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 			<strong class="jxr_keyword">for</strong> (String name : getCandidateConfigNames()) {
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 				<strong class="jxr_keyword">if</strong> (store != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 				<strong class="jxr_keyword">if</strong> (nn(store)) {
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 					<strong class="jxr_keyword">if</strong> (store.exists(name)) {
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 						configBuilder.store(store).name(name);
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 						<strong class="jxr_keyword">break</strong>;
@@ -642,11 +642,11 @@
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 		<em class="jxr_comment">// --------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<em class="jxr_comment">// Initialize console commands.</em>
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<em class="jxr_comment">// --------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">this</strong>.consoleEnabled = Utils.firstNonNull(builder.consoleEnabled, config.get(<span class="jxr_string">"Console/enabled"</span>).asBoolean().orElse(false));
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">this</strong>.consoleEnabled = firstNonNull(builder.consoleEnabled, config.get(<span class="jxr_string">"Console/enabled"</span>).asBoolean().orElse(false));
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 		<strong class="jxr_keyword">if</strong> (consoleEnabled) {
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<strong class="jxr_keyword">var</strong> c = System.console();
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">this</strong>.consoleReader = Utils.firstNonNull(builder.consoleReader, <strong class="jxr_keyword">new</strong> Scanner(c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">new</strong> InputStreamReader(System.in) : c.reader()));
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 			<strong class="jxr_keyword">this</strong>.consoleWriter = Utils.firstNonNull(builder.consoleWriter, c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">new</strong> PrintWriter(System.out, <strong class="jxr_keyword">true</strong>) : c.writer());
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">this</strong>.consoleReader = firstNonNull(builder.consoleReader, <strong class="jxr_keyword">new</strong> Scanner(c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">new</strong> InputStreamReader(System.in) : c.reader()));
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 			<strong class="jxr_keyword">this</strong>.consoleWriter = firstNonNull(builder.consoleWriter, c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">new</strong> PrintWriter(System.out, <strong class="jxr_keyword">true</strong>) : c.writer());
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 			<strong class="jxr_keyword">for</strong> (<a name="ConsoleCommand" href="../../../../org/apache/juneau/microservice/console/ConsoleCommand.html#ConsoleCommand">ConsoleCommand</a> cc : builder.consoleCommands) {
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 				consoleCommandMap.put(cc.getName(), cc);
@@ -685,7 +685,7 @@
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 			<strong class="jxr_keyword">this</strong>.consoleWriter = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 			<strong class="jxr_keyword">this</strong>.consoleThread = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 		}
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">this</strong>.listener = builder.listener != <strong class="jxr_keyword">null</strong> ? builder.listener : <strong class="jxr_keyword">new</strong> <a name="BasicMicroserviceListener" href="../../../../org/apache/juneau/microservice/BasicMicroserviceListener.html#BasicMicroserviceListener">BasicMicroserviceListener</a>();
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">this</strong>.listener = nn(builder.listener) ? builder.listener : <strong class="jxr_keyword">new</strong> <a name="BasicMicroserviceListener" href="../../../../org/apache/juneau/microservice/BasicMicroserviceListener.html#BasicMicroserviceListener">BasicMicroserviceListener</a>();
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 		init();
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 	}
@@ -747,7 +747,7 @@
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">var</strong> l = list();
 <a class="jxr_linenumber" name="L740" href="#L740">740</a> 		l.add(command);
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<strong class="jxr_keyword">for</strong> (Object a : args)
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 			l.add(Utils.s(a));
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 			l.add(s(a));
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 		<strong class="jxr_keyword">var</strong> args2 = <strong class="jxr_keyword">new</strong> <a name="Args" href="../../../../org/apache/juneau/collections/Args.html#Args">Args</a>(l.toArray(<strong class="jxr_keyword">new</strong> String[l.size()]));
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> Scanner(input); <strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> PrintWriter(sw)) {
 <a class="jxr_linenumber" name="L745" href="#L745">745</a> 			executeCommand(args2, in, out);
@@ -950,7 +950,7 @@
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 		<em class="jxr_comment">// Set system properties.</em>
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 		<em class="jxr_comment">// --------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L944" href="#L944">944</a> 		<strong class="jxr_keyword">var</strong> spKeys = config.getKeys(<span class="jxr_string">"SystemProperties"</span>);
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		<strong class="jxr_keyword">if</strong> (spKeys != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		<strong class="jxr_keyword">if</strong> (nn(spKeys))
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> 			<strong class="jxr_keyword">for</strong> (String key : spKeys)
 <a class="jxr_linenumber" name="L947" href="#L947">947</a> 				System.setProperty(key, config.get(<span class="jxr_string">"SystemProperties/"</span> + key).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L948" href="#L948">948</a> 
@@ -958,22 +958,22 @@
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> 		<em class="jxr_comment">// Initialize logging.</em>
 <a class="jxr_linenumber" name="L951" href="#L951">951</a> 		<em class="jxr_comment">// --------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L952" href="#L952">952</a> 		<strong class="jxr_keyword">this</strong>.logger = builder.logger;
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		<strong class="jxr_keyword">var</strong> logConfig = builder.logConfig != <strong class="jxr_keyword">null</strong> ? builder.logConfig : <strong class="jxr_keyword">new</strong> <a name="LogConfig" href="../../../../org/apache/juneau/microservice/LogConfig.html#LogConfig">LogConfig</a>();
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		<strong class="jxr_keyword">var</strong> logConfig = nn(builder.logConfig) ? builder.logConfig : <strong class="jxr_keyword">new</strong> <a name="LogConfig" href="../../../../org/apache/juneau/microservice/LogConfig.html#LogConfig">LogConfig</a>();
 <a class="jxr_linenumber" name="L954" href="#L954">954</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.logger == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L955" href="#L955">955</a> 			LogManager.getLogManager().reset();
 <a class="jxr_linenumber" name="L956" href="#L956">956</a> 			<strong class="jxr_keyword">this</strong>.logger = Logger.getLogger(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 			<strong class="jxr_keyword">var</strong> logFile = Utils.firstNonNull(logConfig.logFile, config.get(<span class="jxr_string">"Logging/logFile"</span>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 			<strong class="jxr_keyword">var</strong> logFile = firstNonNull(logConfig.logFile, config.get(<span class="jxr_string">"Logging/logFile"</span>).orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L958" href="#L958">958</a> 
 <a class="jxr_linenumber" name="L959" href="#L959">959</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(logFile)) {
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 				<strong class="jxr_keyword">var</strong> logDir = Utils.firstNonNull(logConfig.logDir, config.get(<span class="jxr_string">"Logging/logDir"</span>).orElse(<span class="jxr_string">"."</span>));
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 				<strong class="jxr_keyword">var</strong> logDir = firstNonNull(logConfig.logDir, config.get(<span class="jxr_string">"Logging/logDir"</span>).orElse(<span class="jxr_string">"."</span>));
 <a class="jxr_linenumber" name="L961" href="#L961">961</a> 				<strong class="jxr_keyword">var</strong> logDirFile = resolveFile(logDir);
 <a class="jxr_linenumber" name="L962" href="#L962">962</a> 				mkdirs(logDirFile, false);
 <a class="jxr_linenumber" name="L963" href="#L963">963</a> 				logDir = logDirFile.getAbsolutePath();
 <a class="jxr_linenumber" name="L964" href="#L964">964</a> 				System.setProperty(<span class="jxr_string">"juneau.logDir"</span>, logDir);
 <a class="jxr_linenumber" name="L965" href="#L965">965</a> 
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 				<strong class="jxr_keyword">var</strong> append = Utils.firstNonNull(logConfig.append, config.get(<span class="jxr_string">"Logging/append"</span>).asBoolean().orElse(false));
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 				<strong class="jxr_keyword">var</strong> limit = Utils.firstNonNull(logConfig.limit, config.get(<span class="jxr_string">"Logging/limit"</span>).asInteger().orElse(1024 * 1024));
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 				<strong class="jxr_keyword">var</strong> count = Utils.firstNonNull(logConfig.count, config.get(<span class="jxr_string">"Logging/count"</span>).asInteger().orElse(1));
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 				<strong class="jxr_keyword">var</strong> append = firstNonNull(logConfig.append, config.get(<span class="jxr_string">"Logging/append"</span>).asBoolean().orElse(false));
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 				<strong class="jxr_keyword">var</strong> limit = firstNonNull(logConfig.limit, config.get(<span class="jxr_string">"Logging/limit"</span>).asInteger().orElse(1024 * 1024));
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 				<strong class="jxr_keyword">var</strong> count = firstNonNull(logConfig.count, config.get(<span class="jxr_string">"Logging/count"</span>).asInteger().orElse(1));
 <a class="jxr_linenumber" name="L969" href="#L969">969</a> 
 <a class="jxr_linenumber" name="L970" href="#L970">970</a> 				<strong class="jxr_keyword">var</strong> fh = <strong class="jxr_keyword">new</strong> FileHandler(logDir + '/' + logFile, limit, count, append);
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> 
@@ -985,11 +985,11 @@
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> 					f = <strong class="jxr_keyword">new</strong> <a name="LogEntryFormatter" href="../../../../org/apache/juneau/microservice/resources/LogEntryFormatter.html#LogEntryFormatter">LogEntryFormatter</a>(format, dateFormat, useStackTraceHashes);
 <a class="jxr_linenumber" name="L978" href="#L978">978</a> 				}
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 				fh.setFormatter(f);
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 				fh.setLevel(Utils.firstNonNull(logConfig.fileLevel, config.get(<span class="jxr_string">"Logging/fileLevel"</span>).as(Level.<strong class="jxr_keyword">class</strong>).orElse(Level.INFO)));
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 				fh.setLevel(firstNonNull(logConfig.fileLevel, config.get(<span class="jxr_string">"Logging/fileLevel"</span>).as(Level.<strong class="jxr_keyword">class</strong>).orElse(Level.INFO)));
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> 				logger.addHandler(fh);
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> 				<strong class="jxr_keyword">var</strong> ch = <strong class="jxr_keyword">new</strong> ConsoleHandler();
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 				ch.setLevel(Utils.firstNonNull(logConfig.consoleLevel, config.get(<span class="jxr_string">"Logging/consoleLevel"</span>).as(Level.<strong class="jxr_keyword">class</strong>).orElse(Level.WARNING)));
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 				ch.setLevel(firstNonNull(logConfig.consoleLevel, config.get(<span class="jxr_string">"Logging/consoleLevel"</span>).as(Level.<strong class="jxr_keyword">class</strong>).orElse(Level.WARNING)));
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 				ch.setFormatter(f);
 <a class="jxr_linenumber" name="L986" href="#L986">986</a> 				logger.addHandler(ch);
 <a class="jxr_linenumber" name="L987" href="#L987">987</a> 			}
@@ -1088,7 +1088,7 @@
 <a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> <em class="jxr_javadoccomment">	 * @throws Exception Error occurred</em>
 <a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <a name="Microservice" href="../../../../org/apache/juneau/microservice/Microservice.html#Microservice">Microservice</a> startConsole() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 		<strong class="jxr_keyword">if</strong> (consoleThread != <strong class="jxr_keyword">null</strong> &amp;&amp; ! consoleThread.isAlive())
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 		<strong class="jxr_keyword">if</strong> (nn(consoleThread) &amp;&amp; ! consoleThread.isAlive())
 <a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 			consoleThread.start();
 <a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 	}
@@ -1114,13 +1114,13 @@
 <a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> <em class="jxr_javadoccomment">	 * @throws Exception Error occurred</em>
 <a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <a name="Microservice" href="../../../../org/apache/juneau/microservice/Microservice.html#Microservice">Microservice</a> stopConsole() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 		<strong class="jxr_keyword">if</strong> (consoleThread != <strong class="jxr_keyword">null</strong> &amp;&amp; consoleThread.isAlive())
+<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 		<strong class="jxr_keyword">if</strong> (nn(consoleThread) &amp;&amp; consoleThread.isAlive())
 <a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 			consoleThread.interrupt();
 <a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 	}
 <a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 
 <a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 	<strong class="jxr_keyword">private</strong> List&lt;String&gt; getCandidateConfigNames() {
-<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 		<strong class="jxr_keyword">if</strong> (configName != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 		<strong class="jxr_keyword">if</strong> (nn(configName))
 <a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 			<strong class="jxr_keyword">return</strong> Collections.singletonList(configName);
 <a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 
 <a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 		<strong class="jxr_keyword">var</strong> args = getArgs();
@@ -1178,7 +1178,7 @@
 <a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 	<strong class="jxr_keyword">protected</strong> File resolveFile(String path) {
 <a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 		<strong class="jxr_keyword">if</strong> (Paths.get(path).isAbsolute())
 <a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(path);
-<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 		<strong class="jxr_keyword">if</strong> (workingDir != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 		<strong class="jxr_keyword">if</strong> (nn(workingDir))
 <a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(workingDir, path);
 <a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(path);
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 	}

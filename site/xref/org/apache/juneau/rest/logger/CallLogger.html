@@ -579,7 +579,7 @@
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		sb.append('[').append(status);
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">if</strong> (sti != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">if</strong> (nn(sti)) {
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 			<strong class="jxr_keyword">int</strong> count = sti.getCount();
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 			sb.append(',').append(StringUtils.toHex8(sti.getHash())).append('.').append(count);
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 			<strong class="jxr_keyword">if</strong> (count &gt; 1)
@@ -594,20 +594,20 @@
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 			<strong class="jxr_keyword">if</strong> (reqd.isOneOf(HEADER, ENTITY)) {
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 				<strong class="jxr_keyword">var</strong> qs = req.getQueryString();
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				<strong class="jxr_keyword">if</strong> (qs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				<strong class="jxr_keyword">if</strong> (nn(qs))
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 					sb.append('?').append(qs);
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 			}
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			<strong class="jxr_keyword">if</strong> (reqContent != <strong class="jxr_keyword">null</strong> &amp;&amp; reqd.isOneOf(HEADER, ENTITY))
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			<strong class="jxr_keyword">if</strong> (nn(reqContent) &amp;&amp; reqd.isOneOf(HEADER, ENTITY))
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 				sb.append(<span class="jxr_string">"\n\tRequest length: "</span>).append(reqContent.length).append(<span class="jxr_string">" bytes"</span>);
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 			<strong class="jxr_keyword">if</strong> (resd.isOneOf(HEADER, ENTITY))
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 				sb.append(<span class="jxr_string">"\n\tResponse code: "</span>).append(status);
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 			<strong class="jxr_keyword">if</strong> (resContent != <strong class="jxr_keyword">null</strong> &amp;&amp; resd.isOneOf(HEADER, ENTITY))
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 			<strong class="jxr_keyword">if</strong> (nn(resContent) &amp;&amp; resd.isOneOf(HEADER, ENTITY))
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 				sb.append(<span class="jxr_string">"\n\tResponse length: "</span>).append(resContent.length).append(<span class="jxr_string">" bytes"</span>);
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			<strong class="jxr_keyword">if</strong> (execTime != <strong class="jxr_keyword">null</strong> &amp;&amp; resd.isOneOf(HEADER, ENTITY))
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			<strong class="jxr_keyword">if</strong> (nn(execTime) &amp;&amp; resd.isOneOf(HEADER, ENTITY))
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 				sb.append(<span class="jxr_string">"\n\tExec time: "</span>).append(execTime).append(<span class="jxr_string">"ms"</span>);
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<strong class="jxr_keyword">if</strong> (reqd.isOneOf(HEADER, ENTITY)) {
@@ -631,7 +631,7 @@
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 				}
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 			}
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> 
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			<strong class="jxr_keyword">if</strong> (reqContent != <strong class="jxr_keyword">null</strong> &amp;&amp; reqContent.length &gt; 0 &amp;&amp; reqd == ENTITY) {
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			<strong class="jxr_keyword">if</strong> (nn(reqContent) &amp;&amp; reqContent.length &gt; 0 &amp;&amp; reqd == ENTITY) {
 <a class="jxr_linenumber" name="L627" href="#L627">627</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L628" href="#L628">628</a> 					sb.append(<span class="jxr_string">"\n---Request Content UTF-8---"</span>);
 <a class="jxr_linenumber" name="L629" href="#L629">629</a> 					sb.append(<span class="jxr_string">"\n"</span>).append(<strong class="jxr_keyword">new</strong> String(reqContent, IOUtils.UTF8));
@@ -642,7 +642,7 @@
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 				}
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 			}
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">if</strong> (resContent != <strong class="jxr_keyword">null</strong> &amp;&amp; resContent.length &gt; 0 &amp;&amp; resd == ENTITY) {
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">if</strong> (nn(resContent) &amp;&amp; resContent.length &gt; 0 &amp;&amp; resd == ENTITY) {
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 					sb.append(<span class="jxr_string">"\n---Response Content UTF-8---"</span>);
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 					sb.append(<span class="jxr_string">"\n"</span>).append(<strong class="jxr_keyword">new</strong> String(resContent, IOUtils.UTF8));

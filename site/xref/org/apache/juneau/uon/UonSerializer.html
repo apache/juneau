@@ -1099,7 +1099,7 @@
 <a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 		quoteCharUon = builder.quoteCharUon;
 <a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 		addBeanTypes = addBeanTypesUon || <strong class="jxr_keyword">super</strong>.isAddBeanTypes();
-<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 		quoteChar = quoteCharUon != <strong class="jxr_keyword">null</strong> ? quoteCharUon : <strong class="jxr_keyword">super</strong>.quoteChar() != <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">super</strong>.quoteChar() : '\'';
+<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 		quoteChar = nn(quoteCharUon) ? quoteCharUon : nn(<strong class="jxr_keyword">super</strong>.quoteChar()) ? <strong class="jxr_keyword">super</strong>.quoteChar() : '\'';
 <a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 	}
 <a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>

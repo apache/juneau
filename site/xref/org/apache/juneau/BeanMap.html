@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		String key = emptyIfNull(property);
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">if</strong> (meta.properties.containsKey(key) &amp;&amp; ! <span class="jxr_string">"*"</span>.equals(key))
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">if</strong> (meta.dynaProperty != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">if</strong> (nn(meta.dynaProperty)) {
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 				<strong class="jxr_keyword">return</strong> meta.dynaProperty.getDynaMap(bean).containsKey(key);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<em class="jxr_comment">// If this bean has a dyna-property, then we need to construct the entire set before returning.</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<em class="jxr_comment">// Otherwise, we can create an iterator without a new data structure.</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">if</strong> (meta.dynaProperty != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">if</strong> (nn(meta.dynaProperty)) {
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 			Set&lt;Entry&lt;String,Object&gt;&gt; s = set();
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			forEachProperty(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 				<strong class="jxr_keyword">if</strong> (x.isDyna()) {
@@ -284,7 +284,7 @@
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 					<em class="jxr_comment">// TODO - This is kind of inefficient.</em>
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 					Map&lt;String,Object&gt; dynaMap = bpm.getDynaMap(bean);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 					<strong class="jxr_keyword">if</strong> (dynaMap != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 					<strong class="jxr_keyword">if</strong> (nn(dynaMap)) {
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 						dynaMap.forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 							Object val = bpm.get(<strong class="jxr_keyword">this</strong>, k);
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 							actions.put(k, <strong class="jxr_keyword">new</strong> <a name="BeanPropertyValue" href="../../../org/apache/juneau/BeanPropertyValue.html#BeanPropertyValue">BeanPropertyValue</a>(bpm, k, val, <strong class="jxr_keyword">null</strong>));
@@ -386,7 +386,7 @@
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 		T b = getBean(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<em class="jxr_comment">// If we have any arrays that need to be constructed, do it now.</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">if</strong> (arrayPropertyCache != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">if</strong> (nn(arrayPropertyCache)) {
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 			arrayPropertyCache.forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 					getPropertyMeta(k).setArray(b, v);

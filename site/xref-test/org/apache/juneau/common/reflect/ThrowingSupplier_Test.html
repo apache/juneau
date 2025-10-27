@@ -24,19 +24,19 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.common.reflect;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Unit tests for the {@link ThrowingSupplier} functional interface.</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;This test class verifies functional interface compliance, exception handling,</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * and integration with the Utils.safe() method.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * and integration with the safe() method.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> <a name="ThrowingSupplier_Test" href="../../../../../org/apache/juneau/common/reflect/ThrowingSupplier_Test.html#ThrowingSupplier_Test">ThrowingSupplier_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<em class="jxr_comment">// ====================================================================================================</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<em class="jxr_comment">// Integration with Utils.safe() Tests</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<em class="jxr_comment">// Integration with safe() Tests</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<em class="jxr_comment">// ====================================================================================================</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	@Nested
@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">void</strong> c01_safeExecutionWithoutException() {
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			ThrowingSupplier&lt;String&gt; supplier = () -&gt; <span class="jxr_string">"safe_value"</span>;
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">var</strong> result = Utils.safe(supplier);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">var</strong> result = safe(supplier);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			assertEquals(<span class="jxr_string">"safe_value"</span>, result);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
@@ -156,8 +156,8 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> java.io.IOException(<span class="jxr_string">"Checked exception"</span>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			};
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<em class="jxr_comment">// Utils.safe should wrap checked exceptions in RuntimeException</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; Utils.safe(supplier));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<em class="jxr_comment">// safe should wrap checked exceptions in RuntimeException</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; safe(supplier));
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			assertTrue(exception.getCause() instanceof java.io.IOException);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			assertEquals(<span class="jxr_string">"Checked exception"</span>, exception.getCause().getMessage());
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		}
@@ -168,8 +168,8 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Runtime exception"</span>);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			};
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<em class="jxr_comment">// Utils.safe should re-throw RuntimeExceptions as-is</em>
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; Utils.safe(supplier));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<em class="jxr_comment">// safe should re-throw RuntimeExceptions as-is</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; safe(supplier));
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			assertEquals(<span class="jxr_string">"Runtime exception"</span>, exception.getMessage());
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			assertNull(exception.getCause()); <em class="jxr_comment">// Should not be wrapped</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		}
@@ -178,7 +178,7 @@
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">void</strong> c04_safeExecutionWithNullReturn() {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 			ThrowingSupplier&lt;String&gt; supplier = () -&gt; <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">var</strong> result = Utils.safe(supplier);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">var</strong> result = safe(supplier);
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 			assertNull(result);
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		}
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> java.io.FileNotFoundException(<span class="jxr_string">"File not found"</span>);
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 			};
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; Utils.safe(fileReader));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; safe(fileReader));
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			assertTrue(exception.getCause() instanceof java.io.FileNotFoundException);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		}
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 
@@ -210,7 +210,7 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> java.net.SocketTimeoutException(<span class="jxr_string">"Connection timeout"</span>);
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			};
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; Utils.safe(networkCall));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; safe(networkCall));
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			assertTrue(exception.getCause() instanceof java.net.SocketTimeoutException);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		}
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> java.sql.SQLException(<span class="jxr_string">"Database connection failed"</span>);
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 			};
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; Utils.safe(dbQuery));
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">var</strong> exception = assertThrows(RuntimeException.<strong class="jxr_keyword">class</strong>, () -&gt; safe(dbQuery));
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 			assertTrue(exception.getCause() instanceof java.sql.SQLException);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		}
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 				<strong class="jxr_keyword">return</strong> result;
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 			};
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">var</strong> result = Utils.safe(complexOperation);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">var</strong> result = safe(complexOperation);
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			assertNotNull(result);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			assertEquals(<span class="jxr_string">"success"</span>, result.get(<span class="jxr_string">"status"</span>));
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			assertNotNull(result.get(<span class="jxr_string">"data"</span>));
@@ -257,7 +257,7 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 			ThrowingSupplier&lt;String&gt; fastSupplier = () -&gt; <span class="jxr_string">"quick_result"</span>;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">var</strong> start = System.nanoTime();
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">var</strong> result = Utils.safe(fastSupplier);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">var</strong> result = safe(fastSupplier);
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">var</strong> end = System.nanoTime();
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 			assertEquals(<span class="jxr_string">"quick_result"</span>, result);
@@ -274,9 +274,9 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 				}
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			};
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			assertEquals(1, Utils.safe(counter));
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			assertEquals(2, Utils.safe(counter));
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			assertEquals(3, Utils.safe(counter));
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			assertEquals(1, safe(counter));
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			assertEquals(2, safe(counter));
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			assertEquals(3, safe(counter));
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		}
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		@Test
@@ -294,7 +294,7 @@
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 				}
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			};
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">var</strong> result = Utils.safe(resourceUser);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">var</strong> result = safe(resourceUser);
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 			assertEquals(<span class="jxr_string">"resource_data"</span>, result);
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			assertTrue(resourceClosed[0], <span class="jxr_string">"Resource should be cleaned up"</span>);
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 		}
@@ -312,7 +312,7 @@
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 				}
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			};
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">var</strong> result = Utils.safe(problematicResource);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">var</strong> result = safe(problematicResource);
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 			assertEquals(<span class="jxr_string">"success"</span>, result);
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		}
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 	}
@@ -331,7 +331,7 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<em class="jxr_comment">// Test concurrent execution</em>
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<strong class="jxr_keyword">var</strong> futures = <strong class="jxr_keyword">new</strong> ArrayList&lt;java.util.concurrent.CompletableFuture&lt;String&gt;&gt;();
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 10; i++) {
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -&gt; Utils.safe(supplier)));
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -&gt; safe(supplier)));
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 			}
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<em class="jxr_comment">// All should complete successfully</em>
@@ -351,7 +351,7 @@
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 5; i++) {
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -&gt; {
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 						Utils.safe(throwingSupplier);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 						safe(throwingSupplier);
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// Should not reach here</em>
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 					} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 						<strong class="jxr_keyword">return</strong> e;

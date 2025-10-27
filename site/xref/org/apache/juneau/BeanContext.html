@@ -455,7 +455,7 @@
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">public</strong> List&lt;Class&lt;?&gt;&gt; beanDictionary() {
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">if</strong> (beanDictionary == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				beanDictionary = Utils.list();
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				beanDictionary = list();
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">return</strong> beanDictionary;
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 		}
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 
@@ -2999,7 +2999,7 @@
 <a class="jxr_linenumber" name="L2991" href="#L2991">2991</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2992" href="#L2992">2992</a> 		<strong class="jxr_keyword">public</strong> List&lt;Object&gt; swaps() {
 <a class="jxr_linenumber" name="L2993" href="#L2993">2993</a> 			<strong class="jxr_keyword">if</strong> (swaps == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2994" href="#L2994">2994</a> 				swaps = Utils.list();
+<a class="jxr_linenumber" name="L2994" href="#L2994">2994</a> 				swaps = list();
 <a class="jxr_linenumber" name="L2995" href="#L2995">2995</a> 			<strong class="jxr_keyword">return</strong> swaps;
 <a class="jxr_linenumber" name="L2996" href="#L2996">2996</a> 		}
 <a class="jxr_linenumber" name="L2997" href="#L2997">2997</a> 
@@ -3500,15 +3500,15 @@
 <a class="jxr_linenumber" name="L3492" href="#L3492">3492</a> 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 <a class="jxr_linenumber" name="L3493" href="#L3493">3493</a> 		sortProperties = builder.sortProperties;
 <a class="jxr_linenumber" name="L3494" href="#L3494">3494</a> 		findFluentSetters = builder.findFluentSetters;
-<a class="jxr_linenumber" name="L3495" href="#L3495">3495</a> 		typePropertyName = builder.typePropertyName != <strong class="jxr_keyword">null</strong> ? builder.typePropertyName : <span class="jxr_string">"_type"</span>;
-<a class="jxr_linenumber" name="L3496" href="#L3496">3496</a> 		locale = builder.locale != <strong class="jxr_keyword">null</strong> ? builder.locale : Locale.getDefault();
+<a class="jxr_linenumber" name="L3495" href="#L3495">3495</a> 		typePropertyName = nn(builder.typePropertyName) ? builder.typePropertyName : <span class="jxr_string">"_type"</span>;
+<a class="jxr_linenumber" name="L3496" href="#L3496">3496</a> 		locale = nn(builder.locale) ? builder.locale : Locale.getDefault();
 <a class="jxr_linenumber" name="L3497" href="#L3497">3497</a> 		timeZone = builder.timeZone;
 <a class="jxr_linenumber" name="L3498" href="#L3498">3498</a> 		mediaType = builder.mediaType;
 <a class="jxr_linenumber" name="L3499" href="#L3499">3499</a> 		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(list());
 <a class="jxr_linenumber" name="L3500" href="#L3500">3500</a> 		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(list());
 <a class="jxr_linenumber" name="L3501" href="#L3501">3501</a> 		notBeanClasses = opt(builder.notBeanClasses).map(ArrayList::<strong class="jxr_keyword">new</strong>).map(Collections::unmodifiableList).orElse(list());
 <a class="jxr_linenumber" name="L3502" href="#L3502">3502</a> 		notBeanPackages = opt(builder.notBeanPackages).map(ArrayList::<strong class="jxr_keyword">new</strong>).map(Collections::unmodifiableList).orElse(list());
-<a class="jxr_linenumber" name="L3503" href="#L3503">3503</a> 		propertyNamer = builder.propertyNamer != <strong class="jxr_keyword">null</strong> ? builder.propertyNamer : BasicPropertyNamer.<strong class="jxr_keyword">class</strong>;
+<a class="jxr_linenumber" name="L3503" href="#L3503">3503</a> 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.<strong class="jxr_keyword">class</strong>;
 <a class="jxr_linenumber" name="L3504" href="#L3504">3504</a> 
 <a class="jxr_linenumber" name="L3505" href="#L3505">3505</a> 		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, alist(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L3506" href="#L3506">3506</a> 
@@ -4059,7 +4059,7 @@
 <a class="jxr_linenumber" name="L4051" href="#L4051">4051</a> 		<strong class="jxr_keyword">for</strong> (ObjectSwap f : swapArray) {
 <a class="jxr_linenumber" name="L4052" href="#L4052">4052</a> 			<strong class="jxr_keyword">if</strong> (f.getNormalClass().isChildOf(c)) {
 <a class="jxr_linenumber" name="L4053" href="#L4053">4053</a> 				<strong class="jxr_keyword">if</strong> (l == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L4054" href="#L4054">4054</a> 					l = Utils.list();
+<a class="jxr_linenumber" name="L4054" href="#L4054">4054</a> 					l = list();
 <a class="jxr_linenumber" name="L4055" href="#L4055">4055</a> 				l.add(f);
 <a class="jxr_linenumber" name="L4056" href="#L4056">4056</a> 			}
 <a class="jxr_linenumber" name="L4057" href="#L4057">4057</a> 		}
@@ -4076,8 +4076,8 @@
 <a class="jxr_linenumber" name="L4068" href="#L4068">4068</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L4069" href="#L4069">4069</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; ObjectSwap[] findObjectSwaps(Class&lt;T&gt; c) {
 <a class="jxr_linenumber" name="L4070" href="#L4070">4070</a> 		<em class="jxr_comment">// Note:  On first</em>
-<a class="jxr_linenumber" name="L4071" href="#L4071">4071</a> 		<strong class="jxr_keyword">if</strong> (c != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L4072" href="#L4072">4072</a> 			List&lt;ObjectSwap&gt; l = Utils.list();
+<a class="jxr_linenumber" name="L4071" href="#L4071">4071</a> 		<strong class="jxr_keyword">if</strong> (nn(c)) {
+<a class="jxr_linenumber" name="L4072" href="#L4072">4072</a> 			List&lt;ObjectSwap&gt; l = list();
 <a class="jxr_linenumber" name="L4073" href="#L4073">4073</a> 			<strong class="jxr_keyword">for</strong> (ObjectSwap f : swapArray)
 <a class="jxr_linenumber" name="L4074" href="#L4074">4074</a> 				<strong class="jxr_keyword">if</strong> (f.getNormalClass().isParentOf(c))
 <a class="jxr_linenumber" name="L4075" href="#L4075">4075</a> 					l.add(f);
@@ -4104,7 +4104,7 @@
 <a class="jxr_linenumber" name="L4096" href="#L4096">4096</a> 
 <a class="jxr_linenumber" name="L4097" href="#L4097">4097</a> 	<strong class="jxr_keyword">private</strong> ClassMeta&lt;?&gt; resolveType(Type...t) {
 <a class="jxr_linenumber" name="L4098" href="#L4098">4098</a> 		<strong class="jxr_keyword">for</strong> (Type tt : t) {
-<a class="jxr_linenumber" name="L4099" href="#L4099">4099</a> 			<strong class="jxr_keyword">if</strong> (tt != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L4099" href="#L4099">4099</a> 			<strong class="jxr_keyword">if</strong> (nn(tt)) {
 <a class="jxr_linenumber" name="L4100" href="#L4100">4100</a> 				ClassMeta&lt;?&gt; cm = getClassMeta(tt);
 <a class="jxr_linenumber" name="L4101" href="#L4101">4101</a> 				<strong class="jxr_keyword">if</strong> (tt != cmObject)
 <a class="jxr_linenumber" name="L4102" href="#L4102">4102</a> 					<strong class="jxr_keyword">return</strong> cm;
@@ -4189,7 +4189,7 @@
 <a class="jxr_linenumber" name="L4181" href="#L4181">4181</a> 		<strong class="jxr_keyword">if</strong> (c.isArray() || c.isPrimitive() || c.isEnum() || c.isAnnotation())
 <a class="jxr_linenumber" name="L4182" href="#L4182">4182</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L4183" href="#L4183">4183</a> 		Package p = c.getPackage();
-<a class="jxr_linenumber" name="L4184" href="#L4184">4184</a> 		<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L4184" href="#L4184">4184</a> 		<strong class="jxr_keyword">if</strong> (nn(p)) {
 <a class="jxr_linenumber" name="L4185" href="#L4185">4185</a> 			<strong class="jxr_keyword">for</strong> (String p2 : notBeanPackageNames)
 <a class="jxr_linenumber" name="L4186" href="#L4186">4186</a> 				<strong class="jxr_keyword">if</strong> (p.getName().equals(p2))
 <a class="jxr_linenumber" name="L4187" href="#L4187">4187</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
@@ -4266,7 +4266,7 @@
 <a class="jxr_linenumber" name="L4258" href="#L4258">4258</a> 		ClassMeta&lt;T&gt; cm = resolveClassMeta(t, typeVarImpls);
 <a class="jxr_linenumber" name="L4259" href="#L4259">4259</a> 		ClassMeta&lt;T&gt; cm2 = cm;
 <a class="jxr_linenumber" name="L4260" href="#L4260">4260</a> 
-<a class="jxr_linenumber" name="L4261" href="#L4261">4261</a> 		<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L4261" href="#L4261">4261</a> 		<strong class="jxr_keyword">if</strong> (nn(p)) {
 <a class="jxr_linenumber" name="L4262" href="#L4262">4262</a> 
 <a class="jxr_linenumber" name="L4263" href="#L4263">4263</a> 			<strong class="jxr_keyword">if</strong> (ClassUtils.isNotVoid(p.type()))
 <a class="jxr_linenumber" name="L4264" href="#L4264">4264</a> 				cm2 = resolveClassMeta(p.type(), typeVarImpls);
@@ -4331,7 +4331,7 @@
 <a class="jxr_linenumber" name="L4323" href="#L4323">4323</a> 						<strong class="jxr_keyword">break</strong> loop;
 <a class="jxr_linenumber" name="L4324" href="#L4324">4324</a> 				}
 <a class="jxr_linenumber" name="L4325" href="#L4325">4325</a> 				c = c.getSuperclass();
-<a class="jxr_linenumber" name="L4326" href="#L4326">4326</a> 			} <strong class="jxr_keyword">while</strong> (c != <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L4326" href="#L4326">4326</a> 			} <strong class="jxr_keyword">while</strong> (nn(c));
 <a class="jxr_linenumber" name="L4327" href="#L4327">4327</a> 		}
 <a class="jxr_linenumber" name="L4328" href="#L4328">4328</a> 
 <a class="jxr_linenumber" name="L4329" href="#L4329">4329</a> 		<strong class="jxr_keyword">if</strong> (o instanceof ParameterizedType) {
@@ -4413,7 +4413,7 @@
 <a class="jxr_linenumber" name="L4405" href="#L4405">4405</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L4406" href="#L4406">4406</a> 
 <a class="jxr_linenumber" name="L4407" href="#L4407">4407</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t instanceof TypeVariable) {
-<a class="jxr_linenumber" name="L4408" href="#L4408">4408</a> 			<strong class="jxr_keyword">if</strong> (typeVarImpls != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L4408" href="#L4408">4408</a> 			<strong class="jxr_keyword">if</strong> (nn(typeVarImpls)) {
 <a class="jxr_linenumber" name="L4409" href="#L4409">4409</a> 				TypeVariable tv = (TypeVariable)t;
 <a class="jxr_linenumber" name="L4410" href="#L4410">4410</a> 				String varName = tv.getName();
 <a class="jxr_linenumber" name="L4411" href="#L4411">4411</a> 				<strong class="jxr_keyword">int</strong> varIndex = -1;

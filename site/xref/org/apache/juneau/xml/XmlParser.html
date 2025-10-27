@@ -792,9 +792,9 @@
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 		resolver = builder.resolver;
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 		eventAllocator = builder.eventAllocator;
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		reporterImpl = reporter != <strong class="jxr_keyword">null</strong> ? newInstance(reporter) : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		resolverImpl = resolver != <strong class="jxr_keyword">null</strong> ? newInstance(resolver) : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		eventAllocatorImpl = eventAllocator != <strong class="jxr_keyword">null</strong> ? newInstance(eventAllocator) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		reporterImpl = nn(reporter) ? newInstance(reporter) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		resolverImpl = nn(resolver) ? newInstance(resolver) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		eventAllocatorImpl = nn(eventAllocator) ? newInstance(eventAllocator) : <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 	}
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>

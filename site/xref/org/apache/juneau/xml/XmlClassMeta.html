@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">super</strong>(cm);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		List&lt;Xml&gt; xmls = list();
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		List&lt;XmlSchema&gt; schemas = list();
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">if</strong> (cm != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">if</strong> (nn(cm)) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			cm.forEachAnnotation(Xml.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; xmls.add(x));
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  			cm.forEachAnnotation(XmlSchema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; schemas.add(x));
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		}

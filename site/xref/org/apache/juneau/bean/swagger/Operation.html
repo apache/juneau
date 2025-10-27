@@ -525,7 +525,7 @@
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<strong class="jxr_keyword">public</strong> <a name="ParameterInfo" href="../../../../../org/apache/juneau/bean/swagger/ParameterInfo.html#ParameterInfo">ParameterInfo</a> getParameter(String in, String name) {
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 		assertArgNotNull(<span class="jxr_string">"in"</span>, in);
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<em class="jxr_comment">// Note: name can be null for "body" parameters</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">if</strong> (parameters != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">if</strong> (nn(parameters))
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pi : parameters)
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 				<strong class="jxr_keyword">if</strong> (eq(pi.getIn(), in) &amp;&amp; (eq(pi.getName(), name) || <span class="jxr_string">"body"</span>.equals(pi.getIn())))
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 					<strong class="jxr_keyword">return</strong> pi;
@@ -647,24 +647,24 @@
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">	 * @return The property value, or &lt;jk&gt;false&lt;/jk&gt; if it is not set.</em>
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDeprecated() { <strong class="jxr_keyword">return</strong> deprecated != <strong class="jxr_keyword">null</strong> &amp;&amp; deprecated; }
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDeprecated() { <strong class="jxr_keyword">return</strong> nn(deprecated) &amp;&amp; deprecated; }
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 		<strong class="jxr_keyword">var</strong> s = CollectionUtils.setb(String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			.addIf(consumes != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"consumes"</span>)
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			.addIf(deprecated != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"deprecated"</span>)
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			.addIf(description != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"description"</span>)
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			.addIf(externalDocs != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"externalDocs"</span>)
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			.addIf(operationId != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"operationId"</span>)
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			.addIf(parameters != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"parameters"</span>)
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			.addIf(produces != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"produces"</span>)
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			.addIf(responses != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"responses"</span>)
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			.addIf(schemes != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"schemes"</span>)
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			.addIf(security != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"security"</span>)
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			.addIf(summary != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"summary"</span>)
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			.addIf(tags != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"tags"</span>)
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			.addIf(nn(consumes), <span class="jxr_string">"consumes"</span>)
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			.addIf(nn(deprecated), <span class="jxr_string">"deprecated"</span>)
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			.addIf(nn(description), <span class="jxr_string">"description"</span>)
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			.addIf(nn(externalDocs), <span class="jxr_string">"externalDocs"</span>)
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			.addIf(nn(operationId), <span class="jxr_string">"operationId"</span>)
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			.addIf(nn(parameters), <span class="jxr_string">"parameters"</span>)
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			.addIf(nn(produces), <span class="jxr_string">"produces"</span>)
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			.addIf(nn(responses), <span class="jxr_string">"responses"</span>)
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			.addIf(nn(schemes), <span class="jxr_string">"schemes"</span>)
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			.addIf(nn(security), <span class="jxr_string">"security"</span>)
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			.addIf(nn(summary), <span class="jxr_string">"summary"</span>)
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			.addIf(nn(tags), <span class="jxr_string">"tags"</span>)
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 			.build();
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(s, <strong class="jxr_keyword">super</strong>.keySet());
@@ -677,15 +677,15 @@
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"consumes"</span> -&gt; setConsumes(toList(value, MediaType.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"deprecated"</span> -&gt; setDeprecated(toBoolean(value));
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"description"</span> -&gt; setDescription(Utils.s(value));
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"description"</span> -&gt; setDescription(s(value));
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"externalDocs"</span> -&gt; setExternalDocs(toType(value, ExternalDocumentation.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"operationId"</span> -&gt; setOperationId(Utils.s(value));
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"operationId"</span> -&gt; setOperationId(s(value));
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"parameters"</span> -&gt; setParameters(toList(value, ParameterInfo.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"produces"</span> -&gt; setProduces(toList(value, MediaType.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"responses"</span> -&gt; setResponses(toMap(value, String.<strong class="jxr_keyword">class</strong>, ResponseInfo.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"schemes"</span> -&gt; setSchemes(toList(value, String.<strong class="jxr_keyword">class</strong>).sparse().addAny(value).build());
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"security"</span> -&gt; setSecurity((List)toList(value, MapStringList.<strong class="jxr_keyword">class</strong>).sparse().build());
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"summary"</span> -&gt; setSummary(Utils.s(value));
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"summary"</span> -&gt; setSummary(s(value));
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"tags"</span> -&gt; setTags(toList(value, String.<strong class="jxr_keyword">class</strong>).sparse().build());
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 			<strong class="jxr_keyword">default</strong> -&gt; {
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 				<strong class="jxr_keyword">super</strong>.set(property, value);

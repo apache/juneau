@@ -291,7 +291,7 @@
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * @throws AssertionError If assertion failed.</em>
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<strong class="jxr_keyword">public</strong> R is(Predicate&lt;T&gt; test) <strong class="jxr_keyword">throws</strong> AssertionError {
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">if</strong> (test != <strong class="jxr_keyword">null</strong> &amp;&amp; !test.test(value))
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">if</strong> (nn(test) &amp;&amp; !test.test(value))
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">throw</strong> error(getFailureMessage(test, value));
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
@@ -428,7 +428,7 @@
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * @throws AssertionError If assertion failed.</em>
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<strong class="jxr_keyword">public</strong> R isNull() <strong class="jxr_keyword">throws</strong> AssertionError {
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">if</strong> (nn(value))
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_valueWasNotNull);
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 	}
@@ -468,7 +468,7 @@
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 	<strong class="jxr_keyword">public</strong> R isSameSerializedAs(Object o, <a name="WriterSerializer" href="../../../../org/apache/juneau/serializer/WriterSerializer.html#WriterSerializer">WriterSerializer</a> serializer) {
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">var</strong> s1 = serializer.toString(value);
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<strong class="jxr_keyword">var</strong> s2 = serializer.toString(o);
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">if</strong> (Utils.ne(s1, s2))
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">if</strong> (ne(s1, s2))
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_unexpectedComparison, s2, s1);
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 	}
@@ -640,7 +640,7 @@
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 * @return The inner value as a string, or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
 <a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 	<strong class="jxr_keyword">protected</strong> String valueAsString() {
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">return</strong> Utils.s(value);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">return</strong> s(value);
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 	}
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -649,7 +649,7 @@
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the inner value is not null.</em>
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> valueIsNotNull() {
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">return</strong> value != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">return</strong> nn(value);
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 	}
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 	<em class="jxr_javadoccomment">/**</em>

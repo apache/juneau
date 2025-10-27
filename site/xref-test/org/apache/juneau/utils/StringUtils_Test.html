@@ -1020,13 +1020,13 @@
 <a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 
 <a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 	@Test <strong class="jxr_keyword">void</strong> a41_isBlank() {
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		assertTrue(isBlank(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		assertTrue(isBlank(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 		assertTrue(isBlank(<span class="jxr_string">"   "</span>));
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		assertTrue(isBlank(<span class="jxr_string">"\t\n"</span>));
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		assertFalse(isBlank(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		assertFalse(isBlank(<span class="jxr_string">" hello "</span>));
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		assertFalse(isBlank(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		assertTrue(StringUtils.isBlank(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		assertTrue(StringUtils.isBlank(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 		assertTrue(StringUtils.isBlank(<span class="jxr_string">"   "</span>));
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		assertTrue(StringUtils.isBlank(<span class="jxr_string">"\t\n"</span>));
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		assertFalse(StringUtils.isBlank(<span class="jxr_string">"hello"</span>));
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		assertFalse(StringUtils.isBlank(<span class="jxr_string">" hello "</span>));
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		assertFalse(StringUtils.isBlank(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 	}
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 
 <a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 	@Test <strong class="jxr_keyword">void</strong> a42_isNotBlank() {

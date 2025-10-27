@@ -24,20 +24,20 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartType.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.text.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.http.message.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.http.params.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.http.util.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.assertions.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.httppart.HttpPartType.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.text.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.http.message.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.http.params.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.http.util.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.assertions.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.bean.*;
@@ -418,7 +418,7 @@
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 					<strong class="jxr_keyword">if</strong> (request.hasHttpEntity()) {
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 						sb.append(<span class="jxr_string">"\n---request entity---"</span>);
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 						HttpEntity e = request.getHttpEntity();
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 						<strong class="jxr_keyword">if</strong> (e.getContentType() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 						<strong class="jxr_keyword">if</strong> (nn(e.getContentType()))
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 							sb.append(<span class="jxr_string">"\n\t"</span>).append(e.getContentType());
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 						<strong class="jxr_keyword">if</strong> (e.isRepeatable()) {
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 							<strong class="jxr_keyword">try</strong> {
@@ -512,7 +512,7 @@
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 		String s = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">if</strong> (ct.isPresent())
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 			s = getContentType().get().getParameter(<span class="jxr_string">"charset"</span>);
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">return</strong> Utils.isEmpty(s) ? <span class="jxr_string">"utf-8"</span> : s;
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">return</strong> isEmpty(s) ? <span class="jxr_string">"utf-8"</span> : s;
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 	}
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 	<em class="jxr_javadoccomment">/**</em>

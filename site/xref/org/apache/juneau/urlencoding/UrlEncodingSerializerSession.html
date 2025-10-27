@@ -25,16 +25,16 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.urlencoding;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.IOUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.svl.*;
@@ -257,7 +257,7 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<em class="jxr_comment">// Swap if necessary</em>
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> swap = aType.getSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">if</strong> (swap != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">if</strong> (nn(swap)) {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 			o = swap(swap, o);
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			sType = swap.getSwapClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 
@@ -297,24 +297,24 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<strong class="jxr_keyword">private</strong> <a name="SerializerWriter" href="../../../../org/apache/juneau/serializer/SerializerWriter.html#SerializerWriter">SerializerWriter</a> serializeBeanMap(<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a> out, BeanMap&lt;?&gt; m, String typeName) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 		Flag addAmp = Flag.create();
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">if</strong> (typeName != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">if</strong> (nn(typeName)) {
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 			<strong class="jxr_keyword">var</strong> pm = m.getMeta().getTypeProperty();
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 			out.appendObject(pm.getName(), <strong class="jxr_keyword">true</strong>).append('=').appendObject(typeName, false);
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			addAmp.set();
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 		}
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || x != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || nn(x);
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -&gt; {
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			ClassMeta&lt;?&gt; cMeta = pMeta.getClassMeta();
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 			ClassMeta&lt;?&gt; sMeta = cMeta.getSerializedClassMeta(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">if</strong> (thrown != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">if</strong> (nn(thrown))
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 				onBeanGetterException(pMeta, thrown);
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">if</strong> (canIgnoreValue(sMeta, key, value))
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong> &amp;&amp; shouldUseExpandedParams(pMeta)) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">if</strong> (nn(value) &amp;&amp; shouldUseExpandedParams(pMeta)) {
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 				<em class="jxr_comment">// Transformed object array bean properties may be transformed resulting in ArrayLists,</em>
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 				<em class="jxr_comment">// so we need to check type if we think it's an array.</em>
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">if</strong> (sMeta.isCollection() || value instanceof Collection) {
@@ -370,13 +370,13 @@
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 					((Collection&lt;?&gt;)value).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 						addAmp.ifSet(() -&gt; out.cr(indent).append('&amp;')).set();
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 						out.appendObject(key, <strong class="jxr_keyword">true</strong>).append('=');
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 						<strong class="jxr_keyword">super</strong>.serializeAnything(out, x, <strong class="jxr_keyword">null</strong>, Utils.s(key), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 						<strong class="jxr_keyword">super</strong>.serializeAnything(out, x, <strong class="jxr_keyword">null</strong>, s(key), <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 					});
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 				} <strong class="jxr_keyword">else</strong> <em class="jxr_comment">/* array */</em> {
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(value); i++) {
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 						addAmp.ifSet(() -&gt; out.cr(indent).append('&amp;')).set();
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 						out.appendObject(key, <strong class="jxr_keyword">true</strong>).append('=');
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 						<strong class="jxr_keyword">super</strong>.serializeAnything(out, Array.get(value, i), <strong class="jxr_keyword">null</strong>, Utils.s(key), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 						<strong class="jxr_keyword">super</strong>.serializeAnything(out, Array.get(value, i), <strong class="jxr_keyword">null</strong>, s(key), <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 					}
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 				}
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 			} <strong class="jxr_keyword">else</strong> {

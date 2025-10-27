@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<em class="jxr_comment">// forName() is used by Class and Charset</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			String[] fromStringMethodNames = {<span class="jxr_string">"fromString"</span>,<span class="jxr_string">"fromValue"</span>,<span class="jxr_string">"valueOf"</span>,<span class="jxr_string">"parse"</span>,<span class="jxr_string">"parseString"</span>,<span class="jxr_string">"forName"</span>,<span class="jxr_string">"forString"</span>};
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			fromStringMethod = Utils.opt(
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			fromStringMethod = opt(
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 				ci.getPublicMethod(
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 					x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 					&amp;&amp; x.isNotDeprecated()
@@ -204,7 +204,7 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<em class="jxr_comment">// Find example() method if present.</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			exampleMethod = Utils.opt(
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			exampleMethod = opt(
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 				ci.getPublicMethod(
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 					x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 					&amp;&amp; x.isNotDeprecated()
@@ -286,17 +286,17 @@
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			CollectionUtils.addAll(<strong class="jxr_keyword">this</strong>.swaps, swaps);
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">if</strong> (bc != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">if</strong> (nn(bc))
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 				<strong class="jxr_keyword">this</strong>.builderSwap = BuilderSwap.findSwapFromObjectClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 			findSwaps(<strong class="jxr_keyword">this</strong>.swaps, bc);
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">if</strong> (beanFilter != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">if</strong> (nn(beanFilter)) {
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 				example = beanFilter.getExample();
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 				implClass = (Class&lt;? <strong class="jxr_keyword">extends</strong> T&gt;)beanFilter.getImplClass();
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 			}
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">if</strong> (marshalledFilter != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">if</strong> (nn(marshalledFilter)) {
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 				<strong class="jxr_keyword">if</strong> (example == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 					example = marshalledFilter.getExample();
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 				<strong class="jxr_keyword">if</strong> (implClass == <strong class="jxr_keyword">null</strong>)
@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 				<em class="jxr_comment">// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap&lt;String,Person&gt;)</em>
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cc == MAP) {
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 					ClassMeta[] parameters = findParameters();
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 					<strong class="jxr_keyword">if</strong> (parameters != <strong class="jxr_keyword">null</strong> &amp;&amp; parameters.length == 2) {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 					<strong class="jxr_keyword">if</strong> (nn(parameters) &amp;&amp; parameters.length == 2) {
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 						keyType = parameters[0];
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 						valueType = parameters[1];
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 					} <strong class="jxr_keyword">else</strong> {
@@ -329,7 +329,7 @@
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 				<em class="jxr_comment">// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList&lt;Person&gt;)</em>
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cc == COLLECTION || cc == OPTIONAL) {
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 					ClassMeta[] parameters = findParameters();
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 					<strong class="jxr_keyword">if</strong> (parameters != <strong class="jxr_keyword">null</strong> &amp;&amp; parameters.length == 1) {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 					<strong class="jxr_keyword">if</strong> (nn(parameters) &amp;&amp; parameters.length == 1) {
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 						elementType = parameters[0];
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 					} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 						elementType = findClassMeta(Object.<strong class="jxr_keyword">class</strong>);
@@ -364,13 +364,13 @@
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 				<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 			}
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">if</strong> (beanMeta != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">if</strong> (nn(beanMeta))
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 				dictionaryName = beanMeta.getDictionaryName();
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">if</strong> (beanMeta != <strong class="jxr_keyword">null</strong> &amp;&amp; bc != <strong class="jxr_keyword">null</strong> &amp;&amp; bc.isUseInterfaceProxies() &amp;&amp; innerClass.isInterface())
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">if</strong> (nn(beanMeta) &amp;&amp; nn(bc) &amp;&amp; bc.isUseInterfaceProxies() &amp;&amp; innerClass.isInterface())
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 				invocationHandler = <strong class="jxr_keyword">new</strong> BeanProxyInvocationHandler&lt;T&gt;(beanMeta);
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">if</strong> (bc != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">if</strong> (nn(bc)) {
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 				bc.forEachAnnotation(Bean.<strong class="jxr_keyword">class</strong>, c, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; {
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 					<strong class="jxr_keyword">if</strong> (x.dictionary().length != 0)
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 						beanRegistry = <strong class="jxr_keyword">new</strong> <a name="BeanRegistry" href="../../../org/apache/juneau/BeanRegistry.html#BeanRegistry">BeanRegistry</a>(bc, <strong class="jxr_keyword">null</strong>, x.dictionary());
@@ -380,7 +380,7 @@
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 				});
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 			}
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">if</strong> (example == <strong class="jxr_keyword">null</strong> &amp;&amp; bc != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">if</strong> (example == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(bc)) {
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 				bc.forEachAnnotation(Example.<strong class="jxr_keyword">class</strong>, c, x -&gt; ! x.value().isEmpty(), x -&gt; example = x.value());
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 			}
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 
@@ -440,7 +440,7 @@
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">if</strong> (cc == ENUM) {
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 				Class&lt;? <strong class="jxr_keyword">extends</strong> Enum&gt; ec = (Class&lt;? <strong class="jxr_keyword">extends</strong> Enum&lt;?&gt;&gt;)c;
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 				<strong class="jxr_keyword">boolean</strong> useEnumNames = bc != <strong class="jxr_keyword">null</strong> &amp;&amp; bc.isUseEnumNames();
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 				<strong class="jxr_keyword">boolean</strong> useEnumNames = nn(bc) &amp;&amp; bc.isUseEnumNames();
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 				enumValues = BidiMap.create();
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 				enumValues.unmodifiable();
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 				stream(ec.getEnumConstants()).forEach(x -&gt; enumValues.add(x, useEnumNames ? x.name() : x.toString()));
@@ -503,7 +503,7 @@
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> findSwaps(List&lt;ObjectSwap&gt; l, BeanContext bc) {
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			<strong class="jxr_keyword">if</strong> (bc != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			<strong class="jxr_keyword">if</strong> (nn(bc))
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 				bc.forEachAnnotation(Swap.<strong class="jxr_keyword">class</strong>, innerClass, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(createSwap(x)));
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 			ObjectSwap defaultSwap = DefaultSwaps.find(ci);
@@ -515,7 +515,7 @@
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 				defaultSwap = AutoMapSwap.find(bc, ci);
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">if</strong> (defaultSwap == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 				defaultSwap = AutoListSwap.find(bc, ci);
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<strong class="jxr_keyword">if</strong> (defaultSwap != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<strong class="jxr_keyword">if</strong> (nn(defaultSwap))
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 				l.add(defaultSwap);
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 		}
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 	}
@@ -564,7 +564,7 @@
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 			&amp;&amp; x.hasNumParams(isMemberClass ? 1 : 0)
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 		);
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">if</strong> (cc != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">if</strong> (nn(cc))
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 			<strong class="jxr_keyword">return</strong> (Constructor&lt;? <strong class="jxr_keyword">extends</strong> T&gt;)v.transform(cc.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 	}
@@ -644,7 +644,7 @@
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.write()) {
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 			<em class="jxr_comment">// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.</em>
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<strong class="jxr_keyword">if</strong> (beanContext != <strong class="jxr_keyword">null</strong> &amp;&amp; beanContext.cmCache != <strong class="jxr_keyword">null</strong> &amp;&amp; isCacheable(innerClass))
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<strong class="jxr_keyword">if</strong> (nn(beanContext) &amp;&amp; nn(beanContext.cmCache) &amp;&amp; isCacheable(innerClass))
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 				beanContext.cmCache.put(innerClass, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 			ClassMetaBuilder&lt;T&gt; builder = <strong class="jxr_keyword">new</strong> ClassMetaBuilder(innerClass, beanContext, swaps, childSwaps);
@@ -792,7 +792,7 @@
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<strong class="jxr_keyword">if</strong> (beanMeta == <strong class="jxr_keyword">null</strong> || beanMeta.constructor == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">outer</strong> != <strong class="jxr_keyword">null</strong> &amp;&amp; beanMeta.constructor.hasParamTypes(<strong class="jxr_keyword">outer</strong>.getClass());
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 			<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">outer</strong>) &amp;&amp; beanMeta.constructor.hasParamTypes(<strong class="jxr_keyword">outer</strong>.getClass());
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> 	}
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 
@@ -804,7 +804,7 @@
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canCreateNewInstance() {
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 		<strong class="jxr_keyword">if</strong> (isMemberClass)
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		<strong class="jxr_keyword">if</strong> (noArgConstructor != <strong class="jxr_keyword">null</strong> || getProxyInvocationHandler() != <strong class="jxr_keyword">null</strong> || (isArray() &amp;&amp; elementType.canCreateNewInstance()))
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		<strong class="jxr_keyword">if</strong> (nn(noArgConstructor) || nn(getProxyInvocationHandler()) || (isArray() &amp;&amp; elementType.canCreateNewInstance()))
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 	}
@@ -821,7 +821,7 @@
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canCreateNewInstance(Object <strong class="jxr_keyword">outer</strong>) {
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">outer</strong> != <strong class="jxr_keyword">null</strong> &amp;&amp; noArgConstructor != <strong class="jxr_keyword">null</strong> &amp;&amp; noArgConstructor.hasParamTypes(<strong class="jxr_keyword">outer</strong>.getClass());
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 			<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">outer</strong>) &amp;&amp; nn(noArgConstructor) &amp;&amp; noArgConstructor.hasParamTypes(<strong class="jxr_keyword">outer</strong>.getClass());
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">return</strong> canCreateNewInstance();
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 	}
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 
@@ -834,11 +834,11 @@
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class has a no-arg constructor or invocation handler.</em>
 <a class="jxr_linenumber" name="L827" href="#L827">827</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L828" href="#L828">828</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canCreateNewInstanceFromString(Object <strong class="jxr_keyword">outer</strong>) {
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		<strong class="jxr_keyword">if</strong> (fromStringMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		<strong class="jxr_keyword">if</strong> (nn(fromStringMethod))
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		<strong class="jxr_keyword">if</strong> (stringConstructor != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		<strong class="jxr_keyword">if</strong> (nn(stringConstructor)) {
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 			<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">outer</strong> != <strong class="jxr_keyword">null</strong> &amp;&amp; stringConstructor.hasParamTypes(<strong class="jxr_keyword">outer</strong>.getClass(), String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 				<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">outer</strong>) &amp;&amp; stringConstructor.hasParamTypes(<strong class="jxr_keyword">outer</strong>.getClass(), String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 		}
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 		<strong class="jxr_keyword">return</strong> false;
@@ -856,7 +856,7 @@
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> 
 <a class="jxr_linenumber" name="L849" href="#L849">849</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>) &amp;&amp; Utils.eq(<strong class="jxr_keyword">this</strong>, (ClassMeta&lt;?&gt;)o, (x, y) -&gt; Utils.eq(x.innerClass, y.innerClass));
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, (ClassMeta&lt;?&gt;)o, (x, y) -&gt; eq(x.innerClass, y.innerClass));
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 	}
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -909,7 +909,7 @@
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> <em class="jxr_javadoccomment">	 * @throws BeanRuntimeException If this metadata object is not a list of arguments, or the index is out of range.</em>
 <a class="jxr_linenumber" name="L902" href="#L902">902</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L903" href="#L903">903</a> 	<strong class="jxr_keyword">public</strong> ClassMeta&lt;?&gt; getArg(<strong class="jxr_keyword">int</strong> index) {
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		<strong class="jxr_keyword">if</strong> (args != <strong class="jxr_keyword">null</strong> &amp;&amp; index &gt;= 0 &amp;&amp; index &lt; args.length)
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		<strong class="jxr_keyword">if</strong> (nn(args) &amp;&amp; index &gt;= 0 &amp;&amp; index &lt; args.length)
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 			<strong class="jxr_keyword">return</strong> args[index];
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(<span class="jxr_string">"Invalid argument index specified:  {0}.  Only {1} arguments are defined."</span>, index, args == <strong class="jxr_keyword">null</strong> ? 0 : args.length);
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> 	}
@@ -1017,16 +1017,16 @@
 <a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
 <a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 	<strong class="jxr_keyword">public</strong> T getExample(BeanSession session, JsonParserSession jpSession) {
 <a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 			<strong class="jxr_keyword">if</strong> (example != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 			<strong class="jxr_keyword">if</strong> (nn(example))
 <a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 				<strong class="jxr_keyword">return</strong> jpSession.parse(example, <strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 			<strong class="jxr_keyword">if</strong> (exampleMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 			<strong class="jxr_keyword">if</strong> (nn(exampleMethod))
 <a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 				<strong class="jxr_keyword">return</strong> (T)MethodInfo.of(exampleMethod).invokeFuzzy(<strong class="jxr_keyword">null</strong>, session);
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 			<strong class="jxr_keyword">if</strong> (exampleField != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 			<strong class="jxr_keyword">if</strong> (nn(exampleField))
 <a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 				<strong class="jxr_keyword">return</strong> (T)exampleField.get(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 
 <a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 			<strong class="jxr_keyword">if</strong> (isCollection()) {
 <a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 				Object etExample = getElementType().getExample(session, jpSession);
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 				<strong class="jxr_keyword">if</strong> (etExample != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 				<strong class="jxr_keyword">if</strong> (nn(etExample)) {
 <a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 					<strong class="jxr_keyword">if</strong> (canCreateNewInstance()) {
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 						Collection c = (Collection)newInstance();
 <a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 						c.add(etExample);
@@ -1036,7 +1036,7 @@
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 				}
 <a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isArray()) {
 <a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 				Object etExample = getElementType().getExample(session, jpSession);
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 				<strong class="jxr_keyword">if</strong> (etExample != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 				<strong class="jxr_keyword">if</strong> (nn(etExample)) {
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 					Object o = Array.newInstance(getElementType().innerClass, 1);
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 					Array.set(o, 0, etExample);
 <a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 					<strong class="jxr_keyword">return</strong> (T)o;
@@ -1044,7 +1044,7 @@
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isMap()) {
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 				Object vtExample = getValueType().getExample(session, jpSession);
 <a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 				Object ktExample = getKeyType().getExample(session, jpSession);
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 				<strong class="jxr_keyword">if</strong> (ktExample != <strong class="jxr_keyword">null</strong> &amp;&amp; vtExample != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 				<strong class="jxr_keyword">if</strong> (nn(ktExample) &amp;&amp; nn(vtExample)) {
 <a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 					<strong class="jxr_keyword">if</strong> (canCreateNewInstance()) {
 <a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 						Map m = (Map)newInstance();
 <a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 						m.put(ktExample, vtExample);
@@ -1095,7 +1095,7 @@
 <a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> <em class="jxr_javadoccomment">	 * @return The no-arg constructor for this class, or &lt;jk&gt;null&lt;/jk&gt; if it does not exist.</em>
 <a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getImplClassConstructor(<a name="Visibility" href="../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> conVis) {
-<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 		<strong class="jxr_keyword">if</strong> (implClass != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 		<strong class="jxr_keyword">if</strong> (nn(implClass))
 <a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 			<strong class="jxr_keyword">return</strong> ClassInfo.of(implClass).getNoArgConstructor(conVis);
 <a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 	}
@@ -1148,7 +1148,7 @@
 <a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 			<strong class="jxr_keyword">if</strong> (beanContext == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> 				<strong class="jxr_keyword">return</strong> info.getAnnotation(BeanContext.DEFAULT, a);
-<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 			o = Utils.opt(info.getAnnotation(beanContext, a));
+<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 			o = opt(info.getAnnotation(beanContext, a));
 <a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 			annotationLastMap.put(a, o);
 <a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 		}
 <a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 		<strong class="jxr_keyword">return</strong> o.orElse(<strong class="jxr_keyword">null</strong>);
@@ -1187,7 +1187,7 @@
 <a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;?&gt; getOptionalDefault() {
 <a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 		<strong class="jxr_keyword">if</strong> (isOptional())
-<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 			<strong class="jxr_keyword">return</strong> Utils.opt(getElementType().getOptionalDefault());
+<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 			<strong class="jxr_keyword">return</strong> opt(getElementType().getOptionalDefault());
 <a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 	}
 <a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 
@@ -1220,7 +1220,7 @@
 <a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 	<strong class="jxr_keyword">public</strong> &lt;T2&gt; Optional&lt;T2&gt; getProperty(String name, Function&lt;ClassMeta&lt;?&gt;,T2&gt; function) {
 <a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 		Optional&lt;T2&gt; t = (Optional&lt;T2&gt;)properties.get(name);
 <a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 			t = Utils.opt(function.apply(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 			t = opt(function.apply(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 			properties.put(name, t);
 <a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 		}
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 		<strong class="jxr_keyword">return</strong> t;
@@ -1289,7 +1289,7 @@
 <a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> <em class="jxr_javadoccomment">	 * 	this class.</em>
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 	<strong class="jxr_keyword">public</strong> ObjectSwap&lt;T,?&gt; getSwap(BeanSession session) {
-<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 		<strong class="jxr_keyword">if</strong> (swaps != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 		<strong class="jxr_keyword">if</strong> (nn(swaps)) {
 <a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 			<strong class="jxr_keyword">int</strong> matchQuant = 0, matchIndex = -1;
 <a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 
 <a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; swaps.length; i++) {
@@ -1341,7 +1341,7 @@
 <a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the inner class has the annotation.</em>
 <a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasAnnotation(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; a) {
-<a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> 		<strong class="jxr_keyword">return</strong> getLastAnnotation(a) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> 		<strong class="jxr_keyword">return</strong> nn(getLastAnnotation(a));
 <a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> 	}
 <a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> 
 <a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
@@ -1365,7 +1365,7 @@
 <a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class can be instantiated from the specified type.</em>
 <a class="jxr_linenumber" name="L1358" href="#L1358">1358</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasMutaterFrom(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> 		<strong class="jxr_keyword">return</strong> getFromMutater(c) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> 		<strong class="jxr_keyword">return</strong> nn(getFromMutater(c));
 <a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> 	}
 <a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> 
 <a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1375,7 +1375,7 @@
 <a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class can be instantiated from the specified type.</em>
 <a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasMutaterFrom(ClassMeta&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> 		<strong class="jxr_keyword">return</strong> getFromMutater(c.getInnerClass()) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> 		<strong class="jxr_keyword">return</strong> nn(getFromMutater(c.getInnerClass()));
 <a class="jxr_linenumber" name="L1371" href="#L1371">1371</a> 	}
 <a class="jxr_linenumber" name="L1372" href="#L1372">1372</a> 
 <a class="jxr_linenumber" name="L1373" href="#L1373">1373</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1385,7 +1385,7 @@
 <a class="jxr_linenumber" name="L1377" href="#L1377">1377</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class can be transformed to the specified type.</em>
 <a class="jxr_linenumber" name="L1378" href="#L1378">1378</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1379" href="#L1379">1379</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasMutaterTo(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> 		<strong class="jxr_keyword">return</strong> getToMutater(c) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> 		<strong class="jxr_keyword">return</strong> nn(getToMutater(c));
 <a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> 	}
 <a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> 
 <a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1395,7 +1395,7 @@
 <a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class can be transformed to the specified type.</em>
 <a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasMutaterTo(ClassMeta&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 		<strong class="jxr_keyword">return</strong> getToMutater(c.getInnerClass()) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 		<strong class="jxr_keyword">return</strong> nn(getToMutater(c.getInnerClass()));
 <a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 	}
 <a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 
 <a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1413,7 +1413,7 @@
 <a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class has a transform associated with it that allows it to be created from a String.</em>
 <a class="jxr_linenumber" name="L1406" href="#L1406">1406</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1407" href="#L1407">1407</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasStringMutater() {
-<a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> 		<strong class="jxr_keyword">return</strong> stringMutater != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> 		<strong class="jxr_keyword">return</strong> nn(stringMutater);
 <a class="jxr_linenumber" name="L1409" href="#L1409">1409</a> 	}
 <a class="jxr_linenumber" name="L1410" href="#L1410">1410</a> 
 <a class="jxr_linenumber" name="L1411" href="#L1411">1411</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1423,7 +1423,7 @@
 <a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class is an exact match for this metadata.</em>
 <a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> is(Class&lt;?&gt; value) {
-<a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 		<strong class="jxr_keyword">return</strong> Utils.eq(innerClass, value);
+<a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 		<strong class="jxr_keyword">return</strong> eq(innerClass, value);
 <a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 	}
 <a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 
 <a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1462,7 +1462,7 @@
 <a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class is a bean.</em>
 <a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isBean() { <strong class="jxr_keyword">return</strong> beanMeta != <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isBean() { <strong class="jxr_keyword">return</strong> nn(beanMeta); }
 <a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> 
 <a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this class is a subclass of {@link BeanMap}.</em>
@@ -1618,7 +1618,7 @@
 <a class="jxr_linenumber" name="L1610" href="#L1610">1610</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified object is an instance of this class.</em>
 <a class="jxr_linenumber" name="L1611" href="#L1611">1611</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1612" href="#L1612">1612</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isInstance(Object o) {
-<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 		<strong class="jxr_keyword">if</strong> (o != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> 		<strong class="jxr_keyword">if</strong> (nn(o))
 <a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> 			<strong class="jxr_keyword">return</strong> info.isParentOf(o.getClass()) || (isPrimitive() &amp;&amp; info.getPrimitiveWrapper() == o.getClass());
 <a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> 	}
@@ -1666,7 +1666,7 @@
 <a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class is a subclass of {@link Map} or it's a bean.</em>
 <a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isMapOrBean() { <strong class="jxr_keyword">return</strong> cc == MAP || cc == BEANMAP || beanMeta != <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isMapOrBean() { <strong class="jxr_keyword">return</strong> cc == MAP || cc == BEANMAP || nn(beanMeta); }
 <a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 
 <a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this class is an inner class.</em>
@@ -1851,10 +1851,10 @@
 <a class="jxr_linenumber" name="L1843" href="#L1843">1843</a> 		<strong class="jxr_keyword">if</strong> (isArray())
 <a class="jxr_linenumber" name="L1844" href="#L1844">1844</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(getInnerClass().getComponentType(), 0);
 <a class="jxr_linenumber" name="L1845" href="#L1845">1845</a> 		ConstructorInfo c = getConstructor();
-<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 		<strong class="jxr_keyword">if</strong> (c != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 		<strong class="jxr_keyword">if</strong> (nn(c))
 <a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;invoke();
 <a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 		InvocationHandler h = getProxyInvocationHandler();
-<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 		<strong class="jxr_keyword">if</strong> (h != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 		<strong class="jxr_keyword">if</strong> (nn(h))
 <a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader(), <strong class="jxr_keyword">new</strong> Class[] { getInnerClass(), java.io.Serializable.<strong class="jxr_keyword">class</strong> }, h);
 <a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 		<strong class="jxr_keyword">if</strong> (isArray())
 <a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(<strong class="jxr_keyword">this</strong>.elementType.innerClass, 0);
@@ -1904,7 +1904,7 @@
 <a class="jxr_linenumber" name="L1896" href="#L1896">1896</a> 		}
 <a class="jxr_linenumber" name="L1897" href="#L1897">1897</a> 
 <a class="jxr_linenumber" name="L1898" href="#L1898">1898</a> 		Method m = fromStringMethod;
-<a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 		<strong class="jxr_keyword">if</strong> (m != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 		<strong class="jxr_keyword">if</strong> (nn(m)) {
 <a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> 				<strong class="jxr_keyword">return</strong> (T)m.invoke(<strong class="jxr_keyword">null</strong>, arg);
 <a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -1912,7 +1912,7 @@
 <a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> 			}
 <a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> 		}
 <a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> 		ConstructorInfo c = stringConstructor;
-<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 		<strong class="jxr_keyword">if</strong> (c != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 		<strong class="jxr_keyword">if</strong> (nn(c)) {
 <a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 			<strong class="jxr_keyword">if</strong> (isMemberClass)
 <a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> 				<strong class="jxr_keyword">return</strong> c.&lt;T&gt;invoke(<strong class="jxr_keyword">outer</strong>, arg);
 <a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;invoke(arg);
@@ -1965,7 +1965,7 @@
 <a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A[] annotationArray(Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 		A[] array = (A[])annotationArrayMap.get(type);
-<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 		<strong class="jxr_keyword">if</strong> (array == <strong class="jxr_keyword">null</strong> &amp;&amp; beanContext != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 		<strong class="jxr_keyword">if</strong> (array == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(beanContext)) {
 <a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> 			List&lt;A&gt; l = list();
 <a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> 			info.forEachAnnotation(beanContext, type, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> 			array = (A[])Array.newInstance(type, l.size());
@@ -1984,7 +1984,7 @@
 <a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
 <a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForSwap(Class&lt;?&gt; normalClass) {
-<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> 		<strong class="jxr_keyword">if</strong> (childSwapMap != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> 		<strong class="jxr_keyword">if</strong> (nn(childSwapMap)) {
 <a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> 			ObjectSwap&lt;?,?&gt; s = childSwapMap.get(normalClass);
 <a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> 				<strong class="jxr_keyword">for</strong> (ObjectSwap&lt;?,?&gt; f : childSwaps)
@@ -1993,7 +1993,7 @@
 <a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 					s = ObjectSwap.NULL;
 <a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 				ObjectSwap&lt;?,?&gt; s2 = childSwapMap.putIfAbsent(normalClass, s);
-<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 				<strong class="jxr_keyword">if</strong> (s2 != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 				<strong class="jxr_keyword">if</strong> (nn(s2))
 <a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 					s = s2;
 <a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 			}
 <a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 			<strong class="jxr_keyword">if</strong> (s == ObjectSwap.NULL)
@@ -2011,7 +2011,7 @@
 <a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> <em class="jxr_javadoccomment">	 * @return The resolved {@link ObjectSwap} or &lt;jk&gt;null&lt;/jk&gt; if none were found.</em>
 <a class="jxr_linenumber" name="L2004" href="#L2004">2004</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> 	<strong class="jxr_keyword">protected</strong> ObjectSwap&lt;?,?&gt; getChildObjectSwapForUnswap(Class&lt;?&gt; swapClass) {
-<a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> 		<strong class="jxr_keyword">if</strong> (childUnswapMap != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> 		<strong class="jxr_keyword">if</strong> (nn(childUnswapMap)) {
 <a class="jxr_linenumber" name="L2007" href="#L2007">2007</a> 			ObjectSwap&lt;?,?&gt; s = childUnswapMap.get(swapClass);
 <a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> 				<strong class="jxr_keyword">for</strong> (ObjectSwap&lt;?,?&gt; f : childSwaps)
@@ -2020,7 +2020,7 @@
 <a class="jxr_linenumber" name="L2012" href="#L2012">2012</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2013" href="#L2013">2013</a> 					s = ObjectSwap.NULL;
 <a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> 				ObjectSwap&lt;?,?&gt; s2 = childUnswapMap.putIfAbsent(swapClass, s);
-<a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> 				<strong class="jxr_keyword">if</strong> (s2 != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> 				<strong class="jxr_keyword">if</strong> (nn(s2))
 <a class="jxr_linenumber" name="L2016" href="#L2016">2016</a> 					s = s2;
 <a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> 			}
 <a class="jxr_linenumber" name="L2018" href="#L2018">2018</a> 			<strong class="jxr_keyword">if</strong> (s == ObjectSwap.NULL)
@@ -2040,7 +2040,7 @@
 <a class="jxr_linenumber" name="L2032" href="#L2032">2032</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class or any child classes has a {@link ObjectSwap} associated with it.</em>
 <a class="jxr_linenumber" name="L2033" href="#L2033">2033</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2034" href="#L2034">2034</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> hasChildSwaps() {
-<a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> 		<strong class="jxr_keyword">return</strong> childSwaps != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> 		<strong class="jxr_keyword">return</strong> nn(childSwaps);
 <a class="jxr_linenumber" name="L2036" href="#L2036">2036</a> 	}
 <a class="jxr_linenumber" name="L2037" href="#L2037">2037</a> 
 <a class="jxr_linenumber" name="L2038" href="#L2038">2038</a> 	<em class="jxr_javadoccomment">/**</em>

@@ -286,7 +286,7 @@
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		isSize(tests.length);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = length(); i &lt; j; i++) {
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">var</strong> t = tests[i];
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">if</strong> (t != <strong class="jxr_keyword">null</strong> &amp;&amp; !t.test(at(i)))
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">if</strong> (nn(t) &amp;&amp; !t.test(at(i)))
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 				<strong class="jxr_keyword">throw</strong> error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		}
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">return</strong> returns();
@@ -331,7 +331,7 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<strong class="jxr_keyword">public</strong> R isContains(E entry) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = length(); i &lt; j; i++)
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">if</strong> (Utils.eq(at(i), entry))
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">if</strong> (eq(at(i), entry))
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 				<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">throw</strong> error(MSG_arrayDidNotContainExpectedValue, entry, toString());
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
@@ -371,7 +371,7 @@
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">public</strong> R isNotContains(E entry) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = length(); i &lt; j; i++)
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">if</strong> (Utils.eq(at(i), entry))
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">if</strong> (eq(at(i), entry))
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">throw</strong> error(MSG_arrayContainedUnexpectedValue, entry, toString());
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 	}
@@ -445,7 +445,7 @@
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<strong class="jxr_keyword">private</strong> List&lt;E&gt; toList() {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">return</strong> valueIsNull() ? <strong class="jxr_keyword">null</strong> : Utils.list(value());
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">return</strong> valueIsNull() ? <strong class="jxr_keyword">null</strong> : list(value());
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<strong class="jxr_keyword">private</strong> List&lt;E&gt; toSortedList(Comparator&lt;E&gt; comparator) {

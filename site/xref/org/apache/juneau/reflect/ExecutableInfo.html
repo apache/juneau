@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; java.util.function.Predicate&lt;Object&gt; andType(Class&lt;T&gt; type, java.util.function.Predicate&lt;? <strong class="jxr_keyword">super</strong> T&gt; predicate) {
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		java.util.function.Predicate&lt;Object&gt; p = type::isInstance;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (predicate != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (nn(predicate)) {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			p = p.and(o -&gt; predicate.test(type.<strong class="jxr_keyword">cast</strong>(o)));
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">return</strong> p;
@@ -227,7 +227,7 @@
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		ClassInfo dc = declaringClass;
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		Package p = dc.getPackage();
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">if</strong> (nn(p))
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 			sb.append(p.getName()).append('.');
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 		dc.appendShortName(sb);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">if</strong> (! isConstructor)
@@ -785,7 +785,7 @@
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> setAccessible() {
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 			<strong class="jxr_keyword">if</strong> (e != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 			<strong class="jxr_keyword">if</strong> (nn(e))
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 				e.setAccessible(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) SecurityException e) {

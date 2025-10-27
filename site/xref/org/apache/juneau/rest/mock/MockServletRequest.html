@@ -136,59 +136,59 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			MockRestRequest mreq = (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)req;
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			mreq.getAttributeMap().forEach(<strong class="jxr_keyword">this</strong>::attribute);
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			mreq.getRequestDispatcherMap().forEach(<strong class="jxr_keyword">this</strong>::requestDispatcher);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">if</strong> (mreq.getCharacterEncoding() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getCharacterEncoding()))
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 				characterEncoding(mreq.getCharacterEncoding());
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">if</strong> (mreq.getProtocol() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getProtocol()))
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 				protocol(mreq.getProtocol());
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">if</strong> (mreq.getScheme() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getScheme()))
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 				scheme(mreq.getScheme());
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">if</strong> (mreq.getServerName() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getServerName()))
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 				serverName(mreq.getServerName());
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">if</strong> (mreq.getRemoteAddr() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getRemoteAddr()))
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 				remoteAddr(mreq.getRemoteAddr());
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">if</strong> (mreq.getRemoteHost() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getRemoteHost()))
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 				remoteHost(mreq.getRemoteHost());
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">if</strong> (mreq.getLocalName() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getLocalName()))
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 				localName(mreq.getLocalName());
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">if</strong> (mreq.getLocalAddr() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getLocalAddr()))
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 				localAddr(mreq.getLocalAddr());
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">if</strong> (mreq.getPathInfo() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getPathInfo()))
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				pathInfo(mreq.getPathInfo());
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">if</strong> (mreq.getPathTranslated() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getPathTranslated()))
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				pathTranslated(mreq.getPathTranslated());
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">if</strong> (mreq.getContextPath() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getContextPath()))
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				contextPath(mreq.getContextPath());
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">if</strong> (mreq.getQueryString() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getQueryString()))
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 				queryString(mreq.getQueryString());
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">if</strong> (mreq.getRemoteUser() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getRemoteUser()))
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 				remoteUser(mreq.getRemoteUser());
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">if</strong> (mreq.getRequestedSessionId() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getRequestedSessionId()))
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 				requestedSessionId(mreq.getRequestedSessionId());
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">if</strong> (mreq.getRequestURI() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getRequestURI()))
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				requestURI(mreq.getRequestURI());
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">if</strong> (mreq.getServletPath() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getServletPath()))
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				servletPath(mreq.getServletPath());
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">if</strong> (mreq.getAuthType() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getAuthType()))
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 				authType(mreq.getAuthType());
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">if</strong> (mreq.getServerPort() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getServerPort()))
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 				serverPort(mreq.getServerPort());
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">if</strong> (mreq.getRemotePort() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getRemotePort()))
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				remotePort(mreq.getRemotePort());
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">if</strong> (mreq.getLocalPort() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getLocalPort()))
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 				localPort(mreq.getLocalPort());
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">if</strong> (mreq.getLocale() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getLocale()))
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 				locale(mreq.getLocale());
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">if</strong> (mreq.getServletContext() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getServletContext()))
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 				servletContext(mreq.getServletContext());
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">if</strong> (mreq.getDispatcherType() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getDispatcherType()))
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 				dispatcherType(mreq.getDispatcherType());
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">if</strong> (mreq.getCookies() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getCookies()))
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 				cookies(mreq.getCookies());
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">if</strong> (mreq.getUserPrincipal() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getUserPrincipal()))
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 				userPrincipal(mreq.getUserPrincipal());
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">if</strong> (mreq.getHttpSession() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getHttpSession()))
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 				httpSession(mreq.getHttpSession());
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">if</strong> (mreq.getRoles() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">if</strong> (nn(mreq.getRoles()))
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				roles(mreq.getRoles());
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		}
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
@@ -264,7 +264,7 @@
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 				<strong class="jxr_keyword">this</strong>.content = readBytes((InputStream)value);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof CharSequence)
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 				<strong class="jxr_keyword">this</strong>.content = ((CharSequence)value).toString().getBytes();
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(value))
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 				<strong class="jxr_keyword">this</strong>.content = value.toString().getBytes();
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
@@ -363,7 +363,7 @@
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletRequest */</em>
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<strong class="jxr_keyword">public</strong> ServletInputStream getInputStream() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">if</strong> (formDataMap != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">if</strong> (nn(formDataMap))
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 			content = UrlEncodingSerializer.DEFAULT.toString(formDataMap).getBytes();
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BoundedServletInputStream" href="../../../../../org/apache/juneau/rest/util/BoundedServletInputStream.html#BoundedServletInputStream">BoundedServletInputStream</a>(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(content), Integer.MAX_VALUE);
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 	}
@@ -546,7 +546,7 @@
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<strong class="jxr_keyword">public</strong> <a name="MockServletRequest" href="../../../../../org/apache/juneau/rest/mock/MockServletRequest.html#MockServletRequest">MockServletRequest</a> header(String name, Object value) {
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">if</strong> (nn(value)) {
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 			String[] v1 = (value instanceof String[]) ? (String[])value : <strong class="jxr_keyword">new</strong> String[] { value.toString() };
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 			String[] v2 = headerMap.get(name);
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 			String[] v3 = ArrayUtils.combine(v2, v1);
@@ -698,7 +698,7 @@
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> <em class="jxr_javadoccomment">	 * @see MockRestClient.Builder#pathVars(Map)</em>
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 	<strong class="jxr_keyword">public</strong> <a name="MockServletRequest" href="../../../../../org/apache/juneau/rest/mock/MockServletRequest.html#MockServletRequest">MockServletRequest</a> pathVars(Map&lt;String,String&gt; pathVars) {
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		<strong class="jxr_keyword">if</strong> (pathVars != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		<strong class="jxr_keyword">if</strong> (nn(pathVars))
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> 			<strong class="jxr_keyword">this</strong>.attributeMap.put(<span class="jxr_string">"juneau.pathVars"</span>, <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;(pathVars));
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 	}

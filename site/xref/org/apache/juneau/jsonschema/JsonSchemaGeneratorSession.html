@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaGeneratorSession" href="../../../../org/apache/juneau/jsonschema/JsonSchemaGeneratorSession.html#JsonSchemaGeneratorSession">JsonSchemaGeneratorSession</a> addBeanDef(String id, <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> def) {
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">if</strong> (defs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">if</strong> (nn(defs))
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 			defs.put(id, def);
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
@@ -299,7 +299,7 @@
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">boolean</strong> canAdd = isAllowNestedExamples() || ! exampleAdded;
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">if</strong> (canAdd &amp;&amp; (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 			Object example = sType.getExample(<strong class="jxr_keyword">this</strong>, jpSession());
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">if</strong> (example != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">if</strong> (nn(example)) {
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 					<strong class="jxr_keyword">return</strong> JsonParser.DEFAULT.parse(toJson(example), Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 				} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
@@ -310,7 +310,7 @@
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span>, <span class="jxr_string">"null"</span> })
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> getSchema(ClassMeta&lt;?&gt; eType, String attrName, String[] pNames, <strong class="jxr_keyword">boolean</strong> exampleAdded, <strong class="jxr_keyword">boolean</strong> descriptionAdded, <a name="JsonSchemaBeanPropertyMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaBeanPropertyMeta.html#JsonSchemaBeanPropertyMeta">JsonSchemaBeanPropertyMeta</a> jsbpm)
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">throws</strong> BeanRecursionException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 
@@ -347,7 +347,7 @@
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 		JsonSchemaClassMeta jscm = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 		ClassMeta objectSwapCM = objectSwap == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : getClassMeta(objectSwap.getClass());
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">if</strong> (objectSwapCM != <strong class="jxr_keyword">null</strong> &amp;&amp; objectSwapCM.hasAnnotation(Schema.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">if</strong> (nn(objectSwapCM) &amp;&amp; objectSwapCM.hasAnnotation(Schema.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 			jscm = getJsonSchemaClassMeta(objectSwapCM);
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">if</strong> (jscm == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 			jscm = getJsonSchemaClassMeta(sType);
@@ -404,7 +404,7 @@
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 		}
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<em class="jxr_comment">// Add info from @Schema on bean property.</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">if</strong> (jsbpm != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">if</strong> (nn(jsbpm)) {
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 			out.append(jsbpm.getSchema());
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		}
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 
@@ -414,17 +414,17 @@
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		out.appendIfAbsentIf(ne, <span class="jxr_string">"type"</span>, type);
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 		out.appendIfAbsentIf(ne, <span class="jxr_string">"format"</span>, format);
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">if</strong> (aType != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">if</strong> (nn(aType)) {
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 			example = getExample(sType, tc, exampleAdded);
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 			description = getDescription(sType, tc, descriptionAdded);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			exampleAdded |= example != <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			descriptionAdded |= description != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			exampleAdded |= nn(example);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			descriptionAdded |= nn(description);
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">if</strong> (tc == BEAN) {
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 				JsonMap properties = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 				BeanMeta bm = getBeanMeta(sType.getInnerClass());
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 				<strong class="jxr_keyword">if</strong> (pNames != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 				<strong class="jxr_keyword">if</strong> (nn(pNames))
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 					bm = <strong class="jxr_keyword">new</strong> <a name="BeanMetaFiltered" href="../../../../org/apache/juneau/BeanMetaFiltered.html#BeanMetaFiltered">BeanMetaFiltered</a>(bm, pNames);
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 				<strong class="jxr_keyword">for</strong> (Iterator&lt;BeanPropertyMeta&gt; i = bm.getPropertyMetas().iterator(); i.hasNext();) {
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 					BeanPropertyMeta p = i.next();

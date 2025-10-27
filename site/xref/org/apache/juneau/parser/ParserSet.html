@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Builder beanContext(Consumer&lt;BeanContext.Builder&gt; operation) {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">if</strong> (bcBuilder != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">if</strong> (nn(bcBuilder))
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 				operation.accept(bcBuilder);
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		}
@@ -382,10 +382,10 @@
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Parser.Builder) {
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 				Parser.Builder x = (Parser.Builder)o;
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 				Parser.Builder x2 = x.copy();
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 				<strong class="jxr_keyword">if</strong> (Utils.ne(x.getClass(), x2.getClass()))
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 				<strong class="jxr_keyword">if</strong> (ne(x.getClass(), x2.getClass()))
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Copy method not implemented on class {0}"</span>, x.getClass().getName());
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 				x = x2;
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<strong class="jxr_keyword">if</strong> (bcBuilder != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<strong class="jxr_keyword">if</strong> (nn(bcBuilder))
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 					x.beanContext(bcBuilder);
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 				<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			}
@@ -397,13 +397,13 @@
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 				<em class="jxr_comment">// Check for no-arg constructor.</em>
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 				ConstructorInfo ci = ClassInfo.of((Class&lt;?&gt;)o).getPublicConstructor(ConstructorInfo::hasNoParams);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 				<strong class="jxr_keyword">if</strong> (ci != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 				<strong class="jxr_keyword">if</strong> (nn(ci))
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 					<strong class="jxr_keyword">return</strong> ci.invoke();
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 				<em class="jxr_comment">// Check for builder.</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 				@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 				Parser.Builder b = Parser.createParserBuilder((Class&lt;? <strong class="jxr_keyword">extends</strong> Parser&gt;)o);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 				<strong class="jxr_keyword">if</strong> (bcBuilder != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 				<strong class="jxr_keyword">if</strong> (nn(bcBuilder))
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 					b.beanContext(bcBuilder);
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 				o = b;
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 			}
@@ -491,8 +491,8 @@
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 			});
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 		}
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">this</strong>.mediaTypes = Utils.array(lmt, MediaType.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">this</strong>.mediaTypeParsers = Utils.array(l, Parser.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">this</strong>.mediaTypes = array(lmt, MediaType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">this</strong>.mediaTypeParsers = array(l, Parser.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 	}
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -547,7 +547,7 @@
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<strong class="jxr_keyword">public</strong> <a name="ParserMatch" href="../../../../org/apache/juneau/parser/ParserMatch.html#ParserMatch">ParserMatch</a> getParserMatch(String contentTypeHeader) {
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		ParserMatch pm = cache.get(contentTypeHeader);
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">if</strong> (pm != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">if</strong> (nn(pm))
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">return</strong> pm;
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 		MediaType ct = MediaType.of(contentTypeHeader);

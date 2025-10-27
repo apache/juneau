@@ -1585,13 +1585,13 @@
 <a class="jxr_linenumber" name="L1577" href="#L1577">1577</a> 		}
 <a class="jxr_linenumber" name="L1578" href="#L1578">1578</a> 
 <a class="jxr_linenumber" name="L1579" href="#L1579">1579</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; merge(List&lt;String&gt; old, String[] newValues) {
-<a class="jxr_linenumber" name="L1580" href="#L1580">1580</a> 			List&lt;String&gt; x = Utils.listOfSize(newValues.length);
+<a class="jxr_linenumber" name="L1580" href="#L1580">1580</a> 			List&lt;String&gt; x = listOfSize(newValues.length);
 <a class="jxr_linenumber" name="L1581" href="#L1581">1581</a> 			<strong class="jxr_keyword">for</strong> (String s : newValues) {
 <a class="jxr_linenumber" name="L1582" href="#L1582">1582</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"NONE"</span>.equals(s)) {
-<a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> 					<strong class="jxr_keyword">if</strong> (old != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> 					<strong class="jxr_keyword">if</strong> (nn(old))
 <a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> 						old.clear();
 <a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"INHERIT"</span>.equals(s)) {
-<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> 					<strong class="jxr_keyword">if</strong> (old != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> 					<strong class="jxr_keyword">if</strong> (nn(old))
 <a class="jxr_linenumber" name="L1587" href="#L1587">1587</a> 						x.addAll(old);
 <a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> 					x.add(s);
@@ -1601,13 +1601,13 @@
 <a class="jxr_linenumber" name="L1593" href="#L1593">1593</a> 		}
 <a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> 
 <a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; mergeNavLinks(List&lt;String&gt; old, String[] newValues) {
-<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> 			List&lt;String&gt; x = Utils.listOfSize(newValues.length);
+<a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> 			List&lt;String&gt; x = listOfSize(newValues.length);
 <a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> 			<strong class="jxr_keyword">for</strong> (String s : newValues) {
 <a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"NONE"</span>.equals(s)) {
-<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> 					<strong class="jxr_keyword">if</strong> (old != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> 					<strong class="jxr_keyword">if</strong> (nn(old))
 <a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> 						old.clear();
 <a class="jxr_linenumber" name="L1601" href="#L1601">1601</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"INHERIT"</span>.equals(s)) {
-<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 					<strong class="jxr_keyword">if</strong> (old != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1602" href="#L1602">1602</a> 					<strong class="jxr_keyword">if</strong> (nn(old))
 <a class="jxr_linenumber" name="L1603" href="#L1603">1603</a> 						x.addAll(old);
 <a class="jxr_linenumber" name="L1604" href="#L1604">1604</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (s.indexOf('[') != -1 &amp;&amp; INDEXED_LINK_PATTERN.matcher(s).matches()) {
 <a class="jxr_linenumber" name="L1605" href="#L1605">1605</a> 					Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
@@ -1658,15 +1658,15 @@
 <a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlDocSerializer" href="../../../../org/apache/juneau/html/HtmlDocSerializer.html#HtmlDocSerializer">HtmlDocSerializer</a>(Builder builder) {
 <a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 		<strong class="jxr_keyword">super</strong>(builder);
-<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 		style = builder.style != <strong class="jxr_keyword">null</strong> ? toArray(builder.style) : EMPTY_ARRAY;
-<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 		stylesheet = builder.stylesheet != <strong class="jxr_keyword">null</strong> ? toArray(builder.stylesheet) : EMPTY_ARRAY;
-<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 		script = builder.script != <strong class="jxr_keyword">null</strong> ? toArray(builder.script) : EMPTY_ARRAY;
-<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 		head = builder.head != <strong class="jxr_keyword">null</strong> ? toArray(builder.head) : EMPTY_ARRAY;
-<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 		header = builder.header != <strong class="jxr_keyword">null</strong> ? toArray(builder.header) : EMPTY_ARRAY;
-<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 		nav = builder.nav != <strong class="jxr_keyword">null</strong> ? toArray(builder.nav) : EMPTY_ARRAY;
-<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 		aside = builder.aside != <strong class="jxr_keyword">null</strong> ? toArray(builder.aside) : EMPTY_ARRAY;
-<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 		footer = builder.footer != <strong class="jxr_keyword">null</strong> ? toArray(builder.footer) : EMPTY_ARRAY;
-<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 		navlinks = builder.navlinks != <strong class="jxr_keyword">null</strong> ? toArray(builder.navlinks) : EMPTY_ARRAY;
+<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 		style = nn(builder.style) ? toArray(builder.style) : EMPTY_ARRAY;
+<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 		stylesheet = nn(builder.stylesheet) ? toArray(builder.stylesheet) : EMPTY_ARRAY;
+<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 		script = nn(builder.script) ? toArray(builder.script) : EMPTY_ARRAY;
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 		head = nn(builder.head) ? toArray(builder.head) : EMPTY_ARRAY;
+<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 		header = nn(builder.header) ? toArray(builder.header) : EMPTY_ARRAY;
+<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 		nav = nn(builder.nav) ? toArray(builder.nav) : EMPTY_ARRAY;
+<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 		aside = nn(builder.aside) ? toArray(builder.aside) : EMPTY_ARRAY;
+<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 		footer = nn(builder.footer) ? toArray(builder.footer) : EMPTY_ARRAY;
+<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 		navlinks = nn(builder.navlinks) ? toArray(builder.navlinks) : EMPTY_ARRAY;
 <a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 		asideFloat = builder.asideFloat;
 <a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 		noResultsMessage = builder.noResultsMessage;
 <a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 		nowrap = builder.nowrap;
@@ -1677,7 +1677,7 @@
 <a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 		templateBean = newInstance(template);
 <a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 		widgetMap = <strong class="jxr_keyword">new</strong> <a name="HtmlWidgetMap" href="../../../../org/apache/juneau/html/HtmlWidgetMap.html#HtmlWidgetMap">HtmlWidgetMap</a>();
 <a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 		widgets.stream().map(<strong class="jxr_keyword">this</strong>::newInstance).forEach(x -&gt; widgetMap.append(x));
-<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 		widgetArray = Utils.array(widgetMap.values(), HtmlWidget.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 		widgetArray = array(widgetMap.values(), HtmlWidget.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 	}
 <a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 
 <a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>

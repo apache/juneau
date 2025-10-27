@@ -174,7 +174,7 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<strong class="jxr_keyword">public</strong> <a name="Thrown" href="../../../../../org/apache/juneau/http/header/Thrown.html#Thrown">Thrown</a>(String value) {
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">super</strong>(NAME, value);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		List&lt;Part&gt; l = Utils.list();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		List&lt;Part&gt; l = list();
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		StringUtils.split(value, x -&gt; l.add(<strong class="jxr_keyword">new</strong> Part(x)));
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">this</strong>.value = value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : u(l);
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
@@ -185,7 +185,7 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * @return The class name portion of the header, or &lt;jk&gt;null&lt;/jk&gt; if not there.</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;List&lt;Part&gt;&gt; asParts() {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">return</strong> Utils.opt(value);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">return</strong> opt(value);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> }
 </pre>

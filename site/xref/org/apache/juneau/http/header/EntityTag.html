@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If attempting to set an invalid entity tag value.</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="EntityTag" href="../../../../../org/apache/juneau/http/header/EntityTag.html#EntityTag">EntityTag</a> of(Object value) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		Object o = Utils.unwrap(value);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		Object o = unwrap(value);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">return</strong> o == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> <a name="EntityTag" href="../../../../../org/apache/juneau/http/header/EntityTag.html#EntityTag">EntityTag</a>(o.toString());
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
