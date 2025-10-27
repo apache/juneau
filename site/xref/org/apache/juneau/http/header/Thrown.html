@@ -95,7 +95,7 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">		 * @param value The throwable to create the header part value from.</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">public</strong> Part(Throwable value) {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">this</strong>.className = ClassUtils.className(value);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">this</strong>.className = cn(value);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">this</strong>.message = value.getMessage();
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			<strong class="jxr_keyword">this</strong>.value = urlEncode(className) + ';' + urlEncode(value.getMessage());
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		}

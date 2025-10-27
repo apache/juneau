@@ -353,7 +353,7 @@
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		ClassMeta&lt;T&gt; cm = req.getBeanSession().getClassMeta(type);
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		String name = HttpParts.getName(QUERY, cm).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"@Query(name) not found on class {0}"</span>, ClassUtils.className(type)));
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		String name = HttpParts.getName(QUERY, cm).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"@Query(name) not found on class {0}"</span>, cn(type)));
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">return</strong> get(name).as(type);
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 

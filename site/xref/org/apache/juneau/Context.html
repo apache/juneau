@@ -662,7 +662,7 @@
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 				);
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 				<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 				<strong class="jxr_keyword">if</strong> (cci == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Public constructor not found: {0}({1})"</span>, ClassUtils.className(type), ClassUtils.className(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Public constructor not found: {0}({1})"</span>, cn(type), cn(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 				CONTEXT_CONSTRUCTORS.put(type, cci);
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 			}
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 			<strong class="jxr_keyword">return</strong> cci;
@@ -808,7 +808,7 @@
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> 				}
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Invalid annotation @{0} used in BEAN_annotations property."</span>, ClassUtils.className(a));
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Invalid annotation @{0} used in BEAN_annotations property."</span>, cn(a));
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 			}
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 		});
 <a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<strong class="jxr_keyword">this</strong>.annotationMap = rmb.build();

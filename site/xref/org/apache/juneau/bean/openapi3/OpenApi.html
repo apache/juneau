@@ -257,7 +257,7 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ObjectRest(<strong class="jxr_keyword">this</strong>).get(ref.substring(1), c);
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e, c, <span class="jxr_string">"Reference ''{0}'' could not be converted to type ''{1}''."</span>, ref, ClassUtils.className(c));
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e, c, <span class="jxr_string">"Reference ''{0}'' could not be converted to type ''{1}''."</span>, ref, cn(c));
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		}
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 

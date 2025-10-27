@@ -149,14 +149,14 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			context.get().postInitChildFirst();
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		} <strong class="jxr_keyword">catch</strong> (ServletException e) {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			initException.set(e);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			log(SEVERE, e, <span class="jxr_string">"Servlet init error on class ''{0}''"</span>, ClassUtils.className(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			log(SEVERE, e, <span class="jxr_string">"Servlet init error on class ''{0}''"</span>, cn(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> e) {
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			initException.set(e);
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			log(SEVERE, e, <span class="jxr_string">"Servlet init error on class ''{0}''"</span>, ClassUtils.className(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			log(SEVERE, e, <span class="jxr_string">"Servlet init error on class ''{0}''"</span>, cn(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			initException.set(<strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e));
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			log(SEVERE, e, <span class="jxr_string">"Servlet init error on class ''{0}''"</span>, ClassUtils.className(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			log(SEVERE, e, <span class="jxr_string">"Servlet init error on class ''{0}''"</span>, cn(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		}
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">throw</strong> initException.get();
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">if</strong> (context.get() == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 					<span class="jxr_string">"Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig)."</span>, ClassUtils.className(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 					<span class="jxr_string">"Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig)."</span>, cn(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			getContext().execute(<strong class="jxr_keyword">this</strong>, r1, r2);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable e) {
@@ -227,7 +227,7 @@
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		RestContext c = context.get();
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		Logger logger = c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : c.getLogger();
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">if</strong> (logger == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			logger = Logger.getLogger(ClassUtils.className(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			logger = Logger.getLogger(cn(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 		logger.log(level, cause, msg);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 

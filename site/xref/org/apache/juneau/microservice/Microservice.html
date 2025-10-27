@@ -432,7 +432,7 @@
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (value instanceof Class clazz)
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 				<strong class="jxr_keyword">this</strong>.manifest = <strong class="jxr_keyword">new</strong> <a name="ManifestFile" href="../../../../org/apache/juneau/utils/ManifestFile.html#ManifestFile">ManifestFile</a>(clazz);
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid type passed to Builder.manifest(Object).  Type=[{0}]"</span>, ClassUtils.className(value));
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid type passed to Builder.manifest(Object).  Type=[{0}]"</span>, cn(value));
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		}

@@ -244,7 +244,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 				doClose = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			}
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Cannot convert object of type "</span> + ClassUtils.className(input) + <span class="jxr_string">" to an InputStream."</span>);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Cannot convert object of type "</span> + cn(input) + <span class="jxr_string">" to an InputStream."</span>);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		}
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">return</strong> inputStream;
@@ -323,7 +323,7 @@
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			}
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			doClose = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Cannot convert object of type "</span> + ClassUtils.className(input) + <span class="jxr_string">" to an InputStream."</span>);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Cannot convert object of type "</span> + cn(input) + <span class="jxr_string">" to an InputStream."</span>);
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		}
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">return</strong> reader;
