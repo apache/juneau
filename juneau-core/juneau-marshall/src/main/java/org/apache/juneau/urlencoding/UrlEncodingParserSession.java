@@ -17,6 +17,7 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.common.utils.StateEnum.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -221,9 +222,9 @@ public class UrlEncodingParserSession extends UonParserSession {
 		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
-		if (builder != null)
+		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
-		else if (swap != null)
+		else if (nn(swap))
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
@@ -247,7 +248,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance() ? (Map)sType.newInstance() : newGenericMap(sType));
 			o = parseIntoMap2(r, m, sType, m);
-		} else if (builder != null) {
+		} else if (nn(builder)) {
 			BeanMap m = toBeanMap(builder.create(this, eType));
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : builder.build(this, m.getBean(), eType);
@@ -275,19 +276,19 @@ public class UrlEncodingParserSession extends UonParserSession {
 				o = cast(m, null, eType);
 			else if (m.containsKey("_value"))
 				o = convertToType(m.get("_value"), sType);
-			else if (sType.getProxyInvocationHandler() != null) {
+			else if (nn(sType.getProxyInvocationHandler())) {
 				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 			} else {
-				if (sType.getNotABeanReason() != null)
+				if (nn(sType.getNotABeanReason()))
 					throw new ParseException(this, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());
 				throw new ParseException(this, "Malformed application/x-www-form-urlencoded input for class ''{0}''.", sType);
 			}
 		}
 
-		if (swap != null && o != null)
+		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (outer != null)
+		if (nn(outer))
 			setParent(eType, o, outer);
 
 		return (T)o;

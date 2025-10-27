@@ -168,7 +168,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return This object.
 	 */
 	public JsonSchemaGeneratorSession addBeanDef(String id, JsonMap def) {
-		if (defs != null)
+		if (nn(defs))
 			defs.put(id, def);
 		return this;
 	}
@@ -291,7 +291,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		boolean canAdd = isAllowNestedExamples() || ! exampleAdded;
 		if (canAdd && (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
 			Object example = sType.getExample(this, jpSession());
-			if (example != null) {
+			if (nn(example)) {
 				try {
 					return JsonParser.DEFAULT.parse(toJson(example), Object.class);
 				} catch (ParseException e) {
@@ -302,7 +302,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		return null;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "null" })
 	private JsonMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
 		throws BeanRecursionException, SerializeException {
 
@@ -339,7 +339,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		JsonSchemaClassMeta jscm = null;
 		ClassMeta objectSwapCM = objectSwap == null ? null : getClassMeta(objectSwap.getClass());
-		if (objectSwapCM != null && objectSwapCM.hasAnnotation(Schema.class))
+		if (nn(objectSwapCM) && objectSwapCM.hasAnnotation(Schema.class))
 			jscm = getJsonSchemaClassMeta(objectSwapCM);
 		if (jscm == null)
 			jscm = getJsonSchemaClassMeta(sType);
@@ -396,7 +396,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		}
 
 		// Add info from @Schema on bean property.
-		if (jsbpm != null) {
+		if (nn(jsbpm)) {
 			out.append(jsbpm.getSchema());
 		}
 
@@ -406,17 +406,17 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		out.appendIfAbsentIf(ne, "type", type);
 		out.appendIfAbsentIf(ne, "format", format);
 
-		if (aType != null) {
+		if (nn(aType)) {
 
 			example = getExample(sType, tc, exampleAdded);
 			description = getDescription(sType, tc, descriptionAdded);
-			exampleAdded |= example != null;
-			descriptionAdded |= description != null;
+			exampleAdded |= nn(example);
+			descriptionAdded |= nn(description);
 
 			if (tc == BEAN) {
 				JsonMap properties = new JsonMap();
 				BeanMeta bm = getBeanMeta(sType.getInnerClass());
-				if (pNames != null)
+				if (nn(pNames))
 					bm = new BeanMetaFiltered(bm, pNames);
 				for (Iterator<BeanPropertyMeta> i = bm.getPropertyMetas().iterator(); i.hasNext();) {
 					BeanPropertyMeta p = i.next();

@@ -51,7 +51,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 
 		Object output = res.getContent(Object.class);
 
-		if (output == null || ! (output.getClass().getAnnotation(Response.class) != null || res.getResponseBeanMeta() != null))
+		if (output == null || ! (nn(output.getClass().getAnnotation(Response.class)) || nn(res.getResponseBeanMeta())))
 			return NEXT;
 
 		ResponseBeanMeta rm = res.getResponseBeanMeta();
@@ -59,7 +59,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 			rm = req.getOpContext().getResponseBeanMeta(output);
 
 		ResponseBeanPropertyMeta stm = rm.getStatusMethod();
-		if (stm != null) {
+		if (nn(stm)) {
 			try {
 				res.setStatus((int)stm.getGetter().invoke(output));
 			} catch (Exception e) {
@@ -108,7 +108,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 
 		ResponseBeanPropertyMeta bm = rm.getContentMethod();
 
-		if (bm != null) {
+		if (nn(bm)) {
 			Method m = bm.getGetter();
 			try {
 				Class<?>[] pt = m.getParameterTypes();

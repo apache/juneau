@@ -133,11 +133,11 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 				ClassInfo rt = m.getReturnType();
 
 				MethodInfo mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt));
-				if (mi != null)
+				if (nn(mi))
 					return new AutoNumberSwap(bc, ci, m, mi, null);
 
 				ConstructorInfo cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt));
-				if (cs != null)
+				if (nn(cs))
 					return new AutoNumberSwap(bc, ci, m, null, cs);
 
 				return new AutoNumberSwap(bc, ci, m, null, null);
@@ -200,6 +200,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	private final Constructor<?> unswapConstructor;
 	private final Class<?> unswapType;
 
+	@SuppressWarnings("null")
 	private AutoNumberSwap(BeanContext bc, ClassInfo ci, MethodInfo swapMethod, MethodInfo unswapMethod, ConstructorInfo unswapConstructor) {
 		super(ci.inner(), swapMethod.inner().getReturnType());
 		this.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.inner());
@@ -207,11 +208,11 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());
 
 		Class<?> unswapType = null;
-		if (unswapMethod != null) {
+		if (nn(unswapMethod)) {
 			for (ParamInfo pi : unswapMethod.getParams())
 				if (! pi.getParameterType().is(BeanSession.class))
 					unswapType = pi.getParameterType().getWrapperIfPrimitive();
-		} else if (unswapConstructor != null) {
+		} else if (nn(unswapConstructor)) {
 			for (ParamInfo pi : unswapConstructor.getParams())
 				if (! pi.getParameterType().is(BeanSession.class))
 					unswapType = pi.getParameterType().getWrapperIfPrimitive();
@@ -235,9 +236,9 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			throw new ParseException("No unparse methodology found for object.");
 		try {
 			Object o2 = ConverterUtils.toType(o, unswapType);
-			if (unswapMethod != null)
+			if (nn(unswapMethod))
 				return (T)unswapMethod.invoke(null, getMatchingArgs(unswapMethod.getParameterTypes(), session, o2));
-			if (unswapConstructor != null)
+			if (nn(unswapConstructor))
 				return (T)unswapConstructor.newInstance(o2);
 			return super.unswap(session, o, hint);
 		} catch (Exception e) {

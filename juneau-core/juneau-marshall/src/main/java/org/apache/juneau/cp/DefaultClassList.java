@@ -102,7 +102,7 @@ public class DefaultClassList {
 	public <T> Optional<Class<? extends T>> get(Class<T> type) {
 		assertArgNotNull("type", type);
 		for (Class<?> e : entries)
-			if (e != null && type.isAssignableFrom(e))
+			if (nn(e) && type.isAssignableFrom(e))
 				return Utils.opt((Class<? extends T>)e);
 		return Utils.opte();
 	}

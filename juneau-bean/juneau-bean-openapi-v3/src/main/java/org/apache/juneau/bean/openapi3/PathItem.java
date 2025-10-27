@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -228,18 +229,18 @@ public class PathItem extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(delete != null, "delete")
-			.addIf(description != null, "description")
-			.addIf(get != null, "get")
-			.addIf(head != null, "head")
-			.addIf(options != null, "options")
-			.addIf(patch != null, "patch")
-			.addIf(parameters != null, "parameters")
-			.addIf(post != null, "post")
-			.addIf(put != null, "put")
-			.addIf(servers != null, "servers")
-			.addIf(summary != null, "summary")
-			.addIf(trace != null, "trace")
+			.addIf(nn(delete), "delete")
+			.addIf(nn(description), "description")
+			.addIf(nn(get), "get")
+			.addIf(nn(head), "head")
+			.addIf(nn(options), "options")
+			.addIf(nn(patch), "patch")
+			.addIf(nn(parameters), "parameters")
+			.addIf(nn(post), "post")
+			.addIf(nn(put), "put")
+			.addIf(nn(servers), "servers")
+			.addIf(nn(summary), "summary")
+			.addIf(nn(trace), "trace")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

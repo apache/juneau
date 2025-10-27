@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.net.*;
 import java.util.*;
 import java.util.function.*;
@@ -162,7 +164,7 @@ public class BasicUriHeader extends BasicHeader {
 	 */
 	public URI orElse(URI other) {
 		URI x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -175,7 +177,7 @@ public class BasicUriHeader extends BasicHeader {
 	}
 
 	private URI value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

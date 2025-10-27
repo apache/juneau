@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -192,12 +193,12 @@ public class Link extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(description != null, "description")
-			.addIf(operationId != null, "operationId")
-			.addIf(operationRef != null, "operationRef")
-			.addIf(parameters != null, "parameters")
-			.addIf(requestBody != null, "requestBody")
-			.addIf(server != null, "server")
+			.addIf(nn(description), "description")
+			.addIf(nn(operationId), "operationId")
+			.addIf(nn(operationRef), "operationRef")
+			.addIf(nn(parameters), "parameters")
+			.addIf(nn(requestBody), "requestBody")
+			.addIf(nn(server), "server")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

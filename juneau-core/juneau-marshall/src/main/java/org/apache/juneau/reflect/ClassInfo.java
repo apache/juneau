@@ -210,7 +210,7 @@ public class ClassInfo {
 		if (od instanceof Class && id instanceof Class) {
 			Class<?> oc = (Class<?>)od;
 			Class<?> ic = (Class<?>)id;
-			while ((ic = ic.getEnclosingClass()) != null)
+			while (nn(ic = ic.getEnclosingClass()))
 				if (ic == oc)
 					return true;
 		}
@@ -227,7 +227,7 @@ public class ClassInfo {
 		try {
 			ClassInfo ci = ClassInfo.of(a.annotationType());
 			MethodInfo mi = ci.getRepeatedAnnotationMethod();
-			if (mi != null)
+			if (nn(mi))
 				return mi.invoke(a);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -292,9 +292,9 @@ public class ClassInfo {
 	public StringBuilder appendFullName(StringBuilder sb) {
 		Class<?> ct = getComponentType().inner();
 		int dim = getDimensions();
-		if (ct != null && dim == 0 && ! isParameterizedType)
+		if (nn(ct) && dim == 0 && ! isParameterizedType)
 			return sb.append(ct.getName());
-		sb.append(ct != null ? ct.getName() : t.getTypeName());
+		sb.append(nn(ct) ? ct.getName() : t.getTypeName());
 		if (isParameterizedType) {
 			ParameterizedType pt = (ParameterizedType)t;
 			sb.append('<');
@@ -321,7 +321,7 @@ public class ClassInfo {
 	public StringBuilder appendShortName(StringBuilder sb) {
 		Class<?> ct = getComponentType().inner();
 		int dim = getDimensions();
-		if (ct != null) {
+		if (nn(ct)) {
 			if (ct.isLocalClass())
 				sb.append(of(ct.getEnclosingClass()).getSimpleName()).append('$').append(ct.getSimpleName());
 			else if (ct.isMemberClass())
@@ -393,18 +393,18 @@ public class ClassInfo {
 			annotationProvider = AnnotationProvider.DEFAULT;
 		A x = null;
 		x = getPackageAnnotation(type);
-		if (x != null && PredicateUtils.test(filter, x))
+		if (nn(x) && PredicateUtils.test(filter, x))
 			return x;
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length - 1; i >= 0; i--) {
 			x = annotationProvider.firstAnnotation(type, interfaces[i].inner(), filter);
-			if (x != null)
+			if (nn(x))
 				return x;
 		}
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length - 1; i >= 0; i--) {
 			x = annotationProvider.firstAnnotation(type, parents[i].inner(), filter);
-			if (x != null)
+			if (nn(x))
 				return x;
 		}
 		return null;
@@ -483,7 +483,7 @@ public class ClassInfo {
 		if (annotationProvider == null)
 			annotationProvider = AnnotationProvider.DEFAULT;
 		A t2 = getPackageAnnotation(type);
-		if (t2 != null)
+		if (nn(t2))
 			PredicateUtils.consumeIf(filter, action, t2);
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length - 1; i >= 0; i--)
@@ -525,7 +525,7 @@ public class ClassInfo {
 	 */
 	public ClassInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		Package p = c.getPackage();
-		if (p != null)
+		if (nn(p))
 			for (Annotation a : p.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
 					AnnotationInfo.of(p, a2).accept(filter, action);
@@ -898,7 +898,7 @@ public class ClassInfo {
 		if (dim == -1) {
 			int d = 0;
 			Class<?> ct = c;
-			while (ct != null && ct.isArray()) {
+			while (nn(ct) && ct.isArray()) {
 				d++;
 				ct = ct.getComponentType();
 			}
@@ -929,7 +929,7 @@ public class ClassInfo {
 	public String getFullName() {
 		Class<?> ct = getComponentType().inner();
 		int dim = getDimensions();
-		if (ct != null && dim == 0 && ! isParameterizedType)
+		if (nn(ct) && dim == 0 && ! isParameterizedType)
 			return ct.getName();
 		StringBuilder sb = new StringBuilder(128);
 		appendFullName(sb);
@@ -976,7 +976,7 @@ public class ClassInfo {
 	 *
 	 * @return The name of the underlying class.
 	 */
-	public String getName() { return c != null ? c.getName() : t.getTypeName(); }
+	public String getName() { return nn(c) ? c.getName() : t.getTypeName(); }
 
 	/**
 	 * Returns all possible names for this class.
@@ -1039,7 +1039,6 @@ public class ClassInfo {
 	 * @param pt The parameterized type class containing the parameterized type to resolve (e.g. <c>HashMap</c>).
 	 * @return The resolved real class.
 	 */
-	@SuppressWarnings("null")
 	public Class<?> getParameterType(int index, Class<?> pt) {
 		assertArgNotNull("pt", pt);
 
@@ -1049,7 +1048,7 @@ public class ClassInfo {
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			assertArg(cc != null, "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
@@ -1074,7 +1073,7 @@ public class ClassInfo {
 		} else if (actualType instanceof TypeVariable) {
 			TypeVariable<?> typeVariable = (TypeVariable<?>)actualType;
 			List<Class<?>> nestedOuterTypes = new LinkedList<>();
-			for (Class<?> ec = cc.getEnclosingClass(); ec != null; ec = ec.getEnclosingClass()) {
+			for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 				Class<?> outerClass = cc.getClass();
 				nestedOuterTypes.add(outerClass);
 				Map<Type,Type> outerTypeMap = new HashMap<>();
@@ -1257,7 +1256,7 @@ public class ClassInfo {
 	public String getShortName() {
 		Class<?> ct = getComponentType().inner();
 		int dim = getDimensions();
-		if (ct != null && dim == 0 && ! (isParameterizedType || isMemberClass() || c.isLocalClass()))
+		if (nn(ct) && dim == 0 && ! (isParameterizedType || isMemberClass() || c.isLocalClass()))
 			return ct.getSimpleName();
 		StringBuilder sb = new StringBuilder(32);
 		appendShortName(sb);
@@ -1273,7 +1272,7 @@ public class ClassInfo {
 	 *
 	 * @return The simple name of the underlying class;
 	 */
-	public String getSimpleName() { return c != null ? c.getSimpleName() : t.getTypeName(); }
+	public String getSimpleName() { return nn(c) ? c.getSimpleName() : t.getTypeName(); }
 
 	/**
 	 * Returns the parent class.
@@ -1290,7 +1289,7 @@ public class ClassInfo {
 	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.
 	 */
 	public Class<?> getWrapperIfPrimitive() {
-		if (c != null && ! c.isPrimitive())
+		if (nn(c) && ! c.isPrimitive())
 			return c;
 		return pmap1.get(c);
 	}
@@ -1317,7 +1316,7 @@ public class ClassInfo {
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		if (annotationProvider == null)
 			annotationProvider = AnnotationProvider.DEFAULT;
-		return annotationProvider.firstAnnotation(type, c, x -> true) != null;
+		return nn(annotationProvider.firstAnnotation(type, c, x -> true));
 	}
 
 	/**
@@ -1353,7 +1352,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this class is not in the root package.
 	 */
 	public boolean hasPackage() {
-		return getPackage() != null;
+		return nn(getPackage());
 	}
 
 	/**
@@ -1392,7 +1391,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if the specified class is the same as this one.
 	 */
 	public boolean is(Class<?> c) {
-		return this.c != null && this.c.equals(c);
+		return nn(this.c) && this.c.equals(c);
 	}
 
 	/**
@@ -1402,7 +1401,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if the specified class is the same as this one.
 	 */
 	public boolean is(ClassInfo c) {
-		if (this.c != null)
+		if (nn(this.c))
 			return this.c.equals(c.inner());
 		return t.equals(c.t);
 	}
@@ -1425,7 +1424,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is abstract.
 	 */
-	public boolean isAbstract() { return c != null && Modifier.isAbstract(c.getModifiers()); }
+	public boolean isAbstract() { return nn(c) && Modifier.isAbstract(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this class.
@@ -1497,7 +1496,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is an annotation.
 	 */
-	public boolean isAnnotation() { return c != null && c.isAnnotation(); }
+	public boolean isAnnotation() { return nn(c) && c.isAnnotation(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is any of the specified types.
@@ -1581,7 +1580,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is an array.
 	 */
-	public boolean isArray() { return c != null && c.isArray(); }
+	public boolean isArray() { return nn(c) && c.isArray(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a child or the same as <c>parent</c>.
@@ -1590,7 +1589,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this class is a child or the same as <c>parent</c>.
 	 */
 	public boolean isChildOf(Class<?> parent) {
-		return c != null && parent != null && parent.isAssignableFrom(c);
+		return nn(c) && nn(parent) && parent.isAssignableFrom(c);
 	}
 
 	/**
@@ -1633,28 +1632,28 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is not an interface.
 	 */
-	public boolean isClass() { return c != null && ! c.isInterface(); }
+	public boolean isClass() { return nn(c) && ! c.isInterface(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a {@link Collection} or an array.
 	 *
 	 * @return <jk>true</jk> if this class is a {@link Collection} or an array.
 	 */
-	public boolean isCollectionOrArray() { return c != null && (Collection.class.isAssignableFrom(c) || c.isArray()); }
+	public boolean isCollectionOrArray() { return nn(c) && (Collection.class.isAssignableFrom(c) || c.isArray()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this class has the {@link Deprecated @Deprecated} annotation on it.
 	 */
-	public boolean isDeprecated() { return c != null && c.isAnnotationPresent(Deprecated.class); }
+	public boolean isDeprecated() { return nn(c) && c.isAnnotationPresent(Deprecated.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is an enum.
 	 *
 	 * @return <jk>true</jk> if this class is an enum.
 	 */
-	public boolean isEnum() { return c != null && c.isEnum(); }
+	public boolean isEnum() { return nn(c) && c.isEnum(); }
 
 	/**
 	 * Returns <jk>true</jk> if the specified value is an instance of this class.
@@ -1663,7 +1662,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if the specified value is an instance of this class.
 	 */
 	public boolean isInstance(Object value) {
-		if (this.c != null)
+		if (nn(this.c))
 			return c.isInstance(value);
 		return false;
 	}
@@ -1673,28 +1672,28 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is an interface.
 	 */
-	public boolean isInterface() { return c != null && c.isInterface(); }
+	public boolean isInterface() { return nn(c) && c.isInterface(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a local class.
 	 *
 	 * @return <jk>true</jk> if this class is a local class.
 	 */
-	public boolean isLocalClass() { return c != null && c.isLocalClass(); }
+	public boolean isLocalClass() { return nn(c) && c.isLocalClass(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a member class.
 	 *
 	 * @return <jk>true</jk> if this class is a member class.
 	 */
-	public boolean isMemberClass() { return c != null && c.isMemberClass(); }
+	public boolean isMemberClass() { return nn(c) && c.isMemberClass(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a member class and not static.
 	 *
 	 * @return <jk>true</jk> if this class is a member class and not static.
 	 */
-	public boolean isNonStaticMemberClass() { return c != null && c.isMemberClass() && ! isStatic(); }
+	public boolean isNonStaticMemberClass() { return nn(c) && c.isMemberClass() && ! isStatic(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is not abstract.
@@ -1765,7 +1764,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
 	public boolean isParentOf(Class<?> child) {
-		return c != null && child != null && c.isAssignableFrom(child);
+		return nn(c) && nn(child) && c.isAssignableFrom(child);
 	}
 
 	/**
@@ -1846,14 +1845,14 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this is a primitive class.
 	 */
-	public boolean isPrimitive() { return c != null && c.isPrimitive(); }
+	public boolean isPrimitive() { return nn(c) && c.isPrimitive(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is public.
 	 *
 	 * @return <jk>true</jk> if this class is public.
 	 */
-	public boolean isPublic() { return c != null && Modifier.isPublic(c.getModifiers()); }
+	public boolean isPublic() { return nn(c) && Modifier.isPublic(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this is a repeated annotation class.
@@ -1870,7 +1869,7 @@ public class ClassInfo {
 			synchronized (this) {
 				boolean b = false;
 				repeatedAnnotationMethod = getPublicMethod(x -> x.hasName("value"));
-				if (repeatedAnnotationMethod != null) {
+				if (nn(repeatedAnnotationMethod)) {
 					ClassInfo rt = repeatedAnnotationMethod.getReturnType();
 					if (rt.isArray()) {
 						ClassInfo rct = rt.getComponentType();
@@ -1901,7 +1900,7 @@ public class ClassInfo {
 	 *
 	 * @return <jk>true</jk> if this class is public.
 	 */
-	public boolean isStatic() { return c != null && Modifier.isStatic(c.getModifiers()); }
+	public boolean isStatic() { return nn(c) && Modifier.isStatic(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a child of <c>parent</c>.
@@ -1910,7 +1909,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this class is a parent of <c>child</c>.
 	 */
 	public boolean isStrictChildOf(Class<?> parent) {
-		return c != null && parent != null && parent.isAssignableFrom(c) && ! c.equals(parent);
+		return nn(c) && nn(parent) && parent.isAssignableFrom(c) && ! c.equals(parent);
 	}
 
 	/**
@@ -1920,7 +1919,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this visibility matches the modifier attribute of this constructor.
 	 */
 	public boolean isVisible(Visibility v) {
-		return c != null && v.isVisible(c);
+		return nn(c) && v.isVisible(c);
 	}
 
 	/**
@@ -1948,17 +1947,17 @@ public class ClassInfo {
 		ClassInfo[] parents = _getParents();
 		for (ClassInfo parent : parents) {
 			x = annotationProvider.lastAnnotation(type, parent.inner(), filter);
-			if (x != null)
+			if (nn(x))
 				return x;
 		}
 		ClassInfo[] interfaces = _getInterfaces();
 		for (ClassInfo element : interfaces) {
 			x = annotationProvider.lastAnnotation(type, element.inner(), filter);
-			if (x != null)
+			if (nn(x))
 				return x;
 		}
 		x = getPackageAnnotation(type);
-		if (x != null && PredicateUtils.test(filter, x))
+		if (nn(x) && PredicateUtils.test(filter, x))
 			return x;
 		return null;
 	}
@@ -2025,7 +2024,7 @@ public class ClassInfo {
 		for (Class<?> wt : wrapperTypes) {
 			if (isParameterizedTypeOf(wt)) {
 				Type t = getFirstParameterType(wt);
-				if (t != null)
+				if (nn(t))
 					return of(t).unwrap(wrapperTypes); // Recursively do it again.
 			}
 		}
@@ -2044,17 +2043,17 @@ public class ClassInfo {
 		if (ap == null)
 			ap = AnnotationProvider.DEFAULT;
 		A t = ap.firstDeclaredAnnotation(a, c, x -> true);
-		if (t != null)
+		if (nn(t))
 			return t;
 		ClassInfo sci = getSuperclass();
-		if (sci != null) {
+		if (nn(sci)) {
 			t = sci.getAnnotation(ap, a);
-			if (t != null)
+			if (nn(t))
 				return t;
 		}
 		for (ClassInfo c2 : _getInterfaces()) {
 			t = c2.getAnnotation(ap, a);
-			if (t != null)
+			if (nn(t))
 				return t;
 		}
 		return null;
@@ -2064,18 +2063,18 @@ public class ClassInfo {
 		if (ap == null)
 			ap = AnnotationProvider.DEFAULT;
 		A t2 = getPackageAnnotation(a);
-		if (t2 != null && filter.test(t2))
+		if (nn(t2) && filter.test(t2))
 			return t2;
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length - 1; i >= 0; i--) {
 			A o = ap.firstDeclaredAnnotation(a, interfaces[i].inner(), filter);
-			if (o != null)
+			if (nn(o))
 				return o;
 		}
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length - 1; i >= 0; i--) {
 			A o = ap.firstDeclaredAnnotation(a, parents[i].inner(), filter);
-			if (o != null)
+			if (nn(o))
 				return o;
 		}
 		return null;
@@ -2244,7 +2243,7 @@ public class ClassInfo {
 			synchronized (this) {
 				List<ClassInfo> l = list();
 				Class<?> pc = c;
-				while (pc != null && pc != Object.class) {
+				while (nn(pc) && pc != Object.class) {
 					l.add(of(pc));
 					pc = pc.getSuperclass();
 				}

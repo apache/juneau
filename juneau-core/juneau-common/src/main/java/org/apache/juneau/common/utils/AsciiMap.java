@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 /**
  * Stores a Map of ASCII characters to Strings in a quick-lookup array.
  */
@@ -44,7 +46,7 @@ public class AsciiMap {
 	public boolean contains(char c) {
 		if (c > 127)
 			return false;
-		return store[c] != null;
+		return nn(store[c]);
 	}
 
 	/**
@@ -71,7 +73,7 @@ public class AsciiMap {
 	public boolean contains(int c) {
 		if (c < 0 || c > 127)
 			return false;
-		return store[c] != null;
+		return nn(store[c]);
 	}
 
 	/**

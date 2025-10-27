@@ -571,7 +571,7 @@ public class CallLogger {
 
 		sb.append('[').append(status);
 
-		if (sti != null) {
+		if (nn(sti)) {
 			int count = sti.getCount();
 			sb.append(',').append(StringUtils.toHex8(sti.getHash())).append('.').append(count);
 			if (count > 1)
@@ -586,20 +586,20 @@ public class CallLogger {
 
 			if (reqd.isOneOf(HEADER, ENTITY)) {
 				var qs = req.getQueryString();
-				if (qs != null)
+				if (nn(qs))
 					sb.append('?').append(qs);
 			}
 
-			if (reqContent != null && reqd.isOneOf(HEADER, ENTITY))
+			if (nn(reqContent) && reqd.isOneOf(HEADER, ENTITY))
 				sb.append("\n\tRequest length: ").append(reqContent.length).append(" bytes");
 
 			if (resd.isOneOf(HEADER, ENTITY))
 				sb.append("\n\tResponse code: ").append(status);
 
-			if (resContent != null && resd.isOneOf(HEADER, ENTITY))
+			if (nn(resContent) && resd.isOneOf(HEADER, ENTITY))
 				sb.append("\n\tResponse length: ").append(resContent.length).append(" bytes");
 
-			if (execTime != null && resd.isOneOf(HEADER, ENTITY))
+			if (nn(execTime) && resd.isOneOf(HEADER, ENTITY))
 				sb.append("\n\tExec time: ").append(execTime).append("ms");
 
 			if (reqd.isOneOf(HEADER, ENTITY)) {
@@ -623,7 +623,7 @@ public class CallLogger {
 				}
 			}
 
-			if (reqContent != null && reqContent.length > 0 && reqd == ENTITY) {
+			if (nn(reqContent) && reqContent.length > 0 && reqd == ENTITY) {
 				try {
 					sb.append("\n---Request Content UTF-8---");
 					sb.append("\n").append(new String(reqContent, IOUtils.UTF8));
@@ -634,7 +634,7 @@ public class CallLogger {
 				}
 			}
 
-			if (resContent != null && resContent.length > 0 && resd == ENTITY) {
+			if (nn(resContent) && resContent.length > 0 && resd == ENTITY) {
 				try {
 					sb.append("\n---Response Content UTF-8---");
 					sb.append("\n").append(new String(resContent, IOUtils.UTF8));

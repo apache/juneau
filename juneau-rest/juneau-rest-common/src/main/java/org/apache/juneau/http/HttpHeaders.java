@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.net.*;
 import java.time.*;
 import java.util.*;
@@ -500,7 +502,7 @@ public class HttpHeaders {
 	 */
 	public static boolean canCast(Object o) {
 		ClassInfo ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+		return nn(ci) && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 
 	/**

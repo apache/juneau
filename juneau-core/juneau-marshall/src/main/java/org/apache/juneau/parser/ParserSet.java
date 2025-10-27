@@ -212,7 +212,7 @@ public class ParserSet {
 		 * @return This object.
 		 */
 		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
-			if (bcBuilder != null)
+			if (nn(bcBuilder))
 				operation.accept(bcBuilder);
 			return this;
 		}
@@ -377,7 +377,7 @@ public class ParserSet {
 				if (Utils.ne(x.getClass(), x2.getClass()))
 					throw new BasicRuntimeException("Copy method not implemented on class {0}", x.getClass().getName());
 				x = x2;
-				if (bcBuilder != null)
+				if (nn(bcBuilder))
 					x.beanContext(bcBuilder);
 				return x;
 			}
@@ -389,13 +389,13 @@ public class ParserSet {
 
 				// Check for no-arg constructor.
 				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor(ConstructorInfo::hasNoParams);
-				if (ci != null)
+				if (nn(ci))
 					return ci.invoke();
 
 				// Check for builder.
 				@SuppressWarnings("unchecked")
 				Parser.Builder b = Parser.createParserBuilder((Class<? extends Parser>)o);
-				if (bcBuilder != null)
+				if (nn(bcBuilder))
 					b.beanContext(bcBuilder);
 				o = b;
 			}
@@ -539,7 +539,7 @@ public class ParserSet {
 	 */
 	public ParserMatch getParserMatch(String contentTypeHeader) {
 		ParserMatch pm = cache.get(contentTypeHeader);
-		if (pm != null)
+		if (nn(pm))
 			return pm;
 
 		MediaType ct = MediaType.of(contentTypeHeader);

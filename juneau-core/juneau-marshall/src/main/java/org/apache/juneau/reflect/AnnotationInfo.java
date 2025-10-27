@@ -80,7 +80,7 @@ public class AnnotationInfo<T extends Annotation> {
 	private static int getRank(Object a) {
 		ClassInfo ci = ClassInfo.of(a);
 		MethodInfo mi = ci.getPublicMethod(x -> x.hasName("rank") && x.hasNoParams() && x.hasReturnType(int.class));
-		if (mi != null) {
+		if (nn(mi)) {
 			try {
 				return (int)mi.invoke(a);
 			} catch (ExecutableException e) {
@@ -185,9 +185,9 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return The class that this annotation was found on, or <jk>null</jk> if it was found on a package.
 	 */
 	public ClassInfo getClassInfo() {
-		if (this.c != null)
+		if (nn(this.c))
 			return this.c;
-		if (this.m != null)
+		if (nn(this.m))
 			return this.m.getDeclaringClass();
 		return null;
 	}
@@ -252,7 +252,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return <jk>true</jk> if this annotation has the specified annotation defined on it.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return this.a.annotationType().getAnnotation(type) != null;
+		return nn(this.a.annotationType().getAnnotation(type));
 	}
 
 	/**
@@ -273,7 +273,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	public <A extends Annotation> boolean isInGroup(Class<A> group) {
 		AnnotationGroup x = a.annotationType().getAnnotation(AnnotationGroup.class);
-		return (x != null && x.value().equals(group));
+		return (nn(x) && x.value().equals(group));
 	}
 
 	/**
@@ -305,11 +305,11 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	public JsonMap toJsonMap() {
 		JsonMap jm = new JsonMap();
-		if (c != null)
+		if (nn(c))
 			jm.put("class", c.getSimpleName());
-		if (m != null)
+		if (nn(m))
 			jm.put("method", m.getShortName());
-		if (p != null)
+		if (nn(p))
 			jm.put("package", p.getName());
 		JsonMap ja = new JsonMap();
 		ClassInfo ca = ClassInfo.of(a.annotationType());

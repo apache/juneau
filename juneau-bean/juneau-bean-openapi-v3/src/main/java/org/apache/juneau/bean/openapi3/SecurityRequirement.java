@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -95,7 +96,7 @@ public class SecurityRequirement extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(requirements != null, "requirements")
+			.addIf(nn(requirements), "requirements")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

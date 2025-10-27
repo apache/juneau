@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.text.*;
 
 /**
@@ -241,7 +243,7 @@ public class AssertionUtils {
 	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
 		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
 		for (int i = 0; i < o.length; i++)
-			assertArg(o[i] != null, "Argument ''{0}'' parameter {1} cannot be null.", name, i);
+			assertArg(nn(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);
 		return o;
 	}
 

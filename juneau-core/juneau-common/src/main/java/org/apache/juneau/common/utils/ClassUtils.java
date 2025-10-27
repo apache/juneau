@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -37,7 +39,7 @@ public class ClassUtils {
 	 */
 	public static boolean setAccessible(Constructor<?> x) {
 		try {
-			if (x != null)
+			if (nn(x))
 				x.setAccessible(true);
 			return true;
 		} catch (@SuppressWarnings("unused") SecurityException e) {
@@ -53,7 +55,7 @@ public class ClassUtils {
 	 */
 	public static boolean setAccessible(Field x) {
 		try {
-			if (x != null)
+			if (nn(x))
 				x.setAccessible(true);
 			return true;
 		} catch (@SuppressWarnings("unused") SecurityException e) {
@@ -69,7 +71,7 @@ public class ClassUtils {
 	 */
 	public static boolean setAccessible(Method x) {
 		try {
-			if (x != null)
+			if (nn(x))
 				x.setAccessible(true);
 			return true;
 		} catch (@SuppressWarnings("unused") SecurityException e) {
@@ -110,7 +112,6 @@ public class ClassUtils {
 	 * @return The parameter type at the specified index.
 	 * @throws IllegalArgumentException If the class is not a subclass of the parameterized type or if the index is invalid.
 	 */
-	@SuppressWarnings("null")
 	public static Class<?> getParameterType(Class<?> c, int index, Class<?> pt) {
 		AssertionUtils.assertArgNotNull("pt", pt);
 		AssertionUtils.assertArgNotNull("c", c);
@@ -121,7 +122,7 @@ public class ClassUtils {
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			AssertionUtils.assertArg(cc != null, "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+			AssertionUtils.assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
@@ -146,7 +147,7 @@ public class ClassUtils {
 		} else if (actualType instanceof TypeVariable) {
 			TypeVariable<?> typeVariable = (TypeVariable<?>)actualType;
 			List<Class<?>> nestedOuterTypes = new LinkedList<>();
-			for (Class<?> ec = cc.getEnclosingClass(); ec != null; ec = ec.getEnclosingClass()) {
+			for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 				Class<?> outerClass = cc.getClass();
 				nestedOuterTypes.add(outerClass);
 				Map<Type,Type> outerTypeMap = new HashMap<>();
@@ -187,7 +188,7 @@ public class ClassUtils {
 		if (od instanceof Class && id instanceof Class) {
 			Class<?> oc = (Class<?>)od;
 			Class<?> ic = (Class<?>)id;
-			while ((ic = ic.getEnclosingClass()) != null)
+			while (nn(ic = ic.getEnclosingClass()))
 				if (ic == oc)
 					return true;
 		}

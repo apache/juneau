@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -210,12 +211,12 @@ public class Info extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(contact != null, "contact")
-			.addIf(description != null, "description")
-			.addIf(license != null, "license")
-			.addIf(termsOfService != null, "termsOfService")
-			.addIf(title != null, "title")
-			.addIf(version != null, "version")
+			.addIf(nn(contact), "contact")
+			.addIf(nn(description), "description")
+			.addIf(nn(license), "license")
+			.addIf(nn(termsOfService), "termsOfService")
+			.addIf(nn(title), "title")
+			.addIf(nn(version), "version")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

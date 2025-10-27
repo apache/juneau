@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -136,7 +138,7 @@ public class BasicIntegerPart extends BasicPart {
 	 */
 	public Integer orElse(Integer other) {
 		Integer x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -149,7 +151,7 @@ public class BasicIntegerPart extends BasicPart {
 	}
 
 	private Integer value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.swap;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -60,7 +62,7 @@ public class BuilderSwap<T,B> {
 		ConstructorInfo builderConstructor;
 
 		createObjectMethod = getBuilderBuildMethod(bci);
-		if (createObjectMethod != null)
+		if (nn(createObjectMethod))
 			objectClass = createObjectMethod.getReturnType().inner();
 
 		if (objectClass == null)
@@ -102,7 +104,7 @@ public class BuilderSwap<T,B> {
 
 		builderCreateMethod = getBuilderCreateMethod(pci);
 
-		if (builderClass.isEmpty() && builderCreateMethod != null)
+		if (builderClass.isEmpty() && nn(builderCreateMethod))
 			builderClass.set(builderCreateMethod.getReturnType().inner());
 
 		if (builderClass.isEmpty()) {
@@ -113,7 +115,7 @@ public class BuilderSwap<T,B> {
 				&& x.getParamType(0).isChildOf(Builder.class)
 			);
 			// @formatter:on
-			if (cc != null) {
+			if (nn(cc)) {
 				objectConstructor = cc;
 				builderClass.set(cc.getParamType(0).inner());
 			}
@@ -163,10 +165,10 @@ public class BuilderSwap<T,B> {
 
 	private static boolean hasConstructorThatTakesType(ClassInfo c, ClassInfo argType) {
 		// @formatter:off
-		return c.getPublicConstructor(
+		return nn(c.getPublicConstructor(
 			x -> x.hasNumParams(1)
 			&& x.hasParamTypes(argType)
-		) != null;
+		));
 		// @formatter:on
 	}
 
@@ -213,7 +215,7 @@ public class BuilderSwap<T,B> {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public T build(BeanSession session, B builder, ClassMeta<?> hint) throws ExecutableException {
-		if (createObjectMethod != null)
+		if (nn(createObjectMethod))
 			return (T)createObjectMethod.invoke(builder);
 		try {
 			return objectConstructor.newInstance(builder);
@@ -231,7 +233,7 @@ public class BuilderSwap<T,B> {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public B create(BeanSession session, ClassMeta<?> hint) throws ExecutableException {
-		if (createBuilderMethod != null)
+		if (nn(createBuilderMethod))
 			return (B)createBuilderMethod.invoke(null);
 		try {
 			return builderConstructor.newInstance();

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -147,7 +149,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return stringValue != null ? stringValue : Utils.s(value()); }
+	public String getValue() { return nn(stringValue) ? stringValue : Utils.s(value()); }
 
 	/**
 	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the
@@ -199,7 +201,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	 */
 	public MediaRanges orElse(MediaRanges other) {
 		MediaRanges x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -216,7 +218,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	}
 
 	private MediaRanges value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

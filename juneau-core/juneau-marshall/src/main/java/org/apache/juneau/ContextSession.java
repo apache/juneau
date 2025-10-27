@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static java.util.Collections.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
@@ -101,7 +102,7 @@ public abstract class ContextSession {
 		 * @return This object.
 		 */
 		public Builder debug(Boolean value) {
-			if (value != null)
+			if (nn(value))
 				debug = value;
 			return this;
 		}

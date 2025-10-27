@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -168,7 +170,7 @@ public class ClientVersion extends BasicStringHeader {
 
 	@Override /* Overridden from Header */
 	public String getValue() {
-		if (supplier != null)
+		if (nn(supplier))
 			return Utils.s(supplier.get());
 		return super.getValue();
 	}

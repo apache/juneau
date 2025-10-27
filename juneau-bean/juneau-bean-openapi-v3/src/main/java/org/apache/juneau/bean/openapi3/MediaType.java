@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -178,10 +179,10 @@ public class MediaType extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(schema != null, "schema")
-			.addIf(example != null, "x-example")
-			.addIf(encoding != null, "encoding")
-			.addIf(examples != null, "examples")
+			.addIf(nn(schema), "schema")
+			.addIf(nn(example), "x-example")
+			.addIf(nn(encoding), "encoding")
+			.addIf(nn(examples), "examples")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

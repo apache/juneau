@@ -17,6 +17,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -151,9 +152,9 @@ public class BeanCreateMethodFinder<T> {
 				&& x.hasNoAnnotation(BeanIgnore.class)
 				&& filter.test(x)
 				&& beanStore.hasAllParams(x)
-				&& (x.isStatic() || resource != null)
+				&& (x.isStatic() || nn(resource))
 			);
-			if (method != null)
+			if (nn(method))
 				args = beanStore.getParams(method);
 		}
 		return this;
@@ -178,7 +179,7 @@ public class BeanCreateMethodFinder<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T run() throws ExecutableException {
-		if (method != null)
+		if (nn(method))
 			return (T)method.invoke(resource, args);
 		return def.get();
 	}
@@ -192,7 +193,7 @@ public class BeanCreateMethodFinder<T> {
 	 */
 	public T run(Consumer<? super T> consumer) throws ExecutableException {
 		T t = run();
-		if (t != null)
+		if (nn(t))
 			consumer.accept(t);
 		return t;
 	}

@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -230,18 +231,18 @@ public class Parameter extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(allowEmptyValue != null, "allowEmptyValue")
-			.addIf(allowReserved != null, "allowReserved")
-			.addIf(description != null, "description")
-			.addIf(deprecated != null, "deprecated")
-			.addIf(example != null, "example")
-			.addIf(examples != null, "examples")
-			.addIf(explode != null, "explode")
-			.addIf(in != null, "in")
-			.addIf(name != null, "name")
-			.addIf(required != null, "required")
-			.addIf(schema != null, "schema")
-			.addIf(style != null, "style")
+			.addIf(nn(allowEmptyValue), "allowEmptyValue")
+			.addIf(nn(allowReserved), "allowReserved")
+			.addIf(nn(description), "description")
+			.addIf(nn(deprecated), "deprecated")
+			.addIf(nn(example), "example")
+			.addIf(nn(examples), "examples")
+			.addIf(nn(explode), "explode")
+			.addIf(nn(in), "in")
+			.addIf(nn(name), "name")
+			.addIf(nn(required), "required")
+			.addIf(nn(schema), "schema")
+			.addIf(nn(style), "style")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.http.response.*;
@@ -80,7 +82,7 @@ public class RestOpInvoker extends MethodInvoker {
 			}
 
 			if (! inner().hasReturnType(Void.TYPE))
-				if (output != null || ! res.getOutputStreamCalled())
+				if (nn(output) || ! res.getOutputStreamCalled())
 					res.setContent(output);
 
 		} catch (IllegalAccessException | IllegalArgumentException e) {

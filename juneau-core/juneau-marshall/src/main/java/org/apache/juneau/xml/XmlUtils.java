@@ -18,6 +18,7 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -362,14 +363,14 @@ public class XmlUtils {
 		for (int i = xmls.size() - 1; i >= 0; i--) {
 			Xml xml = xmls.get(i);
 			Namespace ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);
-			if (ns != null)
+			if (nn(ns))
 				return ns;
 		}
 
 		for (int i = schemas.size() - 1; i >= 0; i--) {
 			XmlSchema schema = schemas.get(i);
 			Namespace ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
-			if (ns != null)
+			if (nn(ns))
 				return ns;
 		}
 
@@ -468,7 +469,7 @@ public class XmlUtils {
 
 		// If only prefix specified, need to search for namespaceURI.
 		if (! prefix.isEmpty()) {
-			if (xmls != null)
+			if (nn(xmls))
 				for (Xml xml2 : xmls)
 					if (xml2.prefix().equals(prefix) && ! xml2.namespace().isEmpty())
 						return Namespace.of(prefix, xml2.namespace());
@@ -484,7 +485,7 @@ public class XmlUtils {
 
 		// If only namespaceURI specified, need to search for prefix.
 		if (! ns.isEmpty()) {
-			if (xmls != null)
+			if (nn(xmls))
 				for (Xml xml2 : xmls)
 					if (xml2.namespace().equals(ns) && ! xml2.prefix().isEmpty())
 						return Namespace.of(xml2.prefix(), ns);

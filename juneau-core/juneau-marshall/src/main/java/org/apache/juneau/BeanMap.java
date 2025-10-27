@@ -138,7 +138,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		String key = emptyIfNull(property);
 		if (meta.properties.containsKey(key) && ! "*".equals(key))
 			return true;
-		if (meta.dynaProperty != null) {
+		if (nn(meta.dynaProperty)) {
 			try {
 				return meta.dynaProperty.getDynaMap(bean).containsKey(key);
 			} catch (Exception e) {
@@ -158,7 +158,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 		// If this bean has a dyna-property, then we need to construct the entire set before returning.
 		// Otherwise, we can create an iterator without a new data structure.
-		if (meta.dynaProperty != null) {
+		if (nn(meta.dynaProperty)) {
 			Set<Entry<String,Object>> s = set();
 			forEachProperty(x -> true, x -> {
 				if (x.isDyna()) {
@@ -276,7 +276,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				try {
 					// TODO - This is kind of inefficient.
 					Map<String,Object> dynaMap = bpm.getDynaMap(bean);
-					if (dynaMap != null) {
+					if (nn(dynaMap)) {
 						dynaMap.forEach((k, v) -> {
 							Object val = bpm.get(this, k);
 							actions.put(k, new BeanPropertyValue(bpm, k, val, null));
@@ -378,7 +378,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		T b = getBean(true);
 
 		// If we have any arrays that need to be constructed, do it now.
-		if (arrayPropertyCache != null) {
+		if (nn(arrayPropertyCache)) {
 			arrayPropertyCache.forEach((k, v) -> {
 				try {
 					getPropertyMeta(k).setArray(b, v);

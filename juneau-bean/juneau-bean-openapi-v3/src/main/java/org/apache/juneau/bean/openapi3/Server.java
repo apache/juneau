@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -158,9 +159,9 @@ public class Server extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(description != null, "description")
-			.addIf(url != null, "url")
-			.addIf(variables != null, "variables")
+			.addIf(nn(description), "description")
+			.addIf(nn(url), "url")
+			.addIf(nn(variables), "variables")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

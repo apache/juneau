@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 
 /**
@@ -139,6 +141,6 @@ public abstract class FluentAssertion<R> extends Assertion {
 	 */
 	@SuppressWarnings("unchecked")
 	protected R returns() {
-		return returns != null ? returns : (R)this;
+		return nn(returns) ? returns : (R)this;
 	}
 }

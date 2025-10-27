@@ -17,6 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -217,7 +218,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 
 	@Override /* Overridden from Header */
 	public String getValue() {
-		if (supplier != null)
+		if (nn(supplier))
 			return Utils.s(supplier.get());
 		return stringValue;
 	}

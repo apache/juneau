@@ -58,7 +58,7 @@ public class ResponseBeanMeta {
 		}
 
 		Builder apply(Response a) {
-			if (a != null) {
+			if (nn(a)) {
 				if (ClassUtils.isNotVoid(a.serializer()))
 					partSerializer = a.serializer();
 				if (ClassUtils.isNotVoid(a.parser()))
@@ -69,7 +69,7 @@ public class ResponseBeanMeta {
 		}
 
 		Builder apply(StatusCode a) {
-			if (a != null) {
+			if (nn(a)) {
 				if (a.value().length > 0)
 					code = a.value()[0];
 			}
@@ -194,9 +194,9 @@ public class ResponseBeanMeta {
 		this.contentMethod = b.contentMethod == null ? null : b.contentMethod.schema(schema).build(partSerializer, partParser);
 		this.statusMethod = b.statusMethod == null ? null : b.statusMethod.build(opte(), opte());
 
-		if (contentMethod != null)
+		if (nn(contentMethod))
 			properties.put(contentMethod.getGetter().getName(), contentMethod);
-		if (statusMethod != null)
+		if (nn(statusMethod))
 			properties.put(statusMethod.getGetter().getName(), statusMethod);
 
 		this.properties = u(properties);

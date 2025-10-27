@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -165,11 +167,11 @@ public class BasicStringHeader extends BasicHeader {
 	@Override
 	public String orElse(String other) {
 		String x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	private String value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

@@ -18,6 +18,7 @@ package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 
@@ -128,16 +129,16 @@ public abstract class MenuItemWidget extends Widget {
 		String pre = StringUtils.nullIfEmpty(getBeforeShowScript(req, res)), post = StringUtils.nullIfEmpty(getAfterShowScript(req, res));
 
 		sb.append("\n<div class='menu-item'>");
-		if (pre != null || post != null) {
+		if (nn(pre) || nn(post)) {
 			id = getId(req);
 
 			sb.append("\n\t<script>");
-			if (pre != null) {
+			if (nn(pre)) {
 				sb.append("\n\t\tfunction onPreShow" + id + "() {");
 				sb.append("\n").append(pre);
 				sb.append("\n\t\t}");
 			}
-			if (post != null) {
+			if (nn(post)) {
 				sb.append("\n\t\tfunction onPostShow" + id + "() {");
 				sb.append("\n").append(pre);
 				sb.append("\n\t\t}");

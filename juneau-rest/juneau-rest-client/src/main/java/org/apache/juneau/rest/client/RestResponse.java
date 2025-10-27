@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
@@ -410,7 +411,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 					if (request.hasHttpEntity()) {
 						sb.append("\n---request entity---");
 						HttpEntity e = request.getHttpEntity();
-						if (e.getContentType() != null)
+						if (nn(e.getContentType()))
 							sb.append("\n\t").append(e.getContentType());
 						if (e.isRepeatable()) {
 							try {

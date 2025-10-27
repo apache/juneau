@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.html;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.AsideFloat.*;
 
 import org.apache.juneau.common.collections.*;
@@ -35,7 +36,7 @@ import org.apache.juneau.common.utils.*;
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 	private static boolean exists(String s) {
-		return s != null && ! "NONE".equals(s);
+		return nn(s) && ! "NONE".equals(s);
 	}
 
 	@Override /* Overridden from HtmlDocTemplate */

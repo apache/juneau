@@ -278,7 +278,7 @@ public class RdfParserSession extends ReaderParserSession {
 			return n.asLiteral().getValue();
 		if (n.isResource()) {
 			var st = n.asResource().getProperty(pValue);
-			if (st != null) {
+			if (nn(st)) {
 				n = st.getObject();
 				if (n.isLiteral())
 					return n.asLiteral().getValue();
@@ -291,7 +291,7 @@ public class RdfParserSession extends ReaderParserSession {
 	private boolean isBag(RDFNode n) {
 		if (n.isResource()) {
 			var st = n.asResource().getProperty(pRdfType);
-			if (st != null)
+			if (nn(st))
 				return RDF_BAG.equals(st.getResource().getURI());
 		}
 		return false;
@@ -309,7 +309,7 @@ public class RdfParserSession extends ReaderParserSession {
 	private boolean isSeq(RDFNode n) {
 		if (n.isResource()) {
 			var st = n.asResource().getProperty(pRdfType);
-			if (st != null)
+			if (nn(st))
 				return RDF_SEQ.equals(st.getResource().getURI());
 		}
 		return false;
@@ -322,9 +322,9 @@ public class RdfParserSession extends ReaderParserSession {
 		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
-		if (builder != null)
+		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
-		else if (swap != null)
+		else if (nn(swap))
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
@@ -337,17 +337,17 @@ public class RdfParserSession extends ReaderParserSession {
 		if (! sType.canCreateNewInstance(outer)) {
 			if (n.isResource()) {
 				var st = n.asResource().getProperty(pType);
-				if (st != null) {
+				if (nn(st)) {
 					var c = st.getLiteral().getString();
 					var tcm = getClassMeta(c, pMeta, eType);
-					if (tcm != null)
+					if (nn(tcm))
 						sType = eType = tcm;
 				}
 			}
 		}
 
 		Object o = null;
-		if (n.isResource() && n.asResource().getURI() != null && n.asResource().getURI().equals(RDF_NIL)) {
+		if (n.isResource() && nn(n.asResource().getURI()) && n.asResource().getURI().equals(RDF_NIL)) {
 			// Do nothing.  Leave o == null.
 		} else if (sType.isObject()) {
 			if (n.isLiteral()) {
@@ -359,7 +359,7 @@ public class RdfParserSession extends ReaderParserSession {
 				var r = n.asResource();
 				if (! urisVisited.add(r))
 					o = r.getURI();
-				else if (r.getProperty(pValue) != null) {
+				else if (nn(r.getProperty(pValue))) {
 					o = parseAnything(object(), n.asResource().getProperty(pValue).getObject(), outer, null);
 				} else if (isSeq(r)) {
 					o = new JsonList(this);
@@ -374,7 +374,7 @@ public class RdfParserSession extends ReaderParserSession {
 					// If it has a URI and no child properties, we interpret this as an
 					// external resource, and convert it to just a URL.
 					var uri = r.getURI();
-					if (uri != null && ! r.listProperties().hasNext()) {
+					if (nn(uri) && ! r.listProperties().hasNext()) {
 						o = r.getURI();
 					} else {
 						var m2 = new JsonMap(this);
@@ -418,7 +418,7 @@ public class RdfParserSession extends ReaderParserSession {
 			}
 			if (sType.isArray() || sType.isArgs())
 				o = toArray(sType, (Collection)o);
-		} else if (builder != null) {
+		} else if (nn(builder)) {
 			var r = n.asResource();
 			if (! urisVisited.add(r))
 				return null;
@@ -440,7 +440,7 @@ public class RdfParserSession extends ReaderParserSession {
 			parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((JsonMap)m, pMeta, eType);
-			else if (sType.getProxyInvocationHandler() != null)
+			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 			else
 				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -448,10 +448,10 @@ public class RdfParserSession extends ReaderParserSession {
 			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
 		}
 
-		if (swap != null && o != null)
+		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (outer != null)
+		if (nn(outer))
 			setParent(eType, o, outer);
 
 		return (T)o;
@@ -460,7 +460,7 @@ public class RdfParserSession extends ReaderParserSession {
 	private <T> BeanMap<T> parseIntoBeanMap(Resource r2, BeanMap<T> m) throws ParseException {
 		var bm = m.getMeta();
 		var rbm = getRdfBeanMeta(bm);
-		if (rbm.hasBeanUri() && r2.getURI() != null)
+		if (rbm.hasBeanUri() && nn(r2.getURI()))
 			rbm.getBeanUriProperty().set(m, null, r2.getURI());
 		for (StmtIterator i = r2.listProperties(); i.hasNext();) {
 			var st = i.next();
@@ -468,7 +468,7 @@ public class RdfParserSession extends ReaderParserSession {
 			var key = decodeString(p.getLocalName());
 			var pMeta = m.getPropertyMeta(key);
 			setCurrentProperty(pMeta);
-			if (pMeta != null) {
+			if (nn(pMeta)) {
 				var o = st.getObject();
 				var cm = pMeta.getClassMeta();
 				if (cm.isCollectionOrArray() && isMultiValuedCollections(pMeta)) {
@@ -521,7 +521,7 @@ public class RdfParserSession extends ReaderParserSession {
 
 	private <K,V> Map<K,V> parseIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws ParseException {
 		// Add URI as "uri" to generic maps.
-		if (r.getURI() != null) {
+		if (nn(r.getURI())) {
 			var uri = convertAttrToType(m, "uri", keyType);
 			var value = convertAttrToType(m, r.getURI(), valueType);
 			m.put(uri, value);

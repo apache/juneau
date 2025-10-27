@@ -18,6 +18,7 @@ package org.apache.juneau.swaps;
 
 import static java.time.temporal.ChronoField.*;
 import static java.time.temporal.TemporalQueries.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.time.*;
 import java.time.format.*;
@@ -95,7 +96,7 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 	public <R> R query(TemporalQuery<R> query) {
 		var r = inner.query(query);
 
-		if (r != null)
+		if (nn(r))
 			return r;
 
 		if (query == zone() || query == zoneId())

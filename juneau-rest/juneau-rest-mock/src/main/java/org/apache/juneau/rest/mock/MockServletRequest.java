@@ -128,59 +128,59 @@ public class MockServletRequest implements HttpServletRequest {
 			MockRestRequest mreq = (MockRestRequest)req;
 			mreq.getAttributeMap().forEach(this::attribute);
 			mreq.getRequestDispatcherMap().forEach(this::requestDispatcher);
-			if (mreq.getCharacterEncoding() != null)
+			if (nn(mreq.getCharacterEncoding()))
 				characterEncoding(mreq.getCharacterEncoding());
-			if (mreq.getProtocol() != null)
+			if (nn(mreq.getProtocol()))
 				protocol(mreq.getProtocol());
-			if (mreq.getScheme() != null)
+			if (nn(mreq.getScheme()))
 				scheme(mreq.getScheme());
-			if (mreq.getServerName() != null)
+			if (nn(mreq.getServerName()))
 				serverName(mreq.getServerName());
-			if (mreq.getRemoteAddr() != null)
+			if (nn(mreq.getRemoteAddr()))
 				remoteAddr(mreq.getRemoteAddr());
-			if (mreq.getRemoteHost() != null)
+			if (nn(mreq.getRemoteHost()))
 				remoteHost(mreq.getRemoteHost());
-			if (mreq.getLocalName() != null)
+			if (nn(mreq.getLocalName()))
 				localName(mreq.getLocalName());
-			if (mreq.getLocalAddr() != null)
+			if (nn(mreq.getLocalAddr()))
 				localAddr(mreq.getLocalAddr());
-			if (mreq.getPathInfo() != null)
+			if (nn(mreq.getPathInfo()))
 				pathInfo(mreq.getPathInfo());
-			if (mreq.getPathTranslated() != null)
+			if (nn(mreq.getPathTranslated()))
 				pathTranslated(mreq.getPathTranslated());
-			if (mreq.getContextPath() != null)
+			if (nn(mreq.getContextPath()))
 				contextPath(mreq.getContextPath());
-			if (mreq.getQueryString() != null)
+			if (nn(mreq.getQueryString()))
 				queryString(mreq.getQueryString());
-			if (mreq.getRemoteUser() != null)
+			if (nn(mreq.getRemoteUser()))
 				remoteUser(mreq.getRemoteUser());
-			if (mreq.getRequestedSessionId() != null)
+			if (nn(mreq.getRequestedSessionId()))
 				requestedSessionId(mreq.getRequestedSessionId());
-			if (mreq.getRequestURI() != null)
+			if (nn(mreq.getRequestURI()))
 				requestURI(mreq.getRequestURI());
-			if (mreq.getServletPath() != null)
+			if (nn(mreq.getServletPath()))
 				servletPath(mreq.getServletPath());
-			if (mreq.getAuthType() != null)
+			if (nn(mreq.getAuthType()))
 				authType(mreq.getAuthType());
-			if (mreq.getServerPort() != null)
+			if (nn(mreq.getServerPort()))
 				serverPort(mreq.getServerPort());
-			if (mreq.getRemotePort() != null)
+			if (nn(mreq.getRemotePort()))
 				remotePort(mreq.getRemotePort());
-			if (mreq.getLocalPort() != null)
+			if (nn(mreq.getLocalPort()))
 				localPort(mreq.getLocalPort());
-			if (mreq.getLocale() != null)
+			if (nn(mreq.getLocale()))
 				locale(mreq.getLocale());
-			if (mreq.getServletContext() != null)
+			if (nn(mreq.getServletContext()))
 				servletContext(mreq.getServletContext());
-			if (mreq.getDispatcherType() != null)
+			if (nn(mreq.getDispatcherType()))
 				dispatcherType(mreq.getDispatcherType());
-			if (mreq.getCookies() != null)
+			if (nn(mreq.getCookies()))
 				cookies(mreq.getCookies());
-			if (mreq.getUserPrincipal() != null)
+			if (nn(mreq.getUserPrincipal()))
 				userPrincipal(mreq.getUserPrincipal());
-			if (mreq.getHttpSession() != null)
+			if (nn(mreq.getHttpSession()))
 				httpSession(mreq.getHttpSession());
-			if (mreq.getRoles() != null)
+			if (nn(mreq.getRoles()))
 				roles(mreq.getRoles());
 		}
 
@@ -256,7 +256,7 @@ public class MockServletRequest implements HttpServletRequest {
 				this.content = readBytes((InputStream)value);
 			else if (value instanceof CharSequence)
 				this.content = ((CharSequence)value).toString().getBytes();
-			else if (value != null)
+			else if (nn(value))
 				this.content = value.toString().getBytes();
 		} catch (IOException e) {
 			throw asRuntimeException(e);
@@ -355,7 +355,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* Overridden from HttpServletRequest */
 	public ServletInputStream getInputStream() throws IOException {
-		if (formDataMap != null)
+		if (nn(formDataMap))
 			content = UrlEncodingSerializer.DEFAULT.toString(formDataMap).getBytes();
 		return new BoundedServletInputStream(new ByteArrayInputStream(content), Integer.MAX_VALUE);
 	}
@@ -538,7 +538,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest header(String name, Object value) {
-		if (value != null) {
+		if (nn(value)) {
 			String[] v1 = (value instanceof String[]) ? (String[])value : new String[] { value.toString() };
 			String[] v2 = headerMap.get(name);
 			String[] v3 = ArrayUtils.combine(v2, v1);
@@ -690,7 +690,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @see MockRestClient.Builder#pathVars(Map)
 	 */
 	public MockServletRequest pathVars(Map<String,String> pathVars) {
-		if (pathVars != null)
+		if (nn(pathVars))
 			this.attributeMap.put("juneau.pathVars", new TreeMap<>(pathVars));
 		return this;
 	}

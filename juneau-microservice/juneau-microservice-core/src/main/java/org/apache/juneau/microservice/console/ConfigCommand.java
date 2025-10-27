@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.microservice.console;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -44,7 +46,7 @@ public class ConfigCommand extends ConsoleCommand {
 				// config get <key>
 				if (args.size() == 3) {
 					var val = conf.get(key).orElse(null);
-					if (val != null)
+					if (nn(val))
 						out.println(val);
 					else
 						out.println(mb.getString("KeyNotFound", key));

@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -208,56 +209,56 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo copyFrom(ParameterInfo p) {
-		if (p != null) {
-			if (p.name != null)
+		if (nn(p)) {
+			if (nn(p.name))
 				name = p.name;
-			if (p.in != null)
+			if (nn(p.in))
 				in = p.in;
-			if (p.description != null)
+			if (nn(p.description))
 				description = p.description;
-			if (p.type != null)
+			if (nn(p.type))
 				type = p.type;
-			if (p.format != null)
+			if (nn(p.format))
 				format = p.format;
-			if (p.pattern != null)
+			if (nn(p.pattern))
 				pattern = p.pattern;
-			if (p.collectionFormat != null)
+			if (nn(p.collectionFormat))
 				collectionFormat = p.collectionFormat;
-			if (p.maximum != null)
+			if (nn(p.maximum))
 				maximum = p.maximum;
-			if (p.minimum != null)
+			if (nn(p.minimum))
 				minimum = p.minimum;
-			if (p.multipleOf != null)
+			if (nn(p.multipleOf))
 				multipleOf = p.multipleOf;
-			if (p.maxLength != null)
+			if (nn(p.maxLength))
 				maxLength = p.maxLength;
-			if (p.minLength != null)
+			if (nn(p.minLength))
 				minLength = p.minLength;
-			if (p.maxItems != null)
+			if (nn(p.maxItems))
 				maxItems = p.maxItems;
-			if (p.minItems != null)
+			if (nn(p.minItems))
 				minItems = p.minItems;
-			if (p.required != null)
+			if (nn(p.required))
 				required = p.required;
-			if (p.allowEmptyValue != null)
+			if (nn(p.allowEmptyValue))
 				allowEmptyValue = p.allowEmptyValue;
-			if (p.exclusiveMaximum != null)
+			if (nn(p.exclusiveMaximum))
 				exclusiveMaximum = p.exclusiveMaximum;
-			if (p.exclusiveMinimum != null)
+			if (nn(p.exclusiveMinimum))
 				exclusiveMinimum = p.exclusiveMinimum;
-			if (p.uniqueItems != null)
+			if (nn(p.uniqueItems))
 				uniqueItems = p.uniqueItems;
-			if (p.schema != null)
+			if (nn(p.schema))
 				schema = p.schema;
-			if (p.items != null)
+			if (nn(p.items))
 				items = p.items;
-			if (p._default != null)
+			if (nn(p._default))
 				_default = p._default;
-			if (p._enum != null)
+			if (nn(p._enum))
 				_enum = p._enum;
-			if (p.example != null)
+			if (nn(p.example))
 				example = p.example;
-			if (p.examples != null)
+			if (nn(p.examples))
 				examples = p.examples;
 		}
 		return this;
@@ -533,31 +534,31 @@ public class ParameterInfo extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(allowEmptyValue != null, "allowEmptyValue")
-			.addIf(collectionFormat != null, "collectionFormat")
-			.addIf(_default != null, "default")
-			.addIf(description != null, "description")
-			.addIf(_enum != null, "enum")
-			.addIf(example != null, "example")
-			.addIf(examples != null, "examples")
-			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.addIf(format != null, "format")
-			.addIf(in != null, "in")
-			.addIf(items != null, "items")
-			.addIf(maximum != null, "maximum")
-			.addIf(maxItems != null, "maxItems")
-			.addIf(maxLength != null, "maxLength")
-			.addIf(minimum != null, "minimum")
-			.addIf(minItems != null, "minItems")
-			.addIf(minLength != null, "minLength")
-			.addIf(multipleOf != null, "multipleOf")
-			.addIf(name != null, "name")
-			.addIf(pattern != null, "pattern")
-			.addIf(required != null, "required")
-			.addIf(schema != null, "schema")
-			.addIf(type != null, "type")
-			.addIf(uniqueItems != null, "uniqueItems")
+			.addIf(nn(allowEmptyValue), "allowEmptyValue")
+			.addIf(nn(collectionFormat), "collectionFormat")
+			.addIf(nn(_default), "default")
+			.addIf(nn(description), "description")
+			.addIf(nn(_enum), "enum")
+			.addIf(nn(example), "example")
+			.addIf(nn(examples), "examples")
+			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
+			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
+			.addIf(nn(format), "format")
+			.addIf(nn(in), "in")
+			.addIf(nn(items), "items")
+			.addIf(nn(maximum), "maximum")
+			.addIf(nn(maxItems), "maxItems")
+			.addIf(nn(maxLength), "maxLength")
+			.addIf(nn(minimum), "minimum")
+			.addIf(nn(minItems), "minItems")
+			.addIf(nn(minLength), "minLength")
+			.addIf(nn(multipleOf), "multipleOf")
+			.addIf(nn(name), "name")
+			.addIf(nn(pattern), "pattern")
+			.addIf(nn(required), "required")
+			.addIf(nn(schema), "schema")
+			.addIf(nn(type), "type")
+			.addIf(nn(uniqueItems), "uniqueItems")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -578,10 +579,10 @@ public class ParameterInfo extends SwaggerElement {
 	 */
 	public ParameterInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
 
-		if (schema != null)
+		if (nn(schema))
 			schema = schema.resolveRefs(swagger, refStack, maxDepth);
 
-		if (items != null)
+		if (nn(items))
 			items = items.resolveRefs(swagger, refStack, maxDepth);
 
 		return this;

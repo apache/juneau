@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.httppart;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
@@ -122,7 +123,7 @@ public class RequestHttpPart {
 		try {
 			if (HttpParts.isHttpPart(partType, type)) {
 				ConstructorInfo cc = HttpParts.getConstructor(type).orElse(null);
-				if (cc != null) {
+				if (nn(cc)) {
 					if (! isPresent())
 						return Utils.opte();
 					if (cc.hasParamTypes(String.class))

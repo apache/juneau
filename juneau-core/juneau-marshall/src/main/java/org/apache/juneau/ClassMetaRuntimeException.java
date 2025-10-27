@@ -16,6 +16,8 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.text.*;
 
 /**
@@ -32,9 +34,9 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	private static String getMessage(Throwable cause, Class<?> c, String msg) {
-		if (msg != null)
+		if (nn(msg))
 			return (c == null ? "" : c.getName() + ": ") + msg;
-		if (cause != null)
+		if (nn(cause))
 			return (c == null ? "" : c.getName() + ": ") + cause.getMessage();
 		return null;
 	}

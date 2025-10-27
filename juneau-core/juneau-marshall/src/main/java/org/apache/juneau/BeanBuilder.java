@@ -16,6 +16,8 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.common.utils.*;
@@ -81,7 +83,7 @@ public class BeanBuilder<T> {
 	 * @return A new bean.
 	 */
 	public T build() {
-		if (impl != null)
+		if (nn(impl))
 			return impl;
 		if (type == null || type == defaultType)
 			return buildDefault();

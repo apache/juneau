@@ -254,7 +254,7 @@ public class HtmlParserSession extends XmlParserSession {
 	private <T> T parseAnchor(XmlReader r, ClassMeta<T> beanType) throws IOException, ParseException, XMLStreamException {
 		String href = r.getAttributeValue(null, "href");
 		String name = getElementText(r);
-		if (beanType != null && beanType.hasAnnotation(HtmlLink.class)) {
+		if (nn(beanType) && beanType.hasAnnotation(HtmlLink.class)) {
 			Value<String> uriProperty = Value.empty(), nameProperty = Value.empty();
 			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
 			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
@@ -279,9 +279,9 @@ public class HtmlParserSession extends XmlParserSession {
 		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
-		if (builder != null)
+		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
-		else if (swap != null)
+		else if (nn(swap))
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
@@ -341,7 +341,7 @@ public class HtmlParserSession extends XmlParserSession {
 			else
 				isValid = false;
 
-		} else if (tag == STRING || (tag == A && pMeta != null && getHtmlBeanPropertyMeta(pMeta).getLink() != null)) {
+		} else if (tag == STRING || (tag == A && nn(pMeta) && nn(getHtmlBeanPropertyMeta(pMeta).getLink()))) {
 			String text = getElementText(r);
 			if (sType.isObject() || sType.isCharSequence())
 				o = text;
@@ -390,7 +390,7 @@ public class HtmlParserSession extends XmlParserSession {
 			String typeName = getAttribute(r, getBeanTypePropertyName(eType), "object");
 			ClassMeta cm = getClassMeta(typeName, pMeta, eType);
 
-			if (cm != null) {
+			if (nn(cm)) {
 				sType = eType = cm;
 				typeName = sType.isCollectionOrArray() ? "array" : "object";
 			} else if (! "array".equals(typeName)) {
@@ -403,13 +403,13 @@ public class HtmlParserSession extends XmlParserSession {
 					o = parseIntoMap(r, newGenericMap(sType), sType.getKeyType(), sType.getValueType(), pMeta);
 				} else if (sType.isMap()) {
 					o = parseIntoMap(r, (Map)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : newGenericMap(sType)), sType.getKeyType(), sType.getValueType(), pMeta);
-				} else if (builder != null) {
+				} else if (nn(builder)) {
 					BeanMap m = toBeanMap(builder.create(this, eType));
 					o = builder.build(this, parseIntoBean(r, m).getBean(), eType);
 				} else if (sType.canCreateNewBean(outer)) {
 					BeanMap m = newBeanMap(outer, sType.getInnerClass());
 					o = parseIntoBean(r, m).getBean();
-				} else if (sType.getProxyInvocationHandler() != null) {
+				} else if (nn(sType.getProxyInvocationHandler())) {
 					BeanMap m = newBeanMap(outer, sType.getInnerClass());
 					o = parseIntoBean(r, m).getBean();
 				} else {
@@ -436,7 +436,7 @@ public class HtmlParserSession extends XmlParserSession {
 		} else if (tag == UL) {
 			String typeName = getAttribute(r, getBeanTypePropertyName(eType), "array");
 			ClassMeta cm = getClassMeta(typeName, pMeta, eType);
-			if (cm != null)
+			if (nn(cm))
 				sType = eType = cm;
 
 			if (sType.isObject())
@@ -454,10 +454,10 @@ public class HtmlParserSession extends XmlParserSession {
 		if (! isValid)
 			throw new ParseException(this, "Unexpected tag ''{0}'' for type ''{1}''", tag, eType);
 
-		if (swap != null && o != null)
+		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (outer != null)
+		if (nn(outer))
 			setParent(eType, o, outer);
 
 		skipWs(r);
@@ -583,7 +583,7 @@ public class HtmlParserSession extends XmlParserSession {
 
 			ClassMeta elementType = null;
 			String beanType = getAttribute(r, getBeanTypePropertyName(type), null);
-			if (beanType != null)
+			if (nn(beanType))
 				elementType = getClassMeta(beanType, pMeta, null);
 			if (elementType == null)
 				elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
@@ -592,10 +592,10 @@ public class HtmlParserSession extends XmlParserSession {
 
 			BuilderSwap<E,Object> builder = elementType.getBuilderSwap(this);
 
-			if (builder != null || elementType.canCreateNewBean(l)) {
+			if (nn(builder) || elementType.canCreateNewBean(l)) {
 				// @formatter:off
 				BeanMap m =
-					builder != null
+					nn(builder)
 					? toBeanMap(builder.create(this, elementType))
 					: newBeanMap(l, elementType.getInnerClass())
 				;
@@ -624,7 +624,7 @@ public class HtmlParserSession extends XmlParserSession {
 				l.add(
 					m == null
 					? null
-					: builder != null
+					: nn(builder)
 						? builder.build(this, m.getBean(), elementType)
 						: (E)m.getBean()
 				);
@@ -639,14 +639,14 @@ public class HtmlParserSession extends XmlParserSession {
 						nextTag(r, xNULL);
 						break;
 					}
-					if (m != null) {
+					if (nn(m)) {
 						ClassMeta<?> kt = elementType.getKeyType(), vt = elementType.getValueType();
 						Object value = parseAnything(vt, r, l, false, pMeta);
 						setName(vt, value, key);
 						m.put(convertToType(key, kt), value);
 					}
 				}
-				if (m != null && c != null) {
+				if (nn(m) && nn(c)) {
 					JsonMap m2 = (m instanceof JsonMap ? (JsonMap)m : new JsonMap(m).session(this));
 					m2.put(getBeanTypePropertyName(type.getElementType()), c);
 					l.add((E)cast(m2, pMeta, elementType));
@@ -813,7 +813,7 @@ public class HtmlParserSession extends XmlParserSession {
 
 		while (true) {
 			if (et == START_ELEMENT) {
-				if (characters != null) {
+				if (nn(characters)) {
 					if (sb.length() == 0)
 						characters = trimStart(characters);
 					sb.append(characters);
@@ -855,7 +855,7 @@ public class HtmlParserSession extends XmlParserSession {
 					depth++;
 				}
 			} else if (et == END_ELEMENT) {
-				if (characters != null) {
+				if (nn(characters)) {
 					if (sb.length() == 0)
 						characters = trimStart(characters);
 					if (depth == 0)

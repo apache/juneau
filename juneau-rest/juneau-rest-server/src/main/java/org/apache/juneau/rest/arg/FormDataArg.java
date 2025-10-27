@@ -169,11 +169,11 @@ public class FormDataArg implements RestOpArg {
 		FormData mergedFormData = getMergedFormData(pi, name);
 
 		// Use merged form data annotation for all lookups
-		this.def = mergedFormData != null && ! mergedFormData.def().isEmpty() ? mergedFormData.def() : findDef(pi).orElse(null);
+		this.def = nn(mergedFormData) && ! mergedFormData.def().isEmpty() ? mergedFormData.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
-		this.schema = mergedFormData != null ? HttpPartSchema.create(mergedFormData) : HttpPartSchema.create(FormData.class, pi);
+		this.schema = nn(mergedFormData) ? HttpPartSchema.create(mergedFormData) : HttpPartSchema.create(FormData.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();
-		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

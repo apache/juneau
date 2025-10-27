@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -154,14 +155,14 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo copyFrom(ResponseInfo r) {
-		if (r != null) {
-			if (r.description != null)
+		if (nn(r)) {
+			if (nn(r.description))
 				description = r.description;
-			if (r.schema != null)
+			if (nn(r.schema))
 				schema = r.schema;
-			if (r.headers != null)
+			if (nn(r.headers))
 				headers = r.headers;
-			if (r.examples != null)
+			if (nn(r.examples))
 				examples = r.examples;
 		}
 		return this;
@@ -234,10 +235,10 @@ public class ResponseInfo extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(description != null, "description")
-			.addIf(examples != null, "examples")
-			.addIf(headers != null, "headers")
-			.addIf(schema != null, "schema")
+			.addIf(nn(description), "description")
+			.addIf(nn(examples), "examples")
+			.addIf(nn(headers), "headers")
+			.addIf(nn(schema), "schema")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -258,10 +259,10 @@ public class ResponseInfo extends SwaggerElement {
 	 */
 	public ResponseInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
 
-		if (schema != null)
+		if (nn(schema))
 			schema = schema.resolveRefs(swagger, refStack, maxDepth);
 
-		if (headers != null)
+		if (nn(headers))
 			headers.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
 
 		return this;

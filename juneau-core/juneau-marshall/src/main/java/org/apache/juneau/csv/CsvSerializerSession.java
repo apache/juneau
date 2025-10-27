@@ -217,7 +217,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 				return value;
 
 			org.apache.juneau.swap.ObjectSwap swap = type.getSwap(this);
-			if (swap != null) {
+			if (nn(swap)) {
 				return swap(swap, value);
 			}
 			return value;

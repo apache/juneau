@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.annotation.PathRemainderAnnotation.*;
 
 import java.lang.reflect.*;
@@ -89,7 +90,7 @@ public class PathRemainderArg implements RestOpArg {
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(PathRemainder.class, paramInfo);
 		Class<? extends HttpPartParser> pp = schema.getParser();
-		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 	}
 
 	@Override /* Overridden from RestOpArg */

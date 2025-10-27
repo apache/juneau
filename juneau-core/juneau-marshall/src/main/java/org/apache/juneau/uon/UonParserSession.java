@@ -305,9 +305,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
-		if (builder != null)
+		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
-		else if (swap != null)
+		else if (nn(swap))
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
@@ -332,7 +332,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			// Otherwise, leave null.
 		} else if (sType.isVoid()) {
 			String s = parseString(r, isUrlParamValue);
-			if (s != null)
+			if (nn(s))
 				throw new ParseException(this, "Expected ''null'' for void value, but was ''{0}''.", s);
 		} else if (sType.isObject()) {
 			if (c == '(') {
@@ -385,7 +385,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			}
-		} else if (builder != null) {
+		} else if (nn(builder)) {
 			BeanMap m = toBeanMap(builder.create(this, eType));
 			m = parseIntoBeanMap(r, m);
 			o = m == null ? null : builder.build(this, m.getBean(), eType);
@@ -395,7 +395,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			o = m == null ? null : m.getBean();
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			String s = parseString(r, isUrlParamValue);
-			if (s != null)
+			if (nn(s))
 				o = sType.newInstanceFromString(outer, s);
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '(') {
@@ -420,7 +420,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(sType)))
 				o = cast(m, pMeta, eType);
-			else if (sType.getProxyInvocationHandler() != null)
+			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 			else
 				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -433,10 +433,10 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 		if (o == null && sType.isPrimitive())
 			o = sType.getPrimitiveDefault();
-		if (swap != null && o != null)
+		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (outer != null)
+		if (nn(outer))
 			setParent(eType, o, outer);
 
 		return (T)o;

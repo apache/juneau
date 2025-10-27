@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.function.*;
@@ -417,7 +419,7 @@ public class RestOpAnnotation {
 			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 
 			String v = StringUtils.trim(string(a.value()).orElse(null));
-			if (v != null) {
+			if (nn(v)) {
 				int i = v.indexOf(' ');
 				if (i == -1) {
 					b.httpMethod(v);

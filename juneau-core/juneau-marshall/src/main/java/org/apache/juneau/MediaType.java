@@ -305,7 +305,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * @return <jk>true</jk> if the subtype contains the specified subtype string.
 	 */
 	public final boolean hasSubType(String st) {
-		if (st != null)
+		if (nn(st))
 			for (String s : subTypes)
 				if (st.equalsIgnoreCase(s))
 					return true;

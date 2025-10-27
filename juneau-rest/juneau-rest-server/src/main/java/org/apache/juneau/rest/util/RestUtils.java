@@ -482,7 +482,7 @@ public class RestUtils {
 		if (val == null) {
 			if (! b)
 				m.put(key, null);
-		} else if (b && m.get(key) != null) {
+		} else if (b && nn(m.get(key))) {
 			m.put(key, ArrayUtils.append(m.get(key), val));
 		} else {
 			m.put(key, new String[] { val });
@@ -536,7 +536,7 @@ public class RestUtils {
 		for (String v : value) {
 			if (! "INHERIT".equals(v))
 				l.add(v);
-			else if (fromParent != null)
+			else if (nn(fromParent))
 				l.add(fromParent);
 		}
 		return StringUtils.join(l, '\n');

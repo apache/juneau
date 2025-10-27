@@ -124,7 +124,7 @@ public class ArrayUtils {
 		int l = 0;
 		E[] a1 = null;
 		for (E[] a : arrays) {
-			if (a1 == null && a != null)
+			if (a1 == null && nn(a))
 				a1 = a;
 			l += (a == null ? 0 : a.length);
 		}
@@ -133,7 +133,7 @@ public class ArrayUtils {
 		E[] a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
 		int i = 0;
 		for (E[] aa : arrays)
-			if (aa != null)
+			if (nn(aa))
 				for (E t : aa)
 					a[i++] = t;
 		return a;
@@ -174,7 +174,7 @@ public class ArrayUtils {
 	 * @return <jk>true</jk> if the specified array is not null and has a length greater than zero.
 	 */
 	public static boolean isNotEmptyArray(Object[] array) {
-		return array != null && array.length > 0;
+		return nn(array) && array.length > 0;
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class ArrayUtils {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List copyToList(Object array, List list) {
-		if (array != null) {
+		if (nn(array)) {
 			int length = Array.getLength(array);
 			for (int i = 0; i < length; i++)
 				list.add(Array.get(array, i));

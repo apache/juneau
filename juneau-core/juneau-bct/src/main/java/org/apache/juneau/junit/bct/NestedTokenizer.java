@@ -18,6 +18,7 @@ package org.apache.juneau.junit.bct;
 
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.eq;
 import static org.apache.juneau.junit.bct.NestedTokenizer.ParseState.*;
 
@@ -93,7 +94,7 @@ class NestedTokenizer {
 		 * @param value The token value
 		 */
 		public Token(String value) {
-			this.value = value != null ? value : "";
+			this.value = nn(value) ? value : "";
 		}
 
 		@Override
@@ -106,7 +107,7 @@ class NestedTokenizer {
 		 *
 		 * @return unmodifiable list of nested tokens, or empty list if none
 		 */
-		public List<Token> getNested() { return nested != null ? unmodifiableList(nested) : emptyList(); }
+		public List<Token> getNested() { return nn(nested) ? unmodifiableList(nested) : emptyList(); }
 
 		/**
 		 * Returns the main value of this token.
@@ -126,7 +127,7 @@ class NestedTokenizer {
 		 * @return true if nested tokens exist
 		 */
 		public boolean hasNested() {
-			return nested != null && !nested.isEmpty();
+			return nn(nested) && !nested.isEmpty();
 		}
 
 		@Override

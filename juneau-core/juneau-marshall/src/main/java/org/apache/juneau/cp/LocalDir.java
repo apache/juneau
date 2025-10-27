@@ -18,6 +18,7 @@ package org.apache.juneau.cp;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.net.*;
 import java.nio.file.*;
@@ -90,7 +91,7 @@ public class LocalDir {
 	 * @return The file if it exists, or <jk>null</jk> if it does not.
 	 */
 	public LocalFile resolve(String path) {
-		if (clazz != null) {
+		if (nn(clazz)) {
 			String p = clazzPath == null ? path : ("/".equals(clazzPath) ? "" : clazzPath) + '/' + path;
 			if (isClasspathFile(clazz.getResource(p)))
 				return new LocalFile(clazz, p);

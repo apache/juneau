@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -195,7 +197,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 */
 	public Boolean orElse(Boolean other) {
 		Boolean x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -208,7 +210,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	}
 
 	private Boolean value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

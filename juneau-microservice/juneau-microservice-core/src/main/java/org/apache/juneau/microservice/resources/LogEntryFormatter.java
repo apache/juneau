@@ -17,6 +17,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.common.utils.StateEnum.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
@@ -50,7 +51,7 @@ public class LogEntryFormatter extends Formatter {
 
 	private static String hashCode(Throwable t) {
 		int i = 0;
-		while (t != null) {
+		while (nn(t)) {
 			for (StackTraceElement e : t.getStackTrace())
 				i ^= e.hashCode();
 			t = t.getCause();
@@ -207,7 +208,7 @@ public class LogEntryFormatter extends Formatter {
 		Throwable t = r.getThrown();
 		String hash = null;
 		int c = 0;
-		if (hashes != null && t != null) {
+		if (nn(hashes) && nn(t)) {
 			hash = hashCode(t);
 			hashes.putIfAbsent(hash, new AtomicInteger(0));
 			c = hashes.get(hash).incrementAndGet();
@@ -220,7 +221,7 @@ public class LogEntryFormatter extends Formatter {
 		}
 		String s = String.format(format, df.format(new Date(r.getMillis())), r.getSourceClassName(), r.getSourceMethodName(), r.getLoggerName(), r.getLevel(), msg, r.getThreadID(),
 			r.getThrown() == null ? "" : r.getThrown().getMessage());
-		if (t != null)
+		if (nn(t))
 			s += String.format("%n%s", ThrowableUtils.getStackTrace(r.getThrown()));
 		return s;
 	}

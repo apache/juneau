@@ -184,7 +184,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	public RequestHeaders add(Header...headers) {
 		assertArgNotNull("headers", headers);
 		for (Header h : headers)
-			if (h != null)
+			if (nn(h))
 				add(h.getName(), h.getValue());
 		return this;
 	}

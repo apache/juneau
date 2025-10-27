@@ -20,6 +20,7 @@ import static java.lang.Integer.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
@@ -230,7 +231,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		if (context.isAllowContentParam()) {
 			String b = queryParams.get("content").asString().orElse(null);
-			if (b != null) {
+			if (nn(b)) {
 				headers.set("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
 				content.mediaType(MediaType.UON).parser(UonParser.DEFAULT).content(b.getBytes(UTF8));
 			}
@@ -486,7 +487,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			// NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.
 			// Jetty returns the default charset instead of null if the character is not specified on the request.
 			String h = getHeaderParam("Content-Type").orElse(null);
-			if (h != null) {
+			if (nn(h)) {
 				int i = h.indexOf(";charset=");
 				if (i > 0)
 					charset = Charset.forName(h.substring(i + 9).trim());
@@ -848,7 +849,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public Locale getLocale() {
 		var best = inner.getLocale();
 		var h = headers.get("Accept-Language").asString().orElse(null);
-		if (h != null) {
+		if (nn(h)) {
 			StringRanges sr = StringRanges.of(h);
 			float qValue = 0;
 			for (StringRange r : sr.toList()) {
@@ -1164,7 +1165,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			final BeanMeta<T> bm = bs.getBeanMeta(c);
 			return (T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler)(proxy, method, args) -> {
 				RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
-				if (pm != null) {
+				if (nn(pm)) {
 					HttpPartParserSession pp = pm.getParser(getPartParserSession());
 					HttpPartSchema schema = pm.getSchema();
 					String name = pm.getPartName();
@@ -1269,7 +1270,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public Optional<TimeZone> getTimeZone() {
 		var tz = headers.get("Time-Zone").asString().orElse(null);
-		if (tz != null)
+		if (nn(tz))
 			return Utils.opt(TimeZone.getTimeZone(tz));
 		return Optional.empty();
 	}
@@ -1288,10 +1289,10 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public URI getUri(boolean includeQuery, Map<String,Object> addQueryParams) {
 		var uri = inner.getRequestURI();
-		if (includeQuery || addQueryParams != null) {
+		if (includeQuery || nn(addQueryParams)) {
 			StringBuilder sb = new StringBuilder(uri);
 			RequestQueryParams rq = this.queryParams.copy();
-			if (addQueryParams != null)
+			if (nn(addQueryParams))
 				for (Map.Entry<String,?> e : addQueryParams.entrySet())
 					rq.set(e.getKey(), e.getValue());
 			if (! rq.isEmpty())
@@ -1509,7 +1510,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 	/* Called by RestSession.finish() */
 	void close() {
-		if (config != null) {
+		if (nn(config)) {
 			config.close();
 		}
 	}

@@ -17,6 +17,8 @@
 package org.apache.juneau.reflect;
 
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
@@ -178,7 +180,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return annotationProvider.firstAnnotation(type, c, x -> true) != null;
+		return nn(annotationProvider.firstAnnotation(type, c, x -> true));
 	}
 
 	/**

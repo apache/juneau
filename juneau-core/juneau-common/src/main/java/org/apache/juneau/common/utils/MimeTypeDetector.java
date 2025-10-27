@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -290,7 +292,7 @@ public class MimeTypeDetector {
 
 		// Check file map first (for specific file mappings)
 		var fileMimeType = fileMap.get(fileName);
-		if (fileMimeType != null) {
+		if (nn(fileMimeType)) {
 			return fileMimeType;
 		}
 
@@ -324,7 +326,7 @@ public class MimeTypeDetector {
 		var extension = FileUtils.getExtension(fileName);
 		if (Utils.isNotEmpty(extension)) {
 			var mimeType = extMap.get(extension.toLowerCase());
-			if (mimeType != null) {
+			if (nn(mimeType)) {
 				return mimeType;
 			}
 		}

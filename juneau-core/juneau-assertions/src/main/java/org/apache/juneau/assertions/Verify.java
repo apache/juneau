@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.function.*;
 
 import org.apache.juneau.common.utils.*;
@@ -81,7 +83,7 @@ public class Verify {
 		if (expected == o)
 			return null;
 		if (expected == null || o == null || !expected.equals(o))
-			return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
+			return nn(msg) ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
 		return null;
 	}
 
@@ -105,11 +107,12 @@ public class Verify {
 	 * @param type The type to test against.
 	 * @return An error message if the object is not of the specified type, otherwise <jk>null</jk>.
 	 */
+	@SuppressWarnings("null")
 	public String isType(Class<?> type) {
-		if ((type == null && o == null) || (type != null && type.isInstance(o)))
+		if ((type == null && o == null) || (nn(type) && type.isInstance(o)))
 			return null;
 		var c = o == null ? null : o.getClass();
-		return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedType, type, c);
+		return nn(msg) ? msg.get() : StringUtils.format(MSG_unexpectedType, type, c);
 	}
 
 	/**

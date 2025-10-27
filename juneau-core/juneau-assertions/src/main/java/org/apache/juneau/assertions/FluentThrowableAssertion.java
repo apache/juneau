@@ -19,6 +19,7 @@ package org.apache.juneau.assertions;
 import static java.util.Collections.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.list;
 
 import java.io.*;
@@ -211,7 +212,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 */
 	public <X extends Throwable> FluentThrowableAssertion<X,R> asFind(Class<X> throwableClass) {
 		Throwable t = orElse(null);
-		while (t != null) {
+		while (nn(t)) {
 			if (throwableClass.isInstance(t))
 				return new FluentThrowableAssertion<>(this, throwableClass.cast(t), returns());
 			t = t.getCause();
@@ -254,12 +255,12 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	public FluentListAssertion<String,R> asLocalizedMessages() {
 		List<String> l = null;
 		Throwable t = orElse(null);
-		if (t != null) {
+		if (nn(t)) {
 			if (t.getCause() == null)
 				l = singletonList(t.getMessage());
 			else {
 				l = list();
-				while (t != null) {
+				while (nn(t)) {
 					l.add(t.getLocalizedMessage());
 					t = t.getCause();
 				}
@@ -303,12 +304,12 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	public FluentListAssertion<String,R> asMessages() {
 		List<String> l = null;
 		Throwable t = orElse(null);
-		if (t != null) {
+		if (nn(t)) {
 			if (t.getCause() == null)
 				l = singletonList(t.getMessage());
 			else {
 				l = list();
-				while (t != null) {
+				while (nn(t)) {
 					l.add(t.getMessage());
 					t = t.getCause();
 				}

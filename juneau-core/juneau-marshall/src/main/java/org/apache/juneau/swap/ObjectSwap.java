@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.swap;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -270,7 +272,7 @@ public abstract class ObjectSwap<T,S> {
 		var mt = session.getMediaType();
 		if (mt == null)
 			return 0;
-		if (forMediaTypes != null)
+		if (nn(forMediaTypes))
 			for (MediaType mt2 : forMediaTypes)
 				i = Math.max(i, mt2.match(mt, false));
 		return i;

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -206,11 +208,11 @@ public class SerializedHeader extends BasicHeader {
 	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
 	 */
 	public SerializedHeader copyWith(HttpPartSerializerSession serializer, HttpPartSchema schema) {
-		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
+		if ((this.serializer == null && nn(serializer)) || (this.schema == null && nn(schema))) {
 			SerializedHeader h = copy();
-			if (serializer != null)
+			if (nn(serializer))
 				h.serializer(serializer);
-			if (schema != null)
+			if (nn(schema))
 				h.schema(schema);
 			return h;
 		}
@@ -221,7 +223,7 @@ public class SerializedHeader extends BasicHeader {
 	public String getValue() {
 		try {
 			Object v = value;
-			if (supplier != null)
+			if (nn(supplier))
 				v = supplier.get();
 			HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
 			String def = schema.getDefault();
@@ -257,7 +259,7 @@ public class SerializedHeader extends BasicHeader {
 	 * @return This object.
 	 */
 	public SerializedHeader serializer(HttpPartSerializer value) {
-		if (value != null)
+		if (nn(value))
 			return serializer(value.getPartSession());
 		return this;
 	}

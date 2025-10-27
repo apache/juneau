@@ -53,7 +53,7 @@ public class StringUtils {
 
 	/**
 	 * Thread-local cache of MessageFormat objects for improved performance.
-	 * 
+	 *
 	 * <p>MessageFormat objects are not thread-safe, so we use a ThreadLocal cache
 	 * to ensure each thread has its own set of cached formatters. This avoids:
 	 * <ul>
@@ -62,7 +62,7 @@ public class StringUtils {
 	 *   <li>Object allocation for frequently used patterns</li>
 	 * </ul>
 	 */
-	private static final ThreadLocal<Cache<String,MessageFormat>> MESSAGE_FORMAT_CACHE = 
+	private static final ThreadLocal<Cache<String,MessageFormat>> MESSAGE_FORMAT_CACHE =
 		ThreadLocal.withInitial(() -> Cache.of(String.class, MessageFormat.class).maxSize(100).build());
 
 	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
@@ -357,7 +357,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the value contains the specified substring.
 	 */
 	public static boolean contains(String value, CharSequence substring) {
-		return value != null && value.contains(substring);
+		return nn(value) && value.contains(substring);
 	}
 
 	/**
@@ -499,7 +499,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with the specified character.
 	 */
 	public static boolean endsWith(String s, char c) {
-		if (s != null) {
+		if (nn(s)) {
 			var i = s.length();
 			if (i > 0)
 				return s.charAt(i - 1) == c;
@@ -515,7 +515,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and ends with the specified character.
 	 */
 	public static boolean endsWith(String s, char...c) {
-		if (s != null) {
+		if (nn(s)) {
 			var i = s.length();
 			if (i > 0) {
 				var c2 = s.charAt(i - 1);
@@ -654,7 +654,7 @@ public class StringUtils {
 	 * 	of only whitespace.
 	 */
 	public static char firstNonWhitespaceChar(String s) {
-		if (s != null)
+		if (nn(s))
 			for (var i = 0; i < s.length(); i++)
 				if (! isWhitespace(s.charAt(i)))
 					return s.charAt(i);
@@ -667,6 +667,7 @@ public class StringUtils {
 	 * @param in The URI to fix.
 	 * @return The fixed URI.
 	 */
+	@SuppressWarnings("null")
 	public static String fixUrl(String in) {
 
 		if (in == null)
@@ -687,7 +688,7 @@ public class StringUtils {
 				m = i + 1;
 			}
 		}
-		if (sb != null) {
+		if (nn(sb)) {
 			sb.append(in.substring(m));
 			return sb.toString();
 		}
@@ -721,15 +722,15 @@ public class StringUtils {
 		// Get or create a cached MessageFormat for this pattern (thread-safe via ThreadLocal)
 		var cache = MESSAGE_FORMAT_CACHE.get();
 		var mf = cache.get(pattern, () -> new MessageFormat(pattern));
-		
+
 		// Determine which arguments have format types and need to preserve their original type
 		var formats = mf.getFormatsByArgumentIndex();
-		
+
 		var args2 = new Object[args.length];
 		for (var i = 0; i < args.length; i++) {
 			// If there's a Format specified for this index, keep the original argument
 			// Otherwise, convert to readable string for better output
-			var hasFormat = i < formats.length && formats[i] != null;
+			var hasFormat = i < formats.length && nn(formats[i]);
 			args2[i] = hasFormat ? args[i] : convertToReadable(args[i]);
 		}
 
@@ -1709,7 +1710,7 @@ public class StringUtils {
 	 * 	of only whitespace.
 	 */
 	public static char lastNonWhitespaceChar(String s) {
-		if (s != null)
+		if (nn(s))
 			for (var i = s.length() - 1; i >= 0; i--)
 				if (! isWhitespace(s.charAt(i)))
 					return s.charAt(i);
@@ -2350,12 +2351,12 @@ public class StringUtils {
 						key = (hasInternalVar ? replaceVars(key, m) : key);
 						hasInternalVar = false;
 						// JUNEAU-248: Check if key exists in map by attempting to get it
-						// For regular maps: use containsKey() OR get() != null check
+						// For regular maps: use containsKey() OR nn(get()) check
 						// For BeanMaps: get() returns non-null for accessible properties (including hidden ones)
 						var val = m.get(key);
 						// Check if key actually exists: either containsKey is true, or val is non-null
 						// This handles both regular maps and BeanMaps correctly
-						var keyExists = m.containsKey(key) || val != null;
+						var keyExists = m.containsKey(key) || nn(val);
 						if (! keyExists)
 							out.append('{').append(key).append('}');
 						else {
@@ -2963,7 +2964,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and starts with the specified character.
 	 */
 	public static boolean startsWith(String s, char c) {
-		if (s != null) {
+		if (nn(s)) {
 			var i = s.length();
 			if (i > 0)
 				return s.charAt(0) == c;
@@ -3382,7 +3383,7 @@ public class StringUtils {
 	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
 	 */
 	public static String trimEnd(String s) {
-		if (s != null)
+		if (nn(s))
 			while (isNotEmpty(s) && isWhitespace(s.charAt(s.length() - 1)))
 				s = s.substring(0, s.length() - 1);
 		return s;
@@ -3443,7 +3444,7 @@ public class StringUtils {
 	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
 	 */
 	public static String trimStart(String s) {
-		if (s != null)
+		if (nn(s))
 			while (isNotEmpty(s) && isWhitespace(s.charAt(0)))
 				s = s.substring(1);
 		return s;

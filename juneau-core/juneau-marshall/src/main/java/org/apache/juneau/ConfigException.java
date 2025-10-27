@@ -16,6 +16,8 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.text.*;
 
 /**
@@ -56,7 +58,7 @@ public class ConfigException extends BasicRuntimeException {
 		if (t == null)
 			return super.getMessage();
 		StringBuilder sb = new StringBuilder(super.getMessage());
-		while (t != null) {
+		while (nn(t)) {
 			sb.append("  ").append(t.getMessage());
 			t = t.getCause();
 		}

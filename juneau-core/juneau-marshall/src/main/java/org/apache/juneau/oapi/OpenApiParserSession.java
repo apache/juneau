@@ -17,6 +17,7 @@
 package org.apache.juneau.oapi;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
@@ -224,7 +225,7 @@ public class OpenApiParserSession extends UonParserSession {
 
 		boolean isOptional = type.isOptional();
 
-		while (type != null && type.isOptional())
+		while (nn(type) && type.isOptional())
 			type = (ClassMeta<T>)type.getElementType();
 
 		if (type == null)
@@ -255,9 +256,9 @@ public class OpenApiParserSession extends UonParserSession {
 			ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)type.getSwap(this);
 			BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)type.getBuilderSwap(this);
 			ClassMeta<?> sType = null;
-			if (builder != null)
+			if (nn(builder))
 				sType = builder.getBuilderClassMeta(this);
-			else if (swap != null)
+			else if (nn(swap))
 				sType = swap.getSwapClassMeta(this);
 			else
 				sType = type;

@@ -17,6 +17,7 @@
 package org.apache.juneau.assertions;
 
 import static java.util.Arrays.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -299,7 +300,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		isSize(tests.length);
 		for (int i = 0, j = getSize(); i < j; i++) {
 			var t = tests[i];
-			if (t != null && !t.test(at(i)))
+			if (nn(t) && !t.test(at(i)))
 				throw error(MSG_listDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();

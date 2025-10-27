@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -175,11 +176,11 @@ public class Xml extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(attribute != null, "attribute")
-			.addIf(name != null, "name")
-			.addIf(namespace != null, "namespace")
-			.addIf(prefix != null, "prefix")
-			.addIf(wrapped != null, "wrapped")
+			.addIf(nn(attribute), "attribute")
+			.addIf(nn(name), "name")
+			.addIf(nn(namespace), "namespace")
+			.addIf(nn(prefix), "prefix")
+			.addIf(nn(wrapped), "wrapped")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -214,13 +215,13 @@ public class Info extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(contact != null, "contact")
-			.addIf(description != null, "description")
-			.addIf(license != null, "license")
-			.addIf(siteName != null, "siteName")
-			.addIf(termsOfService != null, "termsOfService")
-			.addIf(title != null, "title")
-			.addIf(version != null, "version")
+			.addIf(nn(contact), "contact")
+			.addIf(nn(description), "description")
+			.addIf(nn(license), "license")
+			.addIf(nn(siteName), "siteName")
+			.addIf(nn(termsOfService), "termsOfService")
+			.addIf(nn(title), "title")
+			.addIf(nn(version), "version")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

@@ -17,6 +17,8 @@
 package org.apache.juneau.reflect;
 
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -157,7 +159,7 @@ public class ParamInfo {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			A o = ci.getAnnotation(type, filter);
-			if (o != null)
+			if (nn(o))
 				return o;
 			for (Annotation a2 : eInfo._getParameterAnnotations(index))
 				if (type.isInstance(a2) && PredicateUtils.test(filter, type.cast(a2)))
@@ -166,7 +168,7 @@ public class ParamInfo {
 			MethodInfo mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			A o = ci.getAnnotation(type, filter);
-			if (o != null)
+			if (nn(o))
 				return o;
 			Value<A> v = Value.empty();
 			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, filter, y -> v.set(y)));
@@ -190,7 +192,7 @@ public class ParamInfo {
 	 * @return The specified parameter annotation declared on this parameter, or <jk>null</jk> if not found.
 	 */
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type) {
-		if (type != null)
+		if (nn(type))
 			for (Annotation a : eInfo._getParameterAnnotations(index))
 				if (type.isInstance(a))
 					return type.cast(a);
@@ -223,7 +225,7 @@ public class ParamInfo {
 	 */
 	public String getName() {
 		Name n = p.getAnnotation(Name.class);
-		if (n != null)
+		if (nn(n))
 			return n.value();
 		if (p.isNamePresent())
 			return p.getName();
@@ -246,7 +248,7 @@ public class ParamInfo {
 	 * 	The <jk>true</jk> if annotation if found.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return getAnnotation(type) != null;
+		return nn(getAnnotation(type));
 	}
 
 	/**

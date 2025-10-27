@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.function.*;
 
 import org.apache.http.*;
@@ -139,11 +141,11 @@ public class SerializedPart extends BasicPart {
 	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
 	 */
 	public SerializedPart copyWith(HttpPartSerializerSession serializer, HttpPartSchema schema) {
-		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
+		if ((this.serializer == null && nn(serializer)) || (this.schema == null && nn(schema))) {
 			SerializedPart p = copy();
-			if (serializer != null)
+			if (nn(serializer))
 				p.serializer(serializer);
-			if (schema != null)
+			if (nn(schema))
 				p.schema(schema);
 			return p;
 		}
@@ -188,7 +190,7 @@ public class SerializedPart extends BasicPart {
 	 * @return This object.
 	 */
 	public SerializedPart serializer(HttpPartSerializer value) {
-		if (value != null)
+		if (nn(value))
 			return serializer(value.getPartSession());
 		return this;
 	}

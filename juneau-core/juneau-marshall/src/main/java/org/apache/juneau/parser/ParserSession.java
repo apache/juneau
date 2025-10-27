@@ -18,6 +18,7 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -161,7 +162,7 @@ public class ParserSession extends BeanSession {
 		 * @return This object.
 		 */
 		public Builder schema(HttpPartSchema value) {
-			if (value != null)
+			if (nn(value))
 				this.schema = value;
 			return this;
 		}
@@ -175,7 +176,7 @@ public class ParserSession extends BeanSession {
 		 * @return This object.
 		 */
 		public Builder schemaDefault(HttpPartSchema value) {
-			if (value != null && schema == null)
+			if (nn(value) && schema == null)
 				this.schema = value;
 			return this;
 		}
@@ -218,9 +219,9 @@ public class ParserSession extends BeanSession {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	protected static final void setName(ClassMeta<?> cm, Object o, Object name) throws ExecutableException {
-		if (cm != null) {
+		if (nn(cm)) {
 			Setter m = cm.getNameProperty();
-			if (m != null)
+			if (nn(m))
 				m.set(o, name);
 		}
 	}
@@ -236,7 +237,7 @@ public class ParserSession extends BeanSession {
 	 */
 	protected static final void setParent(ClassMeta<?> cm, Object o, Object parent) throws ExecutableException {
 		Setter m = cm.getParentProperty();
-		if (m != null)
+		if (nn(m))
 			m.set(o, parent);
 	}
 
@@ -290,9 +291,9 @@ public class ParserSession extends BeanSession {
 	 */
 	public final JsonMap getLastLocation() {
 		JsonMap m = new JsonMap();
-		if (currentClass != null)
+		if (nn(currentClass))
 			m.put("currentClass", currentClass.toString(true));
-		if (currentProperty != null)
+		if (nn(currentProperty))
 			m.put("currentProperty", currentProperty);
 		return m;
 	}
@@ -755,7 +756,7 @@ public class ParserSession extends BeanSession {
 
 		ClassMeta<?> cm = getClassMeta(typeName, pMeta, eType);
 
-		if (cm != null) {
+		if (nn(cm)) {
 			BeanMap<?> bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
 
 			// Iterate through all the entries in the map and set the individual field values.
@@ -810,7 +811,7 @@ public class ParserSession extends BeanSession {
 				throw new ParseException(this, "Invalid conversion from string to class ''{0}''", type);
 		}
 
-		if (swap != null)
+		if (nn(swap))
 			o = unswap(swap, o, type);
 
 		return (T)o;
@@ -922,17 +923,17 @@ public class ParserSession extends BeanSession {
 		BeanRegistry br = null;
 
 		// Resolve via @Beanp(dictionary={})
-		if (pMeta != null) {
+		if (nn(pMeta)) {
 			br = pMeta.getBeanRegistry();
-			if (br != null && br.hasName(typeName))
+			if (nn(br) && br.hasName(typeName))
 				return br.getClassMeta(typeName);
 		}
 
 		// Resolve via @Bean(dictionary={}) on the expected type where the
 		// expected type is an interface with subclasses.
-		if (eType != null) {
+		if (nn(eType)) {
 			br = eType.getBeanRegistry();
-			if (br != null && br.hasName(typeName))
+			if (nn(br) && br.hasName(typeName))
 				return br.getClassMeta(typeName);
 		}
 
@@ -1035,7 +1036,7 @@ public class ParserSession extends BeanSession {
 	 * Marks the current position.
 	 */
 	protected void mark() {
-		if (pipe != null) {
+		if (nn(pipe)) {
 			Position p = pipe.getPosition();
 			mark.line = p.line;
 			mark.column = p.column;
@@ -1050,7 +1051,7 @@ public class ParserSession extends BeanSession {
 	 * @param t The throwable that the bean setter threw.
 	 */
 	protected final void onBeanSetterException(BeanPropertyMeta p, Throwable t) {
-		if (listener != null)
+		if (nn(listener))
 			listener.onBeanSetterException(this, t, p);
 		String prefix = "";
 		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
@@ -1071,9 +1072,9 @@ public class ParserSession extends BeanSession {
 		if (propertyName.equals(getBeanTypePropertyName(beanMap.getClassMeta())))
 			return;
 		if (! isIgnoreUnknownBeanProperties())
-			if (value != null || ! isIgnoreUnknownNullBeanProperties())
+			if (nn(value) || ! isIgnoreUnknownNullBeanProperties())
 				throw new ParseException(this, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", propertyName, beanMap.getClassMeta());
-		if (listener != null)
+		if (nn(listener))
 			listener.onUnknownBeanProperty(this, propertyName, beanMap.getClassMeta().getInnerClass(), beanMap.getBean());
 	}
 
@@ -1141,7 +1142,7 @@ public class ParserSession extends BeanSession {
 	 * @return The trimmed string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 */
 	protected final String trim(String s) {
-		if (isTrimStrings() && s != null)
+		if (isTrimStrings() && nn(s))
 			return s.trim();
 		return s;
 	}

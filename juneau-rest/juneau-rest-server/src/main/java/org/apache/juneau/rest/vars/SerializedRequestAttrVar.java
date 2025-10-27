@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.vars;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 
 import org.apache.juneau.common.utils.*;
@@ -67,7 +69,7 @@ public class SerializedRequestAttrVar extends StreamedVar {
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		Object o = req.getAttribute(key).orElse(key);
 		Serializer s = req.getOpContext().getSerializers().getSerializer(s2[0]);
-		if (s != null)
+		if (nn(s))
 			s.serialize(w, o);
 	}
 

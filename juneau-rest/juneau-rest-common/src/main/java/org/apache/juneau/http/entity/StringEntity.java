@@ -18,6 +18,7 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -66,7 +67,7 @@ public class StringEntity extends BasicHttpEntity {
 	public byte[] asBytes() throws IOException {
 		if (isCached() && byteCache == null)
 			byteCache = content().getBytes(getCharset());
-		if (byteCache != null)
+		if (nn(byteCache))
 			return byteCache;
 		return content().getBytes(getCharset());
 	}

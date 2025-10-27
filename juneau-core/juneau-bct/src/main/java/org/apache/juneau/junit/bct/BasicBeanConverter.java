@@ -850,7 +850,7 @@ public class BasicBeanConverter implements BeanConverter {
 		if (c == null)
 			return empty();
 		var l = listifiers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
-		if (l != null)
+		if (nn(l))
 			return of(l.function);
 		return findListifier(c.getSuperclass());
 	}
@@ -859,7 +859,7 @@ public class BasicBeanConverter implements BeanConverter {
 		if (c == null)
 			return empty();
 		var s = stringifiers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
-		if (s != null)
+		if (nn(s))
 			return of(s.function);
 		return findStringifier(c.getSuperclass());
 	}
@@ -868,7 +868,7 @@ public class BasicBeanConverter implements BeanConverter {
 		if (c == null)
 			return empty();
 		var s = swappers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
-		if (s != null)
+		if (nn(s))
 			return of(s.function);
 		return findSwapper(c.getSuperclass());
 	}

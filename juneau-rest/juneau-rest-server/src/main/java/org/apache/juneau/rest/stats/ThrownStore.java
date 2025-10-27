@@ -162,7 +162,7 @@ public class ThrownStore {
 		this.statsImplClass = Utils.firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
 
 		Set<String> s = null;
-		if (builder.ignoreClasses != null)
+		if (nn(builder.ignoreClasses))
 			s = builder.ignoreClasses.stream().map(Class::getName).collect(toSet());
 		if (s == null && parent.isPresent())
 			s = parent.get().ignoreClasses;

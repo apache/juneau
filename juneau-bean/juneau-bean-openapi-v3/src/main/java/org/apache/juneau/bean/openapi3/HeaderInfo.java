@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -244,16 +245,16 @@ public class HeaderInfo extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(ref != null, "$ref")
-			.addIf(allowEmptyValue != null, "allowEmptyValue")
-			.addIf(allowReserved != null, "allowReserved")
-			.addIf(deprecated != null, "deprecated")
-			.addIf(description != null, "description")
-			.addIf(examples != null, "examples")
-			.addIf(explode != null, "explode")
-			.addIf(required != null, "required")
-			.addIf(schema != null, "schema")
-			.addIf(example != null, "x-example")
+			.addIf(nn(ref), "$ref")
+			.addIf(nn(allowEmptyValue), "allowEmptyValue")
+			.addIf(nn(allowReserved), "allowReserved")
+			.addIf(nn(deprecated), "deprecated")
+			.addIf(nn(description), "description")
+			.addIf(nn(examples), "examples")
+			.addIf(nn(explode), "explode")
+			.addIf(nn(required), "required")
+			.addIf(nn(schema), "schema")
+			.addIf(nn(example), "x-example")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 
@@ -274,7 +275,7 @@ public class HeaderInfo extends OpenApiElement {
 	 */
 	public HeaderInfo resolveRefs(OpenApi openApi, Deque<String> refStack, int maxDepth) {
 
-		if (ref != null) {
+		if (nn(ref)) {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);

@@ -17,6 +17,7 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 
@@ -63,11 +64,11 @@ public class XmlReader implements XMLStreamReader, Positionable {
 			factory.setProperty(XMLInputFactory.IS_COALESCING, true);
 			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
 			factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
-			if (factory.isPropertySupported(XMLInputFactory.REPORTER) && reporter != null)
+			if (factory.isPropertySupported(XMLInputFactory.REPORTER) && nn(reporter))
 				factory.setProperty(XMLInputFactory.REPORTER, reporter);
-			if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && resolver != null)
+			if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && nn(resolver))
 				factory.setProperty(XMLInputFactory.RESOLVER, resolver);
-			if (factory.isPropertySupported(XMLInputFactory.ALLOCATOR) && eventAllocator != null)
+			if (factory.isPropertySupported(XMLInputFactory.ALLOCATOR) && nn(eventAllocator))
 				factory.setProperty(XMLInputFactory.ALLOCATOR, eventAllocator);
 			sr = factory.createXMLStreamReader(r);
 			sr.nextTag();

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -163,7 +165,7 @@ public class BasicEntityTagsHeader extends BasicHeader {
 	 */
 	public EntityTags orElse(EntityTags other) {
 		EntityTags x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -176,7 +178,7 @@ public class BasicEntityTagsHeader extends BasicHeader {
 	}
 
 	private EntityTags value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

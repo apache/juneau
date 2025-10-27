@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -1970,7 +1971,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-		
+
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -2009,7 +2010,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-		
+
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -2962,7 +2963,7 @@ public abstract class BeanContextable extends Context {
 	 */
 	protected BeanContextable(Builder b) {
 		super(b);
-		beanContext = b.bc != null ? b.bc : b.bcBuilder.build();
+		beanContext = nn(b.bc) ? b.bc : b.bcBuilder.build();
 	}
 
 	/**

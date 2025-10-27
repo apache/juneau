@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -236,14 +237,14 @@ public class SecurityScheme extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(authorizationUrl != null, "authorizationUrl")
-			.addIf(description != null, "description")
-			.addIf(flow != null, "flow")
-			.addIf(in != null, "in")
-			.addIf(name != null, "name")
-			.addIf(scopes != null, "scopes")
-			.addIf(tokenUrl != null, "tokenUrl")
-			.addIf(type != null, "type")
+			.addIf(nn(authorizationUrl), "authorizationUrl")
+			.addIf(nn(description), "description")
+			.addIf(nn(flow), "flow")
+			.addIf(nn(in), "in")
+			.addIf(nn(name), "name")
+			.addIf(nn(scopes), "scopes")
+			.addIf(nn(tokenUrl), "tokenUrl")
+			.addIf(nn(type), "type")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

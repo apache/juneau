@@ -17,6 +17,7 @@
 package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -414,7 +415,7 @@ public class BasicHttpEntity implements HttpEntity {
 	@SuppressWarnings("unchecked")
 	protected <T> T contentOrElse(T def) {
 		Object o = content;
-		if (o == null && contentSupplier != null)
+		if (o == null && nn(contentSupplier))
 			o = contentSupplier.get();
 		return (o == null ? def : (T)o);
 	}
@@ -428,5 +429,5 @@ public class BasicHttpEntity implements HttpEntity {
 	 *
 	 * @return <jk>true</jk> if the contents of this entity are provided through an external supplier.
 	 */
-	protected boolean isSupplied() { return contentSupplier != null; }
+	protected boolean isSupplied() { return nn(contentSupplier); }
 }

@@ -18,6 +18,7 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 
 import java.net.*;
@@ -434,7 +435,7 @@ public class BasicHttpResponse implements HttpResponse {
 	@Override /* Overridden from Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder().append(statusLine).append(' ').append(headers);
-		if (content != null)
+		if (nn(content))
 			sb.append(' ').append(content);
 		return sb.toString();
 	}

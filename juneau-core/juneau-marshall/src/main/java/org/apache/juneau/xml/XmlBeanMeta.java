@@ -73,7 +73,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 					else
 						elements.put(p.getName(), p);
 				} else if (xf == ATTRS) {
-					if (attrsProperty != null)
+					if (nn(attrsProperty))
 						throw new BeanRuntimeException(c, "Multiple instances of ATTRS properties defined on class.  Only one property can be designated as such.");
 					if (! pcm.isMapOrBean())
 						throw new BeanRuntimeException(c, "Invalid type for ATTRS property.  Only properties of type Map and bean can be used.");
@@ -81,7 +81,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 				} else if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT)) {
 					if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS) && ! pcm.isCollectionOrArray())
 						throw new BeanRuntimeException(c, "Invalid type for {0} property.  Only properties of type Collection and array can be used.", xf);
-					if (contentProperty != null) {
+					if (nn(contentProperty)) {
 						if (xf == contentFormat)
 							throw new BeanRuntimeException(c, "Multiple instances of {0} properties defined on class.  Only one property can be designated as such.", xf);
 						throw new BeanRuntimeException(c, "{0} and {1} properties found on the same bean.  Only one property can be designated as such.", contentFormat, xf);
@@ -91,7 +91,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 				}
 				// Look for any properties that are collections with @Xml.childName specified.
 				String n = mp.getXmlBeanPropertyMeta(p).getChildName();
-				if (n != null) {
+				if (nn(n)) {
 					if (collapsedProperties.containsKey(n) && collapsedProperties.get(n) != p)
 						throw new BeanRuntimeException(c, "Multiple properties found with the child name ''{0}''.", n);
 					collapsedProperties.put(n, p);
@@ -129,7 +129,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 		contentFormat = b.contentFormat;
 
 		// Do some validation.
-		if (contentProperty != null || contentFormat == XmlFormat.VOID) {
+		if (nn(contentProperty) || contentFormat == XmlFormat.VOID) {
 			if (! elements.isEmpty())
 				throw new BeanRuntimeException(c, "{0} and ELEMENT properties found on the same bean.  These cannot be mixed.", contentFormat);
 			if (! collapsedProperties.isEmpty())
@@ -244,11 +244,11 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 * @return The property metadata.
 	 */
 	protected BeanPropertyMeta getPropertyMeta(String fieldName) {
-		if (collapsedProperties != null) {
+		if (nn(collapsedProperties)) {
 			BeanPropertyMeta bpm = collapsedProperties.get(fieldName);
 			if (bpm == null)
 				bpm = collapsedProperties.get("*");
-			if (bpm != null)
+			if (nn(bpm))
 				return bpm;
 		}
 		return getBeanMeta().getPropertyMeta(fieldName);

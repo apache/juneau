@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -110,7 +112,7 @@ public class RestSession extends ContextSession {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder pathVars(Map<String,String> value) {
-			if (value != null && ! value.isEmpty()) {
+			if (nn(value) && ! value.isEmpty()) {
 				Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
 				if (m == null) {
 					m = new TreeMap<>();
@@ -262,7 +264,7 @@ public class RestSession extends ContextSession {
 	public RestSession finish() {
 		try {
 			req.setAttribute("ExecTime", System.currentTimeMillis() - startTime);
-			if (opSession != null)
+			if (nn(opSession))
 				opSession.finish();
 			else {
 				res.flushBuffer();
@@ -270,7 +272,7 @@ public class RestSession extends ContextSession {
 		} catch (Exception e) {
 			exception(e);
 		}
-		if (logger != null)
+		if (nn(logger))
 			logger.log(req, res);
 		return this;
 	}
@@ -310,13 +312,13 @@ public class RestSession extends ContextSession {
 
 			if (! s1.isEmpty()) {
 				String[] x = getQueryParams().get("method");
-				if (x != null && (s1.contains("*") || s1.contains(x[0])))
+				if (nn(x) && (s1.contains("*") || s1.contains(x[0])))
 					method = x[0];
 			}
 
 			if (method == null && ! s2.isEmpty()) {
 				String x = req.getHeader("X-Method");
-				if (x != null && (s2.contains("*") || s2.contains(x)))
+				if (nn(x) && (s2.contains("*") || s2.contains(x)))
 					method = x;
 			}
 
@@ -510,7 +512,7 @@ public class RestSession extends ContextSession {
 	 * @return This object.
 	 */
 	public RestSession status(StatusLine value) {
-		if (value != null)
+		if (nn(value))
 			res.setStatus(value.getStatusCode());
 		return this;
 	}

@@ -17,6 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -107,7 +108,7 @@ public class WriterSerializerSession extends SerializerSession {
 		 * @return This object.
 		 */
 		public Builder fileCharset(Charset value) {
-			if (value != null)
+			if (nn(value))
 				fileCharset = value;
 			return this;
 		}
@@ -190,7 +191,7 @@ public class WriterSerializerSession extends SerializerSession {
 		 * @return This object.
 		 */
 		public Builder streamCharset(Charset value) {
-			if (value != null)
+			if (nn(value))
 				streamCharset = value;
 			return this;
 		}
@@ -231,7 +232,7 @@ public class WriterSerializerSession extends SerializerSession {
 		 * @return This object.
 		 */
 		public Builder useWhitespace(Boolean value) {
-			if (value != null)
+			if (nn(value))
 				useWhitespace = value;
 			return this;
 		}

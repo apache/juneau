@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -46,13 +48,13 @@ public class RdfUtils {
 
 		for (Rdf rdf : rdfs) {
 			var ns = findNamespace(rdf.prefix(), rdf.namespace(), rdfs, schemas);
-			if (ns != null)
+			if (nn(ns))
 				return ns;
 		}
 
 		for (RdfSchema schema : schemas) {
 			var ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
-			if (ns != null)
+			if (nn(ns))
 				return ns;
 		}
 
@@ -67,7 +69,7 @@ public class RdfUtils {
 
 		// If only prefix specified, need to search for namespaceURI.
 		if (! prefix.isEmpty()) {
-			if (rdfs != null)
+			if (nn(rdfs))
 				for (Rdf rdf2 : rdfs)
 					if (rdf2.prefix().equals(prefix) && ! rdf2.namespace().isEmpty())
 						return Namespace.of(prefix, rdf2.namespace());
@@ -83,7 +85,7 @@ public class RdfUtils {
 
 		// If only namespaceURI specified, need to search for prefix.
 		if (! ns.isEmpty()) {
-			if (rdfs != null)
+			if (nn(rdfs))
 				for (Rdf rdf2 : rdfs)
 					if (rdf2.namespace().equals(ns) && ! rdf2.prefix().isEmpty())
 						return Namespace.of(rdf2.prefix(), ns);

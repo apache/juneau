@@ -18,6 +18,7 @@ package org.apache.juneau.collections;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -302,8 +303,7 @@ public class Args extends JsonMap {
 	 * @return <jk>true</jk> if the named argument exists.
 	 */
 	public boolean hasArg(String name) {
-		JsonList l = (JsonList)get(name);
-		return l != null;
+		return nn(get(name));
 	}
 
 	@Override /* Overridden from JsonMap */

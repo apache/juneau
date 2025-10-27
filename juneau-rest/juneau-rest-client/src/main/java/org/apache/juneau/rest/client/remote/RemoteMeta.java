@@ -84,7 +84,7 @@ public class RemoteMeta {
 			}
 		}
 
-		if (clientVersion != null)
+		if (nn(clientVersion))
 			headers.append(stringHeader(versionHeader, clientVersion));
 
 		Map<Method,RemoteOperationMeta> operations = CollectionUtils.map();

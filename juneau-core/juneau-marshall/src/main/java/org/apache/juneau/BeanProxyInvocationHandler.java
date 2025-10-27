@@ -16,6 +16,8 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -79,11 +81,11 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return Json5Serializer.DEFAULT.toString(this.beanProps);
 
 		String prop = this.meta.getterProps.get(method);
-		if (prop != null)
+		if (nn(prop))
 			return this.beanProps.get(prop);
 
 		prop = this.meta.setterProps.get(method);
-		if (prop != null) {
+		if (nn(prop)) {
 			this.beanProps.put(prop, args[0]);
 			return null;
 		}

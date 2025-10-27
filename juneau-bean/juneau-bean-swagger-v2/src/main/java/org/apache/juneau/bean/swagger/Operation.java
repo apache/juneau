@@ -517,7 +517,7 @@ public class Operation extends SwaggerElement {
 	public ParameterInfo getParameter(String in, String name) {
 		assertArgNotNull("in", in);
 		// Note: name can be null for "body" parameters
-		if (parameters != null)
+		if (nn(parameters))
 			for (var pi : parameters)
 				if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
 					return pi;
@@ -639,24 +639,24 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>false</jk> if it is not set.
 	 */
-	public boolean isDeprecated() { return deprecated != null && deprecated; }
+	public boolean isDeprecated() { return nn(deprecated) && deprecated; }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(consumes != null, "consumes")
-			.addIf(deprecated != null, "deprecated")
-			.addIf(description != null, "description")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(operationId != null, "operationId")
-			.addIf(parameters != null, "parameters")
-			.addIf(produces != null, "produces")
-			.addIf(responses != null, "responses")
-			.addIf(schemes != null, "schemes")
-			.addIf(security != null, "security")
-			.addIf(summary != null, "summary")
-			.addIf(tags != null, "tags")
+			.addIf(nn(consumes), "consumes")
+			.addIf(nn(deprecated), "deprecated")
+			.addIf(nn(description), "description")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(operationId), "operationId")
+			.addIf(nn(parameters), "parameters")
+			.addIf(nn(produces), "produces")
+			.addIf(nn(responses), "responses")
+			.addIf(nn(schemes), "schemes")
+			.addIf(nn(security), "security")
+			.addIf(nn(summary), "summary")
+			.addIf(nn(tags), "tags")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

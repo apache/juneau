@@ -285,7 +285,7 @@ public class Messages extends ResourceBundle {
 			for (String bn : baseNames) {
 				bn = StringUtils.replaceVars(bn, m);
 				ResourceBundle rb = findBundle(bn, locale, cl);
-				if (rb != null)
+				if (nn(rb))
 					return rb;
 			}
 			return null;
@@ -355,14 +355,14 @@ public class Messages extends ResourceBundle {
 		this.c = forClass;
 		this.rb = rb;
 		this.parent = parent;
-		if (parent != null)
+		if (nn(parent))
 			setParent(parent);
 		this.locale = locale == null ? Locale.getDefault() : locale;
 
 		Map<String,String> keyMap = new TreeMap<>();
 
 		String cn = c.getSimpleName() + '.';
-		if (rb != null) {
+		if (nn(rb)) {
 			rb.keySet().forEach(x -> {
 				keyMap.put(x, x);
 				if (x.startsWith(cn)) {
@@ -371,7 +371,7 @@ public class Messages extends ResourceBundle {
 				}
 			});
 		}
-		if (parent != null) {
+		if (nn(parent)) {
 			parent.keySet().forEach(x -> {
 				keyMap.put(x, x);
 				if (x.startsWith(cn)) {

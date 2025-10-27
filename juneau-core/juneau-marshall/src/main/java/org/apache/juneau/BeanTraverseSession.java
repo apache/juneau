@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
@@ -299,7 +300,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return <jk>true</jk> if the specified meta is an {@link Optional}.
 	 */
 	protected final static boolean isOptional(ClassMeta<?> cm) {
-		return (cm != null && cm.isOptional());
+		return (nn(cm) && cm.isOptional());
 	}
 
 	/**
@@ -361,7 +362,7 @@ public class BeanTraverseSession extends BeanSession {
 		if (o == null)
 			return null;
 		Class<?> c = o.getClass();
-		ClassMeta<?> cm = (eType != null && c == eType.getInnerClass()) ? eType : ((o instanceof ClassMeta) ? (ClassMeta<?>)o : getClassMeta(c));
+		ClassMeta<?> cm = (nn(eType) && c == eType.getInnerClass()) ? eType : ((o instanceof ClassMeta) ? (ClassMeta<?>)o : getClassMeta(c));
 		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
 			return cm;
 		if (depth > getMaxDepth())

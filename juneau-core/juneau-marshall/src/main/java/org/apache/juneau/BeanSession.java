@@ -119,7 +119,7 @@ public class BeanSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder locale(Locale value) {
-			if (value != null)
+			if (nn(value))
 				locale = value;
 			return this;
 		}
@@ -133,7 +133,7 @@ public class BeanSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder localeDefault(Locale value) {
-			if (value != null && locale == null)
+			if (nn(value) && locale == null)
 				locale = value;
 			return this;
 		}
@@ -158,7 +158,7 @@ public class BeanSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder mediaType(MediaType value) {
-			if (value != null)
+			if (nn(value))
 				mediaType = value;
 			return this;
 		}
@@ -172,7 +172,7 @@ public class BeanSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder mediaTypeDefault(MediaType value) {
-			if (value != null && mediaType == null)
+			if (nn(value) && mediaType == null)
 				mediaType = value;
 			return this;
 		}
@@ -209,7 +209,7 @@ public class BeanSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder timeZone(TimeZone value) {
-			if (value != null)
+			if (nn(value))
 				timeZone = value;
 			return this;
 		}
@@ -223,7 +223,7 @@ public class BeanSession extends ContextSession {
 		 * @return This object.
 		 */
 		public Builder timeZoneDefault(TimeZone value) {
-			if (value != null && timeZone == null)
+			if (nn(value) && timeZone == null)
 				timeZone = value;
 			return this;
 		}
@@ -346,7 +346,7 @@ public class BeanSession extends ContextSession {
 	 */
 	public final <T> T convertToType(Object value, Class<T> type) throws InvalidDataConversionException {
 		// Shortcut for most common case.
-		if (value != null && value.getClass() == type)
+		if (nn(value) && value.getClass() == type)
 			return (T)value;
 		return convertToMemberType(null, value, getClassMeta(type));
 	}
@@ -772,7 +772,7 @@ public class BeanSession extends ContextSession {
 	 * @return <jk>true</jk> if the specified class is considered a bean.
 	 */
 	public final boolean isBean(Class<?> c) {
-		return getBeanMeta(c) != null;
+		return nn(getBeanMeta(c));
 	}
 
 	/**
@@ -1154,6 +1154,7 @@ public class BeanSession extends ContextSession {
 	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
 	 * @return The converted value.
 	 */
+	@SuppressWarnings("null")
 	protected final <T> T convertToMemberType(Object outer, Object value, ClassMeta<T> to) throws InvalidDataConversionException {
 		if (to == null)
 			to = (ClassMeta<T>)object();
@@ -1182,7 +1183,7 @@ public class BeanSession extends ContextSession {
 					return (T)value;
 
 			ObjectSwap swap = to.getSwap(this);
-			if (swap != null) {
+			if (nn(swap)) {
 				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
 					return (T)swap.unswap(this, value, to);
@@ -1195,7 +1196,7 @@ public class BeanSession extends ContextSession {
 
 			ClassMeta<?> from = getClassMetaForObject(value);
 			swap = from.getSwap(this);
-			if (swap != null) {
+			if (nn(swap)) {
 				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
 				if (nc.isParentOf(from.getInnerClass()) && fc.isParentOf(tc))
 					return (T)swap.swap(this, value);
@@ -1462,7 +1463,7 @@ public class BeanSession extends ContextSession {
 					return (T)new String((byte[])value);
 				} else if (from.isMapOrBean() || from.isCollectionOrArrayOrOptional()) {
 					WriterSerializer ws = ctx.getBeanToStringSerializer();
-					if (ws != null)
+					if (nn(ws))
 						return (T)ws.serialize(value);
 				} else if (from.isClass()) {
 					return (T)((Class<?>)value).getName();
@@ -1502,13 +1503,13 @@ public class BeanSession extends ContextSession {
 				if (value instanceof JsonMap && builder == null) {
 					JsonMap m2 = (JsonMap)value;
 					String typeName = m2.getString(getBeanTypePropertyName(to));
-					if (typeName != null) {
+					if (nn(typeName)) {
 						ClassMeta cm = to.getBeanRegistry().getClassMeta(typeName);
-						if (cm != null && to.info.isParentOf(cm.innerClass))
+						if (nn(cm) && to.info.isParentOf(cm.innerClass))
 							return (T)m2.cast(cm);
 					}
 				}
-				if (builder != null) {
+				if (nn(builder)) {
 					BeanMap m = toBeanMap(builder.create(this, to));
 					m.load((Map<?,?>)value);
 					return builder.build(this, m.getBean(), to);

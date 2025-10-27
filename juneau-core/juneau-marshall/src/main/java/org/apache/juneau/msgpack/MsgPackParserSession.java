@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.msgpack.DataType.*;
 
 import java.io.*;
@@ -187,9 +188,9 @@ public class MsgPackParserSession extends InputStreamParserSession {
 		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
-		if (builder != null)
+		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
-		else if (swap != null)
+		else if (nn(swap))
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
@@ -248,7 +249,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				} else {
 					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
-			} else if (builder != null || sType.canCreateNewBean(outer)) {
+			} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 				if (dt == MAP) {
 					BeanMap m = builder == null ? newBeanMap(outer, sType.getInnerClass()) : toBeanMap(builder.create(this, eType));
 					for (int i = 0; i < length; i++) {
@@ -311,7 +312,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 					m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 				if (m.containsKey(getBeanTypePropertyName(eType)))
 					o = cast(m, pMeta, eType);
-				else if (sType.getProxyInvocationHandler() != null)
+				else if (nn(sType.getProxyInvocationHandler()))
 					o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 				else
 					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -320,10 +321,10 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			}
 		}
 
-		if (swap != null && o != null)
+		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (outer != null)
+		if (nn(outer))
 			setParent(eType, o, outer);
 
 		return (T)o;

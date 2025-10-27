@@ -20,6 +20,7 @@ import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
@@ -332,7 +333,7 @@ public class JettyMicroservice extends Microservice {
 		 * @return This object.
 		 */
 		public Builder servletAttribute(Map<String,Object> values) {
-			if (values != null)
+			if (nn(values))
 				this.servletAttributes.putAll(values);
 			return this;
 		}
@@ -358,7 +359,7 @@ public class JettyMicroservice extends Microservice {
 		 * @return This object.
 		 */
 		public Builder servlets(Map<String,Servlet> servlets) {
-			if (servlets != null)
+			if (nn(servlets))
 				this.servlets.putAll(servlets);
 			return this;
 		}
@@ -471,8 +472,8 @@ public class JettyMicroservice extends Microservice {
 		super(builder);
 		setInstance(this);
 		this.builder = builder.copy();
-		this.listener = builder.listener != null ? builder.listener : new BasicJettyMicroserviceListener();
-		this.factory = builder.factory != null ? builder.factory : new BasicJettyServerFactory();
+		this.listener = nn(builder.listener) ? builder.listener : new BasicJettyMicroserviceListener();
+		this.factory = nn(builder.factory) ? builder.factory : new BasicJettyServerFactory();
 	}
 
 	/**
@@ -485,7 +486,7 @@ public class JettyMicroservice extends Microservice {
 	 */
 	public JettyMicroservice addServlet(Servlet servlet, String pathSpec) {
 		ServletHolder sh = new ServletHolder(servlet);
-		if (pathSpec != null && ! pathSpec.endsWith("/*"))
+		if (nn(pathSpec) && ! pathSpec.endsWith("/*"))
 			pathSpec = trimTrailingSlashes(pathSpec) + "/*";
 		getServletContextHandler().addServlet(sh, pathSpec);
 		return this;
@@ -616,7 +617,7 @@ public class JettyMicroservice extends Microservice {
 	 * @throws Exception Error occurred.
 	 */
 	public void destroyServer() throws Exception {
-		if (server != null)
+		if (nn(server))
 			server.destroy();
 		server = null;
 	}

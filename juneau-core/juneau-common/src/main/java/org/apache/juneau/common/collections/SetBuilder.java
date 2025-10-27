@@ -183,7 +183,7 @@ public class SetBuilder<E> {
 	 * @return This object.
 	 */
 	public SetBuilder<E> addAll(Collection<E> value) {
-		if (value != null) {
+		if (nn(value)) {
 			if (set == null)
 				set = new LinkedHashSet<>(value);
 			else
@@ -209,9 +209,9 @@ public class SetBuilder<E> {
 	public SetBuilder<E> addAny(Object...values) {
 		if (elementType == null)
 			throw new IllegalStateException("Unknown element type. Cannot use this method.");
-		if (values != null) {
+		if (nn(values)) {
 			for (var o : values) {
-				if (o != null) {
+				if (nn(o)) {
 					if (o instanceof Collection) {
 						((Collection<?>)o).forEach(x -> addAny(x));
 					} else if (isArray(o)) {
@@ -220,13 +220,13 @@ public class SetBuilder<E> {
 					} else if (elementType.isInstance(o)) {
 						add(elementType.cast(o));
 					} else {
-						if (converters != null) {
-							var e = converters.stream().map(x -> x.convertTo(elementType, o)).filter(x -> x != null).findFirst().orElse(null);
-							if (e != null) {
+						if (nn(converters)) {
+							var e = converters.stream().map(x -> x.convertTo(elementType, o)).filter(x -> nn(x)).findFirst().orElse(null);
+							if (nn(e)) {
 								add(e);
 							} else {
-								var l = converters.stream().map(x -> x.convertTo(List.class, o)).filter(x -> x != null).findFirst().orElse(null);
-								if (l != null)
+								var l = converters.stream().map(x -> x.convertTo(List.class, o)).filter(x -> nn(x)).findFirst().orElse(null);
+								if (nn(l))
 									addAny(l);
 								else
 									throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), elementType);
@@ -316,7 +316,7 @@ public class SetBuilder<E> {
 	 * @return This object.
 	 */
 	public SetBuilder<E> copy() {
-		if (set != null)
+		if (nn(set))
 			set = new LinkedHashSet<>(set);
 		return this;
 	}

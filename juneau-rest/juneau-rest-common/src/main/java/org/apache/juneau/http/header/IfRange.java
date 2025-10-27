@@ -17,6 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.time.*;
 import java.util.*;
@@ -202,7 +203,7 @@ public class IfRange extends BasicDateHeader {
 	 * @return This header as an {@link EntityTag}.
 	 */
 	public Optional<EntityTag> asEntityTag() {
-		if (supplier != null) {
+		if (nn(supplier)) {
 			Object o = supplier.get();
 			return Utils.opt(o instanceof EntityTag ? (EntityTag)o : null);
 		}
@@ -211,7 +212,7 @@ public class IfRange extends BasicDateHeader {
 
 	@Override /* Overridden from Header */
 	public String getValue() {
-		if (supplier != null) {
+		if (nn(supplier)) {
 			Object o = supplier.get();
 			if (o == null)
 				return null;
@@ -222,7 +223,7 @@ public class IfRange extends BasicDateHeader {
 			}
 			throw new BasicRuntimeException("Invalid object type returned by supplier: {0}", ClassUtils.className(o));
 		}
-		if (value != null)
+		if (nn(value))
 			return Utils.s(value);
 		return super.getValue();
 	}

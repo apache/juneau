@@ -220,7 +220,7 @@ public class StringExpressionMatcher {
 	 * 	<br>Always <jk>false</jk> if the string is <jk>null</jk>.
 	 */
 	public boolean matches(String input) {
-		return input != null && exp.matches(input);
+		return nn(input) && exp.matches(input);
 	}
 
 	@Override /* Overridden from Object */

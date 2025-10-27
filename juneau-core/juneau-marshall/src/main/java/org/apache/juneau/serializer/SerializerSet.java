@@ -208,7 +208,7 @@ public class SerializerSet {
 		 * @return This object.
 		 */
 		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
-			if (bcBuilder != null)
+			if (nn(bcBuilder))
 				operation.accept(bcBuilder);
 			return this;
 		}
@@ -373,7 +373,7 @@ public class SerializerSet {
 				if (Utils.ne(x.getClass(), x2.getClass()))
 					throw new BasicRuntimeException("Copy method not implemented on class {0}", x.getClass().getName());
 				x = x2;
-				if (bcBuilder != null)
+				if (nn(bcBuilder))
 					x.beanContext(bcBuilder);
 				return x;
 			}
@@ -385,13 +385,13 @@ public class SerializerSet {
 
 				// Check for no-arg constructor.
 				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor(ConstructorInfo::hasNoParams);
-				if (ci != null)
+				if (nn(ci))
 					return ci.invoke();
 
 				// Check for builder create method.
 				@SuppressWarnings("unchecked")
 				Serializer.Builder b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
-				if (bcBuilder != null)
+				if (nn(bcBuilder))
 					b.beanContext(bcBuilder);
 				o = b;
 			}
@@ -564,7 +564,7 @@ public class SerializerSet {
 		if (acceptHeader == null)
 			return null;
 		SerializerMatch sm = cache.get(acceptHeader);
-		if (sm != null)
+		if (nn(sm))
 			return sm;
 
 		MediaRanges a = MediaRanges.of(acceptHeader);

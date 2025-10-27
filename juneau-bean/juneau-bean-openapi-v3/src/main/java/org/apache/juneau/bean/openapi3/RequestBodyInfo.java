@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -155,9 +156,9 @@ public class RequestBodyInfo extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(content != null, "content")
-			.addIf(description != null, "description")
-			.addIf(required != null, "required")
+			.addIf(nn(content), "content")
+			.addIf(nn(description), "description")
+			.addIf(nn(required), "required")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

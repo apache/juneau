@@ -351,7 +351,7 @@ public class FileStore extends ConfigStore {
 		public void run() {
 			try {
 				WatchKey key;
-				while ((key = watchService.take()) != null) {
+				while (nn(key = watchService.take())) {
 					for (var event : key.pollEvents()) {
 						var kind = event.kind();
 						if (kind != OVERFLOW)
@@ -420,7 +420,7 @@ public class FileStore extends ConfigStore {
 			dir.mkdirs();
 			exts = StringUtils.split(extensions).toArray(String[]::new);
 			watcher = enableWatcher ? new WatcherThread(dir, watcherSensitivity) : null;
-			if (watcher != null)
+			if (nn(watcher))
 				watcher.start();
 		} catch (Exception e) {
 			throw asRuntimeException(e);
@@ -429,7 +429,7 @@ public class FileStore extends ConfigStore {
 
 	@Override /* Overridden from Closeable */
 	public synchronized void close() {
-		if (watcher != null)
+		if (nn(watcher))
 			watcher.interrupt();
 	}
 
@@ -451,7 +451,7 @@ public class FileStore extends ConfigStore {
 		name = p.getFileName().toString();
 
 		var s = cache.get(name);
-		if (s != null)
+		if (nn(s))
 			return s;
 
 		dir.mkdirs();
@@ -521,7 +521,7 @@ public class FileStore extends ConfigStore {
 							}
 							currentContents = sb.toString();
 						}
-						if (expectedContents != null && ! Utils.eq(currentContents, expectedContents)) {
+						if (nn(expectedContents) && ! Utils.eq(currentContents, expectedContents)) {
 							if (currentContents == null)
 								cache.remove(name);
 							else

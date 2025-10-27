@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -190,7 +192,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 		this.values = values;
 		entries = (SimpleMapEntry[])Array.newInstance(SimpleMapEntry.class, keys.length);
 		for (var i = 0; i < keys.length; i++) {
-			AssertionUtils.assertArg(keys[i] != null, "Keys array cannot contain a null value.");
+			AssertionUtils.assertArg(nn(keys[i]), "Keys array cannot contain a null value.");
 			entries[i] = new SimpleMapEntry(i);
 		}
 	}

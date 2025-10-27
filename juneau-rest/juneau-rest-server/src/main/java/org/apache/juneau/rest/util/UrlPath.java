@@ -39,7 +39,7 @@ public class UrlPath {
 	 * @return A new {@link UrlPath} object.
 	 */
 	public static UrlPath of(String path) {
-		if (path != null && ! path.startsWith("/"))
+		if (nn(path) && ! path.startsWith("/"))
 			throw new IllegalArgumentException("Invalid path specified. Must be null or start with '/' per HttpServletRequest.getPathInfo().");
 		return new UrlPath(path);
 	}
@@ -96,7 +96,7 @@ public class UrlPath {
 	 *
 	 * @return <jk>true</jk> if this path ends with a slash.
 	 */
-	public boolean isTrailingSlash() { return path != null && path.endsWith("/"); }
+	public boolean isTrailingSlash() { return nn(path) && path.endsWith("/"); }
 
 	@Override /* Overridden from Object */
 	public String toString() {

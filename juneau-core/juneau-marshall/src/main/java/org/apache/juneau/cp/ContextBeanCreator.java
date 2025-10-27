@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -78,7 +80,7 @@ public class ContextBeanCreator<T> {
 	 * @return This object.
 	 */
 	public ContextBeanCreator<T> apply(AnnotationWorkList work) {
-		if (builder != null)
+		if (nn(builder))
 			builder.apply(work);
 		return this;
 	}
@@ -119,7 +121,7 @@ public class ContextBeanCreator<T> {
 	 * @return This object.
 	 */
 	public boolean canApply(AnnotationWorkList work) {
-		if (builder != null)
+		if (nn(builder))
 			return (builder.canApply(work));
 		return false;
 	}
@@ -140,9 +142,9 @@ public class ContextBeanCreator<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public T create() {
-		if (impl != null)
+		if (nn(impl))
 			return impl;
-		if (builder != null)
+		if (nn(builder))
 			return (T)builder.build();
 		return null;
 	}

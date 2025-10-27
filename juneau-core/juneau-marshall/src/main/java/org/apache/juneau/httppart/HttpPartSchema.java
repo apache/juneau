@@ -168,7 +168,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder _enum(Set<String> value) {
-			if (value != null && ! value.isEmpty())
+			if (nn(value) && ! value.isEmpty())
 				this._enum = value;
 			return this;
 		}
@@ -203,7 +203,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder additionalProperties(Builder value) {
-			if (value != null)
+			if (nn(value))
 				additionalProperties = value;
 			return this;
 		}
@@ -223,7 +223,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder additionalProperties(HttpPartSchema value) {
-			if (value != null)
+			if (nn(value))
 				additionalProperties = value;
 			return this;
 		}
@@ -520,7 +520,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder codes(int[] value) {
-			if (value != null && value.length != 0)
+			if (nn(value) && value.length != 0)
 				for (int v : value)
 					code(v);
 			return this;
@@ -1234,7 +1234,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder items(Builder value) {
-			if (value != null)
+			if (nn(value))
 				this.items = value;
 			return this;
 		}
@@ -1263,7 +1263,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder items(HttpPartSchema value) {
-			if (value != null)
+			if (nn(value))
 				this.items = value;
 			return this;
 		}
@@ -1325,7 +1325,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder maximum(Number value) {
-			if (value != null)
+			if (nn(value))
 				this.maximum = value;
 			return this;
 		}
@@ -1555,7 +1555,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder minimum(Number value) {
-			if (value != null)
+			if (nn(value))
 				this.minimum = value;
 			return this;
 		}
@@ -1763,7 +1763,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder multipleOf(Number value) {
-			if (value != null)
+			if (nn(value))
 				this.multipleOf = value;
 			return this;
 		}
@@ -1818,7 +1818,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder noValidate(Boolean value) {
-			if (value != null)
+			if (nn(value))
 				this.noValidate = value;
 			return this;
 		}
@@ -1938,7 +1938,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder property(String key, Builder value) {
-			if (key != null && value != null) {
+			if (nn(key) && nn(value)) {
 				if (properties == null)
 					properties = CollectionUtils.map();
 				properties.put(key, value);
@@ -1963,7 +1963,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder property(String key, HttpPartSchema value) {
-			if (key != null && value != null) {
+			if (nn(key) && nn(value)) {
 				if (properties == null)
 					properties = CollectionUtils.map();
 				properties.put(key, value);
@@ -2470,14 +2470,14 @@ public class HttpPartSchema {
 		}
 
 		private Builder additionalProperties(JsonMap value) {
-			if (value != null && ! value.isEmpty())
+			if (nn(value) && ! value.isEmpty())
 				additionalProperties = HttpPartSchema.create().apply(value);
 			return this;
 		}
 
 		private static Long firstNmo(Long...l) {
 			for (Long ll : l)
-				if (ll != null && ll != -1)
+				if (nn(ll) && ll != -1)
 					return ll;
 			return null;
 		}
@@ -2512,7 +2512,7 @@ public class HttpPartSchema {
 		}
 
 		private Builder properties(JsonMap value) {
-			if (value != null)
+			if (nn(value))
 				value.forEach((k, v) -> property(k, HttpPartSchema.create().apply((JsonMap)v)));
 			return this;
 		}
@@ -2553,7 +2553,7 @@ public class HttpPartSchema {
 		Builder apply(Class<? extends Annotation> c, Method m) {
 			apply(c, m.getGenericReturnType());
 			Annotation a = m.getAnnotation(c);
-			if (a != null)
+			if (nn(a))
 				return apply(a);
 			return this;
 		}
@@ -2627,7 +2627,7 @@ public class HttpPartSchema {
 		// -----------------------------------------------------------------------------------------------------------------
 
 		Builder apply(JsonMap m) {
-			if (m != null && ! m.isEmpty()) {
+			if (nn(m) && ! m.isEmpty()) {
 				_default(m.getString("default"));
 				_enum(HttpPartSchema.toSet(m.getString("enum")));
 				allowEmptyValue(m.getBoolean("allowEmptyValue"));
@@ -2845,28 +2845,28 @@ public class HttpPartSchema {
 					case "Size":
 						Integer min = getAnnotationValue(a, "min", Integer.class);
 						Integer max = getAnnotationValue(a, "max", Integer.class);
-						if (min != null && min > 0) {
+						if (nn(min) && min > 0) {
 							minLength(min.longValue());
 							minItems(min.longValue());
 						}
-						if (max != null && max < Integer.MAX_VALUE) {
+						if (nn(max) && max < Integer.MAX_VALUE) {
 							maxLength(max.longValue());
 							maxItems(max.longValue());
 						}
 						break;
 					case "Min":
 						Long minValue = getAnnotationValue(a, "value", Long.class);
-						if (minValue != null)
+						if (nn(minValue))
 							minimum(minValue);
 						break;
 					case "Max":
 						Long maxValue = getAnnotationValue(a, "value", Long.class);
-						if (maxValue != null)
+						if (nn(maxValue))
 							maximum(maxValue);
 						break;
 					case "Pattern":
 						String regexp = getAnnotationValue(a, "regexp", String.class);
-						if (regexp != null)
+						if (nn(regexp))
 							pattern(regexp);
 						break;
 					case "Email":
@@ -2899,7 +2899,7 @@ public class HttpPartSchema {
 					case "DecimalMin":
 						String minVal = getAnnotationValue(a, "value", String.class);
 						Boolean minInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
-						if (minVal != null) {
+						if (nn(minVal)) {
 							minimum(toNumber(minVal));
 							if (Boolean.FALSE.equals(minInclusive))
 								exclusiveMinimum(true);
@@ -2908,7 +2908,7 @@ public class HttpPartSchema {
 					case "DecimalMax":
 						String maxVal = getAnnotationValue(a, "value", String.class);
 						Boolean maxInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
-						if (maxVal != null) {
+						if (nn(maxVal)) {
 							maximum(toNumber(maxVal));
 							if (Boolean.FALSE.equals(maxInclusive))
 								exclusiveMaximum(true);
@@ -2930,7 +2930,7 @@ public class HttpPartSchema {
 		}
 
 		Builder items(JsonMap value) {
-			if (value != null && ! value.isEmpty())
+			if (nn(value) && ! value.isEmpty())
 				items = HttpPartSchema.create().apply(value);
 			return this;
 		}
@@ -3570,7 +3570,7 @@ public class HttpPartSchema {
 			return null;
 		Set<String> set = Utils.set();
 		for (String[] ss : s)
-			if (ss != null)
+			if (nn(ss))
 				for (String ss2 : ss)
 					StringUtils.split(ss2, x -> set.add(x));
 		return set.isEmpty() ? null : set;
@@ -3642,7 +3642,7 @@ public class HttpPartSchema {
 		// Calculate parse type
 		Class<?> parsedType = Object.class;
 		if (type == ARRAY) {
-			if (items != null)
+			if (nn(items))
 				parsedType = Array.newInstance(items.parsedType.getInnerClass(), 0).getClass();
 		} else if (type == BOOLEAN) {
 			parsedType = Boolean.class;
@@ -3677,57 +3677,57 @@ public class HttpPartSchema {
 		switch (type) {
 			case STRING: {
 				notAllowed
-					.addIf(properties != null, "properties")
-					.addIf(additionalProperties != null, "additionalProperties")
+					.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
 					.addIf(exclusiveMaximum, "exclusiveMaximum")
 					.addIf(exclusiveMinimum, "exclusiveMinimum")
 					.addIf(uniqueItems, "uniqueItems")
 					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
-					.addIf(items != null, "items")
-					.addIf(maximum != null, "maximum")
-					.addIf(minimum != null, "minimum")
-					.addIf(multipleOf != null, "multipleOf")
-					.addIf(maxItems != null, "maxItems")
-					.addIf(minItems != null, "minItems")
-					.addIf(minProperties != null, "minProperties");
+					.addIf(nn(items), "items")
+					.addIf(nn(maximum), "maximum")
+					.addIf(nn(minimum), "minimum")
+					.addIf(nn(multipleOf), "multipleOf")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.BYTE, HttpPartFormat.BINARY, HttpPartFormat.BINARY_SPACED, HttpPartFormat.DATE, HttpPartFormat.DATE_TIME, HttpPartFormat.PASSWORD, HttpPartFormat.UON, HttpPartFormat.NO_FORMAT);
 				break;
 			}
 			case ARRAY: {
-				notAllowed.addIf(properties != null, "properties")
-					.addIf(additionalProperties != null, "additionalProperties")
+				notAllowed.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
 					.addIf(exclusiveMaximum, "exclusiveMaximum")
 					.addIf(exclusiveMinimum, "exclusiveMinimum")
-					.addIf(pattern != null, "pattern")
-					.addIf(maximum != null, "maximum")
-					.addIf(minimum != null, "minimum")
-					.addIf(multipleOf != null, "multipleOf")
-					.addIf(maxLength != null, "maxLength")
-					.addIf(minLength != null, "minLength")
-					.addIf(maxProperties != null, "maxProperties")
-					.addIf(minProperties != null, "minProperties");
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(maximum), "maximum")
+					.addIf(nn(minimum), "minimum")
+					.addIf(nn(multipleOf), "multipleOf")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(minLength), "minLength")
+					.addIf(nn(maxProperties), "maxProperties")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
 			case BOOLEAN: {
 				notAllowed.addIf(! _enum.isEmpty(), "_enum")
-					.addIf(properties != null, "properties")
-					.addIf(additionalProperties != null, "additionalProperties")
+					.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
 					.addIf(exclusiveMaximum, "exclusiveMaximum")
 					.addIf(exclusiveMinimum, "exclusiveMinimum")
 					.addIf(uniqueItems, "uniqueItems")
 					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
-					.addIf(pattern != null, "pattern")
-					.addIf(items != null, "items")
-					.addIf(maximum != null, "maximum")
-					.addIf(minimum != null, "minimum")
-					.addIf(multipleOf != null, "multipleOf")
-					.addIf(maxItems != null, "maxItems")
-					.addIf(maxLength != null, "maxLength")
-					.addIf(maxProperties != null, "maxProperties")
-					.addIf(minItems != null, "minItems")
-					.addIf(minLength != null, "minLength")
-					.addIf(minProperties != null, "minProperties");
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(items), "items")
+					.addIf(nn(maximum), "maximum")
+					.addIf(nn(minimum), "minimum")
+					.addIf(nn(multipleOf), "multipleOf")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(maxProperties), "maxProperties")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minLength), "minLength")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
@@ -3735,34 +3735,34 @@ public class HttpPartSchema {
 				break;
 			}
 			case INTEGER: {
-				notAllowed.addIf(properties != null, "properties")
-					.addIf(additionalProperties != null, "additionalProperties")
+				notAllowed.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
 					.addIf(uniqueItems, "uniqueItems")
 					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
-					.addIf(pattern != null, "pattern")
-					.addIf(items != null, "items")
-					.addIf(maxItems != null, "maxItems")
-					.addIf(maxLength != null, "maxLength")
-					.addIf(maxProperties != null, "maxProperties")
-					.addIf(minItems != null, "minItems")
-					.addIf(minLength != null, "minLength")
-					.addIf(minProperties != null, "minProperties");
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(items), "items")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(maxProperties), "maxProperties")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minLength), "minLength")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.INT32, HttpPartFormat.INT64);
 				break;
 			}
 			case NUMBER: {
-				notAllowed.addIf(properties != null, "properties")
-					.addIf(additionalProperties != null, "additionalProperties")
+				notAllowed.addIf(nn(properties), "properties")
+					.addIf(nn(additionalProperties), "additionalProperties")
 					.addIf(uniqueItems, "uniqueItems")
 					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
-					.addIf(pattern != null, "pattern")
-					.addIf(items != null, "items")
-					.addIf(maxItems != null, "maxItems")
-					.addIf(maxLength != null, "maxLength")
-					.addIf(maxProperties != null, "maxProperties")
-					.addIf(minItems != null, "minItems")
-					.addIf(minLength != null, "minLength")
-					.addIf(minProperties != null, "minProperties");
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(items), "items")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(maxProperties), "maxProperties")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minLength), "minLength")
+					.addIf(nn(minProperties), "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.FLOAT, HttpPartFormat.DOUBLE);
 				break;
 			}
@@ -3770,15 +3770,15 @@ public class HttpPartSchema {
 				notAllowed.addIf(exclusiveMaximum, "exclusiveMaximum")
 					.addIf(exclusiveMinimum, "exclusiveMinimum")
 					.addIf(uniqueItems, "uniqueItems")
-					.addIf(pattern != null, "pattern")
-					.addIf(items != null, "items")
-					.addIf(maximum != null, "maximum")
-					.addIf(minimum != null, "minimum")
-					.addIf(multipleOf != null, "multipleOf")
-					.addIf(maxItems != null, "maxItems")
-					.addIf(maxLength != null, "maxLength")
-					.addIf(minItems != null, "minItems")
-					.addIf(minLength != null, "minLength");
+					.addIf(nn(pattern), "pattern")
+					.addIf(nn(items), "items")
+					.addIf(nn(maximum), "maximum")
+					.addIf(nn(minimum), "minimum")
+					.addIf(nn(multipleOf), "multipleOf")
+					.addIf(nn(maxItems), "maxItems")
+					.addIf(nn(maxLength), "maxLength")
+					.addIf(nn(minItems), "minItems")
+					.addIf(nn(minLength), "minLength");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT);
 				break;
 			}
@@ -3796,29 +3796,29 @@ public class HttpPartSchema {
 			errors.add("Cannot specify exclusiveMaximum with maximum.");
 		if (exclusiveMinimum && minimum == null)
 			errors.add("Cannot specify exclusiveMinimum with minimum.");
-		if (required && _default != null)
+		if (required && nn(_default))
 			errors.add("Cannot specify a default value on a required value.");
-		if (minLength != null && maxLength != null && maxLength < minLength)
+		if (nn(minLength) && nn(maxLength) && maxLength < minLength)
 			errors.add("maxLength cannot be less than minLength.");
-		if (minimum != null && maximum != null && maximum.doubleValue() < minimum.doubleValue())
+		if (nn(minimum) && nn(maximum) && maximum.doubleValue() < minimum.doubleValue())
 			errors.add("maximum cannot be less than minimum.");
-		if (minItems != null && maxItems != null && maxItems < minItems)
+		if (nn(minItems) && nn(maxItems) && maxItems < minItems)
 			errors.add("maxItems cannot be less than minItems.");
-		if (minProperties != null && maxProperties != null && maxProperties < minProperties)
+		if (nn(minProperties) && nn(maxProperties) && maxProperties < minProperties)
 			errors.add("maxProperties cannot be less than minProperties.");
-		if (minLength != null && minLength < 0)
+		if (nn(minLength) && minLength < 0)
 			errors.add("minLength cannot be less than zero.");
-		if (maxLength != null && maxLength < 0)
+		if (nn(maxLength) && maxLength < 0)
 			errors.add("maxLength cannot be less than zero.");
-		if (minItems != null && minItems < 0)
+		if (nn(minItems) && minItems < 0)
 			errors.add("minItems cannot be less than zero.");
-		if (maxItems != null && maxItems < 0)
+		if (nn(maxItems) && maxItems < 0)
 			errors.add("maxItems cannot be less than zero.");
-		if (minProperties != null && minProperties < 0)
+		if (nn(minProperties) && minProperties < 0)
 			errors.add("minProperties cannot be less than zero.");
-		if (maxProperties != null && maxProperties < 0)
+		if (nn(maxProperties) && maxProperties < 0)
 			errors.add("maxProperties cannot be less than zero.");
-		if (type == ARRAY && items != null && items.getType() == OBJECT && (format != UON && format != HttpPartFormat.NO_FORMAT))
+		if (type == ARRAY && nn(items) && items.getType() == OBJECT && (format != UON && format != HttpPartFormat.NO_FORMAT))
 			errors.add("Cannot define an array of objects unless array format is 'uon'.");
 
 		if (! errors.isEmpty())
@@ -4000,9 +4000,9 @@ public class HttpPartSchema {
 	 * @return The schema information for the specified property, or <jk>null</jk> if properties are not defined on this schema.
 	 */
 	public HttpPartSchema getProperty(String name) {
-		if (properties != null) {
+		if (nn(properties)) {
 			HttpPartSchema schema = properties.get(name);
-			if (schema != null)
+			if (nn(schema))
 				return schema;
 		}
 		return additionalProperties;
@@ -4058,7 +4058,7 @@ public class HttpPartSchema {
 	 * @return <jk>true</jk> if this schema has properties associated with it.
 	 */
 	public boolean hasProperties() {
-		return properties != null || additionalProperties != null;
+		return nn(properties) || nn(additionalProperties);
 	}
 
 	/**
@@ -4162,7 +4162,7 @@ public class HttpPartSchema {
 	public String validateInput(String in) throws SchemaValidationException {
 		if (! isValidRequired(in))
 			throw new SchemaValidationException("No value specified.");
-		if (in != null) {
+		if (nn(in)) {
 			if (! isValidAllowEmpty(in))
 				throw new SchemaValidationException("Empty value not allowed.");
 			if (! isValidConst(in))
@@ -4207,7 +4207,7 @@ public class HttpPartSchema {
 					if (! isValidUniqueItems(o))
 						throw new SchemaValidationException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
-					if (items != null)
+					if (nn(items))
 						for (int i = 0; i < Array.getLength(o); i++)
 							items.validateOutput(Array.get(o, i), bc);
 				} else if (cm.isCollection()) {
@@ -4219,7 +4219,7 @@ public class HttpPartSchema {
 					if (! isValidUniqueItems(c))
 						throw new SchemaValidationException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
-					if (items != null)
+					if (nn(items))
 						c.forEach(x -> items.validateOutput(x, bc));
 				}
 				break;
@@ -4258,7 +4258,7 @@ public class HttpPartSchema {
 					m.forEach((k, v) -> {
 						String key = k.toString();
 						HttpPartSchema s2 = getProperty(key);
-						if (s2 != null)
+						if (nn(s2))
 							s2.validateOutput(v, bc);
 					});
 				} else if (cm.isBean()) {
@@ -4452,7 +4452,7 @@ public class HttpPartSchema {
 
 	private boolean isValidMaximum(Number x) {
 		// Check Draft 2020-12 exclusiveMaximumValue first (takes precedence)
-		if (exclusiveMaximumValue != null) {
+		if (nn(exclusiveMaximumValue)) {
 			if (x instanceof Integer || x instanceof AtomicInteger)
 				return x.intValue() < exclusiveMaximumValue.intValue();
 			if (x instanceof Short || x instanceof Byte)
@@ -4496,7 +4496,7 @@ public class HttpPartSchema {
 
 	private boolean isValidMinimum(Number x) {
 		// Check Draft 2020-12 exclusiveMinimumValue first (takes precedence)
-		if (exclusiveMinimumValue != null) {
+		if (nn(exclusiveMinimumValue)) {
 			if (x instanceof Integer || x instanceof AtomicInteger)
 				return x.intValue() > exclusiveMinimumValue.intValue();
 			if (x instanceof Short || x instanceof Byte)
@@ -4572,7 +4572,7 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidRequired(Object x) {
-		return x != null || ! required;
+		return nn(x) || ! required;
 	}
 
 	private static boolean isValidTime(String x) {

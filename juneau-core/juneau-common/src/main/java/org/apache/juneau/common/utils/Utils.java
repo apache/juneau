@@ -201,7 +201,7 @@ public class Utils {
 	 * @return The cast object, or <jk>null</jk> if the object wasn't the specified type.
 	 */
 	public static <T> T cast(Class<T> c, Object o) {
-		return o != null && c.isInstance(o) ? c.cast(o) : null;
+		return nn(o) && c.isInstance(o) ? c.cast(o) : null;
 	}
 
 	/**
@@ -457,9 +457,9 @@ public class Utils {
 	 */
 	@SafeVarargs
 	public static <T> T firstNonNull(T...t) {
-		if (t != null)
+		if (nn(t))
 			for (T tt : t)
-				if (tt != null)
+				if (nn(tt))
 					return tt;
 		return null;
 	}
@@ -570,7 +570,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the object is not <jk>null</jk> and is an array.
 	 */
 	public static boolean isArray(Object o) {
-		return o != null && o.getClass().isArray();
+		return nn(o) && o.getClass().isArray();
 	}
 
 	/**
@@ -593,7 +593,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the object can be converted to a list.
 	 */
 	public static boolean isConvertibleToList(Object o) {
-		return o != null && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || o instanceof Stream || o instanceof Map || o instanceof Optional
+		return nn(o) && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || o instanceof Stream || o instanceof Map || o instanceof Optional
 			|| isArray(o));
 	}
 
@@ -687,7 +687,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
 	 */
 	public static <T extends Number> boolean isNotMinusOne(T value) {
-		return value != null && value.intValue() != -1;
+		return nn(value) && value.intValue() != -1;
 	}
 
 	/**
@@ -708,7 +708,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
 	 */
 	public static boolean isTrue(Boolean value) {
-		return value != null && value;
+		return nn(value) && value;
 	}
 
 	/**
@@ -798,7 +798,7 @@ public class Utils {
 	 */
 	public static <T,U> boolean ne(T o1, U o2, BiPredicate<T,U> test) {
 		if (o1 == null)
-			return o2 != null;
+			return nn(o2);
 		if (o2 == null)
 			return true;
 		if (o1 == o2)
@@ -825,7 +825,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
 	 */
 	public static boolean nn(Object o) {
-		return o != null;
+		return isNotNull(o);
 	}
 
 	/**

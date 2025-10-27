@@ -17,6 +17,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -103,7 +104,7 @@ public class Assertion {
 	 * @param creator The creator of this assertion.
 	 */
 	protected Assertion(Assertion creator) {
-		if (creator != null) {
+		if (nn(creator)) {
 			this.msg = creator.msg;
 			this.msgArgs = creator.msgArgs;
 			this.out = creator.out;
@@ -223,11 +224,11 @@ public class Assertion {
 	 */
 	protected BasicAssertionError error(Throwable cause, String msg, Object...args) {
 		msg = format(msg, args);
-		if (this.msg != null)
+		if (nn(this.msg))
 			msg = format(this.msg, this.msgArgs).replace("<<<MSG>>>", msg);
-		if (out != null)
+		if (nn(out))
 			out.println(msg);
-		if (throwable != null) {
+		if (nn(throwable)) {
 			try {
 				throw BeanStore
 					.create()

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.processor;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -48,7 +50,7 @@ public class SerializedPojoProcessor implements ResponseProcessor {
 
 		Object o = res.getContent(Object.class);
 
-		if (sm != null) {
+		if (nn(sm)) {
 			try {
 				Serializer s = sm.getSerializer();
 				MediaType mediaType = res.getMediaType();

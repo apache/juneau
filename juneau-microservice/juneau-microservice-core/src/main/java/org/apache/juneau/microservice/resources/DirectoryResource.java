@@ -142,7 +142,7 @@ public class DirectoryResource extends BasicRestServlet {
 				return null;
 			var s = new TreeSet<>(new FileResourceComparator());
 			for (var fc : f.listFiles())
-				s.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName()), false));
+				s.add(new FileResource(fc, (nn(path) ? (path + '/') : "") + urlEncode(fc.getName()), false));
 			return s;
 		}
 
@@ -302,7 +302,7 @@ public class DirectoryResource extends BasicRestServlet {
 			throw new MethodNotAllowed("DELETE not enabled");
 		if (f.isDirectory()) {
 			var files = f.listFiles();
-			if (files != null) {
+			if (nn(files)) {
 				for (var fc : files)
 					deleteFile(fc);
 			}

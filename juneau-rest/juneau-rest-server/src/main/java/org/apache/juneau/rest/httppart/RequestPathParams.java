@@ -132,11 +132,11 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 			add(e.getKey(), e.getValue());
 
 		UrlPathMatch pm = session.getUrlPathMatch();
-		if (pm != null) {
+		if (nn(pm)) {
 			for (Map.Entry<String,String> e : pm.getVars().entrySet())
 				add(e.getKey(), e.getValue());
 			String r = pm.getRemainder();
-			if (r != null) {
+			if (nn(r)) {
 				add("/**", r);
 				add("/*", urlDecode(r));
 			}
@@ -179,7 +179,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	public RequestPathParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
 		for (NameValuePair p : parameters)
-			if (p != null)
+			if (nn(p))
 				add(p.getName(), p.getValue());
 		return this;
 	}

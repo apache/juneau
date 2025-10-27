@@ -18,6 +18,7 @@ package org.apache.juneau.cp;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -93,10 +94,10 @@ public class LocalFile {
 	 */
 	public InputStream read() throws IOException {
 		synchronized (this) {
-			if (cache != null)
+			if (nn(cache))
 				return new ByteArrayInputStream(cache);
 		}
-		if (clazz != null)
+		if (nn(clazz))
 			return clazz.getResourceAsStream(clazzPath);
 		return Files.newInputStream(path);
 	}

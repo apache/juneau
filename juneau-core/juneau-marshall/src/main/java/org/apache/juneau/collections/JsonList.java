@@ -17,6 +17,7 @@
 package org.apache.juneau.collections;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -116,7 +117,7 @@ public class JsonList extends LinkedList<Object> {
 
 		@SuppressWarnings("synthetic-access")
 		UnmodifiableJsonList(JsonList contents) {
-			if (contents != null)
+			if (nn(contents))
 				contents.forEach(super::add);
 		}
 
@@ -352,7 +353,7 @@ public class JsonList extends LinkedList<Object> {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		if (in != null)
+		if (nn(in))
 			p.parseIntoCollection(in, this, bs().object());
 	}
 
@@ -411,7 +412,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @return This object.
 	 */
 	public JsonList append(Collection<?> values) {
-		if (values != null)
+		if (nn(values))
 			addAll(values);
 		return this;
 	}

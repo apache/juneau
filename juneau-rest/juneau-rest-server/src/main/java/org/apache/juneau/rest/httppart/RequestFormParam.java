@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.io.*;
@@ -182,7 +183,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @throws IOException If an error occurs in retrieving the content.
 	 */
 	public InputStream getStream() throws IOException {
-		if (value != null)
+		if (nn(value))
 			return new ByteArrayInputStream(value.getBytes(IOUtils.UTF8));
 		return part.getInputStream();
 	}
@@ -196,7 +197,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 
 	@Override /* Overridden from RequestHttpPart */
 	public String getValue() {
-		if (value == null && part != null)
+		if (value == null && nn(part))
 			try {
 				value = IOUtils.read(part.getInputStream());
 			} catch (IOException e) {

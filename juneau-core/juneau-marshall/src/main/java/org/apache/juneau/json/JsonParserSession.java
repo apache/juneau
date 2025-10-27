@@ -205,9 +205,9 @@ public class JsonParserSession extends ReaderParserSession {
 		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
-		if (builder != null)
+		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
-		else if (swap != null)
+		else if (nn(swap))
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
@@ -221,7 +221,7 @@ public class JsonParserSession extends ReaderParserSession {
 		Object o = null;
 
 		skipCommentsAndSpace(r);
-		if (wrapperAttr != null)
+		if (nn(wrapperAttr))
 			skipWrapperAttrStart(r, wrapperAttr);
 		int c = r.peek();
 		if (c == -1) {
@@ -275,7 +275,7 @@ public class JsonParserSession extends ReaderParserSession {
 				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
 				o = parseIntoCollection2(r, l, sType, pMeta);
 			}
-		} else if (builder != null) {
+		} else if (nn(builder)) {
 			var m = toBeanMap(builder.create(this, eType));
 			o = builder.build(this, parseIntoBeanMap2(r, m).getBean(), eType);
 		} else if (sType.canCreateNewBean(outer)) {
@@ -297,7 +297,7 @@ public class JsonParserSession extends ReaderParserSession {
 			parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast((JsonMap)m, pMeta, eType);
-			else if (sType.getProxyInvocationHandler() != null)
+			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 			else
 				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", sType.getInnerClass().getName(), sType.getNotABeanReason());
@@ -307,13 +307,13 @@ public class JsonParserSession extends ReaderParserSession {
 			throw new ParseException(this, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", sType, (char)c);
 		}
 
-		if (wrapperAttr != null)
+		if (nn(wrapperAttr))
 			skipWrapperAttrEnd(r);
 
-		if (swap != null && o != null)
+		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (outer != null)
+		if (nn(outer))
 			setParent(eType, o, outer);
 
 		return (T)o;

@@ -1778,7 +1778,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	}
 
 	private static String getAccept(Builder builder) {
-		if (builder.getAccept() != null)
+		if (nn(builder.getAccept()))
 			return builder.getAccept();
 		return switch (builder.language) {
 			case "RDF/XML" -> "text/xml+rdf+abbrev";
@@ -1794,7 +1794,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	}
 
 	private static String getProduces(Builder builder) {
-		if (builder.getProduces() != null)
+		if (nn(builder.getProduces()))
 			return builder.getProduces();
 		return switch (builder.language) {
 			case "RDF/XML" -> "text/xml+rdf+abbrev";
@@ -1844,7 +1844,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		juneauNs = builder.juneauNs;
 		juneauBpNs = builder.juneauBpNs;
 		collectionFormat = builder.collectionFormat;
-		namespaces = builder.namespaces != null ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
+		namespaces = nn(builder.namespaces) ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
 		addBeanTypesRdf = builder.addBeanTypesRdf;
 		jenaSettings = new TreeMap<>(builder.jenaSettings);
 

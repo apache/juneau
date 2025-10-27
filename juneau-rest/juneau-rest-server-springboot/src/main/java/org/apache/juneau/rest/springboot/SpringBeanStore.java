@@ -76,7 +76,7 @@ public class SpringBeanStore extends BeanStore {
 				return o;
 			if (appContext.isPresent()) {
 				var ctx = appContext.get();
-				if (name != null)
+				if (nn(name))
 					return opt(ctx.containsBean(name) ? appContext.get().getBean(name, c) : null);
 				return opt(appContext.get().getBean(c));
 			}

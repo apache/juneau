@@ -80,7 +80,7 @@ public class ArgsVar extends DefaultingVar {
 	 */
 	public ArgsVar() {
 		super(NAME);
-		if (ARGS != null)
+		if (nn(ARGS))
 			this.args = ARGS;
 		else {
 			String s = System.getProperty("sun.java.command");

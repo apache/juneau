@@ -17,6 +17,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.time.*;
@@ -173,7 +174,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 		var v = orElse(null);
 		if (valueIsNull() && value == null)
 			return returns();
-		if (valueIsNotNull() && value != null) {
+		if (valueIsNotNull() && nn(value)) {
 			var d = Duration.between(value(), value);
 			if (d.compareTo(precision.getDuration()) <= 0)
 				return returns();

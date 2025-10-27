@@ -77,7 +77,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	protected BeanDictionaryMap() {}
 
 	private void assertValidParameter(Object o) {
-		if (o != null) {
+		if (nn(o)) {
 			if (o instanceof Class)
 				return;
 			if (isArray(o)) {

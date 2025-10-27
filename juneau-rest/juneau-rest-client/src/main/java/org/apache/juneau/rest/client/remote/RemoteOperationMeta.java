@@ -109,7 +109,7 @@ public class RemoteOperationMeta {
 
 			mi.getParams().forEach(x -> {
 				RemoteOperationArg rma = RemoteOperationArg.create(x);
-				if (rma != null) {
+				if (nn(rma)) {
 					HttpPartType pt = rma.getPartType();
 					if (pt == HEADER)
 						headerArgs.add(rma);
@@ -123,7 +123,7 @@ public class RemoteOperationMeta {
 						bodyArg = rma;
 				}
 				RequestBeanMeta rmba = RequestBeanMeta.create(x, AnnotationWorkList.create());
-				if (rmba != null) {
+				if (nn(rmba)) {
 					requestArgs.add(new RemoteOperationBeanArg(x.getIndex(), rmba));
 				}
 			});

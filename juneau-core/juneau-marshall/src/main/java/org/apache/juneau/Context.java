@@ -663,9 +663,9 @@ public abstract class Context implements AnnotationProvider {
 		private Context innerBuild() {
 			if (type == null)
 				throw new BasicRuntimeException("Type not specified for context builder {0}", getClass().getName());
-			if (impl != null && type.isInstance(impl))
+			if (nn(impl) && type.isInstance(impl))
 				return type.cast(impl);
-			if (cache != null)
+			if (nn(cache))
 				return cache.get(hashKey(), () -> getContextConstructor().invoke(this));
 			return getContextConstructor().invoke(this);
 		}
@@ -738,7 +738,7 @@ public abstract class Context implements AnnotationProvider {
 							&& x.hasReturnType(ci.getParam(0).getParameterType())
 						);
 						// @formatter:on
-						if (mi != null)
+						if (nn(mi))
 							break;
 					}
 				}
@@ -782,7 +782,7 @@ public abstract class Context implements AnnotationProvider {
 				ClassInfo ci = ClassInfo.of(a.getClass());
 
 				MethodInfo mi = ci.getPublicMethod(x -> x.hasName("onClass"));
-				if (mi != null) {
+				if (nn(mi)) {
 					if (! mi.getReturnType().is(Class[].class))
 						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.",
 							a.getClass().getSimpleName());
@@ -791,7 +791,7 @@ public abstract class Context implements AnnotationProvider {
 				}
 
 				mi = ci.getPublicMethod(x -> x.hasName("on"));
-				if (mi != null) {
+				if (nn(mi)) {
 					if (! mi.getReturnType().is(String[].class))
 						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.",
 							a.getClass().getSimpleName());
@@ -855,7 +855,7 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		if (type != null && onClass != null)
+		if (nn(type) && nn(onClass))
 			for (A a : annotations(type, onClass))
 				if (PredicateUtils.test(filter, a))
 					return a;
@@ -864,7 +864,7 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-		if (type != null && onConstructor != null)
+		if (nn(type) && nn(onConstructor))
 			for (A a : annotations(type, onConstructor))
 				if (PredicateUtils.test(filter, a))
 					return a;
@@ -873,7 +873,7 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-		if (type != null && onField != null)
+		if (nn(type) && nn(onField))
 			for (A a : annotations(type, onField))
 				if (PredicateUtils.test(filter, a))
 					return a;
@@ -882,7 +882,7 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-		if (type != null && onMethod != null)
+		if (nn(type) && nn(onMethod))
 			for (A a : annotations(type, onMethod))
 				if (PredicateUtils.test(filter, a))
 					return a;
@@ -891,7 +891,7 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		if (type != null && onClass != null)
+		if (nn(type) && nn(onClass))
 			for (A a : declaredAnnotations(type, onClass))
 				if (PredicateUtils.test(filter, a))
 					return a;
@@ -900,35 +900,35 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-		if (type != null && onClass != null)
+		if (nn(type) && nn(onClass))
 			for (A a : annotations(type, onClass))
 				PredicateUtils.consumeIf(filter, action, a);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
-		if (type != null && onConstructor != null)
+		if (nn(type) && nn(onConstructor))
 			for (A a : annotations(type, onConstructor))
 				PredicateUtils.consumeIf(filter, action, a);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
-		if (type != null && onField != null)
+		if (nn(type) && nn(onField))
 			for (A a : annotations(type, onField))
 				PredicateUtils.consumeIf(filter, action, a);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
-		if (type != null && onMethod != null)
+		if (nn(type) && nn(onMethod))
 			for (A a : annotations(type, onMethod))
 				PredicateUtils.consumeIf(filter, action, a);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-		if (type != null && onClass != null)
+		if (nn(type) && nn(onClass))
 			for (A a : declaredAnnotations(type, onClass))
 				PredicateUtils.consumeIf(filter, action, a);
 	}
@@ -1003,7 +1003,7 @@ public abstract class Context implements AnnotationProvider {
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		A x = null;
-		if (type != null && onClass != null)
+		if (nn(type) && nn(onClass))
 			for (A a : annotations(type, onClass))
 				if (PredicateUtils.test(filter, a))
 					x = a;
@@ -1013,7 +1013,7 @@ public abstract class Context implements AnnotationProvider {
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 		A x = null;
-		if (type != null && onConstructor != null)
+		if (nn(type) && nn(onConstructor))
 			for (A a : annotations(type, onConstructor))
 				if (PredicateUtils.test(filter, a))
 					x = a;
@@ -1023,7 +1023,7 @@ public abstract class Context implements AnnotationProvider {
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 		A x = null;
-		if (type != null && onField != null)
+		if (nn(type) && nn(onField))
 			for (A a : annotations(type, onField))
 				if (PredicateUtils.test(filter, a))
 					x = a;
@@ -1033,7 +1033,7 @@ public abstract class Context implements AnnotationProvider {
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 		A x = null;
-		if (type != null && onMethod != null)
+		if (nn(type) && nn(onMethod))
 			for (A a : annotations(type, onMethod))
 				if (PredicateUtils.test(filter, a))
 					x = a;
@@ -1043,7 +1043,7 @@ public abstract class Context implements AnnotationProvider {
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		A x = null;
-		if (type != null && onClass != null)
+		if (nn(type) && nn(onClass))
 			for (A a : declaredAnnotations(type, onClass))
 				if (PredicateUtils.test(filter, a))
 					x = a;

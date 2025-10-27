@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -291,7 +293,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 */
 	public MediaType orElse(MediaType other) {
 		MediaType x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -305,7 +307,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 
 	private static MediaType parse(String value) {
 		// If this happens to be a multi-value, use the last value.
-		if (value != null) {
+		if (nn(value)) {
 			int i = value.indexOf(',');
 			if (i != -1)
 				value = value.substring(i + 1);
@@ -314,7 +316,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	}
 
 	private MediaType value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

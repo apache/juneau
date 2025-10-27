@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -323,24 +324,24 @@ public class Items extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(collectionFormat != null, "collectionFormat")
-			.addIf(_default != null, "default")
-			.addIf(_enum != null, "enum")
-			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.addIf(format != null, "format")
-			.addIf(items != null, "items")
-			.addIf(maximum != null, "maximum")
-			.addIf(maxItems != null, "maxItems")
-			.addIf(maxLength != null, "maxLength")
-			.addIf(minimum != null, "minimum")
-			.addIf(minItems != null, "minItems")
-			.addIf(minLength != null, "minLength")
-			.addIf(multipleOf != null, "multipleOf")
-			.addIf(pattern != null, "pattern")
-			.addIf(ref != null, "$ref")
-			.addIf(type != null, "type")
-			.addIf(uniqueItems != null, "uniqueItems")
+			.addIf(nn(collectionFormat), "collectionFormat")
+			.addIf(nn(_default), "default")
+			.addIf(nn(_enum), "enum")
+			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
+			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
+			.addIf(nn(format), "format")
+			.addIf(nn(items), "items")
+			.addIf(nn(maximum), "maximum")
+			.addIf(nn(maxItems), "maxItems")
+			.addIf(nn(maxLength), "maxLength")
+			.addIf(nn(minimum), "minimum")
+			.addIf(nn(minItems), "minItems")
+			.addIf(nn(minLength), "minLength")
+			.addIf(nn(multipleOf), "multipleOf")
+			.addIf(nn(pattern), "pattern")
+			.addIf(nn(ref), "$ref")
+			.addIf(nn(type), "type")
+			.addIf(nn(uniqueItems), "uniqueItems")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -361,7 +362,7 @@ public class Items extends SwaggerElement {
 	 */
 	public Items resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
 
-		if (ref != null) {
+		if (nn(ref)) {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
@@ -370,7 +371,7 @@ public class Items extends SwaggerElement {
 			return r;
 		}
 
-		if (items != null)
+		if (nn(items))
 			items = items.resolveRefs(swagger, refStack, maxDepth);
 
 		return this;

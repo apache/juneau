@@ -165,7 +165,7 @@ public abstract class OpenApiElement {
 	 * @return This object
 	 */
 	protected OpenApiElement strict(Object value) {
-		strict = value != null && toBoolean(value);
+		strict = nn(value) && toBoolean(value);
 		return this;
 	}
 }

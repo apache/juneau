@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.converter;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.objecttools.*;
@@ -54,11 +56,11 @@ public class Traversable implements RestConverter {
 
 		String pathRemainder = req.getPathRemainder().orElse(null);
 
-		if (pathRemainder != null) {
+		if (nn(pathRemainder)) {
 			try {
 				BeanSession bs = req.getBeanSession();
 				ObjectSwap swap = bs.getClassMetaForObject(o).getSwap(bs);
-				if (swap != null)
+				if (nn(swap))
 					o = swap.swap(bs, o);
 				ReaderParser rp = req.getContent().getParserMatch().map(ParserMatch::getParser).filter(ReaderParser.class::isInstance).map(ReaderParser.class::cast).orElse(null);
 				ObjectRest or = ObjectRest.create(o, rp);

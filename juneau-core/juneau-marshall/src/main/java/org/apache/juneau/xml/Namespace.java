@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -124,7 +126,7 @@ public class Namespace {
 	 */
 	public static Namespace of(String key) {
 		Namespace n = CACHE.get(key);
-		if (n != null)
+		if (nn(n))
 			return n;
 		int i = key.indexOf(':');
 		if (i == -1)

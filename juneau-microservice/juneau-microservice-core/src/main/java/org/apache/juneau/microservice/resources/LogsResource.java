@@ -17,6 +17,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -119,7 +120,7 @@ public class LogsResource extends BasicRestServlet {
 				return null;
 			Set<FileResource> s = new TreeSet<>(FILE_COMPARATOR);
 			for (File fc : f.listFiles(FILE_FILTER))
-				s.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false));
+				s.add(new FileResource(fc, (nn(path) ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false));
 			return s;
 		}
 
@@ -304,7 +305,7 @@ public class LogsResource extends BasicRestServlet {
 			throw new MethodNotAllowed("DELETE not enabled");
 		if (f.isDirectory()) {
 			File[] files = f.listFiles();
-			if (files != null) {
+			if (nn(files)) {
 				for (File fc : files)
 					deleteFile(fc);
 			}

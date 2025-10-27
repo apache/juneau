@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.concurrent.locks.*;
 
 /**
@@ -37,13 +39,13 @@ public class SimpleLock implements AutoCloseable {
 	 */
 	public SimpleLock(Lock lock) {
 		this.lock = lock;
-		if (lock != null)
+		if (nn(lock))
 			lock.lock();
 	}
 
 	@Override
 	public void close() {
-		if (lock != null)
+		if (nn(lock))
 			lock.unlock();
 	}
 }

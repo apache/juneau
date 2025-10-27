@@ -198,7 +198,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	public RequestQueryParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
 		for (NameValuePair p : parameters)
-			if (p != null)
+			if (nn(p))
 				add(p.getName(), p.getValue());
 		return this;
 	}

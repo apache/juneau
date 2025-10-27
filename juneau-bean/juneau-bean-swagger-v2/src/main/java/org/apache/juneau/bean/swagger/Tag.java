@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -145,9 +146,9 @@ public class Tag extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(description != null, "description")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(name != null, "name")
+			.addIf(nn(description), "description")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(name), "name")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

@@ -302,7 +302,7 @@ public class ConfigMap implements ConfigStoreListener {
 			var ce = cs == null ? null : cs.entries.get(key);
 
 			if (ce == null)
-				ce = imports.stream().map(y -> y.getConfigMap().getEntry(section, key)).filter(y -> y != null).findFirst().orElse(null);
+				ce = imports.stream().map(y -> y.getConfigMap().getEntry(section, key)).filter(y -> nn(y)).findFirst().orElse(null);
 
 			return ce;
 		}
@@ -321,10 +321,10 @@ public class ConfigMap implements ConfigStoreListener {
 	public Set<String> getKeys(String section) {
 		checkSectionName(section);
 		var cs = entries.get(section);
-		Set<String> s = imports.isEmpty() && cs != null ? cs.entries.keySet() : set();
+		Set<String> s = imports.isEmpty() && nn(cs) ? cs.entries.keySet() : set();
 		if (! imports.isEmpty()) {
 			imports.forEach(x -> s.addAll(x.getConfigMap().getKeys(section)));
-			if (cs != null)
+			if (nn(cs))
 				s.addAll(cs.entries.keySet());
 		}
 		return u(s);
@@ -384,7 +384,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public boolean hasSection(String section) {
 		checkSectionName(section);
-		return entries.get(section) != null || imports.stream().anyMatch(x -> x.getConfigMap().hasSection(section));
+		return nn(entries.get(section)) || imports.stream().anyMatch(x -> x.getConfigMap().hasSection(section));
 	}
 
 	/**
@@ -414,6 +414,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return this;
 	}
 
+	@SuppressWarnings("null")
 	@Override /* Overridden from ConfigStoreListener */
 	public void onChange(String newContents) {
 		ConfigEvents changes2 = null;
@@ -428,7 +429,7 @@ public class ConfigMap implements ConfigStoreListener {
 		} catch (IOException e) {
 			throw asRuntimeException(e);
 		}
-		if (changes2 != null && ! changes2.isEmpty())
+		if (nn(changes2) && ! changes2.isEmpty())
 			signal(changes2);
 	}
 
@@ -640,13 +641,13 @@ public class ConfigMap implements ConfigStoreListener {
 					cs = new ConfigSection(section);
 					entries.put(section, cs);
 				}
-				if (ce.getPreLines() != null)
+				if (nn(ce.getPreLines()))
 					cs.setPreLines(ce.getPreLines());
 			} else if (ce.getType() == REMOVE_ENTRY) {
-				if (cs != null)
+				if (nn(cs))
 					cs.entries.remove(ce.getKey());
 			} else if (ce.getType() == REMOVE_SECTION) {
-				if (cs != null)  // NOSONAR - Intentional.
+				if (nn(cs))  // NOSONAR - Intentional.
 					entries.remove(section);
 			}
 			if (addToChangeList)
@@ -869,7 +870,7 @@ public class ConfigMap implements ConfigStoreListener {
 						accumulator = l.substring(1) + "\n" + accumulator;  // NOSONAR - Intentionally not using StringBuilder.
 					li.remove();
 				}
-			} else if (accumulator != null) {
+			} else if (nn(accumulator)) {
 				li.set(l + "\n" + accumulator);
 				accumulator = null;
 			}
@@ -923,6 +924,6 @@ public class ConfigMap implements ConfigStoreListener {
 	boolean hasEntry(String section, String key) {
 		var cs = entries.get(section);
 		var ce = cs == null ? null : cs.entries.get(key);
-		return ce != null;
+		return nn(ce);
 	}
 }

@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
 
@@ -85,10 +86,10 @@ public class BasicRuntimeException extends RuntimeException {
 
 	@Override /* Overridden from Throwable */
 	public String getMessage() {
-		if (message != null)
+		if (nn(message))
 			return message;
 		String m = super.getMessage();
-		if (m == null && getCause() != null)
+		if (m == null && nn(getCause()))
 			m = getCause().getMessage();
 		return m;
 	}

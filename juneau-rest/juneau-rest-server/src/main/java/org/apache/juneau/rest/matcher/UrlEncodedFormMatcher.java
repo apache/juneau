@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.matcher;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import jakarta.servlet.http.*;
 
 /**
@@ -30,6 +32,6 @@ public class UrlEncodedFormMatcher extends RestMatcher {
 	@Override /* Overridden from RestMatcher */
 	public boolean matches(HttpServletRequest req) {
 		String contentType = req.getContentType();
-		return contentType != null && contentType.equals("application/x-www-form-urlencoded");
+		return nn(contentType) && contentType.equals("application/x-www-form-urlencoded");
 	}
 }

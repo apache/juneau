@@ -453,7 +453,7 @@ public class Config extends Context implements ConfigEventListener {
 		var l = CollectionUtils.listOf(String.class);
 
 		var s = System.getProperty("juneau.configFile");
-		if (s != null) {
+		if (nn(s)) {
 			l.add(s);
 			return l;
 		}
@@ -511,7 +511,7 @@ public class Config extends Context implements ConfigEventListener {
 
 		for (var n : getCandidateSystemDefaultConfigNames()) {
 			var config = find(n);
-			if (config != null) {
+			if (nn(config)) {
 				if (! DISABLE_AUTO_SYSTEM_PROPS)
 					config.setSystemProperties();
 				return config;
@@ -608,7 +608,7 @@ public class Config extends Context implements ConfigEventListener {
 		for (var section : configMap.getSections()) {
 			for (var key : configMap.getKeys(section)) {
 				var ce = configMap.getEntry(section, key);
-				if (ce.getModifiers() != null) {
+				if (nn(ce.getModifiers())) {
 					var mods2 = ce.getModifiers();
 					var value = ce.getValue();
 					for (var i = 0; i < mods2.length(); i++) {
@@ -756,7 +756,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * @throws SerializeException Value could not be serialized.
 	 */
 	public Config load(Map<String,Map<String,Object>> m) throws SerializeException {
-		if (m != null)
+		if (nn(m))
 			for (var e : m.entrySet()) {
 				setSection(e.getKey(), null, e.getValue());
 			}
@@ -1045,7 +1045,7 @@ public class Config extends Context implements ConfigEventListener {
 		checkWrite();
 		configMap.setSection(section(name), preLines);
 
-		if (contents != null)
+		if (nn(contents))
 			for (var e : contents.entrySet())
 				set(section(name) + '/' + e.getKey(), e.getValue());
 
@@ -1193,7 +1193,7 @@ public class Config extends Context implements ConfigEventListener {
 	}
 
 	String applyMods(String mods, String x) {
-		if (mods != null && x != null)
+		if (nn(mods) && nn(x))
 			for (var i = 0; i < mods.length(); i++)
 				x = getMod(mods.charAt(i)).doApply(x);
 		return x;
@@ -1214,7 +1214,7 @@ public class Config extends Context implements ConfigEventListener {
 	}
 
 	String removeMods(String mods, String x) {
-		if (mods != null && x != null)
+		if (nn(mods) && nn(x))
 			for (int i = mods.length() - 1; i > -1; i--)
 				x = getMod(mods.charAt(i)).doRemove(x);
 		return x;

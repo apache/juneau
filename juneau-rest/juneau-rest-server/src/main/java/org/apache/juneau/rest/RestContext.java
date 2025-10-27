@@ -212,12 +212,12 @@ public class RestContext extends Context {
 
 		private static boolean isRestBeanMethod(MethodInfo mi) {
 			var x = mi.getAnnotation(RestInject.class);
-			return x != null && x.methodScope().length == 0;
+			return nn(x) && x.methodScope().length == 0;
 		}
 
 		private static boolean isRestBeanMethod(MethodInfo mi, String name) {
 			var x = mi.getAnnotation(RestInject.class);
-			return x != null && x.methodScope().length == 0 && x.name().equals(name);
+			return nn(x) && x.methodScope().length == 0 && x.name().equals(name);
 		}
 
 		private boolean initialized;
@@ -291,7 +291,7 @@ public class RestContext extends Context {
 			this.parentContext = parentContext;
 
 			// Pass-through default values.
-			if (parentContext != null) {
+			if (nn(parentContext)) {
 				defaultClasses = parentContext.defaultClasses.copy();
 				defaultSettings = parentContext.defaultSettings.copy();
 				rootBeanStore = parentContext.rootBeanStore;
@@ -1701,7 +1701,7 @@ public class RestContext extends Context {
 
 		@Override /* Overridden from ServletConfig */
 		public ServletContext getServletContext() {
-			return inner != null ? inner.getServletContext() : parentContext != null ? parentContext.getBuilder().getServletContext() : null;
+			return nn(inner) ? inner.getServletContext() : nn(parentContext) ? parentContext.getBuilder().getServletContext() : null;
 		}
 
 		@Override /* Overridden from ServletConfig */
@@ -1736,8 +1736,8 @@ public class RestContext extends Context {
 				.build()
 				.addBean(Builder.class, this)
 				.addBean(ResourceSupplier.class, this.resource)
-				.addBean(ServletConfig.class, inner != null ? inner : this)
-				.addBean(ServletContext.class, (inner != null ? inner : this).getServletContext());
+				.addBean(ServletConfig.class, nn(inner) ? inner : this)
+				.addBean(ServletContext.class, (nn(inner) ? inner : this).getServletContext());
 			// @formatter:on
 
 			if (rootBeanStore == null) {
@@ -4490,13 +4490,13 @@ public class RestContext extends Context {
 					so = () -> o;
 				}
 
-				if (path != null)
+				if (nn(path))
 					cb.path(path);
 
 				RestContext cc = cb.init(so).build();
 
 				MethodInfo mi = ClassInfo.of(so.get()).getMethod(x -> x.hasName("setContext") && x.hasParamTypes(RestContext.class));
-				if (mi != null)
+				if (nn(mi))
 					mi.accessible().invoke(so.get(), cc);
 
 				v.get().add(cc);
@@ -4585,7 +4585,7 @@ public class RestContext extends Context {
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {
-					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && x.getDeclaringClass().getAnnotation(Rest.class) != null;
+					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && nn(x.getDeclaringClass().getAnnotation(Rest.class));
 					mi.forEachMatching(isRestAnnotatedInterface, x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 				}
 
@@ -5000,7 +5000,7 @@ public class RestContext extends Context {
 				.addBean(AnnotationWorkList.class, builder.getApplied());
 			// @formatter:on
 
-			path = builder.path != null ? builder.path : "";
+			path = nn(builder.path) ? builder.path : "";
 			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
 			String p = path;
 			if (! p.endsWith("/*"))
@@ -5120,14 +5120,14 @@ public class RestContext extends Context {
 	public void execute(Object resource, HttpServletRequest r1, HttpServletResponse r2) throws ServletException, IOException {
 
 		// Must be careful not to bleed thread-locals.
-		if (localSession.get() != null)
+		if (nn(localSession.get()))
 			System.err.println("WARNING:  Thread-local call object was not cleaned up from previous request.  " + this + ", thread=[" + Thread.currentThread().getId() + "]");
 
 		RestSession.Builder sb = createSession().resource(resource).req(r1).res(r2).logger(getCallLogger());
 
 		try {
 
-			if (initException != null)
+			if (nn(initException))
 				throw initException;
 
 			// If the resource path contains variables (e.g. @Rest(path="/f/{a}/{b}"), then we want to resolve
@@ -5139,7 +5139,7 @@ public class RestContext extends Context {
 				String pi = sb.getPathInfoUndecoded();
 				UrlPath upi2 = UrlPath.of(pi == null ? sp : sp + pi);
 				UrlPathMatch uppm = pathMatcher.match(upi2);
-				if (uppm != null && ! uppm.hasEmptyVars()) {
+				if (nn(uppm) && ! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
 					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
 				} else {
@@ -5588,7 +5588,7 @@ public class RestContext extends Context {
 		if (s == null) {
 			try {
 				s = swaggerProvider.getSwagger(this, locale);
-				if (s != null)
+				if (nn(s))
 					swaggerCache.put(locale, s);
 			} catch (Exception e) {
 				throw new InternalServerError(e);
@@ -5632,9 +5632,9 @@ public class RestContext extends Context {
 	 * 	<br>If not specified, returns the context path of the ascendant resource.
 	 */
 	public String getUriAuthority() {
-		if (uriAuthority != null)
+		if (nn(uriAuthority))
 			return uriAuthority;
-		if (parentContext != null)
+		if (nn(parentContext))
 			return parentContext.getUriAuthority();
 		return null;
 	}
@@ -5651,9 +5651,9 @@ public class RestContext extends Context {
 	 * 	<br>If not specified, returns the context path of the ascendant resource.
 	 */
 	public String getUriContext() {
-		if (uriContext != null)
+		if (nn(uriContext))
 			return uriContext;
-		if (parentContext != null)
+		if (nn(parentContext))
 			return parentContext.getUriContext();
 		return null;
 	}
@@ -5766,7 +5766,7 @@ public class RestContext extends Context {
 			return this;
 		var resource = getResource();
 		var mi = ClassInfo.of(getResource()).getPublicMethod(x -> x.hasName("setContext") && x.hasParamTypes(RestContext.class));
-		if (mi != null) {
+		if (nn(mi)) {
 			try {
 				mi.accessible().invoke(resource, this);
 			} catch (ExecutableException e) {
@@ -5918,7 +5918,7 @@ public class RestContext extends Context {
 			for (Class<? extends RestOpArg> c : restOpArgs) {
 				try {
 					ra[i] = beanStore.createBean(RestOpArg.class).type(c).run();
-					if (ra[i] != null)
+					if (nn(ra[i]))
 						break;
 				} catch (ExecutableException e) {
 					throw new InternalServerError(e.unwrap(), "Could not resolve parameter {0} on method {1}.", i, mi.getFullName());
@@ -5976,7 +5976,7 @@ public class RestContext extends Context {
 
 		var ci = ClassInfo.of(e);
 		var r = ci.getAnnotation(StatusCode.class);
-		if (r != null)
+		if (nn(r))
 			if (r.value().length > 0)
 				code = r.value()[0];
 
@@ -5986,7 +5986,7 @@ public class RestContext extends Context {
 		var res = session.getResponse();
 
 		Throwable t = e2.getRootCause();
-		if (t != null) {
+		if (nn(t)) {
 			Thrown t2 = thrown(t);
 			res.setHeader(t2.getName(), t2.getValue());
 		}
@@ -6006,7 +6006,7 @@ public class RestContext extends Context {
 
 			try (PrintWriter w2 = w) {
 				String httpMessage = RestUtils.getHttpResponseText(statusCode);
-				if (httpMessage != null)
+				if (nn(httpMessage))
 					w2.append("HTTP ").append(String.valueOf(statusCode)).append(": ").append(httpMessage).append("\n\n");
 				if (isRenderResponseStackTraces())
 					e.printStackTrace(w2);

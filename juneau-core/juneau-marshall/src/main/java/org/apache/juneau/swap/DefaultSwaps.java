@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.swap;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.net.*;
 import java.time.*;
 import java.time.temporal.*;
@@ -70,7 +72,7 @@ public class DefaultSwaps {
 	 * @return The matched swap, or <jk>null</jk> if it couldn't be found.
 	 */
 	public static ObjectSwap<?,?> find(ClassInfo ci) {
-		var ci2 = ci.getAnyParent(x -> SWAPS.get(x.inner()) != null);
+		var ci2 = ci.getAnyParent(x -> nn(SWAPS.get(x.inner())));
 		return ci2 == null ? null : SWAPS.get(ci2.inner());
 	}
 }

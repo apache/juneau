@@ -69,7 +69,7 @@ public class BasicSwaggerProviderSession {
 			for (int i : a.value())
 				codes.add(i);
 		}
-		if (codes.isEmpty() && def != null)
+		if (codes.isEmpty() && nn(def))
 			codes.add(def);
 		return codes;
 	}
@@ -245,7 +245,7 @@ public class BasicSwaggerProviderSession {
 		}
 
 		String s = mb.findFirstString("tags");
-		if (s != null) {
+		if (nn(s)) {
 			for (JsonMap m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(JsonMap.class)) {
 				String name = m.getString("name");
 				if (name == null)
@@ -313,7 +313,7 @@ public class BasicSwaggerProviderSession {
 			op.appendIf(ne, "deprecated",
 				firstNonEmpty(
 					resolve(ms.deprecated()),
-					(m.getAnnotation(Deprecated.class) != null || m.getDeclaringClass().getAnnotation(Deprecated.class) != null) ? "true" : null
+					(nn(m.getAnnotation(Deprecated.class)) || nn(m.getDeclaringClass().getAnnotation(Deprecated.class))) ? "true" : null
 				)
 			);
 			op.appendIf(nec, "tags",
@@ -447,7 +447,7 @@ public class BasicSwaggerProviderSession {
 						Header a = ecmi.getAnnotation(Header.class);
 						if (a == null)
 							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotation(Header.class);
-						if (a != null && ! isMulti(a)) {
+						if (nn(a) && ! isMulti(a)) {
 							String ha = a.name();
 							for (Integer code : codes) {
 								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
@@ -581,7 +581,7 @@ public class BasicSwaggerProviderSession {
 			}
 		}
 
-		if (js.getBeanDefs() != null)
+		if (nn(js.getBeanDefs()))
 			for (Map.Entry<String,JsonMap> e : js.getBeanDefs().entrySet())
 				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
 		if (definitions.isEmpty())
@@ -610,7 +610,7 @@ public class BasicSwaggerProviderSession {
 
 		if (sex == null) {
 			JsonMap schema = resolveRef(piri.getMap("schema"));
-			if (schema != null)
+			if (nn(schema))
 				sex = schema.getString("example", schema.getString("example"));
 		}
 
@@ -638,7 +638,7 @@ public class BasicSwaggerProviderSession {
 		for (MediaType mt : mediaTypes) {
 			if (mt != MediaType.HTML) {
 				Serializer s2 = sm.getSerializers().getSerializer(mt);
-				if (s2 != null) {
+				if (nn(s2)) {
 					try {
 						// @formatter:off
 						String eVal = s2
@@ -754,7 +754,7 @@ public class BasicSwaggerProviderSession {
 	private static JsonList merge(JsonList...lists) {
 		JsonList l = lists[0];
 		for (int i = 1; i < lists.length; i++) {
-			if (lists[i] != null) {
+			if (nn(lists[i])) {
 				if (l == null)
 					l = new JsonList();
 				l.addAll(lists[i]);
@@ -766,7 +766,7 @@ public class BasicSwaggerProviderSession {
 	private static JsonMap merge(JsonMap...maps) {
 		JsonMap m = maps[0];
 		for (int i = 1; i < maps.length; i++) {
-			if (maps[i] != null) {
+			if (nn(maps[i])) {
 				if (m == null)
 					m = new JsonMap();
 				m.putAll(maps[i]);
@@ -1006,7 +1006,7 @@ public class BasicSwaggerProviderSession {
 	private static JsonMap pushupSchemaFields(RestPartType type, JsonMap param, JsonMap schema) {
 		// @formatter:off
 		Predicate<Object> ne = Utils::isNotEmpty;
-		if (schema != null && ! schema.isEmpty()) {
+		if (nn(schema) && ! schema.isEmpty()) {
 			if (type == BODY || type == RESPONSE) {
 				param
 					.appendIf(ne, "description", schema.remove("description"));
@@ -1096,7 +1096,7 @@ public class BasicSwaggerProviderSession {
 	private JsonMap resolveRef(JsonMap m) {
 		if (m == null)
 			return null;
-		if (m.containsKey("$ref") && js.getBeanDefs() != null) {
+		if (m.containsKey("$ref") && nn(js.getBeanDefs())) {
 			String ref = m.getString("$ref");
 			if (ref.startsWith("#/definitions/"))
 				return js.getBeanDefs().get(ref.substring(14));

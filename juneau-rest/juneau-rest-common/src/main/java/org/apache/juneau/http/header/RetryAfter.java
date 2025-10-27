@@ -18,6 +18,7 @@ package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.time.*;
 import java.util.*;
@@ -194,7 +195,7 @@ public class RetryAfter extends BasicDateHeader {
 	 * @return This header value as a integer, or an empty optional if value was <jk>null</jk> or not an integer.
 	 */
 	public Optional<Integer> asInteger() {
-		if (supplier != null) {
+		if (nn(supplier)) {
 			Object o = supplier.get();
 			return Utils.opt(o instanceof Integer ? (Integer)o : null);
 		}
@@ -203,7 +204,7 @@ public class RetryAfter extends BasicDateHeader {
 
 	@Override /* Overridden from Header */
 	public String getValue() {
-		if (supplier != null) {
+		if (nn(supplier)) {
 			Object o = supplier.get();
 			if (o == null)
 				return null;
@@ -214,7 +215,7 @@ public class RetryAfter extends BasicDateHeader {
 			}
 			throw new BasicRuntimeException("Invalid object type returned by supplier: {0}", ClassUtils.className(o));
 		}
-		if (value != null)
+		if (nn(value))
 			return Utils.s(value);
 		return super.getValue();
 	}

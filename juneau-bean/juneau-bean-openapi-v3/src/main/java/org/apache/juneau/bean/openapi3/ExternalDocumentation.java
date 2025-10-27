@@ -18,6 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -121,8 +122,8 @@ public class ExternalDocumentation extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(description != null, "description")
-			.addIf(url != null, "url")
+			.addIf(nn(description), "description")
+			.addIf(nn(url), "url")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

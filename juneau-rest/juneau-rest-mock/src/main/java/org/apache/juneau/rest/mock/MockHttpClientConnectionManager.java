@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.util.concurrent.*;
 
@@ -54,7 +56,7 @@ class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		// All MockHttpClientConnectionManagers are considered equal.
-		return o != null && o instanceof MockHttpClientConnectionManager;
+		return nn(o) && o instanceof MockHttpClientConnectionManager;
 	}
 
 	@Override /* Overridden from Object */

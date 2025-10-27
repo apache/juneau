@@ -62,10 +62,10 @@ public class Utils2 extends Utils {
 			do {
 				String cname = ci.getShortName();
 				MethodInfo mi = ci.getDeclaredMethod(x -> x.hasName("properties"));
-				if (mi != null)
+				if (nn(mi))
 					methods2.put(cname, mi.accessible());
 				ci = ci.getSuperclass();
-			} while (ci != null);
+			} while (nn(ci));
 			methods = methods2;
 			PROPERTIES_METHODS.put(o.getClass(), methods);
 		}

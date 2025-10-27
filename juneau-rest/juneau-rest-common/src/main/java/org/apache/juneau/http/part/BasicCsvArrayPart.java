@@ -152,7 +152,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return <jk>true</jk> if this part contains the specified value.
 	 */
 	public boolean contains(String val) {
-		if (val != null)
+		if (nn(val))
 			for (String v : value())
 				if (Utils.eq(v, val))
 					return true;
@@ -166,7 +166,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return <jk>true</jk> if this part contains the specified value.
 	 */
 	public boolean containsIgnoreCase(String val) {
-		if (val != null)
+		if (nn(val))
 			for (String v : value())
 				if (Utils.eqic(v, val))
 					return true;
@@ -175,9 +175,9 @@ public class BasicCsvArrayPart extends BasicPart {
 
 	@Override /* Overridden from Header */
 	public String getValue() {
-		if (supplier != null)
+		if (nn(supplier))
 			return StringUtils.join(supplier.get(), ',');
-		if (stringValue != null)
+		if (nn(stringValue))
 			stringValue = StringUtils.join(value, ',');
 		return stringValue;
 	}
@@ -193,7 +193,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public String[] orElse(String[] other) {
 		String[] x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -221,9 +221,9 @@ public class BasicCsvArrayPart extends BasicPart {
 	}
 
 	private String[] value() {
-		if (supplier != null) {
+		if (nn(supplier)) {
 			String[] v = supplier.get();
-			return v != null ? v : EMPTY;
+			return nn(v) ? v : EMPTY;
 		}
 		return value;
 	}

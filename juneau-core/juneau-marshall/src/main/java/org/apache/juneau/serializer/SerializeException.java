@@ -17,6 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.text.*;
@@ -60,9 +61,9 @@ public class SerializeException extends BasicRuntimeException {
 
 	private static String getMessage(SerializerSession session, String msg, Object...args) {
 		msg = format(msg, args);
-		if (session != null) {
+		if (nn(session)) {
 			Map<String,Object> m = session.getLastLocation();
-			if (m != null && ! m.isEmpty())
+			if (nn(m) && ! m.isEmpty())
 				msg = "Serialize exception occurred at " + Json5Serializer.DEFAULT.toString(m) + ".  " + msg;
 		}
 		return msg;

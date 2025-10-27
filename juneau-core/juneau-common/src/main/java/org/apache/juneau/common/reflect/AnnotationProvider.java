@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
@@ -53,7 +55,7 @@ public interface AnnotationProvider {
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			if (type != null && onClass != null)
+			if (nn(type) && nn(onClass))
 				for (A a : annotations(type, onClass))
 					if (PredicateUtils.test(filter, a))
 						return a;
@@ -62,7 +64,7 @@ public interface AnnotationProvider {
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-			if (type != null && onConstructor != null)
+			if (nn(type) && nn(onConstructor))
 				for (A a : annotations(type, onConstructor))
 					if (PredicateUtils.test(filter, a))
 						return a;
@@ -71,7 +73,7 @@ public interface AnnotationProvider {
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-			if (type != null && onField != null)
+			if (nn(type) && nn(onField))
 				for (A a : annotations(type, onField))
 					if (PredicateUtils.test(filter, a))
 						return a;
@@ -80,7 +82,7 @@ public interface AnnotationProvider {
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-			if (type != null && onMethod != null)
+			if (nn(type) && nn(onMethod))
 				for (A a : annotations(type, onMethod))
 					if (PredicateUtils.test(filter, a))
 						return a;
@@ -89,7 +91,7 @@ public interface AnnotationProvider {
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			if (type != null && onClass != null)
+			if (nn(type) && nn(onClass))
 				for (A a : declaredAnnotations(type, onClass))
 					if (PredicateUtils.test(filter, a))
 						return a;
@@ -98,35 +100,35 @@ public interface AnnotationProvider {
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-			if (type != null && onClass != null)
+			if (nn(type) && nn(onClass))
 				for (A a : annotations(type, onClass))
 					PredicateUtils.consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
-			if (type != null && onConstructor != null)
+			if (nn(type) && nn(onConstructor))
 				for (A a : annotations(type, onConstructor))
 					PredicateUtils.consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
-			if (type != null && onField != null)
+			if (nn(type) && nn(onField))
 				for (A a : annotations(type, onField))
 					PredicateUtils.consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
-			if (type != null && onMethod != null)
+			if (nn(type) && nn(onMethod))
 				for (A a : annotations(type, onMethod))
 					PredicateUtils.consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-			if (type != null && onClass != null)
+			if (nn(type) && nn(onClass))
 				for (A a : declaredAnnotations(type, onClass))
 					PredicateUtils.consumeIf(filter, action, a);
 		}
@@ -134,7 +136,7 @@ public interface AnnotationProvider {
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			A x = null;
-			if (type != null && onClass != null)
+			if (nn(type) && nn(onClass))
 				for (A a : annotations(type, onClass))
 					if (PredicateUtils.test(filter, a))
 						x = a;
@@ -144,7 +146,7 @@ public interface AnnotationProvider {
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 			A x = null;
-			if (type != null && onConstructor != null)
+			if (nn(type) && nn(onConstructor))
 				for (A a : annotations(type, onConstructor))
 					if (PredicateUtils.test(filter, a))
 						x = a;
@@ -154,7 +156,7 @@ public interface AnnotationProvider {
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 			A x = null;
-			if (type != null && onField != null)
+			if (nn(type) && nn(onField))
 				for (A a : annotations(type, onField))
 					if (PredicateUtils.test(filter, a))
 						x = a;
@@ -164,7 +166,7 @@ public interface AnnotationProvider {
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 			A x = null;
-			if (type != null && onMethod != null)
+			if (nn(type) && nn(onMethod))
 				for (A a : annotations(type, onMethod))
 					if (PredicateUtils.test(filter, a))
 						x = a;
@@ -174,7 +176,7 @@ public interface AnnotationProvider {
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			A x = null;
-			if (type != null && onClass != null)
+			if (nn(type) && nn(onClass))
 				for (A a : declaredAnnotations(type, onClass))
 					if (PredicateUtils.test(filter, a))
 						x = a;

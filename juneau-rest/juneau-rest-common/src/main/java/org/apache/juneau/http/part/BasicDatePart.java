@@ -18,6 +18,7 @@ package org.apache.juneau.http.part;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.time.*;
 import java.time.format.*;
@@ -144,7 +145,7 @@ public class BasicDatePart extends BasicPart {
 	 */
 	public ZonedDateTime orElse(ZonedDateTime other) {
 		ZonedDateTime x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -157,7 +158,7 @@ public class BasicDatePart extends BasicPart {
 	}
 
 	private ZonedDateTime value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

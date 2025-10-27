@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -131,7 +132,11 @@ public class Callback extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class).addIf(callbacks != null, "callbacks").build();
+		// @formatter:off
+		var s = CollectionUtils.setb(String.class)
+			.addIf(nn(callbacks), "callbacks")
+			.build();
+		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
 	}
 

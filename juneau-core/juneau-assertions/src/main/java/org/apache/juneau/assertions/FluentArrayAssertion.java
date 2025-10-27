@@ -278,7 +278,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		isSize(tests.length);
 		for (int i = 0, j = length(); i < j; i++) {
 			var t = tests[i];
-			if (t != null && !t.test(at(i)))
+			if (nn(t) && !t.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();

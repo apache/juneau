@@ -17,6 +17,7 @@
 package org.apache.juneau.config.store;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -163,11 +164,11 @@ public abstract class ConfigStore extends Context implements Closeable {
 	public synchronized ConfigMap getMap(String name) throws IOException {
 		name = resolveName(name);
 		var cm = configMaps.get(name);
-		if (cm != null)
+		if (nn(cm))
 			return cm;
 		cm = new ConfigMap(this, name);
 		var cm2 = configMaps.putIfAbsent(name, cm);
-		if (cm2 != null)
+		if (nn(cm2))
 			return cm2;
 		register(name, cm);
 		return cm;
@@ -209,7 +210,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	public synchronized ConfigStore unregister(String name, ConfigStoreListener l) {
 		name = resolveName(name);
 		var s = listeners.get(name);
-		if (s != null)
+		if (nn(s))
 			s.remove(l);
 		return this;
 	}
@@ -227,7 +228,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	public synchronized ConfigStore update(String name, String contents) {
 		name = resolveName(name);
 		var s = listeners.get(name);
-		if (s != null)
+		if (nn(s))
 			listeners.get(name).forEach(x -> x.onChange(contents));
 		return this;
 	}

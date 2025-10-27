@@ -17,6 +17,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
 import java.util.function.*;
@@ -91,7 +92,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			failedMessage.remove();
 			for (var i = 0; i < inner.length; i++) {
 				var p = inner[i];
-				if (p != null) {
+				if (nn(p)) {
 					var b = p.test(t);
 					if (!b) {
 						var m = format(MSG_predicateTestFailed, i + 1);
@@ -134,7 +135,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 		public boolean test(T t) {
 			failedMessage.remove();
 			var p = inner;
-			if (p != null) {
+			if (nn(p)) {
 				var b = p.test(t);
 				if (b) {
 					failedMessage.set(format(MSG_predicateTestsUnexpectedlyPassed));
@@ -175,7 +176,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 		public boolean test(T t) {
 			failedMessage.remove();
 			for (var p : inner)
-				if (p != null && p.test(t))
+				if (nn(p) && p.test(t))
 					return true;
 			var m = format(MSG_noPredicateTestsPassed);
 			failedMessage.set(m);
@@ -215,7 +216,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 */
 	public AssertionPredicate(Predicate<T> inner, String message, Object...args) {
 		this.inner = inner;
-		if (message != null) {
+		if (nn(message)) {
 			this.message = message;
 			this.args = args;
 		} else if (inner instanceof AssertionPredicate) {

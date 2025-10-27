@@ -141,7 +141,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList append(List<NameValuePair> values) {
-		if (values != null)
+		if (nn(values))
 			values.forEach(this::append);
 		return this;
 	}
@@ -153,7 +153,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList append(NameValuePair value) {
-		if (value != null)
+		if (nn(value))
 			add(value);
 		return this;
 	}
@@ -165,7 +165,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList append(NameValuePair...values) {
-		if (values != null)
+		if (nn(values))
 			for (NameValuePair value : values)
 				append(value);
 		return this;
@@ -525,7 +525,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList prepend(List<NameValuePair> values) {
-		if (values != null)
+		if (nn(values))
 			addAll(0, values);
 		return this;
 	}
@@ -537,7 +537,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList prepend(NameValuePair value) {
-		if (value != null)
+		if (nn(value))
 			add(0, value);
 		return this;
 	}
@@ -549,7 +549,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList prepend(NameValuePair...values) {
-		if (values != null)
+		if (nn(values))
 			prepend(alist(values));
 		return this;
 	}
@@ -592,7 +592,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList remove(List<NameValuePair> values) {
-		if (values != null)
+		if (nn(values))
 			values.forEach(this::remove);
 		return this;
 	}
@@ -604,7 +604,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList remove(NameValuePair value) {
-		if (value != null)
+		if (nn(value))
 			removeIf(x -> eq(x.getName(), value.getName()) && eq(x.getValue(), value.getValue()));
 		return this;
 	}
@@ -639,7 +639,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList remove(String...names) {
-		if (names != null)
+		if (nn(names))
 			for (String name : names)
 				remove(name);
 		return this;
@@ -702,9 +702,9 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList set(List<NameValuePair> values) {
 
-		if (values != null) {
+		if (nn(values)) {
 			for (NameValuePair h : values) {
-				if (h != null) {
+				if (nn(h)) {
 					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
 						var x = get(i2);
 						if (eq(x.getName(), h.getName())) {
@@ -716,7 +716,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			}
 
 			for (NameValuePair x : values) {
-				if (x != null) {
+				if (nn(x)) {
 					add(x);
 				}
 			}
@@ -735,7 +735,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList set(NameValuePair value) {
-		if (value != null) {
+		if (nn(value)) {
 			boolean replaced = false;
 			for (int i = 0, j = size(); i < j; i++) {
 				var x = get(i);
@@ -767,7 +767,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList set(NameValuePair...values) {
-		if (values != null)
+		if (nn(values))
 			set(alist(values));
 		return this;
 	}
@@ -804,8 +804,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList setDefault(List<NameValuePair> parts) {
-		if (parts != null)
-			parts.stream().filter(x -> x != null && ! contains(x.getName())).forEach(this::set);
+		if (nn(parts))
+			parts.stream().filter(x -> nn(x) && ! contains(x.getName())).forEach(this::set);
 		return this;
 	}
 
@@ -819,7 +819,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return A new list, or the same list if the parts were empty.
 	 */
 	public PartList setDefault(NameValuePair...parts) {
-		if (parts != null)
+		if (nn(parts))
 			setDefault(Arrays.asList(parts));
 		return this;
 	}
@@ -872,9 +872,9 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		forEach(p -> {
-			if (p != null) {
+			if (nn(p)) {
 				String v = p.getValue();
-				if (v != null) {
+				if (nn(v)) {
 					if (sb.length() > 0)
 						sb.append("&");
 					sb.append(urlEncode(p.getName())).append('=').append(urlEncode(p.getValue()));
@@ -885,7 +885,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	private NameValuePair createPart(String name, Object value) {
-		var isResolving = varResolver != null;
+		var isResolving = nn(varResolver);
 
 		if (value instanceof Supplier<?>) {
 			var value2 = (Supplier<?>)value;

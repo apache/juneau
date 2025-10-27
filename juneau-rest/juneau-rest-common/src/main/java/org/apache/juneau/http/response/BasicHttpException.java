@@ -81,7 +81,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public BasicHttpException(HttpResponse response) {
 		super((Throwable)null);
 		Header h = response.getLastHeader("Thrown");
-		if (h != null)
+		if (nn(h))
 			setMessage(thrown(h.getValue()).asParts().get().get(0).getMessage());
 		setHeaders(response.getAllHeaders());
 		setContent(response.getEntity());
@@ -190,15 +190,15 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public String getFullStackMessage(boolean scrubForXssVulnerabilities) {
 		String msg = getMessage();
 		StringBuilder sb = new StringBuilder();
-		if (msg != null) {
+		if (nn(msg)) {
 			if (scrubForXssVulnerabilities)
 				msg = msg.replace('<', ' ').replace('>', ' ').replace('&', ' ');
 			sb.append(msg);
 		}
 		Throwable e = getCause();
-		while (e != null) {
+		while (nn(e)) {
 			msg = e.getMessage();
-			if (msg != null && scrubForXssVulnerabilities)
+			if (nn(msg) && scrubForXssVulnerabilities)
 				msg = msg.replace('<', ' ').replace('>', ' ').replace('&', ' ');
 			String cls = e.getClass().getSimpleName();
 			if (msg == null)
@@ -236,7 +236,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	@Override /* Overridden from Throwable */
 	public String getMessage() {
 		String m = super.getMessage();
-		if (m == null && getCause() != null)
+		if (m == null && nn(getCause()))
 			m = getCause().getMessage();
 		if (m == null)
 			m = statusLine.getReasonPhrase();
@@ -264,7 +264,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	public Throwable getRootCause() {
 		Throwable t = this;
-		while (t != null) {
+		while (nn(t)) {
 			if (! (t instanceof BasicHttpException || t instanceof InvocationTargetException))
 				return t;
 			t = t.getCause();
@@ -279,7 +279,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public int hashCode() {
 		int i = 0;
 		Throwable t = this;
-		while (t != null) {
+		while (nn(t)) {
 			for (StackTraceElement e : t.getStackTrace())
 				i ^= e.hashCode();
 			t = t.getCause();

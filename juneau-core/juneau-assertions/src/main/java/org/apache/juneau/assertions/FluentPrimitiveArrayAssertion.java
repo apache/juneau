@@ -18,6 +18,7 @@ package org.apache.juneau.assertions;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -156,7 +157,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 */
 	public FluentPrimitiveArrayAssertion(Assertion creator, T value, R returns) {
 		super(creator, value, returns);
-		if (value != null) {
+		if (nn(value)) {
 			var c = value.getClass();
 			if (!(c.isArray() && c.getComponentType().isPrimitive()))
 				throw new BasicAssertionError(MSG_objectWasNotAnArray, value.getClass());
@@ -227,7 +228,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		isSize(tests.length);
 		for (int i = 0, j = length2(); i < j; i++) {
 			var t = tests[i];
-			if (t != null && !t.test(at(i)))
+			if (nn(t) && !t.test(at(i)))
 				throw error(MSG_arrayDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();

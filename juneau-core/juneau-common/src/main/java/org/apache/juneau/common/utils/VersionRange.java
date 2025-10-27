@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 /**
  * Represents an OSGi-style version range like <js>"1.2"</js> or <js>"[1.0,2.0)"</js>.
  *
@@ -72,7 +74,7 @@ public class VersionRange {
 		if (Utils.isEmpty(v))
 			return (minVersion == null && maxVersion == null);
 		Version ver = new Version(v);
-		if ((minVersion != null && ! ver.isAtLeast(minVersion, minExclusive)) || (maxVersion != null && ! ver.isAtMost(maxVersion, maxExclusive)))
+		if ((nn(minVersion) && ! ver.isAtLeast(minVersion, minExclusive)) || (nn(maxVersion) && ! ver.isAtMost(maxVersion, maxExclusive)))
 			return false;
 		return true;
 	}

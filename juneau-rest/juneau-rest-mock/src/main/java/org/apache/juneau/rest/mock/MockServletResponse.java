@@ -74,7 +74,7 @@ public class MockServletResponse implements HttpServletResponse {
 
 	@Override /* Overridden from HttpServletResponse */
 	public boolean containsHeader(String name) {
-		return getHeader(name) != null;
+		return nn(getHeader(name));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
@@ -237,7 +237,7 @@ public class MockServletResponse implements HttpServletResponse {
 	private void updateContentTypeHeader() {
 		String contentType = getContentType();
 		String charset = characterEncoding;
-		if (contentType != null && charset != null) {
+		if (nn(contentType) && nn(charset)) {
 			if (contentType.indexOf("charset=") != -1)
 				contentType = contentType.replaceAll("\\;\\s*charset=.*", "");
 			if (! "UTF-8".equalsIgnoreCase(charset))

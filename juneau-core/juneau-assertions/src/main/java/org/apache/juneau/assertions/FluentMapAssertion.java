@@ -19,6 +19,7 @@ package org.apache.juneau.assertions;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -197,7 +198,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		if (valueIsNull())
 			return new FluentMapAssertion<>(this, null, returns());
 		Map<K,V> m1 = value(), m2 = CollectionUtils.map();
-		if (m1 != null)
+		if (nn(m1))
 			for (var k : keys)
 				m2.put(k, m1.get(k));
 		return new FluentMapAssertion<>(this, m2, returns());

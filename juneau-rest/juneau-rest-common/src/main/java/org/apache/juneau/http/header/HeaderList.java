@@ -154,7 +154,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList append(Header value) {
-		if (value != null)
+		if (nn(value))
 			add(value);
 		return this;
 	}
@@ -166,9 +166,9 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList append(Header...values) {
-		if (values != null)
+		if (nn(values))
 			for (Header value : values)
-				if (value != null)
+				if (nn(value))
 					append(value);
 		return this;
 	}
@@ -180,7 +180,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList append(List<Header> values) {
-		if (values != null)
+		if (nn(values))
 			values.forEach(this::append);
 		return this;
 	}
@@ -540,7 +540,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList prepend(Header value) {
-		if (value != null)
+		if (nn(value))
 			add(0, value);
 		return this;
 	}
@@ -552,7 +552,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList prepend(Header...values) {
-		if (values != null)
+		if (nn(values))
 			prepend(alist(values));
 		return this;
 	}
@@ -564,7 +564,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList prepend(List<Header> values) {
-		if (values != null)
+		if (nn(values))
 			addAll(0, values);
 		return this;
 	}
@@ -607,7 +607,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList remove(Header value) {
-		if (value != null)
+		if (nn(value))
 			removeIf(x -> eq(x.getName(), value.getName()) && eq(x.getValue(), value.getValue()));
 		return this;
 	}
@@ -631,7 +631,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList remove(List<Header> values) {
-		if (values != null)
+		if (nn(values))
 			values.forEach(this::remove);
 		return this;
 	}
@@ -654,7 +654,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList remove(String...names) {
-		if (names != null)
+		if (nn(names))
 			for (String name : names)
 				remove(name);
 		return this;
@@ -726,7 +726,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList set(Header value) {
-		if (value != null) {
+		if (nn(value)) {
 			boolean replaced = false;
 			for (int i = 0, j = size(); i < j; i++) {
 				var x = get(i);
@@ -758,7 +758,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList set(Header...values) {
-		if (values != null)
+		if (nn(values))
 			set(alist(values));
 		return this;
 	}
@@ -774,9 +774,9 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList set(List<Header> values) {
 
-		if (values != null) {
+		if (nn(values)) {
 			for (Header h : values) {
-				if (h != null) {
+				if (nn(h)) {
 					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
 						var x = get(i2);
 						if (eq(x.getName(), h.getName())) {
@@ -788,7 +788,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			}
 
 			for (Header x : values) {
-				if (x != null) {
+				if (nn(x)) {
 					add(x);
 				}
 			}
@@ -829,7 +829,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return A new list, or the same list if the headers were empty.
 	 */
 	public HeaderList setDefault(Header...headers) {
-		if (headers != null)
+		if (nn(headers))
 			setDefault(Arrays.asList(headers));
 		return this;
 	}
@@ -844,8 +844,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList setDefault(List<Header> headers) {
-		if (headers != null)
-			headers.stream().filter(x -> x != null && ! contains(x.getName())).forEach(this::set);
+		if (nn(headers))
+			headers.stream().filter(x -> nn(x) && ! contains(x.getName())).forEach(this::set);
 		return this;
 	}
 
@@ -903,7 +903,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return A new header.
 	 */
 	private Header createPart(String name, Object value) {
-		var isResolving = varResolver != null;
+		var isResolving = nn(varResolver);
 
 		if (value instanceof Supplier<?>) {
 			var value2 = (Supplier<?>)value;

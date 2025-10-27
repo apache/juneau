@@ -283,7 +283,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Predicate<T> test) throws AssertionError {
-		if (test != null && !test.test(value))
+		if (nn(test) && !test.test(value))
 			throw error(getFailureMessage(test, value));
 		return returns();
 	}
@@ -420,7 +420,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNull() throws AssertionError {
-		if (value != null)
+		if (nn(value))
 			throw error(MSG_valueWasNotNull);
 		return returns();
 	}
@@ -641,7 +641,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return <jk>true</jk> if the inner value is not null.
 	 */
 	protected boolean valueIsNotNull() {
-		return value != null;
+		return nn(value);
 	}
 
 	/**

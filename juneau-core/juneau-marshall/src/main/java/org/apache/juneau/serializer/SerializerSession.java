@@ -112,7 +112,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 * @return This object.
 		 */
 		public Builder javaMethod(Method value) {
-			if (value != null)
+			if (nn(value))
 				javaMethod = value;
 			return this;
 		}
@@ -165,7 +165,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 * @return This object.
 		 */
 		public Builder resolver(VarResolverSession value) {
-			if (value != null)
+			if (nn(value))
 				resolver = value;
 			return this;
 		}
@@ -182,7 +182,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 * @return This object.
 		 */
 		public Builder schema(HttpPartSchema value) {
-			if (value != null)
+			if (nn(value))
 				this.schema = value;
 			return this;
 		}
@@ -196,7 +196,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 * @return This object.
 		 */
 		public Builder schemaDefault(HttpPartSchema value) {
-			if (value != null && schema == null)
+			if (nn(value) && schema == null)
 				this.schema = value;
 			return this;
 		}
@@ -234,7 +234,7 @@ public class SerializerSession extends BeanTraverseSession {
 		 * @return This object.
 		 */
 		public Builder uriContext(UriContext value) {
-			if (value != null)
+			if (nn(value))
 				uriContext = value;
 			return this;
 		}
@@ -771,6 +771,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @param pMeta The current bean property being serialized.
 	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
 	 */
+	@SuppressWarnings("null")
 	protected final String getBeanTypeName(SerializerSession session, ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
 		if (eType == aType || ! (isAddBeanTypes() || (session.isRoot() && isAddRootType())))
 			return null;
@@ -779,32 +780,32 @@ public class SerializerSession extends BeanTraverseSession {
 
 		// First see if it's defined on the actual type.
 		String tn = aType.getDictionaryName();
-		if (tn != null && ! tn.equals(eTypeTn)) {
+		if (nn(tn) && ! tn.equals(eTypeTn)) {
 			return tn;
 		}
 
 		// Then see if it's defined on the expected type.
 		// The expected type might be an interface with mappings for implementation classes.
 		BeanRegistry br = eType.getBeanRegistry();
-		if (br != null) {
+		if (nn(br)) {
 			tn = br.getTypeName(aType);
-			if (tn != null && ! tn.equals(eTypeTn))
+			if (nn(tn) && ! tn.equals(eTypeTn))
 				return tn;
 		}
 
 		// Then look on the bean property.
 		br = pMeta == null ? null : pMeta.getBeanRegistry();
-		if (br != null) {
+		if (nn(br)) {
 			tn = br.getTypeName(aType);
-			if (tn != null && ! tn.equals(eTypeTn))
+			if (nn(tn) && ! tn.equals(eTypeTn))
 				return tn;
 		}
 
 		// Finally look in the session.
 		br = getBeanRegistry();
-		if (br != null) {
+		if (nn(br)) {
 			tn = br.getTypeName(aType);
-			if (tn != null && ! tn.equals(eTypeTn))
+			if (nn(tn) && ! tn.equals(eTypeTn))
 				return tn;
 		}
 
@@ -826,7 +827,7 @@ public class SerializerSession extends BeanTraverseSession {
 		if (isAddRootType())
 			return object();
 		ClassMeta<?> cm = getClassMetaForObject(o);
-		if (cm != null && cm.isOptional())
+		if (nn(cm) && cm.isOptional())
 			return cm.getElementType();
 		return cm;
 	}
@@ -957,7 +958,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @throws SerializeException Thrown if ignoreInvocationExceptionOnGetters is false.
 	 */
 	protected final void onBeanGetterException(BeanPropertyMeta p, Throwable t) throws SerializeException {
-		if (listener != null)
+		if (nn(listener))
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
 		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
@@ -975,7 +976,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 */
 	@Override
 	protected void onError(Throwable t, String msg, Object...args) {
-		if (listener != null)
+		if (nn(listener))
 			listener.onError(this, t, format(msg, args));
 		super.onError(t, msg, args);
 	}

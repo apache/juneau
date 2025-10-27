@@ -97,7 +97,7 @@ public class BasicResource implements HttpResource {
 	 * @return This object.
 	 */
 	public BasicResource addHeader(String name, String value) {
-		if (name != null && value != null)
+		if (nn(name) && nn(value))
 			headers.append(name, value);
 		return this;
 	}
@@ -110,7 +110,7 @@ public class BasicResource implements HttpResource {
 	 */
 	public BasicResource addHeaders(Header...values) {
 		for (Header h : values) {
-			if (h != null) {
+			if (nn(h)) {
 				String n = h.getName();
 				String v = h.getValue();
 				if (isNotEmpty(n)) {
@@ -381,7 +381,7 @@ public class BasicResource implements HttpResource {
 	 * @return This object.
 	 */
 	public BasicResource setHeader(String name, String value) {
-		if (name != null && value != null)
+		if (nn(name) && nn(value))
 			headers.set(name, value);
 		return this;
 	}
@@ -394,7 +394,7 @@ public class BasicResource implements HttpResource {
 	 */
 	public BasicResource setHeaders(Header...values) {
 		for (Header h : values) {
-			if (h != null) {
+			if (nn(h)) {
 				String n = h.getName();
 				String v = h.getValue();
 				if (isNotEmpty(n)) {

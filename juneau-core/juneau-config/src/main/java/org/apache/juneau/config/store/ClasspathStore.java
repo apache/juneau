@@ -184,12 +184,12 @@ public class ClasspathStore extends ConfigStore {
 	@Override /* Overridden from ConfigStore */
 	public synchronized String read(String name) throws IOException {
 		var s = cache.get(name);
-		if (s != null)
+		if (nn(s))
 			return s;
 
 		var cl = Thread.currentThread().getContextClassLoader();
 		try (var in = cl.getResourceAsStream(name)) {
-			if (in != null)
+			if (nn(in))
 				cache.put(name, IOUtils.read(in));
 		}
 		return emptyIfNull(cache.get(name));
@@ -214,7 +214,7 @@ public class ClasspathStore extends ConfigStore {
 
 		var currentContents = read(name);
 
-		if (expectedContents != null && ! eq(currentContents, expectedContents))
+		if (nn(expectedContents) && ! eq(currentContents, expectedContents))
 			return currentContents;
 
 		update(name, newContents);

@@ -116,7 +116,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 		@Override
 		public boolean hasVars() {
-			return varKeys != null;
+			return nn(varKeys);
 		}
 
 		/**
@@ -126,6 +126,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 		 * @return
 		 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
 		 */
+		@SuppressWarnings("null")
 		@Override
 		public UrlPathMatch match(UrlPath urlPath) {
 
@@ -150,9 +151,9 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 			String[] vals = varKeys == null ? null : new String[varKeys.length];
 
 			int j = 0;
-			if (vals != null)
+			if (nn(vals))
 				for (int i = 0; i < parts.length; i++)
-					if (vars[i] != null)
+					if (nn(vars[i]))
 						vals[j++] = pip[i];
 
 			return new UrlPathMatch(urlPath.getPath(), parts.length, varKeys, vals);

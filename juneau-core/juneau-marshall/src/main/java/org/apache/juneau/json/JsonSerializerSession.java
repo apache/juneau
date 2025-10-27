@@ -17,6 +17,7 @@
 package org.apache.juneau.json;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -208,9 +209,9 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		out.w('{');
 
 		Flag addComma = Flag.create();
-		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
-		if (typeName != null) {
+		if (nn(typeName)) {
 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
 			out.cr(i).attr(pm.getName()).w(':').s(i).stringValue(typeName);
 			addComma.set();
@@ -218,7 +219,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			ClassMeta<?> cMeta = pMeta.getClassMeta();
-			if (thrown != null)
+			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
 			if (canIgnoreValue(cMeta, key, value))
@@ -382,7 +383,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 		// Swap if necessary
 		ObjectSwap swap = aType.getSwap(this);
-		if (swap != null) {
+		if (nn(swap)) {
 			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);
 
@@ -393,7 +394,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		}
 
 		String wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
-		if (wrapperAttr != null) {
+		if (nn(wrapperAttr)) {
 			out.w('{').cr(indent).attr(wrapperAttr).w(':').s(indent);
 			indent++;
 		}
@@ -405,7 +406,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			out.append(o);
 		} else if (sType.isBean()) {
 			serializeBeanMap(out, toBeanMap(o), typeName);
-		} else if (sType.isUri() || (pMeta != null && pMeta.isUri())) {
+		} else if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
 			out.uriValue(o);
 		} else if (sType.isMap()) {
 			if (o instanceof BeanMap)
@@ -424,7 +425,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			out.stringValue(toString(o));
 		}
 
-		if (wrapperAttr != null) {
+		if (nn(wrapperAttr)) {
 			indent--;
 			out.cre(indent - 1).w('}');
 		}

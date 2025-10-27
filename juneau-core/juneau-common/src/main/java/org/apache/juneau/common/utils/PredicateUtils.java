@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.function.*;
 
 /**
@@ -39,9 +41,9 @@ public final class PredicateUtils {
 	@SafeVarargs
 	public static <T> Predicate<T> and(Predicate<T>...predicates) {
 		Predicate<T> result = t -> true;
-		if (predicates != null) {
+		if (nn(predicates)) {
 			for (Predicate<T> p : predicates) {
-				if (p != null)
+				if (nn(p))
 					result = result.and(p);
 			}
 		}
@@ -62,9 +64,9 @@ public final class PredicateUtils {
 	@SafeVarargs
 	public static <T> Predicate<T> or(Predicate<T>...predicates) {
 		Predicate<T> result = t -> false;
-		if (predicates != null) {
+		if (nn(predicates)) {
 			for (Predicate<T> p : predicates) {
-				if (p != null)
+				if (nn(p))
 					result = result.or(p);
 			}
 		}
@@ -78,12 +80,12 @@ public final class PredicateUtils {
 	 * @return A predicate that returns {@code true} if the value is an instance of {@code type}.
 	 */
 	public static Predicate<?> isType(Class<?> type) {
-		return v -> type != null && type.isInstance(v);
+		return v -> nn(type) && type.isInstance(v);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
-	
+
 	 * @param <T> The type being tested.
 	 * @param predicate The predicate.
 	 * @param value The value to test.

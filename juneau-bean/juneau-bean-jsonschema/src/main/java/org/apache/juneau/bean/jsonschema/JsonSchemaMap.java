@@ -18,6 +18,7 @@ package org.apache.juneau.bean.jsonschema;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
@@ -64,11 +65,11 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	public JsonSchema get(Object uri) {
 		var u = toURI(uri);
 		var s = super.get(u);
-		if (s != null)
+		if (nn(s))
 			return s;
 		synchronized (this) {
 			s = load(u);
-			if (s != null) {
+			if (nn(s)) {
 				// Note:  Can't use add(Schema...) since the ID property may not be set.
 				s.setSchemaMap(this);
 				put(u, s);

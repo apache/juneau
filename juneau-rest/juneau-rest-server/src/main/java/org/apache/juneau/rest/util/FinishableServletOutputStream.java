@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 
 import org.apache.juneau.encoders.*;
@@ -58,7 +60,7 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 	 */
 	@Override /* Overridden from Finishable */
 	public void finish() throws IOException {
-		if (f != null)
+		if (nn(f))
 			f.finish();
 	}
 
@@ -72,7 +74,7 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 
 	@Override /* Overridden from ServletOutputStream */
 	public void setWriteListener(WriteListener arg0) {
-		if (sos != null)
+		if (nn(sos))
 			sos.setWriteListener(arg0);
 	}
 

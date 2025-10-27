@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -236,14 +237,14 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(bearerFormat != null, "bearerFormat")
-			.addIf(description != null, "description")
-			.addIf(flows != null, "flows")
-			.addIf(in != null, "in")
-			.addIf(name != null, "name")
-			.addIf(openIdConnectUrl != null, "openIdConnectUrl")
-			.addIf(scheme != null, "scheme")
-			.addIf(type != null, "type")
+			.addIf(nn(bearerFormat), "bearerFormat")
+			.addIf(nn(description), "description")
+			.addIf(nn(flows), "flows")
+			.addIf(nn(in), "in")
+			.addIf(nn(name), "name")
+			.addIf(nn(openIdConnectUrl), "openIdConnectUrl")
+			.addIf(nn(scheme), "scheme")
+			.addIf(nn(type), "type")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

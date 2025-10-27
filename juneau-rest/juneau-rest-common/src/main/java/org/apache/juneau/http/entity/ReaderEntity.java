@@ -18,6 +18,7 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -67,7 +68,7 @@ public class ReaderEntity extends BasicHttpEntity {
 	public byte[] asBytes() throws IOException {
 		if (isCached() && byteCache == null)
 			byteCache = readBytes(content());
-		if (byteCache != null)
+		if (nn(byteCache))
 			return byteCache;
 		return readBytes(content());
 	}
@@ -76,7 +77,7 @@ public class ReaderEntity extends BasicHttpEntity {
 	public String asString() throws IOException {
 		if (isCached() && stringCache == null)
 			stringCache = read(content(), getMaxLength());
-		if (stringCache != null)
+		if (nn(stringCache))
 			return stringCache;
 		return read(content());
 	}

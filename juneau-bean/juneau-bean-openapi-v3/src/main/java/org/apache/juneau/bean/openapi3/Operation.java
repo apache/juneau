@@ -373,7 +373,7 @@ public class Operation extends OpenApiElement {
 	public Parameter getParameter(String in, String name) {
 		assertArgNotNull("in", in);
 		assertArgNotNull("name", name);
-		if (parameters != null)
+		if (nn(parameters))
 			for (var p : parameters)
 				if (eq(p.getIn(), in) && eq(p.getName(), name))
 					return p;
@@ -453,18 +453,18 @@ public class Operation extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(callbacks != null, "callbacks")
-			.addIf(deprecated != null, "deprecated")
-			.addIf(description != null, "description")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(operationId != null, "operationId")
-			.addIf(parameters != null, "parameters")
-			.addIf(requestBody != null, "requestBody")
-			.addIf(responses != null, "responses")
-			.addIf(security != null, "security")
-			.addIf(servers != null, "servers")
-			.addIf(summary != null, "summary")
-			.addIf(tags != null, "tags")
+			.addIf(nn(callbacks), "callbacks")
+			.addIf(nn(deprecated), "deprecated")
+			.addIf(nn(description), "description")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(operationId), "operationId")
+			.addIf(nn(parameters), "parameters")
+			.addIf(nn(requestBody), "requestBody")
+			.addIf(nn(responses), "responses")
+			.addIf(nn(security), "security")
+			.addIf(nn(servers), "servers")
+			.addIf(nn(summary), "summary")
+			.addIf(nn(tags), "tags")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

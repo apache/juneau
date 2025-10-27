@@ -18,6 +18,7 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -325,7 +326,7 @@ public class ParserPipe implements Closeable {
 	 *
 	 * @return <jk>true</jk> if the contents passed into this pipe was a {@link CharSequence}.
 	 */
-	public boolean isString() { return inputString != null; }
+	public boolean isString() { return nn(inputString); }
 
 	/**
 	 * Sets the ParserReader/ParserInputStream/XmlReader constructed from this pipe.

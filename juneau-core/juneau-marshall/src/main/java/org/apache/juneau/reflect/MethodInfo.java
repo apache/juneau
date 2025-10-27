@@ -79,7 +79,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			if (m.hasName(m2.getName()) && Arrays.equals(m._getParameterTypes(), m2._getParameterTypes()))
 				l.add(m2);
 		ClassInfo pc = c.getSuperclass();
-		if (pc != null)
+		if (nn(pc))
 			findMatching(l, m, pc);
 		for (ClassInfo ic : c._getDeclaredInterfaces())
 			findMatching(l, m, ic);
@@ -407,7 +407,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public final Annotation getAnyAnnotation(Class<? extends Annotation>...types) {
 		for (Class<? extends Annotation> cc : types) {
 			Annotation a = getAnnotation(cc);
-			if (a != null)
+			if (nn(a))
 				return a;
 		}
 		return null;
@@ -504,7 +504,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		for (MethodInfo m2 : _getMatching())
-			if (annotationProvider.firstAnnotation(type, m2.inner(), x -> true) != null)
+			if (nn(annotationProvider.firstAnnotation(type, m2.inner(), x -> true)))
 				return true;
 		return false;
 	}
@@ -704,20 +704,20 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		if (ci != null)
+		if (nn(ci))
 			for (Annotation a : ci._getDeclaredAnnotations())
 				AnnotationInfo.of(ci, a).accept(filter, action);
 	}
 
 	private static void forEachDeclaredAnnotationInfo(Package p, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		if (p != null)
+		if (nn(p))
 			for (Annotation a : p.getDeclaredAnnotations())
 				AnnotationInfo.of(p, a).accept(filter, action);
 	}
 
 	private void forEachDeclaredMethodAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		MethodInfo m = findMatchingOnClass(ci);
-		if (m != null)
+		if (nn(m))
 			for (Annotation a : m._getDeclaredAnnotations())
 				AnnotationInfo.of(m, a).accept(filter, action);
 	}

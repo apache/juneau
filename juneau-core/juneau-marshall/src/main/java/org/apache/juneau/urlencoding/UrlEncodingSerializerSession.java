@@ -17,6 +17,7 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -249,7 +250,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 		// Swap if necessary
 		var swap = aType.getSwap(this);
-		if (swap != null) {
+		if (nn(swap)) {
 			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);
 
@@ -289,24 +290,24 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		Flag addAmp = Flag.create();
 
-		if (typeName != null) {
+		if (nn(typeName)) {
 			var pm = m.getMeta().getTypeProperty();
 			out.appendObject(pm.getName(), true).append('=').appendObject(typeName, false);
 			addAmp.set();
 		}
 
-		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			ClassMeta<?> cMeta = pMeta.getClassMeta();
 			ClassMeta<?> sMeta = cMeta.getSerializedClassMeta(this);
 
-			if (thrown != null)
+			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
 			if (canIgnoreValue(sMeta, key, value))
 				return;
 
-			if (value != null && shouldUseExpandedParams(pMeta)) {
+			if (nn(value) && shouldUseExpandedParams(pMeta)) {
 				// Transformed object array bean properties may be transformed resulting in ArrayLists,
 				// so we need to check type if we think it's an array.
 				if (sMeta.isCollection() || value instanceof Collection) {

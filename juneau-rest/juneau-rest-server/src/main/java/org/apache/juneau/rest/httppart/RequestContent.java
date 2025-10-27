@@ -363,7 +363,7 @@ public class RequestContent {
 	 */
 	public ServletInputStream getInputStream() throws IOException {
 
-		if (content != null)
+		if (nn(content))
 			return new BoundedServletInputStream(content);
 
 		Encoder enc = getEncoder();
@@ -385,7 +385,7 @@ public class RequestContent {
 	 * 	Includes the matching media type.
 	 */
 	public Optional<ParserMatch> getParserMatch() {
-		if (mediaType != null && parser != null)
+		if (nn(mediaType) && nn(parser))
 			return Utils.opt(new ParserMatch(mediaType, parser));
 		MediaType mt = getMediaType();
 		return Utils.opt(mt).map(x -> parsers.getParserMatch(x));
@@ -487,7 +487,7 @@ public class RequestContent {
 						req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings()));
 			}
 
-			if (encoder != null)
+			if (nn(encoder))
 				contentLength = -1;
 		}
 		// Note that if this is the identity encoder, we want to return null
@@ -514,10 +514,10 @@ public class RequestContent {
 	}
 
 	private MediaType getMediaType() {
-		if (mediaType != null)
+		if (nn(mediaType))
 			return mediaType;
 		Optional<ContentType> ct = req.getHeader(ContentType.class);
-		if (! ct.isPresent() && content != null)
+		if (! ct.isPresent() && nn(content))
 			return MediaType.UON;
 		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
 	}
@@ -538,7 +538,7 @@ public class RequestContent {
 		if (schema == null)
 			schema = HttpPartSchema.DEFAULT;
 
-		if (pm != null) {
+		if (nn(pm)) {
 			Parser p = pm.getParser();
 			MediaType mediaType = pm.getMediaType();
 			// @formatter:off
@@ -558,7 +558,7 @@ public class RequestContent {
 
 			try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
 				T o = session.parse(in, cm);
-				if (schema != null)
+				if (nn(schema))
 					schema.validateOutput(o, cm.getBeanContext());
 				return o;
 			}
@@ -587,10 +587,10 @@ public class RequestContent {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected Reader getUnbufferedReader() throws IOException {
-		if (content != null)
+		if (nn(content))
 			return new CharSequenceReader(new String(content, UTF8));
 		return new InputStreamReader(getInputStream(), req.getCharset());
 	}
 
-	boolean isLoaded() { return content != null; }
+	boolean isLoaded() { return nn(content); }
 }

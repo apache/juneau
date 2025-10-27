@@ -17,6 +17,7 @@
 package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -242,7 +243,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 		// Swap if necessary
 		ObjectSwap swap = aType.getSwap(this);
-		if (swap != null) {
+		if (nn(swap)) {
 			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);
 
@@ -261,7 +262,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 			out.appendNumber((Number)o);
 		else if (sType.isBean())
 			serializeBeanMap(out, toBeanMap(o), typeName);
-		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
+		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))
 			out.appendString(resolveUri(o.toString()));
 		else if (sType.isMap()) {
 			if (o instanceof BeanMap)
@@ -288,17 +289,17 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 	private void serializeBeanMap(MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws SerializeException {
 
-		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
 		List<BeanPropertyValue> values = new ArrayList<>();
 
-		if (typeName != null) {
+		if (nn(typeName)) {
 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
 			values.add(new BeanPropertyValue(pm, pm.getName(), typeName, null));
 		}
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			if (thrown != null) {
+			if (nn(thrown)) {
 				onBeanGetterException(pMeta, thrown);
 				return;
 			}
@@ -359,7 +360,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
 		ClassMeta<?> aType = push2(v.getName(), v.getValue(), v.getClassMeta());
-		if (aType != null)
+		if (nn(aType))
 			pop();
 		return aType == null;
 	}

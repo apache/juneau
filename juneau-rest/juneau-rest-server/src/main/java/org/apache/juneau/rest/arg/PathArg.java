@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.annotation.PathAnnotation.*;
 
 import java.lang.reflect.*;
@@ -171,11 +172,11 @@ public class PathArg implements RestOpArg {
 		Path mergedPath = getMergedPath(paramInfo, name);
 
 		// Use merged path annotation for all lookups
-		this.def = mergedPath != null && ! mergedPath.def().isEmpty() ? mergedPath.def() : findDef(paramInfo).orElse(null);
+		this.def = nn(mergedPath) && ! mergedPath.def().isEmpty() ? mergedPath.def() : findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
-		this.schema = mergedPath != null ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
+		this.schema = nn(mergedPath) ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
 		Class<? extends HttpPartParser> pp = schema.getParser();
-		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 	}
 
 	@Override /* Overridden from RestOpArg */
@@ -192,15 +193,15 @@ public class PathArg implements RestOpArg {
 
 	private static String getName(ParamInfo pi, UrlPathMatcher pathMatcher) {
 		String p = findName(pi).orElse(null);
-		if (p != null)
+		if (nn(p))
 			return p;
-		if (pathMatcher != null) {
+		if (nn(pathMatcher)) {
 			int idx = 0;
 			int i = pi.getIndex();
 			MethodInfo mi = pi.getMethod();
 
 			for (int j = 0; j < i; j++)
-				if (mi.getParam(i).getAnnotation(Path.class) != null)
+				if (nn(mi.getParam(i).getAnnotation(Path.class)))
 					idx++;
 
 			String[] vars = pathMatcher.getVars();

@@ -111,11 +111,11 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 				ClassInfo rt = m.getReturnType();
 
 				MethodInfo mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt));
-				if (mi != null)
+				if (nn(mi))
 					return new AutoObjectSwap(bc, ci, m, mi, null);
 
 				ConstructorInfo cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt));
-				if (cs != null)
+				if (nn(cs))
 					return new AutoObjectSwap(bc, ci, m, null, cs);
 
 				return new AutoObjectSwap(bc, ci, m, null, null);
@@ -189,9 +189,9 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 	@Override /* Overridden from ObjectSwap */
 	public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
 		try {
-			if (unswapMethod != null)
+			if (nn(unswapMethod))
 				return (T)unswapMethod.invoke(null, getMatchingArgs(unswapMethod.getParameterTypes(), session, f));
-			if (unswapConstructor != null)
+			if (nn(unswapConstructor))
 				return (T)unswapConstructor.newInstance(f);
 			return super.unswap(session, f, hint);
 		} catch (Exception e) {

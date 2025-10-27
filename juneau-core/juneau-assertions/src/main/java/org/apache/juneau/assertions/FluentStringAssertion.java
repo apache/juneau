@@ -18,6 +18,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -347,7 +348,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("values", values);
 		var s = orElse(null);
 		for (var substring : values)
-			if (substring != null && !StringUtils.contains(s, substring))
+			if (nn(substring) && !StringUtils.contains(s, substring))
 				throw error(MSG_stringDidNotContainExpectedSubstring, fix(substring), fix(s));
 		return returns();
 	}
@@ -360,7 +361,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isEmpty() throws AssertionError {
 		var s = orElse(null);
-		if (s != null && !s.isEmpty())
+		if (nn(s) && !s.isEmpty())
 			throw error(MSG_stringWasNotEmpty, fix(s));
 		return returns();
 	}
@@ -466,7 +467,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		assertArgNotNull("values", values);
 		var s = orElse(null);
 		for (var substring : values)
-			if (substring != null && StringUtils.contains(s, substring))
+			if (nn(substring) && StringUtils.contains(s, substring))
 				throw error(MSG_stringContainedUnexpectedSubstring, fix(substring), fix(s));
 		return returns();
 	}

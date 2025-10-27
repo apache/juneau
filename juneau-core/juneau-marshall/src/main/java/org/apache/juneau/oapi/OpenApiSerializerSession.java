@@ -17,6 +17,7 @@
 package org.apache.juneau.oapi;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
@@ -299,7 +300,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 		// Swap if necessary
 		ObjectSwap swap = type.getSwap(this);
-		if (swap != null && ! type.isDateOrCalendarOrTemporal()) {
+		if (nn(swap) && ! type.isDateOrCalendarOrTemporal()) {
 			value = swap(swap, value);
 			type = swap.getSwapClassMeta(this);
 
@@ -335,7 +336,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			type = string();
 		}
 
-		if (value != null) {
+		if (nn(value)) {
 
 			if (t == STRING) {
 
@@ -430,7 +431,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 				} else if (type.isBean()) {
 					OapiStringBuilder sb = new OapiStringBuilder(cf);
-					Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+					Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 					HttpPartSchema schema2 = schema;
 
 					toBeanMap(value).forEachValue(checkNull, (pMeta, key, val, thrown) -> {
@@ -490,7 +491,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			s = DEFAULT_SCHEMA;
 		JsonMap m = new JsonMap();
 		if (type.isBean()) {
-			Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+			Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 			HttpPartSchema s2 = s;
 			toBeanMap(o).forEachValue(checkNull, (pMeta, key, val, thrown) -> {
 				if (thrown == null)

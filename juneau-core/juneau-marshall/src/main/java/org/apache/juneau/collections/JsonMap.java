@@ -105,7 +105,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 		@SuppressWarnings("synthetic-access")
 		UnmodifiableJsonMap(JsonMap contents) {
-			if (contents != null)
+			if (nn(contents))
 				contents.forEach(super::put);
 		}
 
@@ -354,7 +354,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public JsonMap(Map<?,?> in) {
 		this();
-		if (in != null)
+		if (nn(in))
 			in.forEach((k, v) -> put(k.toString(), v));
 	}
 
@@ -410,7 +410,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return This object.
 	 */
 	public JsonMap append(Map<String,Object> values) {
-		if (values != null)
+		if (nn(values))
 			super.putAll(values);
 		return this;
 	}
@@ -584,7 +584,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public boolean containsKey(Object key) {
 		if (super.containsKey(key))
 			return true;
-		if (inner != null)
+		if (nn(inner))
 			return inner.containsKey(key);
 		return false;
 	}
@@ -903,7 +903,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	@Override /* Overridden from Map */
 	public Object get(Object key) {
 		Object o = super.get(key);
-		if (o == null && inner != null)
+		if (o == null && nn(inner))
 			o = inner.get(key);
 		return o;
 	}
@@ -1811,7 +1811,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 				List items = (List)get("items");
 				return bs.convertToType(items, cm);
 
-			} else if (value != null) {
+			} else if (nn(value)) {
 				return bs.convertToType(value, cm);
 			}
 

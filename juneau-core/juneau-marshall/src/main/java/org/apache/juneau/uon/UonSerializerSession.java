@@ -18,6 +18,7 @@ package org.apache.juneau.uon;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -226,7 +227,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		try {
 			// Shortcut for simple types.
 			ClassMeta<?> cm = getClassMetaForObject(value);
-			if (cm != null && (schema == null || schema.getType() == HttpPartDataType.NO_TYPE)) {
+			if (nn(cm) && (schema == null || schema.getType() == HttpPartDataType.NO_TYPE)) {
 				if (cm.isNumber() || cm.isBoolean())
 					return Mutaters.toString(value);
 				if (cm.isString()) {
@@ -254,17 +255,17 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 
 		Flag addComma = Flag.create();
 
-		if (typeName != null) {
+		if (nn(typeName)) {
 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
 			out.cr(indent).appendObject(pm.getName(), false).append('=').appendObject(typeName, false);
 			addComma.set();
 		}
 
-		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			ClassMeta<?> cMeta = pMeta.getClassMeta();
 
-			if (thrown != null)
+			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
 			if (canIgnoreValue(cMeta, key, value))
@@ -443,7 +444,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 
 		// Swap if necessary
 		ObjectSwap swap = aType.getSwap(this);
-		if (swap != null) {
+		if (nn(swap)) {
 			o = swap(swap, o);
 			sType = swap.getSwapClassMeta(this);
 
@@ -462,7 +463,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			out.appendNumber(o);
 		else if (sType.isBean())
 			serializeBeanMap(out, toBeanMap(o), typeName);
-		else if (sType.isUri() || (pMeta != null && pMeta.isUri()))
+		else if (sType.isUri() || (nn(pMeta) && pMeta.isUri()))
 			out.appendUri(o);
 		else if (sType.isMap()) {
 			if (o instanceof BeanMap)

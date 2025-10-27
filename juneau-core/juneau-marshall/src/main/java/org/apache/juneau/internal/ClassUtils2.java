@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.reflect.*;
 
 /**
@@ -53,7 +55,7 @@ public class ClassUtils2 {
 		for (int i = 0; i < paramTypes.length; i++) {
 			ClassInfo pt = ClassInfo.of(paramTypes[i]).getWrapperInfoIfPrimitive();
 			for (Object arg : args) {
-				if (arg != null && pt.isParentOf(arg.getClass())) {
+				if (nn(arg) && pt.isParentOf(arg.getClass())) {
 					params[i] = arg;
 					break;
 				}

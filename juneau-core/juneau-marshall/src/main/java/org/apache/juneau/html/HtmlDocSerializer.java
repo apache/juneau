@@ -1580,10 +1580,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			List<String> x = Utils.listOfSize(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
-					if (old != null)
+					if (nn(old))
 						old.clear();
 				} else if ("INHERIT".equals(s)) {
-					if (old != null)
+					if (nn(old))
 						x.addAll(old);
 				} else {
 					x.add(s);
@@ -1596,10 +1596,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			List<String> x = Utils.listOfSize(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
-					if (old != null)
+					if (nn(old))
 						old.clear();
 				} else if ("INHERIT".equals(s)) {
-					if (old != null)
+					if (nn(old))
 						x.addAll(old);
 				} else if (s.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(s).matches()) {
 					Matcher lm = INDEXED_LINK_PATTERN.matcher(s);
@@ -1650,15 +1650,15 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	public HtmlDocSerializer(Builder builder) {
 		super(builder);
-		style = builder.style != null ? toArray(builder.style) : EMPTY_ARRAY;
-		stylesheet = builder.stylesheet != null ? toArray(builder.stylesheet) : EMPTY_ARRAY;
-		script = builder.script != null ? toArray(builder.script) : EMPTY_ARRAY;
-		head = builder.head != null ? toArray(builder.head) : EMPTY_ARRAY;
-		header = builder.header != null ? toArray(builder.header) : EMPTY_ARRAY;
-		nav = builder.nav != null ? toArray(builder.nav) : EMPTY_ARRAY;
-		aside = builder.aside != null ? toArray(builder.aside) : EMPTY_ARRAY;
-		footer = builder.footer != null ? toArray(builder.footer) : EMPTY_ARRAY;
-		navlinks = builder.navlinks != null ? toArray(builder.navlinks) : EMPTY_ARRAY;
+		style = nn(builder.style) ? toArray(builder.style) : EMPTY_ARRAY;
+		stylesheet = nn(builder.stylesheet) ? toArray(builder.stylesheet) : EMPTY_ARRAY;
+		script = nn(builder.script) ? toArray(builder.script) : EMPTY_ARRAY;
+		head = nn(builder.head) ? toArray(builder.head) : EMPTY_ARRAY;
+		header = nn(builder.header) ? toArray(builder.header) : EMPTY_ARRAY;
+		nav = nn(builder.nav) ? toArray(builder.nav) : EMPTY_ARRAY;
+		aside = nn(builder.aside) ? toArray(builder.aside) : EMPTY_ARRAY;
+		footer = nn(builder.footer) ? toArray(builder.footer) : EMPTY_ARRAY;
+		navlinks = nn(builder.navlinks) ? toArray(builder.navlinks) : EMPTY_ARRAY;
 		asideFloat = builder.asideFloat;
 		noResultsMessage = builder.noResultsMessage;
 		nowrap = builder.nowrap;

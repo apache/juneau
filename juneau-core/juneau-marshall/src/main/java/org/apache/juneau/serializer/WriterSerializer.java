@@ -994,7 +994,7 @@ public class WriterSerializer extends Serializer {
 		fileCharset = builder.fileCharset;
 		useWhitespace = builder.useWhitespace;
 
-		quoteCharValue = quoteCharOverride != null ? quoteCharOverride : quoteChar != null ? quoteChar : '"';
+		quoteCharValue = nn(quoteCharOverride) ? quoteCharOverride : nn(quoteChar) ? quoteChar : '"';
 	}
 
 	@Override /* Overridden from Context */
@@ -1111,6 +1111,6 @@ public class WriterSerializer extends Serializer {
 	 * 	The character used for quoting attributes and values.
 	 */
 	protected Character quoteChar() {
-		return quoteCharOverride != null ? quoteCharOverride : quoteChar;
+		return nn(quoteCharOverride) ? quoteCharOverride : quoteChar;
 	}
 }

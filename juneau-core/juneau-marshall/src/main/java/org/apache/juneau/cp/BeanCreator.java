@@ -18,6 +18,7 @@ package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.reflect.Visibility.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -133,7 +134,7 @@ public class BeanCreator<T> {
 			return executable;
 		}
 
-		boolean isPresent() { return executable != null; }
+		boolean isPresent() { return nn(executable); }
 	}
 
 	/**
@@ -197,7 +198,7 @@ public class BeanCreator<T> {
 		do {
 			store.add((Class<T>)t, (T)value);
 			t = t.getSuperclass();
-		} while (t != null && ! t.equals(type));
+		} while (nn(t) && ! t.equals(type));
 		return this;
 	}
 
@@ -239,7 +240,7 @@ public class BeanCreator<T> {
 	 */
 	public T run() {
 
-		if (impl != null)
+		if (nn(impl))
 			return impl;
 
 		if (type == null)
@@ -248,7 +249,7 @@ public class BeanCreator<T> {
 		Value<String> found = Value.empty();
 
 		// Look for getInstance(Builder).
-		if (builder != null) {
+		if (nn(builder)) {
 			// @formatter:off
 			MethodInfo m = type.getPublicMethod(
 				x -> x.isStatic()
@@ -260,7 +261,7 @@ public class BeanCreator<T> {
 				&& x.hasName("getInstance")
 			);
 			// @formatter:on
-			if (m != null)
+			if (nn(m))
 				return m.invoke(null, builder);
 		}
 
@@ -276,7 +277,7 @@ public class BeanCreator<T> {
 				&& x.hasName("getInstance")
 			);
 			// @formatter:on
-			if (m != null)
+			if (nn(m))
 				return m.invoke(null);
 		}
 
@@ -335,7 +336,7 @@ public class BeanCreator<T> {
 			type.forEachDeclaredConstructor(x -> x.hasNumParams(1) && x.isVisible(PROTECTED), x -> {
 				Class<?> pt = x.getParam(0).getParameterType().inner();
 				MethodInfo m = type.getPublicMethod(y -> isStaticCreateMethod(y, pt));
-				if (m != null) {
+				if (nn(m)) {
 					Object builder = m.invoke(null);
 					value.set(x.accessible().invoke(builder));
 				}

@@ -1304,7 +1304,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	private boolean matches(MethodInfo annotated) {
 		var a = annotated.getAnnotation(RestInject.class);
-		if (a != null) {
+		if (nn(a)) {
 			for (var n : a.methodScope()) {
 					if ("*".equals(n) || restMethod.getName().equals(n))
 						return true;
@@ -1315,7 +1315,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	private boolean matches(MethodInfo annotated, String beanName) {
 		var a = annotated.getAnnotation(RestInject.class);
-		if (a != null) {
+		if (nn(a)) {
 			if (! a.name().equals(beanName))
 				return false;
 			for (var n : a.methodScope()) {
@@ -1922,7 +1922,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		var v = Value.of(UrlPathMatcherList.create());
 
-		if (path != null) {
+		if (nn(path)) {
 			for (var p : path) {
 					if (dotAll && ! p.endsWith("/*"))
 						p += "/*";
@@ -1988,7 +1988,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			for (var a : aa) {
 				if (a instanceof Header) {
 					var h = (Header)a;
-						if (def != null) {
+						if (nn(def)) {
 							try {
 								defaultRequestHeaders().set(basicHeader(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 							} catch (ParseException e) {
@@ -1998,7 +1998,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			}
 			if (a instanceof Query) {
 				var h = (Query)a;
-				if (def != null) {
+				if (nn(def)) {
 							try {
 								defaultRequestQueryData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 							} catch (ParseException e) {
@@ -2008,7 +2008,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			}
 			if (a instanceof FormData) {
 				var h = (FormData)a;
-				if (def != null) {
+				if (nn(def)) {
 							try {
 								defaultRequestFormData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 							} catch (ParseException e) {
@@ -2043,7 +2043,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		RestMatcherList getMatchers(RestContext restContext) {
 			RestMatcherList.Builder b = matchers();
-			if (clientVersion != null)
+			if (nn(clientVersion))
 				b.append(new ClientVersionMatcher(restContext.getClientVersionHeader(), MethodInfo.of(restMethod)));
 
 			return b.build();
@@ -2152,8 +2152,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			pathMatchers = bs.add(UrlPathMatcher[].class, builder.getPathMatchers().asArray());
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
-			supportedAcceptTypes = u(builder.produces != null ? builder.produces : serializers.getSupportedMediaTypes());
-			supportedContentTypes = u(builder.consumes != null ? builder.consumes : parsers.getSupportedMediaTypes());
+			supportedAcceptTypes = u(nn(builder.produces) ? builder.produces : serializers.getSupportedMediaTypes());
+			supportedContentTypes = u(nn(builder.consumes) ? builder.consumes : parsers.getSupportedMediaTypes());
 
 			defaultRequestHeaders = builder.defaultRequestHeaders();
 			defaultResponseHeaders = builder.defaultResponseHeaders();
@@ -2163,7 +2163,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			int _hierarchyDepth = 0;
 			Class<?> sc = method.getDeclaringClass().getSuperclass();
-			while (sc != null) {
+			while (nn(sc)) {
 				_hierarchyDepth++;
 				sc = sc.getSuperclass();
 			}
@@ -2176,8 +2176,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				_httpMethod = "*";
 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-			defaultCharset = builder.defaultCharset != null ? builder.defaultCharset : context.defaultCharset;
-			maxInput = builder.maxInput != null ? builder.maxInput : context.maxInput;
+			defaultCharset = nn(builder.defaultCharset) ? builder.defaultCharset : context.defaultCharset;
+			maxInput = nn(builder.maxInput) ? builder.maxInput : context.maxInput;
 
 			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
 
@@ -2435,7 +2435,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var pm = headerPartMetas.get(c);
 		if (pm == null) {
 			var a = c.getAnnotation(Header.class);
-			if (a != null) {
+			if (nn(a)) {
 				var schema = HttpPartSchema.create(a);
 				var serializer = createPartSerializer(schema.getSerializer(), partSerializer);
 				pm = new ResponsePartMeta(HEADER, schema, serializer);

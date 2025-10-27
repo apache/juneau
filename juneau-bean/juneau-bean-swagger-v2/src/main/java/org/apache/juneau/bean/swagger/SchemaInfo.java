@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -538,37 +539,37 @@ public class SchemaInfo extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(additionalProperties != null, "additionalProperties")
-			.addIf(allOf != null, "allOf")
-			.addIf(_default != null, "default")
-			.addIf(description != null, "description")
-			.addIf(discriminator != null, "discriminator")
-			.addIf(_enum != null, "enum")
-			.addIf(example != null, "example")
-			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(format != null, "format")
-			.addIf(items != null, "items")
-			.addIf(maximum != null, "maximum")
-			.addIf(maxItems != null, "maxItems")
-			.addIf(maxLength != null, "maxLength")
-			.addIf(maxProperties != null, "maxProperties")
-			.addIf(minimum != null, "minimum")
-			.addIf(minItems != null, "minItems")
-			.addIf(minLength != null, "minLength")
-			.addIf(minProperties != null, "minProperties")
-			.addIf(multipleOf != null, "multipleOf")
-			.addIf(pattern != null, "pattern")
-			.addIf(properties != null, "properties")
-			.addIf(readOnly != null, "readOnly")
-			.addIf(ref != null, "$ref")
-			.addIf(required != null, "required")
-			.addIf(requiredProperties != null, "requiredProperties")
-			.addIf(title != null, "title")
-			.addIf(type != null, "type")
-			.addIf(uniqueItems != null, "uniqueItems")
-			.addIf(xml != null, "xml")
+			.addIf(nn(additionalProperties), "additionalProperties")
+			.addIf(nn(allOf), "allOf")
+			.addIf(nn(_default), "default")
+			.addIf(nn(description), "description")
+			.addIf(nn(discriminator), "discriminator")
+			.addIf(nn(_enum), "enum")
+			.addIf(nn(example), "example")
+			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
+			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(format), "format")
+			.addIf(nn(items), "items")
+			.addIf(nn(maximum), "maximum")
+			.addIf(nn(maxItems), "maxItems")
+			.addIf(nn(maxLength), "maxLength")
+			.addIf(nn(maxProperties), "maxProperties")
+			.addIf(nn(minimum), "minimum")
+			.addIf(nn(minItems), "minItems")
+			.addIf(nn(minLength), "minLength")
+			.addIf(nn(minProperties), "minProperties")
+			.addIf(nn(multipleOf), "multipleOf")
+			.addIf(nn(pattern), "pattern")
+			.addIf(nn(properties), "properties")
+			.addIf(nn(readOnly), "readOnly")
+			.addIf(nn(ref), "$ref")
+			.addIf(nn(required), "required")
+			.addIf(nn(requiredProperties), "requiredProperties")
+			.addIf(nn(title), "title")
+			.addIf(nn(type), "type")
+			.addIf(nn(uniqueItems), "uniqueItems")
+			.addIf(nn(xml), "xml")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -589,7 +590,7 @@ public class SchemaInfo extends SwaggerElement {
 	 */
 	public SchemaInfo resolveRefs(Swagger swagger, Deque<String> refStack, int maxDepth) {
 
-		if (ref != null) {
+		if (nn(ref)) {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
@@ -598,13 +599,13 @@ public class SchemaInfo extends SwaggerElement {
 			return r;
 		}
 
-		if (items != null)
+		if (nn(items))
 			items = items.resolveRefs(swagger, refStack, maxDepth);
 
-		if (properties != null)
+		if (nn(properties))
 			properties.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
 
-		if (additionalProperties != null)
+		if (nn(additionalProperties))
 			additionalProperties = additionalProperties.resolveRefs(swagger, refStack, maxDepth);
 
 		this.example = null;

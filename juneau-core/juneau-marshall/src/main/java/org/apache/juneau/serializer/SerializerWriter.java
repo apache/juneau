@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -154,7 +156,7 @@ public class SerializerWriter extends Writer {
 	 * @return This object.
 	 */
 	public SerializerWriter append(String value) {
-		if (value != null)
+		if (nn(value))
 			w(value);
 		return this;
 	}

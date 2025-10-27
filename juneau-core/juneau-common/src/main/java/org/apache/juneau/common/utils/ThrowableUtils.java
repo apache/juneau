@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 
 /**
@@ -75,7 +77,7 @@ public class ThrowableUtils {
 	 * @return The exception, or <jk>null</jk> if not found.
 	 */
 	public static <T extends Throwable> T getCause(Class<T> c, Throwable t) {
-		while (t != null) {
+		while (nn(t)) {
 			t = t.getCause();
 			if (c.isInstance(t))
 				return c.cast(t);
@@ -106,7 +108,7 @@ public class ThrowableUtils {
 	 */
 	public static int hash(Throwable t, String stopClass) {
 		var i = 0;
-		while (t != null) {
+		while (nn(t)) {
 			for (var e : t.getStackTrace()) {
 				if (e.getClassName().equals(stopClass))
 					break;

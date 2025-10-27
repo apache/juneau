@@ -118,7 +118,7 @@ public class ConfigMapEntry {
 			return w;
 		for (var pl : preLines)
 			w.append(pl).append('\n');
-		if (rawLine != null) {
+		if (nn(rawLine)) {
 			for (var i = 0; i < rawLine.length(); i++) {
 				var c = rawLine.charAt(i);
 				if (c == '\n')
@@ -129,7 +129,7 @@ public class ConfigMapEntry {
 			w.append('\n');
 		} else {
 			w.append(key);
-			if (modifiers != null)
+			if (nn(modifiers))
 				w.append('<').append(modifiers).append('>');
 			w.append(" = ");
 

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.html;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.annotation.*;
@@ -77,11 +79,11 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		super(bpm);
 
 		Builder b = new Builder();
-		if (bpm.getInnerField() != null)
+		if (nn(bpm.getInnerField()))
 			mp.forEachAnnotation(Html.class, bpm.getInnerField(), x -> true, x -> b.findHtmlInfo(x));
-		if (bpm.getGetter() != null)
+		if (nn(bpm.getGetter()))
 			mp.forEachAnnotation(Html.class, bpm.getGetter(), x -> true, x -> b.findHtmlInfo(x));
-		if (bpm.getSetter() != null)
+		if (nn(bpm.getSetter()))
 			mp.forEachAnnotation(Html.class, bpm.getSetter(), x -> true, x -> b.findHtmlInfo(x));
 
 		this.format = b.format;

@@ -143,13 +143,14 @@ public class BasicFileFinder implements FileFinder {
 	 * @return The resolved resource contents, or <jk>null</jk> if the resource was not found.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings("null")
 	protected Optional<InputStream> find(String name, Locale locale) throws IOException {
 		name = StringUtils.trimSlashesAndSpaces(name);
 
 		if (isInvalidPath(name))
 			return Utils.opte();
 
-		if (locale != null)
+		if (nn(locale))
 			localizedFiles.putIfAbsent(locale, new ConcurrentHashMap<>());
 
 		Map<String,LocalFile> fileCache = locale == null ? files : localizedFiles.get(locale);
@@ -161,15 +162,15 @@ public class BasicFileFinder implements FileFinder {
 			paths: for (LocalDir root : roots) {
 				for (String cfn : candidateFileNames) {
 					lf = root.resolve(cfn);
-					if (lf != null)
+					if (nn(lf))
 						break paths;
 				}
 			}
 
-			if (lf != null && isIgnoredFile(lf.getName()))
+			if (nn(lf) && isIgnoredFile(lf.getName()))
 				lf = null;
 
-			if (lf != null) {
+			if (nn(lf)) {
 				fileCache.put(name, lf);
 
 				if (cachingLimit >= 0) {

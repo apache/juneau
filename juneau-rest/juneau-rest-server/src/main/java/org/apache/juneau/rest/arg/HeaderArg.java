@@ -216,11 +216,11 @@ public class HeaderArg implements RestOpArg {
 		Header mergedHeader = getMergedHeader(pi, name);
 
 		// Use merged header annotation for all lookups
-		this.def = mergedHeader != null && ! mergedHeader.def().isEmpty() ? mergedHeader.def() : findDef(pi).orElse(null);
+		this.def = nn(mergedHeader) && ! mergedHeader.def().isEmpty() ? mergedHeader.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
-		this.schema = mergedHeader != null ? HttpPartSchema.create(mergedHeader) : HttpPartSchema.create(Header.class, pi);
+		this.schema = nn(mergedHeader) ? HttpPartSchema.create(mergedHeader) : HttpPartSchema.create(Header.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();
-		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

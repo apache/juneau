@@ -159,7 +159,7 @@ public class HttpParts {
 	 */
 	public static boolean canCast(Object o) {
 		var ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+		return nn(ci) && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 
 	/**

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.rrpc;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -116,7 +117,7 @@ public class RrpcRestOpSession extends RestOpSession {
 				pip = pip.substring(pip.lastIndexOf('/') + 1);
 			pip = urlDecode(pip);
 			RrpcInterfaceMethodMeta rmm = ctx.getMeta().getMethodMetaByPath(pip);
-			if (rmm != null) {
+			if (nn(rmm)) {
 				Method m = rmm.getJavaMethod();
 				try {
 					// Parse the args and invoke the method.

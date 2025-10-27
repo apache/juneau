@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -137,7 +139,7 @@ public class BasicLongPart extends BasicPart {
 	 */
 	public Long orElse(Long other) {
 		Long x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -150,7 +152,7 @@ public class BasicLongPart extends BasicPart {
 	}
 
 	private Long value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

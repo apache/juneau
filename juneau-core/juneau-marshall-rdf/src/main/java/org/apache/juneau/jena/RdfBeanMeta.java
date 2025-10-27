@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.jena.annotation.*;
 
@@ -58,6 +60,6 @@ public class RdfBeanMeta extends ExtendedBeanMeta {
 	 * @return <jk>true</jk> if there is a URI property associated with this bean.
 	 */
 	public boolean hasBeanUri() {
-		return beanUriProperty != null;
+		return nn(beanUriProperty);
 	}
 }

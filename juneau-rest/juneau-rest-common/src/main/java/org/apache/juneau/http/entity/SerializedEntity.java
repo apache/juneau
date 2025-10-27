@@ -18,6 +18,7 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
@@ -95,11 +96,11 @@ public class SerializedEntity extends BasicHttpEntity {
 	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
 	 */
 	public SerializedEntity copyWith(Serializer serializer, HttpPartSchema schema) {
-		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
+		if ((this.serializer == null && nn(serializer)) || (this.schema == null && nn(schema))) {
 			SerializedEntity h = copy();
-			if (serializer != null)
+			if (nn(serializer))
 				h.setSerializer(serializer);
-			if (schema != null)
+			if (nn(schema))
 				h.setSchema(schema);
 			return h;
 		}
@@ -125,7 +126,7 @@ public class SerializedEntity extends BasicHttpEntity {
 	@Override
 	public Header getContentType() {
 		Header x = super.getContentType();
-		if (x == null && serializer != null)
+		if (x == null && nn(serializer))
 			x = contentType(serializer.getPrimaryMediaType());
 		return x;
 	}

@@ -18,6 +18,7 @@ package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -106,7 +107,7 @@ public class FileUtils {
 			return true;
 		if (f.isDirectory()) {
 			File[] cf = f.listFiles();
-			if (cf != null)
+			if (nn(cf))
 				for (File c : cf)
 					delete(c);
 		}

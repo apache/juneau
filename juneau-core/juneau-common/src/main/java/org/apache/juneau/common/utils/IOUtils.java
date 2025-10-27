@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.*;
@@ -79,6 +81,7 @@ public class IOUtils {
 	 * 	<jk>null</jk> entries are ignored.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings("null")
 	public static void close(Object...o) throws IOException {
 		IOException ex = null;
 		for (var o2 : o) {
@@ -95,7 +98,7 @@ public class IOUtils {
 				ex = e;
 			}
 		}
-		if (ex != null)
+		if (nn(ex))
 			throw ex;
 	}
 
@@ -109,7 +112,7 @@ public class IOUtils {
 	 */
 	public static void closeQuietly(InputStream is) {
 		try {
-			if (is != null)
+			if (nn(is))
 				is.close();
 		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
 	}
@@ -142,7 +145,7 @@ public class IOUtils {
 	 */
 	public static void closeQuietly(OutputStream os) {
 		try {
-			if (os != null)
+			if (nn(os))
 				os.close();
 		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
 	}
@@ -157,7 +160,7 @@ public class IOUtils {
 	 */
 	public static void closeQuietly(Reader r) {
 		try {
-			if (r != null)
+			if (nn(r))
 				r.close();
 		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
 	}
@@ -172,7 +175,7 @@ public class IOUtils {
 	 */
 	public static void closeQuietly(Writer w) {
 		try {
-			if (w != null)
+			if (nn(w))
 				w.close();
 		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
 	}
@@ -227,6 +230,7 @@ public class IOUtils {
 	 * 	<jk>null</jk> entries are ignored.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings("null")
 	public static void flush(Object...o) throws IOException {
 		IOException ex = null;
 		for (var o2 : o) {
@@ -239,7 +243,7 @@ public class IOUtils {
 				ex = e;
 			}
 		}
-		if (ex != null)
+		if (nn(ex))
 			throw ex;
 	}
 
@@ -266,11 +270,11 @@ public class IOUtils {
 		for (var path : paths) {
 			var n = ".".equals(path) ? name : path + '/' + name;
 			try (var is = cl.getResourceAsStream(n)) {
-				if (is != null)
+				if (nn(is))
 					return read(is);
 			}
 			try (var is = ClassLoader.getSystemResourceAsStream(n)) {
-				if (is != null)
+				if (nn(is))
 					return read(is);
 			}
 		}
@@ -600,7 +604,7 @@ public class IOUtils {
 			try (var s = new Scanner(in2)) {
 				while (s.hasNextLine()) {
 					var l = s.nextLine();
-					if (l != null) {
+					if (nn(l)) {
 						out.write(l);
 						out.write("\n");
 						out.flush();
@@ -963,7 +967,7 @@ public class IOUtils {
 	}
 
 	private static byte[] byteBuffer(int maxBytes) {
-		if (BYTE_BUFFER_CACHE != null) {
+		if (nn(BYTE_BUFFER_CACHE)) {
 			var x = BYTE_BUFFER_CACHE.get();
 			if (x == null) {
 				x = new byte[BUFF_SIZE];
@@ -978,7 +982,7 @@ public class IOUtils {
 	}
 
 	private static char[] charBuffer(int maxChars) {
-		if (CHAR_BUFFER_CACHE != null) {
+		if (nn(CHAR_BUFFER_CACHE)) {
 			var x = CHAR_BUFFER_CACHE.get();
 			if (x == null) {
 				x = new char[BUFF_SIZE];

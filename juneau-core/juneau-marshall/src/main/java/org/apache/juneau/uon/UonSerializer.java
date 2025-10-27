@@ -1091,7 +1091,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		quoteCharUon = builder.quoteCharUon;
 
 		addBeanTypes = addBeanTypesUon || super.isAddBeanTypes();
-		quoteChar = quoteCharUon != null ? quoteCharUon : super.quoteChar() != null ? super.quoteChar() : '\'';
+		quoteChar = nn(quoteCharUon) ? quoteCharUon : nn(super.quoteChar()) ? super.quoteChar() : '\'';
 	}
 
 	@Override /* Overridden from Context */

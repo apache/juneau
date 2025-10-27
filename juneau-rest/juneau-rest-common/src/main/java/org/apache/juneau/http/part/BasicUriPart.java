@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.net.*;
 import java.util.*;
 import java.util.function.*;
@@ -123,7 +125,7 @@ public class BasicUriPart extends BasicPart {
 	 */
 	public URI orElse(URI other) {
 		URI x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class BasicUriPart extends BasicPart {
 	}
 
 	private URI value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

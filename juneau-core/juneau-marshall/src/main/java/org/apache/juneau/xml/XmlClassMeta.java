@@ -47,7 +47,7 @@ public class XmlClassMeta extends ExtendedClassMeta {
 		super(cm);
 		List<Xml> xmls = list();
 		List<XmlSchema> schemas = list();
-		if (cm != null) {
+		if (nn(cm)) {
 			cm.forEachAnnotation(Xml.class, x -> true, x -> xmls.add(x));
 			cm.forEachAnnotation(XmlSchema.class, x -> true, x -> schemas.add(x));
 		}

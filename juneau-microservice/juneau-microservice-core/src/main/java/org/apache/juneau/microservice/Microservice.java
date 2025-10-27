@@ -496,7 +496,7 @@ public class Microservice implements ConfigEventListener {
 		protected File resolveFile(String path) {
 			if (Paths.get(path).isAbsolute())
 				return new File(path);
-			if (workingDir != null)
+			if (nn(workingDir))
 				return new File(workingDir, path);
 			return new File(path);
 		}
@@ -566,7 +566,7 @@ public class Microservice implements ConfigEventListener {
 		this.workingDir = builder.workingDir;
 		this.configName = builder.configName;
 
-		this.args = builder.args != null ? builder.args : new Args(new String[0]);
+		this.args = nn(builder.args) ? builder.args : new Args(new String[0]);
 
 		// --------------------------------------------------------------------------------
 		// Try to get the manifest file if it wasn't already set.
@@ -586,7 +586,7 @@ public class Microservice implements ConfigEventListener {
 			} else {
 				// Otherwise, read from manifest file in the jar file containing the main class.
 				var url = getClass().getResource("META-INF/MANIFEST.MF");
-				if (url != null) {
+				if (nn(url)) {
 					try {
 						m.read(url.openStream());
 					} catch (IOException e) {
@@ -608,7 +608,7 @@ public class Microservice implements ConfigEventListener {
 			var store = builder.configStore;
 			var cfs = workingDir == null ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
 			for (String name : getCandidateConfigNames()) {
-				if (store != null) {
+				if (nn(store)) {
 					if (store.exists(name)) {
 						configBuilder.store(store).name(name);
 						break;
@@ -677,7 +677,7 @@ public class Microservice implements ConfigEventListener {
 			this.consoleWriter = null;
 			this.consoleThread = null;
 		}
-		this.listener = builder.listener != null ? builder.listener : new BasicMicroserviceListener();
+		this.listener = nn(builder.listener) ? builder.listener : new BasicMicroserviceListener();
 
 		init();
 	}
@@ -942,7 +942,7 @@ public class Microservice implements ConfigEventListener {
 		// Set system properties.
 		// --------------------------------------------------------------------------------
 		var spKeys = config.getKeys("SystemProperties");
-		if (spKeys != null)
+		if (nn(spKeys))
 			for (String key : spKeys)
 				System.setProperty(key, config.get("SystemProperties/" + key).orElse(null));
 
@@ -950,7 +950,7 @@ public class Microservice implements ConfigEventListener {
 		// Initialize logging.
 		// --------------------------------------------------------------------------------
 		this.logger = builder.logger;
-		var logConfig = builder.logConfig != null ? builder.logConfig : new LogConfig();
+		var logConfig = nn(builder.logConfig) ? builder.logConfig : new LogConfig();
 		if (this.logger == null) {
 			LogManager.getLogManager().reset();
 			this.logger = Logger.getLogger("");
@@ -1080,7 +1080,7 @@ public class Microservice implements ConfigEventListener {
 	 * @throws Exception Error occurred
 	 */
 	public synchronized Microservice startConsole() throws Exception {
-		if (consoleThread != null && ! consoleThread.isAlive())
+		if (nn(consoleThread) && ! consoleThread.isAlive())
 			consoleThread.start();
 		return this;
 	}
@@ -1106,13 +1106,13 @@ public class Microservice implements ConfigEventListener {
 	 * @throws Exception Error occurred
 	 */
 	public synchronized Microservice stopConsole() throws Exception {
-		if (consoleThread != null && consoleThread.isAlive())
+		if (nn(consoleThread) && consoleThread.isAlive())
 			consoleThread.interrupt();
 		return this;
 	}
 
 	private List<String> getCandidateConfigNames() {
-		if (configName != null)
+		if (nn(configName))
 			return Collections.singletonList(configName);
 
 		var args = getArgs();
@@ -1170,7 +1170,7 @@ public class Microservice implements ConfigEventListener {
 	protected File resolveFile(String path) {
 		if (Paths.get(path).isAbsolute())
 			return new File(path);
-		if (workingDir != null)
+		if (nn(workingDir))
 			return new File(workingDir, path);
 		return new File(path);
 	}

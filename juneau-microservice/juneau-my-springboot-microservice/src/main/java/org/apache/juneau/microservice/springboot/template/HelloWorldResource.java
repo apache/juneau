@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.microservice.springboot.template;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.html.annotation.*;
@@ -70,7 +72,7 @@ public class HelloWorldResource extends BasicRestObject {
 	@RestGet(path = "/*", summary = "Responds with \"Hello world!\"")
 	public String sayHello() {
 		var message = this.message;
-		if (messageProvider != null && messageProvider.isPresent())
+		if (nn(messageProvider) && messageProvider.isPresent())
 			message = messageProvider.get().get();
 		return message;
 	}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client.remote;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.text.*;
 
@@ -37,7 +39,7 @@ public class RemoteMetadataException extends BasicRuntimeException {
 
 	private static final String getMessage(Class<?> c, Method m, String msg) {
 		StringBuilder sb = new StringBuilder("Invalid remote definition found on class ").append(c.getName());
-		if (m != null)
+		if (nn(m))
 			sb.append(" on method ").append(m.getName());
 		sb.append(". ").append(msg);
 		return sb.toString();

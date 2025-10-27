@@ -107,7 +107,7 @@ public class BeanStore {
 		 * @return A new bean store.
 		 */
 		public BeanStore build() {
-			if (impl != null)
+			if (nn(impl))
 				return impl;
 			if (type == null || type == BeanStore.class)
 				return new BeanStore(this);
@@ -122,15 +122,15 @@ public class BeanStore {
 				&& x.hasName("getInstance")
 			);
 			// @formatter:on
-			if (m != null)
+			if (nn(m))
 				return m.invoke(null);
 
 			ConstructorInfo ci = c.getPublicConstructor(x -> x.canAccept(this));
-			if (ci != null)
+			if (nn(ci))
 				return ci.invoke(this);
 
 			ci = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this));
-			if (ci != null)
+			if (nn(ci))
 				return ci.accessible().invoke(this);
 
 			throw new BasicRuntimeException("Could not find a way to instantiate class {0}", type);
@@ -466,7 +466,7 @@ public class BeanStore {
 	public <T> Optional<T> getBean(Class<T> beanType) {
 		try (SimpleLock x = lock.read()) {
 			BeanStoreEntry<T> e = (BeanStoreEntry<T>)unnamedEntries.get(beanType);
-			if (e != null)
+			if (nn(e))
 				return Utils.opt(e.get());
 			if (parent.isPresent())
 				return parent.get().getBean(beanType);
@@ -486,7 +486,7 @@ public class BeanStore {
 	public <T> Optional<T> getBean(Class<T> beanType, String name) {
 		try (SimpleLock x = lock.read()) {
 			BeanStoreEntry<T> e = (BeanStoreEntry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
-			if (e != null)
+			if (nn(e))
 				return Utils.opt(e.get());
 			if (parent.isPresent())
 				return parent.get().getBean(beanType, name);
@@ -514,7 +514,7 @@ public class BeanStore {
 			Class<?> ptc = pt.inner();
 			if (beanName == null && ! hasBean(ptc))
 				l.add(pt.getSimpleName());
-			if (beanName != null && ! hasBean(ptc, beanName))
+			if (nn(beanName) && ! hasBean(ptc, beanName))
 				l.add(pt.getSimpleName() + '@' + beanName);
 		}
 		return l.isEmpty() ? null : l.stream().sorted().collect(joining(","));
@@ -561,7 +561,7 @@ public class BeanStore {
 				continue loop;
 			String beanName = findBeanName(pi);
 			Class<?> ptc = pt.inner();
-			if ((beanName == null && ! hasBean(ptc)) || (beanName != null && ! hasBean(ptc, beanName)))
+			if ((beanName == null && ! hasBean(ptc)) || (nn(beanName) && ! hasBean(ptc, beanName)))
 				return false;
 		}
 		return true;
@@ -648,7 +648,7 @@ public class BeanStore {
 
 	private static String findBeanName(ParamInfo pi) {
 		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
-		if (n != null)
+		if (nn(n))
 			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
 		return null;
 	}

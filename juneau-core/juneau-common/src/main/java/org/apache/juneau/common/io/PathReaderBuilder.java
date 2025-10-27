@@ -17,6 +17,7 @@
 package org.apache.juneau.common.io;
 
 import static java.util.Optional.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -98,7 +99,7 @@ public class PathReaderBuilder {
 	 * @return This object.
 	 */
 	public PathReaderBuilder charset(final String charset) {
-		this.charset = charset != null ? Charset.forName(charset) : null;
+		this.charset = nn(charset) ? Charset.forName(charset) : null;
 		return this;
 	}
 

@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -159,10 +160,10 @@ public class OAuthFlows extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(authorizationCode != null, "authorizationCode")
-			.addIf(clientCredentials != null, "clientCredentials")
-			.addIf(implicit != null, "implicit")
-			.addIf(password != null, "password")
+			.addIf(nn(authorizationCode), "authorizationCode")
+			.addIf(nn(clientCredentials), "clientCredentials")
+			.addIf(nn(implicit), "implicit")
+			.addIf(nn(password), "password")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

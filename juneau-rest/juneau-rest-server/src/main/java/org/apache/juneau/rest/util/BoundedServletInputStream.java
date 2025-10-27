@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 
 import jakarta.servlet.*;
@@ -121,7 +123,7 @@ public class BoundedServletInputStream extends ServletInputStream {
 
 	@Override /* Overridden from ServletInputStream */
 	public void setReadListener(ReadListener arg0) {
-		if (sis != null)
+		if (nn(sis))
 			sis.setReadListener(arg0);
 	}
 

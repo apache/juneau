@@ -17,6 +17,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.text.*;
@@ -62,14 +63,14 @@ public class ParseException extends BasicRuntimeException {
 		if (args.length != 0)
 			msg = format(msg, args);
 
-		if (session != null) {
+		if (nn(session)) {
 			Position p = session.getPosition();
 			StringBuilder sb = new StringBuilder(msg);
 
 			sb.append("\n\tAt: ").append(p);
 
 			JsonMap lastLocation = session.getLastLocation();
-			if (lastLocation != null) {
+			if (nn(lastLocation)) {
 				sb.append("\n\tWhile parsing into: ");
 				lastLocation.forEach((k, v) -> sb.append("\n\t\t").append(k).append(": ").append(v));
 			}

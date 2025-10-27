@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
@@ -254,10 +255,10 @@ public class ResponseHeader extends BasicHeader {
 		try {
 			ClassInfo ci = ClassInfo.of(c);
 			ConstructorInfo cc = ci.getPublicConstructor(x -> x.hasParamTypes(String.class));
-			if (cc != null)
+			if (nn(cc))
 				return cc.invoke(getValue());
 			cc = ci.getPublicConstructor(x -> x.hasParamTypes(String.class, String.class));
-			if (cc != null)
+			if (nn(cc))
 				return cc.invoke(getName(), getValue());
 		} catch (Throwable e) {
 			if (e instanceof ExecutableException)

@@ -18,6 +18,7 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -201,8 +202,8 @@ public class Mutaters {
 
 		ClassInfo ici = ClassInfo.of(ic), oci = ClassInfo.of(oc);
 
-		ClassInfo pic = ici.getAnyParent(x -> m.get(x.inner()) != null);
-		if (pic != null)
+		ClassInfo pic = ici.getAnyParent(x -> nn(m.get(x.inner())));
+		if (nn(pic))
 			return m.get(pic.inner());
 
 		if (ic == String.class) {
@@ -228,7 +229,7 @@ public class Mutaters {
 				};
 			}
 
-			if (createMethod != null) {
+			if (nn(createMethod)) {
 				return new Mutater<String,Object>() {
 					@Override
 					public Object mutate(Object outer, String in) {
@@ -251,7 +252,7 @@ public class Mutaters {
 			);
 			// @formatter:on
 
-			if (createMethod != null) {
+			if (nn(createMethod)) {
 				Method cm = createMethod.inner();
 				return new Mutater() {
 					@Override
@@ -267,7 +268,7 @@ public class Mutaters {
 		}
 
 		ConstructorInfo c = oci.getPublicConstructor(x -> x.hasParamTypes(ic));
-		if (c != null && c.isNotDeprecated()) {
+		if (nn(c) && c.isNotDeprecated()) {
 			boolean isMemberClass = oci.isNonStaticMemberClass();
 			return new Mutater() {
 				@Override
@@ -284,7 +285,7 @@ public class Mutaters {
 		}
 
 		MethodInfo toXMethod = findToXMethod(ici, oci);
-		if (toXMethod != null) {
+		if (nn(toXMethod)) {
 			return new Mutater() {
 				@Override
 				public Object mutate(Object outer, Object in) {

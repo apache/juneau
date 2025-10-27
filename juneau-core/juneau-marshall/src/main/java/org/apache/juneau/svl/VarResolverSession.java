@@ -187,7 +187,7 @@ public class VarResolverSession {
 			String var = s.substring(1, s.indexOf('{'));
 			String val = s.substring(s.indexOf('{') + 1, s.length() - 1);
 			Var v = getVar(var);
-			if (v != null) {
+			if (nn(v)) {
 				try {
 					if (v.streamed) {
 						StringWriter sw = new StringWriter();
@@ -426,6 +426,6 @@ public class VarResolverSession {
 	 */
 	protected Var getVar(String name) {
 		Var v = this.context.getVarMap().get(name);
-		return v != null && v.canResolve(this) ? v : null;
+		return nn(v) && v.canResolve(this) ? v : null;
 	}
 }

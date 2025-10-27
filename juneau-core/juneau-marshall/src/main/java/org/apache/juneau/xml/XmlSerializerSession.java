@@ -17,6 +17,7 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
@@ -309,7 +310,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (n == ns)
 				return;
 
-		if (defaultNamespace != null && (ns.uri.equals(defaultNamespace.uri) || ns.name.equals(defaultNamespace.name)))
+		if (nn(defaultNamespace) && (ns.uri.equals(defaultNamespace.uri) || ns.name.equals(defaultNamespace.name)))
 			defaultNamespace = ns;
 		else
 			namespaces = ArrayUtils.append(namespaces, ns);
@@ -318,7 +319,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	private Namespace findDefaultNamespace(Namespace n) {
 		if (n == null)
 			return null;
-		if (n.name != null && n.uri != null)
+		if (nn(n.name) && nn(n.uri))
 			return n;
 		if (n.uri == null) {
 			for (Namespace n2 : getNamespaces())
@@ -353,13 +354,14 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		return xcm.getFormat() == XMLTEXT;
 	}
 
+	@SuppressWarnings("null")
 	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m, Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
 		boolean hasChildren = false;
 		BeanMeta<?> bm = m.getMeta();
 
 		List<BeanPropertyValue> lp = new ArrayList<>();
 
-		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 			lp.add(new BeanPropertyValue(pMeta, key, value, thrown));
 		});
@@ -390,7 +392,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					String key = p.getName();
 					Object value = p.getValue();
 					Throwable t = p.getThrown();
-					if (t != null)
+					if (nn(t))
 						onBeanGetterException(pMeta, t);
 
 					if (canIgnoreValue(cMeta, key, value))
@@ -405,13 +407,13 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						if (value instanceof BeanMap) {
 							BeanMap<?> bm2 = (BeanMap)value;
 							bm2.forEachValue(x -> true, (pMeta2, key2, value2, thrown2) -> {
-								if (thrown2 != null)
+								if (nn(thrown2))
 									onBeanGetterException(pMeta, thrown2);
 								out.attr(ns, key2, value2);
 							});
 						} else /* Map */ {
 							Map m2 = (Map)value;
-							if (m2 != null)
+							if (nn(m2))
 								m2.forEach((k, v) -> out.attr(ns, Utils.s(k), v));
 						}
 					} else {
@@ -446,7 +448,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					String key = p.getName();
 					Object value = p.getValue();
 					Throwable t = p.getThrown();
-					if (t != null)
+					if (nn(t))
 						onBeanGetterException(pMeta, t);
 
 					if (canIgnoreValue(cMeta, key, value))
@@ -466,7 +468,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			return (hasChildren ? CR_ELEMENTS : isVoidElement ? CR_VOID : CR_EMPTY);
 
 		// Serialize XML content.
-		if (content != null) {
+		if (nn(content)) {
 			out.w('>').nlIf(! isMixedOrText, indent);
 			if (contentType == null) {} else if (contentType.isCollection()) {
 				Collection c = (Collection)content;
@@ -474,7 +476,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				for (Object value : c) {
 					boolean currentIsTextNode = isTextNode(value);
 					// Insert delimiter between consecutive text nodes
-					if (previousWasTextNode && currentIsTextNode && textNodeDelimiter != null && ! textNodeDelimiter.isEmpty()) {
+					if (previousWasTextNode && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
 						out.append(textNodeDelimiter);
 					}
 					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
@@ -486,7 +488,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				for (Object value : c) {
 					boolean currentIsTextNode = isTextNode(value);
 					// Insert delimiter between consecutive text nodes
-					if (previousWasTextNode && currentIsTextNode && textNodeDelimiter != null && ! textNodeDelimiter.isEmpty()) {
+					if (previousWasTextNode && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
 						out.append(textNodeDelimiter);
 					}
 					serializeAnything(out, value, contentType.getElementType(), null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
@@ -514,7 +516,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		Value<String> eName = Value.of(type2);
 		Value<Namespace> eNs = Value.empty();
 
-		if (ppMeta != null) {
+		if (nn(ppMeta)) {
 			XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(ppMeta);
 			eName.set(bpXml.getChildName());
 			eNs.set(bpXml.getNamespace());
@@ -527,7 +529,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			boolean currentIsTextNode = isTextNode(x);
 
 			// Insert delimiter between consecutive text nodes
-			if (previousWasTextNode.get() && currentIsTextNode && textNodeDelimiter != null && ! textNodeDelimiter.isEmpty()) {
+			if (previousWasTextNode.get() && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
 				out.append(textNodeDelimiter);
 			}
 
@@ -577,6 +579,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @param o The POJO to check.
 	 * @throws SerializeException Thrown if bean recursion occurred.
 	 */
+	@SuppressWarnings("null")
 	protected final void findNsfMappings(Object o) throws SerializeException {
 		ClassMeta<?> aType = null;						// The actual type
 
@@ -586,10 +589,10 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			throw new SerializeException(e);
 		}
 
-		if (aType != null) {
+		if (nn(aType)) {
 			Namespace ns = getXmlClassMeta(aType).getNamespace();
-			if (ns != null) {
-				if (ns.uri != null)
+			if (nn(ns)) {
+				if (nn(ns.uri))
 					addNamespace(ns);
 				else
 					ns = null;
@@ -597,7 +600,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		}
 
 		// Handle recursion
-		if (aType != null && ! aType.isPrimitive()) {
+		if (nn(aType) && ! aType.isPrimitive()) {
 
 			BeanMap<?> bm = null;
 			if (aType.isBeanMap()) {
@@ -608,7 +611,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				ClassMeta<?> innerType = ((Delegate<?>)o).getClassMeta();
 				Value<Namespace> ns = Value.of(getXmlClassMeta(innerType).getNamespace());
 				if (ns.isPresent()) {
-					if (ns.get().uri != null)
+					if (nn(ns.get().uri))
 						addNamespace(ns.get());
 					else
 						ns.getAndUnset();
@@ -617,7 +620,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				if (innerType.isBean()) {
 					innerType.getBeanMeta().forEachProperty(BeanPropertyMeta::canRead, x -> {
 						ns.set(getXmlBeanPropertyMeta(x).getNamespace());
-						if (ns.isPresent() && ns.get().uri != null)
+						if (ns.isPresent() && nn(ns.get().uri))
 							addNamespace(ns.get());
 					});
 				} else if (innerType.isMap()) {
@@ -634,11 +637,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				for (Object o2 : ((Object[])o))
 					findNsfMappings(o2);
 			}
-			if (bm != null) {
-				Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+			if (nn(bm)) {
+				Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 				bm.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
 					Namespace ns = getXmlBeanPropertyMeta(pMeta).getNamespace();
-					if (ns != null && ns.uri != null)
+					if (nn(ns) && nn(ns.uri))
 						addNamespace(ns);
 
 					try {
@@ -747,6 +750,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * @return The same writer passed in so that calls to the writer can be chained.
 	 * @throws SerializeException General serialization error occurred.
 	 */
+	@SuppressWarnings("null")
 	protected ContentResult serializeAnything(XmlWriter out, Object o, ClassMeta<?> eType, String keyName, String elementName, Namespace elementNamespace, boolean addNamespaceUris, XmlFormat format,
 		boolean isMixedOrText, boolean preserveWhitespace, BeanPropertyMeta pMeta) throws SerializeException {
 
@@ -774,7 +778,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			aType = getClassMetaForObject(o, object());
 		}
 
-		if (o != null) {
+		if (nn(o)) {
 
 			if (aType.isDelegate()) {
 				wType = aType;
@@ -785,7 +789,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 			// Swap if necessary
 			ObjectSwap swap = aType.getSwap(this);
-			if (swap != null) {
+			if (nn(swap)) {
 				o = swap(swap, o);
 				sType = swap.getSwapClassMeta(this);
 
@@ -820,11 +824,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			dictionaryName = sType.getDictionaryName();
 
 		// char '\0' is interpreted as null.
-		if (o != null && sType.isChar() && ((Character)o).charValue() == 0)
+		if (nn(o) && sType.isChar() && ((Character)o).charValue() == 0)
 			o = null;
 
 		boolean isCollapsed = false;		// If 'true', this is a collection and we're not rendering the outer element.
-		boolean isRaw = (sType.isReader() || sType.isInputStream()) && o != null;
+		boolean isRaw = (sType.isReader() || sType.isInputStream()) && nn(o);
 
 		// Get the JSON type string.
 		if (o == null) {
@@ -851,9 +855,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		// Is there a name associated with this bean?
 
 		String name = keyName;
-		if (elementName == null && dictionaryName != null) {
+		if (elementName == null && nn(dictionaryName)) {
 			elementName = dictionaryName;
-			isExpectedType = o != null;  // preserve type='null' when it's null.
+			isExpectedType = nn(o);  // preserve type='null' when it's null.
 		}
 
 		if (elementName == null) {
@@ -869,7 +873,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				elementNamespace = getXmlClassMeta(sType).getNamespace();
 			if (elementNamespace == null)
 				elementNamespace = getXmlClassMeta(aType).getNamespace();
-			if (elementNamespace != null && elementNamespace.uri == null)
+			if (nn(elementNamespace) && elementNamespace.uri == null)
 				elementNamespace = null;
 			if (elementNamespace == null)
 				elementNamespace = defaultNamespace;
@@ -878,7 +882,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		}
 
 		// Do we need a carriage return after the start tag?
-		boolean cr = o != null && (sType.isMapOrBean() || sType.isCollectionOrArray()) && ! isMixedOrText;
+		boolean cr = nn(o) && (sType.isMapOrBean() || sType.isCollectionOrArray()) && ! isMixedOrText;
 
 		String en = elementName;
 		if (en == null && ! isRaw) {
@@ -888,11 +892,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			}
 		}
 
-		boolean encodeEn = elementName != null;
+		boolean encodeEn = nn(elementName);
 		String ns = (elementNamespace == null ? null : elementNamespace.name);
 		String dns = null, elementNs = null;
 		if (isEnableNamespaces()) {
-			dns = elementName == null && defaultNamespace != null ? defaultNamespace.name : null;
+			dns = elementName == null && nn(defaultNamespace) ? defaultNamespace.name : null;
 			elementNs = elementName == null ? dns : ns;
 			if (elementName == null)
 				elementNamespace = null;
@@ -900,7 +904,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		// Render the start tag.
 		if (! isCollapsed) {
-			if (en != null) {
+			if (nn(en)) {
 				out.oTag(i, elementNs, en, encodeEn);
 				if (addNamespaceUris) {
 					out.attr((String)null, "xmlns", defaultNamespace.getUri());
@@ -909,12 +913,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						out.attr("xmlns", n.getName(), n.getUri());
 				}
 				if (! isExpectedType) {
-					if (resolvedDictionaryName != null)
+					if (nn(resolvedDictionaryName))
 						out.attr(dns, getBeanTypePropertyName(eType), resolvedDictionaryName);
-					else if (type != null && type != STRING)
+					else if (nn(type) && type != STRING)
 						out.attr(dns, getBeanTypePropertyName(eType), type);
 				}
-				if (name != null)
+				if (nn(name))
 					out.attr(getNamePropertyName(), name);
 			} else {
 				out.i(i);
@@ -924,7 +928,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					o = sType.getPrimitiveDefault();
 			}
 
-			if (o != null && ! (sType.isMapOrBean() || en == null))
+			if (nn(o) && ! (sType.isMapOrBean() || en == null))
 				out.w('>');
 
 			if (cr && ! (sType.isMapOrBean()))
@@ -934,8 +938,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		ContentResult rc = CR_ELEMENTS;
 
 		// Render the tag contents.
-		if (o != null) {
-			if (sType.isUri() || (pMeta != null && pMeta.isUri())) {
+		if (nn(o)) {
+			if (sType.isUri() || (nn(pMeta) && pMeta.isUri())) {
 				out.textUri(o);
 			} else if (sType.isCharSequence() || sType.isChar()) {
 				if (isXmlText(format, sType))
@@ -944,14 +948,14 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					out.text(o, preserveWhitespace);
 			} else if (sType.isNumber() || sType.isBoolean()) {
 				out.append(o);
-			} else if (sType.isMap() || (wType != null && wType.isMap())) {
+			} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
 				if (o instanceof BeanMap)
 					rc = serializeBeanMap(out, (BeanMap)o, elementNamespace, isCollapsed, isMixedOrText);
 				else
 					rc = serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), isMixedOrText);
 			} else if (sType.isBean()) {
 				rc = serializeBeanMap(out, toBeanMap(o), elementNamespace, isCollapsed, isMixedOrText);
-			} else if (sType.isCollection() || (wType != null && wType.isCollection())) {
+			} else if (sType.isCollection() || (nn(wType) && wType.isCollection())) {
 				if (isCollapsed)
 					this.indent--;
 				serializeCollection(out, o, sType, eType, pMeta, isMixedOrText);
@@ -979,7 +983,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		// Render the end tag.
 		if (! isCollapsed) {
-			if (en != null) {
+			if (nn(en)) {
 				if (rc == CR_EMPTY) {
 					if (isHtmlMode())
 						out.w('>').eTag(elementNs, en, encodeEn);

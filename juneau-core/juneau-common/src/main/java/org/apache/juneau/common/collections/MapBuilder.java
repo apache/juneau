@@ -170,7 +170,7 @@ public class MapBuilder<K,V> {
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> addAll(Map<K,V> value) {
-		if (value != null) {
+		if (nn(value)) {
 			if (map == null)
 				map = new LinkedHashMap<>(value);
 			else
@@ -197,12 +197,12 @@ public class MapBuilder<K,V> {
 		if (keyType == null || valueType == null)
 			throw new IllegalStateException("Unknown key and value types. Cannot use this method.");
 		for (var o : values) {
-			if (o != null) {
+			if (nn(o)) {
 				if (o instanceof Map) {
 					((Map<Object,Object>)o).forEach((k, v) -> add(toType(keyType, k), toType(valueType, v)));
 				} else {
-					var m = converters.stream().map(x -> x.convertTo(Map.class, o)).filter(x -> x != null).findFirst().orElse(null);
-					if (m != null)
+					var m = converters.stream().map(x -> x.convertTo(Map.class, o)).filter(x -> nn(x)).findFirst().orElse(null);
+					if (nn(m))
 						addAny(m);
 					else
 						throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), "Map");
@@ -239,9 +239,9 @@ public class MapBuilder<K,V> {
 	private <T> T toType(Class<T> c, Object o) {
 		if (c.isInstance(o))
 			return c.cast(o);
-		if (converters != null) {
-			var e = converters.stream().map(x -> x.convertTo(c, o)).filter(x -> x != null).findFirst().orElse(null);
-			if (e != null)
+		if (nn(converters)) {
+			var e = converters.stream().map(x -> x.convertTo(c, o)).filter(x -> nn(x)).findFirst().orElse(null);
+			if (nn(e))
 				return e;
 		}
 		throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), c);
@@ -301,7 +301,7 @@ public class MapBuilder<K,V> {
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> copy() {
-		if (map != null)
+		if (nn(map))
 			map = new LinkedHashMap<>(map);
 		return this;
 	}

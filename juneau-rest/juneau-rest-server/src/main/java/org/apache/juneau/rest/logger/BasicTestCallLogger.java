@@ -56,10 +56,10 @@ public class BasicTestCallLogger extends CallLogger {
 
 	private static boolean isNoTrace(HttpServletRequest req) {
 		Object o = req.getAttribute("NoTrace");
-		if (o != null)
+		if (nn(o))
 			return "true".equalsIgnoreCase(o.toString());
 		String s = req.getHeader("No-Trace");
-		if (s != null)
+		if (nn(s))
 			return "true".equalsIgnoreCase(s);
 		return emptyIfNull(req.getQueryString()).contains("noTrace=true");
 	}

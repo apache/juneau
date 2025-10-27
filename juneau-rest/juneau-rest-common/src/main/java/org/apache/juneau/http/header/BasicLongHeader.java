@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -187,7 +189,7 @@ public class BasicLongHeader extends BasicHeader {
 	 */
 	public Long orElse(Long other) {
 		Long x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -208,7 +210,7 @@ public class BasicLongHeader extends BasicHeader {
 	}
 
 	private Long value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

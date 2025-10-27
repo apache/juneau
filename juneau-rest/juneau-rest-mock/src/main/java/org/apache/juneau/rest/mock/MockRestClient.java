@@ -1879,9 +1879,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public MockRestClient(Builder builder) {
 		super(preInit(builder));
 		restContext = builder.restContext;
-		contextPath = builder.contextPath != null ? builder.contextPath : "";
-		servletPath = builder.servletPath != null ? builder.servletPath : "";
-		pathVars = builder.pathVars != null ? builder.pathVars : emptyMap();
+		contextPath = nn(builder.contextPath) ? builder.contextPath : "";
+		servletPath = nn(builder.servletPath) ? builder.servletPath : "";
+		pathVars = nn(builder.pathVars) ? builder.pathVars : emptyMap();
 		restObject = restContext.getResource();
 
 		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
@@ -2056,7 +2056,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
 		InputStream is = new ByteArrayInputStream(sres.get().getContent());
 		Header contentEncoding = response.getLastHeader("Content-Encoding");
-		if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip"))
+		if (nn(contentEncoding) && contentEncoding.getValue().equalsIgnoreCase("gzip"))
 			is = new GZIPInputStream(is);
 		response.setEntity(new InputStreamEntity(is));
 	}
@@ -2114,7 +2114,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public void sendRequestEntity(HttpEntityEnclosingRequest request) throws HttpException, IOException {
 		byte[] body = {};
 		HttpEntity entity = request.getEntity();
-		if (entity != null) {
+		if (nn(entity)) {
 			long length = entity.getContentLength();
 			if (length < 0)
 				length = 1024;
@@ -2142,7 +2142,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			path = target + path;
 
 			MockPathResolver pr = new MockPathResolver(target, contextPath, servletPath, path, null);
-			if (pr.getError() != null)
+			if (nn(pr.getError()))
 				throw new IllegalStateException(pr.getError());
 
 			MockServletRequest r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
@@ -2179,7 +2179,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	private static String findTarget(HttpRequest req) {
 		if (req instanceof HttpRequestWrapper) {
 			HttpHost httpHost = ((HttpRequestWrapper)req).getTarget();
-			if (httpHost != null)
+			if (nn(httpHost))
 				return httpHost.toURI();
 		}
 		return "http://localhost";

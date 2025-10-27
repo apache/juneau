@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.jsonschema;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.net.*;
 import java.util.*;
@@ -330,7 +331,7 @@ public class JsonSchema {
 	 */
 	@Deprecated
 	public URI getId() {
-		return id != null ? id : idUri; // Fall back to new '$id' for compatibility when reading
+		return nn(id) ? id : idUri; // Fall back to new '$id' for compatibility when reading
 	}
 
 	/**
@@ -429,7 +430,7 @@ public class JsonSchema {
 	 */
 	@Swap(JsonTypeOrJsonTypeArraySwap.class)
 	public Object getType() {
-		if (typeJsonType != null)
+		if (nn(typeJsonType))
 			return typeJsonType;
 		return typeJsonTypeArray;
 	}
@@ -469,7 +470,7 @@ public class JsonSchema {
 	public JsonSchema setType(Object type) {
 		this.typeJsonType = null;
 		this.typeJsonTypeArray = null;
-		if (type != null) {
+		if (nn(type)) {
 			if (type instanceof JsonType x)
 				this.typeJsonType = x;
 			else if (type instanceof JsonTypeArray x)
@@ -531,7 +532,7 @@ public class JsonSchema {
 	 * 	The value of the <property>definitions</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
 	public Map<String,JsonSchema> getDefinitions() {
-		return definitions != null ? definitions : defs; // Fall back to $defs for compatibility
+		return nn(definitions) ? definitions : defs; // Fall back to $defs for compatibility
 	}
 
 	/**
@@ -542,7 +543,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema setDefinitions(Map<String,JsonSchema> definitions) {
 		this.definitions = definitions;
-		if (definitions != null)
+		if (nn(definitions))
 			setMasterOn(definitions.values());
 		return this;
 	}
@@ -615,7 +616,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema setProperties(Map<String,JsonSchema> properties) {
 		this.properties = properties;
-		if (properties != null) {
+		if (nn(properties)) {
 			properties.entrySet().forEach(x -> {
 				var value = x.getValue();
 				setMasterOn(value);
@@ -664,7 +665,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema setPatternProperties(Map<String,JsonSchema> patternProperties) {
 		this.patternProperties = patternProperties;
-		if (patternProperties != null) {
+		if (nn(patternProperties)) {
 			patternProperties.entrySet().forEach(x -> {
 				var s = x.getValue();
 				setMasterOn(s);
@@ -712,7 +713,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema setDependencies(Map<String,JsonSchema> dependencies) {
 		this.dependencies = dependencies;
-		if (dependencies != null)
+		if (nn(dependencies))
 			setMasterOn(dependencies.values());
 		return this;
 	}
@@ -741,7 +742,7 @@ public class JsonSchema {
 	 */
 	@Swap(JsonSchemaOrSchemaArraySwap.class)
 	public Object getItems() {
-		if (itemsSchema != null)
+		if (nn(itemsSchema))
 			return itemsSchema;
 		return itemsSchemaArray;
 	}
@@ -807,7 +808,7 @@ public class JsonSchema {
 	public JsonSchema setItems(Object items) {
 		this.itemsSchema = null;
 		this.itemsSchemaArray = null;
-		if (items != null) {
+		if (nn(items)) {
 			if (items instanceof JsonSchema x) {
 				this.itemsSchema = x;
 				setMasterOn(this.itemsSchema);
@@ -1009,7 +1010,7 @@ public class JsonSchema {
 	 */
 	@Swap(BooleanOrSchemaArraySwap.class)
 	public Object getAdditionalItems() {
-		if (additionalItemsBoolean != null)
+		if (nn(additionalItemsBoolean))
 			return additionalItemsBoolean;
 		return additionalItemsSchemaArray;
 	}
@@ -1050,7 +1051,7 @@ public class JsonSchema {
 	public JsonSchema setAdditionalItems(Object additionalItems) {
 		this.additionalItemsBoolean = null;
 		this.additionalItemsSchemaArray = null;
-		if (additionalItems != null) {
+		if (nn(additionalItems)) {
 			if (additionalItems instanceof Boolean x)
 				this.additionalItemsBoolean = x;
 			else if (additionalItems instanceof JsonSchemaArray x) {
@@ -1268,7 +1269,7 @@ public class JsonSchema {
 	 */
 	@Swap(BooleanOrSchemaSwap.class)
 	public Object getAdditionalProperties() {
-		if (additionalPropertiesBoolean != null)
+		if (nn(additionalPropertiesBoolean))
 			return additionalItemsBoolean;
 		return additionalPropertiesSchema;
 	}
@@ -1310,7 +1311,7 @@ public class JsonSchema {
 	public JsonSchema setAdditionalProperties(Object additionalProperties) {
 		this.additionalPropertiesBoolean = null;
 		this.additionalPropertiesSchema = null;
-		if (additionalProperties != null) {
+		if (nn(additionalProperties)) {
 			if (additionalProperties instanceof Boolean x)
 				this.additionalPropertiesBoolean = x;
 			else if (additionalProperties instanceof JsonSchema x) {
@@ -1766,7 +1767,7 @@ public class JsonSchema {
 	@Beanp("$defs")
 	public JsonSchema setDefs(Map<String,JsonSchema> defs) {
 		this.defs = defs;
-		if (defs != null)
+		if (nn(defs))
 			setMasterOn(defs.values());
 		return this;
 	}
@@ -1896,7 +1897,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema setDependentSchemas(Map<String,JsonSchema> dependentSchemas) {
 		this.dependentSchemas = dependentSchemas;
-		if (dependentSchemas != null)
+		if (nn(dependentSchemas))
 			setMasterOn(dependentSchemas.values());
 		return this;
 	}
@@ -1982,23 +1983,23 @@ public class JsonSchema {
 	}
 
 	private void setMasterOn(JsonSchema s) {
-		if (s != null)
+		if (nn(s))
 			s.setMaster(this);
 	}
 
 	private void setMasterOn(JsonSchema[] ss) {
-		if (ss != null)
+		if (nn(ss))
 			for (var s : ss)
 				setMasterOn(s);
 	}
 
 	private void setMasterOn(Collection<JsonSchema> ss) {
-		if (ss != null)
+		if (nn(ss))
 			ss.forEach(this::setMasterOn);
 	}
 
 	private void setMasterOn(JsonSchemaArray ss) {
-		if (ss != null)
+		if (nn(ss))
 			ss.forEach(this::setMasterOn);
 	}
 
@@ -2013,45 +2014,45 @@ public class JsonSchema {
 	 */
 	protected void setMaster(JsonSchema master) {
 		this.master = master;
-		if (definitions != null)
+		if (nn(definitions))
 			definitions.values().forEach(x -> x.setMaster(master));
-		if (defs != null)
+		if (nn(defs))
 			defs.values().forEach(x -> x.setMaster(master));
-		if (properties != null)
+		if (nn(properties))
 			properties.values().forEach(x -> x.setMaster(master));
-		if (patternProperties != null)
+		if (nn(patternProperties))
 			patternProperties.values().forEach(x -> x.setMaster(master));
-		if (dependencies != null)
+		if (nn(dependencies))
 			dependencies.values().forEach(x -> x.setMaster(master));
-		if (dependentSchemas != null)
+		if (nn(dependentSchemas))
 			dependentSchemas.values().forEach(x -> x.setMaster(master));
-		if (itemsSchema != null)
+		if (nn(itemsSchema))
 			itemsSchema.setMaster(master);
-		if (itemsSchemaArray != null)
+		if (nn(itemsSchemaArray))
 			itemsSchemaArray.forEach(x -> x.setMaster(master));
-		if (prefixItems != null)
+		if (nn(prefixItems))
 			prefixItems.forEach(x -> x.setMaster(master));
-		if (additionalItemsSchemaArray != null)
+		if (nn(additionalItemsSchemaArray))
 			additionalItemsSchemaArray.forEach(x -> x.setMaster(master));
-		if (unevaluatedItems != null)
+		if (nn(unevaluatedItems))
 			unevaluatedItems.setMaster(master);
-		if (additionalPropertiesSchema != null)
+		if (nn(additionalPropertiesSchema))
 			additionalPropertiesSchema.setMaster(master);
-		if (unevaluatedProperties != null)
+		if (nn(unevaluatedProperties))
 			unevaluatedProperties.setMaster(master);
-		if (allOf != null)
+		if (nn(allOf))
 			allOf.forEach(x -> x.setMaster(master));
-		if (anyOf != null)
+		if (nn(anyOf))
 			anyOf.forEach(x -> x.setMaster(master));
-		if (oneOf != null)
+		if (nn(oneOf))
 			oneOf.forEach(x -> x.setMaster(master));
-		if (not != null)
+		if (nn(not))
 			not.setMaster(master);
-		if (_if != null)
+		if (nn(_if))
 			_if.setMaster(master);
-		if (_then != null)
+		if (nn(_then))
 			_then.setMaster(master);
-		if (_else != null)
+		if (nn(_else))
 			_else.setMaster(master);
 	}
 

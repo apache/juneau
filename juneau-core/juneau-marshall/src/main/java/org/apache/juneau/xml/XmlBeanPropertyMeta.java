@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.xml.annotation.*;
@@ -119,7 +121,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 		if (xmlFormat == XmlFormat.COLLAPSED) {
 			if (isCollection) {
-				if (cen.isEmpty() && xmlMetaProvider != null)
+				if (cen.isEmpty() && nn(xmlMetaProvider))
 					cen = xmlMetaProvider.getXmlClassMeta(cmProperty).getChildName();
 				if (cen == null || cen.isEmpty())
 					cen = cmProperty.getElementType().getDictionaryName();

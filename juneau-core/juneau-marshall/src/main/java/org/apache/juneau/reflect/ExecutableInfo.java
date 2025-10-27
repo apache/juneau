@@ -59,7 +59,7 @@ public abstract class ExecutableInfo {
 	 */
 	public static <T> java.util.function.Predicate<Object> andType(Class<T> type, java.util.function.Predicate<? super T> predicate) {
 		java.util.function.Predicate<Object> p = type::isInstance;
-		if (predicate != null) {
+		if (nn(predicate)) {
 			p = p.and(o -> predicate.test(type.cast(o)));
 		}
 		return p;
@@ -219,7 +219,7 @@ public abstract class ExecutableInfo {
 		StringBuilder sb = new StringBuilder(128);
 		ClassInfo dc = declaringClass;
 		Package p = dc.getPackage();
-		if (p != null)
+		if (nn(p))
 			sb.append(p.getName()).append('.');
 		dc.appendShortName(sb);
 		if (! isConstructor)
@@ -777,7 +777,7 @@ public abstract class ExecutableInfo {
 	 */
 	public final boolean setAccessible() {
 		try {
-			if (e != null)
+			if (nn(e))
 				e.setAccessible(true);
 			return true;
 		} catch (@SuppressWarnings("unused") SecurityException e) {

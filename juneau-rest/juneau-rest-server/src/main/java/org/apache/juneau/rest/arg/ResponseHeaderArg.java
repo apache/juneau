@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.annotation.HeaderAnnotation.*;
 
 import java.lang.reflect.*;
@@ -77,7 +78,7 @@ public class ResponseHeaderArg implements RestOpArg {
 		HttpPartSchema schema = HttpPartSchema.create(Header.class, pi);
 
 		Class<? extends HttpPartSerializer> ps = schema.getSerializer();
-		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, ps != null ? HttpPartSerializer.creator().type(ps).apply(annotations).create() : null);
+		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, nn(ps) ? HttpPartSerializer.creator().type(ps).apply(annotations).create() : null);
 
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class)

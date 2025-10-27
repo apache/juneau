@@ -174,11 +174,11 @@ public class QueryArg implements RestOpArg {
 		Query mergedQuery = getMergedQuery(pi, name);
 
 		// Use merged query annotation for all lookups
-		this.def = mergedQuery != null && ! mergedQuery.def().isEmpty() ? mergedQuery.def() : findDef(pi).orElse(null);
+		this.def = nn(mergedQuery) && ! mergedQuery.def().isEmpty() ? mergedQuery.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
-		this.schema = mergedQuery != null ? HttpPartSchema.create(mergedQuery) : HttpPartSchema.create(Query.class, pi);
+		this.schema = nn(mergedQuery) ? HttpPartSchema.create(mergedQuery) : HttpPartSchema.create(Query.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();
-		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+		this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

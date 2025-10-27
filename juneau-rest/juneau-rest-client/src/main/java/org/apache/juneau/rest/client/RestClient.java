@@ -2890,7 +2890,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		public Builder interceptors(Class<?>...values) throws Exception {
 			for (Class<?> c : values) {
 				ClassInfo ci = ClassInfo.of(c);
-				if (ci != null) {
+				if (nn(ci)) {
 					if (ci.isChildOfAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
 						interceptors(ci.newInstance());
 					else
@@ -2953,7 +2953,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			List<RestCallInterceptor> l = list();
 			for (Object o : value) {
 				ClassInfo ci = ClassInfo.of(o);
-				if (ci != null) {
+				if (nn(ci)) {
 					if (! ci.isChildOfAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))
 						throw new ConfigException("Invalid object of type ''{0}'' passed to interceptors().", ci.getName());
 					if (o instanceof HttpRequestInterceptor)
@@ -3288,7 +3288,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder marshaller(Marshaller value) {
-			if (value != null)
+			if (nn(value))
 				serializer(value.getSerializer()).parser(value.getParser());
 			return this;
 		}
@@ -3319,7 +3319,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		public Builder marshallers(Marshaller...value) {
 			for (Marshaller m : value)
-				if (m != null)
+				if (nn(m))
 					serializer(m.getSerializer()).parser(m.getParser());
 			return this;
 		}
@@ -6039,7 +6039,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return UrlEncodingSerializer.create().beanContext(beanContext());
 		}
 
-		final CloseableHttpClient getHttpClient() { return httpClient != null ? httpClient : createHttpClient(); }
+		final CloseableHttpClient getHttpClient() { return nn(httpClient) ? httpClient : createHttpClient(); }
 	}
 
 	private static final RestCallInterceptor[] EMPTY_REST_CALL_INTERCEPTORS = {};
@@ -6117,18 +6117,18 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		rootUrl = builder.rootUrl;
 		errorCodes = builder.errorCodes;
 		connectionManager = builder.connectionManager;
-		console = builder.console != null ? builder.console : System.err;
+		console = nn(builder.console) ? builder.console : System.err;
 		executorService = builder.executorService;
 		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
 		ignoreErrors = builder.ignoreErrors;
 		keepHttpClientOpen = builder.keepHttpClientOpen;
 		detectLeaks = builder.detectLeaks;
-		logger = builder.logger != null ? builder.logger : Logger.getLogger(RestClient.class.getName());
+		logger = nn(builder.logger) ? builder.logger : Logger.getLogger(RestClient.class.getName());
 		logToConsole = builder.logToConsole || isDebug();
-		logRequests = builder.logRequests != null ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
-		logRequestsLevel = builder.logRequestsLevel != null ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
-		logRequestsPredicate = builder.logRequestsPredicate != null ? builder.logRequestsPredicate : LOG_REQUESTS_PREDICATE_DEFAULT;
-		interceptors = builder.interceptors != null ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
+		logRequests = nn(builder.logRequests) ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
+		logRequestsLevel = nn(builder.logRequestsLevel) ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
+		logRequestsPredicate = nn(builder.logRequestsPredicate) ? builder.logRequestsPredicate : LOG_REQUESTS_PREDICATE_DEFAULT;
+		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
 		serializers = builder.serializers().build();
 		parsers = builder.parsers().build();
 		partSerializer = builder.partSerializer().create();
@@ -6220,7 +6220,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		try {
 			RestRequest req = request(method, uri, isNotEmpty(content));
-			if (headers != null)
+			if (nn(headers))
 				JsonMap.ofJson(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
 			if (isNotEmpty(content))
 				req.contentString(content);
@@ -6243,9 +6243,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		isClosed = true;
 		if (! keepHttpClientOpen)
 			httpClient.close();
-		if (executorService != null && executorServiceShutdownOnClose)
+		if (nn(executorService) && executorServiceShutdownOnClose)
 			executorService.shutdown();
-		if (creationStack != null)
+		if (nn(creationStack))
 			closedStack = Thread.currentThread().getStackTrace();
 	}
 
@@ -6257,10 +6257,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		try {
 			if (! keepHttpClientOpen)
 				httpClient.close();
-			if (executorService != null && executorServiceShutdownOnClose)
+			if (nn(executorService) && executorServiceShutdownOnClose)
 				executorService.shutdown();
 		} catch (@SuppressWarnings("unused") Throwable t) {}
-		if (creationStack != null)
+		if (nn(creationStack))
 			closedStack = Thread.currentThread().getStackTrace();
 	}
 
@@ -6858,7 +6858,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getPathDefault(a.getName());
-						if (def != null)
+						if (nn(def))
 							val = def;
 					}
 					rc.pathArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer));
@@ -6871,7 +6871,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getQueryDefault(a.getName());
-						if (def != null)
+						if (nn(def))
 							val = def;
 					}
 					rc.queryArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
@@ -6884,7 +6884,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getFormDataDefault(a.getName());
-						if (def != null)
+						if (nn(def))
 							val = def;
 					}
 					rc.formDataArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
@@ -6897,14 +6897,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getHeaderDefault(a.getName());
-						if (def != null)
+						if (nn(def))
 							val = def;
 					}
 					rc.headerArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
 				});
 
 				var ba = rom.getContentArg();
-				if (ba != null) {
+				if (nn(ba)) {
 					var val = args[ba.getIndex()];
 					if (val == null) {
 						// Check parameter-level default first (9.2.0)
@@ -6912,21 +6912,21 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						// Fall back to method-level default if parameter-level not set
 						if (def == null)
 							def = rom.getContentDefault();
-						if (def != null)
+						if (nn(def))
 							val = def;
 					}
 					rc.content(val, ba.getSchema());
 				} else {
 					// Apply Content default if no parameter is present
 					var contentDef = rom.getContentDefault();
-					if (contentDef != null)
+					if (nn(contentDef))
 						rc.content(contentDef);
 				}
 
 				rom.forEachRequestArg(rmba -> {
 					RequestBeanMeta rbm = rmba.getMeta();
 					var bean = args[rmba.getIndex()];
-					if (bean != null) {
+					if (nn(bean)) {
 						for (RequestBeanPropertyMeta p : rbm.getProperties()) {
 							var val = Utils.safeSupplier(() -> p.getGetter().invoke(bean));
 							var pt = p.getPartType();
@@ -6934,7 +6934,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 							HttpPartSchema schema = p.getSchema();
 							if (pt == PATH)
 								rc.pathArg(pn, val, schema, p.getSerializer().orElse(partSerializer));
-							else if (val != null) {
+							else if (nn(val)) {
 								if (pt == QUERY)
 									rc.queryArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
 								else if (pt == FORMDATA)
@@ -7098,7 +7098,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				} catch (Throwable e) {
 					if (e instanceof RestCallException) {
 						Throwable t = e.getCause();
-						if (t != null)
+						if (nn(t))
 							e = t;
 					}
 					if (e instanceof RuntimeException)
@@ -7584,7 +7584,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	protected void finalize() throws Throwable {
 		if (detectLeaks && ! isClosed && ! keepHttpClientOpen) {
 			StringBuilder sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
-			if (creationStack != null) {
+			if (nn(creationStack)) {
 				sb.append("\nCreation Stack:");  // NOT DEBUG
 				for (StackTraceElement e : creationStack)
 					sb.append("\n\t" + e);  // NOT DEBUG
@@ -7706,7 +7706,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		logger.log(level, t, msg(msg, args));
 		if (logToConsole) {
 			console.println(msg(msg, args).get());
-			if (t != null)
+			if (nn(t))
 				t.printStackTrace(console);
 		}
 	}
@@ -7818,7 +7818,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	protected RestRequest request(RestOperation op) throws RestCallException {
 		if (isClosed) {
 			Exception e2 = null;
-			if (closedStack != null) {
+			if (nn(closedStack)) {
 				e2 = new Exception("Creation stack:");
 				e2.setStackTrace(closedStack);
 				throw new RestCallException(null, e2, "RestClient.close() has already been called.  This client cannot be reused.");
@@ -7913,7 +7913,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	ExecutorService getExecutorService() {
-		if (executorService != null)
+		if (nn(executorService))
 			return executorService;
 		synchronized (this) {
 			executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10));
@@ -7943,9 +7943,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	Parser getMatchingParser(String mediaType) {
 		if (parsers.isEmpty())
 			return null;
-		if (mediaType != null) {
+		if (nn(mediaType)) {
 			Parser p = parsers.getParser(mediaType);
-			if (p != null)
+			if (nn(p))
 				return p;
 		}
 		List<Parser> l = parsers.getParsers();
@@ -7960,9 +7960,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	Serializer getMatchingSerializer(String mediaType) {
 		if (serializers.isEmpty())
 			return null;
-		if (mediaType != null) {
+		if (nn(mediaType)) {
 			Serializer s = serializers.getSerializer(mediaType);
-			if (s != null)
+			if (nn(s))
 				return s;
 		}
 		List<Serializer> l = serializers.getSerializers();
@@ -7986,7 +7986,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (x instanceof URIBuilder)
 				return ((URIBuilder)x).build();
 			String s = x == null ? "" : x.toString();
-			if (rootUrl != null && ! absUrlPattern.matcher(s).matches()) {
+			if (nn(rootUrl) && ! absUrlPattern.matcher(s).matches()) {
 				if (s.isEmpty())
 					s = rootUrl;
 				else {

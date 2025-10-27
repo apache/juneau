@@ -343,7 +343,7 @@ public class EncoderSet {
 	 */
 	public EncoderMatch getEncoderMatch(String acceptEncoding) {
 		EncoderMatch em = cache.get(acceptEncoding);
-		if (em != null)
+		if (nn(em))
 			return em;
 
 		StringRanges ae = StringRanges.of(acceptEncoding);

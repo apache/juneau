@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -155,7 +157,7 @@ public class Value<T> {
 	 */
 	public static Type unwrap(Type t) {
 		var x = ClassUtils.getParameterType(t);
-		return x != null ? x : t;
+		return nn(x) ? x : t;
 	}
 
 	private T t;
@@ -239,7 +241,7 @@ public class Value<T> {
 	 * @param consumer Block to be executed if a value is present. Must not be <jk>null</jk>.
 	 */
 	public void ifPresent(Consumer<? super T> consumer) {
-		if (t != null)
+		if (nn(t))
 			consumer.accept(t);
 	}
 
@@ -255,7 +257,7 @@ public class Value<T> {
 	 *
 	 * @return <jk>true</jk> if the value is set.
 	 */
-	public boolean isPresent() { return get() != null; }
+	public boolean isPresent() { return nn(get()); }
 
 	/**
 	 * Checks if the current value equals the specified value using {@link org.apache.juneau.common.utils.Utils#eq(Object, Object)}.
@@ -335,7 +337,7 @@ public class Value<T> {
 	 * @return A new {@link Value} containing the mapped result, or an empty value if this value is empty.
 	 */
 	public <T2> Value<T2> map(Function<? super T,T2> mapper) {
-		if (t != null)
+		if (nn(t))
 			return of(mapper.apply(t));
 		return empty();
 	}
@@ -361,7 +363,7 @@ public class Value<T> {
 	 * null
 	 */
 	public T orElseGet(Supplier<? extends T> other) {
-		return t != null ? t : other.get();
+		return nn(t) ? t : other.get();
 	}
 
 	/**
@@ -377,7 +379,7 @@ public class Value<T> {
 	 * {@code exceptionSupplier} is null
 	 */
 	public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-		if (t != null)
+		if (nn(t))
 			return t;
 		throw exceptionSupplier.get();
 	}
@@ -400,7 +402,7 @@ public class Value<T> {
 	 */
 	public Value<T> set(T t) {
 		this.t = t;
-		if (listener != null)
+		if (nn(listener))
 			listener.onSet(t);
 		return this;
 	}
@@ -471,7 +473,7 @@ public class Value<T> {
 	 * @return This object.
 	 */
 	public Value<T> update(Function<T,T> updater) {
-		if (t != null)
+		if (nn(t))
 			set(updater.apply(t));
 		return this;
 	}

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 
@@ -78,7 +79,7 @@ public class DefaultArg implements RestOpArg {
 
 	private static String findBeanName(ParamInfo pi) {
 		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
-		if (n != null)
+		if (nn(n))
 			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
 		return null;
 	}

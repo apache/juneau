@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -234,7 +235,7 @@ public class ResponseContent implements HttpEntity {
 				type = (ClassMeta<T>)getClassMeta(BasicResource.class);
 
 			ConstructorInfo ci = type.getInfo().getPublicConstructor(x -> x.hasParamTypes(HttpResponse.class));
-			if (ci != null) {
+			if (nn(ci)) {
 				try {
 					return (T)ci.invoke(response);
 				} catch (ExecutableException e) {
@@ -254,7 +255,7 @@ public class ResponseContent implements HttpEntity {
 					return type.getStringMutater().mutate(asString());
 			}
 
-			if (parser != null) {
+			if (nn(parser)) {
 				try (Closeable in = parser.isReaderParser() ? asReader() : asInputStream()) {
 
 					// @formatter:off
@@ -271,7 +272,7 @@ public class ResponseContent implements HttpEntity {
 					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
 					if (t == null && ! type.is(String.class)) {
 						ConstructorInfo c = type.getInfo().getPublicConstructor(ConstructorInfo::hasNoParams);
-						if (c != null) {
+						if (nn(c)) {
 							try {
 								return c.<T>invoke();
 							} catch (ExecutableException e) {
@@ -548,7 +549,7 @@ public class ResponseContent implements HttpEntity {
 	 */
 	public InputStream asInputStream() throws IOException {
 		try {
-			if (body != null)
+			if (nn(body))
 				return new ByteArrayInputStream(body);
 
 			if (cached) {
@@ -759,7 +760,7 @@ public class ResponseContent implements HttpEntity {
 		var ct = getContentType().orElse(null);
 
 		// First look for "charset=" in Content-Type header of response.
-		if (ct != null)
+		if (nn(ct))
 			if (ct.contains("charset="))
 				cs = ct.substring(ct.indexOf("charset=") + 8).trim();
 
@@ -1042,7 +1043,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	<br>If the content length is known but exceeds {@link Long#MAX_VALUE}, a negative number is returned.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public long getContentLength() { return body != null ? body.length : entity.getContentLength(); }
+	public long getContentLength() { return nn(body) ? body.length : entity.getContentLength(); }
 
 	/**
 	 * Obtains the <c>Content-Type</c> header, if known.

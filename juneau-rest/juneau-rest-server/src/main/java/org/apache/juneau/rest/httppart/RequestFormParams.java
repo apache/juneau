@@ -129,6 +129,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 * @throws Exception Any exception can be thrown.
 	 */
+	@SuppressWarnings("null")
 	public RequestFormParams(RestRequest req, boolean caseSensitive) throws Exception {
 		this.req = req;
 		this.caseSensitive = caseSensitive;
@@ -146,7 +147,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 				m = req.getHttpServletRequest().getParameterMap();
 		}
 
-		if (m != null) {
+		if (nn(m)) {
 			for (Map.Entry<String,String[]> e : m.entrySet()) {
 				String name = e.getKey();
 
@@ -166,7 +167,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 				for (String value : values)
 					add(new RequestFormParam(req, name, value));
 			}
-		} else if (c != null) {
+		} else if (nn(c)) {
 			c.stream().forEach(this::add);
 		}
 	}
@@ -207,7 +208,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	public RequestFormParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
 		for (NameValuePair p : parameters)
-			if (p != null)
+			if (nn(p))
 				add(p.getName(), p.getValue());
 		return this;
 	}

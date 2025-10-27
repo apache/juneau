@@ -45,7 +45,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> List<E> addAll(List<E> value, E...entries) {
-		if (entries != null) {
+		if (nn(entries)) {
 			if (value == null)
 				value = list(entries);
 			else
@@ -64,7 +64,7 @@ public class CollectionUtils {
 	 * @return The set.
 	 */
 	public static <E> List<E> addAll(List<E> value, List<E> entries) {
-		if (entries != null) {
+		if (nn(entries)) {
 			if (value == null)
 				value = new ArrayList<>(entries);
 			else
@@ -84,7 +84,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> Set<E> addAll(Set<E> value, E...entries) {
-		if (entries != null) {
+		if (nn(entries)) {
 			if (value == null)
 				value = set(entries);
 			else
@@ -104,7 +104,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> SortedSet<E> addAll(SortedSet<E> value, E...entries) {
-		if (entries != null) {
+		if (nn(entries)) {
 			if (value == null)
 				value = sortedSet(entries);
 			else
@@ -441,7 +441,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> List<E> prependAll(List<E> value, E...entries) {
-		if (entries != null) {
+		if (nn(entries)) {
 			if (value == null)
 				value = list(entries);
 			else

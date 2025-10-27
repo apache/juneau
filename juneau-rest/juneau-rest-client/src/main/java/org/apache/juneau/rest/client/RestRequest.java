@@ -334,7 +334,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@Override /* Overridden from AutoCloseable */
 	public void close() {
 		try {
-			if (response != null) {
+			if (nn(response)) {
 				response.close();
 			}
 		} catch (RuntimeException | Error e) {
@@ -1801,7 +1801,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (rethrow == null)
 			rethrow = list();
 		for (Class<?> v : values) {
-			if (v != null && Throwable.class.isAssignableFrom(v))
+			if (nn(v) && Throwable.class.isAssignableFrom(v))
 				rethrow.add((Class<? extends Throwable>)v);
 		}
 		return this;
@@ -1831,8 +1831,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return The response object.
 	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
 	 */
+	@SuppressWarnings("null")
 	public RestResponse run() throws RestCallException {
-		if (response != null)
+		if (nn(response))
 			throw new RestCallException(response, null, "run() already called.");
 
 		try {
@@ -1862,7 +1863,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			Serializer serializer = this.serializer;
 			if (serializer == null)
 				serializer = client.getMatchingSerializer(contentType);
-			if (contentType == null && serializer != null)
+			if (contentType == null && nn(serializer))
 				contentType = serializer.getPrimaryMediaType().toString();
 
 			// Pick the parser if it hasn't been overridden.
@@ -1871,7 +1872,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			Parser parser = this.parser;
 			if (parser == null)
 				parser = client.getMatchingParser(accept);
-			if (accept == null && parser != null)
+			if (accept == null && nn(parser))
 				hl.set(Accept.of(parser.getPrimaryMediaType()));
 
 			headerData.stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(x -> request.addHeader(x));
@@ -1879,7 +1880,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			if (request2 == null && content != NO_BODY)
 				throw new RestCallException(null, null, "Method does not support content entity.  Method={0}, URI={1}", getMethod(), getURI());
 
-			if (request2 != null) {
+			if (nn(request2)) {
 
 				Object input2 = null;
 				if (content != NO_BODY) {
@@ -1908,7 +1909,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					entity = readerEntity((Reader)input2, getRequestContentType(TEXT_PLAIN));
 				else if (input2 instanceof InputStream)
 					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
-				else if (serializer != null)
+				else if (nn(serializer))
 					entity = serializedEntity(input2, serializer, contentSchema).setContentType(contentType);
 				else {
 					if (client.hasSerializers()) {
@@ -1940,7 +1941,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			int sc = response.getStatusCode();
 
 			Thrown thrown = response.getHeader("Thrown").asHeader(Thrown.class);
-			if (thrown.isPresent() && rethrow != null) {
+			if (thrown.isPresent() && nn(rethrow)) {
 				Thrown.Part thrownPart = thrown.asParts().get().get(0);
 				String className = thrownPart.getClassName();
 				String message = thrownPart.getMessage();
@@ -1949,16 +1950,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 						ConstructorInfo c = null;
 						ClassInfo ci = ClassInfo.of(t);
 						c = ci.getPublicConstructor(x -> x.hasParamTypes(HttpResponse.class));
-						if (c != null)
+						if (nn(c))
 							throw c.<Throwable>invoke(response);
 						c = ci.getPublicConstructor(x -> x.hasParamTypes(String.class));
-						if (c != null)
-							throw c.<Throwable>invoke(message != null ? message : response.getContent().asString());
+						if (nn(c))
+							throw c.<Throwable>invoke(nn(message) ? message : response.getContent().asString());
 						c = ci.getPublicConstructor(x -> x.hasParamTypes(String.class, Throwable.class));
-						if (c != null)
-							throw c.<Throwable>invoke(message != null ? message : response.getContent().asString(), null);
+						if (nn(c))
+							throw c.<Throwable>invoke(nn(message) ? message : response.getContent().asString(), null);
 						c = ci.getPublicConstructor(ConstructorInfo::hasNoParams);
-						if (c != null)
+						if (nn(c))
 							throw c.<Throwable>invoke();
 					}
 				}
@@ -1970,11 +1971,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			}
 
 		} catch (RuntimeException | RestCallException e) {
-			if (response != null)
+			if (nn(response))
 				response.close();
 			throw e;
 		} catch (Throwable e) {
-			if (response != null)
+			if (nn(response))
 				response.close();
 			throw new RestCallException(response, e, "Call failed.");
 		}
@@ -2191,17 +2192,17 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest uri(Object uri) throws RestCallException {
 		URI x = client.toURI(uri, null);
-		if (x.getScheme() != null)
+		if (nn(x.getScheme()))
 			uriBuilder.setScheme(x.getScheme());
-		if (x.getHost() != null)
+		if (nn(x.getHost()))
 			uriBuilder.setHost(x.getHost());
 		if (x.getPort() != -1)
 			uriBuilder.setPort(x.getPort());
-		if (x.getUserInfo() != null)
+		if (nn(x.getUserInfo()))
 			uriBuilder.setUserInfo(x.getUserInfo());
-		if (x.getFragment() != null)
+		if (nn(x.getFragment()))
 			uriBuilder.setFragment(x.getFragment());
-		if (x.getQuery() != null)
+		if (nn(x.getQuery()))
 			uriBuilder.setCustomQuery(x.getQuery());
 		uriBuilder.setPath(x.getPath());
 		return this;
@@ -2361,7 +2362,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private ContentType getRequestContentType(ContentType def) {
 		Header h = request.getFirstHeader("Content-Type");
-		if (h != null) {
+		if (nn(h)) {
 			String s = h.getValue();
 			if (! isEmpty(s))
 				return ContentType.of(s);
@@ -2470,7 +2471,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			toMap(value).forEach((k, v) -> l.add(createPart(Utils.s(k), v, FORMDATA, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, FORMDATA, serializer, schema, skipIfEmpty)));
-		} else if (value != null) {
+		} else if (nn(value)) {
 			formDataCustom(value);
 			return this;
 		}
@@ -2513,7 +2514,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			toMap(value).forEach((k, v) -> l.add(createHeader(Utils.s(k), v, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
-		} else if (value != null) {
+		} else if (nn(value)) {
 			throw new BasicRuntimeException("Invalid value type for header arg ''{0}'': {1}", name, ClassUtils.className(value));
 		}
 
@@ -2548,7 +2549,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			toMap(value).forEach((k, v) -> l.add(createPart(Utils.s(k), v, PATH, serializer, schema, false)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, PATH, serializer, schema, false)));
-		} else if (value != null) {
+		} else if (nn(value)) {
 			throw new BasicRuntimeException("Invalid value type for path arg ''{0}'': {1}", name, ClassUtils.className(value));
 		}
 
@@ -2581,7 +2582,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			toMap(value).forEach((k, v) -> l.add(createPart(Utils.s(k), v, QUERY, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, QUERY, serializer, schema, skipIfEmpty)));
-		} else if (value != null) {
+		} else if (nn(value)) {
 			queryCustom(value);
 			return this;
 		}

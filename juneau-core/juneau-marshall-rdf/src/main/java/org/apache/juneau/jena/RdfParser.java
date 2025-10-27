@@ -1415,7 +1415,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	}
 
 	private static String getConsumes(Builder builder) {
-		if (builder.getConsumes() != null)
+		if (nn(builder.getConsumes()))
 			return builder.getConsumes();
 		return switch (builder.language) {
 			case "RDF/XML", "RDF/XML-ABBREV" -> "text/xml+rdf";

@@ -332,7 +332,7 @@ public class ReflectionMap<V> {
 		MethodEntry(String name, V value) {
 			int i = name.indexOf('(');
 			this.args = i == -1 ? null : StringUtils.splitMethodArgs(name.substring(i + 1, name.length() - 1));
-			if (args != null) {
+			if (nn(args)) {
 				for (int j = 0; j < args.length; j++) {
 
 					// Strip off generic parameters.
@@ -454,7 +454,7 @@ public class ReflectionMap<V> {
 			return true;
 		if (cFull.indexOf('$') != -1) {
 			var p = c.getPackage();
-			if (p != null)
+			if (nn(p))
 				cFull = cFull.substring(p.getName().length() + 1);
 			if (Utils.eq(simpleName, cFull))
 				return true;
@@ -529,7 +529,7 @@ public class ReflectionMap<V> {
 	public V[] appendAll(Class<?> c, Class<? extends V> ofType, V[] array) {
 		List<V> list = null;
 		for (ClassEntry<V> e : classEntries)
-			if (e.matches(c) && e.value != null)
+			if (e.matches(c) && nn(e.value))
 				if (ofType == null || ofType.isInstance(e.value))
 					list = lazyAdd(array, list, e.value);
 		return lazyArray(array, list);
@@ -546,7 +546,7 @@ public class ReflectionMap<V> {
 	public V[] appendAll(Constructor<?> c, Class<? extends V> ofType, V[] array) {
 		List<V> list = null;
 		for (ConstructorEntry<V> e : constructorEntries)
-			if (e.matches(c) && e.value != null)
+			if (e.matches(c) && nn(e.value))
 				if (ofType == null || ofType.isInstance(e.value))
 					list = lazyAdd(array, list, e.value);
 		return lazyArray(array, list);
@@ -563,7 +563,7 @@ public class ReflectionMap<V> {
 	public V[] appendAll(Field f, Class<? extends V> ofType, V[] array) {
 		List<V> list = null;
 		for (FieldEntry<V> e : fieldEntries)
-			if (e.matches(f) && e.value != null)
+			if (e.matches(f) && nn(e.value))
 				if (ofType == null || ofType.isInstance(e.value))
 					list = lazyAdd(array, list, e.value);
 		return lazyArray(array, list);
@@ -580,7 +580,7 @@ public class ReflectionMap<V> {
 	public V[] appendAll(Method m, Class<? extends V> ofType, V[] array) {
 		List<V> list = null;
 		for (MethodEntry<V> e : methodEntries)
-			if (e.matches(m) && e.value != null)
+			if (e.matches(m) && nn(e.value))
 				if (ofType == null || ofType.isInstance(e.value))
 					list = lazyAdd(array, list, e.value);
 		return lazyArray(array, list);
@@ -695,7 +695,7 @@ public class ReflectionMap<V> {
 	public List<V> findAll(Class<?> c) {
 		List<V> list = null;
 		for (ClassEntry<V> e : classEntries)
-			if (e.matches(c) && e.value != null)
+			if (e.matches(c) && nn(e.value))
 				list = lazyAdd(list, e.value);
 		return lazyList(list);
 	}
@@ -710,7 +710,7 @@ public class ReflectionMap<V> {
 	public List<V> findAll(Class<?> c, Class<? extends V> ofType) {
 		List<V> list = null;
 		for (ClassEntry<V> e : classEntries)
-			if (e.matches(c) && e.value != null)
+			if (e.matches(c) && nn(e.value))
 				if (ofType == null || ofType.isInstance(e.value))
 					list = lazyAdd(list, e.value);
 		return lazyList(list);
@@ -725,7 +725,7 @@ public class ReflectionMap<V> {
 	public List<V> findAll(Constructor<?> c) {
 		List<V> list = null;
 		for (ConstructorEntry<V> e : constructorEntries)
-			if (e.matches(c) && e.value != null)
+			if (e.matches(c) && nn(e.value))
 				list = lazyAdd(list, e.value);
 		return lazyList(list);
 	}
@@ -740,7 +740,7 @@ public class ReflectionMap<V> {
 	public List<V> findAll(Constructor<?> c, Class<? extends V> ofType) {
 		List<V> list = null;
 		for (ConstructorEntry<V> e : constructorEntries)
-			if (e.matches(c) && e.value != null)
+			if (e.matches(c) && nn(e.value))
 				if (ofType == null || ofType.isInstance(e.value))
 					list = lazyAdd(list, e.value);
 		return lazyList(list);
@@ -755,7 +755,7 @@ public class ReflectionMap<V> {
 	public List<V> findAll(Field f) {
 		List<V> list = null;
 		for (FieldEntry<V> e : fieldEntries)
-			if (e.matches(f) && e.value != null)
+			if (e.matches(f) && nn(e.value))
 				list = lazyAdd(list, e.value);
 		return lazyList(list);
 	}
@@ -770,7 +770,7 @@ public class ReflectionMap<V> {
 	public List<V> findAll(Field f, Class<? extends V> ofType) {
 		List<V> list = null;
 		for (FieldEntry<V> e : fieldEntries)
-			if (e.matches(f) && e.value != null)
+			if (e.matches(f) && nn(e.value))
 				if (ofType == null || ofType.isInstance(e.value))
 					list = lazyAdd(list, e.value);
 		return lazyList(list);
@@ -785,7 +785,7 @@ public class ReflectionMap<V> {
 	public List<V> findAll(Method m) {
 		List<V> list = null;
 		for (MethodEntry<V> e : methodEntries)
-			if (e.matches(m) && e.value != null)
+			if (e.matches(m) && nn(e.value))
 				list = lazyAdd(list, e.value);
 		return lazyList(list);
 	}
@@ -800,7 +800,7 @@ public class ReflectionMap<V> {
 	public List<V> findAll(Method m, Class<? extends V> ofType) {
 		List<V> list = null;
 		for (MethodEntry<V> e : methodEntries)
-			if (e.matches(m) && e.value != null)
+			if (e.matches(m) && nn(e.value))
 				if (ofType == null || ofType.isInstance(e.value))
 					list = lazyAdd(list, e.value);
 		return lazyList(list);

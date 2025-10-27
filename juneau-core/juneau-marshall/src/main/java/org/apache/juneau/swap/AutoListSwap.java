@@ -109,11 +109,11 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 				var rt = m.getReturnType();
 
 				var mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt));
-				if (mi != null)
+				if (nn(mi))
 					return new AutoListSwap(bc, ci, m, mi, null);
 
 				var cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt));
-				if (cs != null)
+				if (nn(cs))
 					return new AutoListSwap(bc, ci, m, null, cs);
 
 				return new AutoListSwap(bc, ci, m, null, null);
@@ -188,9 +188,9 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 	@Override /* Overridden from ObjectSwap */
 	public T unswap(BeanSession session, List<?> o, ClassMeta<?> hint) throws ParseException {
 		try {
-			if (unswapMethod != null)
+			if (nn(unswapMethod))
 				return (T)unswapMethod.invoke(null, getMatchingArgs(unswapMethod.getParameterTypes(), session, o));
-			if (unswapConstructor != null)
+			if (nn(unswapConstructor))
 				return (T)unswapConstructor.newInstance(o);
 			return super.unswap(session, o, hint);
 		} catch (Exception e) {

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 
 import org.apache.juneau.encoders.*;
@@ -51,7 +53,7 @@ public class FinishablePrintWriter extends PrintWriter implements Finishable {
 	 */
 	@Override /* Overridden from Finishable */
 	public void finish() throws IOException {
-		if (f != null)
+		if (nn(f))
 			f.finish();
 	}
 }

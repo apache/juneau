@@ -784,9 +784,9 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		resolver = builder.resolver;
 		eventAllocator = builder.eventAllocator;
 
-		reporterImpl = reporter != null ? newInstance(reporter) : null;
-		resolverImpl = resolver != null ? newInstance(resolver) : null;
-		eventAllocatorImpl = eventAllocator != null ? newInstance(eventAllocator) : null;
+		reporterImpl = nn(reporter) ? newInstance(reporter) : null;
+		resolverImpl = nn(resolver) ? newInstance(resolver) : null;
+		eventAllocatorImpl = nn(eventAllocator) ? newInstance(eventAllocator) : null;
 	}
 
 	@Override /* Overridden from Context */

@@ -17,6 +17,8 @@
 package org.apache.juneau.reflect;
 
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -166,7 +168,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 		StringBuilder sb = new StringBuilder(128);
 		ClassInfo dc = declaringClass;
 		Package p = dc.getPackage();
-		if (p != null)
+		if (nn(p))
 			sb.append(p.getName()).append('.');
 		dc.appendShortName(sb);
 		sb.append(".").append(getName());
@@ -215,7 +217,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return annotationProvider.firstAnnotation(type, f, x -> true) != null;
+		return nn(annotationProvider.firstAnnotation(type, f, x -> true));
 	}
 
 	/**
@@ -476,7 +478,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 */
 	public boolean setAccessible() {
 		try {
-			if (f != null)
+			if (nn(f))
 				f.setAccessible(true);
 			return true;
 		} catch (@SuppressWarnings("unused") SecurityException e) {

@@ -201,7 +201,7 @@ public class ConfigEvent {
 			case SET_ENTRY -> {
 				var out = new StringBuilder("SET(");
 				out.append(section + (section.isEmpty() ? "" : "/") + key);
-				if (modifiers != null)
+				if (nn(modifiers))
 					out.append(modifiers);
 				out.append(" = ");
 				var val = value == null ? "null" : value;

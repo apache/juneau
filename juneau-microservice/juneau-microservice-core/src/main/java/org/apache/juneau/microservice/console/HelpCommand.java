@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.microservice.console;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -53,13 +55,13 @@ public class HelpCommand extends ConsoleCommand {
 
 				out.append(mb.getString("NAME")).append("\n\t").append(cc.getName()).append(info == null ? "" : " -- " + indent(info)).println();
 
-				if (synopsis != null)
+				if (nn(synopsis))
 					out.append('\n').append(mb.getString("SYNOPSIS")).append("\n\t").append(indent(synopsis)).println();
 
-				if (description != null)
+				if (nn(description))
 					out.append('\n').append(mb.getString("DESCRIPTION")).append("\n\t").append(indent(description)).println();
 
-				if (examples != null)
+				if (nn(examples))
 					out.append('\n').append(mb.getString("EXAMPLES")).append("\n\t").append(indent(examples)).println();
 			}
 		}

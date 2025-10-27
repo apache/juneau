@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -164,7 +166,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return stringValue != null ? stringValue : Utils.s(value()); }
+	public String getValue() { return nn(stringValue) ? stringValue : Utils.s(value()); }
 
 	/**
 	 * Given a list of media types, returns the best match for this string range header.
@@ -200,7 +202,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	 */
 	public StringRanges orElse(StringRanges other) {
 		StringRanges x = value();
-		return x != null ? x : other;
+		return nn(x) ? x : other;
 	}
 
 	/**
@@ -213,7 +215,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	}
 
 	private StringRanges value() {
-		if (supplier != null)
+		if (nn(supplier))
 			return supplier.get();
 		return value;
 	}

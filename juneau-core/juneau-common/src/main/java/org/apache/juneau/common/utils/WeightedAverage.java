@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 /**
  * A simple weighted average of numbers.
  *
@@ -34,7 +36,7 @@ public class WeightedAverage {
 	 * @return This object.
 	 */
 	public WeightedAverage add(int w, Number v) {
-		if (v != null) {
+		if (nn(v)) {
 			try {
 				double w1 = weight, w2 = w;
 				weight = Math.addExact(weight, w);

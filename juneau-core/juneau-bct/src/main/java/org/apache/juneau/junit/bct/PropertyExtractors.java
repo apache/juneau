@@ -220,6 +220,7 @@ public class PropertyExtractors {
 			return true;
 		}
 
+		@SuppressWarnings("null")
 		@Override
 		public Object extract(BeanConverter converter, Object o, String name) {
 			return safe(() -> {
@@ -229,7 +230,7 @@ public class PropertyExtractors {
 				var c = o.getClass();
 				var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 				var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is" + n) && x.getParameterCount() == 0).findFirst().orElse(null);
-				if (m != null) {
+				if (nn(m)) {
 					m.setAccessible(true);
 					return m.invoke(o);
 				}
@@ -241,26 +242,26 @@ public class PropertyExtractors {
 						return me.getValue();
 				}
 				m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get" + n) && x.getParameterCount() == 0).findFirst().orElse(null);
-				if (m != null) {
+				if (nn(m)) {
 					m.setAccessible(true);
 					return m.invoke(o);
 				}
 				m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class).findFirst().orElse(null);
-				if (m != null) {
+				if (nn(m)) {
 					m.setAccessible(true);
 					return m.invoke(o, name);
 				}
 				var c2 = c;
-				while (f == null && c2 != null) {
+				while (f == null && nn(c2)) {
 					f = Arrays.stream(c2.getDeclaredFields()).filter(x -> x.getName().equals(name)).findFirst().orElse(null);
 					c2 = c2.getSuperclass();
 				}
-				if (f != null) {
+				if (nn(f)) {
 					f.setAccessible(true);
 					return f.get(o);
 				}
 				m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals(name) && x.getParameterCount() == 0).findFirst().orElse(null);
-				if (m != null) {
+				if (nn(m)) {
 					m.setAccessible(true);
 					return m.invoke(o);
 				}

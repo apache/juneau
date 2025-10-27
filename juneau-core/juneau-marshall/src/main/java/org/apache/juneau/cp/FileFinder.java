@@ -130,9 +130,10 @@ public interface FileFinder {
 		 * @param recursive If <jk>true</jk>, also recursively adds all the paths of the parent classes as well.
 		 * @return This object.
 		 */
+		@SuppressWarnings("null")
 		public Builder cp(Class<?> c, String path, boolean recursive) {
 			assertArgNotNull("c", c);
-			while (c != null) {
+			while (nn(c)) {
 				roots.add(new LocalDir(c, path));
 				c = recursive ? c.getSuperclass() : null;
 			}

@@ -1007,7 +1007,7 @@ public class Parser extends BeanContextable {
 		unbuffered = builder.unbuffered;
 		listener = builder.listener;
 
-		String[] _consumes = StringUtils.splita(consumes != null ? consumes : "");
+		String[] _consumes = StringUtils.splita(nn(consumes) ? consumes : "");
 		this.consumesArray = new MediaType[_consumes.length];
 		for (int i = 0; i < _consumes.length; i++) {
 			this.consumesArray[i] = MediaType.of(_consumes[i]);
@@ -1021,7 +1021,7 @@ public class Parser extends BeanContextable {
 	 * @return <jk>true</jk> if this parser can handle the specified content type.
 	 */
 	public boolean canHandle(String contentType) {
-		if (contentType != null)
+		if (nn(contentType))
 			for (MediaType mt : getMediaTypes())
 				if (contentType.equals(mt.toString()))
 					return true;

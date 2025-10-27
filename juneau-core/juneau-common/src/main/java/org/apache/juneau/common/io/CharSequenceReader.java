@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.io;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 
 /**
@@ -75,11 +77,11 @@ public class CharSequenceReader extends BufferedReader {
 		if (next >= length)
 			return -1;
 		int n = Math.min(length - next, len);
-		if (s != null)
+		if (nn(s))
 			s.getChars(next, next + n, cbuf, off);
-		else if (sb != null)
+		else if (nn(sb))
 			sb.getChars(next, next + n, cbuf, off);
-		else if (sb2 != null)
+		else if (nn(sb2))
 			sb2.getChars(next, next + n, cbuf, off);
 		else {
 			for (int i = 0; i < n; i++)

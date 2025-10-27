@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -184,11 +185,11 @@ public class Encoding extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(allowReserved != null, "allowReserved")
-			.addIf(contentType != null, "contentType")
-			.addIf(explode != null, "explode")
-			.addIf(headers != null, "headers")
-			.addIf(style != null, "style")
+			.addIf(nn(allowReserved), "allowReserved")
+			.addIf(nn(contentType), "contentType")
+			.addIf(nn(explode), "explode")
+			.addIf(nn(headers), "headers")
+			.addIf(nn(style), "style")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

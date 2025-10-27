@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.microservice.resources;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.text.*;
@@ -49,13 +51,13 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 				if (m.matches()) {
 					isRecord = true;
 					String s = formatter.getField("date", m);
-					if (s != null)
+					if (nn(s))
 						date = formatter.getDateFormat().parse(s);
 					thread = formatter.getField("thread", m);
 					severity = formatter.getField("level", m);
 					logger = formatter.getField("logger", m);
 					text = formatter.getField("msg", m);
-					if (logger != null && logger.indexOf('.') > -1)
+					if (nn(logger) && logger.indexOf('.') > -1)
 						logger = logger.substring(logger.lastIndexOf('.') + 1);
 				}
 			} catch (ParseException e) {
@@ -65,7 +67,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 
 		public Writer appendHtml(Writer w) throws IOException {
 			w.append(toHtml(line)).append("<br>");
-			if (additionalText != null)
+			if (nn(additionalText))
 				for (String t : additionalText)
 					w.append(toHtml(t)).append("<br>");
 			return w;
@@ -88,7 +90,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 
 		protected Writer append(Writer w) throws IOException {
 			w.append(line).append('\n');
-			if (additionalText != null)
+			if (nn(additionalText))
 				for (String t : additionalText)
 					w.append(t).append('\n');
 			return w;
@@ -103,15 +105,15 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		boolean matches() {
 			if (! isRecord)
 				return false;
-			if (start != null && date.before(start))
+			if (nn(start) && date.before(start))
 				return false;
-			if (end != null && date.after(end))
+			if (nn(end) && date.after(end))
 				return false;
-			if (threadFilter != null && ! threadFilter.equals(thread))
+			if (nn(threadFilter) && ! threadFilter.equals(thread))
 				return false;
-			if (loggerFilter != null && ! loggerFilter.contains(logger))
+			if (nn(loggerFilter) && ! loggerFilter.contains(logger))
 				return false;
-			if (severityFilter != null && ! severityFilter.contains(severity))
+			if (nn(severityFilter) && ! severityFilter.contains(severity))
 				return false;
 			return true;
 		}
@@ -150,14 +152,14 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		this.start = start;
 		this.end = end;
 		this.threadFilter = thread;
-		if (loggers != null)
+		if (nn(loggers))
 			this.loggerFilter = new LinkedHashSet<>(Arrays.asList(loggers));
-		if (severity != null)
+		if (nn(severity))
 			this.severityFilter = new LinkedHashSet<>(Arrays.asList(severity));
 
 		// Find the first line.
 		String line;
-		while (next == null && (line = br.readLine()) != null) {
+		while (next == null && nn(line = br.readLine())) {
 			Entry e = new Entry(line);
 			if (e.matches())
 				next = e;
@@ -171,7 +173,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 
 	@Override /* Overridden from Iterator */
 	public boolean hasNext() {
-		return next != null;
+		return nn(next);
 	}
 
 	@Override /* Overridden from Iterable */
@@ -179,6 +181,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		return this;
 	}
 
+	@SuppressWarnings("null")
 	@Override /* Overridden from Iterator */
 	public Entry next() {
 		Entry current = next;
@@ -186,14 +189,14 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		try {
 			next = null;
 			String line = null;
-			while (next == null && (line = br.readLine()) != null) {
+			while (next == null && nn(line = br.readLine())) {
 				Entry e = new Entry(line);
 				if (e.isRecord) {
 					if (e.matches())
 						next = e;
 					prev = null;
 				} else {
-					if (prev != null)
+					if (nn(prev))
 						prev.addText(e.line);
 				}
 			}

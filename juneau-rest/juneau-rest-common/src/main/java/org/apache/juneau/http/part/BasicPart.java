@@ -17,6 +17,7 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -58,7 +59,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	 */
 	public static boolean canCast(Object o) {
 		ClassInfo ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+		return nn(ci) && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 
 	/**

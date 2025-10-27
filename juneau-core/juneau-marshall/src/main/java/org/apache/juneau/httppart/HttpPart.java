@@ -17,6 +17,7 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.http.*;
 
@@ -64,7 +65,7 @@ public class HttpPart implements NameValuePair {
 
 	@Override /* Overridden from NameValuePair */
 	public String getValue() {
-		if (spart != null)
+		if (nn(spart))
 			return spart;
 		try {
 			return serializer.serialize(partType, schema, opart);

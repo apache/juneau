@@ -548,7 +548,7 @@ public class JettyLogger implements LocationAwareLogger {
 	 */
 	private void log(Level level, String msg, Throwable thrown) {
 		LogRecord r = new LogRecord(level, msg);
-		if (thrown != null)
+		if (nn(thrown))
 			r.setThrown(thrown);
 		r.setLoggerName(logger.getName());
 		if (SHOW_SOURCE) {

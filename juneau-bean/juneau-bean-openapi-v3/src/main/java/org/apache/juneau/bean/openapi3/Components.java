@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -208,15 +209,15 @@ public class Components extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		var s = CollectionUtils.setb(String.class)
-			.addIf(callbacks != null, "callbacks")
-			.addIf(examples != null, "examples")
-			.addIf(headers != null, "headers")
-			.addIf(links != null, "links")
-			.addIf(parameters != null, "parameters")
-			.addIf(requestBodies != null, "requestBodies")
-			.addIf(responses != null, "responses")
-			.addIf(schemas != null, "schemas")
-			.addIf(securitySchemes != null, "securitySchemes")
+			.addIf(nn(callbacks), "callbacks")
+			.addIf(nn(examples), "examples")
+			.addIf(nn(headers), "headers")
+			.addIf(nn(links), "links")
+			.addIf(nn(parameters), "parameters")
+			.addIf(nn(requestBodies), "requestBodies")
+			.addIf(nn(responses), "responses")
+			.addIf(nn(schemas), "schemas")
+			.addIf(nn(securitySchemes), "securitySchemes")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

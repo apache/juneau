@@ -1226,8 +1226,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		addNamespaceUrlsToRoot = builder.addNamespaceUrisToRoot;
 		addBeanTypesXml = builder.addBeanTypesXml;
 		addJsonTags = ! builder.disableJsonTags;
-		defaultNamespace = builder.defaultNamespace != null ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
-		namespaces = builder.namespaces != null ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
+		defaultNamespace = nn(builder.defaultNamespace) ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
+		namespaces = nn(builder.namespaces) ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
 		textNodeDelimiter = builder.textNodeDelimiter;
 		addBeanTypes = addBeanTypesXml || super.isAddBeanTypes();
 	}

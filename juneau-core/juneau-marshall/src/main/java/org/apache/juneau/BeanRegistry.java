@@ -61,7 +61,7 @@ public class BeanRegistry {
 		this.map = new ConcurrentHashMap<>();
 		this.reverseMap = new ConcurrentHashMap<>();
 		beanContext.getBeanDictionary().forEach(this::addClass);
-		if (parent != null)
+		if (nn(parent))
 			parent.map.forEach(this::addToMap);
 		for (Class<?> c : classes)
 			addClass(c);
@@ -80,11 +80,11 @@ public class BeanRegistry {
 		if (isEmpty || typeName == null)
 			return null;
 		ClassMeta<?> cm = map.get(typeName);
-		if (cm != null)
+		if (nn(cm))
 			return cm;
 		if (typeName.charAt(typeName.length() - 1) == '^') {
 			cm = getClassMeta(typeName.substring(0, typeName.length() - 1));
-			if (cm != null) {
+			if (nn(cm)) {
 				cm = beanContext.getClassMeta(Array.newInstance(cm.innerClass, 1).getClass());
 				map.put(typeName, cm);
 			}
@@ -112,7 +112,7 @@ public class BeanRegistry {
 	 * @return <jk>true</jk> if this dictionary has an entry for the specified type name.
 	 */
 	public boolean hasName(String typeName) {
-		return getClassMeta(typeName) != null;
+		return nn(getClassMeta(typeName));
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class BeanRegistry {
 
 	private void addClass(Class<?> c) {
 		try {
-			if (c != null) {
+			if (nn(c)) {
 				ClassInfo ci = ClassInfo.of(c);
 				if (ci.isChildOf(Collection.class)) {
 					Collection<?> cc = BeanCreator.of(Collection.class).type(c).run();

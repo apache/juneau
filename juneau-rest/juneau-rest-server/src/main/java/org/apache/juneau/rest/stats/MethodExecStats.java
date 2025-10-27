@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.stats;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -119,7 +121,7 @@ public class MethodExecStats {
 	protected MethodExecStats(Builder builder) {
 		this.guid = new Random().nextLong();
 		this.method = builder.method;
-		this.thrownStore = builder.thrownStore != null ? builder.thrownStore : new ThrownStore();
+		this.thrownStore = nn(builder.thrownStore) ? builder.thrownStore : new ThrownStore();
 	}
 
 	/**

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 
@@ -151,7 +152,7 @@ public abstract class Widget implements HtmlWidget {
 	protected String loadHtml(RestRequest req, String name) {
 		try {
 			String s = getFileFinder(req).getString(name, null).orElse(null);
-			if (s != null)
+			if (nn(s))
 				s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
 			return s;
 		} catch (IOException e) {
@@ -190,7 +191,7 @@ public abstract class Widget implements HtmlWidget {
 	protected String loadScript(RestRequest req, String name) {
 		try {
 			String s = getFileFinder(req).getString(name, null).orElse(null);
-			if (s != null)
+			if (nn(s))
 				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 			return s;
 		} catch (IOException e) {
@@ -229,7 +230,7 @@ public abstract class Widget implements HtmlWidget {
 	protected String loadStyle(RestRequest req, String name) {
 		try {
 			String s = getFileFinder(req).getString(name, null).orElse(null);
-			if (s != null)
+			if (nn(s))
 				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 			return s;
 		} catch (IOException e) {

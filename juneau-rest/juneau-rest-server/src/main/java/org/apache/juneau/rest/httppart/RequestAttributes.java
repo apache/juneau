@@ -206,7 +206,7 @@ public class RequestAttributes {
 	public boolean containsAny(String...names) {
 		assertArgNotNull("names", names);
 		for (String n : names)
-			if (sreq.getAttribute(n) != null)
+			if (nn(sreq.getAttribute(n)))
 				return true;
 		return false;
 	}

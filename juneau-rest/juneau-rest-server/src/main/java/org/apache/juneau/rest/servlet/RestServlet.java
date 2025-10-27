@@ -72,7 +72,7 @@ public abstract class RestServlet extends HttpServlet {
 
 	@Override /* Overridden from GenericServlet */
 	public synchronized void destroy() {
-		if (context.get() != null)
+		if (nn(context.get()))
 			context.get().destroy();
 		super.destroy();
 	}
@@ -108,7 +108,7 @@ public abstract class RestServlet extends HttpServlet {
 	 */
 	public synchronized String getPath() {
 		RestContext context = this.context.get();
-		if (context != null)
+		if (nn(context))
 			return context.getFullPath();
 		ClassInfo ci = ClassInfo.of(getClass());
 		Value<String> path = Value.empty();
@@ -133,7 +133,7 @@ public abstract class RestServlet extends HttpServlet {
 	@Override /* Overridden from Servlet */
 	public synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
-			if (context.get() != null)
+			if (nn(context.get()))
 				return;
 			super.init(servletConfig);
 			context.set(RestContext.create(this.getClass(), null, servletConfig).init(() -> this).build());
@@ -190,7 +190,7 @@ public abstract class RestServlet extends HttpServlet {
 	@Override /* Overridden from Servlet */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, InternalServerError, IOException {
 		try {
-			if (initException.get() != null)
+			if (nn(initException.get()))
 				throw initException.get();
 			if (context.get() == null)
 				throw new InternalServerError(

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.objecttools;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 
 import org.apache.juneau.common.reflect.*;
@@ -99,14 +101,14 @@ public class ObjectMerger {
 			Object r = null;
 			boolean isGetter = args == null && method.getReturnType() != Void.class;
 			for (Object pojo : pojos) {
-				if (pojo != null) {
+				if (nn(pojo)) {
 					try {
 						r = method.invoke(pojo, args);
 					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 						throw new ExecutableException(e);
 					}
 					if (isGetter) {
-						if (r != null)
+						if (nn(r))
 							return r;
 					} else {
 						if (! callAllNonGetters)

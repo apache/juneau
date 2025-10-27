@@ -228,7 +228,7 @@ public class RoleMatcher {
 	 * 	<br>Always <jk>false</jk> if the string is <jk>null</jk>.
 	 */
 	public boolean matches(Set<String> roles) {
-		return roles != null && exp.matches(roles);
+		return nn(roles) && exp.matches(roles);
 	}
 
 	@Override /* Overridden from Object */

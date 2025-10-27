@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -132,8 +133,8 @@ public class ExternalDocumentation extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(description != null, "description")
-			.addIf(url != null, "url")
+			.addIf(nn(description), "description")
+			.addIf(nn(url), "url")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

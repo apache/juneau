@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -148,7 +149,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 *
 	 * @return <jk>true</jk> if the value exists.
 	 */
-	public boolean isPresent() { return getValue() != null; }
+	public boolean isPresent() { return nn(getValue()); }
 
 	/**
 	 * If a value is present, returns the value, otherwise returns other.
@@ -161,7 +162,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 */
 	public Object orElse(Object other) {
 		Object o = getValue();
-		return o != null ? o : other;
+		return nn(o) ? o : other;
 	}
 
 	@Override /* Overridden from Object */

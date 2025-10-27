@@ -3492,15 +3492,15 @@ public class BeanContext extends Context {
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 		sortProperties = builder.sortProperties;
 		findFluentSetters = builder.findFluentSetters;
-		typePropertyName = builder.typePropertyName != null ? builder.typePropertyName : "_type";
-		locale = builder.locale != null ? builder.locale : Locale.getDefault();
+		typePropertyName = nn(builder.typePropertyName) ? builder.typePropertyName : "_type";
+		locale = nn(builder.locale) ? builder.locale : Locale.getDefault();
 		timeZone = builder.timeZone;
 		mediaType = builder.mediaType;
 		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(list());
 		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(list());
 		notBeanClasses = opt(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(list());
 		notBeanPackages = opt(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(list());
-		propertyNamer = builder.propertyNamer != null ? builder.propertyNamer : BasicPropertyNamer.class;
+		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.class;
 
 		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, alist(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
 
@@ -4068,7 +4068,7 @@ public class BeanContext extends Context {
 	 */
 	private final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
 		// Note:  On first
-		if (c != null) {
+		if (nn(c)) {
 			List<ObjectSwap> l = Utils.list();
 			for (ObjectSwap f : swapArray)
 				if (f.getNormalClass().isParentOf(c))
@@ -4096,7 +4096,7 @@ public class BeanContext extends Context {
 
 	private ClassMeta<?> resolveType(Type...t) {
 		for (Type tt : t) {
-			if (tt != null) {
+			if (nn(tt)) {
 				ClassMeta<?> cm = getClassMeta(tt);
 				if (tt != cmObject)
 					return cm;
@@ -4181,7 +4181,7 @@ public class BeanContext extends Context {
 		if (c.isArray() || c.isPrimitive() || c.isEnum() || c.isAnnotation())
 			return true;
 		Package p = c.getPackage();
-		if (p != null) {
+		if (nn(p)) {
 			for (String p2 : notBeanPackageNames)
 				if (p.getName().equals(p2))
 					return true;
@@ -4258,7 +4258,7 @@ public class BeanContext extends Context {
 		ClassMeta<T> cm = resolveClassMeta(t, typeVarImpls);
 		ClassMeta<T> cm2 = cm;
 
-		if (p != null) {
+		if (nn(p)) {
 
 			if (ClassUtils.isNotVoid(p.type()))
 				cm2 = resolveClassMeta(p.type(), typeVarImpls);
@@ -4323,7 +4323,7 @@ public class BeanContext extends Context {
 						break loop;
 				}
 				c = c.getSuperclass();
-			} while (c != null);
+			} while (nn(c));
 		}
 
 		if (o instanceof ParameterizedType) {
@@ -4405,7 +4405,7 @@ public class BeanContext extends Context {
 			return null;
 
 		} else if (t instanceof TypeVariable) {
-			if (typeVarImpls != null) {
+			if (nn(typeVarImpls)) {
 				TypeVariable tv = (TypeVariable)t;
 				String varName = tv.getName();
 				int varIndex = -1;

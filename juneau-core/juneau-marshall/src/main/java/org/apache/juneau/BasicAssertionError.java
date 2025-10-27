@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
 
@@ -41,9 +42,9 @@ public class BasicAssertionError extends AssertionError {
 	 * @return The resolved message.
 	 */
 	protected static final String getMessage(Throwable cause, String msg, String def) {
-		if (msg != null)
+		if (nn(msg))
 			return msg;
-		if (cause != null)
+		if (nn(cause))
 			return cause.getMessage();
 		return def;
 	}

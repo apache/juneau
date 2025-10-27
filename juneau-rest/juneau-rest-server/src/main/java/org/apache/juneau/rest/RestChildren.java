@@ -145,11 +145,11 @@ public class RestChildren {
 	 */
 	public Optional<RestChildMatch> findMatch(RestSession.Builder builder) {
 		var pi = builder.getPathInfoUndecoded();
-		if ((! children.isEmpty()) && pi != null && ! pi.equals("/")) {
+		if ((! children.isEmpty()) && nn(pi) && ! pi.equals("/")) {
 			for (RestContext rc : children.values()) {
 				UrlPathMatcher upp = rc.getPathMatcher();
 				UrlPathMatch uppm = upp.match(builder.getUrlPath());
-				if (uppm != null) {
+				if (nn(uppm)) {
 					return Utils.opt(RestChildMatch.create(uppm, rc));
 				}
 			}

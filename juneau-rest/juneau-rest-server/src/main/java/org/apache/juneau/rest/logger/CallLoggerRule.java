@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.logger;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.function.*;
 import java.util.logging.*;
@@ -375,14 +376,14 @@ public class CallLoggerRule {
 	 */
 	public boolean matches(HttpServletRequest req, HttpServletResponse res) {
 
-		if ((requestFilter != null && ! requestFilter.test(req)) || (responseFilter != null && ! responseFilter.test(res)))
+		if ((nn(requestFilter) && ! requestFilter.test(req)) || (nn(responseFilter) && ! responseFilter.test(res)))
 			return false;
 
-		if (statusFilter != null && ! statusFilter.test(res.getStatus()))
+		if (nn(statusFilter) && ! statusFilter.test(res.getStatus()))
 			return false;
 
 		Throwable e = (Throwable)req.getAttribute("Exception");
-		if (e != null && exceptionFilter != null && ! exceptionFilter.test(e))
+		if (nn(e) && nn(exceptionFilter) && ! exceptionFilter.test(e))
 			return false;
 
 		return true;

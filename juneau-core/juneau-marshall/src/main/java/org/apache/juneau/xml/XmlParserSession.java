@@ -295,6 +295,7 @@ public class XmlParserSession extends ReaderParserSession {
 		return decodeString(s);
 	}
 
+	@SuppressWarnings("null")
 	private Object getUnknown(XmlReader r) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		if (r.getEventType() != START_ELEMENT) {
 			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
@@ -361,7 +362,7 @@ public class XmlParserSession extends ReaderParserSession {
 		String s = sb.toString().trim();
 		returnStringBuilder(sb);
 		s = decodeString(s);
-		if (m != null) {
+		if (nn(m)) {
 			if (! s.isEmpty())
 				m.put("contents", s);
 			return m;
@@ -373,6 +374,7 @@ public class XmlParserSession extends ReaderParserSession {
 		return key.equals(getBeanTypePropertyName(null)) || key.equals(getNamePropertyName());
 	}
 
+	@SuppressWarnings("null")
 	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m, boolean isNil) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		BeanMeta<?> bMeta = m.getMeta();
 		XmlBeanMeta xmlMeta = getXmlBeanMeta(bMeta);
@@ -384,7 +386,7 @@ public class XmlParserSession extends ReaderParserSession {
 				String ns = r.getAttributeNamespace(i);
 				BeanPropertyMeta bpm = xmlMeta.getPropertyMeta(key);
 				if (bpm == null) {
-					if (xmlMeta.getAttrsProperty() != null) {
+					if (nn(xmlMeta.getAttrsProperty())) {
 						xmlMeta.getAttrsProperty().add(m, key, key, val);
 					} else if (ns == null) {
 						onUnknownProperty(key, m, val);
@@ -415,7 +417,7 @@ public class XmlParserSession extends ReaderParserSession {
 			// We only care about text in MIXED mode.
 			// Ignore if in ELEMENTS mode.
 			if (event == CHARACTERS) {
-				if (cp != null && cpf.isOneOf(MIXED, MIXED_PWS)) {
+				if (nn(cp) && cpf.isOneOf(MIXED, MIXED_PWS)) {
 					if (cpcm.isCollectionOrArray()) {
 						if (l == null)
 							l = new LinkedList<>();
@@ -425,7 +427,7 @@ public class XmlParserSession extends ReaderParserSession {
 					}
 				} else if (cpf != ELEMENTS) {
 					String s = getText(r, trim);
-					if (s != null) {
+					if (nn(s)) {
 						if (sb == null)
 							sb = getStringBuilder();
 						sb.append(s);
@@ -434,9 +436,9 @@ public class XmlParserSession extends ReaderParserSession {
 					// Do nothing...we're in ELEMENTS mode.
 				}
 			} else if (event == START_ELEMENT) {
-				if (cp != null && cpf.isOneOf(TEXT, TEXT_PWS)) {
+				if (nn(cp) && cpf.isOneOf(TEXT, TEXT_PWS)) {
 					String s = parseText(r);
-					if (s != null) {
+					if (nn(s)) {
 						if (sb == null)
 							sb = getStringBuilder();
 						sb.append(s);
@@ -447,7 +449,7 @@ public class XmlParserSession extends ReaderParserSession {
 						sb = getStringBuilder();
 					sb.append(getElementAsString(r));
 					depth++;
-				} else if (cp != null && cpf.isOneOf(MIXED, MIXED_PWS)) {
+				} else if (nn(cp) && cpf.isOneOf(MIXED, MIXED_PWS)) {
 					if (isWhitespaceElement(r) && (breg == null || ! breg.hasName(r.getLocalName()))) {
 						if (cpcm.isCollectionOrArray()) {
 							if (l == null)
@@ -465,7 +467,7 @@ public class XmlParserSession extends ReaderParserSession {
 							cp.set(m, null, parseAnything(cpcm, cp.getName(), r, m.getBean(false), false, cp));
 						}
 					}
-				} else if (cp != null && cpf == ELEMENTS) {
+				} else if (nn(cp) && cpf == ELEMENTS) {
 					cp.add(m, null, parseAnything(cpcm.getElementType(), cp.getName(), r, m.getBean(false), false, cp));
 				} else {
 					currAttr = getNameProperty(r);
@@ -512,10 +514,10 @@ public class XmlParserSession extends ReaderParserSession {
 			}
 		} while (depth >= 0);
 
-		if (cp != null && ! isNil) {
-			if (sb != null)
+		if (nn(cp) && ! isNil) {
+			if (nn(sb))
 				cp.set(m, null, sb.toString());
-			else if (l != null)
+			else if (nn(l))
 				cp.set(m, null, XmlUtils.collapseTextNodes(l));
 			else if (cpcm.isCollectionOrArray()) {
 				Object o = cp.get(m, null);
@@ -764,6 +766,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 * @throws XMLStreamException Malformed XML encountered.
 	 */
+	@SuppressWarnings("null")
 	protected <T> T parseAnything(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {
 
@@ -772,9 +775,9 @@ public class XmlParserSession extends ReaderParserSession {
 		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
 		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
-		if (builder != null)
+		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
-		else if (swap != null)
+		else if (nn(swap))
 			sType = swap.getSwapClassMeta(this);
 		else
 			sType = eType;
@@ -799,9 +802,9 @@ public class XmlParserSession extends ReaderParserSession {
 		}
 
 		ClassMeta tcm = getClassMeta(typeAttr, pMeta, eType);
-		if (tcm == null && elementName != null && ! elementName.equals(currAttr))
+		if (tcm == null && nn(elementName) && ! elementName.equals(currAttr))
 			tcm = getClassMeta(elementName, pMeta, eType);
-		if (tcm != null)
+		if (nn(tcm))
 			sType = eType = tcm;
 
 		Object o = null;
@@ -815,7 +818,7 @@ public class XmlParserSession extends ReaderParserSession {
 			if (jsonType == OBJECT) {
 				JsonMap m = new JsonMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
-				if (wrapperAttr != null)
+				if (nn(wrapperAttr))
 					m = new JsonMap(this).append(wrapperAttr, m);
 				o = cast(m, pMeta, eType);
 			} else if (jsonType == ARRAY)
@@ -839,37 +842,37 @@ public class XmlParserSession extends ReaderParserSession {
 		} else if (sType.isMap()) {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
-			if (wrapperAttr != null)
+			if (nn(wrapperAttr))
 				o = new JsonMap(this).append(wrapperAttr, m);
 		} else if (sType.isCollection()) {
 			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
 			o = parseIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.getInnerClass());
-		} else if (builder != null || sType.canCreateNewBean(outer)) {
+		} else if (nn(builder) || sType.canCreateNewBean(outer)) {
 			if (getXmlClassMeta(sType).getFormat() == COLLAPSED) {
 				String fieldName = r.getLocalName();
-				BeanMap<?> m = builder != null ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
+				BeanMap<?> m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
 				BeanPropertyMeta bpm = getXmlBeanMeta(m.getMeta()).getPropertyMeta(fieldName);
 				ClassMeta<?> cm = m.getMeta().getClassMeta();
 				Object value = parseAnything(cm, currAttr, r, m.getBean(false), false, null);
 				setName(cm, value, currAttr);
 				bpm.set(m, currAttr, value);
-				o = builder != null ? builder.build(this, m.getBean(), eType) : m.getBean();
+				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			} else {
-				BeanMap m = builder != null ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
+				BeanMap m = nn(builder) ? toBeanMap(builder.create(this, eType)) : newBeanMap(outer, sType.getInnerClass());
 				m = parseIntoBean(r, m, isNil);
-				o = builder != null ? builder.build(this, m.getBean(), eType) : m.getBean();
+				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
 		} else if (sType.isArray() || sType.isArgs()) {
 			ArrayList l = (ArrayList)parseIntoCollection(r, list(), sType, pMeta);
 			o = toArray(sType, l);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, getElementText(r));
-		} else if (sType.getProxyInvocationHandler() != null) {
+		} else if (nn(sType.getProxyInvocationHandler())) {
 			JsonMap m = new JsonMap(this);
 			parseIntoMap(r, m, string(), object(), pMeta);
-			if (wrapperAttr != null)
+			if (nn(wrapperAttr))
 				m = new JsonMap(this).append(wrapperAttr, m);
 			o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 		} else {
@@ -877,10 +880,10 @@ public class XmlParserSession extends ReaderParserSession {
 				pMeta == null ? null : pMeta.getName());
 		}
 
-		if (swap != null && o != null)
+		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
 
-		if (outer != null)
+		if (nn(outer))
 			setParent(eType, o, outer);
 
 		return (T)o;

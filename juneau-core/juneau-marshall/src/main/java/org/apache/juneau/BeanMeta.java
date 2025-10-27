@@ -104,9 +104,9 @@ public class BeanMeta<T> {
 
 			// Get the bean property type from the getter/field.
 			Class<?> pt = null;
-			if (b.getter != null)
+			if (nn(b.getter))
 				pt = b.getter.getReturnType();
-			else if (b.field != null)
+			else if (nn(b.field))
 				pt = b.field.getType();
 
 			// Matches if only a setter is defined.
@@ -155,20 +155,20 @@ public class BeanMeta<T> {
 
 		private String findDictionaryName(ClassMeta<?> cm) {
 			BeanRegistry br = cm.getBeanRegistry();
-			if (br != null) {
+			if (nn(br)) {
 				String s = br.getTypeName(this.classMeta);
-				if (s != null)
+				if (nn(s))
 					return s;
 			}
 			Class<?> pcm = cm.innerClass.getSuperclass();
-			if (pcm != null) {
+			if (nn(pcm)) {
 				String s = findDictionaryName(ctx.getClassMeta(pcm));
-				if (s != null)
+				if (nn(s))
 					return s;
 			}
 			for (Class<?> icm : cm.innerClass.getInterfaces()) {
 				String s = findDictionaryName(ctx.getClassMeta(icm));
-				if (s != null)
+				if (nn(s))
 					return s;
 			}
 			return null;
@@ -203,7 +203,7 @@ public class BeanMeta<T> {
 				// @formatter:on
 
 				List<Class<?>> bdClasses = list();
-				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
+				if (nn(beanFilter) && nn(beanFilter.getBeanDictionary()))
 					CollectionUtils.addAll(bdClasses, beanFilter.getBeanDictionary());
 
 				Value<String> typeName = Value.empty();
@@ -216,13 +216,13 @@ public class BeanMeta<T> {
 				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typePropertyName()), x -> typePropertyName.set(x.typePropertyName()));
 				this.typePropertyName = typePropertyName.orElseGet(() -> ctx.getBeanTypePropertyName());
 
-				fluentSetters = (ctx.isFindFluentSetters() || (beanFilter != null && beanFilter.isFluentSetters()));
+				fluentSetters = (ctx.isFindFluentSetters() || (nn(beanFilter) && beanFilter.isFluentSetters()));
 
 				// If @Bean.interfaceClass is specified on the parent class, then we want
 				// to use the properties defined on that class, not the subclass.
-				Class<?> c2 = (beanFilter != null && beanFilter.getInterfaceClass() != null ? beanFilter.getInterfaceClass() : c);
+				Class<?> c2 = (nn(beanFilter) && nn(beanFilter.getInterfaceClass()) ? beanFilter.getInterfaceClass() : c);
 
-				Class<?> stopClass = (beanFilter != null ? beanFilter.getStopClass() : Object.class);
+				Class<?> stopClass = (nn(beanFilter) ? beanFilter.getStopClass() : Object.class);
 				if (stopClass == null)
 					stopClass = Object.class;
 
@@ -247,7 +247,7 @@ public class BeanMeta<T> {
 
 				// Look for @Beanc constructor on public constructors.
 				ci.forEachPublicConstructor(x -> x.hasAnnotation(ctx, Beanc.class), x -> {
-					if (constructor != null)
+					if (nn(constructor))
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
@@ -270,7 +270,7 @@ public class BeanMeta<T> {
 				// Look for @Beanc on all other constructors.
 				if (constructor == null) {
 					ci.forEachDeclaredConstructor(x -> x.hasAnnotation(ctx, Beanc.class), x -> {
-						if (constructor != null)
+						if (nn(constructor))
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
@@ -301,7 +301,7 @@ public class BeanMeta<T> {
 				if (constructor == null && beanFilter == null && ctx.isBeansRequireDefaultConstructor())
 					return "Class does not have the required no-arg constructor";
 
-				if (constructor != null)
+				if (nn(constructor))
 					constructor.setAccessible();
 
 				// Explicitly defined property names in @Bean annotation.
@@ -313,7 +313,7 @@ public class BeanMeta<T> {
 
 				Set<String> filterProps = set();  // Names of properties defined in @Bean(properties)
 
-				if (beanFilter != null) {
+				if (nn(beanFilter)) {
 
 					Set<String> bfbpi = beanFilter.getProperties();
 
@@ -323,7 +323,7 @@ public class BeanMeta<T> {
 					if (bpi.isEmpty())
 						fixedBeanProps.addAll(bfbpi);
 
-					if (beanFilter.getPropertyNamer() != null)
+					if (nn(beanFilter.getPropertyNamer()))
 						propertyNamer = beanFilter.getPropertyNamer();
 
 					bpro.addAll(beanFilter.getReadOnlyProperties());
@@ -345,7 +345,7 @@ public class BeanMeta<T> {
 						bi = Introspector.getBeanInfo(c2, stopClass);
 					else
 						bi = Introspector.getBeanInfo(c2, null);
-					if (bi != null) {
+					if (nn(bi)) {
 						for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
 							String name = pd.getName();
 							if (! normalProps.containsKey(name))
@@ -358,7 +358,7 @@ public class BeanMeta<T> {
 
 					findBeanFields(ctx, c2, stopClass, fVis).forEach(x -> {
 						String name = findPropertyName(x);
-						if (name != null) {
+						if (nn(name)) {
 							if (! normalProps.containsKey(name))
 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
 							normalProps.get(name).setField(x);
@@ -376,7 +376,7 @@ public class BeanMeta<T> {
 						BeanPropertyMeta.Builder bpm = normalProps.get(pn);
 						if (x.methodType == GETTER) {
 							// Two getters.  Pick the best.
-							if (bpm.getter != null) {
+							if (nn(bpm.getter)) {
 
 								if (! ctx.hasAnnotation(Beanp.class, m) && ctx.hasAnnotation(Beanp.class, bpm.getter))
 									m = bpm.getter;  // @Beanp annotated method takes precedence.
@@ -420,10 +420,10 @@ public class BeanMeta<T> {
 
 						if (p.validate(ctx, beanRegistry, typeVarImpls, bpro, bpwo)) {
 
-							if (p.getter != null)
+							if (nn(p.getter))
 								getterProps.put(p.getter, p.name);
 
-							if (p.setter != null)
+							if (nn(p.setter))
 								setterProps.put(p.setter, p.name);
 
 						} else {
@@ -453,11 +453,11 @@ public class BeanMeta<T> {
 				if (beanFilter == null && ctx.isBeansRequireSomeProperties() && normalProps.isEmpty())
 					return "No properties detected on bean class";
 
-				sortProperties = (ctx.isSortProperties() || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
+				sortProperties = (ctx.isSortProperties() || (nn(beanFilter) && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
 				properties = sortProperties ? CollectionUtils.sortedMap() : map();
 
-				if (beanFilter != null && beanFilter.getTypeName() != null)
+				if (nn(beanFilter) && nn(beanFilter.getTypeName()))
 					dictionaryName = beanFilter.getTypeName();
 				if (dictionaryName == null)
 					dictionaryName = findDictionaryName(this.classMeta);
@@ -470,7 +470,7 @@ public class BeanMeta<T> {
 				});
 
 				// If a beanFilter is defined, look for inclusion and exclusion lists.
-				if (beanFilter != null) {
+				if (nn(beanFilter)) {
 
 					// Eliminated excluded properties if BeanFilter.excludeKeys is specified.
 					Set<String> bfbpi = beanFilter.getProperties();
@@ -504,7 +504,7 @@ public class BeanMeta<T> {
 
 				bpx.forEach(x -> hiddenProperties.put(x, properties.remove(x)));
 
-				if (pNames != null) {
+				if (nn(pNames)) {
 					Map<String,BeanPropertyMeta> properties2 = map();
 					for (String k : pNames) {
 						if (properties.containsKey(k))
@@ -536,7 +536,7 @@ public class BeanMeta<T> {
 
 	private static void forEachClass(ClassInfo c, Class<?> stopClass, Consumer<ClassInfo> consumer) {
 		ClassInfo sc = c.getSuperclass();
-		if (sc != null && ! sc.is(stopClass))
+		if (nn(sc) && ! sc.is(stopClass))
 			forEachClass(sc, stopClass, consumer);
 		c.getInterfaces().forEach(x -> forEachClass(x, stopClass, consumer));
 		consumer.accept(c);
@@ -594,7 +594,7 @@ public class BeanMeta<T> {
 				if (m.isStatic() || m.isBridge() || m.getParamCount() > 2 || m.hasAnnotation(ctx, BeanIgnore.class))
 					continue;
 				Transient t = m.getAnnotation(ctx, Transient.class);
-				if (t != null && t.value())
+				if (nn(t) && t.value())
 					continue;
 
 				List<Beanp> lp = list();
@@ -630,7 +630,7 @@ public class BeanMeta<T> {
 					} else if (n.startsWith("is") && (rt.is(Boolean.TYPE) || rt.is(Boolean.class))) {
 						methodType = GETTER;
 						n = n.substring(2);
-					} else if (bpName != null) {
+					} else if (nn(bpName)) {
 						methodType = GETTER;
 						if (bpName.isEmpty()) {
 							if (n.startsWith("get"))
@@ -657,7 +657,7 @@ public class BeanMeta<T> {
 					} else if (n.startsWith("with") && (rt.isParentOf(c))) {
 						methodType = SETTER;
 						n = n.substring(4);
-					} else if (bpName != null) {
+					} else if (nn(bpName)) {
 						methodType = SETTER;
 						if (bpName.isEmpty()) {
 							if (n.startsWith("set"))
@@ -685,9 +685,9 @@ public class BeanMeta<T> {
 					throw new BeanRuntimeException(c, "Found @Beanp(\"*\") but could not determine method type on method ''{0}''.", m.getSimpleName());
 
 				if (methodType != UNKNOWN) {
-					if (bpName != null && ! bpName.isEmpty())
+					if (nn(bpName) && ! bpName.isEmpty())
 						n = bpName;
-					if (n != null)
+					if (nn(n))
 						l.add(new BeanMethod(n, methodType, m.inner()));
 				}
 			}
@@ -708,7 +708,7 @@ public class BeanMeta<T> {
 				&& x.hasName(name)
 			);
 			// @formatter:on
-			if (f != null)
+			if (nn(f))
 				value.set(f.inner());
 		});
 		return value.get();
@@ -801,7 +801,7 @@ public class BeanMeta<T> {
 		ClassInfo currentClass = ClassInfo.of(c);
 		ClassInfo sc = currentClass.getSuperclass();
 
-		while (sc != null && ! sc.is(stopClass) && ! sc.is(Object.class)) {
+		while (nn(sc) && ! sc.is(stopClass) && ! sc.is(Object.class)) {
 			// Look for a method with the same signature in the parent class
 			for (MethodInfo parentMethod : sc.getDeclaredMethods()) {
 				if (parentMethod.getSimpleName().equals(methodName) && paramTypes.size() == parentMethod.getParamTypes().size()) {
@@ -1049,13 +1049,13 @@ public class BeanMeta<T> {
 	@SuppressWarnings("unchecked")
 	protected T newBean(Object outer) throws ExecutableException {
 		if (classMeta.isMemberClass()) {
-			if (constructor != null)
+			if (nn(constructor))
 				return constructor.<T>invoke(outer);
 		} else {
-			if (constructor != null)
+			if (nn(constructor))
 				return constructor.<T>invoke();
 			InvocationHandler h = classMeta.getProxyInvocationHandler();
-			if (h != null) {
+			if (nn(h)) {
 				ClassLoader cl = classMeta.innerClass.getClassLoader();
 				return (T)Proxy.newProxyInstance(cl, new Class[] { classMeta.innerClass, java.io.Serializable.class }, h);
 			}

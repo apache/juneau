@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.html5;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
@@ -1042,7 +1043,7 @@ public abstract class HtmlElement {
 	 */
 	@Beanp("a")
 	public HtmlElement setAttrs(java.util.Map<String,Object> value) {
-		if (value != null) {
+		if (nn(value)) {
 			value.entrySet().forEach(x -> {
 				var key = x.getKey();
 				if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))

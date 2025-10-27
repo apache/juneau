@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.bean.html5;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -161,7 +163,7 @@ public class Select extends HtmlElementContainer {
 	 * @return This object.
 	 */
 	public Select choose(Object optionValue) {
-		if (optionValue != null) {
+		if (nn(optionValue)) {
 			getChildren().forEach(x -> {
 				if (x instanceof Option o && Utils.eq(optionValue.toString(), o.getAttr(String.class, "value")))
 					o.selected(true);

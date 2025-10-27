@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -618,42 +619,42 @@ public class SchemaInfo extends OpenApiElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(ref != null, "$ref")
-			.addIf(additionalProperties != null, "additionalProperties")
-			.addIf(allOf != null, "allOf")
-			.addIf(anyOf != null, "anyOf")
-			.addIf(_default != null, "default")
-			.addIf(deprecated != null, "deprecated")
-			.addIf(description != null, "description")
-			.addIf(discriminator != null, "discriminator")
-			.addIf(_enum != null, "enum")
-			.addIf(example != null, "example")
-			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(format != null, "format")
-			.addIf(items != null, "items")
-			.addIf(maximum != null, "maximum")
-			.addIf(maxItems != null, "maxItems")
-			.addIf(maxLength != null, "maxLength")
-			.addIf(maxProperties != null, "maxProperties")
-			.addIf(minimum != null, "minimum")
-			.addIf(minItems != null, "minItems")
-			.addIf(minLength != null, "minLength")
-			.addIf(minProperties != null, "minProperties")
-			.addIf(multipleOf != null, "multipleOf")
-			.addIf(not != null, "not")
-			.addIf(nullable != null, "nullable")
-			.addIf(oneOf != null, "oneOf")
-			.addIf(pattern != null, "pattern")
-			.addIf(properties != null, "properties")
-			.addIf(readOnly != null, "readOnly")
-			.addIf(required != null, "required")
-			.addIf(title != null, "title")
-			.addIf(type != null, "type")
-			.addIf(uniqueItems != null, "uniqueItems")
-			.addIf(writeOnly != null, "writeOnly")
-			.addIf(xml != null, "xml")
+			.addIf(nn(ref), "$ref")
+			.addIf(nn(additionalProperties), "additionalProperties")
+			.addIf(nn(allOf), "allOf")
+			.addIf(nn(anyOf), "anyOf")
+			.addIf(nn(_default), "default")
+			.addIf(nn(deprecated), "deprecated")
+			.addIf(nn(description), "description")
+			.addIf(nn(discriminator), "discriminator")
+			.addIf(nn(_enum), "enum")
+			.addIf(nn(example), "example")
+			.addIf(nn(exclusiveMaximum), "exclusiveMaximum")
+			.addIf(nn(exclusiveMinimum), "exclusiveMinimum")
+			.addIf(nn(externalDocs), "externalDocs")
+			.addIf(nn(format), "format")
+			.addIf(nn(items), "items")
+			.addIf(nn(maximum), "maximum")
+			.addIf(nn(maxItems), "maxItems")
+			.addIf(nn(maxLength), "maxLength")
+			.addIf(nn(maxProperties), "maxProperties")
+			.addIf(nn(minimum), "minimum")
+			.addIf(nn(minItems), "minItems")
+			.addIf(nn(minLength), "minLength")
+			.addIf(nn(minProperties), "minProperties")
+			.addIf(nn(multipleOf), "multipleOf")
+			.addIf(nn(not), "not")
+			.addIf(nn(nullable), "nullable")
+			.addIf(nn(oneOf), "oneOf")
+			.addIf(nn(pattern), "pattern")
+			.addIf(nn(properties), "properties")
+			.addIf(nn(readOnly), "readOnly")
+			.addIf(nn(required), "required")
+			.addIf(nn(title), "title")
+			.addIf(nn(type), "type")
+			.addIf(nn(uniqueItems), "uniqueItems")
+			.addIf(nn(writeOnly), "writeOnly")
+			.addIf(nn(xml), "xml")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -674,7 +675,7 @@ public class SchemaInfo extends OpenApiElement {
 	 */
 	public SchemaInfo resolveRefs(OpenApi openApi, Deque<String> refStack, int maxDepth) {
 
-		if (ref != null) {
+		if (nn(ref)) {
 			if (refStack.contains(ref) || refStack.size() >= maxDepth)
 				return this;
 			refStack.addLast(ref);
@@ -684,14 +685,14 @@ public class SchemaInfo extends OpenApiElement {
 			return r;
 		}
 
-		if (items != null)
+		if (nn(items))
 			items = items.resolveRefs(openApi, refStack, maxDepth);
 
-		if (properties != null)
+		if (nn(properties))
 			for (var e : properties.entrySet())
 				e.setValue(e.getValue().resolveRefs(openApi, refStack, maxDepth));
 
-		if (additionalProperties != null)
+		if (nn(additionalProperties))
 			additionalProperties = additionalProperties.resolveRefs(openApi, refStack, maxDepth);
 
 		this.example = null;

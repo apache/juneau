@@ -17,6 +17,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -143,7 +144,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 
 		try {
 			var passThroughHeaders = request.getHeaderParam("x-response-headers").orElse(null);
-			if (passThroughHeaders != null) {
+			if (nn(passThroughHeaders)) {
 				var m = context.getPartParser().getPartSession().parse(HEADER, null, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
 				for (var e : m.entrySet())
 					addHeader(e.getKey(), resolveUris(e.getValue()));
@@ -164,7 +165,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 						charset = opContext.getDefaultCharset();
 					else if (Charset.isSupported(r.getName()))
 						charset = Charset.forName(r.getName());
-					if (charset != null)
+					if (nn(charset))
 						break;
 				}
 			}
@@ -234,7 +235,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 */
 	@Override
 	public void addHeader(String name, String value) {
-		if (name != null && value != null) {
+		if (nn(name) && nn(value)) {
 			if (name.equalsIgnoreCase("Content-Type"))
 				setHeader(name, value);
 			else {
@@ -256,9 +257,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 */
 	@Override
 	public void flushBuffer() throws IOException {
-		if (w != null)
+		if (nn(w))
 			w.flush();
-		if (os != null)
+		if (nn(os))
 			os.flush();
 		inner.flushBuffer();
 	}
@@ -312,13 +313,13 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return The schema of the response content, never <jk>null</jk>.
 	 */
 	public Optional<HttpPartSchema> getContentSchema() {
-		if (contentSchema != null)
+		if (nn(contentSchema))
 			return contentSchema;
-		if (responseBeanMeta != null)
+		if (nn(responseBeanMeta))
 			contentSchema = Utils.opt(responseBeanMeta.getSchema());
 		else {
 			var rbm = opContext.getResponseBeanMeta(getContent(Object.class));
-				if (rbm != null)
+				if (nn(rbm))
 				contentSchema = Utils.opt(rbm.getSchema());
 			else
 				contentSchema = Utils.opte();
@@ -380,7 +381,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (os == null) {
 			Encoder encoder = null;
 			var encoders = request.getOpContext().getEncoders();
-	
+
 			var ae = request.getHeaderParam("Accept-Encoding").orElse(null);
 			if (! (ae == null || ae.isEmpty())) {
 				var match = encoders.getEncoderMatch(ae);
@@ -447,7 +448,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * @return <jk>true</jk> if {@link #getOutputStream()} has been called.
 	 */
-	public boolean getOutputStreamCalled() { return sos != null; }
+	public boolean getOutputStreamCalled() { return nn(sos); }
 
 	/**
 	 * Returns the metadata about this response.
@@ -464,9 +465,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return The matching serializer, never <jk>null</jk>.
 	 */
 	public Optional<SerializerMatch> getSerializerMatch() {
-		if (serializerMatch != null)
+		if (nn(serializerMatch))
 			return serializerMatch;
-		if (serializer != null) {
+		if (nn(serializer)) {
 			serializerMatch = Utils.opt(new SerializerMatch(getMediaType(), serializer));
 		} else {
 			serializerMatch = Utils.opt(opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*")));
@@ -500,7 +501,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return <jk>true</jk> if the response contains output.
 	 */
 	public boolean hasContent() {
-		return content != null;
+		return nn(content);
 	}
 
 	/**
@@ -670,7 +671,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		} else if (header instanceof SerializedHeader) {
 			var x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
 			String v = x.getValue();
-			if (v != null && v.indexOf("://") != -1)
+			if (nn(v) && v.indexOf("://") != -1)
 				v = resolveUris(v);
 			setHeader(x.getName(), v);
 		} else {
@@ -737,7 +738,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (name.equalsIgnoreCase("Content-Type")) {
 			inner.setContentType(value);
 			ContentType ct = contentType(value);
-			if (ct != null && ct.getParameter("charset") != null)
+			if (nn(ct) && nn(ct.getParameter("charset")))
 				inner.setCharacterEncoding(ct.getParameter("charset"));
 		} else {
 			if (safeHeaders)
@@ -812,7 +813,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	private Object getRawOutput() { return content == null ? null : content.orElse(null); }
 
 	private FinishablePrintWriter getWriter(boolean raw, boolean autoflush) throws NotAcceptable, IOException {
-		if (w != null)
+		if (nn(w))
 			return w;
 
 		// If plain text requested, override it now.

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.net.*;
 
@@ -341,7 +343,7 @@ public class XmlWriter extends SerializerWriter {
 	 */
 	public XmlWriter eTag(String ns, String name, boolean needsEncoding) {
 		w('<').w('/');
-		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
+		if (enableNs && nn(ns) && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			w(ns).w(':');
 		if (needsEncoding)
 			XmlUtils.encodeElementName(out, name);
@@ -395,7 +397,7 @@ public class XmlWriter extends SerializerWriter {
 	 */
 	public XmlWriter oAttr(String ns, String name) {
 		w(' ');
-		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
+		if (enableNs && nn(ns) && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			w(ns).w(':');
 		w(name).w('=');
 		return this;
@@ -468,7 +470,7 @@ public class XmlWriter extends SerializerWriter {
 	 */
 	public XmlWriter oTag(String ns, String name, boolean needsEncoding) {
 		w('<');
-		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
+		if (enableNs && nn(ns) && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			w(ns).w(':');
 		if (needsEncoding)
 			XmlUtils.encodeElementName(out, name);
@@ -632,7 +634,7 @@ public class XmlWriter extends SerializerWriter {
 	 */
 	public XmlWriter tag(String ns, String name, boolean needsEncoding) {
 		w('<');
-		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
+		if (enableNs && nn(ns) && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
 			w(ns).w(':');
 		if (needsEncoding)
 			XmlUtils.encodeElementName(out, name);

@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -131,8 +132,8 @@ public class License extends SwaggerElement {
 	public Set<String> keySet() {
 		// @formatter:off
 		var s = CollectionUtils.setb(String.class)
-			.addIf(name != null, "name")
-			.addIf(url != null, "url")
+			.addIf(nn(name), "name")
+			.addIf(nn(url), "url")
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

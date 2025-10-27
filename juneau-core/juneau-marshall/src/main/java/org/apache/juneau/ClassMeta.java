@@ -278,17 +278,17 @@ public class ClassMeta<T> implements Type {
 
 			CollectionUtils.addAll(this.swaps, swaps);
 
-			if (bc != null)
+			if (nn(bc))
 				this.builderSwap = BuilderSwap.findSwapFromObjectClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
 
 			findSwaps(this.swaps, bc);
 
-			if (beanFilter != null) {
+			if (nn(beanFilter)) {
 				example = beanFilter.getExample();
 				implClass = (Class<? extends T>)beanFilter.getImplClass();
 			}
 
-			if (marshalledFilter != null) {
+			if (nn(marshalledFilter)) {
 				if (example == null)
 					example = marshalledFilter.getExample();
 				if (implClass == null)
@@ -309,7 +309,7 @@ public class ClassMeta<T> implements Type {
 				// If this is a MAP, see if it's parameterized (e.g. AddressBook extends HashMap<String,Person>)
 				else if (cc == MAP) {
 					ClassMeta[] parameters = findParameters();
-					if (parameters != null && parameters.length == 2) {
+					if (nn(parameters) && parameters.length == 2) {
 						keyType = parameters[0];
 						valueType = parameters[1];
 					} else {
@@ -321,7 +321,7 @@ public class ClassMeta<T> implements Type {
 				// If this is a COLLECTION, see if it's parameterized (e.g. AddressBook extends LinkedList<Person>)
 				else if (cc == COLLECTION || cc == OPTIONAL) {
 					ClassMeta[] parameters = findParameters();
-					if (parameters != null && parameters.length == 1) {
+					if (nn(parameters) && parameters.length == 1) {
 						elementType = parameters[0];
 					} else {
 						elementType = findClassMeta(Object.class);
@@ -356,13 +356,13 @@ public class ClassMeta<T> implements Type {
 				throw e;
 			}
 
-			if (beanMeta != null)
+			if (nn(beanMeta))
 				dictionaryName = beanMeta.getDictionaryName();
 
-			if (beanMeta != null && bc != null && bc.isUseInterfaceProxies() && innerClass.isInterface())
+			if (nn(beanMeta) && nn(bc) && bc.isUseInterfaceProxies() && innerClass.isInterface())
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
-			if (bc != null) {
+			if (nn(bc)) {
 				bc.forEachAnnotation(Bean.class, c, x -> true, x -> {
 					if (x.dictionary().length != 0)
 						beanRegistry = new BeanRegistry(bc, null, x.dictionary());
@@ -372,7 +372,7 @@ public class ClassMeta<T> implements Type {
 				});
 			}
 
-			if (example == null && bc != null) {
+			if (example == null && nn(bc)) {
 				bc.forEachAnnotation(Example.class, c, x -> ! x.value().isEmpty(), x -> example = x.value());
 			}
 
@@ -432,7 +432,7 @@ public class ClassMeta<T> implements Type {
 
 			if (cc == ENUM) {
 				Class<? extends Enum> ec = (Class<? extends Enum<?>>)c;
-				boolean useEnumNames = bc != null && bc.isUseEnumNames();
+				boolean useEnumNames = nn(bc) && bc.isUseEnumNames();
 				enumValues = BidiMap.create();
 				enumValues.unmodifiable();
 				stream(ec.getEnumConstants()).forEach(x -> enumValues.add(x, useEnumNames ? x.name() : x.toString()));
@@ -495,7 +495,7 @@ public class ClassMeta<T> implements Type {
 
 		private void findSwaps(List<ObjectSwap> l, BeanContext bc) {
 
-			if (bc != null)
+			if (nn(bc))
 				bc.forEachAnnotation(Swap.class, innerClass, x -> true, x -> l.add(createSwap(x)));
 
 			ObjectSwap defaultSwap = DefaultSwaps.find(ci);
@@ -507,7 +507,7 @@ public class ClassMeta<T> implements Type {
 				defaultSwap = AutoMapSwap.find(bc, ci);
 			if (defaultSwap == null)
 				defaultSwap = AutoListSwap.find(bc, ci);
-			if (defaultSwap != null)
+			if (nn(defaultSwap))
 				l.add(defaultSwap);
 		}
 	}
@@ -556,7 +556,7 @@ public class ClassMeta<T> implements Type {
 			&& x.hasNumParams(isMemberClass ? 1 : 0)
 		);
 		// @formatter:on
-		if (cc != null)
+		if (nn(cc))
 			return (Constructor<? extends T>)v.transform(cc.inner());
 		return null;
 	}
@@ -636,7 +636,7 @@ public class ClassMeta<T> implements Type {
 
 		try (SimpleLock x = lock.write()) {
 			// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
-			if (beanContext != null && beanContext.cmCache != null && isCacheable(innerClass))
+			if (nn(beanContext) && nn(beanContext.cmCache) && isCacheable(innerClass))
 				beanContext.cmCache.put(innerClass, this);
 
 			ClassMetaBuilder<T> builder = new ClassMetaBuilder(innerClass, beanContext, swaps, childSwaps);
@@ -784,7 +784,7 @@ public class ClassMeta<T> implements Type {
 		if (beanMeta == null || beanMeta.constructor == null)
 			return false;
 		if (isMemberClass)
-			return outer != null && beanMeta.constructor.hasParamTypes(outer.getClass());
+			return nn(outer) && beanMeta.constructor.hasParamTypes(outer.getClass());
 		return true;
 	}
 
@@ -796,7 +796,7 @@ public class ClassMeta<T> implements Type {
 	public boolean canCreateNewInstance() {
 		if (isMemberClass)
 			return false;
-		if (noArgConstructor != null || getProxyInvocationHandler() != null || (isArray() && elementType.canCreateNewInstance()))
+		if (nn(noArgConstructor) || nn(getProxyInvocationHandler()) || (isArray() && elementType.canCreateNewInstance()))
 			return true;
 		return false;
 	}
@@ -813,7 +813,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	public boolean canCreateNewInstance(Object outer) {
 		if (isMemberClass)
-			return outer != null && noArgConstructor != null && noArgConstructor.hasParamTypes(outer.getClass());
+			return nn(outer) && nn(noArgConstructor) && noArgConstructor.hasParamTypes(outer.getClass());
 		return canCreateNewInstance();
 	}
 
@@ -826,11 +826,11 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class has a no-arg constructor or invocation handler.
 	 */
 	public boolean canCreateNewInstanceFromString(Object outer) {
-		if (fromStringMethod != null)
+		if (nn(fromStringMethod))
 			return true;
-		if (stringConstructor != null) {
+		if (nn(stringConstructor)) {
 			if (isMemberClass)
-				return outer != null && stringConstructor.hasParamTypes(outer.getClass(), String.class);
+				return nn(outer) && stringConstructor.hasParamTypes(outer.getClass(), String.class);
 			return true;
 		}
 		return false;
@@ -901,7 +901,7 @@ public class ClassMeta<T> implements Type {
 	 * @throws BeanRuntimeException If this metadata object is not a list of arguments, or the index is out of range.
 	 */
 	public ClassMeta<?> getArg(int index) {
-		if (args != null && index >= 0 && index < args.length)
+		if (nn(args) && index >= 0 && index < args.length)
 			return args[index];
 		throw new BeanRuntimeException("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.length);
 	}
@@ -1009,16 +1009,16 @@ public class ClassMeta<T> implements Type {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public T getExample(BeanSession session, JsonParserSession jpSession) {
 		try {
-			if (example != null)
+			if (nn(example))
 				return jpSession.parse(example, this);
-			if (exampleMethod != null)
+			if (nn(exampleMethod))
 				return (T)MethodInfo.of(exampleMethod).invokeFuzzy(null, session);
-			if (exampleField != null)
+			if (nn(exampleField))
 				return (T)exampleField.get(null);
 
 			if (isCollection()) {
 				Object etExample = getElementType().getExample(session, jpSession);
-				if (etExample != null) {
+				if (nn(etExample)) {
 					if (canCreateNewInstance()) {
 						Collection c = (Collection)newInstance();
 						c.add(etExample);
@@ -1028,7 +1028,7 @@ public class ClassMeta<T> implements Type {
 				}
 			} else if (isArray()) {
 				Object etExample = getElementType().getExample(session, jpSession);
-				if (etExample != null) {
+				if (nn(etExample)) {
 					Object o = Array.newInstance(getElementType().innerClass, 1);
 					Array.set(o, 0, etExample);
 					return (T)o;
@@ -1036,7 +1036,7 @@ public class ClassMeta<T> implements Type {
 			} else if (isMap()) {
 				Object vtExample = getValueType().getExample(session, jpSession);
 				Object ktExample = getKeyType().getExample(session, jpSession);
-				if (ktExample != null && vtExample != null) {
+				if (nn(ktExample) && nn(vtExample)) {
 					if (canCreateNewInstance()) {
 						Map m = (Map)newInstance();
 						m.put(ktExample, vtExample);
@@ -1087,7 +1087,7 @@ public class ClassMeta<T> implements Type {
 	 * @return The no-arg constructor for this class, or <jk>null</jk> if it does not exist.
 	 */
 	public ConstructorInfo getImplClassConstructor(Visibility conVis) {
-		if (implClass != null)
+		if (nn(implClass))
 			return ClassInfo.of(implClass).getNoArgConstructor(conVis);
 		return null;
 	}
@@ -1281,7 +1281,7 @@ public class ClassMeta<T> implements Type {
 	 * 	this class.
 	 */
 	public ObjectSwap<T,?> getSwap(BeanSession session) {
-		if (swaps != null) {
+		if (nn(swaps)) {
 			int matchQuant = 0, matchIndex = -1;
 
 			for (int i = 0; i < swaps.length; i++) {
@@ -1333,7 +1333,7 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if the inner class has the annotation.
 	 */
 	public boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getLastAnnotation(a) != null;
+		return nn(getLastAnnotation(a));
 	}
 
 	@Override /* Overridden from Object */
@@ -1357,7 +1357,7 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
 	 */
 	public boolean hasMutaterFrom(Class<?> c) {
-		return getFromMutater(c) != null;
+		return nn(getFromMutater(c));
 	}
 
 	/**
@@ -1367,7 +1367,7 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class can be instantiated from the specified type.
 	 */
 	public boolean hasMutaterFrom(ClassMeta<?> c) {
-		return getFromMutater(c.getInnerClass()) != null;
+		return nn(getFromMutater(c.getInnerClass()));
 	}
 
 	/**
@@ -1377,7 +1377,7 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class can be transformed to the specified type.
 	 */
 	public boolean hasMutaterTo(Class<?> c) {
-		return getToMutater(c) != null;
+		return nn(getToMutater(c));
 	}
 
 	/**
@@ -1387,7 +1387,7 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class can be transformed to the specified type.
 	 */
 	public boolean hasMutaterTo(ClassMeta<?> c) {
-		return getToMutater(c.getInnerClass()) != null;
+		return nn(getToMutater(c.getInnerClass()));
 	}
 
 	/**
@@ -1405,7 +1405,7 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class has a transform associated with it that allows it to be created from a String.
 	 */
 	public boolean hasStringMutater() {
-		return stringMutater != null;
+		return nn(stringMutater);
 	}
 
 	/**
@@ -1454,7 +1454,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is a bean.
 	 */
-	public boolean isBean() { return beanMeta != null; }
+	public boolean isBean() { return nn(beanMeta); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a subclass of {@link BeanMap}.
@@ -1610,7 +1610,7 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if the specified object is an instance of this class.
 	 */
 	public boolean isInstance(Object o) {
-		if (o != null)
+		if (nn(o))
 			return info.isParentOf(o.getClass()) || (isPrimitive() && info.getPrimitiveWrapper() == o.getClass());
 		return false;
 	}
@@ -1658,7 +1658,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return <jk>true</jk> if this class is a subclass of {@link Map} or it's a bean.
 	 */
-	public boolean isMapOrBean() { return cc == MAP || cc == BEANMAP || beanMeta != null; }
+	public boolean isMapOrBean() { return cc == MAP || cc == BEANMAP || nn(beanMeta); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is an inner class.
@@ -1843,10 +1843,10 @@ public class ClassMeta<T> implements Type {
 		if (isArray())
 			return (T)Array.newInstance(getInnerClass().getComponentType(), 0);
 		ConstructorInfo c = getConstructor();
-		if (c != null)
+		if (nn(c))
 			return c.<T>invoke();
 		InvocationHandler h = getProxyInvocationHandler();
-		if (h != null)
+		if (nn(h))
 			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { getInnerClass(), java.io.Serializable.class }, h);
 		if (isArray())
 			return (T)Array.newInstance(this.elementType.innerClass, 0);
@@ -1896,7 +1896,7 @@ public class ClassMeta<T> implements Type {
 		}
 
 		Method m = fromStringMethod;
-		if (m != null) {
+		if (nn(m)) {
 			try {
 				return (T)m.invoke(null, arg);
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -1904,7 +1904,7 @@ public class ClassMeta<T> implements Type {
 			}
 		}
 		ConstructorInfo c = stringConstructor;
-		if (c != null) {
+		if (nn(c)) {
 			if (isMemberClass)
 				return c.<T>invoke(outer, arg);
 			return c.<T>invoke(arg);
@@ -1957,7 +1957,7 @@ public class ClassMeta<T> implements Type {
 	@SuppressWarnings("unchecked")
 	private <A extends Annotation> A[] annotationArray(Class<A> type) {
 		A[] array = (A[])annotationArrayMap.get(type);
-		if (array == null && beanContext != null) {
+		if (array == null && nn(beanContext)) {
 			List<A> l = list();
 			info.forEachAnnotation(beanContext, type, x -> true, x -> l.add(x));
 			array = (A[])Array.newInstance(type, l.size());
@@ -1976,7 +1976,7 @@ public class ClassMeta<T> implements Type {
 	 * @return The resolved {@link ObjectSwap} or <jk>null</jk> if none were found.
 	 */
 	protected ObjectSwap<?,?> getChildObjectSwapForSwap(Class<?> normalClass) {
-		if (childSwapMap != null) {
+		if (nn(childSwapMap)) {
 			ObjectSwap<?,?> s = childSwapMap.get(normalClass);
 			if (s == null) {
 				for (ObjectSwap<?,?> f : childSwaps)
@@ -1985,7 +1985,7 @@ public class ClassMeta<T> implements Type {
 				if (s == null)
 					s = ObjectSwap.NULL;
 				ObjectSwap<?,?> s2 = childSwapMap.putIfAbsent(normalClass, s);
-				if (s2 != null)
+				if (nn(s2))
 					s = s2;
 			}
 			if (s == ObjectSwap.NULL)
@@ -2003,7 +2003,7 @@ public class ClassMeta<T> implements Type {
 	 * @return The resolved {@link ObjectSwap} or <jk>null</jk> if none were found.
 	 */
 	protected ObjectSwap<?,?> getChildObjectSwapForUnswap(Class<?> swapClass) {
-		if (childUnswapMap != null) {
+		if (nn(childUnswapMap)) {
 			ObjectSwap<?,?> s = childUnswapMap.get(swapClass);
 			if (s == null) {
 				for (ObjectSwap<?,?> f : childSwaps)
@@ -2012,7 +2012,7 @@ public class ClassMeta<T> implements Type {
 				if (s == null)
 					s = ObjectSwap.NULL;
 				ObjectSwap<?,?> s2 = childUnswapMap.putIfAbsent(swapClass, s);
-				if (s2 != null)
+				if (nn(s2))
 					s = s2;
 			}
 			if (s == ObjectSwap.NULL)
@@ -2032,7 +2032,7 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if this class or any child classes has a {@link ObjectSwap} associated with it.
 	 */
 	protected boolean hasChildSwaps() {
-		return childSwaps != null;
+		return nn(childSwaps);
 	}
 
 	/**
