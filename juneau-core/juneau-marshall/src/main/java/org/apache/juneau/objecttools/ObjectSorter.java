@@ -138,7 +138,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		}
 
 		// We reverse the list and sort last to first.
-		List<String> columns = CollectionUtils.listFrom(sort.keySet());
+		List<String> columns = CollectionUtils.toList(sort.keySet());
 		Collections.reverse(columns);
 
 		List<SortEntry> l3 = l;

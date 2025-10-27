@@ -268,7 +268,7 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.listFrom(value);
+		_enum = CollectionUtils.toList(value);
 		return this;
 	}
 

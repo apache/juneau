@@ -470,7 +470,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.listFrom(value);
+		_enum = CollectionUtils.toList(value);
 		return this;
 	}
 

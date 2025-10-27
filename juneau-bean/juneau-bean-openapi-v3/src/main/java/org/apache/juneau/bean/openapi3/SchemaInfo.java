@@ -769,7 +769,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setAllOf(Collection<Object> value) {
-		allOf = CollectionUtils.listFrom(value);
+		allOf = CollectionUtils.toList(value);
 		return this;
 	}
 
@@ -782,7 +782,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setAnyOf(Collection<Object> value) {
-		anyOf = CollectionUtils.listFrom(value);
+		anyOf = CollectionUtils.toList(value);
 		return this;
 	}
 
@@ -850,7 +850,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.listFrom(value);
+		_enum = CollectionUtils.toList(value);
 		return this;
 	}
 
@@ -1096,7 +1096,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setOneOf(Collection<Object> value) {
-		oneOf = CollectionUtils.listFrom(value);
+		oneOf = CollectionUtils.toList(value);
 		return this;
 	}
 
@@ -1175,7 +1175,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setRequired(Collection<String> value) {
-		required = CollectionUtils.listFrom(value);
+		required = CollectionUtils.toList(value);
 		return this;
 	}
 

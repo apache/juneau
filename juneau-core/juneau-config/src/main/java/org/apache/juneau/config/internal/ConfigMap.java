@@ -834,7 +834,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		List<Import> irl = listOfSize(imports2.size());
-		CollectionUtils.forEachReverse(CollectionUtils.listFrom(imports2.values()), x -> irl.add(new Import(x).register(listeners)));
+		CollectionUtils.forEachReverse(CollectionUtils.toList(imports2.values()), x -> irl.add(new Import(x).register(listeners)));
 		this.imports.addAll(irl);
 
 		// Add [blank] section.

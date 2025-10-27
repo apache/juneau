@@ -492,7 +492,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 					// Copy any existing array values into the temporary list.
 					Object oldArray = invokeGetter(bean, pName);
-					copyToList(oldArray, l);
+					copyArrayToList(oldArray, l);
 				}
 
 				// Add new entry to our array.

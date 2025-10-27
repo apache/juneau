@@ -464,7 +464,7 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.setFrom(value);
+		_enum = CollectionUtils.toSet(value);
 		return this;
 	}
 

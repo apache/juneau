@@ -127,7 +127,7 @@ public class RestOperations {
 	public RestOperations(Builder builder) {
 		Map<String,List<RestOpContext>> m = CollectionUtils.map();
 		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
-			m.put(e.getKey(), CollectionUtils.listFrom(e.getValue()));
+			m.put(e.getKey(), CollectionUtils.toList(e.getValue()));
 		this.map = m;
 		this.list = array(builder.set, RestOpContext.class);
 	}

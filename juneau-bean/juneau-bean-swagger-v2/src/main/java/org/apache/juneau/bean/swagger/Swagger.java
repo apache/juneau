@@ -791,7 +791,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setConsumes(Collection<MediaType> value) {
-		consumes = CollectionUtils.setFrom(value);
+		consumes = CollectionUtils.toSet(value);
 		return this;
 	}
 
@@ -925,7 +925,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setProduces(Collection<MediaType> value) {
-		produces = CollectionUtils.setFrom(value);
+		produces = CollectionUtils.toSet(value);
 		return this;
 	}
 
@@ -979,7 +979,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSchemes(Collection<String> value) {
-		schemes = CollectionUtils.setFrom(value);
+		schemes = CollectionUtils.toSet(value);
 		return this;
 	}
 
@@ -1011,7 +1011,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSecurity(Collection<Map<String,List<String>>> value) {
-		security = CollectionUtils.listFrom(value);
+		security = CollectionUtils.toList(value);
 		return this;
 	}
 
@@ -1064,7 +1064,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setTags(Collection<Tag> value) {
-		tags = CollectionUtils.setFrom(value);
+		tags = CollectionUtils.toSet(value);
 		return this;
 	}
 

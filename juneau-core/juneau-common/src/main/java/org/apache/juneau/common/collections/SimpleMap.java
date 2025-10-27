@@ -221,7 +221,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override /* Map */
 	public Set<Map.Entry<K,V>> entrySet() {
-		return asSet(entries);
+		return toSet(entries);
 	}
 
 	/**
@@ -276,7 +276,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override /* Map */
 	public Set<K> keySet() {
-		return asSet(keys);
+		return toSet(keys);
 	}
 
 	/**

@@ -305,8 +305,8 @@ public class CollectionUtils {
 	 * @param value The collection to copy from.
 	 * @return A new modifiable list.
 	 */
-	public static <E> ArrayList<E> listFrom(Collection<E> value) {
-		return listFrom(value, false);
+	public static <E> ArrayList<E> toList(Collection<E> value) {
+		return toList(value, false);
 	}
 
 	/**
@@ -317,7 +317,7 @@ public class CollectionUtils {
 	 * @param nullIfEmpty If <jk>true</jk> will return <jk>null</jk> if the collection is empty.
 	 * @return A new modifiable list.
 	 */
-	public static <E> ArrayList<E> listFrom(Collection<E> value, boolean nullIfEmpty) {
+	public static <E> ArrayList<E> toList(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null || (nullIfEmpty && value.isEmpty()))
 			return null;
 		ArrayList<E> l = new ArrayList<>();
@@ -405,20 +405,6 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Creates an {@link ArrayList} copy from a collection.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param value The collection to copy from.
-	 * @return A new modifiable list.
-	 */
-	public static <K,V> LinkedHashMap<K,V> mapFrom(Map<K,V> value) {
-		if (value == null)
-			return null;
-		return new LinkedHashMap<>(value);
-	}
-
-	/**
 	 * Convenience method for creating a {@link LinkedHashMap}.
 	 *
 	 * @param <K> The key type.
@@ -458,7 +444,7 @@ public class CollectionUtils {
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <E> Set<E> setFrom(Collection<E> val) {
+	public static <E> Set<E> toSet(Collection<E> val) {
 		return val == null ? null : new LinkedHashSet<>(val);
 	}
 
@@ -484,7 +470,7 @@ public class CollectionUtils {
 	 * @return A new modifiable list.
 	 */
 	public static <E> ArrayList<E> sortedList(Comparator<E> comparator, Collection<E> value) {
-		ArrayList<E> l = listFrom(value);
+		ArrayList<E> l = toList(value);
 		Collections.sort(l, comparator);
 		return l;
 	}
@@ -551,7 +537,7 @@ public class CollectionUtils {
 	 * @param value The value to copy from.
 	 * @return A new {@link TreeSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <E> TreeSet<E> sortedSetFrom(Collection<E> value) {
+	public static <E> TreeSet<E> toSortedSet(Collection<E> value) {
 		if (value == null)
 			return null;
 		TreeSet<E> l = new TreeSet<>();
@@ -567,7 +553,7 @@ public class CollectionUtils {
 	 * @param nullIfEmpty If <jk>true</jk> returns <jk>null</jk> if the collection is empty.
 	 * @return A new {@link TreeSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <E> TreeSet<E> sortedSetFrom(Collection<E> value, boolean nullIfEmpty) {
+	public static <E> TreeSet<E> toSortedSet(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null || (nullIfEmpty && value.isEmpty()))
 			return null;
 		TreeSet<E> l = new TreeSet<>();
@@ -654,20 +640,8 @@ public class CollectionUtils {
 	 * @param copyFrom The set to copy from.
 	 * @return A new {@link TreeSet}, or <jk>null</jk> if the set was <jk>null</jk>.
 	 */
-	public static <T> TreeSet<T> treeSet(Set<T> copyFrom) {
+	public static <T> TreeSet<T> toSortedSet(Set<T> copyFrom) {
 		return copyFrom == null ? null : new TreeSet<>(copyFrom);
-	}
-
-	/**
-	 * Creates a new {@link TreeSet} containing the specified values.
-	 *
-	 * @param <T> The element type.
-	 * @param values The values to add to the set.
-	 * @return A new {@link TreeSet}, never <jk>null</jk>.
-	 */
-	@SafeVarargs
-	public static <T> TreeSet<T> treeSet(T...values) {
-		return new TreeSet<>(Arrays.asList(values));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -683,7 +657,7 @@ public class CollectionUtils {
 	 * @return A new array with the specified elements appended.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T[] append(T[] array, T...newElements) {
+	public static <T> T[] addAll(T[] array, T...newElements) {
 		if (array == null)
 			return newElements;
 		if (newElements.length == 0)
@@ -706,7 +680,7 @@ public class CollectionUtils {
 	 * @param array The array being wrapped in a <c>Set</c> interface.
 	 * @return The new set.
 	 */
-	public static <T> Set<T> asSet(final T[] array) {
+	public static <T> Set<T> toSet(final T[] array) {
 		AssertionUtils.assertArgNotNull("array", array);
 		return new AbstractSet<>() {
 
@@ -780,11 +754,11 @@ public class CollectionUtils {
 	 * 	The index position of the element in the specified array, or
 	 * 	<c>-1</c> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
 	 */
-	public static int indexOf(String element, String[] array) {
+	public static <T> int indexOf(T element, T[] array) {
 		if (element == null || array == null)
 			return -1;
 		for (int i = 0; i < array.length; i++)
-			if (element.equals(array[i]))
+			if (eq(element, array[i]))
 				return i;
 		return -1;
 	}
@@ -890,7 +864,7 @@ public class CollectionUtils {
 	 * @return The same list passed in.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static List copyToList(Object array, List list) {
+	public static List copyArrayToList(Object array, List list) {
 		if (nn(array)) {
 			int length = Array.getLength(array);
 			for (int i = 0; i < length; i++)
@@ -955,7 +929,7 @@ public class CollectionUtils {
 	 * 	<jk>true</jk> if the specified array contains the specified element,
 	 * 	<jk>false</jk> if the array or element is <jk>null</jk>.
 	 */
-	public static boolean contains(String element, String[] array) {
+	public static <T> boolean contains(T element, T[] array) {
 		return indexOf(element, array) != -1;
 	}
 

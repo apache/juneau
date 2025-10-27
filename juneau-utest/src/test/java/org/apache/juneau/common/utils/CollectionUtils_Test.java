@@ -32,19 +32,19 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a01_treeSet_fromSet() {
 		LinkedHashSet<String> input = new LinkedHashSet<>(List.of("c", "a", "b"));
-		TreeSet<String> result = treeSet(input);
+		TreeSet<String> result = toSortedSet(input);
 		
 		assertNotNull(result);
 		assertEquals(List.of("a", "b", "c"), new ArrayList<>(result));
 		
 		// Null input
-		assertNull(treeSet((Set<String>)null));
+		assertNull(toSortedSet((Set<String>)null));
 	}
 
 	@Test
 	void a02_treeSet_fromSet_numbers() {
 		LinkedHashSet<Integer> input = new LinkedHashSet<>(List.of(3, 1, 2));
-		TreeSet<Integer> result = treeSet(input);
+		TreeSet<Integer> result = toSortedSet(input);
 		
 		assertNotNull(result);
 		assertEquals(List.of(1, 2, 3), new ArrayList<>(result));
@@ -55,7 +55,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a03_treeSet_varargs() {
-		TreeSet<String> result = treeSet("c", "a", "b");
+		TreeSet<String> result = sortedSet("c", "a", "b");
 		
 		assertNotNull(result);
 		assertEquals(List.of("a", "b", "c"), new ArrayList<>(result));
@@ -63,7 +63,7 @@ class CollectionUtils_Test extends TestBase {
 
 	@Test
 	void a04_treeSet_varargs_empty() {
-		TreeSet<String> result = treeSet();
+		TreeSet<String> result = sortedSet();
 		
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
@@ -71,7 +71,7 @@ class CollectionUtils_Test extends TestBase {
 
 	@Test
 	void a05_treeSet_varargs_single() {
-		TreeSet<String> result = treeSet("a");
+		TreeSet<String> result = sortedSet("a");
 		
 		assertNotNull(result);
 		assertEquals(List.of("a"), new ArrayList<>(result));
@@ -79,7 +79,7 @@ class CollectionUtils_Test extends TestBase {
 
 	@Test
 	void a06_treeSet_varargs_numbers() {
-		TreeSet<Integer> result = treeSet(3, 1, 2, 5, 4);
+		TreeSet<Integer> result = sortedSet(3, 1, 2, 5, 4);
 		
 		assertNotNull(result);
 		assertEquals(List.of(1, 2, 3, 4, 5), new ArrayList<>(result));

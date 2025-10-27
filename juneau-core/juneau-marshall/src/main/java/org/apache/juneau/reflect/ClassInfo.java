@@ -2278,7 +2278,7 @@ public class ClassInfo {
 							m.put(f.getName(), f);
 					}
 				}
-				List<FieldInfo> l = CollectionUtils.listFrom(m.values());
+				List<FieldInfo> l = CollectionUtils.toList(m.values());
 				l.sort(null);
 				publicFields = l.toArray(new FieldInfo[l.size()]);
 			}

@@ -32,19 +32,19 @@ class ArrayUtilsTest extends TestBase {
 	@Test void a01_appendArrayToArray() {
 		String[] s = {};
 
-		s = CollectionUtils.append(s, "a", "b");
+		s = CollectionUtils.addAll(s, "a", "b");
 		assertList(s, "a", "b");
 
-		s = CollectionUtils.append(s, "c");
+		s = CollectionUtils.addAll(s, "c");
 		assertList(s, "a", "b", "c");
 
-		s = CollectionUtils.append(s);
+		s = CollectionUtils.addAll(s);
 		assertList(s, "a", "b", "c");
 
-		var o = CollectionUtils.append((Object[])null);
+		var o = CollectionUtils.addAll((Object[])null);
 		assertEmpty(o);
 
-		s = CollectionUtils.append((String[])null, "a", "b");
+		s = CollectionUtils.addAll((String[])null, "a", "b");
 		assertList(s, "a", "b");
 	}
 
@@ -52,10 +52,10 @@ class ArrayUtilsTest extends TestBase {
 	// asSet(T[])
 	//====================================================================================================
 	@Test void a02_asSet() {
-		assertThrows(IllegalArgumentException.class, ()->CollectionUtils.asSet((String[])null));
+		assertThrows(IllegalArgumentException.class, ()->CollectionUtils.toSet((String[])null));
 
 		var s = a("a");
-		var i = CollectionUtils.asSet(s).iterator();
+		var i = CollectionUtils.toSet(s).iterator();
 		assertEquals("a", i.next());
 
 		assertThrows(UnsupportedOperationException.class, i::remove);

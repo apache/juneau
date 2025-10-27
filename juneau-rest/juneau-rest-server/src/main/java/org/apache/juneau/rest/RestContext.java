@@ -5058,16 +5058,16 @@ public class RestContext extends Context {
 			// @formatter:off
 			produces = builder.produces().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils.setFrom(opContexts.get(0).getSerializers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils.toSet(opContexts.get(0).getSerializers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
-					return u(CollectionUtils.listFrom(s));
+					return u(CollectionUtils.toList(s));
 				}
 			);
 			consumes = builder.consumes().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils.setFrom(opContexts.get(0).getParsers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils.toSet(opContexts.get(0).getParsers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
-					return u(CollectionUtils.listFrom(s));
+					return u(CollectionUtils.toList(s));
 				}
 			);
 			// @formatter:on

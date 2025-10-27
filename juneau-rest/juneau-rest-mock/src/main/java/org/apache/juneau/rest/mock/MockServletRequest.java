@@ -402,7 +402,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public Enumeration<String> getParameterNames() { return enumeration(CollectionUtils.listFrom(getParameterMap().keySet())); }
+	public Enumeration<String> getParameterNames() { return enumeration(CollectionUtils.toList(getParameterMap().keySet())); }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String[] getParameterValues(String name) {

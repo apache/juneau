@@ -677,7 +677,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setAllOf(Collection<SchemaInfo> value) {
-		allOf = CollectionUtils.setFrom(value);
+		allOf = CollectionUtils.toSet(value);
 		return this;
 	}
 
@@ -747,7 +747,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.setFrom(value);
+		_enum = CollectionUtils.toSet(value);
 		return this;
 	}
 
@@ -1057,7 +1057,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setRequiredProperties(Collection<String> value) {
-		requiredProperties = CollectionUtils.setFrom(value);
+		requiredProperties = CollectionUtils.toSet(value);
 		return this;
 	}
 

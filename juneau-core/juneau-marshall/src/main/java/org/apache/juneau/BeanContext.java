@@ -252,10 +252,10 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-			beanDictionary = CollectionUtils.listFrom(copyFrom.beanDictionary, true);
-			swaps = CollectionUtils.listFrom(copyFrom.swaps, true);
+			beanDictionary = CollectionUtils.toList(copyFrom.beanDictionary, true);
+			swaps = CollectionUtils.toList(copyFrom.swaps, true);
 			notBeanClasses = classSet(copyFrom.notBeanClasses, true);
-			notBeanPackages = CollectionUtils.sortedSetFrom(copyFrom.notBeanPackages, true);
+			notBeanPackages = CollectionUtils.toSortedSet(copyFrom.notBeanPackages, true);
 			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -294,7 +294,7 @@ public class BeanContext extends Context {
 			beanDictionary = CollectionUtils.copyOf(copyFrom.beanDictionary);
 			swaps = CollectionUtils.copyOf(copyFrom.swaps);
 			notBeanClasses = classSet(copyFrom.notBeanClasses);
-			notBeanPackages = CollectionUtils.sortedSetFrom(copyFrom.notBeanPackages);
+			notBeanPackages = CollectionUtils.toSortedSet(copyFrom.notBeanPackages);
 			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;

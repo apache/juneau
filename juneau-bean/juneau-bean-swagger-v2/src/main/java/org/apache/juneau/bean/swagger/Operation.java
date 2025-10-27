@@ -701,7 +701,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setConsumes(Collection<MediaType> value) {
-		consumes = CollectionUtils.setFrom(value);
+		consumes = CollectionUtils.toSet(value);
 		return this;
 	}
 
@@ -800,7 +800,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setParameters(Collection<ParameterInfo> value) {
-		parameters = CollectionUtils.listFrom(value);
+		parameters = CollectionUtils.toList(value);
 		return this;
 	}
 
@@ -832,7 +832,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setProduces(Collection<MediaType> value) {
-		produces = CollectionUtils.setFrom(value);
+		produces = CollectionUtils.toSet(value);
 		return this;
 	}
 
@@ -888,7 +888,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSchemes(Collection<String> value) {
-		schemes = CollectionUtils.setFrom(value);
+		schemes = CollectionUtils.toSet(value);
 		return this;
 	}
 
@@ -920,7 +920,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSecurity(Collection<Map<String,List<String>>> value) {
-		security = CollectionUtils.listFrom(value);
+		security = CollectionUtils.toList(value);
 		return this;
 	}
 
@@ -970,7 +970,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setTags(Collection<String> value) {
-		tags = CollectionUtils.setFrom(value);
+		tags = CollectionUtils.toSet(value);
 		return this;
 	}
 

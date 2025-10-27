@@ -313,7 +313,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		if (nn(defaultNamespace) && (ns.uri.equals(defaultNamespace.uri) || ns.name.equals(defaultNamespace.name)))
 			defaultNamespace = ns;
 		else
-			namespaces = append(namespaces, ns);
+			namespaces = addAll(namespaces, ns);
 	}
 
 	private Namespace findDefaultNamespace(Namespace n) {
