@@ -18,6 +18,7 @@ package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.annotation.InvalidAnnotationException.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
@@ -28,7 +29,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
@@ -50,7 +50,7 @@ public class ResponseBeanMeta {
 		Class<? extends HttpPartParser> partParser;
 		HttpPartSchema.Builder schema = HttpPartSchema.create();
 
-		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = CollectionUtils.map();
+		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = map();
 		ResponseBeanPropertyMeta.Builder contentMethod;
 		ResponseBeanPropertyMeta.Builder statusMethod;
 
@@ -182,9 +182,9 @@ public class ResponseBeanMeta {
 		this.partParser = opt(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
 		this.schema = b.schema.build();
 
-		Map<String,ResponseBeanPropertyMeta> properties = CollectionUtils.map();
+		Map<String,ResponseBeanPropertyMeta> properties = map();
 
-		Map<String,ResponseBeanPropertyMeta> hm = CollectionUtils.map();
+		Map<String,ResponseBeanPropertyMeta> hm = map();
 		b.headerMethods.forEach((k, v) -> {
 			ResponseBeanPropertyMeta pm = v.build(partSerializer, partParser);
 			hm.put(k, pm);

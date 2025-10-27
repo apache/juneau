@@ -17,14 +17,14 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ConverterUtils.toList;
+import static org.apache.juneau.internal.ConverterUtils.toListBuilder;
 
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Describes a single API operation on a path.
@@ -115,18 +115,18 @@ public class Operation extends OpenApiElement {
 	 */
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
-		this.tags = CollectionUtils.copyOf(copyFrom.tags);
+		this.tags = copyOf(copyFrom.tags);
 		this.summary = copyFrom.summary;
 		this.description = copyFrom.description;
 		this.operationId = copyFrom.operationId;
 		this.externalDocs = copyFrom.externalDocs;
-		this.parameters = CollectionUtils.copyOf(copyFrom.parameters);
+		this.parameters = copyOf(copyFrom.parameters);
 		this.requestBody = copyFrom.requestBody;
-		this.responses = CollectionUtils.copyOf(copyFrom.responses);
-		this.callbacks = CollectionUtils.copyOf(copyFrom.callbacks);
+		this.responses = copyOf(copyFrom.responses);
+		this.callbacks = copyOf(copyFrom.callbacks);
 		this.deprecated = copyFrom.deprecated;
-		this.security = CollectionUtils.copyOf(copyFrom.security);
-		this.servers = CollectionUtils.copyOf(copyFrom.servers);
+		this.security = copyOf(copyFrom.security);
+		this.servers = copyOf(copyFrom.servers);
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class Operation extends OpenApiElement {
 	public Operation addCallback(String name, Callback callback) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("callback", callback);
-		callbacks = CollectionUtils.mapb(String.class, Callback.class).to(callbacks).sparse().add(name, callback).build();
+		callbacks = mapb(String.class, Callback.class).to(callbacks).sparse().add(name, callback).build();
 		return this;
 	}
 
@@ -162,7 +162,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(Collection<Parameter> values) {
-		parameters = CollectionUtils.listb(Parameter.class).to(parameters).sparse().addAll(values).build();
+		parameters = listb(Parameter.class).to(parameters).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -178,7 +178,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(Parameter...values) {
-		parameters = CollectionUtils.listb(Parameter.class).to(parameters).sparse().add(values).build();
+		parameters = listb(Parameter.class).to(parameters).sparse().add(values).build();
 		return this;
 	}
 
@@ -199,7 +199,7 @@ public class Operation extends OpenApiElement {
 	public Operation addResponse(String statusCode, Response response) {
 		assertArgNotNull("statusCode", statusCode);
 		assertArgNotNull("response", response);
-		responses = CollectionUtils.mapb(String.class, Response.class).to(responses).sparse().add(statusCode, response).build();
+		responses = mapb(String.class, Response.class).to(responses).sparse().add(statusCode, response).build();
 		return this;
 	}
 
@@ -215,7 +215,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addSecurity(Collection<SecurityRequirement> values) {
-		security = CollectionUtils.listb(SecurityRequirement.class).to(security).sparse().addAll(values).build();
+		security = listb(SecurityRequirement.class).to(security).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -231,7 +231,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addSecurity(SecurityRequirement...values) {
-		security = CollectionUtils.listb(SecurityRequirement.class).to(security).sparse().add(values).build();
+		security = listb(SecurityRequirement.class).to(security).sparse().add(values).build();
 		return this;
 	}
 
@@ -247,7 +247,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addServers(Collection<Server> values) {
-		servers = CollectionUtils.listb(Server.class).to(servers).sparse().addAll(values).build();
+		servers = listb(Server.class).to(servers).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -263,7 +263,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addServers(Server...values) {
-		servers = CollectionUtils.listb(Server.class).to(servers).sparse().add(values).build();
+		servers = listb(Server.class).to(servers).sparse().add(values).build();
 		return this;
 	}
 
@@ -279,7 +279,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addTags(Collection<String> values) {
-		tags = CollectionUtils.listb(String.class).to(tags).sparse().addAll(values).build();
+		tags = listb(String.class).to(tags).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -295,7 +295,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation addTags(String...values) {
-		tags = CollectionUtils.listb(String.class).to(tags).sparse().add(values).build();
+		tags = listb(String.class).to(tags).sparse().add(values).build();
 		return this;
 	}
 
@@ -452,7 +452,7 @@ public class Operation extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(callbacks), "callbacks")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
@@ -473,18 +473,18 @@ public class Operation extends OpenApiElement {
 	public Operation set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "callbacks" -> setCallbacks(toMap(value, String.class, Callback.class).sparse().build());
+			case "callbacks" -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
 			case "deprecated" -> setDeprecated(toType(value, Boolean.class));
 			case "description" -> setDescription(s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			case "operationId" -> setOperationId(s(value));
-			case "parameters" -> setParameters(toList(value, Parameter.class).sparse().build());
+			case "parameters" -> setParameters(toListBuilder(value, Parameter.class).sparse().build());
 			case "requestBody" -> setRequestBody(toType(value, RequestBodyInfo.class));
-			case "responses" -> setResponses(toMap(value, String.class, Response.class).sparse().build());
-			case "security" -> setSecurity(toList(value, SecurityRequirement.class).sparse().build());
-			case "servers" -> setServers(toList(value, Server.class).sparse().build());
+			case "responses" -> setResponses(toMapBuilder(value, String.class, Response.class).sparse().build());
+			case "security" -> setSecurity(toListBuilder(value, SecurityRequirement.class).sparse().build());
+			case "servers" -> setServers(toListBuilder(value, Server.class).sparse().build());
 			case "summary" -> setSummary(s(value));
-			case "tags" -> setTags(toList(value, String.class).sparse().build());
+			case "tags" -> setTags(toListBuilder(value, String.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -565,7 +565,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setParameters(Parameter...value) {
-		setParameters(toList(value, Parameter.class).sparse().build());
+		setParameters(toListBuilder(value, Parameter.class).sparse().build());
 		return this;
 	}
 
@@ -609,7 +609,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setSecurity(SecurityRequirement...value) {
-		setSecurity(toList(value, SecurityRequirement.class).sparse().build());
+		setSecurity(toListBuilder(value, SecurityRequirement.class).sparse().build());
 		return this;
 	}
 
@@ -631,7 +631,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setServers(Server...value) {
-		setServers(toList(value, Server.class).sparse().build());
+		setServers(toListBuilder(value, Server.class).sparse().build());
 		return this;
 	}
 
@@ -664,7 +664,7 @@ public class Operation extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Operation setTags(String...value) {
-		setTags(toList(value, String.class).sparse().build());
+		setTags(toListBuilder(value, String.class).sparse().build());
 		return this;
 	}
 

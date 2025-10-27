@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -24,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -43,7 +43,7 @@ public abstract class SwaggerElement {
 
 	SwaggerElement(SwaggerElement copyFrom) {
 		this.strict = copyFrom.strict;
-		this.extra = CollectionUtils.copyOf(copyFrom.extra);
+		this.extra = copyOf(copyFrom.extra);
 	}
 
 	/**
@@ -130,7 +130,7 @@ public abstract class SwaggerElement {
 		if (strict)
 			throw new RuntimeException("Cannot set property '" + property + "' in strict mode.");
 		if (extra == null)
-			extra = CollectionUtils.map();
+			extra = map();
 		extra.put(property, value);
 		return this;
 	}

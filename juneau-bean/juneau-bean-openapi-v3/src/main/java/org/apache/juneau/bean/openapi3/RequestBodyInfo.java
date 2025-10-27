@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -25,7 +26,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Describes a single request body.
@@ -86,7 +86,7 @@ public class RequestBodyInfo extends OpenApiElement {
 
 		this.description = copyFrom.description;
 		this.required = copyFrom.required;
-		this.content = CollectionUtils.copyOf(copyFrom.content, MediaType::copy);
+		this.content = copyOf(copyFrom.content, MediaType::copy);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	public RequestBodyInfo addContent(String key, MediaType value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		content = CollectionUtils.mapb(String.class, MediaType.class).to(content).sparse().add(key, value).build();
+		content = mapb(String.class, MediaType.class).to(content).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -155,7 +155,7 @@ public class RequestBodyInfo extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(content), "content")
 			.addIf(nn(description), "description")
 			.addIf(nn(required), "required")
@@ -167,7 +167,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	public RequestBodyInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "content" -> setContent(toMap(value, String.class, MediaType.class).sparse().build());
+			case "content" -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
 			case "description" -> setDescription(s(value));
 			case "required" -> setRequired(toBoolean(value));
 			default -> {
@@ -186,7 +186,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public RequestBodyInfo setContent(Map<String,MediaType> value) {
-		content = CollectionUtils.copyOf(value);
+		content = copyOf(value);
 		return this;
 	}
 

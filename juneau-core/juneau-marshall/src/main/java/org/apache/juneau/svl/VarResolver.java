@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.io.*;
 import java.util.*;

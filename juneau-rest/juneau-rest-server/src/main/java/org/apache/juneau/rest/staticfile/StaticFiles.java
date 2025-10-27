@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.staticfile;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.nio.file.*;
 import java.util.*;
@@ -127,7 +127,7 @@ public interface StaticFiles extends FileFinder {
 		 * @return This object.
 		 */
 		public Builder headers(Header...headers) {
-			CollectionUtils.addAll(this.headers, headers);
+			addAll(this.headers, headers);
 			return this;
 		}
 

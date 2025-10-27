@@ -17,13 +17,13 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * TODO
@@ -90,7 +90,7 @@ public class ServerVariable extends OpenApiElement {
 	public ServerVariable(ServerVariable copyFrom) {
 		super(copyFrom);
 
-		this._enum = CollectionUtils.copyOf(copyFrom._enum);
+		this._enum = copyOf(copyFrom._enum);
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
 	}
@@ -119,7 +119,7 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable addEnum(Object...values) {
-		_enum = CollectionUtils.listb(Object.class).to(_enum).sparse().addAny(values).build();
+		_enum = listb(Object.class).to(_enum).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -188,7 +188,7 @@ public class ServerVariable extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(_default),"default" )
 			.addIf(nn(description), "description")
 			.addIf(nn(_enum), "enum")
@@ -203,7 +203,7 @@ public class ServerVariable extends OpenApiElement {
 		return switch (property) {
 			case "default" -> setDefault(s(value));
 			case "description" -> setDescription(s(value));
-			case "enum" -> setEnum(toList(value, Object.class).sparse().build());
+			case "enum" -> setEnum(listb(Object.class).addAny(value).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -268,7 +268,7 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.toList(value);
+		_enum = toList(value);
 		return this;
 	}
 

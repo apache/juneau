@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.testutils.pojos;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;

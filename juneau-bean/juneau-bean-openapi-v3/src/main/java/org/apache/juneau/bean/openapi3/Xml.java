@@ -17,13 +17,13 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A metadata object that allows for more fine-tuned XML model definitions.
@@ -183,7 +183,7 @@ public class Xml extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(attribute), "attribute")
 			.addIf(nn(name), "name")
 			.addIf(nn(namespace), "namespace")

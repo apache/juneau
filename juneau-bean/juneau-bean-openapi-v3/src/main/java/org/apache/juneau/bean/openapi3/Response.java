@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -25,7 +26,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Describes a single response from an API operation.
@@ -96,9 +96,9 @@ public class Response extends OpenApiElement {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		this.headers = CollectionUtils.copyOf(copyFrom.headers, HeaderInfo::copy);
-		this.content = CollectionUtils.copyOf(copyFrom.content, MediaType::copy);
-		this.links = CollectionUtils.copyOf(copyFrom.links, Link::copy);
+		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.content = copyOf(copyFrom.content, MediaType::copy);
+		this.links = copyOf(copyFrom.links, Link::copy);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class Response extends OpenApiElement {
 	public Response addContent(String key, MediaType value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		content = CollectionUtils.mapb(String.class, MediaType.class).to(content).sparse().add(key, value).build();
+		content = mapb(String.class, MediaType.class).to(content).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -125,7 +125,7 @@ public class Response extends OpenApiElement {
 	public Response addHeader(String key, HeaderInfo value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		headers = CollectionUtils.mapb(String.class, HeaderInfo.class).to(headers).sparse().add(key, value).build();
+		headers = mapb(String.class, HeaderInfo.class).to(headers).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -139,7 +139,7 @@ public class Response extends OpenApiElement {
 	public Response addLink(String key, Link value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		links = CollectionUtils.mapb(String.class, Link.class).to(links).sparse().add(key, value).build();
+		links = mapb(String.class, Link.class).to(links).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -230,7 +230,7 @@ public class Response extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(content), "content")
 			.addIf(nn(description), "description")
 			.addIf(nn(headers), "headers")
@@ -243,10 +243,10 @@ public class Response extends OpenApiElement {
 	public Response set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "content" -> setContent(toMap(value, String.class, MediaType.class).sparse().build());
+			case "content" -> setContent(toMapBuilder(value, String.class, MediaType.class).sparse().build());
 			case "description" -> setDescription(s(value));
-			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
-			case "links" -> setLinks(toMap(value, String.class, Link.class).sparse().build());
+			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case "links" -> setLinks(toMapBuilder(value, String.class, Link.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -263,7 +263,7 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setContent(Map<String,MediaType> value) {
-		content = CollectionUtils.copyOf(value);
+		content = copyOf(value);
 		return this;
 	}
 
@@ -296,7 +296,7 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setHeaders(Map<String,HeaderInfo> value) {
-		headers = CollectionUtils.copyOf(value);
+		headers = copyOf(value);
 		return this;
 	}
 
@@ -309,7 +309,7 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setLinks(Map<String,Link> value) {
-		links = CollectionUtils.copyOf(value);
+		links = copyOf(value);
 		return this;
 	}
 

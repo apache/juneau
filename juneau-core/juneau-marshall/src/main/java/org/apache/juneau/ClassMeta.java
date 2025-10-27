@@ -81,7 +81,7 @@ public class ClassMeta<T> implements Type {
 		Setter parentPropertyMethod = null, namePropertyMethod = null;
 		ConstructorInfo noArgConstructor = null, stringConstructor = null;
 		Object primitiveDefault = null;
-		Map<String,Method> publicMethods = CollectionUtils.map();
+		Map<String,Method> publicMethods = map();
 		ClassMeta<?> keyType = null, valueType = null, elementType = null;
 		String typePropertyName = null, notABeanReason = null, dictionaryName = null;
 		Throwable initException = null;
@@ -277,7 +277,7 @@ public class ClassMeta<T> implements Type {
 			BeanFilter beanFilter = findBeanFilter(bc);
 			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
 
-			CollectionUtils.addAll(this.swaps, swaps);
+			addAll(this.swaps, swaps);
 
 			if (nn(bc))
 				this.builderSwap = BuilderSwap.findSwapFromObjectClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());

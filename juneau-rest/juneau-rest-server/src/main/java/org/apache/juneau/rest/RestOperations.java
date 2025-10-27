@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
@@ -125,9 +125,9 @@ public class RestOperations {
 	 * @param builder The builder containing the settings for this object.
 	 */
 	public RestOperations(Builder builder) {
-		Map<String,List<RestOpContext>> m = CollectionUtils.map();
+		Map<String,List<RestOpContext>> m = map();
 		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
-			m.put(e.getKey(), CollectionUtils.toList(e.getValue()));
+			m.put(e.getKey(), toList(e.getValue()));
 		this.map = m;
 		this.list = array(builder.set, RestOpContext.class);
 	}

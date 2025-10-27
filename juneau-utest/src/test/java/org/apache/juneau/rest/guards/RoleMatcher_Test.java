@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.guards;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,7 +54,7 @@ class RoleMatcher_Test extends TestBase {
 			return Collections.singleton(input);
 		if (input.isEmpty())
 			return Collections.emptySet();
-		return CollectionUtils.sortedSet(StringUtils.splita(input));
+		return sortedSet(StringUtils.splita(input));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

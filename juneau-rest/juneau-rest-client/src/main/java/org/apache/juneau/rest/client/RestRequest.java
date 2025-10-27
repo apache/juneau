@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client;
 
 import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;

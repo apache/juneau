@@ -17,6 +17,7 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -31,7 +32,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
@@ -95,7 +95,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 		private static <T> List<T> copy(List<T> s) {
-			return s == null || s.isEmpty() ? null : CollectionUtils.copyOf(s);
+			return s == null || s.isEmpty() ? null : copyOf(s);
 		}
 
 		private static <T> List<T> copy(T[] s) {
@@ -1566,7 +1566,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder widgets(Class<? extends HtmlWidget>...values) {
-			CollectionUtils.addAll(widgets(), values);
+			addAll(widgets(), values);
 			return this;
 		}
 
@@ -1664,7 +1664,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		nowrap = builder.nowrap;
 		resolveBodyVars = builder.resolveBodyVars;
 		template = builder.template;
-		widgets = builder.widgets == null ? Collections.emptyList() : CollectionUtils.copyOf(builder.widgets);
+		widgets = builder.widgets == null ? Collections.emptyList() : copyOf(builder.widgets);
 
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();

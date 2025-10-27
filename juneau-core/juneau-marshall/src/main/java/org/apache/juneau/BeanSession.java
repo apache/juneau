@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -1627,7 +1628,7 @@ public class BeanSession extends ContextSession {
 	 */
 	protected Map newGenericMap(ClassMeta mapMeta) {
 		ClassMeta<?> k = mapMeta.getKeyType();
-		return (k == null || k.isString()) ? new JsonMap(this) : CollectionUtils.map();
+		return (k == null || k.isString()) ? new JsonMap(this) : map();
 	}
 
 	/**

@@ -26,7 +26,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.marshaller.*;
 
 /**
@@ -106,7 +105,7 @@ public class Items extends SwaggerElement {
 
 		this.collectionFormat = copyFrom.collectionFormat;
 		this._default = copyFrom._default;
-		this._enum = CollectionUtils.copyOf(copyFrom._enum);
+		this._enum = copyOf(copyFrom._enum);
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.format = copyFrom.format;
@@ -133,7 +132,7 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items addEnum(Object...value) {
-		setEnum(CollectionUtils.setb(Object.class).to(_enum).sparse().add(value).build());
+		setEnum(setb(Object.class).to(_enum).sparse().add(value).build());
 		return this;
 	}
 
@@ -324,7 +323,7 @@ public class Items extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(_default), "default")
 			.addIf(nn(_enum), "enum")
@@ -464,7 +463,7 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.toSet(value);
+		_enum = toSet(value);
 		return this;
 	}
 

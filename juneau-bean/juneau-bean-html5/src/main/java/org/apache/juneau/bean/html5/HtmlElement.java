@@ -19,6 +19,7 @@ package org.apache.juneau.bean.html5;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.net.*;
 
@@ -86,7 +87,7 @@ public abstract class HtmlElement {
 	 */
 	public HtmlElement attr(String key, Object val) {
 		if (attrs == null)
-			attrs = CollectionUtils.map();
+			attrs = map();
 		if (val == null)
 			attrs.remove(key);
 		else {
@@ -117,7 +118,7 @@ public abstract class HtmlElement {
 	 */
 	public HtmlElement attrUri(String key, Object val) {
 		if (attrs == null)
-			attrs = CollectionUtils.map();
+			attrs = map();
 		attrs.put(key, StringUtils.toURI(val));
 		return this;
 	}

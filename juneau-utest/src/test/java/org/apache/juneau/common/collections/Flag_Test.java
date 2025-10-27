@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class Flag_Test extends TestBase {
@@ -190,7 +190,7 @@ class Flag_Test extends TestBase {
 		var a = Flag.create();
 
 		// Simulate using flag in a lambda
-		var list = Utils.list("a", "b", "c");
+		var list = list("a", "b", "c");
 		list.forEach(x -> {
 			if ("b".equals(x)) {
 				a.set();

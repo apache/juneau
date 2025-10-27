@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.util.*;
 
@@ -54,7 +54,7 @@ public class SearchArgs {
 		return new SearchArgs(args);
 	}
 
-	private final Map<String,String> search = CollectionUtils.map();
+	private final Map<String,String> search = map();
 
 	/**
 	 * Constructor.

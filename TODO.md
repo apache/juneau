@@ -34,6 +34,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-66 There are two ArrayUtilsTest classes whose tests should be merged into CollectionUtils_Test.
 - [ ] TODO-67 Add to ThrowableUtils: unsupportedOp, ioException.
 - [ ] TODO-68 Replace BasicRuntimeException with ThrowableUtils.runtimeException.
+- [ ] TODO-69 Look for places in code where a(...) can be used.
 
 ## Framework Improvements
 

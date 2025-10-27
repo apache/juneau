@@ -17,13 +17,13 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Describes a single response from an API operation.
@@ -102,8 +102,8 @@ public class ResponseInfo extends SwaggerElement {
 
 		this.description = copyFrom.description;
 		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
-		this.examples = CollectionUtils.copyOf(copyFrom.examples);
-		this.headers = CollectionUtils.copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.examples = copyOf(copyFrom.examples);
+		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class ResponseInfo extends SwaggerElement {
 	public ResponseInfo addExample(String mimeType, Object example) {
 		assertArgNotNull("mimeType", mimeType);
 		assertArgNotNull("example", example);
-		examples = CollectionUtils.mapb(String.class, Object.class).to(examples).sparse().add(mimeType, example).build();
+		examples = mapb(String.class, Object.class).to(examples).sparse().add(mimeType, example).build();
 		return this;
 	}
 
@@ -133,7 +133,7 @@ public class ResponseInfo extends SwaggerElement {
 	public ResponseInfo addHeader(String name, HeaderInfo header) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("header", header);
-		headers = CollectionUtils.mapb(String.class, HeaderInfo.class).to(headers).add(name, header).build();
+		headers = mapb(String.class, HeaderInfo.class).to(headers).add(name, header).build();
 		return this;
 	}
 
@@ -234,7 +234,7 @@ public class ResponseInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(description), "description")
 			.addIf(nn(examples), "examples")
 			.addIf(nn(headers), "headers")
@@ -273,8 +273,8 @@ public class ResponseInfo extends SwaggerElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(s(value));
-			case "examples" -> setExamples(toMap(value, String.class, Object.class).sparse().build());
-			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
+			case "examples" -> setExamples(toMapBuilder(value, String.class, Object.class).sparse().build());
+			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
 			default -> {
 				super.set(property, value);
@@ -314,7 +314,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo setExamples(Map<String,Object> value) {
-		examples = CollectionUtils.copyOf(value);
+		examples = copyOf(value);
 		return this;
 	}
 
@@ -330,7 +330,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo setHeaders(Map<String,HeaderInfo> value) {
-		headers = CollectionUtils.copyOf(value);
+		headers = copyOf(value);
 		return this;
 	}
 

@@ -17,6 +17,7 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
@@ -24,7 +25,6 @@ import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
@@ -44,7 +44,7 @@ public class RequestBeanMeta {
 		AnnotationWorkList annotations;
 		BeanCreator<HttpPartSerializer> serializer = BeanCreator.of(HttpPartSerializer.class);
 		BeanCreator<HttpPartParser> parser = BeanCreator.of(HttpPartParser.class);
-		Map<String,RequestBeanPropertyMeta.Builder> properties = CollectionUtils.map();
+		Map<String,RequestBeanPropertyMeta.Builder> properties = map();
 
 		Builder(AnnotationWorkList annotations) {
 			this.annotations = annotations;
@@ -136,7 +136,7 @@ public class RequestBeanMeta {
 		this.cm = b.cm;
 		this.serializer = b.serializer.orElse(null);
 		this.parser = b.parser.orElse(null);
-		Map<String,RequestBeanPropertyMeta> properties = CollectionUtils.map();
+		Map<String,RequestBeanPropertyMeta> properties = map();
 		b.properties.forEach((k, v) -> properties.put(k, v.build(serializer, parser)));
 		this.properties = u(properties);
 	}

@@ -17,16 +17,15 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.objecttools.*;
 
@@ -120,34 +119,34 @@ public class Swagger extends SwaggerElement {
 		super(copyFrom);
 
 		this.basePath = copyFrom.basePath;
-		this.consumes = CollectionUtils.copyOf(copyFrom.consumes);
+		this.consumes = copyOf(copyFrom.consumes);
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.host = copyFrom.host;
 		this.info = copyFrom.info == null ? null : copyFrom.info.copy();
-		this.produces = CollectionUtils.copyOf(copyFrom.produces);
-		this.schemes = CollectionUtils.copyOf(copyFrom.schemes);
+		this.produces = copyOf(copyFrom.produces);
+		this.schemes = copyOf(copyFrom.schemes);
 		this.swagger = copyFrom.swagger;
 
 		// TODO - Definitions are not deep copied, so they should not contain references.
-		this.definitions = CollectionUtils.copyOf(copyFrom.definitions, JsonMap::new);
+		this.definitions = copyOf(copyFrom.definitions, JsonMap::new);
 
-		this.paths = CollectionUtils.copyOf(copyFrom.paths, v -> {
+		this.paths = copyOf(copyFrom.paths, v -> {
 			var m = new OperationMap();
 			v.forEach((k2, v2) -> m.put(k2, v2.copy()));
 			return m;
 		});
 
-		this.parameters = CollectionUtils.copyOf(copyFrom.parameters, ParameterInfo::copy);
-		this.responses = CollectionUtils.copyOf(copyFrom.responses, ResponseInfo::copy);
-		this.securityDefinitions = CollectionUtils.copyOf(copyFrom.securityDefinitions, SecurityScheme::copy);
+		this.parameters = copyOf(copyFrom.parameters, ParameterInfo::copy);
+		this.responses = copyOf(copyFrom.responses, ResponseInfo::copy);
+		this.securityDefinitions = copyOf(copyFrom.securityDefinitions, SecurityScheme::copy);
 
-		this.security = CollectionUtils.copyOf(copyFrom.security, x -> {
-			Map<String,List<String>> m2 = CollectionUtils.map();
-			x.forEach((k, v) -> m2.put(k, CollectionUtils.copyOf(v)));
+		this.security = copyOf(copyFrom.security, x -> {
+			Map<String,List<String>> m2 = map();
+			x.forEach((k, v) -> m2.put(k, copyOf(v)));
 			return m2;
 		});
 
-		this.tags = CollectionUtils.copyOf(copyFrom.tags, x -> x.copy());
+		this.tags = copyOf(copyFrom.tags, x -> x.copy());
 	}
 
 	/**
@@ -162,7 +161,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addConsumes(Collection<MediaType> values) {
-		consumes = CollectionUtils.setb(MediaType.class).to(consumes).sparse().addAll(values).build();
+		consumes = setb(MediaType.class).to(consumes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -179,7 +178,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addConsumes(MediaType...values) {
-		consumes = CollectionUtils.setb(MediaType.class).to(consumes).sparse().add(values).build();
+		consumes = setb(MediaType.class).to(consumes).sparse().add(values).build();
 		return this;
 	}
 
@@ -196,7 +195,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addDefinition(String name, JsonMap schema) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("schema", schema);
-		definitions = CollectionUtils.mapb(String.class, JsonMap.class).to(definitions).sparse().add(name, schema).build();
+		definitions = mapb(String.class, JsonMap.class).to(definitions).sparse().add(name, schema).build();
 		return this;
 	}
 
@@ -213,7 +212,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addParameter(String name, ParameterInfo parameter) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("parameter", parameter);
-		parameters = CollectionUtils.mapb(String.class, ParameterInfo.class).to(parameters).sparse().add(name, parameter).build();
+		parameters = mapb(String.class, ParameterInfo.class).to(parameters).sparse().add(name, parameter).build();
 		return this;
 	}
 
@@ -251,7 +250,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addProduces(Collection<MediaType> values) {
-		produces = CollectionUtils.setb(MediaType.class).to(produces).sparse().addAll(values).build();
+		produces = setb(MediaType.class).to(produces).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -268,7 +267,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addProduces(MediaType...values) {
-		produces = CollectionUtils.setb(MediaType.class).to(produces).sparse().add(values).build();
+		produces = setb(MediaType.class).to(produces).sparse().add(values).build();
 		return this;
 	}
 
@@ -285,7 +284,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addResponse(String name, ResponseInfo response) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("response", response);
-		responses = CollectionUtils.mapb(String.class, ResponseInfo.class).to(responses).sparse().add(name, response).build();
+		responses = mapb(String.class, ResponseInfo.class).to(responses).sparse().add(name, response).build();
 		return this;
 	}
 
@@ -308,7 +307,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addSchemes(Collection<String> values) {
-		schemes = CollectionUtils.setb(String.class).to(schemes).sparse().addAll(values).build();
+		schemes = setb(String.class).to(schemes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -331,7 +330,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addSchemes(String...values) {
-		schemes = CollectionUtils.setb(String.class).to(schemes).sparse().add(values).build();
+		schemes = setb(String.class).to(schemes).sparse().add(values).build();
 		return this;
 	}
 
@@ -348,7 +347,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger addSecurity(Collection<Map<String,List<String>>> values) {
-		security = CollectionUtils.listb(Map.class).to((List)security).sparse().addAll(values).build();
+		security = listb(Map.class).to((List)security).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -366,9 +365,9 @@ public class Swagger extends SwaggerElement {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Swagger addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
-		var m = CollectionUtils.map();
+		var m = map();
 		m.put(scheme, alist(alternatives));
-		security = CollectionUtils.listb(Map.class).to((List)security).sparse().addAll(Collections.singleton(m)).build();
+		security = listb(Map.class).to((List)security).sparse().addAll(Collections.singleton(m)).build();
 		return this;
 	}
 
@@ -385,7 +384,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addSecurityDefinition(String name, SecurityScheme securityScheme) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("securityScheme", securityScheme);
-		securityDefinitions = CollectionUtils.mapb(String.class, SecurityScheme.class).to(securityDefinitions).sparse().add(name, securityScheme).build();
+		securityDefinitions = mapb(String.class, SecurityScheme.class).to(securityDefinitions).sparse().add(name, securityScheme).build();
 		return this;
 	}
 
@@ -405,7 +404,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addTags(Collection<Tag> values) {
-		tags = CollectionUtils.setb(Tag.class).to(tags).sparse().addAll(values).build();
+		tags = setb(Tag.class).to(tags).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -425,7 +424,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger addTags(Tag...values) {
-		tags = CollectionUtils.setb(Tag.class).to(tags).sparse().add(values).build();
+		tags = setb(Tag.class).to(tags).sparse().add(values).build();
 		return this;
 	}
 
@@ -709,7 +708,7 @@ public class Swagger extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(basePath), "basePath")
 			.addIf(nn(consumes), "consumes")
 			.addIf(nn(definitions), "definitions")
@@ -736,20 +735,20 @@ public class Swagger extends SwaggerElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "basePath" -> setBasePath(s(value));
-			case "consumes" -> setConsumes(toList(value, MediaType.class).sparse().build());
-			case "definitions" -> setDefinitions(toMap(value, String.class, JsonMap.class).sparse().build());
+			case "consumes" -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
+			case "definitions" -> setDefinitions(toMapBuilder(value, String.class, JsonMap.class).sparse().build());
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			case "host" -> setHost(s(value));
 			case "info" -> setInfo(toType(value, Info.class));
-			case "parameters" -> setParameters(toMap(value, String.class, ParameterInfo.class).sparse().build());
-			case "paths" -> setPaths(toMap(value, String.class, OperationMap.class).sparse().build());
-			case "produces" -> setProduces(toList(value, MediaType.class).sparse().build());
-			case "responses" -> setResponses(toMap(value, String.class, ResponseInfo.class).sparse().build());
-			case "schemes" -> setSchemes(toList(value, String.class).sparse().build());
-			case "security" -> setSecurity((List)toList(value, MapOfStringLists.class).sparse().build());
-			case "securityDefinitions" -> setSecurityDefinitions(toMap(value, String.class, SecurityScheme.class).sparse().build());
+			case "parameters" -> setParameters(toMapBuilder(value, String.class, ParameterInfo.class).sparse().build());
+			case "paths" -> setPaths(toMapBuilder(value, String.class, OperationMap.class).sparse().build());
+			case "produces" -> setProduces(toListBuilder(value, MediaType.class).sparse().build());
+			case "responses" -> setResponses(toMapBuilder(value, String.class, ResponseInfo.class).sparse().build());
+			case "schemes" -> setSchemes(toListBuilder(value, String.class).sparse().build());
+			case "security" -> setSecurity((List)toListBuilder(value, MapOfStringLists.class).sparse().build());
+			case "securityDefinitions" -> setSecurityDefinitions(toMapBuilder(value, String.class, SecurityScheme.class).sparse().build());
 			case "swagger" -> setSwagger(s(value));
-			case "tags" -> setTags(toList(value, Tag.class).sparse().build());
+			case "tags" -> setTags(toListBuilder(value, Tag.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -791,7 +790,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setConsumes(Collection<MediaType> value) {
-		consumes = CollectionUtils.toSet(value);
+		consumes = toSet(value);
 		return this;
 	}
 
@@ -806,7 +805,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setConsumes(MediaType...value) {
-		setConsumes(CollectionUtils.setb(MediaType.class).sparse().add(value).build());
+		setConsumes(setb(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -822,7 +821,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setDefinitions(Map<String,JsonMap> value) {
-		definitions = CollectionUtils.copyOf(value);
+		definitions = copyOf(value);
 		return this;
 	}
 
@@ -891,7 +890,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setParameters(Map<String,ParameterInfo> value) {
-		parameters = CollectionUtils.copyOf(value);
+		parameters = copyOf(value);
 		return this;
 	}
 
@@ -908,7 +907,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setPaths(Map<String,OperationMap> value) {
-		paths = CollectionUtils.mapb(String.class, OperationMap.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
+		paths = mapb(String.class, OperationMap.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
 		return this;
 	}
 
@@ -925,7 +924,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setProduces(Collection<MediaType> value) {
-		produces = CollectionUtils.toSet(value);
+		produces = toSet(value);
 		return this;
 	}
 
@@ -940,7 +939,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setProduces(MediaType...value) {
-		setProduces(CollectionUtils.setb(MediaType.class).sparse().add(value).build());
+		setProduces(setb(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -956,7 +955,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setResponses(Map<String,ResponseInfo> value) {
-		responses = CollectionUtils.copyOf(value);
+		responses = copyOf(value);
 		return this;
 	}
 
@@ -979,7 +978,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSchemes(Collection<String> value) {
-		schemes = CollectionUtils.toSet(value);
+		schemes = toSet(value);
 		return this;
 	}
 
@@ -995,7 +994,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSchemes(String...value) {
-		setSchemes(CollectionUtils.setb(String.class).sparse().addJson(value).build());
+		setSchemes(setb(String.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -1011,7 +1010,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSecurity(Collection<Map<String,List<String>>> value) {
-		security = CollectionUtils.toList(value);
+		security = toList(value);
 		return this;
 	}
 
@@ -1027,7 +1026,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSecurityDefinitions(Map<String,SecurityScheme> value) {
-		securityDefinitions = CollectionUtils.copyOf(value);
+		securityDefinitions = copyOf(value);
 		return this;
 	}
 
@@ -1064,7 +1063,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setTags(Collection<Tag> value) {
-		tags = CollectionUtils.toSet(value);
+		tags = toSet(value);
 		return this;
 	}
 
@@ -1084,7 +1083,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setTags(Tag...value) {
-		setTags(CollectionUtils.setb(Tag.class).sparse().add(value).build());
+		setTags(setb(Tag.class).sparse().add(value).build());
 		return this;
 	}
 

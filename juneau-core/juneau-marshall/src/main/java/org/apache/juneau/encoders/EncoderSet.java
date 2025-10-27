@@ -17,6 +17,7 @@
 package org.apache.juneau.encoders;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -25,7 +26,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -109,7 +109,7 @@ public class EncoderSet {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
-			entries = CollectionUtils.copyOf(copyFrom.entries);
+			entries = copyOf(copyFrom.entries);
 		}
 
 		/**
@@ -148,7 +148,7 @@ public class EncoderSet {
 		 * @return This object.
 		 */
 		public Builder add(Encoder...values) {
-			CollectionUtils.prependAll(entries, (Object[])values);
+			prependAll(entries, (Object[])values);
 			return this;
 		}
 

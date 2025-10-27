@@ -18,6 +18,7 @@ package org.apache.juneau.rest.mock;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
@@ -53,7 +54,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
@@ -1226,7 +1226,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * @return This object.
 		 */
 		public Builder pathVars(String...pairs) {
-			return pathVars(CollectionUtils.mapb(String.class, String.class).addPairs((Object[])pairs).build());
+			return pathVars(mapb(String.class, String.class).addPairs((Object[])pairs).build());
 		}
 
 		@Override /* Overridden from Builder */

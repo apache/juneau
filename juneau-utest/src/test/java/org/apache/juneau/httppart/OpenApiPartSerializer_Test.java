@@ -18,6 +18,7 @@ package org.apache.juneau.httppart;
 
 import static java.lang.String.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.junit.jupiter.api.Assertions.*;

@@ -25,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.marshaller.*;
 
 /**
@@ -155,7 +154,7 @@ public class ParameterInfo extends SwaggerElement {
 		this.collectionFormat = copyFrom.collectionFormat;
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
-		this._enum = CollectionUtils.copyOf(copyFrom._enum);
+		this._enum = copyOf(copyFrom._enum);
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -176,7 +175,7 @@ public class ParameterInfo extends SwaggerElement {
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 
-		this.examples = CollectionUtils.copyOf(copyFrom.examples);
+		this.examples = copyOf(copyFrom.examples);
 	}
 
 	/**
@@ -188,7 +187,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo addEnum(Object...value) {
-		_enum = CollectionUtils.setb(Object.class).to(_enum).sparse().add(value).build();
+		_enum = setb(Object.class).to(_enum).sparse().add(value).build();
 		return this;
 	}
 
@@ -534,7 +533,7 @@ public class ParameterInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(allowEmptyValue), "allowEmptyValue")
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(_default), "default")
@@ -715,7 +714,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.toSet(value);
+		_enum = toSet(value);
 		return this;
 	}
 
@@ -728,7 +727,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setEnum(Object...value) {
-		setEnum(CollectionUtils.setb(Object.class).sparse().addAny(value).build());
+		setEnum(setb(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 

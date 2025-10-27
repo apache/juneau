@@ -222,7 +222,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (nn(field) || isNotEmpty(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = bc.resolveClassMeta(CollectionUtils.last(lp), innerField.getGenericType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(last(lp), innerField.getGenericType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
 				lp.forEach(x -> {
@@ -230,7 +230,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						swap = getPropertySwap(x);
 					if (! x.properties().isEmpty())
 						properties = StringUtils.splita(x.properties());
-					CollectionUtils.addAll(bdClasses, x.dictionary());
+					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
 					if (! x.wo().isEmpty())
@@ -244,14 +244,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, getter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(CollectionUtils.last(lp), getter.getGenericReturnType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
 				lp.forEach(x -> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (nn(properties) && ! x.properties().isEmpty())
 						properties = StringUtils.splita(x.properties());
-					CollectionUtils.addAll(bdClasses, x.dictionary());
+					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
 					if (! x.wo().isEmpty())
@@ -264,14 +264,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, setter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(CollectionUtils.last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, setter));
 				lp.forEach(x -> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (nn(properties) && ! x.properties().isEmpty())
 						properties = StringUtils.splita(x.properties());
-					CollectionUtils.addAll(bdClasses, x.dictionary());
+					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
 					if (! x.wo().isEmpty())
@@ -760,7 +760,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public Map<String,Object> getDynaMap(Object bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		if (isDyna) {
 			if (nn(extraKeys) && nn(getter) && ! isDynaGetterMap) {
-				Map<String,Object> m = CollectionUtils.map();
+				Map<String,Object> m = map();
 				((Collection<String>)extraKeys.invoke(bean)).forEach(x -> safe(() -> m.put(x, getter.invoke(bean, x))));
 				return m;
 			}

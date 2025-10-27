@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * A list of default settings.
@@ -53,14 +52,14 @@ public class DefaultSettingsMap {
 	 * @param value The object to copy.
 	 */
 	public DefaultSettingsMap(DefaultSettingsMap value) {
-		entries = CollectionUtils.copyOf(value.entries);
+		entries = copyOf(value.entries);
 	}
 
 	/**
 	 * Constructor.
 	 */
 	protected DefaultSettingsMap() {
-		entries = CollectionUtils.map();
+		entries = map();
 	}
 
 	/**

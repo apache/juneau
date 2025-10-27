@@ -17,13 +17,13 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Holds a set of reusable objects for different aspects of the OpenAPI Specification.
@@ -106,15 +106,15 @@ public class Components extends OpenApiElement {
 	 */
 	public Components(Components copyFrom) {
 		super(copyFrom);
-		this.schemas = CollectionUtils.copyOf(copyFrom.schemas);
-		this.responses = CollectionUtils.copyOf(copyFrom.responses);
-		this.parameters = CollectionUtils.copyOf(copyFrom.parameters);
-		this.examples = CollectionUtils.copyOf(copyFrom.examples);
-		this.requestBodies = CollectionUtils.copyOf(copyFrom.requestBodies);
-		this.headers = CollectionUtils.copyOf(copyFrom.headers);
-		this.securitySchemes = CollectionUtils.copyOf(copyFrom.securitySchemes);
-		this.links = CollectionUtils.copyOf(copyFrom.links);
-		this.callbacks = CollectionUtils.copyOf(copyFrom.callbacks);
+		this.schemas = copyOf(copyFrom.schemas);
+		this.responses = copyOf(copyFrom.responses);
+		this.parameters = copyOf(copyFrom.parameters);
+		this.examples = copyOf(copyFrom.examples);
+		this.requestBodies = copyOf(copyFrom.requestBodies);
+		this.headers = copyOf(copyFrom.headers);
+		this.securitySchemes = copyOf(copyFrom.securitySchemes);
+		this.links = copyOf(copyFrom.links);
+		this.callbacks = copyOf(copyFrom.callbacks);
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class Components extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(callbacks), "callbacks")
 			.addIf(nn(examples), "examples")
 			.addIf(nn(headers), "headers")
@@ -226,15 +226,15 @@ public class Components extends OpenApiElement {
 	public Components set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "callbacks" -> setCallbacks(toMap(value, String.class, Callback.class).sparse().build());
-			case "examples" -> setExamples(toMap(value, String.class, Example.class).sparse().build());
-			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
-			case "links" -> setLinks(toMap(value, String.class, Link.class).sparse().build());
-			case "parameters" -> setParameters(toMap(value, String.class, Parameter.class).sparse().build());
-			case "requestBodies" -> setRequestBodies(toMap(value, String.class, RequestBodyInfo.class).sparse().build());
-			case "responses" -> setResponses(toMap(value, String.class, Response.class).sparse().build());
-			case "schemas" -> setSchemas(toMap(value, String.class, SchemaInfo.class).sparse().build());
-			case "securitySchemes" -> setSecuritySchemes(toMap(value, String.class, SecuritySchemeInfo.class).sparse().build());
+			case "callbacks" -> setCallbacks(toMapBuilder(value, String.class, Callback.class).sparse().build());
+			case "examples" -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
+			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
+			case "links" -> setLinks(toMapBuilder(value, String.class, Link.class).sparse().build());
+			case "parameters" -> setParameters(toMapBuilder(value, String.class, Parameter.class).sparse().build());
+			case "requestBodies" -> setRequestBodies(toMapBuilder(value, String.class, RequestBodyInfo.class).sparse().build());
+			case "responses" -> setResponses(toMapBuilder(value, String.class, Response.class).sparse().build());
+			case "schemas" -> setSchemas(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
+			case "securitySchemes" -> setSecuritySchemes(toMapBuilder(value, String.class, SecuritySchemeInfo.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

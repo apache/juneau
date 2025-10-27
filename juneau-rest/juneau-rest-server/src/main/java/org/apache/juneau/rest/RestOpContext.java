@@ -17,6 +17,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
@@ -357,7 +358,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
-			consumes = CollectionUtils.addAll(consumes, values);
+			consumes = addAll(consumes, values);
 			return this;
 		}
 
@@ -1113,7 +1114,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder path(String...values) {
-			path = CollectionUtils.prependAll(path, values);
+			path = prependAll(path, values);
 			return this;
 		}
 
@@ -1144,7 +1145,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
-			produces = CollectionUtils.addAll(produces, values);
+			produces = addAll(produces, values);
 			return this;
 		}
 
@@ -1239,7 +1240,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder rolesDeclared(String...values) {
-			rolesDeclared = CollectionUtils.addAll(rolesDeclared, values);
+			rolesDeclared = addAll(rolesDeclared, values);
 			return this;
 		}
 
@@ -2026,7 +2027,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	RestGuardList getGuards() {
 		var b = guards();
-		var roleGuard = opt(this.roleGuard).orElseGet(Utils::set);
+		var roleGuard = opt(this.roleGuard).orElseGet(CollectionUtils::set);
 
 		for (var rg : roleGuard) {
 				try {

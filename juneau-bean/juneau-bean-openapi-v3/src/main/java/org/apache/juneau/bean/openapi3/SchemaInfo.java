@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -24,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Allows the definition of input and output data types.
@@ -155,12 +155,12 @@ public class SchemaInfo extends OpenApiElement {
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
-		this._enum = CollectionUtils.copyOf(copyFrom._enum);
-		this.allOf = CollectionUtils.copyOf(copyFrom.allOf);
-		this.required = CollectionUtils.copyOf(copyFrom.required);
-		this.anyOf = CollectionUtils.copyOf(copyFrom.anyOf);
-		this.oneOf = CollectionUtils.copyOf(copyFrom.oneOf);
-		this.properties = CollectionUtils.copyOf(copyFrom.properties, SchemaInfo::copy);
+		this._enum = copyOf(copyFrom._enum);
+		this.allOf = copyOf(copyFrom.allOf);
+		this.required = copyOf(copyFrom.required);
+		this.anyOf = copyOf(copyFrom.anyOf);
+		this.oneOf = copyOf(copyFrom.oneOf);
+		this.properties = copyOf(copyFrom.properties, SchemaInfo::copy);
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
 		this.not = copyFrom.not == null ? null : copyFrom.not.copy();
 	}
@@ -189,7 +189,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addAllOf(Object...values) {
-		allOf = CollectionUtils.listb(Object.class).to(allOf).sparse().addAny(values).build();
+		allOf = listb(Object.class).to(allOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -217,7 +217,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addAnyOf(Object...values) {
-		anyOf = CollectionUtils.listb(Object.class).to(anyOf).sparse().addAny(values).build();
+		anyOf = listb(Object.class).to(anyOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -245,7 +245,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addEnum(Object...values) {
-		_enum = CollectionUtils.listb(Object.class).to(_enum).sparse().addAny(values).build();
+		_enum = listb(Object.class).to(_enum).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -273,7 +273,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addOneOf(Object...values) {
-		oneOf = CollectionUtils.listb(Object.class).to(oneOf).sparse().addAny(values).build();
+		oneOf = listb(Object.class).to(oneOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -299,7 +299,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo addRequired(String...values) {
-		required = CollectionUtils.listb(String.class).to(required).sparse().add(values).build();
+		required = listb(String.class).to(required).sparse().add(values).build();
 		return this;
 	}
 
@@ -618,7 +618,7 @@ public class SchemaInfo extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(ref), "$ref")
 			.addIf(nn(additionalProperties), "additionalProperties")
 			.addIf(nn(allOf), "allOf")
@@ -706,13 +706,13 @@ public class SchemaInfo extends OpenApiElement {
 		return switch (property) {  // NOSONAR
 			case "$ref" -> setRef(value);
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
-			case "allOf" -> setAllOf(toList(value, Object.class).sparse().build());
-			case "anyOf" -> setAnyOf(toList(value, Object.class).sparse().build());
+			case "allOf" -> setAllOf(listb(Object.class).addAny(value).sparse().build());
+			case "anyOf" -> setAnyOf(listb(Object.class).addAny(value).sparse().build());
 			case "default" -> setDefault(value);
 			case "deprecated" -> setDeprecated(toBoolean(value));
 			case "description" -> setDescription(s(value));
 			case "discriminator" -> setDiscriminator(toType(value, Discriminator.class));
-			case "enum" -> setEnum(toList(value, Object.class).sparse().build());
+			case "enum" -> setEnum(listb(Object.class).addAny(value).sparse().build());
 			case "example" -> setExample(value);
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
@@ -730,11 +730,11 @@ public class SchemaInfo extends OpenApiElement {
 			case "multipleOf" -> setMultipleOf(toNumber(value));
 			case "not" -> setNot(toType(value, SchemaInfo.class));
 			case "nullable" -> setNullable(toBoolean(value));
-			case "oneOf" -> setOneOf(toList(value, Object.class).sparse().build());
+			case "oneOf" -> setOneOf(listb(Object.class).addAny(value).sparse().build());
 			case "pattern" -> setPattern(s(value));
-			case "properties" -> setProperties(toMap(value, String.class, SchemaInfo.class).sparse().build());
+			case "properties" -> setProperties(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
 			case "readOnly" -> setReadOnly(toBoolean(value));
-			case "required" -> setRequired(toList(value, String.class).sparse().build());
+			case "required" -> setRequired(listb(String.class).addAny(value).sparse().build());
 			case "title" -> setTitle(s(value));
 			case "type" -> setType(s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
@@ -769,7 +769,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setAllOf(Collection<Object> value) {
-		allOf = CollectionUtils.toList(value);
+		allOf = toList(value);
 		return this;
 	}
 
@@ -782,7 +782,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setAnyOf(Collection<Object> value) {
-		anyOf = CollectionUtils.toList(value);
+		anyOf = toList(value);
 		return this;
 	}
 
@@ -850,7 +850,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.toList(value);
+		_enum = toList(value);
 		return this;
 	}
 
@@ -1096,7 +1096,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setOneOf(Collection<Object> value) {
-		oneOf = CollectionUtils.toList(value);
+		oneOf = toList(value);
 		return this;
 	}
 
@@ -1125,7 +1125,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setProperties(Map<String,SchemaInfo> value) {
-		properties = CollectionUtils.copyOf(value);
+		properties = copyOf(value);
 		return this;
 	}
 
@@ -1175,7 +1175,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setRequired(Collection<String> value) {
-		required = CollectionUtils.toList(value);
+		required = toList(value);
 		return this;
 	}
 

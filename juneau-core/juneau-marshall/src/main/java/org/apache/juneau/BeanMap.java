@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -260,7 +261,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 			// Bean with dyna properties.
 		} else {
-			Map<String,BeanPropertyValue> actions = (meta.sortProperties ? CollectionUtils.sortedMap() : map());
+			Map<String,BeanPropertyValue> actions = (meta.sortProperties ? sortedMap() : map());
 
 			forEachProperty(x -> ! x.isDyna(), bpm -> {
 				try {

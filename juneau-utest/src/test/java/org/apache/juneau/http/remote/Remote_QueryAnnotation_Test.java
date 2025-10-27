@@ -17,6 +17,7 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,7 +30,6 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.rest.RestRequest;
@@ -747,9 +747,9 @@ class Remote_QueryAnnotation_Test extends TestBase {
 	}
 
 	public static class K2a {
-		@Query public Map<String,Object> getA() { return CollectionUtils.mapb(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
+		@Query public Map<String,Object> getA() { return mapb(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
 		@Query("*") public Map<String,Object> getB() { return map("b1","true","b2","123","b3","null"); }
-		@Query("*") @Schema(allowEmptyValue=true) public Map<String,Object> getC() { return CollectionUtils.mapb(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
+		@Query("*") @Schema(allowEmptyValue=true) public Map<String,Object> getC() { return mapb(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
 		@Query("*")
 		public Map<String,Object> getD() { return null; }
 	}

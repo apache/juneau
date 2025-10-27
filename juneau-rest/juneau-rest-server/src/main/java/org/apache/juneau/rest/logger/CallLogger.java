@@ -19,6 +19,7 @@ package org.apache.juneau.rest.logger;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
@@ -539,34 +540,34 @@ public class CallLogger {
 	 * @param res The servlet response.
 	 */
 	public void log(HttpServletRequest req, HttpServletResponse res) {
-	
+
 		var rule = getRule(req, res);
-	
+
 		if (! isEnabled(rule, req))
 			return;
-	
+
 		var level = firstNonNull(rule.getLevel(), this.level);
-	
+
 		if (level == Level.OFF)
 			return;
-	
+
 		var e = castOrNull(req.getAttribute("Exception"), Throwable.class);
 		var execTime = castOrNull(req.getAttribute("ExecTime"), Long.class);
-	
+
 		var reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
 		var resd = firstNonNull(rule.getResponseDetail(), responseDetail);
-	
+
 		var method = req.getMethod();
 		int status = res.getStatus();
 		var uri = req.getRequestURI();
 		byte[] reqContent = getRequestContent(req);
 		byte[] resContent = getResponseContent(req, res);
-	
+
 		var sb = new StringBuilder();
-	
+
 		if (reqd != STATUS_LINE || resd != STATUS_LINE)
 			sb.append("\n=== HTTP Call (incoming) ======================================================\n");
-	
+
 		var sti = getThrownStats(e);
 
 		sb.append('[').append(status);

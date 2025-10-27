@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.jena.Constants.*;
@@ -194,7 +195,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * Maps RDF writer names to property prefixes that apply to them.
 	 */
 	// @formatter:off
-	static final Map<String,String> LANG_PROP_MAP = CollectionUtils.mapb(String.class, String.class)
+	static final Map<String,String> LANG_PROP_MAP = mapb(String.class, String.class)
 		.unmodifiable()
 		.add("RDF/XML", "rdfXml.")
 		.add("RDF/XML-ABBREV", "rdfXml.")

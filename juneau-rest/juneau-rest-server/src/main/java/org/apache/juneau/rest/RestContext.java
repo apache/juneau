@@ -21,10 +21,12 @@ import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.addAll;
+import static org.apache.juneau.common.utils.CollectionUtils.list;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.common.utils.Utils.list;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
@@ -197,7 +199,7 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		private static <T extends Annotation> MethodList getAnnotatedMethods(Supplier<?> resource, Class<T> annotation, Predicate<T> predicate) {
-			Map<String,Method> x = CollectionUtils.map();
+			Map<String,Method> x = map();
 			var r = resource.get();
 
 			// @formatter:off
@@ -846,7 +848,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder children(Object...values) {
-			CollectionUtils.addAll(children, values);
+			addAll(children, values);
 			return this;
 		}
 
@@ -1033,7 +1035,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
-			consumes = CollectionUtils.addAll(consumes, values);
+			consumes = addAll(consumes, values);
 			return this;
 		}
 
@@ -2631,7 +2633,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
-			produces = CollectionUtils.addAll(produces, values);
+			produces = addAll(produces, values);
 			return this;
 		}
 
@@ -5059,16 +5061,16 @@ public class RestContext extends Context {
 			// @formatter:off
 			produces = builder.produces().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils.toSet(opContexts.get(0).getSerializers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : toSet(opContexts.get(0).getSerializers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
-					return u(CollectionUtils.toList(s));
+					return u(toList(s));
 				}
 			);
 			consumes = builder.consumes().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils.toSet(opContexts.get(0).getParsers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : toSet(opContexts.get(0).getParsers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
-					return u(CollectionUtils.toList(s));
+					return u(toList(s));
 				}
 			);
 			// @formatter:on

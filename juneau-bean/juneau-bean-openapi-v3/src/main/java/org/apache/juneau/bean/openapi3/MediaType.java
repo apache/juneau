@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -24,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Provides schema and examples for the media type identified by its key.
@@ -89,8 +89,8 @@ public class MediaType extends OpenApiElement {
 
 		this.schema = copyFrom.schema;
 		this.example = copyFrom.example;
-		this.examples = CollectionUtils.copyOf(copyFrom.examples, Example::copy);
-		this.encoding = CollectionUtils.copyOf(copyFrom.encoding, Encoding::copy);
+		this.examples = copyOf(copyFrom.examples, Example::copy);
+		this.encoding = copyOf(copyFrom.encoding, Encoding::copy);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class MediaType extends OpenApiElement {
 	public MediaType addEncoding(String key, Encoding value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		encoding = CollectionUtils.mapb(String.class, Encoding.class).to(encoding).sparse().add(key, value).build();
+		encoding = mapb(String.class, Encoding.class).to(encoding).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -119,7 +119,7 @@ public class MediaType extends OpenApiElement {
 	public MediaType addExample(String name, Example example) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("example", example);
-		examples = CollectionUtils.mapb(String.class, Example.class).to(examples).add(name, example).build();
+		examples = mapb(String.class, Example.class).to(examples).add(name, example).build();
 		return this;
 	}
 
@@ -178,7 +178,7 @@ public class MediaType extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(schema), "schema")
 			.addIf(nn(example), "x-example")
 			.addIf(nn(encoding), "encoding")
@@ -191,8 +191,8 @@ public class MediaType extends OpenApiElement {
 	public MediaType set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "encoding" -> setEncoding(toMap(value, String.class, Encoding.class).sparse().build());
-			case "examples" -> setExamples(toMap(value, String.class, Example.class).sparse().build());
+			case "encoding" -> setEncoding(toMapBuilder(value, String.class, Encoding.class).sparse().build());
+			case "examples" -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
 			case "x-example" -> setExample(value);
 			default -> {
@@ -211,7 +211,7 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType setEncoding(Map<String,Encoding> value) {
-		encoding = CollectionUtils.copyOf(value);
+		encoding = copyOf(value);
 		return this;
 	}
 
@@ -241,7 +241,7 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType setExamples(Map<String,Example> value) {
-		examples = CollectionUtils.copyOf(value);
+		examples = copyOf(value);
 		return this;
 	}
 

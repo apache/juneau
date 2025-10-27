@@ -19,6 +19,7 @@ package org.apache.juneau.junit.bct;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 

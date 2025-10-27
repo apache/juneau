@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.guard;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.Utils.*;
 

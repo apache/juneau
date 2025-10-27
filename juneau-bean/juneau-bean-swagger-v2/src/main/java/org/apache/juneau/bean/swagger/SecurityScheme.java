@@ -25,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.marshaller.*;
 
 /**
@@ -107,7 +106,7 @@ public class SecurityScheme extends SwaggerElement {
 		this.flow = copyFrom.flow;
 		this.in = copyFrom.in;
 		this.name = copyFrom.name;
-		this.scopes = CollectionUtils.copyOf(copyFrom.scopes);
+		this.scopes = copyOf(copyFrom.scopes);
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.type = copyFrom.type;
 	}
@@ -125,7 +124,7 @@ public class SecurityScheme extends SwaggerElement {
 	public SecurityScheme addScope(String key, String value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		scopes = CollectionUtils.mapb(String.class, String.class).to(scopes).sparse().add(key, value).build();
+		scopes = mapb(String.class, String.class).to(scopes).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -237,7 +236,7 @@ public class SecurityScheme extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(authorizationUrl), "authorizationUrl")
 			.addIf(nn(description), "description")
 			.addIf(nn(flow), "flow")
@@ -260,7 +259,7 @@ public class SecurityScheme extends SwaggerElement {
 			case "flow" -> setFlow(s(value));
 			case "in" -> setIn(s(value));
 			case "name" -> setName(s(value));
-			case "scopes" -> setScopes(toMap(value, String.class, String.class).sparse().build());
+			case "scopes" -> setScopes(toMapBuilder(value, String.class, String.class).sparse().build());
 			case "tokenUrl" -> setTokenUrl(s(value));
 			case "type" -> setType(s(value));
 			default -> {
@@ -375,7 +374,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SecurityScheme setScopes(Map<String,String> value) {
-		scopes = CollectionUtils.copyOf(value);
+		scopes = copyOf(value);
 		return this;
 	}
 

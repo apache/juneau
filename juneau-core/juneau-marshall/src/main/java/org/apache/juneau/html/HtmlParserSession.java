@@ -17,6 +17,7 @@
 package org.apache.juneau.html;
 
 import static javax.xml.stream.XMLStreamConstants.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.HtmlTag.*;

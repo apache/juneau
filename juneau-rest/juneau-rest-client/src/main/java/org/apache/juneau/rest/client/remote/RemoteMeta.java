@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client.remote;
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -88,7 +89,7 @@ public class RemoteMeta {
 		if (nn(clientVersion))
 			headers.append(stringHeader(versionHeader, clientVersion));
 
-		Map<Method,RemoteOperationMeta> operations = CollectionUtils.map();
+		Map<Method,RemoteOperationMeta> operations = map();
 		var path2 = path;
 		ci.forEachPublicMethod(x -> true, x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));
 

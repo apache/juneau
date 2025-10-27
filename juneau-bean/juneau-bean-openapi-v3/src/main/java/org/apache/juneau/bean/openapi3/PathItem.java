@@ -17,13 +17,13 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Describes the operations available on a single path.
@@ -109,8 +109,8 @@ public class PathItem extends OpenApiElement {
 		this.head = copyFrom.head;
 		this.patch = copyFrom.patch;
 		this.trace = copyFrom.trace;
-		this.servers = CollectionUtils.copyOf(copyFrom.servers);
-		this.parameters = CollectionUtils.copyOf(copyFrom.parameters);
+		this.servers = copyOf(copyFrom.servers);
+		this.parameters = copyOf(copyFrom.parameters);
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class PathItem extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(delete), "delete")
 			.addIf(nn(description), "description")
 			.addIf(nn(get), "get")
@@ -255,10 +255,10 @@ public class PathItem extends OpenApiElement {
 			case "head" -> setHead(toType(value, Operation.class));
 			case "options" -> setOptions(toType(value, Operation.class));
 			case "patch" -> setPatch(toType(value, Operation.class));
-			case "parameters" -> setParameters(toList(value, Parameter.class).sparse().build());
+			case "parameters" -> setParameters(listb(Parameter.class).addAny(value).sparse().build());
 			case "post" -> setPost(toType(value, Operation.class));
 			case "put" -> setPut(toType(value, Operation.class));
-			case "servers" -> setServers(toList(value, Server.class).sparse().build());
+			case "servers" -> setServers(listb(Server.class).addAny(value).sparse().build());
 			case "summary" -> setSummary(s(value));
 			case "trace" -> setTrace(toType(value, Operation.class));
 			default -> {

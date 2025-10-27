@@ -18,7 +18,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.ne;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.eq;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -174,21 +174,21 @@ class BeanListAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void ca01_exists() {
-		var x = Utils.<A>alist();
+		var x = CollectionUtils.<A>alist();
 		var nil = (List<A>)null;
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
-		var x = Utils.<A>alist();
+		var x = CollectionUtils.<A>alist();
 		var nil = (List<A>)null;
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
-		var x = Utils.<A>alist();
+		var x = CollectionUtils.<A>alist();
 		var nil = (List<A>)null;
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
@@ -337,7 +337,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb01_isEmpty() {
-		var x1 = Utils.<A>alist();
+		var x1 = CollectionUtils.<A>alist();
 		var x2 = alist(A1);
 		var nil = (List<A>)null;
 		test(x1).isEmpty();
@@ -346,7 +346,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb02_isNotEmpty() {
-		var x1 = Utils.<A>alist();
+		var x1 = CollectionUtils.<A>alist();
 		var x2 = alist(A1);
 		var nil = (List<A>)null;
 		test(x2).isNotEmpty();

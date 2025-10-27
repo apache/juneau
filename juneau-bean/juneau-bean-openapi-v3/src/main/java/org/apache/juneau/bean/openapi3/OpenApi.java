@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -24,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.objecttools.*;
 
@@ -105,11 +105,11 @@ public class OpenApi extends OpenApiElement {
 		super(copyFrom);
 		this.openapi = copyFrom.openapi;
 		this.info = copyFrom.info;
-		this.servers = CollectionUtils.copyOf(copyFrom.servers);
-		this.paths = CollectionUtils.copyOf(copyFrom.paths);
+		this.servers = copyOf(copyFrom.servers);
+		this.paths = copyOf(copyFrom.paths);
 		this.components = copyFrom.components;
-		this.security = CollectionUtils.copyOf(copyFrom.security);
-		this.tags = CollectionUtils.copyOf(copyFrom.tags);
+		this.security = copyOf(copyFrom.security);
+		this.tags = copyOf(copyFrom.tags);
 		this.externalDocs = copyFrom.externalDocs;
 	}
 
@@ -141,7 +141,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addSecurity(Collection<SecurityRequirement> values) {
-		security = CollectionUtils.listb(SecurityRequirement.class).sparse().addAny(security, values).build();
+		security = listb(SecurityRequirement.class).sparse().addAny(security, values).build();
 		return this;
 	}
 
@@ -157,7 +157,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addSecurity(SecurityRequirement...values) {
-		security = CollectionUtils.listb(SecurityRequirement.class).sparse().addAll(security).addAny((Object)values).build();
+		security = listb(SecurityRequirement.class).sparse().addAll(security).addAny((Object)values).build();
 		return this;
 	}
 
@@ -173,7 +173,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addServers(Collection<Server> values) {
-		servers = CollectionUtils.listb(Server.class).to(servers).sparse().addAll(values).build();
+		servers = listb(Server.class).to(servers).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -189,7 +189,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addServers(Server...values) {
-		servers = CollectionUtils.listb(Server.class).to(servers).sparse().add(values).build();
+		servers = listb(Server.class).to(servers).sparse().add(values).build();
 		return this;
 	}
 
@@ -205,7 +205,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addTags(Collection<Tag> values) {
-		tags = CollectionUtils.listb(Tag.class).to(tags).sparse().addAll(values).build();
+		tags = listb(Tag.class).to(tags).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -221,7 +221,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addTags(Tag...values) {
-		tags = CollectionUtils.listb(Tag.class).to(tags).sparse().add(values).build();
+		tags = listb(Tag.class).to(tags).sparse().add(values).build();
 		return this;
 	}
 
@@ -327,7 +327,7 @@ public class OpenApi extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(components), "components")
 			.addIf(nn(externalDocs), "externalDocs")
 			.addIf(nn(info), "info")
@@ -348,10 +348,10 @@ public class OpenApi extends OpenApiElement {
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			case "info" -> setInfo(toType(value, Info.class));
 			case "openapi" -> setOpenapi(s(value));
-			case "paths" -> setPaths(toMap(value, String.class, PathItem.class).sparse().build());
-			case "security" -> setSecurity(toList(value, SecurityRequirement.class).sparse().build());
-			case "servers" -> setServers(toList(value, Server.class).sparse().build());
-			case "tags" -> setTags(toList(value, Tag.class).sparse().build());
+			case "paths" -> setPaths(toMapBuilder(value, String.class, PathItem.class).sparse().build());
+			case "security" -> setSecurity(listb(SecurityRequirement.class).addAny(value).sparse().build());
+			case "servers" -> setServers(listb(Server.class).addAny(value).sparse().build());
+			case "tags" -> setTags(listb(Tag.class).addAny(value).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -410,7 +410,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setPaths(Map<String,PathItem> value) {
-		this.paths = toMap(value, String.class, PathItem.class).sparse().sorted(PATH_COMPARATOR).build();
+		this.paths = toMapBuilder(value, String.class, PathItem.class).sparse().sorted(PATH_COMPARATOR).build();
 		return this;
 	}
 
@@ -459,7 +459,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setTags(Tag...value) {
-		setTags(toList(value, Tag.class).sparse().build());
+		setTags(listb(Tag.class).add(value).sparse().build());
 		return this;
 	}
 

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.util.*;
 

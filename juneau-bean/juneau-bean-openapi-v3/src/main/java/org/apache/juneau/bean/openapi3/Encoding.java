@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -25,7 +26,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A single encoding definition applied to a single schema property.
@@ -97,7 +97,7 @@ public class Encoding extends OpenApiElement {
 		this.style = copyFrom.style;
 		this.explode = copyFrom.explode;
 		this.allowReserved = copyFrom.allowReserved;
-		this.headers = CollectionUtils.copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class Encoding extends OpenApiElement {
 	public Encoding addHeader(String key, HeaderInfo value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		headers = CollectionUtils.mapb(String.class, HeaderInfo.class).to(headers).sparse().add(key, value).build();
+		headers = mapb(String.class, HeaderInfo.class).to(headers).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -184,7 +184,7 @@ public class Encoding extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(allowReserved), "allowReserved")
 			.addIf(nn(contentType), "contentType")
 			.addIf(nn(explode), "explode")
@@ -201,7 +201,7 @@ public class Encoding extends OpenApiElement {
 			case "allowReserved" -> setAllowReserved(toBoolean(value));
 			case "contentType" -> setContentType(s(value));
 			case "explode" -> setExplode(toBoolean(value));
-			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
+			case "headers" -> setHeaders(toMapBuilder(value, String.class, HeaderInfo.class).sparse().build());
 			case "style" -> setStyle(s(value));
 			default -> {
 				super.set(property, value);
@@ -273,7 +273,7 @@ public class Encoding extends OpenApiElement {
 	 * @return This object
 	 */
 	public Encoding setHeaders(Map<String,HeaderInfo> value) {
-		headers = CollectionUtils.copyOf(value);
+		headers = copyOf(value);
 		return this;
 	}
 

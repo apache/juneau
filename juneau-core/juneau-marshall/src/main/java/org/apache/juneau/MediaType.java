@@ -410,7 +410,7 @@ public class MediaType implements Comparable<MediaType> {
 			return 0;
 
 		// Subtypes match but are ordered different
-		if (CollectionUtils.equals(subTypesSorted, o.subTypesSorted))
+		if (eq(subTypesSorted, o.subTypesSorted))
 			return c + 7500;
 
 		for (String st1 : subTypes) {

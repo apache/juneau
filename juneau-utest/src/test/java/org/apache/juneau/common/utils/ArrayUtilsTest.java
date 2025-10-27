@@ -17,6 +17,7 @@
 package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -32,19 +33,19 @@ class ArrayUtilsTest extends TestBase {
 	@Test void a01_appendArrayToArray() {
 		String[] s = {};
 
-		s = CollectionUtils.addAll(s, "a", "b");
+		s = addAll(s, "a", "b");
 		assertList(s, "a", "b");
 
-		s = CollectionUtils.addAll(s, "c");
+		s = addAll(s, "c");
 		assertList(s, "a", "b", "c");
 
-		s = CollectionUtils.addAll(s);
+		s = addAll(s);
 		assertList(s, "a", "b", "c");
 
-		var o = CollectionUtils.addAll((Object[])null);
+		var o = addAll((Object[])null);
 		assertEmpty(o);
 
-		s = CollectionUtils.addAll((String[])null, "a", "b");
+		s = addAll((String[])null, "a", "b");
 		assertList(s, "a", "b");
 	}
 
@@ -52,10 +53,10 @@ class ArrayUtilsTest extends TestBase {
 	// asSet(T[])
 	//====================================================================================================
 	@Test void a02_asSet() {
-		assertThrows(IllegalArgumentException.class, ()->CollectionUtils.toSet((String[])null));
+		assertThrows(IllegalArgumentException.class, ()->toSet((String[])null));
 
 		var s = a("a");
-		var i = CollectionUtils.toSet(s).iterator();
+		var i = toSet(s).iterator();
 		assertEquals("a", i.next());
 
 		assertThrows(UnsupportedOperationException.class, i::remove);
@@ -69,12 +70,12 @@ class ArrayUtilsTest extends TestBase {
 		var s1 = a("a");
 		var s2 = a("b");
 
-		assertList(CollectionUtils.combine(s1, s2), "a", "b");
-		assertList(CollectionUtils.combine(s1), "a");
-		assertList(CollectionUtils.combine(s2), "b");
-		assertList(CollectionUtils.combine(s1,null), "a");
-		assertList(CollectionUtils.combine(null,s2), "b");
-		assertNull(CollectionUtils.combine(null,null));
-		assertNull(CollectionUtils.combine());
+		assertList(combine(s1, s2), "a", "b");
+		assertList(combine(s1), "a");
+		assertList(combine(s2), "b");
+		assertList(combine(s1,null), "a");
+		assertList(combine(null,s2), "b");
+		assertNull(combine(null,null));
+		assertNull(combine());
 	}
 }

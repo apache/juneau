@@ -18,6 +18,7 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -89,7 +90,7 @@ public class ClassInfo {
 	@SuppressWarnings("rawtypes")
 	// @formatter:off
 	private static final Map<Class,Object> primitiveDefaultMap =
-		CollectionUtils.mapb(Class.class,Object.class)
+		mapb(Class.class,Object.class)
 			.unmodifiable()
 			.add(Boolean.TYPE, false)
 			.add(Character.TYPE, (char)0)
@@ -2271,7 +2272,7 @@ public class ClassInfo {
 	FieldInfo[] _getPublicFields() {
 		if (publicFields == null) {
 			synchronized (this) {
-				Map<String,FieldInfo> m = CollectionUtils.map();
+				Map<String,FieldInfo> m = map();
 				for (ClassInfo c : _getParents()) {
 					for (FieldInfo f : c._getDeclaredFields()) {
 						String fn = f.getName();
@@ -2279,7 +2280,7 @@ public class ClassInfo {
 							m.put(f.getName(), f);
 					}
 				}
-				List<FieldInfo> l = CollectionUtils.toList(m.values());
+				List<FieldInfo> l = toList(m.values());
 				l.sort(null);
 				publicFields = l.toArray(new FieldInfo[l.size()]);
 			}

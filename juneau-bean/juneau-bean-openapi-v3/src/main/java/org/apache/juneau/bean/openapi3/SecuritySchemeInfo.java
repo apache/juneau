@@ -25,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Defines a security scheme that can be used by the operations.
@@ -237,7 +236,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(bearerFormat), "bearerFormat")
 			.addIf(nn(description), "description")
 			.addIf(nn(flows), "flows")

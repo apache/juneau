@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.assertions.AssertionPredicates.ne;
+import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -155,7 +155,7 @@ class MapAssertion_Test extends TestBase {
 		var x1 = map(1,2);
 		var x1a = map(1,2);
 		var x2 = map(2,3);
-		var nil = nmap(Object.class, Object.class);
+		var nil = nmap(Integer.class, Integer.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -175,7 +175,7 @@ class MapAssertion_Test extends TestBase {
 		var x1 = map(1,2);
 		var x1a = map(1,2);
 		var x2 = map(3,4);
-		var nil = nmap(Object.class, Object.class);
+		var nil = nmap(Integer.class, Integer.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -187,7 +187,7 @@ class MapAssertion_Test extends TestBase {
 		var x1 = map(1,2);
 		var x1a = map(1,2);
 		var x2 = map(3,4);
-		var nil = nmap(Object.class, Object.class);
+		var nil = nmap(Integer.class, Integer.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[{3=4}]'.  Actual='{1=2}'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='{1=2}'.");
@@ -198,7 +198,7 @@ class MapAssertion_Test extends TestBase {
 		var x1 = map(1,2);
 		var x1a = map(1,2);
 		var x2 = map(3,4);
-		var nil = nmap(Object.class, Object.class);
+		var nil = nmap(Integer.class, Integer.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -209,7 +209,7 @@ class MapAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = map(1,2);
 		var x1a = map(1,2);
-		var nil = nmap(Object.class, Object.class);
+		var nil = nmap(Integer.class, Integer.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='{1=2}(LinkedHashMap@*)'.  Actual='{1=2}(LinkedHashMap@*)'.");

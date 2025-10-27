@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.swagger;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.isEmpty;
@@ -235,7 +236,7 @@ public class BasicSwaggerProviderSession {
 		if (produces.isEmpty())
 			produces.addAll(context.getProduces());
 
-		Map<String,JsonMap> tagMap = CollectionUtils.map();
+		Map<String,JsonMap> tagMap = map();
 		if (omSwagger.containsKey("tags")) {
 			for (JsonMap om : omSwagger.getList("tags").elements(JsonMap.class)) {
 				String name = om.getString("name");

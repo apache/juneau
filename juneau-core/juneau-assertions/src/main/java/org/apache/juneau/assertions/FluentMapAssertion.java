@@ -18,7 +18,7 @@ package org.apache.juneau.assertions;
 
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;

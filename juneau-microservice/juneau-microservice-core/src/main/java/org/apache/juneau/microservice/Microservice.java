@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.FileUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -27,10 +28,10 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.jar.*;
 import java.util.logging.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
@@ -301,7 +302,7 @@ public class Microservice implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder consoleCommands(ConsoleCommand...consoleCommands) {
-			CollectionUtils.addAll(this.consoleCommands, consoleCommands);
+			addAll(this.consoleCommands, consoleCommands);
 			return this;
 		}
 

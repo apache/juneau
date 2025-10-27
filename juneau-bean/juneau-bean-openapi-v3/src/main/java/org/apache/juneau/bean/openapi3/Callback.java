@@ -17,13 +17,13 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A map of possible out-of-band callbacks related to the parent operation.
@@ -86,7 +86,7 @@ public class Callback extends OpenApiElement {
 	 */
 	public Callback(Callback copyFrom) {
 		super(copyFrom);
-		this.callbacks = CollectionUtils.copyOf(copyFrom.callbacks);
+		this.callbacks = copyOf(copyFrom.callbacks);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class Callback extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(callbacks), "callbacks")
 			.build();
 		// @formatter:on
@@ -144,7 +144,7 @@ public class Callback extends OpenApiElement {
 	public Callback set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "callbacks" -> setCallbacks(toMap(value, String.class, PathItem.class).sparse().build());
+			case "callbacks" -> setCallbacks(toMapBuilder(value, String.class, PathItem.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

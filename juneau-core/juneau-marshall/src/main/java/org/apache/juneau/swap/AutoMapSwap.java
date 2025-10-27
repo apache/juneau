@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.swap;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils2.*;
 

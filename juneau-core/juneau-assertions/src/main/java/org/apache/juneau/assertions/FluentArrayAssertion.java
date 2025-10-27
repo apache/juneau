@@ -18,6 +18,7 @@ package org.apache.juneau.assertions;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -441,6 +442,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {
-		return valueIsNull() ? null : CollectionUtils.sortedList(comparator, value());
+		return valueIsNull() ? null : sortedList(comparator, value());
 	}
 }

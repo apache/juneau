@@ -17,6 +17,7 @@
 package org.apache.juneau.microservice.jetty;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -72,8 +73,8 @@ public class JettyMicroservice extends Microservice {
 		String jettyXml;
 		int[] ports;
 		Boolean jettyXmlResolveVars;
-		Map<String,Servlet> servlets = CollectionUtils.map();
-		Map<String,Object> servletAttributes = CollectionUtils.map();
+		Map<String,Servlet> servlets = map();
+		Map<String,Object> servletAttributes = map();
 		JettyMicroserviceListener listener;
 		JettyServerFactory factory;
 
@@ -92,8 +93,8 @@ public class JettyMicroservice extends Microservice {
 			this.jettyXml = copyFrom.jettyXml;
 			this.ports = copyFrom.ports;
 			this.jettyXmlResolveVars = copyFrom.jettyXmlResolveVars;
-			this.servlets = CollectionUtils.copyOf(copyFrom.servlets);
-			this.servletAttributes = CollectionUtils.copyOf(copyFrom.servletAttributes);
+			this.servlets = copyOf(copyFrom.servlets);
+			this.servletAttributes = copyOf(copyFrom.servletAttributes);
 			this.listener = copyFrom.listener;
 		}
 

@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -116,7 +117,7 @@ public abstract class Context implements AnnotationProvider {
 		protected Builder(Builder copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.type;
-			annotations = CollectionUtils.toList(copyFrom.annotations, true);
+			annotations = toList(copyFrom.annotations, true);
 			registerBuilders(this);
 		}
 
@@ -128,7 +129,7 @@ public abstract class Context implements AnnotationProvider {
 		protected Builder(Context copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
-			annotations = CollectionUtils.toList(copyFrom.annotations, true);
+			annotations = toList(copyFrom.annotations, true);
 			registerBuilders(this);
 		}
 
@@ -304,7 +305,7 @@ public abstract class Context implements AnnotationProvider {
 		 * @return This object.
 		 */
 		public Builder annotations(Annotation...values) {
-			annotations = CollectionUtils.addAll(annotations, values);
+			annotations = addAll(annotations, values);
 			return this;
 		}
 
@@ -316,7 +317,7 @@ public abstract class Context implements AnnotationProvider {
 		 * @return This object.
 		 */
 		public Builder annotations(List<Annotation> values) {
-			annotations = CollectionUtils.addAll(annotations, values);
+			annotations = addAll(annotations, values);
 			return this;
 		}
 
@@ -671,7 +672,7 @@ public abstract class Context implements AnnotationProvider {
 		}
 
 		private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
-			Utils.traverse(x, y -> {
+			CollectionUtils.traverse(x, y -> {
 				if (x instanceof Class<?> x2)
 					work.add(ClassInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));
 				else if (x instanceof ClassInfo x2)

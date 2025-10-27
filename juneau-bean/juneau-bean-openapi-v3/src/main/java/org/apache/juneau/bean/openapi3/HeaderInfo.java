@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -24,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Describes a single HTTP header.
@@ -105,7 +105,7 @@ public class HeaderInfo extends OpenApiElement {
 		this.ref = copyFrom.ref;
 		this.explode = copyFrom.explode;
 		this.deprecated = copyFrom.deprecated;
-		this.examples = CollectionUtils.copyOf(copyFrom.examples, Example::copy);
+		this.examples = copyOf(copyFrom.examples, Example::copy);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class HeaderInfo extends OpenApiElement {
 	public HeaderInfo addExample(String name, Example example) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("example", example);
-		examples = CollectionUtils.mapb(String.class, Example.class).to(examples).sparse().add(name, example).build();
+		examples = mapb(String.class, Example.class).to(examples).sparse().add(name, example).build();
 		return this;
 	}
 
@@ -244,7 +244,7 @@ public class HeaderInfo extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(ref), "$ref")
 			.addIf(nn(allowEmptyValue), "allowEmptyValue")
 			.addIf(nn(allowReserved), "allowReserved")
@@ -296,7 +296,7 @@ public class HeaderInfo extends OpenApiElement {
 			case "allowReserved" -> setAllowReserved(toBoolean(value));
 			case "deprecated" -> setDeprecated(toBoolean(value));
 			case "description" -> setDescription(s(value));
-			case "examples" -> setExamples(toMap(value, String.class, Example.class).sparse().build());
+			case "examples" -> setExamples(toMapBuilder(value, String.class, Example.class).sparse().build());
 			case "explode" -> setExplode(toBoolean(value));
 			case "required" -> setRequired(toBoolean(value));
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
@@ -398,7 +398,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public HeaderInfo setExamples(Map<String,Example> value) {
-		examples = CollectionUtils.copyOf(value);
+		examples = copyOf(value);
 		return this;
 	}
 

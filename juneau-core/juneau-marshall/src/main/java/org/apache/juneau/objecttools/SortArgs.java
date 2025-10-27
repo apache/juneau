@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.objecttools;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
@@ -84,7 +84,7 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(Collection<String> sortArgs) {
-		Map<String,Boolean> sort = CollectionUtils.map();
+		Map<String,Boolean> sort = map();
 		sortArgs.forEach(s -> {
 			boolean isDesc = false;
 			if (endsWith(s, '-', '+')) {

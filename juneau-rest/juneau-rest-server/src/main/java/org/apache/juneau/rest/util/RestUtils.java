@@ -47,7 +47,7 @@ import jakarta.servlet.http.*;
 public class RestUtils {
 
 	// @formatter:off
-	private static Map<Integer,String> httpMsgs = CollectionUtils.mapb(Integer.class, String.class)
+	private static Map<Integer,String> httpMsgs = mapb(Integer.class, String.class)
 		.unmodifiable()
 		.add(100, "Continue")
 		.add(101, "Switching Protocols")
@@ -263,7 +263,7 @@ public class RestUtils {
 		try {
 			Map<String,String[]> m = map;
 			if (m == null)
-				m = CollectionUtils.map();
+				m = map();
 
 			if (qs == null || ((qs instanceof CharSequence) && isEmpty(s(qs))))
 				return m;
@@ -498,7 +498,7 @@ public class RestUtils {
 		List<String> list = list();
 		for (String l : content) {
 			if ("INHERIT".equals(l)) {
-				CollectionUtils.addAll(list, parentContent);
+				addAll(list, parentContent);
 			} else if ("NONE".equals(l)) {
 				return new String[0];
 			} else {
@@ -515,7 +515,7 @@ public class RestUtils {
 		List<String> list = list();
 		for (String l : links) {
 			if ("INHERIT".equals(l))
-				CollectionUtils.addAll(list, parentLinks);
+				addAll(list, parentLinks);
 			else if (l.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(l).matches()) {
 				Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
 				lm.matches();

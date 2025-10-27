@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.objecttools;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * POJO model sorter.
@@ -138,7 +138,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		}
 
 		// We reverse the list and sort last to first.
-		List<String> columns = CollectionUtils.toList(sort.keySet());
+		List<String> columns = toList(sort.keySet());
 		Collections.reverse(columns);
 
 		List<SortEntry> l3 = l;

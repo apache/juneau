@@ -7,6 +7,7 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 
@@ -934,5 +935,361 @@ public class CollectionUtils {
 		return indexOf(element, array) != -1;
 	}
 
+	/**
+	 * Shortcut for creating a modifiable list out of an array of values.
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the list.
+	 * @return A modifiable list containing the specified values.
+	 */
+	@SafeVarargs
+	public static <T> List<T> list(T...values) {  // NOSONAR
+		return new ArrayList<>(Arrays.asList(values));
+	}
+
+	/**
+	 * Convenience method for creating an {@link ArrayList} of the specified size.
+	 *
+	 * @param <E> The element type.
+	 * @param size The initial size of the list.
+	 * @return A new modifiable list.
+	 */
+	public static <E> ArrayList<E> listOfSize(int size) {
+		return new ArrayList<>(size);
+	}
+
 	private CollectionUtils() {}
+
+	/**
+	 * Shortcut for creating an unmodifiable list out of an array of values.
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the list.
+	 * @return An unmodifiable list containing the specified values, or <jk>null</jk> if the input is <jk>null</jk>.
+	 */
+	@SafeVarargs
+	public static <T> List<T> alist(T...values) {  // NOSONAR
+		return values == null ? null : Arrays.asList(values);
+	}
+
+	/**
+	 * Converts the specified collection to an array.
+	 *
+	 * @param <E> The element type.
+	 * @param value The collection to convert.
+	 * @param componentType The component type of the array.
+	 * @return A new array.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
+		if (value == null)
+			return null;
+		E[] array = (E[])Array.newInstance(componentType, value.size());
+		return value.toArray(array);
+	}
+
+	/**
+	 * Converts any array (including primitive arrays) to a List.
+	 *
+	 * @param array The array to convert. Can be any array type including primitives.
+	 * @return A List containing the array elements. Primitive values are auto-boxed.
+	 *         Returns null if the input is null.
+	 * @throws IllegalArgumentException if the input is not an array.
+	 */
+	public static List<Object> arrayToList(Object array) {
+		if (array == null) {
+			return null;  // NOSONAR
+		}
+
+		assertArg(Utils.isArray(array), "Input must be an array but was {0}", array.getClass().getName());
+
+		var componentType = array.getClass().getComponentType();
+		var length = Array.getLength(array);
+		var result = new ArrayList<>(length);
+
+		// Handle primitive arrays specifically for better performance
+		if (componentType.isPrimitive()) {
+			if (componentType == int.class) {
+				var arr = (int[])array;
+				for (int value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == long.class) {
+				var arr = (long[])array;
+				for (long value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == double.class) {
+				var arr = (double[])array;
+				for (double value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == float.class) {
+				var arr = (float[])array;
+				for (float value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == boolean.class) {
+				var arr = (boolean[])array;
+				for (boolean value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == byte.class) {
+				var arr = (byte[])array;
+				for (byte value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == char.class) {
+				var arr = (char[])array;
+				for (char value : arr) {
+					result.add(value);
+				}
+			} else if (componentType == short.class) {
+				var arr = (short[])array;
+				for (short value : arr) {
+					result.add(value);
+				}
+			}
+		} else {
+			// Handle Object arrays
+			for (var i = 0; i < length; i++) {
+				result.add(Array.get(array, i));
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Shortcut for creating an empty list of the specified type.
+	 *
+	 * @param <T> The element type.
+	 * @param type The element type class.
+	 * @return An empty list.
+	 */
+	public static <T> List<T> elist(Class<T> type) {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Shortcut for creating an empty map of the specified types.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param keyType The key type class.
+	 * @param valueType The value type class.
+	 * @return An empty unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> emap(Class<K> keyType, Class<V> valueType) {
+		return Collections.emptyMap();
+	}
+
+	/**
+	 * Returns a null list.
+	 *
+	 * @param <T> The element type.
+	 * @param type The element type class.
+	 * @return <jk>null</jk>.
+	 */
+	public static <T> List<T> nlist(Class<T> type) {
+		return null;
+	}
+
+	/**
+	 * Returns a null map.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param keyType The key type class.
+	 * @param valueType The value type class.
+	 * @return <jk>null</jk>.
+	 */
+	public static <K,V> Map<K,V> nmap(Class<K> keyType, Class<V> valueType) {
+		return null;
+	}
+
+	/**
+	 * Returns <jk>null</jk> for the specified array type.
+	 *
+	 * @param <T> The component type.
+	 * @param type The component type class.
+	 * @return <jk>null</jk>.
+	 */
+	public static <T> T[] na(Class<T> type) {
+		return null;
+	}
+
+	/**
+	 * Shortcut for creating a modifiable set out of an array of values.
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the set.
+	 * @return A modifiable LinkedHashSet containing the specified values.
+	 */
+	@SafeVarargs
+	public static <T> LinkedHashSet<T> set(T...values) {  // NOSONAR
+		return new LinkedHashSet<>(Arrays.asList(values));
+	}
+
+	/**
+	 * Converts various collection-like objects to a {@link List}.
+	 *
+	 * <p>This utility method enables testing of any collection-like object by converting it to a List that can be
+	 * passed to methods such as TestUtils.assertList().</p>
+	 *
+	 * <h5 class='section'>Supported Input Types:</h5>
+	 * <ul>
+	 * 	<li><b>List:</b> Returns the input unchanged</li>
+	 * 	<li><b>Iterable:</b> Any collection, set, queue, etc. (converted to List preserving order)</li>
+	 * 	<li><b>Iterator:</b> Converts iterator contents to List</li>
+	 * 	<li><b>Enumeration:</b> Converts enumeration contents to List</li>
+	 * 	<li><b>Stream:</b> Converts stream contents to List (stream is consumed)</li>
+	 * 	<li><b>Map:</b> Converts map entries to List of Map.Entry objects</li>
+	 * 	<li><b>Array:</b> Converts any array type (including primitive arrays) to List</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Test a Set</jc>
+	 * 	Set&lt;String&gt; <jv>mySet</jv> = Set.of(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * 	assertList(toList(<jv>mySet</jv>), <js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 *
+	 * 	<jc>// Test an array</jc>
+	 * 	String[] <jv>myArray</jv> = {<js>"x"</js>, <js>"y"</js>, <js>"z"</js>};
+	 * 	assertList(toList(<jv>myArray</jv>), <js>"x"</js>, <js>"y"</js>, <js>"z"</js>);
+	 *
+	 * 	<jc>// Test a primitive array</jc>
+	 * 	<jk>int</jk>[] <jv>numbers</jv> = {1, 2, 3};
+	 * 	assertList(toList(<jv>numbers</jv>), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
+	 *
+	 * 	<jc>// Test a Stream</jc>
+	 * 	Stream&lt;String&gt; <jv>myStream</jv> = Stream.of(<js>"foo"</js>, <js>"bar"</js>);
+	 * 	assertList(toList(<jv>myStream</jv>), <js>"foo"</js>, <js>"bar"</js>);
+	 *
+	 * 	<jc>// Test a Map (converted to entries)</jc>
+	 * 	Map&lt;String,Integer&gt; <jv>myMap</jv> = Map.of(<js>"a"</js>, 1, <js>"b"</js>, 2);
+	 * 	assertList(toList(<jv>myMap</jv>), <js>"a=1"</js>, <js>"b=2"</js>);
+	 *
+	 * 	<jc>// Test any Iterable collection</jc>
+	 * 	Queue&lt;String&gt; <jv>myQueue</jv> = new LinkedList&lt;&gt;(List.of(<js>"first"</js>, <js>"second"</js>));
+	 * 	assertList(toList(<jv>myQueue</jv>), <js>"first"</js>, <js>"second"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Integration with Testing:</h5>
+	 * <p>This method is specifically designed to work with testing frameworks to provide
+	 * a unified testing approach for all collection-like types. Instead of having separate assertion methods
+	 * for arrays, sets, and other collections, you can convert them all to Lists and use standard
+	 * list assertion methods.</p>
+	 *
+	 * @param o The object to convert to a List. Must not be null and must be a supported collection-like type.
+	 * @return A {@link List} containing the elements from the input object.
+	 * @throws IllegalArgumentException if the input object cannot be converted to a List.
+	 * @see arrayToList
+	 */
+	public static final List<?> toList(Object o) {  // NOSONAR
+		assertArgNotNull("o", o);
+		if (o instanceof List<?> o2)
+			return o2;
+		if (o instanceof Iterable<?> o2)
+			return StreamSupport.stream(o2.spliterator(), false).toList();
+		if (o instanceof Iterator<?> o2)
+			return StreamSupport.stream(Spliterators.spliteratorUnknownSize(o2, 0), false).toList();
+		if (o instanceof Enumeration<?> o2)
+			return Collections.list(o2);
+		if (o instanceof Stream<?> o2)
+			return o2.toList();
+		if (o instanceof Map<?,?> o2)
+			return toList(o2.entrySet());
+		if (o instanceof Optional<?> o2)
+			return o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());
+		if (Utils.isArray(o))
+			return arrayToList(o);
+		throw ThrowableUtils.runtimeException("Could not convert object of type {0} to a list", Utils.cn(o));
+	}
+
+	/**
+	 * Converts an array to a stream of objects.
+	 * @param array The array to convert.
+	 * @return A new stream.
+	 */
+	public static Stream<Object> toStream(Object array) {
+		assertArg(Utils.isArray(array), "Arg was not an array.  Type: {0}", array.getClass().getName());
+		var length = Array.getLength(array);
+		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
+	}
+
+	/**
+	 * Creates an unmodifiable view of the specified list.
+	 *
+	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableList(List)}.</p>
+	 *
+	 * @param <T> The element type.
+	 * @param value The list to make unmodifiable. Can be null.
+	 * @return An unmodifiable view of the list, or null if the input was null.
+	 */
+	public static <T> List<T> u(List<? extends T> value) {
+		return value == null ? null : Collections.unmodifiableList(value);
+	}
+
+	/**
+	 * Creates an unmodifiable view of the specified map.
+	 *
+	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableMap(Map)}.</p>
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param value The map to make unmodifiable. Can be null.
+	 * @return An unmodifiable view of the map, or null if the input was null.
+	 */
+	public static <K,V> Map<K,V> u(Map<? extends K,? extends V> value) {
+		return value == null ? null : Collections.unmodifiableMap(value);
+	}
+
+	/**
+	 * Creates an unmodifiable view of the specified set.
+	 *
+	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableSet(Set)}.</p>
+	 *
+	 * @param <T> The element type.
+	 * @param value The set to make unmodifiable. Can be null.
+	 * @return An unmodifiable view of the set, or null if the input was null.
+	 */
+	public static <T> Set<T> u(Set<? extends T> value) {
+		return value == null ? null : Collections.unmodifiableSet(value);
+	}
+
+	/**
+	 * Traverses all elements in the specified object and executes a consumer for it.
+	 *
+	 * @param <T> The element type.
+	 * @param o The object to traverse.
+	 * @param c The consumer of the objects.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> void traverse(Object o, Consumer<T> c) {
+		if (o == null)
+			return;
+		if (o instanceof Iterable<?> o2)
+			o2.forEach(x -> traverse(x, c));
+		else if (o instanceof Stream<?> o2)
+			o2.forEach(x -> traverse(x, c));
+		else if (Utils.isArray(o))
+			toStream(o).forEach(x -> traverse(x, c));
+		else
+			c.accept((T)o);
+	}
+
+	/**
+	 * Traverses all elements in the specified object and accumulates them into a list.
+	 *
+	 * @param <T> The element type.
+	 * @param o The object to traverse.
+	 * @return A list containing all accumulated elements.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> accumulate(Object o) {
+		var l = list();
+		traverse(o, l::add);
+		return (List<T>)l;
+	}
 }

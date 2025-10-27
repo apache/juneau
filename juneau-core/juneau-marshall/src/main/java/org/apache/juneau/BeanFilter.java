@@ -718,10 +718,10 @@ public class BeanFilter {
 	BeanFilter(Builder builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.properties = CollectionUtils.copyOf(builder.properties);
-		this.excludeProperties = CollectionUtils.copyOf(builder.excludeProperties);
-		this.readOnlyProperties = CollectionUtils.copyOf(builder.readOnlyProperties);
-		this.writeOnlyProperties = CollectionUtils.copyOf(builder.writeOnlyProperties);
+		this.properties = copyOf(builder.properties);
+		this.excludeProperties = copyOf(builder.excludeProperties);
+		this.readOnlyProperties = copyOf(builder.readOnlyProperties);
+		this.writeOnlyProperties = copyOf(builder.writeOnlyProperties);
 		this.example = builder.example;
 		this.implClass = builder.implClass;
 		this.interfaceClass = builder.interfaceClass;

@@ -18,11 +18,12 @@ package org.apache.juneau.httppart;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.list;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.isEmpty;
-import static org.apache.juneau.common.utils.Utils.list;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
 
@@ -1943,7 +1944,7 @@ public class HttpPartSchema {
 		public Builder property(String key, Builder value) {
 			if (nn(key) && nn(value)) {
 				if (properties == null)
-					properties = CollectionUtils.map();
+					properties = map();
 				properties.put(key, value);
 			}
 			return this;
@@ -1968,7 +1969,7 @@ public class HttpPartSchema {
 		public Builder property(String key, HttpPartSchema value) {
 			if (nn(key) && nn(value)) {
 				if (properties == null)
-					properties = CollectionUtils.map();
+					properties = map();
 				properties.put(key, value);
 			}
 			return this;
@@ -3512,7 +3513,7 @@ public class HttpPartSchema {
 	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
 		if (in == null)
 			return null;
-		Map<String,HttpPartSchema> m = CollectionUtils.map();
+		Map<String,HttpPartSchema> m = map();
 		in.forEach((k, v) -> m.put(k, build(v, noValidate)));
 		return u(m);
 	}
@@ -3526,7 +3527,7 @@ public class HttpPartSchema {
 	}
 
 	private static <T> Set<T> copy(Set<T> in) {
-		return in == null ? emptySet() : u(CollectionUtils.copyOf(in));
+		return in == null ? emptySet() : u(copyOf(in));
 	}
 
 	final static JsonMap toJsonMap(String[] ss) {
@@ -3674,7 +3675,7 @@ public class HttpPartSchema {
 
 		// Validation.
 		List<String> errors = list();
-		ListBuilder<String> notAllowed = CollectionUtils.listb(String.class);
+		ListBuilder<String> notAllowed = listb(String.class);
 		boolean invalidFormat = false;
 		// @formatter:off
 		switch (type) {

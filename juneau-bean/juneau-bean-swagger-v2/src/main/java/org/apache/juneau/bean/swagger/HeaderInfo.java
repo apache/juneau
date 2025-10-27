@@ -26,7 +26,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.marshaller.*;
 
 /**
@@ -109,7 +108,7 @@ public class HeaderInfo extends SwaggerElement {
 		this.collectionFormat = copyFrom.collectionFormat;
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
-		this._enum = CollectionUtils.copyOf(copyFrom._enum);
+		this._enum = copyOf(copyFrom._enum);
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -137,7 +136,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo addEnum(Object...value) {
-		setEnum(CollectionUtils.setb(Object.class).to(_enum).sparse().add(value).build());
+		setEnum(setb(Object.class).to(_enum).sparse().add(value).build());
 		return this;
 	}
 
@@ -347,7 +346,7 @@ public class HeaderInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(_default), "default")
 			.addIf(nn(description), "description")
@@ -410,7 +409,7 @@ public class HeaderInfo extends SwaggerElement {
 			case "collectionFormat" -> setCollectionFormat(s(value));
 			case "default" -> setDefault(value);
 			case "description" -> setDescription(s(value));
-			case "enum" -> setEnum(CollectionUtils.setb(Object.class).sparse().addAny(value).build());
+			case "enum" -> setEnum(setb(Object.class).sparse().addAny(value).build());
 			case "example" -> setExample(value);
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
@@ -507,7 +506,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.toSet(value);
+		_enum = toSet(value);
 		return this;
 	}
 

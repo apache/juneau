@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.BeanMeta.MethodType.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -204,7 +205,7 @@ public class BeanMeta<T> {
 
 				List<Class<?>> bdClasses = list();
 				if (nn(beanFilter) && nn(beanFilter.getBeanDictionary()))
-					CollectionUtils.addAll(bdClasses, beanFilter.getBeanDictionary());
+					addAll(bdClasses, beanFilter.getBeanDictionary());
 
 				Value<String> typeName = Value.empty();
 				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
@@ -455,7 +456,7 @@ public class BeanMeta<T> {
 
 				sortProperties = (ctx.isSortProperties() || (nn(beanFilter) && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
-				properties = sortProperties ? CollectionUtils.sortedMap() : map();
+				properties = sortProperties ? sortedMap() : map();
 
 				if (nn(beanFilter) && nn(beanFilter.getTypeName()))
 					dictionaryName = beanFilter.getTypeName();
@@ -546,7 +547,7 @@ public class BeanMeta<T> {
 		if (p.isEmpty() && n.isEmpty())
 			return null;
 		if (! n.isEmpty())
-			return CollectionUtils.last(n).value();
+			return last(n).value();
 
 		Value<String> name = Value.of(p.isEmpty() ? null : "");
 		p.forEach(x -> {

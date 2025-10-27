@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
@@ -26,7 +27,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * An object representing a Server.
@@ -91,7 +91,7 @@ public class Server extends OpenApiElement {
 
 		this.url = copyFrom.url;
 		this.description = copyFrom.description;
-		this.variables = CollectionUtils.copyOf(copyFrom.variables, ServerVariable::copy);
+		this.variables = copyOf(copyFrom.variables, ServerVariable::copy);
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class Server extends OpenApiElement {
 	public Server addVariable(String key, ServerVariable value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		variables = CollectionUtils.mapb(String.class, ServerVariable.class).to(variables).sparse().add(key, value).build();
+		variables = mapb(String.class, ServerVariable.class).to(variables).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -158,7 +158,7 @@ public class Server extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(description), "description")
 			.addIf(nn(url), "url")
 			.addIf(nn(variables), "variables")
@@ -173,7 +173,7 @@ public class Server extends OpenApiElement {
 		return switch (property) {
 			case "description" -> setDescription(s(value));
 			case "url" -> setUrl(toURI(value));
-			case "variables" -> setVariables(toMap(value, String.class, ServerVariable.class).sparse().build());
+			case "variables" -> setVariables(toMapBuilder(value, String.class, ServerVariable.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -223,7 +223,7 @@ public class Server extends OpenApiElement {
 	 * @return This object
 	 */
 	public Server setVariables(Map<String,ServerVariable> value) {
-		variables = CollectionUtils.copyOf(value);
+		variables = copyOf(value);
 		return this;
 	}
 

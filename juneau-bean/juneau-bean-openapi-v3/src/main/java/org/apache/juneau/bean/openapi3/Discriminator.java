@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -24,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Used to aid in serialization, deserialization, and validation.
@@ -91,7 +91,7 @@ public class Discriminator extends OpenApiElement {
 		super(copyFrom);
 
 		this.propertyName = copyFrom.propertyName;
-		this.mapping = CollectionUtils.copyOf(copyFrom.mapping);
+		this.mapping = copyOf(copyFrom.mapping);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class Discriminator extends OpenApiElement {
 	public Discriminator addMapping(String key, String value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		mapping = CollectionUtils.mapb(String.class, String.class).to(mapping).sparse().add(key, value).build();
+		mapping = mapb(String.class, String.class).to(mapping).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -149,7 +149,7 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(mapping), "mapping")
 			.addIf(nn(propertyName), "propertyName")
 			.build();
@@ -160,7 +160,7 @@ public class Discriminator extends OpenApiElement {
 	public Discriminator set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "mapping" -> setMapping(toMap(value, String.class, String.class).sparse().build());
+			case "mapping" -> setMapping(toMapBuilder(value, String.class, String.class).sparse().build());
 			case "propertyName" -> setPropertyName(s(value));
 			default -> {
 				super.set(property, value);
@@ -183,7 +183,7 @@ public class Discriminator extends OpenApiElement {
 	 * @return This object
 	 */
 	public Discriminator setMapping(Map<String,String> value) {
-		mapping = CollectionUtils.copyOf(value);
+		mapping = copyOf(value);
 		return this;
 	}
 

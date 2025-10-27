@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.util.*;
 
@@ -64,7 +64,7 @@ public class ViewArgs {
 	 * 	<br>Values are column names.
 	 */
 	public ViewArgs(Collection<String> viewArgs) {
-		this.view = u(CollectionUtils.toList(viewArgs));
+		this.view = u(toList(viewArgs));
 	}
 
 	/**

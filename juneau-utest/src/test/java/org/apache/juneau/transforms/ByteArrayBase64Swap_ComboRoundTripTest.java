@@ -17,13 +17,12 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.assertions.Verify.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.swaps.*;
 
 class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
@@ -108,7 +107,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.verify(x -> verify(x).isType(List.class))
 			.verify(x -> verify(x.get(0)).isType(byte[].class))
 			.build(),
-		tester(4, "MapOfByteArrays", getType(Map.class,String.class,byte[].class), CollectionUtils.mapb(String.class,byte[].class).add("foo",new byte[]{1,2,3}).add("bar",null).add(null,new byte[]{4,5,6}).add("null",new byte[]{7,8,9}).build())
+		tester(4, "MapOfByteArrays", getType(Map.class,String.class,byte[].class), mapb(String.class,byte[].class).add("foo",new byte[]{1,2,3}).add("bar",null).add(null,new byte[]{4,5,6}).add("null",new byte[]{7,8,9}).build())
 			.json("{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}")
 			.jsonT("{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}")
 			.jsonR("{\n\tfoo: 'AQID',\n\tbar: null,\n\tnull: 'BAUG',\n\t'null': 'BwgJ'\n}")

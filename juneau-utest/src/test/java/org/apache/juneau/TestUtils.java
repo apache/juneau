@@ -632,7 +632,7 @@ public class TestUtils extends Utils2 {
 	 * <p>This method can validate the size of various types of objects:</p>
 	 * <ul>
 	 * 	<li><b>String:</b> Validates character length</li>
-	 * 	<li><b>Collection-like objects:</b> Any object that can be converted to a List via {@link #toList(Object)}</li>
+	 * 	<li><b>Collection-like objects:</b> Any object that can be converted to a List via {@link CollectionUtils#toList(Object)}</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>

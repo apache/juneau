@@ -17,15 +17,14 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ConverterUtils.toList;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Describes a single API operation on a path.
@@ -181,15 +180,15 @@ public class Operation extends SwaggerElement {
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
 
-		this.consumes = CollectionUtils.copyOf(copyFrom.consumes);
+		this.consumes = copyOf(copyFrom.consumes);
 		this.deprecated = copyFrom.deprecated;
 		this.description = copyFrom.description;
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.operationId = copyFrom.operationId;
-		this.produces = CollectionUtils.copyOf(copyFrom.produces);
-		this.schemes = CollectionUtils.copyOf(copyFrom.schemes);
+		this.produces = copyOf(copyFrom.produces);
+		this.schemes = copyOf(copyFrom.schemes);
 		this.summary = copyFrom.summary;
-		this.tags = CollectionUtils.copyOf(copyFrom.tags);
+		this.tags = copyOf(copyFrom.tags);
 
 		if (copyFrom.parameters == null) {
 			this.parameters = null;
@@ -201,7 +200,7 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.responses == null) {
 			this.responses = null;
 		} else {
-			this.responses = CollectionUtils.map();
+			this.responses = map();
 			copyFrom.responses.forEach((k, v) -> this.responses.put(k, v.copy()));
 		}
 
@@ -210,8 +209,8 @@ public class Operation extends SwaggerElement {
 		} else {
 			this.security = list();
 			copyFrom.security.forEach(x -> {
-				Map<String,List<String>> m2 = CollectionUtils.map();
-				x.forEach((k, v) -> m2.put(k, CollectionUtils.copyOf(v)));
+				Map<String,List<String>> m2 = map();
+				x.forEach((k, v) -> m2.put(k, copyOf(v)));
 				this.security.add(m2);
 			});
 		}
@@ -229,7 +228,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addConsumes(Collection<MediaType> values) {
-		consumes = CollectionUtils.setb(MediaType.class).to(consumes).sparse().addAll(values).build();
+		consumes = setb(MediaType.class).to(consumes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -244,7 +243,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addConsumes(MediaType...value) {
-		consumes = CollectionUtils.setb(MediaType.class).to(consumes).sparse().add(value).build();
+		consumes = setb(MediaType.class).to(consumes).sparse().add(value).build();
 		return this;
 	}
 
@@ -260,7 +259,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(Collection<ParameterInfo> values) {
-		parameters = CollectionUtils.listb(ParameterInfo.class).to(parameters).sparse().addAll(values).build();
+		parameters = listb(ParameterInfo.class).to(parameters).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -275,7 +274,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addParameters(ParameterInfo...value) {
-		parameters = CollectionUtils.listb(ParameterInfo.class).to(parameters).sparse().add(value).build();
+		parameters = listb(ParameterInfo.class).to(parameters).sparse().add(value).build();
 		return this;
 	}
 
@@ -291,7 +290,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addProduces(Collection<MediaType> values) {
-		produces = CollectionUtils.setb(MediaType.class).to(produces).sparse().addAll(values).build();
+		produces = setb(MediaType.class).to(produces).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -306,7 +305,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addProduces(MediaType...value) {
-		produces = CollectionUtils.setb(MediaType.class).to(produces).sparse().add(value).build();
+		produces = setb(MediaType.class).to(produces).sparse().add(value).build();
 		return this;
 	}
 
@@ -320,7 +319,7 @@ public class Operation extends SwaggerElement {
 	public Operation addResponse(String statusCode, ResponseInfo response) {
 		assertArgNotNull("statusCode", statusCode);
 		assertArgNotNull("response", response);
-		responses = CollectionUtils.mapb(String.class, ResponseInfo.class).to(responses).add(statusCode, response).build();
+		responses = mapb(String.class, ResponseInfo.class).to(responses).add(statusCode, response).build();
 		return this;
 	}
 
@@ -336,7 +335,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSchemes(Collection<String> values) {
-		schemes = CollectionUtils.setb(String.class).to(schemes).sparse().addAll(values).build();
+		schemes = setb(String.class).to(schemes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -352,7 +351,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addSchemes(String...value) {
-		schemes = CollectionUtils.setb(String.class).to(schemes).sparse().add(value).build();
+		schemes = setb(String.class).to(schemes).sparse().add(value).build();
 		return this;
 	}
 
@@ -370,7 +369,7 @@ public class Operation extends SwaggerElement {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
 		assertArgNotNull("value", value);
-		security = CollectionUtils.listb(Map.class).to((List)security).addAny(value).build();
+		security = listb(Map.class).to((List)security).addAny(value).build();
 		return this;
 	}
 
@@ -390,9 +389,9 @@ public class Operation extends SwaggerElement {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Operation addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
-		Map<String,List<String>> m = CollectionUtils.map();
+		Map<String,List<String>> m = map();
 		m.put(scheme, alist(alternatives));
-		security = CollectionUtils.listb(Map.class).to((List)security).add(m).build();
+		security = listb(Map.class).to((List)security).add(m).build();
 		return this;
 	}
 
@@ -408,7 +407,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addTags(Collection<String> values) {
-		tags = CollectionUtils.setb(String.class).to(tags).sparse().addAll(values).build();
+		tags = setb(String.class).to(tags).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -424,7 +423,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation addTags(String...value) {
-		tags = CollectionUtils.setb(String.class).to(tags).sparse().add(value).build();
+		tags = setb(String.class).to(tags).sparse().add(value).build();
 		return this;
 	}
 
@@ -644,7 +643,7 @@ public class Operation extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(consumes), "consumes")
 			.addIf(nn(deprecated), "deprecated")
 			.addIf(nn(description), "description")
@@ -667,18 +666,18 @@ public class Operation extends SwaggerElement {
 	public Operation set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "consumes" -> setConsumes(toList(value, MediaType.class).sparse().build());
+			case "consumes" -> setConsumes(toListBuilder(value, MediaType.class).sparse().build());
 			case "deprecated" -> setDeprecated(toBoolean(value));
 			case "description" -> setDescription(s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			case "operationId" -> setOperationId(s(value));
-			case "parameters" -> setParameters(toList(value, ParameterInfo.class).sparse().build());
-			case "produces" -> setProduces(toList(value, MediaType.class).sparse().build());
-			case "responses" -> setResponses(toMap(value, String.class, ResponseInfo.class).sparse().build());
-			case "schemes" -> setSchemes(toList(value, String.class).sparse().addAny(value).build());
-			case "security" -> setSecurity((List)toList(value, MapStringList.class).sparse().build());
+			case "parameters" -> setParameters(toListBuilder(value, ParameterInfo.class).sparse().build());
+			case "produces" -> setProduces(toListBuilder(value, MediaType.class).sparse().build());
+			case "responses" -> setResponses(toMapBuilder(value, String.class, ResponseInfo.class).sparse().build());
+			case "schemes" -> setSchemes(toListBuilder(value, String.class).sparse().addAny(value).build());
+			case "security" -> setSecurity((List)toListBuilder(value, MapStringList.class).sparse().build());
 			case "summary" -> setSummary(s(value));
-			case "tags" -> setTags(toList(value, String.class).sparse().build());
+			case "tags" -> setTags(toListBuilder(value, String.class).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -701,7 +700,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setConsumes(Collection<MediaType> value) {
-		consumes = CollectionUtils.toSet(value);
+		consumes = toSet(value);
 		return this;
 	}
 
@@ -800,7 +799,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setParameters(Collection<ParameterInfo> value) {
-		parameters = CollectionUtils.toList(value);
+		parameters = toList(value);
 		return this;
 	}
 
@@ -832,7 +831,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setProduces(Collection<MediaType> value) {
-		produces = CollectionUtils.toSet(value);
+		produces = toSet(value);
 		return this;
 	}
 
@@ -865,7 +864,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setResponses(Map<String,ResponseInfo> value) {
-		responses = CollectionUtils.copyOf(value);
+		responses = copyOf(value);
 		return this;
 	}
 
@@ -888,7 +887,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSchemes(Collection<String> value) {
-		schemes = CollectionUtils.toSet(value);
+		schemes = toSet(value);
 		return this;
 	}
 
@@ -904,7 +903,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSchemes(String...value) {
-		setSchemes(CollectionUtils.setb(String.class).sparse().add(value).build());
+		setSchemes(setb(String.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -920,7 +919,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSecurity(Collection<Map<String,List<String>>> value) {
-		security = CollectionUtils.toList(value);
+		security = toList(value);
 		return this;
 	}
 
@@ -970,7 +969,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setTags(Collection<String> value) {
-		tags = CollectionUtils.toSet(value);
+		tags = toSet(value);
 		return this;
 	}
 
@@ -986,7 +985,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setTags(String...value) {
-		setTags(CollectionUtils.setb(String.class).sparse().add(value).build());
+		setTags(setb(String.class).sparse().add(value).build());
 		return this;
 	}
 

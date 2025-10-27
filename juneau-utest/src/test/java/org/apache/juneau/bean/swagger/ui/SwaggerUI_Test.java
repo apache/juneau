@@ -18,6 +18,7 @@ package org.apache.juneau.bean.swagger.ui;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -313,7 +314,7 @@ class SwaggerUI_Test extends TestBase {
 	@Test void a12_htmlOutputStructure() throws Exception {
 		var swagger = swagger()
 			.setInfo(info("Test API", "1.0.0"))
-			.setPaths(org.apache.juneau.common.utils.Utils.map("/test", operationMap()
+			.setPaths(map("/test", operationMap()
 				.append("get", operation().setSummary("Test operation"))));
 
 		assertString(

@@ -17,6 +17,7 @@
 package org.apache.juneau.parser;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -25,7 +26,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.reflect.*;
 
@@ -179,7 +179,7 @@ public class ParserSet {
 		 * @return This object.
 		 */
 		public Builder add(Parser...s) {
-			CollectionUtils.prependAll(entries, (Object[])s);
+			prependAll(entries, (Object[])s);
 			return this;
 		}
 

@@ -18,6 +18,7 @@ package org.apache.juneau.utils;
 
 import static java.lang.Character.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -156,10 +157,10 @@ public class ReflectionMap<V> {
 		 * @param copyFrom The builder being copied.
 		 */
 		protected Builder(Builder<V> copyFrom) {
-			classEntries = CollectionUtils.copyOf(copyFrom.classEntries);
-			methodEntries = CollectionUtils.copyOf(copyFrom.methodEntries);
-			fieldEntries = CollectionUtils.copyOf(copyFrom.fieldEntries);
-			constructorEntries = CollectionUtils.copyOf(copyFrom.constructorEntries);
+			classEntries = copyOf(copyFrom.classEntries);
+			methodEntries = copyOf(copyFrom.methodEntries);
+			fieldEntries = copyOf(copyFrom.fieldEntries);
+			constructorEntries = copyOf(copyFrom.constructorEntries);
 		}
 
 		/**

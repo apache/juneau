@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -24,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Allows the definition of input and output data types.
@@ -127,11 +127,11 @@ public class SchemaInfo extends SwaggerElement {
 		super(copyFrom);
 
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
-		this.allOf = CollectionUtils.copyOf(copyFrom.allOf);
+		this.allOf = copyOf(copyFrom.allOf);
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
 		this.discriminator = copyFrom.discriminator;
-		this._enum = CollectionUtils.copyOf(copyFrom._enum);
+		this._enum = copyOf(copyFrom._enum);
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -151,12 +151,12 @@ public class SchemaInfo extends SwaggerElement {
 		this.readOnly = copyFrom.readOnly;
 		this.ref = copyFrom.ref;
 		this.required = copyFrom.required;
-		this.requiredProperties = CollectionUtils.copyOf(copyFrom.requiredProperties);
+		this.requiredProperties = copyOf(copyFrom.requiredProperties);
 		this.title = copyFrom.title;
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
-		this.properties = CollectionUtils.copyOf(copyFrom.properties, SchemaInfo::copy);
+		this.properties = copyOf(copyFrom.properties, SchemaInfo::copy);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo addAllOf(Collection<SchemaInfo> values) {
-		allOf = CollectionUtils.setb(SchemaInfo.class).to(allOf).elementType(SchemaInfo.class).sparse().addAll(values).build();
+		allOf = setb(SchemaInfo.class).to(allOf).elementType(SchemaInfo.class).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -184,7 +184,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo addAllOf(SchemaInfo...values) {
-		allOf = CollectionUtils.setb(SchemaInfo.class).to(allOf).elementType(SchemaInfo.class).sparse().add(values).build();
+		allOf = setb(SchemaInfo.class).to(allOf).elementType(SchemaInfo.class).sparse().add(values).build();
 		return this;
 	}
 
@@ -200,7 +200,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo addEnum(Collection<Object> values) {
-		_enum = CollectionUtils.setb(Object.class).to(_enum).sparse().addAll(values).build();
+		_enum = setb(Object.class).to(_enum).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -213,7 +213,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo addEnum(Object...value) {
-		_enum = CollectionUtils.setb(Object.class).to(_enum).sparse().add(value).build();
+		_enum = setb(Object.class).to(_enum).sparse().add(value).build();
 		return this;
 	}
 
@@ -227,7 +227,7 @@ public class SchemaInfo extends SwaggerElement {
 	public SchemaInfo addProperty(String key, SchemaInfo value) {
 		assertArgNotNull("key", key);
 		assertArgNotNull("value", value);
-		properties = CollectionUtils.mapb(String.class, SchemaInfo.class).to(properties).sparse().add(key, value).build();
+		properties = mapb(String.class, SchemaInfo.class).to(properties).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -243,7 +243,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo addRequiredProperties(Collection<String> values) {
-		requiredProperties = CollectionUtils.setb(String.class).to(requiredProperties).sparse().addAll(values).build();
+		requiredProperties = setb(String.class).to(requiredProperties).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -259,7 +259,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo addRequiredProperties(String...value) {
-		requiredProperties = CollectionUtils.setb(String.class).to(requiredProperties).sparse().add(value).build();
+		requiredProperties = setb(String.class).to(requiredProperties).sparse().add(value).build();
 		return this;
 	}
 
@@ -538,7 +538,7 @@ public class SchemaInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(additionalProperties), "additionalProperties")
 			.addIf(nn(allOf), "allOf")
 			.addIf(nn(_default), "default")
@@ -618,7 +618,7 @@ public class SchemaInfo extends SwaggerElement {
 		assertArgNotNull("property", property);
 		return switch (property) {  // NOSONAR
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
-			case "allOf" -> setAllOf(toSet(value, SchemaInfo.class).sparse().build());
+			case "allOf" -> setAllOf(toSetBuilder(value, SchemaInfo.class).sparse().build());
 			case "default" -> setDefault(value);
 			case "description" -> setDescription(s(value));
 			case "discriminator" -> setDiscriminator(s(value));
@@ -639,11 +639,11 @@ public class SchemaInfo extends SwaggerElement {
 			case "minProperties" -> setMinProperties(toInteger(value));
 			case "multipleOf" -> setMultipleOf(toNumber(value));
 			case "pattern" -> setPattern(s(value));
-			case "properties" -> setProperties(toMap(value, String.class, SchemaInfo.class).sparse().build());
+			case "properties" -> setProperties(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
 			case "readOnly" -> setReadOnly(toBoolean(value));
 			case "$ref" -> setRef(s(value));
 			case "required" -> setRequired(toBoolean(value));
-			case "requiredProperties" -> setRequiredProperties(toList(value, String.class).sparse().build());
+			case "requiredProperties" -> setRequiredProperties(listb(String.class).addAny(value).sparse().build());
 			case "title" -> setTitle(s(value));
 			case "type" -> setType(s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
@@ -677,7 +677,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setAllOf(Collection<SchemaInfo> value) {
-		allOf = CollectionUtils.toSet(value);
+		allOf = toSet(value);
 		return this;
 	}
 
@@ -691,7 +691,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setAllOf(SchemaInfo...value) {
-		setAllOf(CollectionUtils.setb(SchemaInfo.class).sparse().addAny((Object[])value).build());
+		setAllOf(setb(SchemaInfo.class).sparse().addAny((Object[])value).build());
 		return this;
 	}
 
@@ -747,7 +747,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.toSet(value);
+		_enum = toSet(value);
 		return this;
 	}
 
@@ -760,7 +760,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setEnum(Object...value) {
-		setEnum(CollectionUtils.setb(Object.class).sparse().addAny(value).build());
+		setEnum(setb(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 
@@ -994,7 +994,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setProperties(Map<String,SchemaInfo> value) {
-		properties = CollectionUtils.copyOf(value);
+		properties = copyOf(value);
 		return this;
 	}
 
@@ -1057,7 +1057,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setRequiredProperties(Collection<String> value) {
-		requiredProperties = CollectionUtils.toSet(value);
+		requiredProperties = toSet(value);
 		return this;
 	}
 
@@ -1069,7 +1069,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setRequiredProperties(String...value) {
-		setRequiredProperties(CollectionUtils.setb(String.class).sparse().addAny((Object[])value).build());
+		setRequiredProperties(setb(String.class).sparse().addAny((Object[])value).build());
 		return this;
 	}
 

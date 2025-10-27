@@ -27,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -121,7 +120,7 @@ public class Items extends OpenApiElement {
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this._default = copyFrom._default;
-		this._enum = CollectionUtils.copyOf(copyFrom._enum);
+		this._enum = copyOf(copyFrom._enum);
 		this.ref = copyFrom.ref;
 	}
 
@@ -134,7 +133,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items addEnum(Object...values) {
-		_enum = CollectionUtils.listb(Object.class).to(_enum).sparse().addAny(values).build();
+		_enum = listb(Object.class).to(_enum).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -325,7 +324,7 @@ public class Items extends OpenApiElement {
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(ref), "$ref")
 			.addIf(nn(collectionFormat), "collectionFormat")
 			.addIf(nn(_default), "default")
@@ -470,7 +469,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = CollectionUtils.toList(value);
+		_enum = toList(value);
 		return this;
 	}
 
@@ -498,7 +497,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Object...values) {  // NOSONAR - Intentional naming.
-		_enum = CollectionUtils.listb(Object.class).sparse().addAny(_enum, values).build();
+		_enum = listb(Object.class).sparse().addAny(_enum, values).build();
 		return this;
 	}
 

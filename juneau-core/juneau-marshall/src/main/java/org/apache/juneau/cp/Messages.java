@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ResourceBundleUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -382,7 +383,7 @@ public class Messages extends ResourceBundle {
 			});
 		}
 
-		this.keyMap = u(CollectionUtils.copyOf(keyMap));
+		this.keyMap = u(copyOf(keyMap));
 		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
 	}
 

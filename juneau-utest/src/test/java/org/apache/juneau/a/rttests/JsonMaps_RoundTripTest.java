@@ -17,11 +17,12 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -50,7 +51,7 @@ class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 		x3 = t.roundTrip(x3, List.class, A.class);
 		assertBean(x3, "size,0{f1,f2}", "1,{a,2}");
 
-		var x4 = CollectionUtils.map("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		var x4 = map("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		x4 = t.roundTrip(x4, Map.class, String.class, A.class);
 		assertMap(x4, "size,a{f1,f2}", "1,{a,2}");
 	}

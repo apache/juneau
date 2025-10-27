@@ -19,6 +19,7 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.eqic;
 
 import java.io.*;
 import java.util.*;

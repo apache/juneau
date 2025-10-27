@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
@@ -233,8 +234,8 @@ public class ConverterUtils {
 	 * @param type The element type class.
 	 * @return A new {@link ListBuilder} containing the converted elements.
 	 */
-	public static <T> ListBuilder<T> toList(Object value, Class<T> type) {
-		return CollectionUtils.listb(type, GenericConverter.INSTANCE).addAny(value);
+	public static <T> ListBuilder<T> toListBuilder(Object value, Class<T> type) {
+		return listb(type, GenericConverter.INSTANCE).addAny(value);
 	}
 
 	/**
@@ -255,8 +256,8 @@ public class ConverterUtils {
 	 * @param valueType The value type class.
 	 * @return A new {@link MapBuilder} containing the converted entries.
 	 */
-	public static <K,V> MapBuilder<K,V> toMap(Object value, Class<K> keyType, Class<V> valueType) {
-		return CollectionUtils.mapb(keyType, valueType, GenericConverter.INSTANCE).addAny(value);
+	public static <K,V> MapBuilder<K,V> toMapBuilder(Object value, Class<K> keyType, Class<V> valueType) {
+		return mapb(keyType, valueType, GenericConverter.INSTANCE).addAny(value);
 	}
 
 	/**
@@ -279,7 +280,7 @@ public class ConverterUtils {
 	 * @param type The element type class.
 	 * @return A new {@link SetBuilder} containing the converted elements.
 	 */
-	public static <T> SetBuilder<T> toSet(Object value, Class<T> type) {
-		return CollectionUtils.setb(type, GenericConverter.INSTANCE).addAny(value);
+	public static <T> SetBuilder<T> toSetBuilder(Object value, Class<T> type) {
+		return setb(type, GenericConverter.INSTANCE).addAny(value);
 	}
 }

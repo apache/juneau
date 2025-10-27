@@ -17,13 +17,13 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Configuration details for a supported OAuth Flow.
@@ -98,7 +98,7 @@ public class OAuthFlow extends OpenApiElement {
 		this.authorizationUrl = copyFrom.authorizationUrl;
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.refreshUrl = copyFrom.refreshUrl;
-		this.scopes = CollectionUtils.copyOf(copyFrom.scopes);
+		this.scopes = copyOf(copyFrom.scopes);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class OAuthFlow extends OpenApiElement {
 	public OAuthFlow addScope(String name, String description) {
 		assertArgNotNull("name", name);
 		assertArgNotNull("description", description);
-		scopes = CollectionUtils.mapb(String.class, String.class).to(scopes).sparse().add(name, description).build();
+		scopes = mapb(String.class, String.class).to(scopes).sparse().add(name, description).build();
 		return this;
 	}
 
@@ -178,7 +178,7 @@ public class OAuthFlow extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(authorizationUrl), "authorizationUrl")
 			.addIf(nn(refreshUrl), "refreshUrl")
 			.addIf(nn(scopes), "scopes")
@@ -193,7 +193,7 @@ public class OAuthFlow extends OpenApiElement {
 		return switch (property) {
 			case "authorizationUrl" -> setAuthorizationUrl(s(value));
 			case "refreshUrl" -> setRefreshUrl(s(value));
-			case "scopes" -> setScopes(toMap(value, String.class, String.class).sparse().build());
+			case "scopes" -> setScopes(toMapBuilder(value, String.class, String.class).sparse().build());
 			case "tokenUrl" -> setTokenUrl(s(value));
 			default -> {
 				super.set(property, value);
@@ -248,7 +248,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object
 	 */
 	public OAuthFlow setScopes(Map<String,String> value) {
-		scopes = CollectionUtils.copyOf(value);
+		scopes = copyOf(value);
 		return this;
 	}
 

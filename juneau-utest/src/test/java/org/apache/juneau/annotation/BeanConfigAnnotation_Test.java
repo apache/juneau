@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.common.utils.CollectionUtils.toList;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 

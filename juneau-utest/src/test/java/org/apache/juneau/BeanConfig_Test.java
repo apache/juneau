@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.reflect.Visibility.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;

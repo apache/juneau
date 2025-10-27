@@ -17,11 +17,10 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * A list of default implementation classes.
@@ -61,7 +60,7 @@ public class DefaultClassList {
 	 * @param value The object to copy.
 	 */
 	public DefaultClassList(DefaultClassList value) {
-		entries = CollectionUtils.copyOf(value.entries);
+		entries = copyOf(value.entries);
 	}
 
 	/**
@@ -78,7 +77,7 @@ public class DefaultClassList {
 	 * @return This object.
 	 */
 	public DefaultClassList add(Class<?>...values) {
-		CollectionUtils.prependAll(entries, values);
+		prependAll(entries, values);
 		return this;
 	}
 

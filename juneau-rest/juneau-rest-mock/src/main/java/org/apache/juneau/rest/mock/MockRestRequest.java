@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.net.*;
 import java.security.*;
 import java.util.*;
@@ -25,7 +27,6 @@ import org.apache.http.*;
 import org.apache.http.client.config.*;
 import org.apache.http.concurrent.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
@@ -50,8 +51,8 @@ import jakarta.servlet.http.*;
  */
 @SuppressWarnings("resource")
 public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
-	private Map<String,Object> attributeMap = CollectionUtils.map();
-	private Map<String,RequestDispatcher> requestDispatcherMap = CollectionUtils.map();
+	private Map<String,Object> attributeMap = map();
+	private Map<String,RequestDispatcher> requestDispatcherMap = map();
 	private String characterEncoding, protocol, scheme, serverName, remoteAddr, remoteHost, localName, localAddr, pathInfo, pathTranslated, contextPath, queryString, remoteUser, requestedSessionId,
 		requestURI, servletPath, authType;
 	private Integer serverPort, remotePort, localPort;

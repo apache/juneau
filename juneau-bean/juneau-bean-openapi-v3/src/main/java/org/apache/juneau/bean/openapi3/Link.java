@@ -17,13 +17,13 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * The Link object represents a possible design-time link for a response.
@@ -89,7 +89,7 @@ public class Link extends OpenApiElement {
 		this.operationId = copyFrom.operationId;
 		this.requestBody = copyFrom.requestBody;
 		this.server = copyFrom.server == null ? null : copyFrom.server.copy();
-		this.parameters = CollectionUtils.copyOf(copyFrom.parameters);
+		this.parameters = copyOf(copyFrom.parameters);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class Link extends OpenApiElement {
 	public Link addParameter(String mimeType, Object parameter) {
 		assertArgNotNull("mimeType", mimeType);
 		assertArgNotNull("parameter", parameter);
-		parameters = CollectionUtils.mapb(String.class, Object.class).to(parameters).sparse().add(mimeType, parameter).build();
+		parameters = mapb(String.class, Object.class).to(parameters).sparse().add(mimeType, parameter).build();
 		return this;
 	}
 
@@ -192,7 +192,7 @@ public class Link extends OpenApiElement {
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
-		var s = CollectionUtils.setb(String.class)
+		var s = setb(String.class)
 			.addIf(nn(description), "description")
 			.addIf(nn(operationId), "operationId")
 			.addIf(nn(operationRef), "operationRef")
@@ -210,7 +210,7 @@ public class Link extends OpenApiElement {
 			case "description" -> setDescription(s(value));
 			case "operationId" -> setOperationId(s(value));
 			case "operationRef" -> setOperationRef(s(value));
-			case "parameters" -> setParameters(toMap(value, String.class, Object.class).sparse().build());
+			case "parameters" -> setParameters(toMapBuilder(value, String.class, Object.class).sparse().build());
 			case "requestBody" -> setRequestBody(value);
 			case "server" -> setServer(toType(value, Server.class));
 			default -> {
@@ -278,7 +278,7 @@ public class Link extends OpenApiElement {
 	 * @return This object
 	 */
 	public Link setParameters(Map<String,Object> value) {
-		parameters = CollectionUtils.copyOf(value);
+		parameters = copyOf(value);
 		return this;
 	}
 
