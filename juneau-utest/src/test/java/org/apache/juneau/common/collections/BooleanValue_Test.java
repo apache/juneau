@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class BooleanValue_Test extends TestBase {
@@ -184,7 +184,7 @@ class BooleanValue_Test extends TestBase {
 	void d01_trackingConditionMet() {
 		var found = BooleanValue.of(false);
 
-		Utils.list(1, 2, 3, 4, 5).forEach(x -> {
+		list(1, 2, 3, 4, 5).forEach(x -> {
 			if (x > 3) {
 				found.set(true);
 			}
@@ -197,7 +197,7 @@ class BooleanValue_Test extends TestBase {
 	void d02_allConditionsMet() {
 		var allValid = BooleanValue.of(true);
 
-		Utils.list(2, 4, 6, 8, 10).forEach(x -> {
+		list(2, 4, 6, 8, 10).forEach(x -> {
 			if (x % 2 != 0) {
 				allValid.set(false);
 			}

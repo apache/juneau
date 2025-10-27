@@ -188,7 +188,7 @@ public class ArrayUtils {
 		if (a1.length != a2.length)
 			return false;
 		for (int i = 0; i < a1.length; i++)
-			if (! Utils.eq(a1[i], a2[i]))
+			if (! eq(a1[i], a2[i]))
 				return false;
 		return true;
 	}
@@ -298,7 +298,7 @@ public class ArrayUtils {
 		String[] r = new String[c.size()];
 		int i = 0;
 		for (Object o : c)
-			r[i++] = Utils.s(o);
+			r[i++] = s(o);
 		return r;
 	}
 

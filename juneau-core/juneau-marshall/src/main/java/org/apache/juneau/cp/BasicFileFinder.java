@@ -96,8 +96,8 @@ public class BasicFileFinder implements FileFinder {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof BasicFileFinder && Utils.eq(this, (BasicFileFinder)o, (x, y) -> Utils.eq(x.hashCode, y.hashCode) && Utils.eq(x.getClass(), y.getClass()) && Utils.eq(x.roots, y.roots)
-			&& Utils.eq(x.cachingLimit, y.cachingLimit) && Utils.eq(x.includePatterns, y.includePatterns) && Utils.eq(x.excludePatterns, y.excludePatterns));
+		return o instanceof BasicFileFinder && eq(this, (BasicFileFinder)o, (x, y) -> eq(x.hashCode, y.hashCode) && eq(x.getClass(), y.getClass()) && eq(x.roots, y.roots)
+			&& eq(x.cachingLimit, y.cachingLimit) && eq(x.includePatterns, y.includePatterns) && eq(x.excludePatterns, y.excludePatterns));
 	}
 
 	@Override /* Overridden from FileFinder */
@@ -107,7 +107,7 @@ public class BasicFileFinder implements FileFinder {
 
 	@Override /* Overridden from FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
-		return Utils.opt(read(find(name, locale).orElse(null)));
+		return opt(read(find(name, locale).orElse(null)));
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class BasicFileFinder implements FileFinder {
 		name = StringUtils.trimSlashesAndSpaces(name);
 
 		if (isInvalidPath(name))
-			return Utils.opte();
+			return opte();
 
 		if (nn(locale))
 			localizedFiles.putIfAbsent(locale, new ConcurrentHashMap<>());
@@ -181,7 +181,7 @@ public class BasicFileFinder implements FileFinder {
 			}
 		}
 
-		return Utils.opt(lf == null ? null : lf.read());
+		return opt(lf == null ? null : lf.read());
 	}
 
 	/**
@@ -276,6 +276,6 @@ public class BasicFileFinder implements FileFinder {
 	 * @return <jk>true</jk> if the path is invalid.
 	 */
 	protected boolean isInvalidPath(String path) {
-		return Utils.isEmpty(path) || path.contains("..") || path.contains("%");
+		return isEmpty(path) || path.contains("..") || path.contains("%");
 	}
 }

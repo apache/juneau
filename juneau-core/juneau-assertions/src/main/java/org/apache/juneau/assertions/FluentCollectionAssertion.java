@@ -22,7 +22,6 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.serializer.*;
 
@@ -221,7 +220,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 */
 	public R isContains(E entry) throws AssertionError {
 		for (var v : value())
-			if (Utils.eq(v, entry))
+			if (eq(v, entry))
 				return returns();
 		throw error(MSG_collectionDidNotContainExpectedValue, entry, value());
 	}
@@ -247,7 +246,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 */
 	public R isNotContains(E entry) throws AssertionError {
 		value().forEach(x -> {
-			if (Utils.eq(x, entry))
+			if (eq(x, entry))
 				throw error(MSG_collectionContainedUnexpectedValue, entry, value());
 		});
 		return returns();

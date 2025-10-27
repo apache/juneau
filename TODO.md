@@ -75,6 +75,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-62 ResourceBundleUtils.empty() appears to be unused. Let's remove it if so.
 - [ ] TODO-63 Look for places in code where ThrowableUtils.illegalArg and runtimeException can be used.
 - [ ] TODO-64 Add a Utils.nn(Object...) that validates that all parameters are not null.
+- [ ] TODO-65 Add Utils.isEmpty(CharSequence) which redirects to StringUtils.isEmpty(CharSequence).
 
 ## Framework Improvements
 

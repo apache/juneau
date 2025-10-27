@@ -69,7 +69,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			return null;  // NOSONAR - Intentionally returning null.
 		if (s.indexOf(',') == -1)
 			return singletonList(s);
-		var l = Utils.list();
+		var l = list();
 		var sa = s.split("\n");
 		for (var i = 0; i < sa.length; i++) {
 			if (i > 0)

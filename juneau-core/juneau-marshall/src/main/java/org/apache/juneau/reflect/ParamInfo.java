@@ -134,7 +134,7 @@ public class ParamInfo {
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
 		Optional<Annotation> o = annotationMap().get(type);
 		if (o == null) {
-			o = Utils.opt(findAnnotation(type));
+			o = opt(findAnnotation(type));
 			annotationMap().put(type, o);
 		}
 		return o.isPresent() ? (A)o.get() : null;

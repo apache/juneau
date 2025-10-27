@@ -16,11 +16,12 @@
  */
 package org.apache.juneau.objecttools;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -87,12 +88,12 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 
 		if (type.isArray()) {
 			int size = Array.getLength(input);
-			l = Utils.listOfSize(size);
+			l = listOfSize(size);
 			for (int i = 0; i < size; i++)
 				l.add(Array.get(input, i));
 		} else if (type.isCollection()) {
 			Collection c = (Collection)input;
-			l = Utils.listOfSize(c.size());
+			l = listOfSize(c.size());
 			List<Object> l2 = l;
 			c.forEach(x -> l2.add(x));
 		} else {

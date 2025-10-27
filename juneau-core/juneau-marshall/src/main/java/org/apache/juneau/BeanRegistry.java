@@ -139,7 +139,7 @@ public class BeanRegistry {
 				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
 					m.forEach((k, v) -> {
-						String typeName = Utils.s(k);
+						String typeName = s(k);
 						ClassMeta<?> val = null;
 						if (v instanceof Type)
 							val = beanContext.getClassMeta((Type)v);

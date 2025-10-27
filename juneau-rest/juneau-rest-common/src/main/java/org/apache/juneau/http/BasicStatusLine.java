@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.http;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.message.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A basic implementation of the {@link StatusLine} interface.
@@ -99,7 +100,7 @@ public class BasicStatusLine implements StatusLine {
 	@Override /* Overridden from StatusLine */
 	public String getReasonPhrase() {
 		if (reasonPhrase == null) {
-			ReasonPhraseCatalog rfc = Utils.firstNonNull(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);
+			ReasonPhraseCatalog rfc = firstNonNull(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);
 			return rfc.getReason(statusCode, locale);
 		}
 		return reasonPhrase;

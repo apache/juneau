@@ -25,7 +25,6 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Utility class for finding regular or localized files on the classpath and file system.
@@ -105,7 +104,7 @@ public interface FileFinder {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(BasicFileFinder.class, beanStore);
-			roots = Utils.set();
+			roots = set();
 			cachingLimit = -1;
 			include = new Pattern[] { Pattern.compile(".*") };
 			exclude = new Pattern[0];

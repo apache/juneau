@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.config;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
@@ -169,7 +169,7 @@ class ConfigImportsTest extends TestBase {
 			if (events.isEmpty())
 				return null;
 			for (ConfigEvent ce : events)
-				if (Utils.eq(section, ce.getSection()) && Utils.eq(key, ce.getKey()))
+				if (eq(section, ce.getSection()) && eq(key, ce.getKey()))
 					return ce.getValue();
 			return null;
 		}

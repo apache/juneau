@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.function;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -66,7 +68,7 @@ public class Tuple3<A,B,C> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple3 && Utils.eq(this, (Tuple3<?,?,?>)o, (x, y) -> Utils.eq(x.a, y.a) && Utils.eq(x.b, y.b) && Utils.eq(x.c, y.c));
+		return o instanceof Tuple3 && eq(this, (Tuple3<?,?,?>)o, (x, y) -> eq(x.a, y.a) && eq(x.b, y.b) && eq(x.c, y.c));
 	}
 
 	/**

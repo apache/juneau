@@ -1577,7 +1577,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		private static List<String> merge(List<String> old, String[] newValues) {
-			List<String> x = Utils.listOfSize(newValues.length);
+			List<String> x = listOfSize(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
 					if (nn(old))
@@ -1593,7 +1593,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		private static List<String> mergeNavLinks(List<String> old, String[] newValues) {
-			List<String> x = Utils.listOfSize(newValues.length);
+			List<String> x = listOfSize(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
 					if (nn(old))
@@ -1669,7 +1669,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();
 		widgets.stream().map(this::newInstance).forEach(x -> widgetMap.append(x));
-		widgetArray = Utils.array(widgetMap.values(), HtmlWidget.class);
+		widgetArray = array(widgetMap.values(), HtmlWidget.class);
 	}
 
 	@Override /* Overridden from Context */

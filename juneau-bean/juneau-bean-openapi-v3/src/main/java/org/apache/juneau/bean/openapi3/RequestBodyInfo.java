@@ -168,7 +168,7 @@ public class RequestBodyInfo extends OpenApiElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "content" -> setContent(toMap(value, String.class, MediaType.class).sparse().build());
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "required" -> setRequired(toBoolean(value));
 			default -> {
 				super.set(property, value);

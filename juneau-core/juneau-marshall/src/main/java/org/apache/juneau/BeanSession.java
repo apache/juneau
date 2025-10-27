@@ -1172,7 +1172,7 @@ public class BeanSession extends ContextSession {
 			}
 
 			if (to.isOptional() && (! (value instanceof Optional)))
-				return (T)Utils.opt(convertToMemberType(outer, value, to.getElementType()));
+				return (T)opt(convertToMemberType(outer, value, to.getElementType()));
 
 			Class<T> tc = to.getInnerClass();
 
@@ -1421,7 +1421,7 @@ public class BeanSession extends ContextSession {
 			// Target type is some sort of Collection
 			if (to.isCollection()) {
 				try {
-					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? Utils.set() : new JsonList(this);
+					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? set() : new JsonList(this);
 					ClassMeta elementType = to.getElementType();
 
 					if (from.isArray()) {

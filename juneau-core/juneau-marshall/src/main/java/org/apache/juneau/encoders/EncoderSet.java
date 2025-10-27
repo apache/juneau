@@ -99,7 +99,7 @@ public class EncoderSet {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(EncoderSet.class, beanStore);
-			entries = Utils.list();
+			entries = list();
 		}
 
 		/**
@@ -123,7 +123,7 @@ public class EncoderSet {
 		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 		 */
 		public Builder add(Class<?>...values) {
-			List<Object> l = Utils.list();
+			List<Object> l = list();
 			for (Class<?> v : values)
 				if (v.getSimpleName().equals("NoInherit"))
 					clear();
@@ -215,7 +215,7 @@ public class EncoderSet {
 		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 		 */
 		public Builder set(Class<?>...values) {
-			List<Object> l = Utils.list();
+			List<Object> l = list();
 			for (Class<?> v : values) {
 				if (v.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
@@ -304,8 +304,8 @@ public class EncoderSet {
 	protected EncoderSet(Builder builder) {
 		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore(), x)).toArray(Encoder[]::new);
 
-		List<String> lc = Utils.list();
-		List<Encoder> l = Utils.list();
+		List<String> lc = list();
+		List<Encoder> l = list();
 		for (Encoder e : entries) {
 			for (String c : e.getCodings()) {
 				lc.add(c);

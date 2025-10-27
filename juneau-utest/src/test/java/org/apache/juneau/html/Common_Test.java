@@ -25,7 +25,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class Common_Test extends TestBase {
@@ -350,7 +349,7 @@ class Common_Test extends TestBase {
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrowsWithMessage(Exception.class, Utils.list("[0] <noname>:org.apache.juneau.html.Common_Test$R1", "->[1] r2:org.apache.juneau.html.Common_Test$R2", "->[2] r3:org.apache.juneau.html.Common_Test$R3", "->[3] r1:org.apache.juneau.html.Common_Test$R1"), ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, list("[0] <noname>:org.apache.juneau.html.Common_Test$R1", "->[1] r2:org.apache.juneau.html.Common_Test$R2", "->[2] r3:org.apache.juneau.html.Common_Test$R3", "->[3] r1:org.apache.juneau.html.Common_Test$R1"), ()->s.build().serialize(r1));
 
 		s.ignoreRecursions();
 		assertEquals(

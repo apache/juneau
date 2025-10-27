@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -92,9 +93,9 @@ class Value_Test extends TestBase {
 		var v = Value.of("old");
 		var sb = new StringBuilder();
 		v.listener((val) -> sb.append(val));
-		
+
 		var old = v.getAndSet("new");
-		
+
 		assertEquals("old", old, "Should return old value");
 		assertEquals("new", v.get(), "Should have new value");
 		assertEquals("new", sb.toString(), "Listener should be called with new value");
@@ -116,7 +117,7 @@ class Value_Test extends TestBase {
 		var v = Value.empty();
 		assertTrue(v.is(null), "Empty value should equal null");
 		assertFalse(v.is("test"), "Empty value should not equal non-null");
-		
+
 		v.set("test");
 		assertFalse(v.is(null), "Non-null value should not equal null");
 	}
@@ -145,9 +146,9 @@ class Value_Test extends TestBase {
 
 	@Test
 	void c06_is_equalLists() {
-		var v = Value.of(Utils.list("a", "b", "c"));
-		assertTrue(v.is(Utils.list("a", "b", "c")), "Should be equal to same list content");
-		assertFalse(v.is(Utils.list("a", "b", "d")), "Should not be equal to different list content");
+		var v = Value.of(list("a", "b", "c"));
+		assertTrue(v.is(list("a", "b", "c")), "Should be equal to same list content");
+		assertFalse(v.is(list("a", "b", "d")), "Should not be equal to different list content");
 	}
 
 	@Test
@@ -175,7 +176,7 @@ class Value_Test extends TestBase {
 		// Using A1 class defined at the top
 		var obj1 = new A1();
 		var obj2 = new A1();
-		
+
 		var v = Value.of(obj1);
 		assertTrue(v.is(obj1), "Should be equal to same object");
 		// Note: A1 doesn't override equals(), so different instances won't be equal
@@ -186,7 +187,7 @@ class Value_Test extends TestBase {
 	void c11_is_afterSet() {
 		var v = Value.of("initial");
 		assertTrue(v.is("initial"));
-		
+
 		v.set("updated");
 		assertFalse(v.is("initial"), "Should not equal old value after set");
 		assertTrue(v.is("updated"), "Should equal new value after set");

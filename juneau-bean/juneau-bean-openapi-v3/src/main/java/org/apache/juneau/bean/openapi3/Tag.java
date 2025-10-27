@@ -158,9 +158,9 @@ public class Tag extends OpenApiElement {
 	public Tag set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "name" -> setName(Utils.s(value));
+			case "name" -> setName(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

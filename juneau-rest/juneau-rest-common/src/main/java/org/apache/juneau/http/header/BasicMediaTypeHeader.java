@@ -23,7 +23,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -87,7 +86,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaTypeHeader(String name, MediaType value) {
-		super(name, Utils.s(value));
+		super(name, s(value));
 		this.value = value;
 		this.supplier = null;
 	}
@@ -132,7 +131,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The header value as a {@link MediaType} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<MediaType> asMediaType() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	/**
@@ -187,7 +186,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	public final String getType() { return orElse(MediaType.EMPTY).getType(); }
 
 	@Override /* Overridden from Header */
-	public String getValue() { return Utils.s(value()); }
+	public String getValue() { return s(value()); }
 
 	/**
 	 * Returns <jk>true</jk> if the subtype contains the specified <js>'+'</js> delimited subtype value.

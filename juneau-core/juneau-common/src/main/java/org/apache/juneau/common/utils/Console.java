@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.text.*;
 
 /**
@@ -66,7 +68,7 @@ public class Console {
 	 */
 	public static final String format(String msg, Object...args) {
 		for (int i = 0; i < args.length; i++)
-			args[i] = Utils.s(args[i]);
+			args[i] = s(args[i]);
 		return MessageFormat.format(msg, args);
 	}
 

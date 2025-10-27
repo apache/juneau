@@ -242,7 +242,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public RequestFormParams add(String name, Object value) {
 		assertArgNotNull("name", name);
-		add(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
+		add(new RequestFormParam(req, name, s(value)).parser(parser));
 		return this;
 	}
 
@@ -261,7 +261,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		for (NameValuePair p : pairs) {
 			String name = p.getName();
 			Stream<RequestFormParam> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));
+			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestFormParam(req, name, vs.resolve(p.getValue())));
@@ -520,7 +520,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public RequestFormParams set(String name, Object value) {
 		assertArgNotNull("name", name);
-		set(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
+		set(new RequestFormParam(req, name, s(value)).parser(parser));
 		return this;
 	}
 
@@ -553,8 +553,6 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		if (caseSensitive)
-			return Utils.eq(s1, s2);
-		return Utils.eqic(s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);
 	}
 }

@@ -272,7 +272,7 @@ public class ResponseInfo extends SwaggerElement {
 	public ResponseInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "examples" -> setExamples(toMap(value, String.class, Object.class).sparse().build());
 			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));

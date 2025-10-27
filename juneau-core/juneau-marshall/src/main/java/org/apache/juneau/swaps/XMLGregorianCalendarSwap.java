@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.swaps;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -66,7 +66,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	 */
 	@Override /* Overridden from ObjectSwap */
 	public XMLGregorianCalendar unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			return null;
 		return dtf.newXMLGregorianCalendar(s);
 	}

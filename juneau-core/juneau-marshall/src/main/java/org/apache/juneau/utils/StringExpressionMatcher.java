@@ -229,7 +229,7 @@ public class StringExpressionMatcher {
 	}
 
 	private Exp parse(String expression) throws ParseException {
-		if (Utils.isEmptyOrBlank(expression))
+		if (isEmptyOrBlank(expression))
 			return new Never();
 
 		expression = expression.trim();

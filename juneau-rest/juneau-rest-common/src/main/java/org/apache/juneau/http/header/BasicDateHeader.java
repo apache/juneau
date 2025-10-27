@@ -25,7 +25,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Category of headers that consist of a single HTTP-date.
@@ -107,7 +106,7 @@ public class BasicDateHeader extends BasicHeader {
 	 */
 	public BasicDateHeader(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
+		this.value = isEmpty(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
 		this.supplier = null;
 	}
 
@@ -169,7 +168,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @return The header value as a {@link ZonedDateTime} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	@Override /* Overridden from Header */

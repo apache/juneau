@@ -414,7 +414,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						} else /* Map */ {
 							Map m2 = (Map)value;
 							if (nn(m2))
-								m2.forEach((k, v) -> out.attr(ns, Utils.s(k), v));
+								m2.forEach((k, v) -> out.attr(ns, s(k), v));
 						}
 					} else {
 						out.attr(ns, key, value);
@@ -865,7 +865,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			name = null;
 		}
 
-		if (Utils.eq(name, elementName))
+		if (eq(name, elementName))
 			name = null;
 
 		if (isEnableNamespaces()) {

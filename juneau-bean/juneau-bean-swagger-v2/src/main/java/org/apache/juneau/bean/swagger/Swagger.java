@@ -735,11 +735,11 @@ public class Swagger extends SwaggerElement {
 	public Swagger set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "basePath" -> setBasePath(Utils.s(value));
+			case "basePath" -> setBasePath(s(value));
 			case "consumes" -> setConsumes(toList(value, MediaType.class).sparse().build());
 			case "definitions" -> setDefinitions(toMap(value, String.class, JsonMap.class).sparse().build());
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "host" -> setHost(Utils.s(value));
+			case "host" -> setHost(s(value));
 			case "info" -> setInfo(toType(value, Info.class));
 			case "parameters" -> setParameters(toMap(value, String.class, ParameterInfo.class).sparse().build());
 			case "paths" -> setPaths(toMap(value, String.class, OperationMap.class).sparse().build());
@@ -748,7 +748,7 @@ public class Swagger extends SwaggerElement {
 			case "schemes" -> setSchemes(toList(value, String.class).sparse().build());
 			case "security" -> setSecurity((List)toList(value, MapOfStringLists.class).sparse().build());
 			case "securityDefinitions" -> setSecurityDefinitions(toMap(value, String.class, SecurityScheme.class).sparse().build());
-			case "swagger" -> setSwagger(Utils.s(value));
+			case "swagger" -> setSwagger(s(value));
 			case "tags" -> setTags(toList(value, Tag.class).sparse().build());
 			default -> {
 				super.set(property, value);

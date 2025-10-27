@@ -1205,7 +1205,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		public Builder roleGuard(String value) {
 			if (roleGuard == null)
-				roleGuard = Utils.set(value);
+				roleGuard = set(value);
 			else
 				roleGuard.add(value);
 			return this;
@@ -2020,13 +2020,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			}
 		}
 
-		Optional<BeanContext> getBeanContext() { return Utils.opt(beanContext).map(BeanContext.Builder::build); }
+		Optional<BeanContext> getBeanContext() { return opt(beanContext).map(BeanContext.Builder::build); }
 
-		Optional<EncoderSet> getEncoders() { return Utils.opt(encoders).map(EncoderSet.Builder::build); }
+		Optional<EncoderSet> getEncoders() { return opt(encoders).map(EncoderSet.Builder::build); }
 
 	RestGuardList getGuards() {
 		var b = guards();
-		var roleGuard = Utils.opt(this.roleGuard).orElseGet(Utils::set);
+		var roleGuard = opt(this.roleGuard).orElseGet(Utils::set);
 
 		for (var rg : roleGuard) {
 				try {
@@ -2039,7 +2039,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return guards.build();
 		}
 
-		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() { return Utils.opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build); }
+		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() { return opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build); }
 
 		RestMatcherList getMatchers(RestContext restContext) {
 			RestMatcherList.Builder b = matchers();
@@ -2049,13 +2049,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return b.build();
 		}
 
-		Optional<ParserSet> getParsers() { return Utils.opt(parsers).map(ParserSet.Builder::build); }
+		Optional<ParserSet> getParsers() { return opt(parsers).map(ParserSet.Builder::build); }
 
-		Optional<HttpPartParser> getPartParser() { return Utils.opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create); }
+		Optional<HttpPartParser> getPartParser() { return opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create); }
 
-		Optional<HttpPartSerializer> getPartSerializer() { return Utils.opt(partSerializer).map(Creator::create); }
+		Optional<HttpPartSerializer> getPartSerializer() { return opt(partSerializer).map(Creator::create); }
 
-		Optional<SerializerSet> getSerializers() { return Utils.opt(serializers).map(SerializerSet.Builder::build); }
+		Optional<SerializerSet> getSerializers() { return opt(serializers).map(SerializerSet.Builder::build); }
 
 	}
 
@@ -2205,19 +2205,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				return c;
 		}
 
-		c = Utils.compare(o.hierarchyDepth, hierarchyDepth);
+		c = compare(o.hierarchyDepth, hierarchyDepth);
 		if (c != 0)
 			return c;
 
-		c = Utils.compare(o.requiredMatchers.length, requiredMatchers.length);
+		c = compare(o.requiredMatchers.length, requiredMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = Utils.compare(o.optionalMatchers.length, optionalMatchers.length);
+		c = compare(o.optionalMatchers.length, optionalMatchers.length);
 		if (c != 0)
 			return c;
 
-		c = Utils.compare(o.guards.length, guards.length);
+		c = compare(o.guards.length, guards.length);
 
 		if (c != 0)
 			return c;
@@ -2226,7 +2226,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (c != 0)
 			return c;
 
-		c = Utils.compare(method.getParameterCount(), o.method.getParameterCount());
+		c = compare(method.getParameterCount(), o.method.getParameterCount());
 		if (c != 0)
 			return c;
 
@@ -2285,7 +2285,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof RestOpContext) && Utils.eq(this, (RestOpContext)o, (x, y) -> x.method.equals(y.method));
+		return (o instanceof RestOpContext) && eq(this, (RestOpContext)o, (x, y) -> x.method.equals(y.method));
 	}
 
 	/**

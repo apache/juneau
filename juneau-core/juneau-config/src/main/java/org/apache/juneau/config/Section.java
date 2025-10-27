@@ -17,13 +17,13 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.beans.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.parser.*;
 
@@ -104,7 +104,7 @@ public class Section {
 		assertArgNotNull("c", c);
 
 		if (! isPresent())
-			return Utils.opte();
+			return opte();
 
 		var keys = configMap.getKeys(name);
 
@@ -119,7 +119,7 @@ public class Section {
 			}
 		}
 
-		return Utils.opt(bm.getBean());
+		return opt(bm.getBean());
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class Section {
 		if (! c.isInterface())
 			throw new IllegalArgumentException("Class '" + c.getName() + "' passed to toInterface() is not an interface.");
 
-		return Utils.opt((T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
+		return opt((T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
 			var bi = Introspector.getBeanInfo(c, null);
 			for (var pd : bi.getPropertyDescriptors()) {
 				var rm = pd.getReadMethod();
@@ -210,14 +210,14 @@ public class Section {
 	 */
 	public Optional<JsonMap> asMap() {
 		if (! isPresent())
-			return Utils.opte();
+			return opte();
 
 		var keys = configMap.getKeys(name);
 
 		var m = new JsonMap();
 		for (var k : keys)
 			m.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
-		return Utils.opt(m);
+		return opt(m);
 	}
 
 	/**

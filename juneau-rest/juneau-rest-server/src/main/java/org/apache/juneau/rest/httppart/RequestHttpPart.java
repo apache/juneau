@@ -27,7 +27,6 @@ import java.util.regex.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
@@ -125,14 +124,14 @@ public class RequestHttpPart {
 				ConstructorInfo cc = HttpParts.getConstructor(type).orElse(null);
 				if (nn(cc)) {
 					if (! isPresent())
-						return Utils.opte();
+						return opte();
 					if (cc.hasParamTypes(String.class))
-						return Utils.opt(cc.invoke(get()));
+						return opt(cc.invoke(get()));
 					if (cc.hasParamTypes(String.class, String.class))
-						return Utils.opt(cc.invoke(getName(), get()));
+						return opt(cc.invoke(getName(), get()));
 				}
 			}
-			return Utils.opt(parser.parse(HEADER, schema, orElse(null), type));
+			return opt(parser.parse(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse {0} parameter ''{1}''.", partType.toString().toLowerCase(), getName());
 		}
@@ -406,7 +405,7 @@ public class RequestHttpPart {
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
 	 */
 	public Optional<String> asString() {
-		return Utils.opt(getValue());
+		return opt(getValue());
 	}
 
 	/**

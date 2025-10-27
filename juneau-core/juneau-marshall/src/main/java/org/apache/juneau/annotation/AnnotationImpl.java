@@ -18,6 +18,7 @@ package org.apache.juneau.annotation;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -104,7 +105,7 @@ public class AnnotationImpl implements Annotation {
 		stream(annotationType().getDeclaredMethods())
 			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
 			.sorted(Comparator.comparing(Method::getName))
-			.forEach(x -> m.append(x.getName(), Utils.safeSupplier(()->x.invoke(this))));
+			.forEach(x -> m.append(x.getName(), safeSupplier(()->x.invoke(this))));
 		// @formatter:on
 		return m;
 	}

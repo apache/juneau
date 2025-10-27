@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.stats;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;

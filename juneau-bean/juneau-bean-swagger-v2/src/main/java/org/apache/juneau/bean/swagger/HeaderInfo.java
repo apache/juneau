@@ -406,14 +406,14 @@ public class HeaderInfo extends SwaggerElement {
 	public HeaderInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
+			case "collectionFormat" -> setCollectionFormat(s(value));
 			case "default" -> setDefault(value);
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "enum" -> setEnum(CollectionUtils.setb(Object.class).sparse().addAny(value).build());
 			case "example" -> setExample(value);
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "format" -> setFormat(Utils.s(value));
+			case "format" -> setFormat(s(value));
 			case "items" -> setItems(toType(value, Items.class));
 			case "maximum" -> setMaximum(toNumber(value));
 			case "maxItems" -> setMaxItems(toInteger(value));
@@ -422,9 +422,9 @@ public class HeaderInfo extends SwaggerElement {
 			case "minItems" -> setMinItems(toInteger(value));
 			case "minLength" -> setMinLength(toInteger(value));
 			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "pattern" -> setPattern(Utils.s(value));
-			case "$ref" -> setRef(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
+			case "pattern" -> setPattern(s(value));
+			case "$ref" -> setRef(s(value));
+			case "type" -> setType(s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			default -> {
 				super.set(property, value);

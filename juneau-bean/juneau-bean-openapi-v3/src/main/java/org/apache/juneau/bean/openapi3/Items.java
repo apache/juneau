@@ -387,12 +387,12 @@ public class Items extends OpenApiElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "$ref" -> setRef(value);
-			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
+			case "collectionFormat" -> setCollectionFormat(s(value));
 			case "default" -> setDefault(value);
 			case "enum" -> setEnum(value);
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "format" -> setFormat(Utils.s(value));
+			case "format" -> setFormat(s(value));
 			case "items" -> setItems(toType(value, Items.class));
 			case "maxItems" -> setMaxItems(toInteger(value));
 			case "maxLength" -> setMaxLength(toInteger(value));
@@ -401,8 +401,8 @@ public class Items extends OpenApiElement {
 			case "minLength" -> setMinLength(toInteger(value));
 			case "minimum" -> setMinimum(toNumber(value));
 			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "pattern" -> setPattern(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
+			case "pattern" -> setPattern(s(value));
+			case "type" -> setType(s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			default -> {
 				super.set(property, value);
@@ -677,7 +677,7 @@ public class Items extends OpenApiElement {
 	 */
 	@Beanp("$ref")
 	public Items setRef(Object value) {
-		ref = Utils.s(value);
+		ref = s(value);
 		return this;
 	}
 

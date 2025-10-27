@@ -254,14 +254,14 @@ public class SecurityScheme extends SwaggerElement {
 	public SecurityScheme set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "flow" -> setFlow(Utils.s(value));
-			case "in" -> setIn(Utils.s(value));
-			case "name" -> setName(Utils.s(value));
+			case "authorizationUrl" -> setAuthorizationUrl(s(value));
+			case "description" -> setDescription(s(value));
+			case "flow" -> setFlow(s(value));
+			case "in" -> setIn(s(value));
+			case "name" -> setName(s(value));
 			case "scopes" -> setScopes(toMap(value, String.class, String.class).sparse().build());
-			case "tokenUrl" -> setTokenUrl(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
+			case "tokenUrl" -> setTokenUrl(s(value));
+			case "type" -> setType(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

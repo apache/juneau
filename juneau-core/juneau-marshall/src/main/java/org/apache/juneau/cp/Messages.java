@@ -20,6 +20,7 @@ import static org.apache.juneau.common.utils.ResourceBundleUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.isEmpty;
 
 import java.text.*;
 import java.util.*;
@@ -141,7 +142,7 @@ public class Messages extends ResourceBundle {
 			super(Messages.class, BeanStore.INSTANCE);
 			this.forClass = forClass;
 			this.name = forClass.getSimpleName();
-			locations = Utils.list();
+			locations = list();
 			locale = Locale.getDefault();
 		}
 
@@ -227,7 +228,7 @@ public class Messages extends ResourceBundle {
 		 * @return This object.
 		 */
 		public Builder name(String name) {
-			this.name = Utils.isEmpty(name) ? forClass.getSimpleName() : name;
+			this.name = isEmpty(name) ? forClass.getSimpleName() : name;
 			return this;
 		}
 
@@ -258,7 +259,7 @@ public class Messages extends ResourceBundle {
 				Builder x = null;
 
 				for (int i = mbl.length - 1; i >= 0; i--) {
-					Class<?> c = Utils.firstNonNull(mbl[i].getA(), forClass);
+					Class<?> c = firstNonNull(mbl[i].getA(), forClass);
 					String value = mbl[i].getB();
 					if (isJsonObject(value, true)) {
 						MessagesString ms;
@@ -459,7 +460,7 @@ public class Messages extends ResourceBundle {
 	 * @return The set of all keys in the resource bundle with the prefix.
 	 */
 	public Set<String> keySet(String prefix) {
-		Set<String> set = Utils.set();
+		Set<String> set = set();
 		keySet().forEach(x -> {
 			if (x.equals(prefix) || (x.startsWith(prefix) && x.charAt(prefix.length()) == '.'))
 				set.add(x);

@@ -67,7 +67,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
 		if (o == null) {
 			w.append(6, "<null/>").nl(6);
-		} else if (Utils.isEmpty(o)) {
+		} else if (isEmpty(o)) {
 			String m = session.getNoResultsMessage();
 			if (exists(m))
 				w.append(6, session.resolve(m)).nl(6);

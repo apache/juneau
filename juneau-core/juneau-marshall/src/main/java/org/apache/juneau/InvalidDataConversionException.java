@@ -16,9 +16,10 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.text.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.reflect.*;
 
@@ -68,7 +69,7 @@ public class InvalidDataConversionException extends BasicRuntimeException {
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, ClassMeta<?> toType, Exception cause) {
-		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", name(value), Utils.s(toType), value(value));
+		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", name(value), s(toType), value(value));
 	}
 
 	/**

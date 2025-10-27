@@ -20,7 +20,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -147,7 +146,7 @@ public class BeanBuilder<T> {
 	 * @return The override bean specified via {@link #impl(Object)}.
 	 */
 	protected Optional<T> impl() {
-		return Utils.opt(impl);
+		return opt(impl);
 	}
 
 	/**
@@ -156,6 +155,6 @@ public class BeanBuilder<T> {
 	 * @return The implementation type specified via {@link #type(Class)}.
 	 */
 	protected Optional<Class<? extends T>> type() {
-		return Utils.opt(type);
+		return opt(type);
 	}
 }

@@ -182,11 +182,11 @@ public class MimeTypeDetector {
 		 */
 		public Builder addTypes(String...mimeTypesLines) {
 			for (String input : mimeTypesLines) {
-				if (Utils.isNotEmpty(input)) {
+				if (isNotEmpty(input)) {
 					// Split on newlines to handle both individual lines and file contents
 					var lines = input.split("\\r?\\n");
 					for (String line : lines) {
-						if (Utils.isNotEmpty(line) && ! line.trim().startsWith("#")) {
+						if (isNotEmpty(line) && ! line.trim().startsWith("#")) {
 							var parts = line.trim().split("\\s+");
 							if (parts.length >= 2) {
 								var mimeType = parts[0];
@@ -286,7 +286,7 @@ public class MimeTypeDetector {
 	 * @return The MIME type of the file, or the default type if unknown.
 	 */
 	public String getContentType(String fileName) {
-		if (Utils.isEmpty(fileName)) {
+		if (isEmpty(fileName)) {
 			return defaultType;
 		}
 
@@ -313,7 +313,7 @@ public class MimeTypeDetector {
 				var path = Paths.get(fileName);
 				if (Files.exists(path)) {
 					var contentType = Files.probeContentType(path);
-					if (Utils.isNotEmpty(contentType)) {
+					if (isNotEmpty(contentType)) {
 						return contentType;
 					}
 				}
@@ -324,7 +324,7 @@ public class MimeTypeDetector {
 
 		// Fall back to extension-based detection
 		var extension = FileUtils.getExtension(fileName);
-		if (Utils.isNotEmpty(extension)) {
+		if (isNotEmpty(extension)) {
 			var mimeType = extMap.get(extension.toLowerCase());
 			if (nn(mimeType)) {
 				return mimeType;

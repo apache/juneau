@@ -18,6 +18,7 @@ package org.apache.juneau.rest.staticfile;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.FileUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
 
@@ -143,8 +144,8 @@ public class BasicStaticFiles implements StaticFiles {
 		try {
 			Optional<InputStream> is = getStream(path, locale);
 			if (! is.isPresent())
-				return Utils.opte();
-			return Utils.opt(streamResource(is.get()).setHeaders(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path)))).addHeaders(headers));
+				return opte();
+			return opt(streamResource(is.get()).setHeaders(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path)))).addHeaders(headers));
 		} catch (IOException e) {
 			throw new InternalServerError(e);
 		}

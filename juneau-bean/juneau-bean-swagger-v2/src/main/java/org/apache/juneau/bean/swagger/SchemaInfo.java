@@ -620,14 +620,14 @@ public class SchemaInfo extends SwaggerElement {
 			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
 			case "allOf" -> setAllOf(toSet(value, SchemaInfo.class).sparse().build());
 			case "default" -> setDefault(value);
-			case "description" -> setDescription(Utils.s(value));
-			case "discriminator" -> setDiscriminator(Utils.s(value));
+			case "description" -> setDescription(s(value));
+			case "discriminator" -> setDiscriminator(s(value));
 			case "enum" -> setEnum(value);
 			case "example" -> setExample(value);
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "format" -> setFormat(Utils.s(value));
+			case "format" -> setFormat(s(value));
 			case "items" -> setItems(toType(value, Items.class));
 			case "maximum" -> setMaximum(toNumber(value));
 			case "maxItems" -> setMaxItems(toInteger(value));
@@ -638,14 +638,14 @@ public class SchemaInfo extends SwaggerElement {
 			case "minLength" -> setMinLength(toInteger(value));
 			case "minProperties" -> setMinProperties(toInteger(value));
 			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "pattern" -> setPattern(Utils.s(value));
+			case "pattern" -> setPattern(s(value));
 			case "properties" -> setProperties(toMap(value, String.class, SchemaInfo.class).sparse().build());
 			case "readOnly" -> setReadOnly(toBoolean(value));
-			case "$ref" -> setRef(Utils.s(value));
+			case "$ref" -> setRef(s(value));
 			case "required" -> setRequired(toBoolean(value));
 			case "requiredProperties" -> setRequiredProperties(toList(value, String.class).sparse().build());
-			case "title" -> setTitle(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
+			case "title" -> setTitle(s(value));
+			case "type" -> setType(s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			case "xml" -> setXml(toType(value, Xml.class));
 			default -> {

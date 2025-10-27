@@ -634,11 +634,11 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Initialize console commands.
 		// --------------------------------------------------------------------------------
-		this.consoleEnabled = Utils.firstNonNull(builder.consoleEnabled, config.get("Console/enabled").asBoolean().orElse(false));
+		this.consoleEnabled = firstNonNull(builder.consoleEnabled, config.get("Console/enabled").asBoolean().orElse(false));
 		if (consoleEnabled) {
 			var c = System.console();
-			this.consoleReader = Utils.firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
-			this.consoleWriter = Utils.firstNonNull(builder.consoleWriter, c == null ? new PrintWriter(System.out, true) : c.writer());
+			this.consoleReader = firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
+			this.consoleWriter = firstNonNull(builder.consoleWriter, c == null ? new PrintWriter(System.out, true) : c.writer());
 
 			for (ConsoleCommand cc : builder.consoleCommands) {
 				consoleCommandMap.put(cc.getName(), cc);
@@ -739,7 +739,7 @@ public class Microservice implements ConfigEventListener {
 		var l = list();
 		l.add(command);
 		for (Object a : args)
-			l.add(Utils.s(a));
+			l.add(s(a));
 		var args2 = new Args(l.toArray(new String[l.size()]));
 		try (var in = new Scanner(input); var out = new PrintWriter(sw)) {
 			executeCommand(args2, in, out);
@@ -954,18 +954,18 @@ public class Microservice implements ConfigEventListener {
 		if (this.logger == null) {
 			LogManager.getLogManager().reset();
 			this.logger = Logger.getLogger("");
-			var logFile = Utils.firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
+			var logFile = firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
 
 			if (isNotEmpty(logFile)) {
-				var logDir = Utils.firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
+				var logDir = firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
 				var logDirFile = resolveFile(logDir);
 				mkdirs(logDirFile, false);
 				logDir = logDirFile.getAbsolutePath();
 				System.setProperty("juneau.logDir", logDir);
 
-				var append = Utils.firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
-				var limit = Utils.firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024 * 1024));
-				var count = Utils.firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
+				var append = firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
+				var limit = firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024 * 1024));
+				var count = firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
 
 				var fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
 
@@ -977,11 +977,11 @@ public class Microservice implements ConfigEventListener {
 					f = new LogEntryFormatter(format, dateFormat, useStackTraceHashes);
 				}
 				fh.setFormatter(f);
-				fh.setLevel(Utils.firstNonNull(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
+				fh.setLevel(firstNonNull(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
 				logger.addHandler(fh);
 
 				var ch = new ConsoleHandler();
-				ch.setLevel(Utils.firstNonNull(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
+				ch.setLevel(firstNonNull(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
 				ch.setFormatter(f);
 				logger.addHandler(ch);
 			}

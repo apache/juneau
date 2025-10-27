@@ -16,11 +16,12 @@
  */
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a wrapped {@link Map} where entries in the map can be removed without affecting the underlying map.
@@ -47,7 +48,7 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	@SuppressWarnings("unchecked")
 	public DelegateMap(T m, BeanSession session) {
 		this.classMeta = session.getClassMetaForObject(m);
-		m.forEach((k, v) -> put(Utils.s(k), v));
+		m.forEach((k, v) -> put(s(k), v));
 	}
 
 	/**

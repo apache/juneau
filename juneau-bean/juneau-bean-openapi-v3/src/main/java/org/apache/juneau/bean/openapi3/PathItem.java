@@ -250,7 +250,7 @@ public class PathItem extends OpenApiElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "delete" -> setDelete(toType(value, Operation.class));
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "get" -> setGet(toType(value, Operation.class));
 			case "head" -> setHead(toType(value, Operation.class));
 			case "options" -> setOptions(toType(value, Operation.class));
@@ -259,7 +259,7 @@ public class PathItem extends OpenApiElement {
 			case "post" -> setPost(toType(value, Operation.class));
 			case "put" -> setPut(toType(value, Operation.class));
 			case "servers" -> setServers(toList(value, Server.class).sparse().build());
-			case "summary" -> setSummary(Utils.s(value));
+			case "summary" -> setSummary(s(value));
 			case "trace" -> setTrace(toType(value, Operation.class));
 			default -> {
 				super.set(property, value);

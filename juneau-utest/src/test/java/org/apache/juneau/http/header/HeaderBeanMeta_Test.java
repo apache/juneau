@@ -20,7 +20,6 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.junit.jupiter.api.*;
 
@@ -42,7 +41,7 @@ class HeaderBeanMeta_Test extends TestBase {
 
 		public A2(String name, Object value) {
 			this.name = name;
-			this.value = Utils.s(value);
+			this.value = s(value);
 		}
 	}
 
@@ -60,7 +59,7 @@ class HeaderBeanMeta_Test extends TestBase {
 		public String value;
 
 		public A4(Object value) {
-			this.value = Utils.s(value);
+			this.value = s(value);
 		}
 	}
 

@@ -146,7 +146,7 @@ public class AnnotationInfo<T extends Annotation> {
 	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
 		for (Method m : _getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type))
-				Utils.safe(() -> PredicateUtils.consumeIf(test, action, (V)m.invoke(a)));
+				safe(() -> PredicateUtils.consumeIf(test, action, (V)m.invoke(a)));
 		return this;
 	}
 
@@ -236,12 +236,12 @@ public class AnnotationInfo<T extends Annotation> {
 				try {
 					V v = (V)m.invoke(a);
 					if (PredicateUtils.test(test, v))
-						return Utils.opt(v);
+						return opt(v);
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.
 				}
 			}
-		return Utils.opte();
+		return opte();
 	}
 
 	/**
@@ -317,7 +317,7 @@ public class AnnotationInfo<T extends Annotation> {
 			try {
 				Object v = x.invoke(a);
 				Object d = x.inner().getDefaultValue();
-				if (Utils.ne(v, d)) {
+				if (ne(v, d)) {
 					if (! (isArray(v) && Array.getLength(v) == 0 && Array.getLength(d) == 0))
 						ja.put(m.getName(), v);
 				}

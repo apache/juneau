@@ -23,7 +23,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Category of headers that consist of a single string value.
@@ -149,11 +148,11 @@ public class BasicStringHeader extends BasicHeader {
 
 	@Override /* Overridden from BasicHeader */
 	public Optional<String> asString() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return Utils.s(value()); }
+	public String getValue() { return s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

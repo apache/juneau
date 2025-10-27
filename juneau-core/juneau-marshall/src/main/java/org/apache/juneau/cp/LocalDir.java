@@ -73,7 +73,7 @@ public class LocalDir {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof LocalDir && Utils.eq(this, (LocalDir)o, (x, y) -> Utils.eq(x.clazz, y.clazz) && Utils.eq(x.clazzPath, y.clazzPath) && Utils.eq(x.path, y.path));
+		return o instanceof LocalDir && eq(this, (LocalDir)o, (x, y) -> eq(x.clazz, y.clazz) && eq(x.clazzPath, y.clazzPath) && eq(x.path, y.path));
 	}
 
 	@Override /* Overridden from Object */

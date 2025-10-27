@@ -150,7 +150,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @return The header value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return Utils.opt(ArrayUtils.copyOf(value()));
+		return opt(ArrayUtils.copyOf(value()));
 	}
 
 	/**
@@ -184,13 +184,13 @@ public class BasicCsvHeader extends BasicHeader {
 	public boolean contains(String val) {
 		if (nn(value))
 			for (String v : value)
-				if (Utils.eq(v, val))
+				if (eq(v, val))
 					return true;
 		if (nn(supplier)) {
 			String[] value2 = supplier.get();
 			if (nn(value2))
 				for (String v : supplier.get())
-					if (Utils.eq(v, val))
+					if (eq(v, val))
 						return true;
 
 		}
@@ -206,13 +206,13 @@ public class BasicCsvHeader extends BasicHeader {
 	public boolean containsIgnoreCase(String val) {
 		if (nn(value))
 			for (String v : value)
-				if (Utils.eqic(v, val))
+				if (eqic(v, val))
 					return true;
 		if (nn(supplier)) {
 			String[] value2 = supplier.get();
 			if (nn(value2))
 				for (String v : supplier.get())
-					if (Utils.eqic(v, val))
+					if (eqic(v, val))
 						return true;
 		}
 		return false;

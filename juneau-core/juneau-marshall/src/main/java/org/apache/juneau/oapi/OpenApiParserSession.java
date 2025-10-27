@@ -231,7 +231,7 @@ public class OpenApiParserSession extends UonParserSession {
 		if (type == null)
 			type = (ClassMeta<T>)object();
 
-		schema = Utils.firstNonNull(schema, getSchema(), DEFAULT_SCHEMA);
+		schema = firstNonNull(schema, getSchema(), DEFAULT_SCHEMA);
 
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
@@ -239,7 +239,7 @@ public class OpenApiParserSession extends UonParserSession {
 		schema.validateOutput(t, ctx.getBeanContext());
 
 		if (isOptional)
-			t = (T)Utils.opt(t);
+			t = (T)opt(t);
 
 		return t;
 	}
@@ -264,7 +264,7 @@ public class OpenApiParserSession extends UonParserSession {
 				sType = type;
 
 			if (sType.isOptional())
-				return (T)Utils.opt(parseInner(partType, schema, in, sType.getElementType()));
+				return (T)opt(parseInner(partType, schema, in, sType.getElementType()));
 
 			HttpPartDataType t = schema.getType(sType);
 			if (partType == null)

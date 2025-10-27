@@ -20,6 +20,7 @@ import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.isEmpty;
 
 import java.io.*;
 import java.util.*;
@@ -263,7 +264,7 @@ public class RestUtils {
 			if (m == null)
 				m = CollectionUtils.map();
 
-			if (qs == null || ((qs instanceof CharSequence) && Utils.isEmpty(s(qs))))
+			if (qs == null || ((qs instanceof CharSequence) && isEmpty(s(qs))))
 				return m;
 
 			try (ParserPipe p = new ParserPipe(qs)) {
@@ -503,7 +504,7 @@ public class RestUtils {
 				list.add(l);
 			}
 		}
-		return Utils.array(list, String.class);
+		return array(list, String.class);
 	}
 
 	static String[] resolveLinks(String[] links, String[] parentLinks) {
@@ -525,7 +526,7 @@ public class RestUtils {
 				list.add(l);
 			}
 		}
-		return Utils.array(list, String.class);
+		return array(list, String.class);
 	}
 
 	static String resolveNewlineSeparatedAnnotation(String[] value, String fromParent) {

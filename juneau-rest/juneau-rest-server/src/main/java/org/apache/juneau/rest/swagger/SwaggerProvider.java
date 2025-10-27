@@ -16,11 +16,12 @@
  */
 package org.apache.juneau.rest.swagger;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.bean.swagger.Swagger;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.jsonschema.*;
@@ -82,7 +83,7 @@ public interface SwaggerProvider {
 		 * @return The file finder.
 		 */
 		public Optional<FileFinder> fileFinder() {
-			return Utils.opt(fileFinder).map(Supplier::get);
+			return opt(fileFinder).map(Supplier::get);
 		}
 
 		/**
@@ -113,7 +114,7 @@ public interface SwaggerProvider {
 		 * @return The JSON schema generator.
 		 */
 		public Optional<JsonSchemaGenerator> jsonSchemaGenerator() {
-			return Utils.opt(jsonSchemaGenerator).map(Supplier::get);
+			return opt(jsonSchemaGenerator).map(Supplier::get);
 		}
 
 		/**
@@ -133,7 +134,7 @@ public interface SwaggerProvider {
 		 * @return The messages.
 		 */
 		public Optional<Messages> messages() {
-			return Utils.opt(messages).map(Supplier::get);
+			return opt(messages).map(Supplier::get);
 		}
 
 		/**
@@ -164,7 +165,7 @@ public interface SwaggerProvider {
 		 * @return The var resolver.
 		 */
 		public Optional<VarResolver> varResolver() {
-			return Utils.opt(varResolver).map(Supplier::get);
+			return opt(varResolver).map(Supplier::get);
 		}
 
 		/**

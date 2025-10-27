@@ -216,7 +216,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public RequestQueryParams add(String name, Object value) {
 		assertArgNotNull("name", name);
-		add(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
+		add(new RequestQueryParam(req, name, s(value)).parser(parser));
 		return this;
 	}
 
@@ -235,7 +235,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		for (NameValuePair p : pairs) {
 			String name = p.getName();
 			Stream<RequestQueryParam> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));
+			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));
@@ -526,7 +526,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public RequestQueryParams set(String name, Object value) {
 		assertArgNotNull("name", name);
-		set(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
+		set(new RequestQueryParam(req, name, s(value)).parser(parser));
 		return this;
 	}
 
@@ -559,8 +559,6 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		if (caseSensitive)
-			return Utils.eq(s1, s2);
-		return Utils.eqic(s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);
 	}
 }

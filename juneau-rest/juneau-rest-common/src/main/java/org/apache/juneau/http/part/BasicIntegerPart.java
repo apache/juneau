@@ -23,7 +23,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A {@link NameValuePair} that consists of a single integer value.
@@ -41,7 +40,7 @@ public class BasicIntegerPart extends BasicPart {
 	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicIntegerPart of(String name, Integer value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicIntegerPart(name, value);
 	}
@@ -57,7 +56,7 @@ public class BasicIntegerPart extends BasicPart {
 	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicIntegerPart of(String name, Supplier<Integer> value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicIntegerPart(name, value);
 	}
@@ -89,7 +88,7 @@ public class BasicIntegerPart extends BasicPart {
 	 */
 	public BasicIntegerPart(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty(value) ? null : Integer.valueOf(value);
+		this.value = isEmpty(value) ? null : Integer.valueOf(value);
 		this.supplier = null;
 	}
 
@@ -111,7 +110,7 @@ public class BasicIntegerPart extends BasicPart {
 	 * @return The part value as an {@link Integer} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> asInteger() {
-		return Utils.opt(toInteger());
+		return opt(toInteger());
 	}
 
 	/**
@@ -125,7 +124,7 @@ public class BasicIntegerPart extends BasicPart {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return Utils.s(value()); }
+	public String getValue() { return s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

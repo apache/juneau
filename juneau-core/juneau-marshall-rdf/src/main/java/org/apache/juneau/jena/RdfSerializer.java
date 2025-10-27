@@ -137,7 +137,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			collectionFormat = copyFrom.collectionFormat;
 			juneauNs = copyFrom.juneauNs;
 			juneauBpNs = copyFrom.juneauBpNs;
-			namespaces = copyFrom.namespaces.length == 0 ? null : Utils.list(copyFrom.namespaces);
+			namespaces = copyFrom.namespaces.length == 0 ? null : list(copyFrom.namespaces);
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 

@@ -177,8 +177,8 @@ public class ResponseBeanMeta {
 	ResponseBeanMeta(Builder b) {
 		this.cm = b.cm;
 		this.code = b.code;
-		this.partSerializer = Utils.opt(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
-		this.partParser = Utils.opt(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
+		this.partSerializer = opt(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
+		this.partParser = opt(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
 		this.schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties = CollectionUtils.map();

@@ -447,7 +447,7 @@ public class BeanContext extends Context {
 		 */
 		public List<Class<?>> beanDictionary() {
 			if (beanDictionary == null)
-				beanDictionary = Utils.list();
+				beanDictionary = list();
 			return beanDictionary;
 		}
 
@@ -2991,7 +2991,7 @@ public class BeanContext extends Context {
 		 */
 		public List<Object> swaps() {
 			if (swaps == null)
-				swaps = Utils.list();
+				swaps = list();
 			return swaps;
 		}
 
@@ -4051,7 +4051,7 @@ public class BeanContext extends Context {
 		for (ObjectSwap f : swapArray) {
 			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
-					l = Utils.list();
+					l = list();
 				l.add(f);
 			}
 		}
@@ -4069,7 +4069,7 @@ public class BeanContext extends Context {
 	private final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
 		// Note:  On first
 		if (nn(c)) {
-			List<ObjectSwap> l = Utils.list();
+			List<ObjectSwap> l = list();
 			for (ObjectSwap f : swapArray)
 				if (f.getNormalClass().isParentOf(c))
 					l.add(f);

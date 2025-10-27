@@ -263,7 +263,7 @@ public class Value<T> {
 	 * Checks if the current value equals the specified value using {@link org.apache.juneau.common.utils.Utils#eq(Object, Object)}.
 	 *
 	 * <p>
-	 * This method uses {@code Utils.eq()} for equality comparison, which handles <jk>null</jk> values safely
+	 * This method uses {@code eq()} for equality comparison, which handles <jk>null</jk> values safely
 	 * and performs deep equality checks for arrays and collections.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -287,7 +287,7 @@ public class Value<T> {
 	 * @return <jk>true</jk> if the values are equal according to {@link org.apache.juneau.common.utils.Utils#eq(Object, Object)}.
 	 */
 	public boolean is(T other) {
-		return Utils.eq(t, other);
+		return eq(t, other);
 	}
 
 	/**

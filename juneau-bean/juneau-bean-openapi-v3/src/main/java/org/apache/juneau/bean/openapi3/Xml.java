@@ -199,9 +199,9 @@ public class Xml extends OpenApiElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "attribute" -> setAttribute(toBoolean(value));
-			case "name" -> setName(Utils.s(value));
-			case "namespace" -> setNamespace(Utils.s(value));
-			case "prefix" -> setPrefix(Utils.s(value));
+			case "name" -> setName(s(value));
+			case "namespace" -> setNamespace(s(value));
+			case "prefix" -> setPrefix(s(value));
 			case "wrapped" -> setWrapped(toBoolean(value));
 			default -> {
 				super.set(property, value);

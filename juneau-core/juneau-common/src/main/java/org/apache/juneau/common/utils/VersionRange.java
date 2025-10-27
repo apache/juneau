@@ -71,7 +71,7 @@ public class VersionRange {
 	 * @return <jk>true</jk> if the specified version string matches this version range.
 	 */
 	public boolean matches(String v) {
-		if (Utils.isEmpty(v))
+		if (isEmpty(v))
 			return (minVersion == null && maxVersion == null);
 		Version ver = new Version(v);
 		if ((nn(minVersion) && ! ver.isAtLeast(minVersion, minExclusive)) || (nn(maxVersion) && ! ver.isAtMost(maxVersion, maxExclusive)))

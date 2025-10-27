@@ -230,7 +230,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Utils.opt(parseAnything(eType.getElementType(), r, outer));
+			return (T)opt(parseAnything(eType.getElementType(), r, outer));
 
 		int c = r.peekSkipWs();
 		if (c == '?')

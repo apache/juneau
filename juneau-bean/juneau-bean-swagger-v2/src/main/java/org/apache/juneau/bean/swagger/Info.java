@@ -232,12 +232,12 @@ public class Info extends SwaggerElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "contact" -> setContact(toType(value, Contact.class));
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "license" -> setLicense(toType(value, License.class));
-			case "siteName" -> setSiteName(Utils.s(value));
-			case "termsOfService" -> setTermsOfService(Utils.s(value));
-			case "title" -> setTitle(Utils.s(value));
-			case "version" -> setVersion(Utils.s(value));
+			case "siteName" -> setSiteName(s(value));
+			case "termsOfService" -> setTermsOfService(s(value));
+			case "title" -> setTitle(s(value));
+			case "version" -> setVersion(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

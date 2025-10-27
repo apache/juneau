@@ -205,9 +205,9 @@ public class IfRange extends BasicDateHeader {
 	public Optional<EntityTag> asEntityTag() {
 		if (nn(supplier)) {
 			Object o = supplier.get();
-			return Utils.opt(o instanceof EntityTag ? (EntityTag)o : null);
+			return opt(o instanceof EntityTag ? (EntityTag)o : null);
 		}
-		return Utils.opt(value);
+		return opt(value);
 	}
 
 	@Override /* Overridden from Header */
@@ -224,7 +224,7 @@ public class IfRange extends BasicDateHeader {
 			throw new BasicRuntimeException("Invalid object type returned by supplier: {0}", ClassUtils.className(o));
 		}
 		if (nn(value))
-			return Utils.s(value);
+			return s(value);
 		return super.getValue();
 	}
 }

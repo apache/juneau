@@ -207,9 +207,9 @@ public class Link extends OpenApiElement {
 	public Link set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
-			case "operationId" -> setOperationId(Utils.s(value));
-			case "operationRef" -> setOperationRef(Utils.s(value));
+			case "description" -> setDescription(s(value));
+			case "operationId" -> setOperationId(s(value));
+			case "operationRef" -> setOperationRef(s(value));
 			case "parameters" -> setParameters(toMap(value, String.class, Object.class).sparse().build());
 			case "requestBody" -> setRequestBody(value);
 			case "server" -> setServer(toType(value, Server.class));

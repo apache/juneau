@@ -323,7 +323,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R isContains(E entry) throws AssertionError {
 		for (int i = 0, j = length(); i < j; i++)
-			if (Utils.eq(at(i), entry))
+			if (eq(at(i), entry))
 				return returns();
 		throw error(MSG_arrayDidNotContainExpectedValue, entry, toString());
 	}
@@ -363,7 +363,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public R isNotContains(E entry) throws AssertionError {
 		for (int i = 0, j = length(); i < j; i++)
-			if (Utils.eq(at(i), entry))
+			if (eq(at(i), entry))
 				throw error(MSG_arrayContainedUnexpectedValue, entry, toString());
 		return returns();
 	}
@@ -437,7 +437,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	private List<E> toList() {
-		return valueIsNull() ? null : Utils.list(value());
+		return valueIsNull() ? null : list(value());
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {

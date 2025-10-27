@@ -19,6 +19,7 @@ package org.apache.juneau.rest.httppart;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.isEmpty;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -27,7 +28,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.io.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
@@ -386,9 +386,9 @@ public class RequestContent {
 	 */
 	public Optional<ParserMatch> getParserMatch() {
 		if (nn(mediaType) && nn(parser))
-			return Utils.opt(new ParserMatch(mediaType, parser));
+			return opt(new ParserMatch(mediaType, parser));
 		MediaType mt = getMediaType();
-		return Utils.opt(mt).map(x -> parsers.getParserMatch(x));
+		return opt(mt).map(x -> parsers.getParserMatch(x));
 	}
 
 	/**
@@ -572,7 +572,7 @@ public class RequestContent {
 
 		MediaType mt = getMediaType();
 
-		if ((Utils.isEmpty(Utils.s(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
+		if ((isEmpty(s(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
 			return cm.getStringMutater().mutate(asString());
 
 		Optional<ContentType> ct = req.getHeader(ContentType.class);

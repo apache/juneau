@@ -19,6 +19,7 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.AssertionPredicates.ne;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.eq;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -46,7 +47,7 @@ class BeanListAssertion_Test extends TestBase {
 		public A(Integer a, Integer b) { this.a = a; this.b = b; }
 		public static A of(Integer a, Integer b) { return new A(a, b); }
 		@Override public String toString() { return "(a="+a+",b="+b+")"; }
-		@Override public boolean equals(Object o) { return Utils.eq(this, (A)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b)); }
+		@Override public boolean equals(Object o) { return eq(this, (A)o, (x,y)->eq(x.a,y.a) && eq(x.b,y.b)); }
 		@Override public int compareTo(A o) { return a-o.a; }
 	}
 

@@ -26,7 +26,6 @@ import java.util.function.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -208,7 +207,7 @@ public class BeanCreator<T> {
 	 * @return A new bean wrapped in an {@link Optional}.
 	 */
 	public Optional<T> execute() {
-		return Utils.opt(silent().run());
+		return opt(silent().run());
 	}
 
 	/**

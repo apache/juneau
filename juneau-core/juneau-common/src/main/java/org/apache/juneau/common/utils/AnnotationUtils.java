@@ -50,7 +50,7 @@ public class AnnotationUtils {
 		if (! t1.equals(t2))
 			return false;
 
-		boolean b = getAnnotationMethods(t1).anyMatch(x -> ! memberEquals(x.getReturnType(), Utils.safeSupplier(() -> x.invoke(a1)), Utils.safeSupplier(() -> x.invoke(a2))));
+		boolean b = getAnnotationMethods(t1).anyMatch(x -> ! memberEquals(x.getReturnType(), safeSupplier(() -> x.invoke(a1)), safeSupplier(() -> x.invoke(a2))));
 		if (b)
 			return false;
 
@@ -66,7 +66,7 @@ public class AnnotationUtils {
 	 * @throws IllegalStateException if an annotation method invocation returns {@code null}
 	 */
 	public static int hashCode(Annotation a) {
-		return getAnnotationMethods(a.annotationType()).mapToInt(x -> hashMember(x.getName(), Utils.safeSupplier(() -> x.invoke(a)))).sum();
+		return getAnnotationMethods(a.annotationType()).mapToInt(x -> hashMember(x.getName(), safeSupplier(() -> x.invoke(a)))).sum();
 	}
 
 	private static boolean annotationArrayMemberEquals(Annotation[] a1, Annotation[] a2) {

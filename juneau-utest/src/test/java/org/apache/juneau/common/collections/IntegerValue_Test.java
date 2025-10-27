@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -290,7 +291,7 @@ class IntegerValue_Test extends TestBase {
 	void d02_conditionalCounting() {
 		var a = IntegerValue.create();
 
-		Utils.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
+		list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
 			if (x % 2 == 0) {
 				a.getAndIncrement();
 			}
@@ -304,7 +305,7 @@ class IntegerValue_Test extends TestBase {
 		var a = IntegerValue.create();
 		var b = IntegerValue.create();
 
-		Utils.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
+		list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
 			if (x % 2 == 0) {
 				a.getAndIncrement();
 			} else {

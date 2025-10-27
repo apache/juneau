@@ -16,6 +16,8 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -203,7 +205,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<Class<?>[]> classes(Class<?>[] in) {
-		return Utils.opt(in.length == 0 ? null : in);
+		return opt(in.length == 0 ? null : in);
 	}
 
 	/**
@@ -239,7 +241,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 */
 	protected Optional<String> string(String in) {
 		in = vr.resolve(in);
-		return Utils.opt(Utils.isEmpty(in) ? null : in);
+		return opt(StringUtils.isEmpty(in) ? null : in);
 	}
 
 	/**
@@ -252,7 +254,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<String[]> strings(String[] in) {
-		return Utils.opt(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty).toArray(String[]::new));
+		return opt(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty).toArray(String[]::new));
 	}
 
 	/**
@@ -263,7 +265,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return An optional containing the specified value.
 	 */
 	protected <T> Optional<Class<T>> type(Class<T> in) {
-		return Utils.opt(in).filter(ClassUtils.NOT_VOID);
+		return opt(in).filter(ClassUtils.NOT_VOID);
 	}
 
 	/**

@@ -183,7 +183,7 @@ public class ClassMeta<T> implements Type {
 			// forName() is used by Class and Charset
 			String[] fromStringMethodNames = {"fromString","fromValue","valueOf","parse","parseString","forName","forString"};
 			// @formatter:off
-			fromStringMethod = Utils.opt(
+			fromStringMethod = opt(
 				ci.getPublicMethod(
 					x -> x.isStatic()
 					&& x.isNotDeprecated()
@@ -196,7 +196,7 @@ public class ClassMeta<T> implements Type {
 
 			// Find example() method if present.
 			// @formatter:off
-			exampleMethod = Utils.opt(
+			exampleMethod = opt(
 				ci.getPublicMethod(
 					x -> x.isStatic()
 					&& x.isNotDeprecated()
@@ -848,7 +848,7 @@ public class ClassMeta<T> implements Type {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof ClassMeta) && Utils.eq(this, (ClassMeta<?>)o, (x, y) -> Utils.eq(x.innerClass, y.innerClass));
+		return (o instanceof ClassMeta) && eq(this, (ClassMeta<?>)o, (x, y) -> eq(x.innerClass, y.innerClass));
 	}
 
 	/**
@@ -1140,7 +1140,7 @@ public class ClassMeta<T> implements Type {
 		if (o == null) {
 			if (beanContext == null)
 				return info.getAnnotation(BeanContext.DEFAULT, a);
-			o = Utils.opt(info.getAnnotation(beanContext, a));
+			o = opt(info.getAnnotation(beanContext, a));
 			annotationLastMap.put(a, o);
 		}
 		return o.orElse(null);
@@ -1179,7 +1179,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	public Optional<?> getOptionalDefault() {
 		if (isOptional())
-			return Utils.opt(getElementType().getOptionalDefault());
+			return opt(getElementType().getOptionalDefault());
 		return null;
 	}
 
@@ -1212,7 +1212,7 @@ public class ClassMeta<T> implements Type {
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
 		Optional<T2> t = (Optional<T2>)properties.get(name);
 		if (t == null) {
-			t = Utils.opt(function.apply(this));
+			t = opt(function.apply(this));
 			properties.put(name, t);
 		}
 		return t;
@@ -1415,7 +1415,7 @@ public class ClassMeta<T> implements Type {
 	 * @return <jk>true</jk> if the specified class is an exact match for this metadata.
 	 */
 	public boolean is(Class<?> value) {
-		return Utils.eq(innerClass, value);
+		return eq(innerClass, value);
 	}
 
 	/**

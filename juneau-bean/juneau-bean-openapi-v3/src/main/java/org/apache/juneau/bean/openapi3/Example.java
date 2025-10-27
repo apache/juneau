@@ -177,9 +177,9 @@ public class Example extends OpenApiElement {
 	public Example set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
-			case "externalValue" -> setExternalValue(Utils.s(value));
-			case "summary" -> setSummary(Utils.s(value));
+			case "description" -> setDescription(s(value));
+			case "externalValue" -> setExternalValue(s(value));
+			case "summary" -> setSummary(s(value));
 			case "value" -> setValue(value);
 			default -> {
 				super.set(property, value);

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 
 /**
@@ -67,7 +69,7 @@ public class Version implements Comparable<Version> {
 	 * 	Any parts that are not numeric are interpreted as {@link Integer#MAX_VALUE}
 	 */
 	public Version(String value) {
-		if (Utils.isEmpty(value))
+		if (StringUtils.isEmpty(value))
 			value = "0";
 		String[] sParts = StringUtils.splita(value, '.');
 		parts = new int[sParts.length];
@@ -143,8 +145,8 @@ public class Version implements Comparable<Version> {
 	 */
 	public Optional<Integer> getPart(int index) {
 		if (index < 0 || parts.length <= index)
-			return Utils.opte();
-		return Utils.opt(parts[index]);
+			return opte();
+		return opt(parts[index]);
 	}
 
 	/**

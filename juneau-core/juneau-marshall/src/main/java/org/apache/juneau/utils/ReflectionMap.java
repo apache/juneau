@@ -180,7 +180,7 @@ public class ReflectionMap<V> {
 		 * @return This object.
 		 */
 		public Builder<V> append(String key, V value) {
-			if (Utils.isEmpty(key))
+			if (isEmpty(key))
 				throw new BasicRuntimeException("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {
@@ -309,7 +309,7 @@ public class ReflectionMap<V> {
 			if (f == null)
 				return false;
 			var c = f.getDeclaringClass();
-			return classMatches(simpleClassName, fullClassName, c) && (Utils.eq(f.getName(), fieldName));
+			return classMatches(simpleClassName, fullClassName, c) && (eq(f.getName(), fieldName));
 		}
 
 		@Override
@@ -372,7 +372,7 @@ public class ReflectionMap<V> {
 			// @formatter:off
 			return
 				classMatches(simpleClassName, fullClassName, c)
-				&& (Utils.eq(m.getName(), methodName))
+				&& (eq(m.getName(), methodName))
 				&& (argsMatch(args, m.getParameterTypes()));
 			// @formatter:on
 		}
@@ -437,7 +437,7 @@ public class ReflectionMap<V> {
 		for (int i = 0; i < args.length; i++) {
 			var n = names[i];
 			var a = args[i];
-			if (! (Utils.eq(n, a.getSimpleName()) || Utils.eq(n, a.getName())))
+			if (! (eq(n, a.getSimpleName()) || eq(n, a.getName())))
 				return false;
 		}
 		return true;
@@ -450,18 +450,18 @@ public class ReflectionMap<V> {
 		// c.getPackage() == "org.apache.juneau.a.rttests"
 		var cSimple = c.getSimpleName();
 		var cFull = c.getName();
-		if (Utils.eq(simpleName, cSimple) || Utils.eq(fullName, cFull) || "*".equals(simpleName))
+		if (eq(simpleName, cSimple) || eq(fullName, cFull) || "*".equals(simpleName))
 			return true;
 		if (cFull.indexOf('$') != -1) {
 			var p = c.getPackage();
 			if (nn(p))
 				cFull = cFull.substring(p.getName().length() + 1);
-			if (Utils.eq(simpleName, cFull))
+			if (eq(simpleName, cFull))
 				return true;
 			int i = cFull.indexOf('$');
 			while (i != -1) {
 				cFull = cFull.substring(i + 1);
-				if (Utils.eq(simpleName, cFull))
+				if (eq(simpleName, cFull))
 					return true;
 				i = cFull.indexOf('$');
 			}
@@ -607,8 +607,8 @@ public class ReflectionMap<V> {
 		for (ClassEntry<V> e : classEntries)
 			if (e.matches(c))
 				if (ofType == null || ofType.isInstance(e.value))
-					return Utils.opt(e.value);
-		return Utils.opte();
+					return opt(e.value);
+		return opte();
 	}
 
 	/**
@@ -632,8 +632,8 @@ public class ReflectionMap<V> {
 		for (ConstructorEntry<V> e : constructorEntries)
 			if (e.matches(c))
 				if (ofType == null || ofType.isInstance(e.value))
-					return Utils.opt(e.value);
-		return Utils.opte();
+					return opt(e.value);
+		return opte();
 	}
 
 	/**
@@ -657,8 +657,8 @@ public class ReflectionMap<V> {
 		for (FieldEntry<V> e : fieldEntries)
 			if (e.matches(f))
 				if (ofType == null || ofType.isInstance(e.value))
-					return Utils.opt(e.value);
-		return Utils.opte();
+					return opt(e.value);
+		return opte();
 	}
 
 	/**
@@ -682,8 +682,8 @@ public class ReflectionMap<V> {
 		for (MethodEntry<V> e : methodEntries)
 			if (e.matches(m))
 				if (ofType == null || ofType.isInstance(e.value))
-					return Utils.opt(e.value);
-		return Utils.opte();
+					return opt(e.value);
+		return opte();
 	}
 
 	/**

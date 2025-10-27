@@ -491,7 +491,7 @@ public class FileStore extends ConfigStore {
 		name = resolveName(name);
 
 		// This is a no-op.
-		if (Utils.eq(expectedContents, newContents))
+		if (eq(expectedContents, newContents))
 			return null;
 
 		dir.mkdirs();
@@ -502,7 +502,7 @@ public class FileStore extends ConfigStore {
 		var exists = Files.exists(p);
 
 		// Don't create the file if we're not going to match.
-		if ((! exists) && Utils.isNotEmpty(expectedContents))
+		if ((! exists) && isNotEmpty(expectedContents))
 			return "";
 
 		if (isWritable(p)) {
@@ -521,7 +521,7 @@ public class FileStore extends ConfigStore {
 							}
 							currentContents = sb.toString();
 						}
-						if (nn(expectedContents) && ! Utils.eq(currentContents, expectedContents)) {
+						if (nn(expectedContents) && ! eq(currentContents, expectedContents)) {
 							if (currentContents == null)
 								cache.remove(name);
 							else
@@ -574,7 +574,7 @@ public class FileStore extends ConfigStore {
 		cache.remove(fn);
 		var newContents = read(fn);
 
-		if (! Utils.eq(oldContents, newContents)) {
+		if (! eq(oldContents, newContents)) {
 			update(fn, newContents);
 		}
 	}

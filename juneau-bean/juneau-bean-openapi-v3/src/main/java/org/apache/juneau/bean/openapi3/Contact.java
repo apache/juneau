@@ -158,8 +158,8 @@ public class Contact extends OpenApiElement {
 	public Contact set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "email" -> setEmail(Utils.s(value));
-			case "name" -> setName(Utils.s(value));
+			case "email" -> setEmail(s(value));
+			case "name" -> setName(s(value));
 			case "url" -> setUrl(toURI(value));
 			default -> {
 				super.set(property, value);

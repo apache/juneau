@@ -169,7 +169,7 @@ class StringVarResolver_Test extends TestBase {
 	@Test void a07_test$E() {
 		var t = "$E{PATH}";
 
-		assertFalse(Utils.isEmpty(VarResolver.DEFAULT.resolve(t)));
+		assertFalse(isEmpty(VarResolver.DEFAULT.resolve(t)));
 	}
 
 	//====================================================================================================

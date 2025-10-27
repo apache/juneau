@@ -351,7 +351,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 					first = x;
 				else {
 					if (rest == null)
-						rest = Utils.list();
+						rest = list();
 					rest.add(x);
 				}
 			}
@@ -361,7 +361,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			return opte();
 
 		if (rest == null)
-			return Utils.opt(first);
+			return opt(first);
 
 		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -370,7 +370,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			sb.append(element.getValue());
 		}
 
-		return Utils.opt(new BasicHeader(name, sb.toString()));
+		return opt(new BasicHeader(name, sb.toString()));
 	}
 
 	/**
@@ -409,7 +409,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 					first = x;
 				else {
 					if (rest == null)
-						rest = Utils.list();
+						rest = list();
 					rest.add(x);
 				}
 			}
@@ -419,7 +419,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			return opte();
 
 		if (rest == null)
-			return Utils.opt(HeaderBeanMeta.of(type).construct(name, first.getValue()));
+			return opt(HeaderBeanMeta.of(type).construct(name, first.getValue()));
 
 		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -428,7 +428,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			sb.append(element.getValue());
 		}
 
-		return Utils.opt(HeaderBeanMeta.of(type).construct(name, sb.toString()));
+		return opt(HeaderBeanMeta.of(type).construct(name, sb.toString()));
 	}
 
 	/**
@@ -480,7 +480,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		for (int i = 0; i < size(); i++) {
 			var x = get(i);
 			if (eq(x.getName(), name))
-				return Utils.opt(x);
+				return opt(x);
 		}
 		return opte();
 	}
@@ -498,7 +498,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		for (int i = size() - 1; i >= 0; i--) {
 			var x = get(i);
 			if (eq(x.getName(), name))
-				return Utils.opt(x);
+				return opt(x);
 		}
 		return opte();
 	}
@@ -913,11 +913,11 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return caseSensitive ? Utils.eq(s1, s2) : Utils.eqic(s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);
 	}
 
 	private Supplier<Object> resolver(Object input) {
-		return () -> varResolver.resolve(Utils.s(unwrap(input)));
+		return () -> varResolver.resolve(s(unwrap(input)));
 	}
 
 	private static Object unwrap(Object o) {

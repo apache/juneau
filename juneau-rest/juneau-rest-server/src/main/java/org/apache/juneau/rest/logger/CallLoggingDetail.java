@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.logger;
 
-import org.apache.juneau.common.utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 /**
  * Represents the amount of detail to include in a log entry for HTTP requests and responses.
@@ -49,7 +49,7 @@ public enum CallLoggingDetail {
 	 * @return The resolved value.
 	 */
 	public static CallLoggingDetail fromString(String s) {
-		if (! Utils.isEmpty(s)) {
+		if (! isEmpty(s)) {
 			try {
 				return valueOf(s.toUpperCase());
 			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {}

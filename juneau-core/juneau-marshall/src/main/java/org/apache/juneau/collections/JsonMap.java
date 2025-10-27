@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.collections;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -372,7 +373,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		if (keyValuePairs.length % 2 != 0)
 			throw new IllegalArgumentException("Odd number of parameters passed into JsonMap(Object...)");
 		for (int i = 0; i < keyValuePairs.length; i += 2)
-			put(Utils.s(keyValuePairs[i]), keyValuePairs[i + 1]);
+			put(s(keyValuePairs[i]), keyValuePairs[i + 1]);
 	}
 
 	/**
@@ -514,7 +515,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public String asReadableString() {
 		if (Json5Serializer.DEFAULT_READABLE == null)
-			return Utils.s(this);
+			return s(this);
 		return Json5Serializer.DEFAULT_READABLE.toString(this);
 	}
 
@@ -525,7 +526,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public String asString() {
 		if (Json5Serializer.DEFAULT == null)
-			return Utils.s(this);
+			return s(this);
 		return Json5Serializer.DEFAULT.toString(this);
 	}
 
@@ -602,8 +603,8 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		Object val = get(key);
 		if (val == null)
 			return false;
-		if (val instanceof CharSequence)
-			return ! Utils.isEmpty(val);
+		if (val instanceof CharSequence val2)
+			return ! isBlank(val2);
 		return false;
 	}
 
@@ -1347,7 +1348,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		else if (s instanceof Object[])
 			r = ArrayUtils.toStringArray(alist((Object[])s));
 		else
-			r = StringUtils.splita(Utils.s(s));
+			r = StringUtils.splita(s(s));
 		return (r.length == 0 ? def : r);
 	}
 
@@ -1499,7 +1500,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public Set<String> keySet() {
 		if (inner == null)
 			return super.keySet();
-		LinkedHashSet<String> s = Utils.set();
+		LinkedHashSet<String> s = set();
 		s.addAll(inner.keySet());
 		s.addAll(super.keySet());
 		return s;

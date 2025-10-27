@@ -217,7 +217,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (nn(innerField)) {
 				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, innerField, x -> true, x -> lp.add(x));
-				if (nn(field) || Utils.isNotEmpty(lp)) {
+				if (nn(field) || isNotEmpty(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
 					rawTypeMeta = bc.resolveClassMeta(CollectionUtils.last(lp), innerField.getGenericType(), typeVarImpls);
@@ -609,7 +609,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof BeanPropertyMeta) && Utils.eq(this, (BeanPropertyMeta)o, (x, y) -> Utils.eq(x.name, y.name) && Utils.eq(x.beanMeta, y.beanMeta));
+		return (o instanceof BeanPropertyMeta) && eq(this, (BeanPropertyMeta)o, (x, y) -> eq(x.name, y.name) && eq(x.beanMeta, y.beanMeta));
 	}
 
 	/**
@@ -1312,7 +1312,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					return l;
 				} else if (rawTypeMeta.isCollection()) {
 					Collection c = (Collection)o;
-					List l = Utils.listOfSize(c.size());
+					List l = listOfSize(c.size());
 					ClassMeta childType = rawTypeMeta.getElementType();
 					c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
 					return l;

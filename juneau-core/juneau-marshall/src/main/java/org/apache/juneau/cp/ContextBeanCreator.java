@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Utility class for instantiating a Context bean.
@@ -93,7 +92,7 @@ public class ContextBeanCreator<T> {
 	 * @return An optional containing the builder if it exists.
 	 */
 	public <B extends Context.Builder> Optional<B> builder(Class<B> c) {
-		return Utils.opt(c.isInstance(builder) ? c.cast(builder) : null);
+		return opt(c.isInstance(builder) ? c.cast(builder) : null);
 	}
 
 	/**

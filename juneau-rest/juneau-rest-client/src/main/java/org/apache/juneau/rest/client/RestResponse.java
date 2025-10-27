@@ -30,7 +30,6 @@ import org.apache.http.params.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
@@ -505,7 +504,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		String s = null;
 		if (ct.isPresent())
 			s = getContentType().get().getParameter("charset");
-		return Utils.isEmpty(s) ? "utf-8" : s;
+		return isEmpty(s) ? "utf-8" : s;
 	}
 
 	/**

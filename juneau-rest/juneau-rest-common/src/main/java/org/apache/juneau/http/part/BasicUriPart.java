@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A {@link NameValuePair} that consists of a single URL value.
@@ -44,7 +43,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicUriPart of(String name, Supplier<URI> value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicUriPart(name, value);
 	}
@@ -57,7 +56,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicUriPart of(String name, URI value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicUriPart(name, value);
 	}
@@ -77,7 +76,7 @@ public class BasicUriPart extends BasicPart {
 	 */
 	public BasicUriPart(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty(value) ? null : URI.create(value);
+		this.value = isEmpty(value) ? null : URI.create(value);
 		this.supplier = null;
 	}
 
@@ -111,7 +110,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return The part value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> asUri() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	/**

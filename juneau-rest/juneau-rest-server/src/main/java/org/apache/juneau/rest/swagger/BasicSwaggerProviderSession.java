@@ -18,6 +18,7 @@ package org.apache.juneau.rest.swagger;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.isEmpty;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import static org.apache.juneau.rest.httppart.RestPartType.*;
 
@@ -614,7 +615,7 @@ public class BasicSwaggerProviderSession {
 				sex = schema.getString("example", schema.getString("example"));
 		}
 
-		if (Utils.isEmpty(sex))
+		if (isEmpty(sex))
 			return;
 
 		Object example = null;
@@ -665,7 +666,7 @@ public class BasicSwaggerProviderSession {
 
 		String s = piri.getString("example");
 
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			return;
 
 		JsonMap examples = piri.getMap("examples");
@@ -692,7 +693,7 @@ public class BasicSwaggerProviderSession {
 	@SafeVarargs
 	private final static <T> T firstNonEmpty(T...t) {
 		for (T oo : t)
-			if (! Utils.isEmpty(oo))
+			if (! isEmpty(oo))
 				return oo;
 		return null;
 	}
@@ -794,7 +795,7 @@ public class BasicSwaggerProviderSession {
 		om = newMap(om);
 		for (Header aa : a) {
 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
-			if (Utils.isEmpty(name))
+			if (isEmpty(name))
 				throw new IllegalArgumentException("@Header used without name or value.");
 			merge(om.getMap(name, true), aa.schema());
 		}

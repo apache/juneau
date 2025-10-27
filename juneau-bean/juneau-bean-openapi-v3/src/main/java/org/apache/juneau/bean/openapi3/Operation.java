@@ -475,15 +475,15 @@ public class Operation extends OpenApiElement {
 		return switch (property) {
 			case "callbacks" -> setCallbacks(toMap(value, String.class, Callback.class).sparse().build());
 			case "deprecated" -> setDeprecated(toType(value, Boolean.class));
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "operationId" -> setOperationId(Utils.s(value));
+			case "operationId" -> setOperationId(s(value));
 			case "parameters" -> setParameters(toList(value, Parameter.class).sparse().build());
 			case "requestBody" -> setRequestBody(toType(value, RequestBodyInfo.class));
 			case "responses" -> setResponses(toMap(value, String.class, Response.class).sparse().build());
 			case "security" -> setSecurity(toList(value, SecurityRequirement.class).sparse().build());
 			case "servers" -> setServers(toList(value, Server.class).sparse().build());
-			case "summary" -> setSummary(Utils.s(value));
+			case "summary" -> setSummary(s(value));
 			case "tags" -> setTags(toList(value, String.class).sparse().build());
 			default -> {
 				super.set(property, value);

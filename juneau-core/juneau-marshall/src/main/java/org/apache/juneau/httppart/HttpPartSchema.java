@@ -20,6 +20,8 @@ import static java.util.Collections.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.isEmpty;
+import static org.apache.juneau.common.utils.Utils.list;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
 
@@ -185,7 +187,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder _enum(String...values) {
-			return _enum(Utils.set(values));
+			return _enum(set(values));
 		}
 
 		/**
@@ -612,7 +614,7 @@ public class HttpPartSchema {
 		 */
 		public Builder collectionFormat(String value) {
 			try {
-				if (Utils.isNotEmpty(value))
+				if (isNotEmpty(value))
 					this.collectionFormat = HttpPartCollectionFormat.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
@@ -1160,7 +1162,7 @@ public class HttpPartSchema {
 		 */
 		public Builder format(String value) {
 			try {
-				if (Utils.isNotEmpty(value))
+				if (isNotEmpty(value))
 					format = HttpPartFormat.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
@@ -1794,7 +1796,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			if (Utils.isNotEmpty(value))
+			if (isNotEmpty(value))
 				name = value;
 			return this;
 		}
@@ -1913,7 +1915,7 @@ public class HttpPartSchema {
 		 */
 		public Builder pattern(String value) {
 			try {
-				if (Utils.isNotEmpty(value))
+				if (isNotEmpty(value))
 					this.pattern = Pattern.compile(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value);
@@ -2370,7 +2372,7 @@ public class HttpPartSchema {
 		 */
 		public Builder type(String value) {
 			try {
-				if (Utils.isNotEmpty(value))
+				if (isNotEmpty(value))
 					type = HttpPartDataType.fromString(value);
 			} catch (Exception e) {
 				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
@@ -2526,11 +2528,11 @@ public class HttpPartSchema {
 		}
 
 		private static Boolean resolve(String newValue, Boolean oldValue) {
-			return Utils.isEmpty(newValue) ? oldValue : Boolean.valueOf(newValue);
+			return isEmpty(newValue) ? oldValue : Boolean.valueOf(newValue);
 		}
 
 		private static Long resolve(String newValue, Long oldValue) {
-			return Utils.isEmpty(newValue) ? oldValue : Long.parseLong(newValue);
+			return isEmpty(newValue) ? oldValue : Long.parseLong(newValue);
 		}
 
 		private static Number toNumber(String...s) {
@@ -3542,7 +3544,7 @@ public class HttpPartSchema {
 	final static Number toNumber(String...s) {
 		try {
 			for (String ss : s)
-				if (Utils.isNotEmpty(ss))
+				if (isNotEmpty(ss))
 					return parseNumber(ss, Number.class);
 			return null;
 		} catch (ParseException e) {
@@ -3551,9 +3553,9 @@ public class HttpPartSchema {
 	}
 
 	final static Set<String> toSet(String s) {
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			return null;
-		Set<String> set = Utils.set();
+		Set<String> set = set();
 		try {
 			JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
 		} catch (ParseException e) {
@@ -3568,7 +3570,7 @@ public class HttpPartSchema {
 			isNotEmpty |= ss.length > 0;
 		if (! isNotEmpty)
 			return null;
-		Set<String> set = Utils.set();
+		Set<String> set = set();
 		for (String[] ss : s)
 			if (nn(ss))
 				for (String ss2 : ss)
@@ -3670,7 +3672,7 @@ public class HttpPartSchema {
 			return;
 
 		// Validation.
-		List<String> errors = Utils.list();
+		List<String> errors = list();
 		ListBuilder<String> notAllowed = CollectionUtils.listb(String.class);
 		boolean invalidFormat = false;
 		// @formatter:off
@@ -4112,7 +4114,7 @@ public class HttpPartSchema {
 	@Override
 	public String toString() {
 		try {
-			Predicate<Object> ne = x -> Utils.isNotEmpty(Utils.s(x));
+			Predicate<Object> ne = x -> isNotEmpty(s(x));
 			Predicate<Boolean> nf = Utils::isTrue;
 			Predicate<Number> nm1 = Utils::isNotMinusOne;
 			Predicate<Object> nn = Utils::isNotNull;
@@ -4291,7 +4293,7 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidAllowEmpty(String x) {
-		return allowEmptyValue || Utils.isNotEmpty(x);
+		return allowEmptyValue || isNotEmpty(x);
 	}
 
 	private boolean isValidConst(String x) {

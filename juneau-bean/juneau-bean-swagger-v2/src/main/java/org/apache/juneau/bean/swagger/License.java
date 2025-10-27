@@ -143,7 +143,7 @@ public class License extends SwaggerElement {
 	public License set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "name" -> setName(Utils.s(value));
+			case "name" -> setName(s(value));
 			case "url" -> setUrl(StringUtils.toURI(value));
 			default -> {
 				super.set(property, value);

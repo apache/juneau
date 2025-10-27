@@ -21,7 +21,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-select-element">&lt;select&gt;</a>
@@ -165,7 +164,7 @@ public class Select extends HtmlElementContainer {
 	public Select choose(Object optionValue) {
 		if (nn(optionValue)) {
 			getChildren().forEach(x -> {
-				if (x instanceof Option o && Utils.eq(optionValue.toString(), o.getAttr(String.class, "value")))
+				if (x instanceof Option o && eq(optionValue.toString(), o.getAttr(String.class, "value")))
 					o.selected(true);
 			});
 		}

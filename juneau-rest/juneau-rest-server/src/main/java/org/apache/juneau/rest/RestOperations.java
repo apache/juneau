@@ -129,7 +129,7 @@ public class RestOperations {
 		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
 			m.put(e.getKey(), CollectionUtils.listFrom(e.getValue()));
 		this.map = m;
-		this.list = Utils.array(builder.set, RestOpContext.class);
+		this.list = array(builder.set, RestOpContext.class);
 	}
 
 	/**

@@ -200,12 +200,12 @@ public class SqlStore extends ConfigStore {
 	public synchronized String write(String name, String expectedContents, String newContents) {
 
 		// This is a no-op.
-		if (Utils.eq(expectedContents, newContents))
+		if (eq(expectedContents, newContents))
 			return null;
 
 		var currentContents = read(name);
 
-		if (expectedContents != null && Utils.ne(currentContents, expectedContents))
+		if (expectedContents != null && ne(currentContents, expectedContents))
 			return currentContents;
 
 		update(name, newContents);

@@ -80,7 +80,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 						if (o2 instanceof Map.Entry) {
 							@SuppressWarnings("rawtypes")
 							Map.Entry x = (Map.Entry)o2;
-							String k = Utils.s(x.getKey());
+							String k = s(x.getKey());
 							h = new SerializedHeader(k, x.getValue(), hm.getSerializer().orElse(defaultPartSerializer).getPartSession(), ps.getProperty(k), true);
 						} else if (o2 instanceof Header) {
 							h = (Header)o2;

@@ -202,7 +202,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders add(String name, Object value) {
 		assertArgNotNull("name", name);
-		add(new RequestHeader(req, name, Utils.s(value)).parser(parser));
+		add(new RequestHeader(req, name, s(value)).parser(parser));
 		return this;
 	}
 
@@ -233,7 +233,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		for (Header p : pairs) {
 			String name = p.getName();
 			Stream<RequestHeader> l = stream(name);
-			boolean hasAllBlanks = l.allMatch(x -> Utils.isEmpty(x.getValue()));
+			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestHeader(req, name, vs.resolve(p.getValue())));
@@ -459,7 +459,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders set(String name, Object value) {
 		assertArgNotNull("name", name);
-		set(new RequestHeader(req, name, Utils.s(value)).parser(parser));
+		set(new RequestHeader(req, name, s(value)).parser(parser));
 		return this;
 	}
 
@@ -492,9 +492,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		if (caseSensitive)
-			return Utils.eq(s1, s2);
-		return Utils.eqic(s1, s2);
+		return Utils.eq(! caseSensitive, s1, s2);
 	}
 
 	private String key(String name) {

@@ -22,7 +22,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
@@ -162,9 +161,9 @@ public class SerializedPart extends BasicPart {
 				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
 					return null;
 			}
-			if (Utils.isEmpty(Utils.s(v)) && skipIfEmpty && def == null)
+			if (isEmpty(s(v)) && skipIfEmpty && def == null)
 				return null;
-			return serializer == null ? Utils.s(v) : serializer.serialize(type, schema, v);
+			return serializer == null ? s(v) : serializer.serialize(type, schema, v);
 		} catch (SchemaValidationException e) {
 			throw new BasicRuntimeException(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);
 		} catch (SerializeException e) {

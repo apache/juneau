@@ -23,7 +23,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A {@link NameValuePair} that consists of a single long value.
@@ -41,7 +40,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicLongPart of(String name, Long value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicLongPart(name, value);
 	}
@@ -57,7 +56,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicLongPart of(String name, Supplier<Long> value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicLongPart(name, value);
 	}
@@ -90,7 +89,7 @@ public class BasicLongPart extends BasicPart {
 	 */
 	public BasicLongPart(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty(value) ? null : Long.valueOf(value);
+		this.value = isEmpty(value) ? null : Long.valueOf(value);
 		this.supplier = null;
 	}
 
@@ -112,7 +111,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return The part value as a {@link Long} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Long> asLong() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	/**
@@ -126,7 +125,7 @@ public class BasicLongPart extends BasicPart {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return Utils.s(value()); }
+	public String getValue() { return s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

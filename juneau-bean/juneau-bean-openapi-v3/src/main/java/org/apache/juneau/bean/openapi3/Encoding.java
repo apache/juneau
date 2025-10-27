@@ -199,10 +199,10 @@ public class Encoding extends OpenApiElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "allowReserved" -> setAllowReserved(toBoolean(value));
-			case "contentType" -> setContentType(Utils.s(value));
+			case "contentType" -> setContentType(s(value));
 			case "explode" -> setExplode(toBoolean(value));
 			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
-			case "style" -> setStyle(Utils.s(value));
+			case "style" -> setStyle(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

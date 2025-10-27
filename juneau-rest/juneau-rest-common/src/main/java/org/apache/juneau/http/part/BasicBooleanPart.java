@@ -23,7 +23,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A {@link NameValuePair} that consists of a single boolean value.
@@ -41,7 +40,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicBooleanPart of(String name, Boolean value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicBooleanPart(name, value);
 	}
@@ -57,7 +56,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicBooleanPart of(String name, Supplier<Boolean> value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicBooleanPart(name, value);
 	}
@@ -89,7 +88,7 @@ public class BasicBooleanPart extends BasicPart {
 	 */
 	public BasicBooleanPart(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty(value) ? null : Boolean.valueOf(value);
+		this.value = isEmpty(value) ? null : Boolean.valueOf(value);
 		this.supplier = null;
 	}
 
@@ -111,7 +110,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * @return The part value as a {@link Boolean} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return Utils.opt(toBoolean());
+		return opt(toBoolean());
 	}
 
 	/**
@@ -125,7 +124,7 @@ public class BasicBooleanPart extends BasicPart {
 	}
 
 	@Override /* Overridden from NameValuePair */
-	public String getValue() { return Utils.s(value()); }
+	public String getValue() { return s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

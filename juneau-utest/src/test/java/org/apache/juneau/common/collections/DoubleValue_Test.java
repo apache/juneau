@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class DoubleValue_Test extends TestBase {
@@ -68,7 +68,7 @@ class DoubleValue_Test extends TestBase {
 		var v = new DoubleValue(null);
 		v.setIfEmpty(1.5);
 		assertEquals(1.5, v.get(), 0.00001);
-		
+
 		v.setIfEmpty(2.5);
 		assertEquals(1.5, v.get(), 0.00001); // Should not change
 	}
@@ -77,7 +77,7 @@ class DoubleValue_Test extends TestBase {
 	void b03_orElse() {
 		var v = new DoubleValue(null);
 		assertEquals(9.9, v.orElse(9.9), 0.00001);
-		
+
 		v.set(4.2);
 		assertEquals(4.2, v.orElse(9.9), 0.00001);
 	}
@@ -101,7 +101,7 @@ class DoubleValue_Test extends TestBase {
 	void b06_isPresent() {
 		var v = new DoubleValue(null);
 		assertFalse(v.isPresent());
-		
+
 		v.set(1.0);
 		assertTrue(v.isPresent());
 	}
@@ -110,7 +110,7 @@ class DoubleValue_Test extends TestBase {
 	void b07_isEmpty() {
 		var v = new DoubleValue(null);
 		assertTrue(v.isEmpty());
-		
+
 		v.set(1.0);
 		assertFalse(v.isEmpty());
 	}
@@ -136,11 +136,11 @@ class DoubleValue_Test extends TestBase {
 	@Test
 	void c01_trackingPreciseSum() {
 		var sum = DoubleValue.create();
-		
-		Utils.list(1.111, 2.222, 3.333, 4.444).forEach(x -> {
+
+		list(1.111, 2.222, 3.333, 4.444).forEach(x -> {
 			sum.set(sum.get() + x);
 		});
-		
+
 		assertEquals(11.11, sum.get(), 0.00001);
 	}
 
@@ -148,12 +148,12 @@ class DoubleValue_Test extends TestBase {
 	void c02_trackingStatistics() {
 		var sum = DoubleValue.create();
 		var count = DoubleValue.create();
-		
-		Utils.list(10.5, 20.3, 15.7, 30.1).forEach(x -> {
+
+		list(10.5, 20.3, 15.7, 30.1).forEach(x -> {
 			sum.set(sum.get() + x);
 			count.set(count.get() + 1);
 		});
-		
+
 		double average = sum.get() / count.get();
 		assertEquals(19.15, average, 0.00001);
 	}
@@ -161,13 +161,13 @@ class DoubleValue_Test extends TestBase {
 	@Test
 	void c03_trackingMaxValue() {
 		var max = DoubleValue.of(Double.MIN_VALUE);
-		
-		Utils.list(5.5, 12.3, 3.8, 20.1, 1.2).forEach(x -> {
+
+		list(5.5, 12.3, 3.8, 20.1, 1.2).forEach(x -> {
 			if (x > max.get()) {
 				max.set(x);
 			}
 		});
-		
+
 		assertEquals(20.1, max.get(), 0.00001);
 	}
 
@@ -175,12 +175,12 @@ class DoubleValue_Test extends TestBase {
 	void c04_compoundInterestCalculation() {
 		var principal = DoubleValue.of(1000.0);
 		double rate = 0.05; // 5% interest
-		
+
 		// Apply interest 3 times
 		for (int i = 0; i < 3; i++) {
 			principal.set(principal.get() * (1 + rate));
 		}
-		
+
 		assertEquals(1157.625, principal.get(), 0.001);
 	}
 
@@ -266,7 +266,7 @@ class DoubleValue_Test extends TestBase {
 	void d11_is_afterSet() {
 		var v = DoubleValue.of(1.0);
 		assertTrue(v.is(1.0, 0.01));
-		
+
 		v.set(2.0);
 		assertFalse(v.is(1.0, 0.01));
 		assertTrue(v.is(2.0, 0.01));

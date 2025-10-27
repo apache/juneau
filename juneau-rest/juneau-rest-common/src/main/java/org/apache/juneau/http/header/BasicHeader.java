@@ -107,8 +107,8 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");
 		this.name = name;
 		this.value = value instanceof Supplier ? null : value;
-		this.stringValue = Utils.s(value);
-		this.supplier = Utils.cast(Supplier.class, value);
+		this.stringValue = s(value);
+		this.supplier = cast(Supplier.class, value);
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return The value of this header as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<String> asString() {
-		return Utils.opt(getValue());
+		return opt(getValue());
 	}
 
 	@Override /* Overridden from Object */
@@ -176,7 +176,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		// Not a perfect equality operator if using SVL vars.
 		if (! (o instanceof Header))
 			return false;
-		return Utils.eq(this, (Header)o, (x, y) -> Utils.eq(x.name, y.getName()) && Utils.eq(x.getValue(), y.getValue()));
+		return eq(this, (Header)o, (x, y) -> eq(x.name, y.getName()) && eq(x.getValue(), y.getValue()));
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return <jk>true</jk> if the specified value is the same.
 	 */
 	public boolean equalsIgnoreCase(String compare) {
-		return Utils.eqic(getValue(), compare);
+		return eqic(getValue(), compare);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	@Override /* Overridden from Header */
 	public String getValue() {
 		if (nn(supplier))
-			return Utils.s(supplier.get());
+			return s(supplier.get());
 		return stringValue;
 	}
 

@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class FloatValue_Test extends TestBase {
@@ -68,7 +68,7 @@ class FloatValue_Test extends TestBase {
 		var v = new FloatValue(null);
 		v.setIfEmpty(1.5f);
 		assertEquals(1.5f, v.get(), 0.001f);
-		
+
 		v.setIfEmpty(2.5f);
 		assertEquals(1.5f, v.get(), 0.001f); // Should not change
 	}
@@ -77,7 +77,7 @@ class FloatValue_Test extends TestBase {
 	void b03_orElse() {
 		var v = new FloatValue(null);
 		assertEquals(9.9f, v.orElse(9.9f), 0.001f);
-		
+
 		v.set(4.2f);
 		assertEquals(4.2f, v.orElse(9.9f), 0.001f);
 	}
@@ -101,7 +101,7 @@ class FloatValue_Test extends TestBase {
 	void b06_isPresent() {
 		var v = new FloatValue(null);
 		assertFalse(v.isPresent());
-		
+
 		v.set(1.0f);
 		assertTrue(v.isPresent());
 	}
@@ -110,7 +110,7 @@ class FloatValue_Test extends TestBase {
 	void b07_isEmpty() {
 		var v = new FloatValue(null);
 		assertTrue(v.isEmpty());
-		
+
 		v.set(1.0f);
 		assertFalse(v.isEmpty());
 	}
@@ -137,12 +137,12 @@ class FloatValue_Test extends TestBase {
 	void c01_trackingRunningAverage() {
 		var sum = FloatValue.create();
 		var count = FloatValue.create();
-		
-		Utils.list(1.5f, 2.5f, 3.5f, 4.5f).forEach(x -> {
+
+		list(1.5f, 2.5f, 3.5f, 4.5f).forEach(x -> {
 			sum.set(sum.get() + x);
 			count.set(count.get() + 1);
 		});
-		
+
 		float average = sum.get() / count.get();
 		assertEquals(3.0f, average, 0.001f);
 	}
@@ -150,35 +150,35 @@ class FloatValue_Test extends TestBase {
 	@Test
 	void c02_accumulatingValues() {
 		var total = FloatValue.create();
-		
-		Utils.list(0.1f, 0.2f, 0.3f, 0.4f).forEach(x -> {
+
+		list(0.1f, 0.2f, 0.3f, 0.4f).forEach(x -> {
 			total.set(total.get() + x);
 		});
-		
+
 		assertEquals(1.0f, total.get(), 0.001f);
 	}
 
 	@Test
 	void c03_trackingMinValue() {
 		var min = FloatValue.of(Float.MAX_VALUE);
-		
-		Utils.list(5.5f, 1.2f, 3.8f, 0.9f, 2.1f).forEach(x -> {
+
+		list(5.5f, 1.2f, 3.8f, 0.9f, 2.1f).forEach(x -> {
 			if (x < min.get()) {
 				min.set(x);
 			}
 		});
-		
+
 		assertEquals(0.9f, min.get(), 0.001f);
 	}
 
 	@Test
 	void c04_multiplierChaining() {
 		var multiplier = FloatValue.of(1.0f);
-		
-		Utils.list(2.0f, 3.0f, 1.5f).forEach(x -> {
+
+		list(2.0f, 3.0f, 1.5f).forEach(x -> {
 			multiplier.set(multiplier.get() * x);
 		});
-		
+
 		assertEquals(9.0f, multiplier.get(), 0.001f);
 	}
 
@@ -264,7 +264,7 @@ class FloatValue_Test extends TestBase {
 	void d11_is_afterSet() {
 		var v = FloatValue.of(1.0f);
 		assertTrue(v.is(1.0f, 0.01f));
-		
+
 		v.set(2.0f);
 		assertFalse(v.is(1.0f, 0.01f));
 		assertTrue(v.is(2.0f, 0.01f));

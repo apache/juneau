@@ -1134,8 +1134,8 @@ public class StringUtils {
 	 * @param str The string to check.
 	 * @return <jk>true</jk> if the string is null, empty, or contains only whitespace characters.
 	 */
-	public static boolean isBlank(String str) {
-		return str == null || str.trim().isEmpty();
+	public static boolean isBlank(CharSequence str) {
+		return str == null || str.toString().isBlank();
 	}
 
 	/**
@@ -1226,7 +1226,7 @@ public class StringUtils {
 	 * @param str The string to check.
 	 * @return <jk>true</jk> if the string is null or has zero length.
 	 */
-	public static boolean isEmpty(String str) {
+	public static boolean isEmpty(CharSequence str) {
 		return str == null || str.isEmpty();
 	}
 
@@ -1629,7 +1629,7 @@ public class StringUtils {
 		if (tokens == null)
 			return null;
 		if (tokens.length == 1)
-			return Utils.emptyIfNull(Utils.s(tokens[0]));
+			return emptyIfNull(s(tokens[0]));
 		return StringUtils.join(tokens, d, new StringBuilder()).toString();
 	}
 
@@ -1805,7 +1805,7 @@ public class StringUtils {
 	 * @return The string value, or <jk>null</jk> if the string is <jk>null</jk> or empty.
 	 */
 	public static String nullIfEmpty(String value) {
-		return Utils.isEmpty(value) ? null : value;
+		return isEmpty(value) ? null : value;
 	}
 
 	/**
@@ -2467,7 +2467,7 @@ public class StringUtils {
 	public static void split(String s, char c, Consumer<String> consumer) {
 		var escapeChars = getEscapeSet(c);
 
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			return;
 		if (s.indexOf(c) == -1) {
 			consumer.accept(s);
@@ -2508,7 +2508,7 @@ public class StringUtils {
 
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.indexOf(c) == -1)
 			return Collections.singletonList(s);
@@ -2640,7 +2640,7 @@ public class StringUtils {
 
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			return Collections.emptyMap();
 
 		var m = new LinkedHashMap<String,String>();
@@ -2706,7 +2706,7 @@ public class StringUtils {
 
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			return new String[0];
 		if (s.indexOf(',') == -1)
 			return new String[] { s };
@@ -2755,7 +2755,7 @@ public class StringUtils {
 
 		if (s == null)
 			return null;  // NOSONAR - Intentional.
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			return Collections.emptyList();
 		if (s.indexOf(',') == -1)
 			return Collections.singletonList(trim(s));
@@ -2808,7 +2808,7 @@ public class StringUtils {
 	public static List<String> splitNestedInner(String s) {
 		if (s == null)
 			throw ThrowableUtils.illegalArg("String was null.");
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			throw ThrowableUtils.illegalArg("String was empty.");
 
 		// S1: Looking for '{'
@@ -2894,7 +2894,7 @@ public class StringUtils {
 
 		s = s.trim();
 
-		if (Utils.isEmpty(s))
+		if (isEmpty(s))
 			return new String[0];
 
 		if (! containsAny(s, ' ', '\t', '\'', '"'))

@@ -43,7 +43,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, String...value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
@@ -59,7 +59,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, Supplier<String[]> value) {
-		if (Utils.isEmpty(name) || value == null)
+		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
@@ -120,7 +120,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return Utils.opt(ArrayUtils.copyOf(value()));
+		return opt(ArrayUtils.copyOf(value()));
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as a {@link List} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<List<String>> asList() {
-		return Utils.opt(toList());
+		return opt(toList());
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	public boolean contains(String val) {
 		if (nn(val))
 			for (String v : value())
-				if (Utils.eq(v, val))
+				if (eq(v, val))
 					return true;
 		return false;
 	}
@@ -168,7 +168,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	public boolean containsIgnoreCase(String val) {
 		if (nn(val))
 			for (String v : value())
-				if (Utils.eqic(v, val))
+				if (eqic(v, val))
 					return true;
 		return false;
 	}

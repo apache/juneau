@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.isEmpty;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -272,8 +273,8 @@ public class BeanStore {
 	 * @param builder The builder containing the settings for this bean.
 	 */
 	protected BeanStore(Builder builder) {
-		parent = Utils.opt(builder.parent);
-		outer = Utils.opt(builder.outer);
+		parent = opt(builder.parent);
+		outer = opt(builder.outer);
 		readOnly = builder.readOnly;
 		threadSafe = builder.threadSafe;
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
@@ -363,7 +364,7 @@ public class BeanStore {
 		BeanStoreEntry<T> e = createEntry(beanType, bean, name);
 		try (SimpleLock x = lock.write()) {
 			entries.addFirst(e);
-			if (Utils.isEmpty(name))
+			if (isEmpty(name))
 				unnamedEntries.put(beanType, e);
 		}
 		return this;
@@ -467,10 +468,10 @@ public class BeanStore {
 		try (SimpleLock x = lock.read()) {
 			BeanStoreEntry<T> e = (BeanStoreEntry<T>)unnamedEntries.get(beanType);
 			if (nn(e))
-				return Utils.opt(e.get());
+				return opt(e.get());
 			if (parent.isPresent())
 				return parent.get().getBean(beanType);
-			return Utils.opte();
+			return opte();
 		}
 	}
 
@@ -487,10 +488,10 @@ public class BeanStore {
 		try (SimpleLock x = lock.read()) {
 			BeanStoreEntry<T> e = (BeanStoreEntry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
 			if (nn(e))
-				return Utils.opt(e.get());
+				return opt(e.get());
 			if (parent.isPresent())
 				return parent.get().getBean(beanType, name);
-			return Utils.opte();
+			return opte();
 		}
 	}
 

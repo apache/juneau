@@ -244,7 +244,7 @@ public class Response extends OpenApiElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "content" -> setContent(toMap(value, String.class, MediaType.class).sparse().build());
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "headers" -> setHeaders(toMap(value, String.class, HeaderInfo.class).sparse().build());
 			case "links" -> setLinks(toMap(value, String.class, Link.class).sparse().build());
 			default -> {

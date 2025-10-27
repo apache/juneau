@@ -22,7 +22,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * POJO model searcher.
@@ -157,7 +156,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		@SuppressWarnings("unchecked")
 		RowMatcher(BeanSession bs, Map query) {
 			this.bs = bs;
-			query.forEach((k, v) -> entryMatchers.put(Utils.s(k), new ColumnMatcher(bs, Utils.s(v))));
+			query.forEach((k, v) -> entryMatchers.put(s(k), new ColumnMatcher(bs, s(v))));
 		}
 
 		boolean matches(Object o) {
@@ -249,7 +248,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 
 		if (type.isCollection()) {
 			Collection<?> c = (Collection)input;
-			l = Utils.listOfSize(c.size());
+			l = listOfSize(c.size());
 			List<Object> l2 = l;
 			c.forEach(x -> {
 				if (rowMatcher.matches(x))
@@ -258,7 +257,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 
 		} else /* isArray */ {
 			int size = Array.getLength(input);
-			l = Utils.listOfSize(size);
+			l = listOfSize(size);
 			for (int i = 0; i < size; i++) {
 				Object o = Array.get(input, i);
 				if (rowMatcher.matches(o))

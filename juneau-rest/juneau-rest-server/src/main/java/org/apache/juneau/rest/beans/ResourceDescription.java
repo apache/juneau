@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.rest.beans;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 
@@ -89,7 +90,7 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof ResourceDescription) && Utils.eq(this, (ResourceDescription)o, (x, y) -> Utils.eq(x.getName(), y.getName()));
+		return (o instanceof ResourceDescription) && eq(this, (ResourceDescription)o, (x, y) -> eq(x.getName(), y.getName()));
 	}
 
 	/**

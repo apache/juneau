@@ -85,7 +85,7 @@ public class BasicPart implements NameValuePair, Headerable {
 		}
 		if (o instanceof Map.Entry) {
 			Map.Entry e = (Map.Entry)o;
-			return BasicPart.of(Utils.s(e.getKey()), e.getValue());
+			return BasicPart.of(s(e.getKey()), e.getValue());
 		}
 		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", ClassUtils.className(o));
 	}
@@ -146,7 +146,7 @@ public class BasicPart implements NameValuePair, Headerable {
 
 	@Override /* Overridden from Headerable */
 	public BasicHeader asHeader() {
-		return BasicHeader.of(name, Utils.s(value));
+		return BasicHeader.of(name, s(value));
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	public Object getRawValue() { return unwrap(value); }
 
 	@Override /* Overridden from NameValuePair */
-	public String getValue() { return Utils.s(unwrap(value)); }
+	public String getValue() { return s(unwrap(value)); }
 
 	@Override /* Overridden from Object */
 	public String toString() {

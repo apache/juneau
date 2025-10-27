@@ -291,11 +291,11 @@ public class HeaderInfo extends OpenApiElement {
 	public HeaderInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "$ref" -> setRef(Utils.s(value));
+			case "$ref" -> setRef(s(value));
 			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
 			case "allowReserved" -> setAllowReserved(toBoolean(value));
 			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "examples" -> setExamples(toMap(value, String.class, Example.class).sparse().build());
 			case "explode" -> setExplode(toBoolean(value));
 			case "required" -> setRequired(toBoolean(value));

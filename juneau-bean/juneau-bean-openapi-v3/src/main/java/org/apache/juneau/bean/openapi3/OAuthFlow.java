@@ -191,10 +191,10 @@ public class OAuthFlow extends OpenApiElement {
 	public OAuthFlow set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
-			case "refreshUrl" -> setRefreshUrl(Utils.s(value));
+			case "authorizationUrl" -> setAuthorizationUrl(s(value));
+			case "refreshUrl" -> setRefreshUrl(s(value));
 			case "scopes" -> setScopes(toMap(value, String.class, String.class).sparse().build());
-			case "tokenUrl" -> setTokenUrl(Utils.s(value));
+			case "tokenUrl" -> setTokenUrl(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

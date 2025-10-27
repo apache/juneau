@@ -1271,7 +1271,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public Optional<TimeZone> getTimeZone() {
 		var tz = headers.get("Time-Zone").asString().orElse(null);
 		if (nn(tz))
-			return Utils.opt(TimeZone.getTimeZone(tz));
+			return opt(TimeZone.getTimeZone(tz));
 		return Optional.empty();
 	}
 

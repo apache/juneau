@@ -28,7 +28,6 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
@@ -316,13 +315,13 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (nn(contentSchema))
 			return contentSchema;
 		if (nn(responseBeanMeta))
-			contentSchema = Utils.opt(responseBeanMeta.getSchema());
+			contentSchema = opt(responseBeanMeta.getSchema());
 		else {
 			var rbm = opContext.getResponseBeanMeta(getContent(Object.class));
 				if (nn(rbm))
-				contentSchema = Utils.opt(rbm.getSchema());
+				contentSchema = opt(rbm.getSchema());
 			else
-				contentSchema = Utils.opte();
+				contentSchema = opte();
 		}
 		return contentSchema;
 	}
@@ -468,9 +467,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (nn(serializerMatch))
 			return serializerMatch;
 		if (nn(serializer)) {
-			serializerMatch = Utils.opt(new SerializerMatch(getMediaType(), serializer));
+			serializerMatch = opt(new SerializerMatch(getMediaType(), serializer));
 		} else {
-			serializerMatch = Utils.opt(opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*")));
+			serializerMatch = opt(opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*")));
 		}
 		return serializerMatch;
 	}
@@ -591,7 +590,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object.
 	 */
 	public RestResponse setContent(Object output) {
-		this.content = Utils.opt(output);
+		this.content = opt(output);
 		return this;
 	}
 
@@ -605,7 +604,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object.
 	 */
 	public RestResponse setContentSchema(HttpPartSchema schema) {
-		this.contentSchema = Utils.opt(schema);
+		this.contentSchema = opt(schema);
 		return this;
 	}
 
@@ -832,7 +831,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	private String resolveUris(Object value) {
-		String s = Utils.s(value);
+		String s = s(value);
 		return request.getUriResolver().resolve(s);
 	}
 }

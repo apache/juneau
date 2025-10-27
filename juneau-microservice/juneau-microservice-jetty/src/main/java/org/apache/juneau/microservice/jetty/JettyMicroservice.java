@@ -545,7 +545,7 @@ public class JettyMicroservice extends Microservice {
 		JsonMap mf = getManifest();
 		VarResolver vr = getVarResolver();
 
-		int[] ports = Utils.firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.getWithDefault("Jetty-Port", new int[] { 8000 }, int[].class)));
+		int[] ports = firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.getWithDefault("Jetty-Port", new int[] { 8000 }, int[].class)));
 		int availablePort = findOpenPort(ports);
 
 		if (System.getProperty("availablePort") == null)
@@ -553,7 +553,7 @@ public class JettyMicroservice extends Microservice {
 
 		String jettyXml = builder.jettyXml;
 		String jettyConfig = cf.get("Jetty/config").orElse(mf.getString("Jetty-Config", "jetty.xml"));
-		boolean resolveVars = Utils.firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
+		boolean resolveVars = firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
 
 		if (jettyXml == null)
 			jettyXml = IOUtils.loadSystemResourceAsString("jetty.xml", ".", "files");

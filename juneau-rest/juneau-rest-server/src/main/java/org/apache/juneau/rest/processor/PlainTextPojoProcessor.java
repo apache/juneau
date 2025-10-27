@@ -16,9 +16,10 @@
  */
 package org.apache.juneau.rest.processor;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
+
 import java.io.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
@@ -40,12 +41,12 @@ public class PlainTextPojoProcessor implements ResponseProcessor {
 		RestResponse res = opSession.getResponse();
 		String accept = req.getHeaderParam("Accept").orElse("*/*");
 
-		if (res.getSerializerMatch().isPresent() || ! (Utils.isEmpty(accept) || accept.startsWith("text/plain") || accept.contains("*/*")))
+		if (res.getSerializerMatch().isPresent() || ! (isEmpty(accept) || accept.startsWith("text/plain") || accept.contains("*/*")))
 			return NEXT;
 
 		Object o = res.getContent(Object.class);
 
-		if (Utils.isEmpty(res.getContentType()))
+		if (isEmpty(res.getContentType()))
 			res.setHeader(ContentType.TEXT_PLAIN);
 
 		FinishablePrintWriter w = res.getNegotiatedWriter();

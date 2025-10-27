@@ -367,7 +367,7 @@ public class ClassInfo {
 
 	@Override
 	public boolean equals(Object o) {
-		return (o instanceof ClassInfo) && Utils.eq(this, (ClassInfo)o, (x, y) -> Utils.eq(x.t, y.t));
+		return (o instanceof ClassInfo) && eq(this, (ClassInfo)o, (x, y) -> eq(x.t, y.t));
 	}
 
 	/**
@@ -2166,7 +2166,7 @@ public class ClassInfo {
 		if (declaredConstructors == null) {
 			synchronized (this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
-				List<ConstructorInfo> l = Utils.listOfSize(cc.length);
+				List<ConstructorInfo> l = listOfSize(cc.length);
 				for (Constructor<?> ccc : cc)
 					l.add(getConstructorInfo(ccc));
 				l.sort(null);
@@ -2180,7 +2180,7 @@ public class ClassInfo {
 		if (declaredFields == null) {
 			synchronized (this) {
 				Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
-				List<FieldInfo> l = Utils.listOfSize(ff.length);
+				List<FieldInfo> l = listOfSize(ff.length);
 				for (Field f : ff)
 					if (! "$jacocoData".equals(f.getName()))
 						l.add(getFieldInfo(f));
@@ -2209,7 +2209,7 @@ public class ClassInfo {
 		if (declaredMethods == null) {
 			synchronized (this) {
 				Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
-				List<MethodInfo> l = Utils.listOfSize(mm.length);
+				List<MethodInfo> l = listOfSize(mm.length);
 				for (Method m : mm)
 					if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
 						l.add(getMethodInfo(m));
@@ -2257,7 +2257,7 @@ public class ClassInfo {
 		if (publicConstructors == null) {
 			synchronized (this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
-				List<ConstructorInfo> l = Utils.listOfSize(cc.length);
+				List<ConstructorInfo> l = listOfSize(cc.length);
 				for (Constructor<?> ccc : cc)
 					l.add(getConstructorInfo(ccc));
 				l.sort(null);
@@ -2290,7 +2290,7 @@ public class ClassInfo {
 		if (publicMethods == null) {
 			synchronized (this) {
 				Method[] mm = c == null ? new Method[0] : c.getMethods();
-				List<MethodInfo> l = Utils.listOfSize(mm.length);
+				List<MethodInfo> l = listOfSize(mm.length);
 				for (Method m : mm)
 					if (m.getDeclaringClass() != Object.class)
 						l.add(getMethodInfo(m));

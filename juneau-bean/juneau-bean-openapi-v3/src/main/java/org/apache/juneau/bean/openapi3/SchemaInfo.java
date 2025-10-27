@@ -710,14 +710,14 @@ public class SchemaInfo extends OpenApiElement {
 			case "anyOf" -> setAnyOf(toList(value, Object.class).sparse().build());
 			case "default" -> setDefault(value);
 			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "discriminator" -> setDiscriminator(toType(value, Discriminator.class));
 			case "enum" -> setEnum(toList(value, Object.class).sparse().build());
 			case "example" -> setExample(value);
 			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
 			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "format" -> setFormat(Utils.s(value));
+			case "format" -> setFormat(s(value));
 			case "items" -> setItems(toType(value, Items.class));
 			case "maxItems" -> setMaxItems(toInteger(value));
 			case "maxLength" -> setMaxLength(toInteger(value));
@@ -731,12 +731,12 @@ public class SchemaInfo extends OpenApiElement {
 			case "not" -> setNot(toType(value, SchemaInfo.class));
 			case "nullable" -> setNullable(toBoolean(value));
 			case "oneOf" -> setOneOf(toList(value, Object.class).sparse().build());
-			case "pattern" -> setPattern(Utils.s(value));
+			case "pattern" -> setPattern(s(value));
 			case "properties" -> setProperties(toMap(value, String.class, SchemaInfo.class).sparse().build());
 			case "readOnly" -> setReadOnly(toBoolean(value));
 			case "required" -> setRequired(toList(value, String.class).sparse().build());
-			case "title" -> setTitle(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
+			case "title" -> setTitle(s(value));
+			case "type" -> setType(s(value));
 			case "uniqueItems" -> setUniqueItems(toBoolean(value));
 			case "writeOnly" -> setWriteOnly(toBoolean(value));
 			case "xml" -> setXml(toType(value, Xml.class));
@@ -1152,7 +1152,7 @@ public class SchemaInfo extends OpenApiElement {
 	 */
 	@Beanp("$ref")
 	public SchemaInfo setRef(Object value) {
-		ref = Utils.s(value);
+		ref = s(value);
 		return this;
 	}
 

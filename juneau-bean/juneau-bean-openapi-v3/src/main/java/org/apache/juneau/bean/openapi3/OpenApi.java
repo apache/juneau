@@ -347,7 +347,7 @@ public class OpenApi extends OpenApiElement {
 			case "components" -> setComponents(toType(value, Components.class));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
 			case "info" -> setInfo(toType(value, Info.class));
-			case "openapi" -> setOpenapi(Utils.s(value));
+			case "openapi" -> setOpenapi(s(value));
 			case "paths" -> setPaths(toMap(value, String.class, PathItem.class).sparse().build());
 			case "security" -> setSecurity(toList(value, SecurityRequirement.class).sparse().build());
 			case "servers" -> setServers(toList(value, Server.class).sparse().build());

@@ -25,7 +25,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -329,7 +328,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
-		List<Object> l = Utils.listOfSize(c.size());
+		List<Object> l = listOfSize(c.size());
 		c = sort(c);
 		l.addAll(c);
 		out.startArray(l.size());
@@ -345,7 +344,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 		// The map size may change as we're iterating over it, so
 		// grab a snapshot of the entries in a separate list.
-		List<SimpleMapEntry> entries = Utils.listOfSize(m.size());
+		List<SimpleMapEntry> entries = listOfSize(m.size());
 		m.forEach((k, v) -> entries.add(new SimpleMapEntry(k, v)));
 
 		out.startMap(entries.size());

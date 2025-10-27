@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Category of headers that consist of simple comma-delimited lists of strings with q-values.
@@ -120,7 +119,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicStringRangesHeader(String name, StringRanges value) {
-		super(name, Utils.s(value));
+		super(name, s(value));
 		this.stringValue = null;
 		this.value = value;
 		this.supplier = null;
@@ -151,7 +150,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	 * @return The header value as a {@link StringRanges} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<StringRanges> asStringRanges() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	/**
@@ -166,7 +165,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return nn(stringValue) ? stringValue : Utils.s(value()); }
+	public String getValue() { return nn(stringValue) ? stringValue : s(value()); }
 
 	/**
 	 * Given a list of media types, returns the best match for this string range header.

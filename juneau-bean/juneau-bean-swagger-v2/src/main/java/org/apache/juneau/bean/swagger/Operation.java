@@ -669,15 +669,15 @@ public class Operation extends SwaggerElement {
 		return switch (property) {
 			case "consumes" -> setConsumes(toList(value, MediaType.class).sparse().build());
 			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "operationId" -> setOperationId(Utils.s(value));
+			case "operationId" -> setOperationId(s(value));
 			case "parameters" -> setParameters(toList(value, ParameterInfo.class).sparse().build());
 			case "produces" -> setProduces(toList(value, MediaType.class).sparse().build());
 			case "responses" -> setResponses(toMap(value, String.class, ResponseInfo.class).sparse().build());
 			case "schemes" -> setSchemes(toList(value, String.class).sparse().addAny(value).build());
 			case "security" -> setSecurity((List)toList(value, MapStringList.class).sparse().build());
-			case "summary" -> setSummary(Utils.s(value));
+			case "summary" -> setSummary(s(value));
 			case "tags" -> setTags(toList(value, String.class).sparse().build());
 			default -> {
 				super.set(property, value);

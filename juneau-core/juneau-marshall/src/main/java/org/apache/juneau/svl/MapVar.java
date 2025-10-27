@@ -17,10 +17,9 @@
 package org.apache.juneau.svl;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * A subclass of {@link DefaultingVar} that simply pulls values from a {@link Map}.
@@ -49,6 +48,6 @@ public abstract class MapVar extends DefaultingVar {
 
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String varVal) {
-		return Utils.s(m.get(varVal));
+		return s(m.get(varVal));
 	}
 }

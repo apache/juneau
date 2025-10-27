@@ -22,8 +22,6 @@ import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
-
 /**
  * Category of headers that consist of a single URL value.
  *
@@ -104,7 +102,7 @@ public class BasicUriHeader extends BasicHeader {
 	 */
 	public BasicUriHeader(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty(value) ? null : URI.create(value);
+		this.value = isEmpty(value) ? null : URI.create(value);
 		this.supplier = null;
 	}
 
@@ -136,7 +134,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicUriHeader(String name, URI value) {
-		super(name, Utils.s(value));
+		super(name, s(value));
 		this.value = value;
 		this.supplier = null;
 	}
@@ -147,11 +145,11 @@ public class BasicUriHeader extends BasicHeader {
 	 * @return The header value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> asUri() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return Utils.s(value()); }
+	public String getValue() { return s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

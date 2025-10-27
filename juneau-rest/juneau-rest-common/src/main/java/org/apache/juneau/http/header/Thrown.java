@@ -166,7 +166,7 @@ public class Thrown extends BasicCsvHeader {
 	 */
 	public Thrown(String value) {
 		super(NAME, value);
-		List<Part> l = Utils.list();
+		List<Part> l = list();
 		StringUtils.split(value, x -> l.add(new Part(x)));
 		this.value = value == null ? null : u(l);
 	}
@@ -177,6 +177,6 @@ public class Thrown extends BasicCsvHeader {
 	 * @return The class name portion of the header, or <jk>null</jk> if not there.
 	 */
 	public Optional<List<Part>> asParts() {
-		return Utils.opt(value);
+		return opt(value);
 	}
 }

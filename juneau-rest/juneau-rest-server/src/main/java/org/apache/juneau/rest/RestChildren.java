@@ -50,7 +50,7 @@ public class RestChildren {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestChildren.class, beanStore);
-			list = Utils.list();
+			list = list();
 		}
 
 		/**
@@ -150,7 +150,7 @@ public class RestChildren {
 				UrlPathMatcher upp = rc.getPathMatcher();
 				UrlPathMatch uppm = upp.match(builder.getUrlPath());
 				if (nn(uppm)) {
-					return Utils.opt(RestChildMatch.create(uppm, rc));
+					return opt(RestChildMatch.create(uppm, rc));
 				}
 			}
 		}

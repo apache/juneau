@@ -460,7 +460,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
 		var s1 = serializer.toString(value);
 		var s2 = serializer.toString(o);
-		if (Utils.ne(s1, s2))
+		if (ne(s1, s2))
 			throw error(MSG_unexpectedComparison, s2, s1);
 		return returns();
 	}
@@ -632,7 +632,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The inner value as a string, or <jk>null</jk> if the value was null.
 	 */
 	protected String valueAsString() {
-		return Utils.s(value);
+		return s(value);
 	}
 
 	/**

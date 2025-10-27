@@ -135,7 +135,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ClientVersion(Version value) {
-		super(NAME, Utils.s(value));
+		super(NAME, s(value));
 		this.value = value;
 		this.supplier = null;
 	}
@@ -165,13 +165,13 @@ public class ClientVersion extends BasicStringHeader {
 	 * @return The header value as a {@link Version} object, or {@link Optional#empty()} if the value is <jk>null</jk>.
 	 */
 	public Optional<Version> asVersion() {
-		return Utils.opt(value);
+		return opt(value);
 	}
 
 	@Override /* Overridden from Header */
 	public String getValue() {
 		if (nn(supplier))
-			return Utils.s(supplier.get());
+			return s(supplier.get());
 		return super.getValue();
 	}
 }

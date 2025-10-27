@@ -3906,7 +3906,7 @@ public class RestContext extends Context {
 		 * @return A new config.
 		 */
 		protected Config createConfig(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
-	
+
 			var v = Value.<Config>empty();
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
@@ -3973,7 +3973,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			var v = Value.of(NamedAttributeMap.create());
-	
+
 			beanStore.getBean(NamedAttributeMap.class, "defaultRequestAttributes").ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultRequestAttributes") public [static] NamedAttributeMap xxx(<args>)
@@ -3992,7 +3992,7 @@ public class RestContext extends Context {
 		 * @return A new default request headers sub-builder.
 		 */
 		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, Supplier<?> resource) {
-	
+
 			// Default value.
 			var v = Value.of(HeaderList.create());
 
@@ -4018,10 +4018,10 @@ public class RestContext extends Context {
 
 			// Default value.
 			var v = Value.of(HeaderList.create());
-	
+
 			// Replace with bean from bean store.
 			beanStore.getBean(HeaderList.class, "defaultResponseHeaders").ifPresent(x -> v.set(x));
-	
+
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders") public [static] HeaderList xxx(<args>)
 			beanStore.createMethodFinder(HeaderList.class).addBean(HeaderList.class, v.get()).find(x -> isRestBeanMethod(x, "defaultResponseHeaders")).run(x -> v.set(x));
 
@@ -4041,7 +4041,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			var v = Value.of(getAnnotatedMethods(resource, RestDestroy.class, x -> true));
-	
+
 			// Replace with bean from:  @RestInject(name="destroyMethods") public [static] MethodList xxx(<args>)
 			beanStore.createMethodFinder(MethodList.class).addBean(MethodList.class, v.get()).find(x -> isRestBeanMethod(x, "destroyMethods")).run(x -> v.set(x));
 

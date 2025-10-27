@@ -22,7 +22,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
 
@@ -227,7 +226,7 @@ public class RequestAttributes {
 	 * @return All the attribute on this request.
 	 */
 	public List<RequestAttribute> getAll() {
-		List<RequestAttribute> l = Utils.list();
+		List<RequestAttribute> l = list();
 		Enumeration<String> e = sreq.getAttributeNames();
 		while (e.hasMoreElements()) {
 			String n = e.nextElement();

@@ -514,7 +514,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
-		List<RDFNode> l = Utils.listOfSize(c.size());
+		List<RDFNode> l = listOfSize(c.size());
 		c.forEach(x -> l.add(serializeAnything(x, false, elementType, null, null, null)));
 		return model.createList(l.iterator());
 	}

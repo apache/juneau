@@ -30,7 +30,6 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
@@ -330,7 +329,7 @@ public class RdfParserSession extends ReaderParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Utils.opt(parseAnything(eType.getElementType(), n, outer, pMeta));
+			return (T)opt(parseAnything(eType.getElementType(), n, outer, pMeta));
 
 		setCurrentClass(sType);
 
@@ -570,7 +569,7 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 
 		if (roots.isEmpty())
-			return type.isOptional() ? (T)Utils.opte() : null;
+			return type.isOptional() ? (T)opte() : null;
 
 		if (roots.size() > 1)
 			throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());

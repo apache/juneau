@@ -18,6 +18,7 @@ package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.ref.*;
 import java.lang.reflect.*;
@@ -142,7 +143,7 @@ public class DateUtils {
 	 * @return The formatter.
 	 */
 	public static DateTimeFormatter getFormatter(String pattern) {
-		if (Utils.isEmpty(pattern))
+		if (StringUtils.isEmpty(pattern))
 			return DateTimeFormatter.ISO_INSTANT;
 		try {
 			for (Field f : DateTimeFormatter.class.getFields()) {
@@ -220,7 +221,7 @@ public class DateUtils {
 	 * @see #toIso8601(Calendar)
 	 */
 	public static Calendar fromIso8601Calendar(String s) {
-		if (Utils.isEmptyOrBlank(s))
+		if (isEmptyOrBlank(s))
 			return null;
 		return GregorianCalendar.from(fromIso8601(s));
 	}
@@ -288,7 +289,7 @@ public class DateUtils {
 	 * @see ZonedDateTime
 	 */
 	public static ZonedDateTime fromIso8601(String s) {
-		if (Utils.isEmptyOrBlank(s))
+		if (isEmptyOrBlank(s))
 			return null;
 		String validDate = toValidIso8601DT(s);
 		return ZonedDateTime.parse(validDate, DateTimeFormatter.ISO_DATE_TIME);
@@ -491,7 +492,7 @@ public class DateUtils {
 	 * @see ChronoField
 	 */
 	public static ChronoField getPrecisionFromString(String seg) {
-		if (Utils.isEmpty(seg))
+		if (StringUtils.isEmpty(seg))
 			return ChronoField.MILLI_OF_SECOND;
 
 		// States:

@@ -107,7 +107,7 @@ public class ResponseHeader extends BasicHeader {
 	 */
 	public <T> Optional<T> as(ClassMeta<T> type) {
 		try {
-			return Utils.opt(parser.parse(HEADER, schema, getValue(), type));
+			return opt(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
 			throw new BasicRuntimeException(e, "Could not parse response header {0}.", getName());
 		}

@@ -21,8 +21,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
-
 /**
  * Category of headers that consist of a comma-delimited list of entity validator values.
  *
@@ -148,11 +146,11 @@ public class BasicEntityTagsHeader extends BasicHeader {
 	 * @return The header value as an {@link EntityTags} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<EntityTags> asEntityTags() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return Utils.s(value()); }
+	public String getValue() { return s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

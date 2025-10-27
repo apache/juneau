@@ -89,7 +89,7 @@ public abstract class Context implements AnnotationProvider {
 		List<Annotation> annotations;
 		Cache<HashKey,? extends Context> cache;
 
-		private final List<Object> builders = Utils.list();
+		private final List<Object> builders = list();
 		private final AnnotationWorkList applied = AnnotationWorkList.create();
 
 		/**
@@ -593,7 +593,7 @@ public abstract class Context implements AnnotationProvider {
 		 *
 		 * @return The context class if it was specified.
 		 */
-		public Optional<Class<?>> getType() { return Utils.opt(type); }
+		public Optional<Class<?>> getType() { return opt(type); }
 
 		/**
 		 * Returns the hashkey of this builder.
@@ -773,7 +773,7 @@ public abstract class Context implements AnnotationProvider {
 	protected Context(Builder builder) {
 		init(builder);
 		debug = builder.debug;
-		annotations = Utils.opt(builder.annotations).orElseGet(Collections::emptyList);
+		annotations = opt(builder.annotations).orElseGet(Collections::emptyList);
 
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 

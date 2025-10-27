@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * A simple mutable boolean flag.
@@ -156,7 +157,7 @@ public class Flag {
 	 */
 	public Flag ifNotSet(Snippet snippet) {
 		if (! value)
-			Utils.safe(snippet);
+			safe(snippet);
 		return this;
 	}
 
@@ -180,7 +181,7 @@ public class Flag {
 	 */
 	public Flag ifSet(Snippet snippet) {
 		if (value)
-			Utils.safe(snippet);
+			safe(snippet);
 		return this;
 	}
 

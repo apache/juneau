@@ -26,7 +26,6 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
@@ -179,7 +178,7 @@ public class HttpParts {
 		}
 		if (o instanceof Map.Entry) {
 			Map.Entry e = (Map.Entry)o;
-			return BasicPart.of(Utils.s(e.getKey()), e.getValue());
+			return BasicPart.of(s(e.getKey()), e.getValue());
 		}
 		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", o == null ? null : o.getClass().getName());
 	}
@@ -307,7 +306,7 @@ public class HttpParts {
 			case HEADER -> type.getProperty("HttpPart.header.name", HEADER_NAME_FUNCTION);
 			case PATH -> type.getProperty("HttpPart.path.name", PATH_NAME_FUNCTION);
 			case QUERY -> type.getProperty("HttpPart.query.name", QUERY_NAME_FUNCTION);
-			default -> Utils.opte();
+			default -> opte();
 		};
 	}
 

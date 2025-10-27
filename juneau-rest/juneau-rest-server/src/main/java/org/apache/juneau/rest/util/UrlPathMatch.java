@@ -121,7 +121,7 @@ public class UrlPathMatch {
 	 */
 	public boolean hasEmptyVars() {
 		for (String v : vars.values())
-			if (Utils.isEmpty(v))
+			if (isEmpty(v))
 				return true;
 		return false;
 	}

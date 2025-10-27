@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.util;
 
-import java.util.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
-import org.apache.juneau.common.utils.*;
+import java.util.*;
 
 /**
  * A list of {@link UrlPathMatcher} objects.
@@ -47,6 +47,6 @@ public class UrlPathMatcherList extends ArrayList<UrlPathMatcher> {
 	 * @return The contents of this list as a {@link UrlPathMatcher} array.
 	 */
 	public UrlPathMatcher[] asArray() {
-		return Utils.array(this, UrlPathMatcher.class);
+		return array(this, UrlPathMatcher.class);
 	}
 }

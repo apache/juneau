@@ -17,13 +17,13 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.time.temporal.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.serializer.*;
 
@@ -201,7 +201,7 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R is(Date value, ChronoUnit precision) throws AssertionError {
-		if (Utils.ne(value(), value, (x, y) -> x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
+		if (ne(value(), value, (x, y) -> x.toInstant().truncatedTo(precision).equals(y.toInstant().truncatedTo(precision))))
 			throw error(MSG_unexpectedValue, value, value());
 		return returns();
 	}

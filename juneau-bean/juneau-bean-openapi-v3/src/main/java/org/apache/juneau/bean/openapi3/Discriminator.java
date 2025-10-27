@@ -161,7 +161,7 @@ public class Discriminator extends OpenApiElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "mapping" -> setMapping(toMap(value, String.class, String.class).sparse().build());
-			case "propertyName" -> setPropertyName(Utils.s(value));
+			case "propertyName" -> setPropertyName(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

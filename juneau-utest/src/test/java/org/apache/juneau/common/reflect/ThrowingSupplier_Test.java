@@ -16,19 +16,19 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Unit tests for the {@link ThrowingSupplier} functional interface.
  *
  * <p>This test class verifies functional interface compliance, exception handling,
- * and integration with the Utils.safe() method.</p>
+ * and integration with the safe() method.</p>
  */
 class ThrowingSupplier_Test extends TestBase {
 
@@ -128,7 +128,7 @@ class ThrowingSupplier_Test extends TestBase {
 	}
 
 	// ====================================================================================================
-	// Integration with Utils.safe() Tests
+	// Integration with safe() Tests
 	// ====================================================================================================
 
 	@Nested
@@ -138,7 +138,7 @@ class ThrowingSupplier_Test extends TestBase {
 		void c01_safeExecutionWithoutException() {
 			ThrowingSupplier<String> supplier = () -> "safe_value";
 
-			var result = Utils.safe(supplier);
+			var result = safe(supplier);
 			assertEquals("safe_value", result);
 		}
 
@@ -148,8 +148,8 @@ class ThrowingSupplier_Test extends TestBase {
 				throw new java.io.IOException("Checked exception");
 			};
 
-			// Utils.safe should wrap checked exceptions in RuntimeException
-			var exception = assertThrows(RuntimeException.class, () -> Utils.safe(supplier));
+			// safe should wrap checked exceptions in RuntimeException
+			var exception = assertThrows(RuntimeException.class, () -> safe(supplier));
 			assertTrue(exception.getCause() instanceof java.io.IOException);
 			assertEquals("Checked exception", exception.getCause().getMessage());
 		}
@@ -160,8 +160,8 @@ class ThrowingSupplier_Test extends TestBase {
 				throw new RuntimeException("Runtime exception");
 			};
 
-			// Utils.safe should re-throw RuntimeExceptions as-is
-			var exception = assertThrows(RuntimeException.class, () -> Utils.safe(supplier));
+			// safe should re-throw RuntimeExceptions as-is
+			var exception = assertThrows(RuntimeException.class, () -> safe(supplier));
 			assertEquals("Runtime exception", exception.getMessage());
 			assertNull(exception.getCause()); // Should not be wrapped
 		}
@@ -170,7 +170,7 @@ class ThrowingSupplier_Test extends TestBase {
 		void c04_safeExecutionWithNullReturn() {
 			ThrowingSupplier<String> supplier = () -> null;
 
-			var result = Utils.safe(supplier);
+			var result = safe(supplier);
 			assertNull(result);
 		}
 	}
@@ -190,7 +190,7 @@ class ThrowingSupplier_Test extends TestBase {
 				throw new java.io.FileNotFoundException("File not found");
 			};
 
-			var exception = assertThrows(RuntimeException.class, () -> Utils.safe(fileReader));
+			var exception = assertThrows(RuntimeException.class, () -> safe(fileReader));
 			assertTrue(exception.getCause() instanceof java.io.FileNotFoundException);
 		}
 
@@ -202,7 +202,7 @@ class ThrowingSupplier_Test extends TestBase {
 				throw new java.net.SocketTimeoutException("Connection timeout");
 			};
 
-			var exception = assertThrows(RuntimeException.class, () -> Utils.safe(networkCall));
+			var exception = assertThrows(RuntimeException.class, () -> safe(networkCall));
 			assertTrue(exception.getCause() instanceof java.net.SocketTimeoutException);
 		}
 
@@ -214,7 +214,7 @@ class ThrowingSupplier_Test extends TestBase {
 				throw new java.sql.SQLException("Database connection failed");
 			};
 
-			var exception = assertThrows(RuntimeException.class, () -> Utils.safe(dbQuery));
+			var exception = assertThrows(RuntimeException.class, () -> safe(dbQuery));
 			assertTrue(exception.getCause() instanceof java.sql.SQLException);
 		}
 
@@ -229,7 +229,7 @@ class ThrowingSupplier_Test extends TestBase {
 				return result;
 			};
 
-			var result = Utils.safe(complexOperation);
+			var result = safe(complexOperation);
 			assertNotNull(result);
 			assertEquals("success", result.get("status"));
 			assertNotNull(result.get("data"));
@@ -249,7 +249,7 @@ class ThrowingSupplier_Test extends TestBase {
 			ThrowingSupplier<String> fastSupplier = () -> "quick_result";
 
 			var start = System.nanoTime();
-			var result = Utils.safe(fastSupplier);
+			var result = safe(fastSupplier);
 			var end = System.nanoTime();
 
 			assertEquals("quick_result", result);
@@ -266,9 +266,9 @@ class ThrowingSupplier_Test extends TestBase {
 				}
 			};
 
-			assertEquals(1, Utils.safe(counter));
-			assertEquals(2, Utils.safe(counter));
-			assertEquals(3, Utils.safe(counter));
+			assertEquals(1, safe(counter));
+			assertEquals(2, safe(counter));
+			assertEquals(3, safe(counter));
 		}
 
 		@Test
@@ -286,7 +286,7 @@ class ThrowingSupplier_Test extends TestBase {
 				}
 			};
 
-			var result = Utils.safe(resourceUser);
+			var result = safe(resourceUser);
 			assertEquals("resource_data", result);
 			assertTrue(resourceClosed[0], "Resource should be cleaned up");
 		}
@@ -304,7 +304,7 @@ class ThrowingSupplier_Test extends TestBase {
 				}
 			};
 
-			var result = Utils.safe(problematicResource);
+			var result = safe(problematicResource);
 			assertEquals("success", result);
 		}
 	}
@@ -323,7 +323,7 @@ class ThrowingSupplier_Test extends TestBase {
 			// Test concurrent execution
 			var futures = new ArrayList<java.util.concurrent.CompletableFuture<String>>();
 			for (int i = 0; i < 10; i++) {
-				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -> Utils.safe(supplier)));
+				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -> safe(supplier)));
 			}
 
 			// All should complete successfully
@@ -343,7 +343,7 @@ class ThrowingSupplier_Test extends TestBase {
 			for (int i = 0; i < 5; i++) {
 				futures.add(java.util.concurrent.CompletableFuture.supplyAsync(() -> {
 					try {
-						Utils.safe(throwingSupplier);
+						safe(throwingSupplier);
 						return null; // Should not reach here
 					} catch (RuntimeException e) {
 						return e;

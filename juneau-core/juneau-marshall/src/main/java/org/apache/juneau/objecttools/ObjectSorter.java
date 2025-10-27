@@ -74,8 +74,8 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		@Override
 		public int compareTo(Object o) {
 			if (isDesc)
-				return Utils.compare(((SortEntry)o).sortVal, this.sortVal);
-			return Utils.compare(this.sortVal, ((SortEntry)o).sortVal);
+				return compare(((SortEntry)o).sortVal, this.sortVal);
+			return compare(this.sortVal, ((SortEntry)o).sortVal);
 		}
 
 		void setSort(String sortCol, boolean isDesc) {
@@ -127,12 +127,12 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 
 		if (type.isArray()) {
 			int size = Array.getLength(input);
-			l = Utils.listOfSize(size);
+			l = listOfSize(size);
 			for (int i = 0; i < size; i++)
 				l.add(new SortEntry(session, Array.get(input, i)));
 		} else /* isCollection() */ {
 			Collection c = (Collection)input;
-			l = Utils.listOfSize(c.size());
+			l = listOfSize(c.size());
 			List<SortEntry> l2 = l;
 			c.forEach(x -> l2.add(new SortEntry(session, x)));
 		}
@@ -148,7 +148,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 			Collections.sort(l3);
 		});
 
-		List<Object> l2 = Utils.listOfSize(l.size());
+		List<Object> l2 = listOfSize(l.size());
 		l.forEach(x -> l2.add(x.o));
 
 		return l2;

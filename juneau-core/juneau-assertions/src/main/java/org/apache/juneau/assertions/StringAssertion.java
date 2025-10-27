@@ -16,11 +16,12 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.util.function.*;
 import java.util.regex.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -142,7 +143,7 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public StringAssertion(Object value) {
-		super(Utils.s(value), null);
+		super(s(value), null);
 	}
 
 	@Override /* Overridden from FluentStringAssertion */

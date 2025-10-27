@@ -254,14 +254,14 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	public SecuritySchemeInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "bearerFormat" -> setBearerFormat(Utils.s(value));
-			case "description" -> setDescription(Utils.s(value));
+			case "bearerFormat" -> setBearerFormat(s(value));
+			case "description" -> setDescription(s(value));
 			case "flows" -> setFlows(toType(value, OAuthFlow.class));
-			case "in" -> setIn(Utils.s(value));
-			case "name" -> setName(Utils.s(value));
-			case "openIdConnectUrl" -> setOpenIdConnectUrl(Utils.s(value));
-			case "scheme" -> setScheme(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
+			case "in" -> setIn(s(value));
+			case "name" -> setName(s(value));
+			case "openIdConnectUrl" -> setOpenIdConnectUrl(s(value));
+			case "scheme" -> setScheme(s(value));
+			case "type" -> setType(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

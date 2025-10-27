@@ -370,7 +370,7 @@ public class SerializerSet {
 			if (o instanceof Serializer.Builder) {
 				Serializer.Builder x = (Serializer.Builder)o;
 				Serializer.Builder x2 = x.copy();
-				if (Utils.ne(x.getClass(), x2.getClass()))
+				if (ne(x.getClass(), x2.getClass()))
 					throw new BasicRuntimeException("Copy method not implemented on class {0}", x.getClass().getName());
 				x = x2;
 				if (nn(bcBuilder))

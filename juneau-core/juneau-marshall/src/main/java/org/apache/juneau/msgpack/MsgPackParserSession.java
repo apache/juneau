@@ -27,7 +27,6 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
@@ -196,7 +195,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Utils.opt(parseAnything(eType.getElementType(), is, outer, pMeta));
+			return (T)opt(parseAnything(eType.getElementType(), is, outer, pMeta));
 
 		setCurrentClass(sType);
 

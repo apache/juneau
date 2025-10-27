@@ -253,16 +253,16 @@ public class Parameter extends OpenApiElement {
 		return switch (property) {
 			case "allowEmptyValue" -> setAllowEmptyValue(toType(value, Boolean.class));
 			case "allowReserved" -> setAllowReserved(toType(value, Boolean.class));
-			case "description" -> setDescription(Utils.s(value));
+			case "description" -> setDescription(s(value));
 			case "deprecated" -> setDeprecated(toType(value, Boolean.class));
 			case "example" -> setExample(value);
 			case "examples" -> setExamples(toMap(value, String.class, Example.class).sparse().build());
 			case "explode" -> setExplode(toType(value, Boolean.class));
-			case "in" -> setIn(Utils.s(value));
-			case "name" -> setName(Utils.s(value));
+			case "in" -> setIn(s(value));
+			case "name" -> setName(s(value));
 			case "required" -> setRequired(toType(value, Boolean.class));
 			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			case "style" -> setStyle(Utils.s(value));
+			case "style" -> setStyle(s(value));
 			default -> {
 				super.set(property, value);
 				yield this;

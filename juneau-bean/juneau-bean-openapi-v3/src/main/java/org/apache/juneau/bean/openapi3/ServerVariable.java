@@ -201,8 +201,8 @@ public class ServerVariable extends OpenApiElement {
 	public ServerVariable set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "default" -> setDefault(Utils.s(value));
-			case "description" -> setDescription(Utils.s(value));
+			case "default" -> setDefault(s(value));
+			case "description" -> setDescription(s(value));
 			case "enum" -> setEnum(toList(value, Object.class).sparse().build());
 			default -> {
 				super.set(property, value);

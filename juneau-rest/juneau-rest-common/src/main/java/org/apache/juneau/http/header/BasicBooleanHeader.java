@@ -23,7 +23,6 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -123,7 +122,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 */
 	public BasicBooleanHeader(String name, String value) {
 		super(name, value);
-		this.value = Utils.isEmpty(value) ? null : Boolean.valueOf(value);
+		this.value = isEmpty(value) ? null : Boolean.valueOf(value);
 		this.supplier = null;
 	}
 
@@ -151,7 +150,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return The header value as a {@link Boolean} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	/**
@@ -174,7 +173,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return Utils.s(value()); }
+	public String getValue() { return s(value()); }
 
 	/**
 	 * Returns <jk>true</jk> if the header value is <jk>true</jk>.

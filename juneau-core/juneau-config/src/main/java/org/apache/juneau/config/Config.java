@@ -656,7 +656,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
 	public boolean exists(String key) {
-		return Utils.isNotEmpty(get(key).as(String.class).orElse(null));
+		return isNotEmpty(get(key).as(String.class).orElse(null));
 	}
 
 	/**
@@ -712,7 +712,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * @return The section bean, never <jk>null</jk>.
 	 */
 	public Section getSection(String name) {
-		return new Section(this, configMap, Utils.emptyIfNull(name));
+		return new Section(this, configMap, emptyIfNull(name));
 	}
 
 	/**
@@ -1133,7 +1133,7 @@ public class Config extends Context implements ConfigEventListener {
 
 	private static String section(String section) {
 		assertArgNotNull("section", section);
-		if (Utils.isEmpty(section))
+		if (StringUtils.isEmpty(section))
 			return "";
 		return section;
 	}

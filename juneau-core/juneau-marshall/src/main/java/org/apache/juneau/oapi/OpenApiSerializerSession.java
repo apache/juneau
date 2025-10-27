@@ -232,11 +232,11 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				delim(cf);
 			first = false;
 			if (cf == PIPES)
-				sb.append(escapeChars(Utils.s(o), PIPE));
+				sb.append(escapeChars(s(o), PIPE));
 			else if (cf == SSV || cf == TSV)
-				sb.append(Utils.s(o));
+				sb.append(s(o));
 			else
-				sb.append(escapeChars(Utils.s(o), COMMA));
+				sb.append(escapeChars(s(o), COMMA));
 			return this;
 		}
 
@@ -245,11 +245,11 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				delim(cf);
 			first = false;
 			if (cf == PIPES)
-				sb.append(escapeChars(Utils.s(key), PIPE_OR_EQ)).append('=').append(escapeChars(Utils.s(val), PIPE_OR_EQ));
+				sb.append(escapeChars(s(key), PIPE_OR_EQ)).append('=').append(escapeChars(s(val), PIPE_OR_EQ));
 			else if (cf == SSV || cf == TSV)
-				sb.append(escapeChars(Utils.s(key), EQ)).append('=').append(escapeChars(Utils.s(val), EQ));
+				sb.append(escapeChars(s(key), EQ)).append('=').append(escapeChars(s(val), EQ));
 			else
-				sb.append(escapeChars(Utils.s(key), COMMA_OR_EQ)).append('=').append(escapeChars(Utils.s(val), COMMA_OR_EQ));
+				sb.append(escapeChars(s(key), COMMA_OR_EQ)).append('=').append(escapeChars(s(val), COMMA_OR_EQ));
 			return this;
 		}
 	}
@@ -310,7 +310,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				type = getClassMetaForObject(value);
 		}
 
-		schema = Utils.firstNonNull(schema, DEFAULT_SCHEMA);
+		schema = firstNonNull(schema, DEFAULT_SCHEMA);
 
 		HttpPartDataType t = schema.getType(type);
 
@@ -380,21 +380,21 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 			} else if (t == BOOLEAN) {
 
-				out = Utils.s(toType(value, CM_Boolean));
+				out = s(toType(value, CM_Boolean));
 
 			} else if (t == INTEGER) {
 
 				if (f == INT64)
-					out = Utils.s(toType(value, CM_Long));
+					out = s(toType(value, CM_Long));
 				else
-					out = Utils.s(toType(value, CM_Integer));
+					out = s(toType(value, CM_Integer));
 
 			} else if (t == NUMBER) {
 
 				if (f == DOUBLE)
-					out = Utils.s(toType(value, CM_Double));
+					out = s(toType(value, CM_Double));
 				else
-					out = Utils.s(toType(value, CM_Float));
+					out = s(toType(value, CM_Float));
 
 			} else if (t == ARRAY) {
 
@@ -443,7 +443,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				} else if (type.isMap()) {
 					OapiStringBuilder sb = new OapiStringBuilder(cf);
 					HttpPartSchema schema2 = schema;
-					((Map<?,?>)value).forEach((k, v) -> sb.append(k, serialize(partType, schema2.getProperty(Utils.s(k)), v)));
+					((Map<?,?>)value).forEach((k, v) -> sb.append(k, serialize(partType, schema2.getProperty(s(k)), v)));
 					out = sb.toString();
 
 				} else {
@@ -499,7 +499,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			});
 		} else {
 			HttpPartSchema s2 = s;
-			((Map<?,?>)o).forEach((k, v) -> m.put(Utils.s(k), toObject(partType, v, s2.getProperty(Utils.s(k)))));
+			((Map<?,?>)o).forEach((k, v) -> m.put(s(k), toObject(partType, v, s2.getProperty(s(k)))));
 		}
 		if (isSortMaps())
 			return sort(m);

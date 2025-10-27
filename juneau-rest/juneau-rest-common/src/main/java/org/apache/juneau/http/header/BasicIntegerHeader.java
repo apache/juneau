@@ -24,7 +24,6 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -152,7 +151,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @return The header value as an {@link Integer} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> asInteger() {
-		return Utils.opt(value());
+		return opt(value());
 	}
 
 	/**
@@ -175,7 +174,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return Utils.s(value()); }
+	public String getValue() { return s(value()); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

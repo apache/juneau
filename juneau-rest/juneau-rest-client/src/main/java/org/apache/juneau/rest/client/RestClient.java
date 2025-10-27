@@ -6928,7 +6928,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					var bean = args[rmba.getIndex()];
 					if (nn(bean)) {
 						for (RequestBeanPropertyMeta p : rbm.getProperties()) {
-							var val = Utils.safeSupplier(() -> p.getGetter().invoke(bean));
+							var val = safeSupplier(() -> p.getGetter().invoke(bean));
 							var pt = p.getPartType();
 							var pn = p.getPartName();
 							HttpPartSchema schema = p.getSchema();

@@ -45,7 +45,7 @@ public class EntityTag {
 	 * @throws IllegalArgumentException If attempting to set an invalid entity tag value.
 	 */
 	public static EntityTag of(Object value) {
-		Object o = Utils.unwrap(value);
+		Object o = unwrap(value);
 		return o == null ? null : new EntityTag(o.toString());
 	}
 

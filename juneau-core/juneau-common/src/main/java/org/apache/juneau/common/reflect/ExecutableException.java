@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.text.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * General exception that occurs when trying to execute a constructor, method, or field using reflection.
@@ -40,7 +40,7 @@ public class ExecutableException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ExecutableException(String message, Object...args) {
-		super(Utils.f(message, args));
+		super(f(message, args));
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ExecutableException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public ExecutableException(Throwable causedBy, String message, Object...args) {
-		super(Utils.f(message, args), causedBy);
+		super(f(message, args), causedBy);
 	}
 
 	/**

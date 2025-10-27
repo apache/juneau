@@ -25,7 +25,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -67,7 +66,7 @@ public class ThrownStore {
 		 * @return This object.
 		 */
 		public Builder ignoreClasses(Class<?>...value) {
-			this.ignoreClasses = Utils.set(value);
+			this.ignoreClasses = set(value);
 			return this;
 		}
 
@@ -156,10 +155,10 @@ public class ThrownStore {
 	 * @param builder The builder for this object.
 	 */
 	public ThrownStore(Builder builder) {
-		this.parent = Utils.opt(builder.parent);
+		this.parent = opt(builder.parent);
 		this.beanStore = builder.beanStore();
 
-		this.statsImplClass = Utils.firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
+		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
 
 		Set<String> s = null;
 		if (nn(builder.ignoreClasses))
@@ -199,7 +198,7 @@ public class ThrownStore {
 	 */
 	public Optional<ThrownStats> getStats(long hash) {
 		ThrownStats s = db.get(hash);
-		return Utils.opt(s == null ? null : s.clone());
+		return opt(s == null ? null : s.clone());
 	}
 
 	/**

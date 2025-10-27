@@ -17,8 +17,7 @@
 package org.apache.juneau;
 
 import static java.lang.Character.*;
-
-import org.apache.juneau.common.utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 /**
  * Converts property names to dashed-lower-case format.
@@ -41,7 +40,7 @@ public class PropertyNamerDLC implements PropertyNamer {
 
 	@Override /* Overridden from PropertyNamer */
 	public String getPropertyName(String name) {
-		if (Utils.isEmpty(name))
+		if (isEmpty(name))
 			return name;
 
 		int numUCs = 0;

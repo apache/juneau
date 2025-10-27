@@ -18,12 +18,12 @@ package org.apache.juneau.rest.debug;
 
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.Method;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
@@ -223,9 +223,9 @@ public abstract class DebugEnablement {
 	 */
 	public DebugEnablement(BeanStore beanStore) {
 		Builder builder = init(beanStore);
-		this.defaultEnablement = Utils.firstNonNull(builder.defaultEnablement, NEVER);
+		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = Utils.firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
+		this.conditionalPredicate = firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
 	}
 
 	/**
@@ -234,9 +234,9 @@ public abstract class DebugEnablement {
 	 * @param builder The builder for this enablement.
 	 */
 	public DebugEnablement(Builder builder) {
-		this.defaultEnablement = Utils.firstNonNull(builder.defaultEnablement, NEVER);
+		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = Utils.firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
+		this.conditionalPredicate = firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
 
 	}
 

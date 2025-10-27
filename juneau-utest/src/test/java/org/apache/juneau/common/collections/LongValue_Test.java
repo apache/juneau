@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class LongValue_Test extends TestBase {
@@ -110,7 +110,7 @@ class LongValue_Test extends TestBase {
 		var v = new LongValue(null);
 		v.setIfEmpty(10L);
 		assertEquals(10L, v.get());
-		
+
 		v.setIfEmpty(20L);
 		assertEquals(10L, v.get()); // Should not change
 	}
@@ -119,7 +119,7 @@ class LongValue_Test extends TestBase {
 	void c03_orElse() {
 		var v = new LongValue(null);
 		assertEquals(99L, v.orElse(99L));
-		
+
 		v.set(42L);
 		assertEquals(42L, v.orElse(99L));
 	}
@@ -143,7 +143,7 @@ class LongValue_Test extends TestBase {
 	void c06_isPresent() {
 		var v = new LongValue(null);
 		assertFalse(v.isPresent());
-		
+
 		v.set(1L);
 		assertTrue(v.isPresent());
 	}
@@ -152,7 +152,7 @@ class LongValue_Test extends TestBase {
 	void c07_isEmpty() {
 		var v = new LongValue(null);
 		assertTrue(v.isEmpty());
-		
+
 		v.set(1L);
 		assertFalse(v.isEmpty());
 	}
@@ -178,37 +178,37 @@ class LongValue_Test extends TestBase {
 	@Test
 	void d01_countingInLambda() {
 		var counter = LongValue.create();
-		
-		Utils.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
+
+		list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
 			if (x % 2 == 0) {
 				counter.getAndIncrement();
 			}
 		});
-		
+
 		assertEquals(5L, counter.get());
 	}
 
 	@Test
 	void d02_trackingBytesProcessed() {
 		var bytesProcessed = LongValue.create();
-		
-		Utils.list(1024L, 2048L, 512L, 4096L).forEach(bytes -> {
+
+		list(1024L, 2048L, 512L, 4096L).forEach(bytes -> {
 			bytesProcessed.set(bytesProcessed.get() + bytes);
 		});
-		
+
 		assertEquals(7680L, bytesProcessed.get());
 	}
 
 	@Test
 	void d03_trackingMaxTimestamp() {
 		var maxTimestamp = LongValue.of(0L);
-		
-		Utils.list(1000L, 5000L, 3000L, 8000L, 2000L).forEach(timestamp -> {
+
+		list(1000L, 5000L, 3000L, 8000L, 2000L).forEach(timestamp -> {
 			if (timestamp > maxTimestamp.get()) {
 				maxTimestamp.set(timestamp);
 			}
 		});
-		
+
 		assertEquals(8000L, maxTimestamp.get());
 	}
 }
