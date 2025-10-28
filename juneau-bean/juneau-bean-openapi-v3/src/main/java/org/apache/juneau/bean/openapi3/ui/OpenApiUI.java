@@ -85,7 +85,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	 */
 	@Override
 	public org.apache.juneau.MediaType[] forMediaTypes() {
-		return Utils.a(HTML);
+		return CollectionUtils.a(HTML);
 	}
 
 	@Override

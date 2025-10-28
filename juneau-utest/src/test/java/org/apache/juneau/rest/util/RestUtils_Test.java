@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;

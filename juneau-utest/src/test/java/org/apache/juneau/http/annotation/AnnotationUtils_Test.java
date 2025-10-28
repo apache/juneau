@@ -193,7 +193,7 @@ class AnnotationUtils_Test extends TestBase {
 		assertTrue(ResponseAnnotation.empty((Response)null));
 
 		assertFalse(ResponseAnnotation.empty(response().examples(a("foo")).build()));
-		assertFalse(ResponseAnnotation.empty(response().headers(Utils.a(header().name("foo").build())).build()));
+		assertFalse(ResponseAnnotation.empty(response().headers(CollectionUtils.a(header().name("foo").build())).build()));
 		assertFalse(ResponseAnnotation.empty(response().parser(OpenApiParser.class).build()));
 		assertFalse(ResponseAnnotation.empty(response().schema(schema().$ref("foo").build()).build()));
 		assertFalse(ResponseAnnotation.empty(response().serializer(OpenApiSerializer.class).build()));

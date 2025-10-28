@@ -649,7 +649,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d03_d2ArrayOfMaps() {
-		var in = Utils.a(
+		var in = CollectionUtils.a(
 			map("f","foo"),
 			map("f","bar"),
 			null,

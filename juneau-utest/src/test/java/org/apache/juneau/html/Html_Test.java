@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.html;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;

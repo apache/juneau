@@ -108,7 +108,7 @@ class A_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		A x1 = new A("a", Utils.a("b1", strong("b2")));
+		A x1 = new A("a", CollectionUtils.a("b1", strong("b2")));
 		assertString("<a href='a'>b1<strong>b2</strong></a>", x1);
 
 	}

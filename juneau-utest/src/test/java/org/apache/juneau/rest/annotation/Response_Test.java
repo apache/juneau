@@ -139,7 +139,7 @@ class Response_Test extends TestBase {
 		@Response(schema=@Schema(collectionFormat="pipes"))
 		@RestGet
 		public String[] a() {
-			return Utils.a("foo","bar");
+			return CollectionUtils.a("foo","bar");
 		}
 		@Response(schema=@Schema(type="string",format="byte"))
 		@RestGet
@@ -164,7 +164,7 @@ class Response_Test extends TestBase {
 		}
 		@RestGet
 		public void g(@Response(schema=@Schema(collectionFormat="pipes")) Value<String[]> value) {
-			value.set(Utils.a("foo","bar"));
+			value.set(CollectionUtils.a("foo","bar"));
 		}
 		@RestGet
 		public void h(@Response(schema=@Schema(type="string",format="byte")) Value<byte[]> value) {

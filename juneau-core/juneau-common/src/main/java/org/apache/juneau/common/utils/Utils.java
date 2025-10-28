@@ -62,18 +62,6 @@ public class Utils {
 	private static final ConcurrentHashMap<String,String> PROPERTY_TO_ENV = new ConcurrentHashMap<>();
 
 	/**
-	 * Creates an array of objects.
-	 *
-	 * @param <T> The component type of the array.
-	 * @param x The objects to place in the array.
-	 * @return A new array containing the specified objects.
-	 */
-	@SafeVarargs
-	public static <T> T[] a(T...x) {
-		return x;
-	}
-
-	/**
 	 * Casts an object to a specific type if it's an instance of that type.
 	 *
 	 * @param <T> The type to cast to.

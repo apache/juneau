@@ -988,6 +988,18 @@ public class CollectionUtils {
 		return value.toArray(array);
 	}
 
+	/**
+	 * Creates an array of objects.
+	 *
+	 * @param <T> The component type of the array.
+	 * @param x The objects to place in the array.
+	 * @return A new array containing the specified objects.
+	 */
+	@SafeVarargs
+	public static <T> T[] a(T...x) {
+		return x;
+	}
+
 	public static <E> E[][] a2(E[]...value) {
 		return value;
 	}

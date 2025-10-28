@@ -22,7 +22,7 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.map;
 import static org.apache.juneau.bean.html5.HtmlBuilder.u;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.map;
-import static org.apache.juneau.common.utils.Utils.a;
+import static org.apache.juneau.common.utils.CollectionUtils.a;
 
 import java.lang.reflect.*;
 import java.util.*;
