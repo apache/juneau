@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		@Response(schema=@Schema(collectionFormat=<span class="jxr_string">"pipes"</span>))
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		@RestGet
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">public</strong> String[] a() {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">return</strong> Utils.a(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">return</strong> CollectionUtils.a(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		@Response(schema=@Schema(type=<span class="jxr_string">"string"</span>,format=<span class="jxr_string">"byte"</span>))
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		@RestGet
@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		@RestGet
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> g(@Response(schema=@Schema(collectionFormat=<span class="jxr_string">"pipes"</span>)) Value&lt;String[]&gt; value) {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			value.set(Utils.a(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			value.set(CollectionUtils.a(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		}
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		@RestGet
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> h(@Response(schema=@Schema(type=<span class="jxr_string">"string"</span>,format=<span class="jxr_string">"byte"</span>)) Value&lt;byte[]&gt; value) {
