@@ -221,10 +221,10 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			this.args = args;
 		} else if (inner instanceof AssertionPredicate) {
 			this.message = MSG_valueDidNotPassTest;
-			this.args = new Object[] {};
+			this.args = a();
 		} else {
 			this.message = MSG_valueDidNotPassTestWithValue;
-			this.args = new Object[] { VALUE };
+			this.args = a(VALUE);
 		}
 	}
 

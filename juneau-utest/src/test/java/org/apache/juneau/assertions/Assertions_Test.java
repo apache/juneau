@@ -18,9 +18,6 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.assertions.Assertions.assertBean;
-import static org.apache.juneau.assertions.Assertions.assertList;
-import static org.apache.juneau.assertions.Assertions.assertMap;
 import static org.apache.juneau.assertions.Assertions.assertThrowable;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -120,35 +117,35 @@ class Assertions_Test extends TestBase {
 	}
 
 	@Test void a20a_assertIntArray() {
-		assertIntArray(new int[]{1}).asLength().is(1);
+		assertIntArray(ints(1)).asLength().is(1);
 	}
 
 	@Test void a20b_assertLongArray() {
-		assertLongArray(new long[]{1L}).asLength().is(1);
+		assertLongArray(longs(1L)).asLength().is(1);
 	}
 
 	@Test void a20c_assertShortArray() {
-		assertShortArray(new short[]{1}).asLength().is(1);
+		assertShortArray(shorts(1)).asLength().is(1);
 	}
 
 	@Test void a20d_assertFloatArray() {
-		assertFloatArray(new float[]{1}).asLength().is(1);
+		assertFloatArray(floats(1)).asLength().is(1);
 	}
 
 	@Test void a20e_assertDoubleArray() {
-		assertDoubleArray(new double[]{1}).asLength().is(1);
+		assertDoubleArray(doubles(1)).asLength().is(1);
 	}
 
 	@Test void a20f_assertBooleanArray() {
-		assertBooleanArray(new boolean[]{true}).asLength().is(1);
+		assertBooleanArray(booleans(true)).asLength().is(1);
 	}
 
 	@Test void a20g_assertCharArray() {
-		assertCharArray(new char[]{'a'}).asLength().is(1);
+		assertCharArray(chars('a')).asLength().is(1);
 	}
 
 	@Test void a20h_assertByteArray() {
-		assertByteArray(new byte[]{1}).asLength().is(1);
+		assertByteArray(bytes(1)).asLength().is(1);
 	}
 
 	@Test void a21_assertMap() {

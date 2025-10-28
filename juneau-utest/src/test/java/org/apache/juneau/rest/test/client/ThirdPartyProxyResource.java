@@ -1236,17 +1236,17 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnInteger3dArray")
 	public Integer[][][] returnInteger3dArray() {
-		return new Integer[][][]{{{1,null},null},null};
+		return a(a(a(1,null),null),null);
 	}
 
 	@RestGet(path="/returnString3dArray")
 	public String[][][] returnString3dArray() {
-		return new String[][][]{{{"foo","bar",null},null},null};
+		return a(a(a("foo","bar",null),null),null);
 	}
 
 	@RestGet(path="/returnIntegerList")
 	public List<Integer> returnIntegerList() {
-		return alist(new Integer[]{1,null});
+		return alist(a(1,null));
 	}
 
 	@RestGet(path="/returnInteger3dList")
@@ -1256,7 +1256,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnInteger1d3dList")
 	public List<Integer[][][]> returnInteger1d3dList() {
-		return list(new Integer[][][]{{{1,null},null},null},null);
+		return list(a(a(a(1,null),null),null),null);
 	}
 
 	@RestGet(path="/returnInt1d3dList")
@@ -1266,7 +1266,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnStringList")
 	public List<String> returnStringList() {
-		return alist(new String[]{"foo","bar",null});
+		return alist(a("foo","bar",null));
 	}
 
 	// Beans
@@ -1278,7 +1278,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnBean3dArray")
 	public ABean[][][] returnBean3dArray() {
-		return new ABean[][][]{{{ABean.get(),null},null},null};
+		return a(a(a(ABean.get(),null),null),null);
 	}
 
 	@RestGet(path="/returnBeanList")
@@ -1288,7 +1288,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnBean1d3dList")
 	public List<ABean[][][]> returnBean1d3dList() {
-		return alist(new ABean[][][]{{{ABean.get(),null},null},null},null);
+		return alist(a(a(a(ABean.get(),null),null),null),null);
 	}
 
 	@RestGet(path="/returnBeanMap")
@@ -1303,7 +1303,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnBean1d3dListMap")
 	public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-		return map("foo", alist(new ABean[][][]{{{ABean.get(),null},null},null},null));
+		return map("foo", alist(a(a(a(ABean.get(),null),null),null),null));
 	}
 
 	@RestGet(path="/returnBeanListMapIntegerKeys")
@@ -1320,7 +1320,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnTypedBean3dArray")
 	public TypedBean[][][] returnTypedBean3dArray() {
-		return new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null};
+		return a(a(a(TypedBeanImpl.get(),null),null),null);
 	}
 
 	@RestGet(path="/returnTypedBeanList")
@@ -1330,7 +1330,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnTypedBean1d3dList")
 	public List<TypedBean[][][]> returnTypedBean1d3dList() {
-		return list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
+		return list(a(a(a(TypedBeanImpl.get(),null),null),null),null);
 	}
 
 	@RestGet(path="/returnTypedBeanMap")
@@ -1345,7 +1345,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnTypedBean1d3dListMap")
 	public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-		return map("foo", list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+		return map("foo", list(a(a(a(TypedBeanImpl.get(),null),null),null),null));
 	}
 
 	@RestGet(path="/returnTypedBeanListMapIntegerKeys")
@@ -1362,7 +1362,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnSwappedObject3dArray")
 	public SwappedObject[][][] returnSwappedObject3dArray() {
-		return new SwappedObject[][][]{{{new SwappedObject(),null},null},null};
+		return a(a(a(new SwappedObject(),null),null),null);
 	}
 
 	@RestGet(path="/returnSwappedObjectMap")
@@ -1372,7 +1372,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnSwappedObject3dMap")
 	public Map<SwappedObject,SwappedObject[][][]> returnSwappedObject3dMap() {
-		return map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
+		return map(new SwappedObject(),a(a(a(new SwappedObject(),null),null),null));
 	}
 
 	// Implicit swapped POJOs
@@ -1384,7 +1384,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnImplicitSwappedObject3dArray")
 	public ImplicitSwappedObject[][][] returnImplicitSwappedObject3dArray() {
-		return new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null};
+		return a(a(a(new ImplicitSwappedObject(),null),null),null);
 	}
 
 	@RestGet(path="/returnImplicitSwappedObjectMap")
@@ -1394,7 +1394,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnImplicitSwappedObject3dMap")
 	public Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> returnImplicitSwappedObject3dMap() {
-		return map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
+		return map(new ImplicitSwappedObject(),a(a(a(new ImplicitSwappedObject(),null),null),null));
 	}
 
 	// Enums
@@ -1406,7 +1406,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnEnum3d")
 	public TestEnum[][][] returnEnum3d() {
-		return new TestEnum[][][]{{{TestEnum.TWO,null},null},null};
+		return a(a(a(TestEnum.TWO,null),null),null);
 	}
 
 	@RestGet(path="/returnEnumList")
@@ -1421,7 +1421,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnEnum1d3dList")
 	public List<TestEnum[][][]> returnEnum1d3dList() {
-		return alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
+		return alist(a(a(a(TestEnum.TWO,null),null),null),null);
 	}
 
 	@RestGet(path="/returnEnumMap")
@@ -1431,12 +1431,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnEnum3dArrayMap")
 	public Map<TestEnum,TestEnum[][][]> returnEnum3dArrayMap() {
-		return map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
+		return map(TestEnum.ONE,a(a(a(TestEnum.TWO,null),null),null));
 	}
 
 	@RestGet(path="/returnEnum1d3dListMap")
 	public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-		return map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+		return map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,null),null),null),null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

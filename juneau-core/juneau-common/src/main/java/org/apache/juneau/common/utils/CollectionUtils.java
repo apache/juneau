@@ -988,6 +988,14 @@ public class CollectionUtils {
 		return value.toArray(array);
 	}
 
+	public static <E> E[][] a2(E[]...value) {
+		return value;
+	}
+
+	public static Object[] ao(Object...value) {
+		return value;
+	}
+
 	/**
 	 * Converts any array (including primitive arrays) to a List.
 	 *
@@ -1291,5 +1299,141 @@ public class CollectionUtils {
 		var l = list();
 		traverse(o, l::add);
 		return (List<T>)l;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Primitive array creation methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Shortcut for creating an int array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>int</jk>[] <jv>myArray</jv> = <jsm>ints</jsm>(1, 2, 3);
+	 * </p>
+	 *
+	 * @param value The values to initialize the array with.
+	 * @return A new int array.
+	 */
+	public static int[] ints(int... value) {
+		return value;
+	}
+
+	/**
+	 * Shortcut for creating a long array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>long</jk>[] <jv>myArray</jv> = <jsm>longs</jsm>(1L, 2L, 3L);
+	 * </p>
+	 *
+	 * @param value The values to initialize the array with.
+	 * @return A new long array.
+	 */
+	public static long[] longs(long... value) {
+		return value;
+	}
+
+	/**
+	 * Shortcut for creating a float array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>float</jk>[] <jv>myArray</jv> = <jsm>floats</jsm>(1.0f, 2.0f, 3.0f);
+	 * </p>
+	 *
+	 * @param value The values to initialize the array with.
+	 * @return A new float array.
+	 */
+	public static float[] floats(float... value) {
+		return value;
+	}
+
+	/**
+	 * Shortcut for creating a double array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>double</jk>[] <jv>myArray</jv> = <jsm>doubles</jsm>(1.0, 2.0, 3.0);
+	 * </p>
+	 *
+	 * @param value The values to initialize the array with.
+	 * @return A new double array.
+	 */
+	public static double[] doubles(double... value) {
+		return value;
+	}
+
+	/**
+	 * Shortcut for creating a short array.
+	 *
+	 * <p>Accepts int values and converts them to shorts, eliminating the need for explicit short casts.</p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>short</jk>[] <jv>myArray</jv> = <jsm>shorts</jsm>(1, 2, 3);
+	 * </p>
+	 *
+	 * @param value The int values to convert to shorts. Values outside the short range (-32768 to 32767) will be truncated.
+	 * @return A new short array.
+	 */
+	public static short[] shorts(int... value) {
+		short[] result = new short[value.length];
+		for (int i = 0; i < value.length; i++) {
+			result[i] = (short)value[i];
+		}
+		return result;
+	}
+
+	/**
+	 * Shortcut for creating a byte array.
+	 *
+	 * <p>Accepts int values and converts them to bytes, eliminating the need for explicit byte casts.</p>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>byte</jk>[] <jv>myArray</jv> = <jsm>bytes</jsm>(1, 2, 3);
+	 * </p>
+	 *
+	 * @param value The int values to convert to bytes. Values outside the byte range (-128 to 127) will be truncated.
+	 * @return A new byte array.
+	 */
+	public static byte[] bytes(int... value) {
+		byte[] result = new byte[value.length];
+		for (int i = 0; i < value.length; i++) {
+			result[i] = (byte)value[i];
+		}
+		return result;
+	}
+
+	/**
+	 * Shortcut for creating a boolean array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>boolean</jk>[] <jv>myArray</jv> = <jsm>booleans</jsm>(<jk>true</jk>, <jk>false</jk>, <jk>true</jk>);
+	 * </p>
+	 *
+	 * @param value The values to initialize the array with.
+	 * @return A new boolean array.
+	 */
+	public static boolean[] booleans(boolean... value) {
+		return value;
+	}
+
+	/**
+	 * Shortcut for creating a char array.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>char</jk>[] <jv>myArray</jv> = <jsm>chars</jsm>(<js>'a'</js>, <js>'b'</js>, <js>'c'</js>);
+	 * </p>
+	 *
+	 * @param value The values to initialize the array with.
+	 * @return A new char array.
+	 */
+	public static char[] chars(char... value) {
+		return value;
 	}
 }

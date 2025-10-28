@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.json;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -39,11 +39,11 @@ class CommonParser_Test extends TestBase {
 		var m = (Map)p.parse("{a:1}", Object.class);
 		assertEquals(1, m.get("a"));
 		m = (Map)p.parse("{a:1,b:\"foo bar\"}", Object.class);
-		assertMap(m, "a,b", "1,foo bar");
+		assertBean(m, "a,b", "1,foo bar");
 		m = (Map)p.parse("{a:1,b:\"foo bar\",c:false}", Object.class);
-		assertMap(m, "a,c", "1,false");
+		assertBean(m, "a,c", "1,false");
 		m = (Map)p.parse(" { a : 1 , b : 'foo' , c : false } ", Object.class);
-		assertMap(m, "a,b,c", "1,foo,false");
+		assertBean(m, "a,b,c", "1,foo,false");
 
 		m = (Map)p.parse("{x:\"org.apache.juneau.test.Person\",addresses:[{x:\"org.apache.juneau.test.Address\",city:\"city A\",state:\"state A\",street:\"street A\",zip:12345}]}", Object.class);
 		assertEquals("org.apache.juneau.test.Person", m.get("x"));
@@ -51,7 +51,7 @@ class CommonParser_Test extends TestBase {
 		assertNotNull(l);
 		m = (Map)l.get(0);
 		assertNotNull(m);
-		assertMap(m, "x,city,state,street,zip", "org.apache.juneau.test.Address,city A,state A,street A,12345");
+		assertBean(m, "x,city,state,street,zip", "org.apache.juneau.test.Address,city A,state A,street A,12345");
 
 		var jl = (JsonList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));

@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.DateUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -199,11 +200,11 @@ class RoundTripTransformBeans_Test extends TestBase {
 		public Map<String,Date> fmDate;
 
 		public A init() {
-			fByte = new byte[]{0,1,2,3};
+			fByte = bytes(0,1,2,3);
 			fnByte = null;
 			faByte = new byte[][]{{0,1},{2,3},{4,5}};
-			flByte = alist(new byte[]{1,2,3},new byte[]{4,5,6},null);
-			fmByte = map("foo",new byte[]{1,2,3},"bar",new byte[]{4,5,6},"baz",null);
+			flByte = alist(bytes(1,2,3),bytes(4,5,6),null);
+			fmByte = map("foo",bytes(1,2,3),"bar",bytes(4,5,6),"baz",null);
 
 			fCalendar = new GregorianCalendar() {{
 				set(2001, 01, 02, 03, 04, 05);
@@ -211,18 +212,18 @@ class RoundTripTransformBeans_Test extends TestBase {
 			}};
 			fnCalendar = null;
 			fn2Calendar = null;
-			faCalendar = new GregorianCalendar[]{
+			faCalendar = a(
 				new GregorianCalendar() {{
 					set(2001, 01, 02, 03, 04, 05);
 					setTimeZone(TimeZone.getTimeZone("GMT"));
 				}}
-			};
+			);
 
 			fDate = new Date(1000);
 			fnDate = null;
-			faDate = new Date[]{
+			faDate = a(
 				new Date(1000), new Date(2000), new Date(3000)
-			};
+			);
 			flDate = alist(new Date(4000),null);
 			fmDate = map("foo",new Date(5000),"bar",null);
 			return this;

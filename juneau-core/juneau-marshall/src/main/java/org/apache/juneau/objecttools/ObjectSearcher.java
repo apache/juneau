@@ -232,7 +232,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 * 	</ul>
 	 */
 	public ObjectSearcher(MatcherFactory...factories) {
-		this.factories = factories.length == 0 ? new MatcherFactory[] { NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT } : factories;
+		this.factories = factories.length == 0 ? a(NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT) : factories;
 	}
 
 	@Override /* Overridden from ObjectTool */

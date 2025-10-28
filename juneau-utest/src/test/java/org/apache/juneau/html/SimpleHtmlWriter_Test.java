@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -61,7 +62,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 		result = w.append((Object)"obj");
 		assertSame(w, result);
 
-		result = w.append(new char[]{'a','b','c'});
+		result = w.append(chars('a','b','c'));
 		assertSame(w, result);
 
 		result = w.appendIf(true, "conditional");

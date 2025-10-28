@@ -86,7 +86,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	 */
 	@Override
 	public MediaType[] forMediaTypes() {
-		return new MediaType[] { MediaType.HTML };
+		return Utils.a(MediaType.HTML);
 	}
 
 	@Override

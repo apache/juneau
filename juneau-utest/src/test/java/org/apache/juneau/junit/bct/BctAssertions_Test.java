@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -253,7 +255,7 @@ class BctAssertions_Test extends TestBase {
 		void f05_multipleErrors() {
 			// Test that multiple missing substrings are collected and reported together
 			var text = "Hello World Testing";
-			var expected = new String[]{"Hello", "Missing1", "World", "Missing2", "Testing"};
+			var expected = a("Hello", "Missing1", "World", "Missing2", "Testing");
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertContainsAll(text, expected));
 
@@ -274,7 +276,7 @@ class BctAssertions_Test extends TestBase {
 		void f06_singleError() {
 			// Test that single errors are still reported as single assertion failures
 			var text = "Hello World";
-			var expected = new String[]{"Hello", "Missing", "World"};
+			var expected = a("Hello", "Missing", "World");
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertContainsAll(text, expected));
 
@@ -383,7 +385,7 @@ class BctAssertions_Test extends TestBase {
 		void h07_multipleErrors() {
 			// Test that multiple assertion errors are collected and reported together
 			var list = Arrays.asList("a", "wrong1", "c", "wrong2", "e");
-			var expected = new Object[]{"a", "b", "c", "d", "e"};
+			var expected = ao("a", "b", "c", "d", "e");
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertList(list, expected));
 
@@ -404,7 +406,7 @@ class BctAssertions_Test extends TestBase {
 		void h08_singleError() {
 			// Test that single errors are still reported as single assertion failures
 			var list = Arrays.asList("a", "wrong", "c");
-			var expected = new Object[]{"a", "b", "c"};
+			var expected = ao("a", "b", "c");
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertList(list, expected));
 
@@ -475,7 +477,7 @@ class BctAssertions_Test extends TestBase {
 		void h07_multipleErrors() {
 			// Test that multiple assertion errors are collected and reported together
 			var map = Map.of("a", "1", "b", "wrong1", "c", "3", "d", "wrong2");
-			var expected = new Object[]{"a=1", "b=2", "c=3", "d=4"};
+			var expected = ao("a=1", "b=2", "c=3", "d=4");
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertMap(map, expected));
 
@@ -515,7 +517,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h10_mapsWithArrays() {
 			// Test maps with array values
-			var mapWithArrays = Map.of("a", Map.of("b", new Integer[]{1, 2}));
+			var mapWithArrays = Map.of("a", Map.of("b", a(1, 2)));
 			assertDoesNotThrow(() -> assertMap(mapWithArrays, "a={b=[1,2]}"));
 		}
 
@@ -565,7 +567,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void i01_basicNotEmpty() {
 			assertDoesNotThrow(() -> assertNotEmpty(List.of("item")));
-			assertDoesNotThrow(() -> assertNotEmpty(new String[]{"item"}));
+			assertDoesNotThrow(() -> assertNotEmpty(a("item")));
 		}
 
 		@Test
@@ -813,8 +815,8 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h06_assertSizeWithCustomListifiableObjects() {
 			// Test size assertions with objects that can be converted to lists
-			var stringArray = new String[]{"a", "b", "c"};
-			var intArray = new int[]{1, 2, 3, 4, 5};
+			var stringArray = a("a", "b", "c");
+			var intArray = ints(1, 2, 3, 4, 5);
 
 			assertSize(3, stringArray);
 			assertSize(5, intArray);

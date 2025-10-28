@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.common.reflect.*;
@@ -31,9 +32,7 @@ class JacocoDummy_Test extends TestBase {
 	//====================================================================================================
 	@Test void accessPrivateConstructorsOnStaticUtilityClasses() throws Exception {
 
-		Class<?>[] classes = new Class[] {
-			StringUtils.class, ClassUtils2.class, CollectionUtils.class
-		};
+		Class<?>[] classes = a(StringUtils.class, ClassUtils2.class, CollectionUtils.class);
 
 		for (Class<?> c : classes) {
 			var c1 = c.getDeclaredConstructor();

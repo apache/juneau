@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -1559,11 +1560,11 @@ class Swagger_Test extends TestBase {
 
 	@Test void p01a_responses_100_headers_default() throws Exception {
 		assertNull(getSwagger(new P1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
-		assertMap(getSwaggerWithFile(new P1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{s-description,integer,int32}");
+		assertBean(getSwaggerWithFile(new P1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{s-description,integer,int32}");
 	}
 	@Test void p01b_responses_100_headers_default() throws Exception {
 		assertNull(getSwagger(new P1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders());
-		assertMap(getSwaggerWithFile(new P1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{s-description,integer,int32}");
+		assertBean(getSwaggerWithFile(new P1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{s-description,integer,int32}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
@@ -1575,8 +1576,8 @@ class Swagger_Test extends TestBase {
 	}
 
 	@Test void p02_response_100_headers_swaggerOnClass() throws Exception {
-		assertMap(getSwagger(new P2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{b-description,integer,int32}");
-		assertMap(getSwaggerWithFile(new P2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{b-description,integer,int32}");
+		assertBean(getSwagger(new P2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{b-description,integer,int32}");
+		assertBean(getSwaggerWithFile(new P2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{b-description,integer,int32}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
@@ -1588,8 +1589,8 @@ class Swagger_Test extends TestBase {
 	}
 
 	@Test void p03_response_100_headers_swaggerOnMethod() throws Exception {
-		assertMap(getSwagger(new P3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{c-description,integer,int32}");
-		assertMap(getSwaggerWithFile(new P3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{c-description,integer,int32}");
+		assertBean(getSwagger(new P3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{c-description,integer,int32}");
+		assertBean(getSwaggerWithFile(new P3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{c-description,integer,int32}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
@@ -1606,12 +1607,12 @@ class Swagger_Test extends TestBase {
 	public static class P4c {}
 
 	@Test void p04a_response_100_headers_swaggerOnAnnotation() throws Exception {
-		assertMap(getSwagger(new P4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
-		assertMap(getSwaggerWithFile(new P4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
+		assertBean(getSwagger(new P4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
+		assertBean(getSwaggerWithFile(new P4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
 	}
 	@Test void p04b_response_100_headers_swaggerOnAnnotation() throws Exception {
-		assertMap(getSwagger(new P4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
-		assertMap(getSwaggerWithFile(new P4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
+		assertBean(getSwagger(new P4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
+		assertBean(getSwaggerWithFile(new P4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{d-description,integer,int32}");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{headers:{'X-Foo':{description:'b-description',type:'integer',format:'int32'}}}}}}}"))
@@ -1628,12 +1629,12 @@ class Swagger_Test extends TestBase {
 	public static class P5c {}
 
 	@Test void p05a_response_100_headers_swaggerOnAnnotation_localized() throws Exception {
-		assertMap(getSwagger(new P5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
-		assertMap(getSwaggerWithFile(new P5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
+		assertBean(getSwagger(new P5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
+		assertBean(getSwaggerWithFile(new P5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
 	}
 	@Test void p05b_response_100_headers_swaggerOnAnnotation_localized() throws Exception {
-		assertMap(getSwagger(new P5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
-		assertMap(getSwaggerWithFile(new P5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
+		assertBean(getSwagger(new P5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
+		assertBean(getSwaggerWithFile(new P5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getHeaders(), "X-Foo{description,type,format}", "{l-foo,integer,int32}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1657,11 +1658,11 @@ class Swagger_Test extends TestBase {
 
 	@Test void r01a_responses_100_examples_default() throws Exception {
 		assertNull(getSwagger(new R1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
-		assertMap(getSwaggerWithFile(new R1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo", "a");
+		assertBean(getSwaggerWithFile(new R1a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo", "a");
 	}
 	@Test void r01b_responses_100_examples_default() throws Exception {
 		assertNull(getSwagger(new R1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples());
-		assertMap(getSwaggerWithFile(new R1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo", "a");
+		assertBean(getSwaggerWithFile(new R1b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo", "a");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
@@ -1671,8 +1672,8 @@ class Swagger_Test extends TestBase {
 	}
 
 	@Test void r02_response_100_examples_swaggerOnClass() throws Exception {
-		assertMap(getSwagger(new R2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{b}");
-		assertMap(getSwaggerWithFile(new R2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{b}");
+		assertBean(getSwagger(new R2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{b}");
+		assertBean(getSwaggerWithFile(new R2()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{b}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
@@ -1682,8 +1683,8 @@ class Swagger_Test extends TestBase {
 	}
 
 	@Test void r03_response_100_examples_swaggerOnMethod() throws Exception {
-		assertMap(getSwagger(new R3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{c}");
-		assertMap(getSwaggerWithFile(new R3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{c}");
+		assertBean(getSwagger(new R3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{c}");
+		assertBean(getSwaggerWithFile(new R3()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{c}");
 	}
 
 	@Rest(swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
@@ -1700,12 +1701,12 @@ class Swagger_Test extends TestBase {
 	public static class R4c {}
 
 	@Test void r04a_response_100_examples_swaggerOnAnnotation() throws Exception {
-		assertMap(getSwagger(new R4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
-		assertMap(getSwaggerWithFile(new R4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
+		assertBean(getSwagger(new R4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
+		assertBean(getSwaggerWithFile(new R4a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
 	}
 	@Test void r04b_response_100_examples_swaggerOnAnnotation() throws Exception {
-		assertMap(getSwagger(new R4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
-		assertMap(getSwaggerWithFile(new R4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
+		assertBean(getSwagger(new R4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
+		assertBean(getSwaggerWithFile(new R4b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{d}");
 	}
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}/responses/100':{get:{responses:{100:{examples:{foo:{bar:'b'}}}}}}}"))
@@ -1722,12 +1723,12 @@ class Swagger_Test extends TestBase {
 	public static class R5c {}
 
 	@Test void r05a_response_100_examples_swaggerOnAnnotation_lodalized() throws Exception {
-		assertMap(getSwagger(new R5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
-		assertMap(getSwaggerWithFile(new R5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
+		assertBean(getSwagger(new R5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
+		assertBean(getSwaggerWithFile(new R5a()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
 	}
 	@Test void r05b_response_100_examples_swaggerOnAnnotation_lodalized() throws Exception {
-		assertMap(getSwagger(new R5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
-		assertMap(getSwaggerWithFile(new R5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
+		assertBean(getSwagger(new R5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
+		assertBean(getSwaggerWithFile(new R5b()).getPaths().get("/path/{foo}/responses/100").get("get").getResponse(100).getExamples(), "foo{bar}", "{l-foo}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -1861,6 +1862,6 @@ class Swagger_Test extends TestBase {
 		var o = s.getOperation("/", "get");
 
 		var ri = o.getResponse("200");
-		assertMap(ri.getExamples(), "application/json5", "{\n\tf1: 1,\n\tf2: 2\n}");
+		assertBean(ri.getExamples(), "application/json5", "{\n\tf1: 1,\n\tf2: 2\n}");
 	}
 }

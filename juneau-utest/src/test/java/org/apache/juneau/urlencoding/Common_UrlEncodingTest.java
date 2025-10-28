@@ -144,8 +144,8 @@ class Common_UrlEncodingTest extends TestBase {
 
 		public static D create() {
 			var t = new D();
-			t.f1 = new A[]{};
-			t.f2 = new A[]{null, A.create()};
+			t.f1 = a();
+			t.f2 = a(null, A.create());
 			return t;
 		}
 	}

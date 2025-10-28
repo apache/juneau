@@ -162,7 +162,7 @@ public class Messages extends ResourceBundle {
 		 * @return This object.
 		 */
 		public Builder baseNames(String...baseNames) {
-			this.baseNames = baseNames == null ? new String[] {} : baseNames;
+			this.baseNames = baseNames == null ? a() : baseNames;
 			return this;
 		}
 

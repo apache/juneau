@@ -17,12 +17,14 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
@@ -137,7 +139,7 @@ class Response_Test extends TestBase {
 		@Response(schema=@Schema(collectionFormat="pipes"))
 		@RestGet
 		public String[] a() {
-			return new String[]{"foo","bar"};
+			return Utils.a("foo","bar");
 		}
 		@Response(schema=@Schema(type="string",format="byte"))
 		@RestGet
@@ -162,7 +164,7 @@ class Response_Test extends TestBase {
 		}
 		@RestGet
 		public void g(@Response(schema=@Schema(collectionFormat="pipes")) Value<String[]> value) {
-			value.set(new String[]{"foo","bar"});
+			value.set(Utils.a("foo","bar"));
 		}
 		@RestGet
 		public void h(@Response(schema=@Schema(type="string",format="byte")) Value<byte[]> value) {
@@ -173,7 +175,7 @@ class Response_Test extends TestBase {
 	@Response(schema=@Schema(type="array",collectionFormat="pipes"))
 	public static class D1 {
 		public String[] toStringArray() {
-			return new String[]{"foo","bar"};
+			return a("foo","bar");
 		}
 	}
 
@@ -187,7 +189,7 @@ class Response_Test extends TestBase {
 	@Response(schema=@Schema(type="array",collectionFormat="pipes"))
 	public static class D3 extends Exception {
 		public String[] toStringArray() {
-			return new String[]{"foo","bar"};
+			return a("foo","bar");
 		}
 	}
 

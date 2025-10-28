@@ -156,7 +156,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 				values[0] = "";
 
 			if (values.length == 0)
-				values = new String[] { null };
+				values = a((String)null);
 
 			for (String value : values)
 				add(new RequestQueryParam(req, name, value));

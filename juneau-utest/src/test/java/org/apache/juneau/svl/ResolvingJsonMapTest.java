@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -38,14 +39,14 @@ class ResolvingJsonMapTest extends TestBase {
 		m.put("foo", "$X{a}");
 		assertEquals("1", m.get("foo"));
 
-		m.put("foo", new String[]{"$X{a}"});
+		m.put("foo", a("$X{a}"));
 		assertList(m.get("foo"), "1");
 
 		m.put("foo", list("$X{a}"));
 		assertList(m.get("foo"), "1");
 
 		m.put("foo", map("k1","$X{a}"));
-		assertMap(m, "foo{k1}", "{1}");
+		assertBean(m, "foo{k1}", "{1}");
 	}
 
 	public static class XVar extends MapVar {
@@ -64,14 +65,14 @@ class ResolvingJsonMapTest extends TestBase {
 		m.put("foo", null);
 		assertNull(m.get("foo"));
 
-		m.put("foo", new String[]{null});
+		m.put("foo", a((String)null));
 		assertList(m.get("foo"), (Object)null);
 
 		m.put("foo", list((String)null));
 		assertList(m.get("foo"), (Object)null);
 
 		m.put("foo", map("k1",null));
-		assertMap(m, "foo{k1}", "{<null>}");
+		assertBean(m, "foo{k1}", "{<null>}");
 	}
 
 	//====================================================================================================
@@ -83,7 +84,7 @@ class ResolvingJsonMapTest extends TestBase {
 
 		m.put("foo", FooEnum.ONE);
 		assertString("ONE", m.get("foo"));
-		m.put("foo", new Object[]{FooEnum.ONE});
+		m.put("foo", ao(FooEnum.ONE));
 		assertList(m.get("foo"), "ONE");
 
 		m.put("foo", list(FooEnum.ONE));
@@ -111,14 +112,14 @@ class ResolvingJsonMapTest extends TestBase {
 		m3.put("foo", "$X{a}");
 		assertEquals("1", m.get("foo"));
 
-		m3.put("foo", new String[]{"$X{a}"});
+		m3.put("foo", a("$X{a}"));
 		assertList(m.get("foo"), "1");
 
 		m3.put("foo", list("$X{a}"));
 		assertList(m.get("foo"), "1");
 
 		m3.put("foo", map("k1","$X{a}"));
-		assertMap(m, "foo{k1}", "{1}");
+		assertBean(m, "foo{k1}", "{1}");
 	}
 
 	//====================================================================================================

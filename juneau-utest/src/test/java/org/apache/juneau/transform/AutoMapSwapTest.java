@@ -18,6 +18,7 @@ package org.apache.juneau.transform;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -105,7 +106,7 @@ class AutoMapSwapTest extends TestBase {
 			return STRINGMAP;
 		}
 		public static B01 fromMap(Map<String,String> o) {
-			assertMap(o, "foo", "bar");
+			assertBean(o, "foo", "bar");
 			return new B01();
 		}
 	}
@@ -114,7 +115,7 @@ class AutoMapSwapTest extends TestBase {
 			return JSONMAP;
 		}
 		public static B02 fromJsonMap(JsonMap o) {
-			assertMap(o, "foo", "bar");
+			assertBean(o, "foo", "bar");
 			return new B02();
 		}
 	}
@@ -123,7 +124,7 @@ class AutoMapSwapTest extends TestBase {
 			return STRINGMAP;
 		}
 		public static B03 create(Map<String,String> o) {
-			assertMap(o, "foo", "bar");
+			assertBean(o, "foo", "bar");
 			return new B03();
 		}
 	}
@@ -156,7 +157,7 @@ class AutoMapSwapTest extends TestBase {
 	public static class C01 {
 		public C01() {}
 		public C01(Map<String,String> o) {
-			assertMap(o, "foo", "bar");
+			assertBean(o, "foo", "bar");
 		}
 		public Map<String,String> toMap() {
 			return STRINGMAP;

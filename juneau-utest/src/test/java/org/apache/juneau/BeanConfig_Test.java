@@ -16,9 +16,10 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.reflect.Visibility.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -291,7 +292,7 @@ class BeanConfig_Test extends TestBase {
 		// Array to String
 		o = a("a", 1, false);
 		assertEquals("['a',1,false]", bc.convertToType(o, String.class));
-		o = new Object[]{a("a", 1, false)};
+		o = a2(a("a", 1, false));
 		assertEquals("[['a',1,false]]", bc.convertToType(o, String.class));
 	}
 
@@ -394,7 +395,7 @@ class BeanConfig_Test extends TestBase {
 	@Test void a05_proxyHandler() {
 		var session = BeanContext.DEFAULT_SESSION;
 
-		var f1 = (A) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { A.class }, new AHandler());
+		var f1 = (A) Proxy.newProxyInstance(this.getClass().getClassLoader(), a(A.class), new AHandler());
 
 		var bm1 = session.toBeanMap(f1);
 		assertNotNull(bm1, fs("Failed to obtain bean adapter for proxy: {0}", f1));
@@ -407,7 +408,7 @@ class BeanConfig_Test extends TestBase {
 		f1.setA("Hello");
 		f1.setB(50);
 
-		assertMap(bm2, "a,b", "Hello,50");
+		assertBean(bm2, "a,b", "Hello,50");
 		assertEquals(bm1, bm2, fs("Failed equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
 		assertEquals(bm2, bm1, fs("Failed reverse equality test of dynamic proxies beans: {0} / {1}", bm1, bm2));
 	}

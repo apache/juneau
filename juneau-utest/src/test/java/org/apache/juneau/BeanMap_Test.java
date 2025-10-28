@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -222,7 +223,7 @@ class BeanMap_Test extends TestBase {
 
 		// al1 should be initialized with an ArrayList, since it's not a superclass of JsonList.
 		// The rest are proper superclasses of JsonList.
-		assertMap(
+		assertBean(
 			m,
 			"al1{class{simpleName}},l1{class{simpleName}},ll1{class{simpleName}},c1{class{simpleName}},jl1{class{simpleName}}",
 			"{{ArrayList}},{{JsonList}},{{LinkedList}},{{JsonList}},{{JsonList}}"
@@ -913,7 +914,7 @@ class BeanMap_Test extends TestBase {
 	//====================================================================================================
 	@Test void a18_propertyNameFactoryDashedLC1() {
 		var m = bc.newBeanMap(P1.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
-		assertMap(m, "foo,bar-baz,bing-boo-url", "1,2,3");
+		assertBean(m, "foo,bar-baz,bing-boo-url", "1,2,3");
 		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "1,2,3");
 		m.put("foo", 4);
 		m.put("bar-baz", 5);
@@ -928,7 +929,7 @@ class BeanMap_Test extends TestBase {
 
 	@Test void a19_propertyNameFactoryDashedLC1_usingConfig() {
 		var m = bc.copy().applyAnnotations(P1cConfig.class).build().newBeanMap(P1c.class).load("{'foo':1,'bar-baz':2,'bing-boo-url':3}");
-		assertMap(m, "foo,bar-baz,bing-boo-url", "1,2,3");
+		assertBean(m, "foo,bar-baz,bing-boo-url", "1,2,3");
 		assertBean(m.getBean(), "foo,barBaz,bingBooURL", "1,2,3");
 		m.put("foo", 4);
 		m.put("bar-baz", 5);
@@ -951,7 +952,7 @@ class BeanMap_Test extends TestBase {
 	@Test void a20_propertyNameFactoryDashedLC2() {
 		var bc2 = BeanContext.DEFAULT_SORTED;
 		var m = bc2.newBeanMap(P2.class).load("{'foo-bar':1,'baz-bing':2}");
-		assertMap(m, "foo-bar,baz-bing", "1,2");
+		assertBean(m, "foo-bar,baz-bing", "1,2");
 		assertBean(m.getBean(), "fooBar,bazBING", "1,2");
 		m.put("foo-bar", 3);
 		m.put("baz-bing", 4);

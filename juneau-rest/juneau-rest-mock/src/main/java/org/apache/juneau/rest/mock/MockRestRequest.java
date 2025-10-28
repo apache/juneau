@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.net.*;
 import java.security.*;
@@ -982,7 +983,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	 * @return This object.
 	 */
 	public MockRestRequest role(String role) {
-		this.roles = new String[] { role };
+		this.roles = a(role);
 		return this;
 	}
 

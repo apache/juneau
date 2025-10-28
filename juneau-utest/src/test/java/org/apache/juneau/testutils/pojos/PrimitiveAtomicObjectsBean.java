@@ -17,6 +17,7 @@
 package org.apache.juneau.testutils.pojos;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -58,19 +59,19 @@ public class PrimitiveAtomicObjectsBean {
 		poAtomicLong = new AtomicLong(2);
 
 		// primitive object arrays
-		poaAtomicInteger = new AtomicInteger[][]{{new AtomicInteger(1)}, {new AtomicInteger(2)}, null};
-		poaAtomicLong = new AtomicLong[][]{{new AtomicLong(1)}, {new AtomicLong(2)}, null};
+		poaAtomicInteger = a(a(new AtomicInteger(1)),a(new AtomicInteger(2)),null);
+		poaAtomicLong = a(a(new AtomicLong(1)),a(new AtomicLong(2)),null);
 
 		// Anonymous list of primitives
-		poalAtomicInteger = alist(new AtomicInteger[]{new AtomicInteger(1)},null);
-		poalAtomicLong = alist(new AtomicLong[]{new AtomicLong(1)},null);
+		poalAtomicInteger = alist(a(new AtomicInteger(1)),null);
+		poalAtomicLong = alist(a(new AtomicLong(1)),null);
 
 		// Regular list of primitives
 		polAtomicInteger = new ArrayList<>();
-		polAtomicInteger.add(new AtomicInteger[]{new AtomicInteger(1)});
+		polAtomicInteger.add(a(new AtomicInteger(1)));
 		polAtomicInteger.add(null);
 		polAtomicLong = new ArrayList<>();
-		polAtomicLong.add(new AtomicLong[]{new AtomicLong(1)});
+		polAtomicLong.add(a(new AtomicLong(1)));
 		polAtomicLong.add(null);
 
 		return this;

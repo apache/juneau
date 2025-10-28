@@ -1848,7 +1848,7 @@ public class ClassMeta<T> implements Type {
 			return c.<T>invoke();
 		InvocationHandler h = getProxyInvocationHandler();
 		if (nn(h))
-			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { getInnerClass(), java.io.Serializable.class }, h);
+			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(getInnerClass(), java.io.Serializable.class), h);
 		if (isArray())
 			return (T)Array.newInstance(this.elementType.innerClass, 0);
 		return null;

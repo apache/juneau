@@ -18,6 +18,7 @@ package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.util.*;
 
@@ -58,10 +59,6 @@ public class ObjectSearcher_Test extends TestBase {
 
 	static Object run(Object in, SearchArgs sa) {
 		return os.run(bs, in, sa);
-	}
-
-	static String[] a(String...s) {
-		return s;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -628,7 +625,7 @@ public class ObjectSearcher_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_d2ListOfMaps() {
-		List<Map<?,?>> in = list(
+		var in = list(
 			map("f","foo"),
 			map("f","bar"),
 			null,
@@ -640,7 +637,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d02_d2SetOfMaps() {
-		Set<Map<?,?>> in = set(
+		var in = set(
 			map("f","foo"),
 			map("f","bar"),
 			null,
@@ -652,19 +649,19 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d03_d2ArrayOfMaps() {
-		Map<?,?>[] in = new Map[]{
+		var in = Utils.a(
 			map("f","foo"),
 			map("f","bar"),
 			null,
 			map(null,"qux"),
 			map("quux",null),
 			map(null,null)
-		};
+		);
 		assertBeans(run(in, "f=foo"), "f", "foo");
 	}
 
 	@Test void d04_d2ListOfObjects() {
-		List<Object> in = list(
+		var in = list(
 			map("f","foo"),
 			map("f","bar"),
 			null,
@@ -678,7 +675,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d05_d2SetOfObjects() {
-		Set<Object> in = set(
+		var in = set(
 			map("f","foo"),
 			map("f","bar"),
 			null,
@@ -692,7 +689,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d06_d2ArrayOfObjects() {
-		Object[] in = {
+		var in = a(
 			map("f","foo"),
 			map("f","bar"),
 			null,
@@ -701,12 +698,12 @@ public class ObjectSearcher_Test extends TestBase {
 			map(null,null),
 			"xxx",
 			123
-		};
+		);
 		assertBeans(run(in, "f=foo"), "f", "foo");
 	}
 
 	@Test void d07_d2ListOfMapsWithLists() {
-		List<Map<?,?>> in = list(
+		var in = list(
 			map("f",list("foo")),
 			map("f",list("bar")),
 			null,
@@ -718,7 +715,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d08_d2SetOfMapsWithSets() {
-		Set<Map<?,?>> in = set(
+		var in = set(
 			map("f",set("foo")),
 			map("f",set("bar")),
 			null,
@@ -730,19 +727,19 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d09_d2ArrayOfMapsWithArrays() {
-		Map<?,?>[] in = new Map[]{
-			map("f",new Object[]{"foo"}),
-			map("f",new Object[]{"bar"}),
+		var in = a(
+			map("f",ao("foo")),
+			map("f",ao("bar")),
 			null,
-			map(null,new Object[]{"qux"}),
-			map("quux",new Object[]{null}),
-			map(null,new Object[]{null})
-		};
+			map(null,ao("qux")),
+			map("quux",ao((String)null)),
+			map(null,ao((String)null))
+		);
 		assertBeans(run(in, "f=foo"), "f", "[foo]");
 	}
 
 	@Test void d10_d2ListOfBeans() {
-		List<A> in = list(
+		var in = list(
 			A.create("foo"),
 			A.create("bar"),
 			null,
@@ -752,7 +749,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d11_d3ListOfListOfMaps() {
-		List<List<Map<?,?>>> in = list(
+		var in = list(
 			list(map("f","foo")),
 			list(map("f","bar")),
 			list((Map<?,?>)null),
@@ -765,7 +762,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d12_d3SetOfSetOfMaps() {
-		Set<Set<Map<?,?>>> in = set(
+		var in = set(
 			set(map("f","foo")),
 			set(map("f","bar")),
 			set(map("f","baz")),
@@ -779,21 +776,21 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d13_d3ArrayOfArrayOfMaps() {
-		Map<?,?>[][] in = new Map[][]{
-			new Map[]{map("f","foo")},
-			new Map[]{map("f","bar")},
-			new Map[]{map("f","baz")},
-			new Map[]{null},
-			new Map[]{map(null,"qux")},
-			new Map[]{map("quux",null)},
-			new Map[]{map(null,null)},
+		var in = a(
+			a(map("f","foo")),
+			a(map("f","bar")),
+			a(map("f","baz")),
+			a((Map<?,?>)null),
+			a(map(null,"qux")),
+			a(map("quux",null)),
+			a(map(null,null)),
 			null
-		};
+		);
 		assertBeans(run(in, "f=foo"), "#{f}", "[{foo}]");
 	}
 
 	@Test void d14_d3ListOfListOfObjects() {
-		List<List<Object>> in = list(
+		var in = list(
 			list(map("f","foo")),
 			list(map("f","bar")),
 			list((Object)null),
@@ -807,7 +804,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d15_d3SetOfSetOfObjects() {
-		Set<Set<Object>> in = set(
+		var in = set(
 			set(map("f","foo")),
 			set(map("f","bar")),
 			set((Map<?,?>)null),
@@ -822,22 +819,22 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d16_d3ArrayOfArrayOfObjects() {
-		Object[][] in = {
-			new Object[]{map("f","foo")},
-			new Object[]{map("f","bar")},
-			new Object[]{null},
-			new Object[]{map(null,"qux")},
-			new Object[]{map("quux",null)},
-			new Object[]{map(null,null)},
-			new Object[]{"xxx"},
-			new Object[]{123},
+		var in = a(
+			ao(map("f","foo")),
+			ao(map("f","bar")),
+			ao((Object)null),
+			ao(map(null,"qux")),
+			ao(map("quux",null)),
+			ao(map(null,null)),
+			ao("xxx"),
+			ao(123),
 			null
-		};
+		);
 		assertBeans(run(in, "f=foo"), "#{f}", "[{foo}]");
 	}
 
 	@Test void d17_d3ListOfListOfMapsWithCollections() {
-		List<List<Map<?,?>>> in = list(
+		var in = list(
 			list(map("f",list("foo"))),
 			list(map("f",list("bar"))),
 			list((Map<?,?>)null),
@@ -850,7 +847,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d18_d3SetOfSetOfMapsWithCollections() {
-		Set<Set<Map<?,?>>> in = set(
+		var in = set(
 			set(map("f",set("foo"))),
 			set(map("f",set("bar"))),
 			set((Map<?,?>)null),
@@ -863,26 +860,26 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d19_d3ArrayOfArrayOfMapsWithCollections() {
-		Map<?,?>[][] in = new Map[][]{
-			new Map[]{map("f",new Object[]{"foo"})},
-			new Map[]{map("f",new Object[]{"bar"})},
-			new Map[]{null},
-			new Map[]{map(null,new Object[]{"qux"})},
-			new Map[]{map("quux",new Object[]{null})},
-			new Map[]{map(null,new Object[]{null})},
+		var in = a(
+			a(map("f",ao("foo"))),
+			a(map("f",ao("bar"))),
+			a((Map<?,?>)null),
+			a(map(null,ao("qux"))),
+			a(map("quux",ao((Object)null))),
+			a(map(null,ao((Object)null))),
 			null
-		};
+		);
 		assertBeans(run(in, "f=foo"), "#{f}", "[{[foo]}]");
 	}
 
 	@Test void d20_d3ArrayOfArrayOfBeans() {
-		A[][] in = {
-			new A[]{A.create("foo")},
-			new A[]{A.create("bar")},
-			new A[]{null},
-			new A[]{A.create(null)},
+		var in = a(
+			a(A.create("foo")),
+			a(A.create("bar")),
+			a((A)null),
+			a(A.create(null)),
 			null
-		};
+		);
 		assertBeans(run(in, "f=foo"), "#{f}", "[{foo}]");
 	}
 }

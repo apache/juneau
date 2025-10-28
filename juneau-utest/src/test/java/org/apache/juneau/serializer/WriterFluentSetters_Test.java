@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -43,7 +44,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void a01_csvSerializer_basic() throws Exception {
 		// Verify CsvSerializer works correctly (uses CsvWriter internally)
 		CsvSerializer s = CsvSerializer.DEFAULT;
-		String result = s.serialize(new String[]{"foo", "bar"});
+		String result = s.serialize(a("foo", "bar"));
 		assertTrue(result.contains("foo") && result.contains("bar"));
 	}
 
@@ -62,7 +63,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void b01_jsonSerializer_basic() throws Exception {
 		// Verify JsonSerializer works correctly (uses JsonWriter internally)
 		JsonSerializer s = JsonSerializer.DEFAULT;
-		String result = s.serialize(new String[]{"foo", "bar"});
+		String result = s.serialize(a("foo", "bar"));
 		assertEquals("[\"foo\",\"bar\"]", result.trim());
 	}
 
@@ -81,7 +82,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void c01_uonSerializer_basic() throws Exception {
 		// Verify UonSerializer works correctly (uses UonWriter internally)
 		UonSerializer s = UonSerializer.DEFAULT;
-		String result = s.serialize(new String[]{"foo", "bar"});
+		String result = s.serialize(a("foo", "bar"));
 		assertEquals("@(foo,bar)", result.trim());
 	}
 
@@ -100,7 +101,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void d01_xmlSerializer_basic() throws Exception {
 		// Verify XmlSerializer works correctly (uses XmlWriter internally)
 		XmlSerializer s = XmlSerializer.DEFAULT;
-		String result = s.serialize(new String[]{"foo", "bar"});
+		String result = s.serialize(a("foo", "bar"));
 		assertTrue(result.contains("<string>foo</string>") && result.contains("<string>bar</string>"));
 	}
 
@@ -119,7 +120,7 @@ class WriterFluentSetters_Test extends TestBase {
 	@Test void e01_htmlSerializer_basic() throws Exception {
 		// Verify HtmlSerializer works correctly (uses HtmlWriter internally)
 		HtmlSerializer s = HtmlSerializer.DEFAULT;
-		String result = s.serialize(new String[]{"foo", "bar"});
+		String result = s.serialize(a("foo", "bar"));
 		assertTrue(result.contains("foo") && result.contains("bar"));
 	}
 

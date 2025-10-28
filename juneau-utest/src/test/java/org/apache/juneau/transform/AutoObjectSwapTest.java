@@ -18,6 +18,7 @@ package org.apache.juneau.transform;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -109,7 +110,7 @@ class AutoObjectSwapTest extends TestBase {
 			return JSONMAP;
 		}
 		public static B02 create(JsonMap o) {
-			assertMap(o, "foo", "bar");
+			assertBean(o, "foo", "bar");
 			return new B02();
 		}
 	}
@@ -118,7 +119,7 @@ class AutoObjectSwapTest extends TestBase {
 			return STRINGMAP;
 		}
 		public static B03 fromObject(Map<String,String> o) {
-			assertMap(o, "foo", "bar");
+			assertBean(o, "foo", "bar");
 			return new B03();
 		}
 	}

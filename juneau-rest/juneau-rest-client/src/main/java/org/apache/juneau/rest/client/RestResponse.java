@@ -908,7 +908,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	<T> T as(ResponseBeanMeta rbm) {
 		Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
 		final RestClient rc = this.client;
-		return (T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler)(proxy, method, args) -> {
+		return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
 			ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
 			HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
 			HttpPartSchema schema = pm.getSchema();

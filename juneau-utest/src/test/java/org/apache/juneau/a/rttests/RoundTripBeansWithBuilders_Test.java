@@ -18,6 +18,7 @@ package org.apache.juneau.a.rttests;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.util.*;
 
@@ -242,15 +243,15 @@ class RoundTripBeansWithBuilders_Test extends TestBase {
 		if (t.label.contains("UrlEncoding - expanded params"))
 			return;
 		var x = A3.builder()
-			.f1(new A[]{A.builder().f1(1).build()})
+			.f1(a(A.builder().f1(1).build()))
 			.f2(singletonList(A.builder().f1(2).build()))
 			.f3(singletonList(singletonList(A.builder().f1(3).build())))
-			.f4(singletonList(new A[]{A.builder().f1(4).build()}))
-			.f5(singletonList(singletonList(new A[]{A.builder().f1(5).build()})))
+			.f4(singletonList(a(A.builder().f1(4).build())))
+			.f5(singletonList(singletonList(a(A.builder().f1(5).build()))))
 			.f6(singletonMap("foo", A.builder().f1(6).build()))
 			.f7(singletonMap("foo", singletonMap("bar", A.builder().f1(7).build())))
-			.f8(singletonMap("foo", new A[]{A.builder().f1(8).build()}))
-			.f9(singletonMap("foo", singletonList(new A[]{A.builder().f1(9).build()})))
+			.f8(singletonMap("foo", a(A.builder().f1(8).build())))
+			.f9(singletonMap("foo", singletonList(a(A.builder().f1(9).build()))))
 			.build();
 		x = t.roundTrip(x, A3.class);
 		assertJson("{f1:[{f1:1}],f2:[{f1:2}],f3:[[{f1:3}]],f4:[[{f1:4}]],f5:[[[{f1:5}]]],f6:{foo:{f1:6}},f7:{foo:{bar:{f1:7}}},f8:{foo:[{f1:8}]},f9:{foo:[[{f1:9}]]}}", x);

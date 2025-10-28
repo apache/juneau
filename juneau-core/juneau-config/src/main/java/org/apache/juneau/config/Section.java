@@ -189,7 +189,7 @@ public class Section {
 		if (! c.isInterface())
 			throw new IllegalArgumentException("Class '" + c.getName() + "' passed to toInterface() is not an interface.");
 
-		return opt((T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler) (proxy, method, args) -> {
+		return opt((T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler) (proxy, method, args) -> {
 			var bi = Introspector.getBeanInfo(c, null);
 			for (var pd : bi.getPropertyDescriptors()) {
 				var rm = pd.getReadMethod();

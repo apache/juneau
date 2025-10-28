@@ -18,13 +18,14 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
@@ -192,7 +193,7 @@ class AnnotationUtils_Test extends TestBase {
 		assertTrue(ResponseAnnotation.empty((Response)null));
 
 		assertFalse(ResponseAnnotation.empty(response().examples(a("foo")).build()));
-		assertFalse(ResponseAnnotation.empty(response().headers(new Header[]{header().name("foo").build()}).build()));
+		assertFalse(ResponseAnnotation.empty(response().headers(Utils.a(header().name("foo").build())).build()));
 		assertFalse(ResponseAnnotation.empty(response().parser(OpenApiParser.class).build()));
 		assertFalse(ResponseAnnotation.empty(response().schema(schema().$ref("foo").build()).build()));
 		assertFalse(ResponseAnnotation.empty(response().serializer(OpenApiSerializer.class).build()));

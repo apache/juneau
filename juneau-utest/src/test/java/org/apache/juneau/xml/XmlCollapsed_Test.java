@@ -40,9 +40,9 @@ class XmlCollapsed_Test extends TestBase {
 		var t = new A();
 
 		t.f1 = list("f1a","f1b");
-		t.f2 = new String[]{"f2a","f2b"};
+		t.f2 = a("f2a","f2b");
 		t.f3 = list("f3a","f3b");
-		t.f4 = new String[]{"f4a","f4b"};
+		t.f4 = a("f4a","f4b");
 
 		var xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><f1>f1b</f1><f2>f2a</f2><f2>f2b</f2><xf3>f3a</xf3><xf3>f3b</xf3><xf4>f4a</xf4><xf4>f4b</xf4></object>", xml);
@@ -79,9 +79,9 @@ class XmlCollapsed_Test extends TestBase {
 		var t = new B();
 
 		t.f1 = list("f1a","f1b");
-		t.f2 = new String[]{"f2a","f2b"};
+		t.f2 = a("f2a","f2b");
 		t.f3 = list("f3a","f3b");
-		t.f4 = new String[]{"f4a","f4b"};
+		t.f4 = a("f4a","f4b");
 
 		var xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><f1>f1b</f1><f2>f2a</f2><f2>f2b</f2><xf3>f3a</xf3><xf3>f3b</xf3><xf4>f4a</xf4><xf4>f4b</xf4></object>", xml);
@@ -118,9 +118,9 @@ class XmlCollapsed_Test extends TestBase {
 		var t = new C();
 
 		t.f1 = list("f1b");
-		t.f2 = new String[]{"f2b"};
+		t.f2 = a("f2b");
 		t.f3 = list("f3b");
-		t.f4 = new String[]{"f4b"};
+		t.f4 = a("f4b");
 
 		var xml = s.serialize(t);
 		assertEquals("<object><f1>f1b</f1><f2>f2b</f2><xf3>f3b</xf3><xf4>f4b</xf4></object>", xml);
@@ -163,9 +163,9 @@ class XmlCollapsed_Test extends TestBase {
 		var t = new D();
 
 		t.f1 = list("f1a");
-		t.f2 = new String[]{"f2a"};
+		t.f2 = a("f2a");
 		t.f3 = list("f3a");
-		t.f4 = new String[]{"f4a"};
+		t.f4 = a("f4a");
 
 		var xml = s.serialize(t);
 		assertEquals("<object><f1>f1a</f1><f2>f2a</f2><xf3>f3a</xf3><xf4>f4a</xf4></object>", xml);
@@ -269,10 +269,10 @@ class XmlCollapsed_Test extends TestBase {
 
 		public static FB newInstance() {
 			var t = new FB();
-			t.f1 = new F1[]{
+			t.f1 = a(
 				F1.newInstance("x1"),
 				F1.newInstance("x2")
-			};
+			);
 			return t;
 		}
 	}

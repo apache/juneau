@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.html5;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,10 +58,10 @@ class HtmlElementContainer_Test extends TestBase {
 		assertString("[child1]", x.getChildren());
 
 		x = div("child1");
-		assertNull(x.getChild(new int[]{}));
+		assertNull(x.getChild(ints()));
 
 		x = div("child1", "child2");
-		assertString("child1", x.getChild(new int[]{0}));
+		assertString("child1", x.getChild(ints(0)));
 
 		x = div(
 			div(

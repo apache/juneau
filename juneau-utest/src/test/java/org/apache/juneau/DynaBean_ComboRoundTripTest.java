@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Verify.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
@@ -324,7 +325,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public Map<String,List<String>> f1 = new LinkedHashMap<>();
 
 		public BeanWithDynaFieldStringList init() {
-			f1.put("f1a", Arrays.asList(new String[]{"foo","bar"}));
+			f1.put("f1a", Arrays.asList(a("foo","bar")));
 			return this;
 		}
 	}

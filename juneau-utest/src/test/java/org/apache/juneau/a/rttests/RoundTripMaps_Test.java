@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -183,8 +184,8 @@ class RoundTripMaps_Test extends TestBase {
 		Object r;
 
 		var x = new LinkedHashMap<byte[],String>();
-		x.put(new byte[]{1,2,3}, "a");
-		x.put(new byte[]{4,5,6}, null);
+		x.put(bytes(1,2,3), "a");
+		x.put(bytes(4,5,6), null);
 		x.put(null, "b");
 
 		var s = (Serializer)JsonSerializer.create().json5().swaps(ByteArraySwap.Base64.class).keepNullProperties().build();

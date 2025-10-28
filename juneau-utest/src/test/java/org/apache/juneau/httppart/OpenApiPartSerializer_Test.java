@@ -212,27 +212,27 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void c10_stringType_noneFormat_2d() throws Exception {
 		var ps = tArray(tString()).build();
-		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
+		assertEquals("foo,bar,null", serialize(ps, a("foo","bar",null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
-		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
+		assertEquals("foo,bar,null", serialize(ps, ao("foo","bar",null)));
 		assertEquals("foo,bar,null", serialize(ps, list((Object)"foo",(Object)"bar",null)));
-		assertEquals("foo,bar,null,null", serialize(ps, new C2[]{new C2("foo"),new C2("bar"),new C2(null),null}));
+		assertEquals("foo,bar,null,null", serialize(ps, a(new C2("foo"),new C2("bar"),new C2(null),null)));
 		assertEquals("foo,bar,null,null", serialize(ps, list(new C2("foo"),new C2("bar"),new C2(null),null)));
 		assertEquals("foo,bar,null", serialize(ps, new C3("foo","bar",null)));
 	}
 
 	@Test void c11_stringType_noneFormat_3d() throws Exception {
 		var ps = tArrayPipes(tArray(tString())).build();
-		assertEquals("foo,bar|baz,null|null", serialize(ps, new String[][]{{"foo","bar"},{"baz",null},null}));
-		assertEquals("foo,bar|baz,null|null", serialize(ps, list(new String[]{"foo","bar"}, new String[]{"baz",null},null)));
+		assertEquals("foo,bar|baz,null|null", serialize(ps, a2(a("foo","bar"),a("baz",null),null)));
+		assertEquals("foo,bar|baz,null|null", serialize(ps, list(a("foo","bar"), a("baz",null),null)));
 		assertEquals("foo,bar|baz,null|null", serialize(ps, list(list("foo","bar"),list("baz",null),null)));
-		assertEquals("foo,bar|baz,null|null", serialize(ps, new Object[][]{{"foo","bar"},{"baz",null},null}));
-		assertEquals("foo,bar|baz,null|null", serialize(ps, list(new Object[]{"foo","bar"}, new String[]{"baz",null},null)));
+		assertEquals("foo,bar|baz,null|null", serialize(ps, a2(ao("foo","bar"),ao("baz",null),null)));
+		assertEquals("foo,bar|baz,null|null", serialize(ps, list(ao("foo","bar"), a("baz",null),null)));
 		assertEquals("foo,bar|baz,null|null", serialize(ps, list(list((Object)"foo",(Object)"bar"),list((Object)"baz",null),null)));
-		assertEquals("foo,bar|baz,null,null|null", serialize(ps, new C2[][]{{new C2("foo"),new C2("bar")},{new C2("baz"),new C2(null),null},null}));
-		assertEquals("foo,bar|baz,null,null|null", serialize(ps, list(new C2[]{new C2("foo"),new C2("bar")}, new C2[]{new C2("baz"),new C2(null),null},null)));
+		assertEquals("foo,bar|baz,null,null|null", serialize(ps, a(a(new C2("foo"),new C2("bar")),a(new C2("baz"),new C2(null),null),null)));
+		assertEquals("foo,bar|baz,null,null|null", serialize(ps, list(a(new C2("foo"),new C2("bar")), a(new C2("baz"),new C2(null),null),null)));
 		assertEquals("foo,bar|baz,null,null|null", serialize(ps, list(list(new C2("foo"),new C2("bar")),list(new C2("baz"),new C2(null),null),null)));
-		assertEquals("foo,bar|baz,null|null|null", serialize(ps, new C3[]{new C3("foo","bar"),new C3("baz",null),new C3((String)null),null}));
+		assertEquals("foo,bar|baz,null|null|null", serialize(ps, a(new C3("foo","bar"),new C3("baz",null),new C3((String)null),null)));
 		assertEquals("foo,bar|baz,null|null|null", serialize(ps, list(new C3("foo","bar"),new C3("baz",null),new C3((String)null),null)));
 	}
 
@@ -275,22 +275,22 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void d01_arrayType_collectionFormatCsv() throws Exception {
 		var ps = T_ARRAY_CSV;
-		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
-		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("foo,bar,null,null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
+		assertEquals("foo,bar,null", serialize(ps, a("foo","bar",null)));
+		assertEquals("foo,bar,null", serialize(ps, ao("foo","bar",null)));
+		assertEquals("foo,bar,null,null", serialize(ps, a(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null,null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", serialize(ps, JsonList.of("foo","bar",null)));
 
-		assertEquals("foo\\,bar,null", serialize(ps, new String[]{"foo,bar",null}));
+		assertEquals("foo\\,bar,null", serialize(ps, a("foo,bar",null)));
 	}
 
 	@Test void d02_arrayType_collectionFormatPipes() throws Exception {
 		var ps = T_ARRAY_PIPES;
-		assertEquals("foo|bar|null", serialize(ps, new String[]{"foo","bar",null}));
-		assertEquals("foo|bar|null", serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("foo|bar|null|null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
+		assertEquals("foo|bar|null", serialize(ps, a("foo","bar",null)));
+		assertEquals("foo|bar|null", serialize(ps, ao("foo","bar",null)));
+		assertEquals("foo|bar|null|null", serialize(ps, a(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo|bar|null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo|bar|null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo|bar|null|null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
@@ -299,9 +299,9 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void d03_arrayType_collectionFormatSsv() throws Exception {
 		var ps = T_ARRAY_SSV;
-		assertEquals("foo bar null", serialize(ps, new String[]{"foo","bar",null}));
-		assertEquals("foo bar null", serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("foo bar null null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
+		assertEquals("foo bar null", serialize(ps, a("foo","bar",null)));
+		assertEquals("foo bar null", serialize(ps, ao("foo","bar",null)));
+		assertEquals("foo bar null null", serialize(ps, a(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo bar null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo bar null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo bar null null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
@@ -310,9 +310,9 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void d04_arrayType_collectionFormatTsv() throws Exception {
 		var ps = T_ARRAY_TSV;
-		assertEquals("foo\tbar\tnull", serialize(ps, new String[]{"foo","bar",null}));
-		assertEquals("foo\tbar\tnull", serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("foo\tbar\tnull\tnull", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
+		assertEquals("foo\tbar\tnull", serialize(ps, a("foo","bar",null)));
+		assertEquals("foo\tbar\tnull", serialize(ps, ao("foo","bar",null)));
+		assertEquals("foo\tbar\tnull\tnull", serialize(ps, a(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo\tbar\tnull", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo\tbar\tnull", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo\tbar\tnull\tnull", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
@@ -321,9 +321,9 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void d05_arrayType_collectionFormatUon() throws Exception {
 		var ps = T_ARRAY_UON;
-		assertEquals("@(foo,bar,'null',null)", serialize(ps, new String[]{"foo","bar","null",null}));
-		assertEquals("@(foo,bar,'null',null)", serialize(ps, new Object[]{"foo","bar","null",null}));
-		assertEquals("@(foo,bar,'null',null)", serialize(ps, new D[]{new D("foo"),new D("bar"),new D("null"),null}));
+		assertEquals("@(foo,bar,'null',null)", serialize(ps, a("foo","bar","null",null)));
+		assertEquals("@(foo,bar,'null',null)", serialize(ps, ao("foo","bar","null",null)));
+		assertEquals("@(foo,bar,'null',null)", serialize(ps, a(new D("foo"),new D("bar"),new D("null"),null)));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, list("foo","bar","null",null)));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, list("foo","bar","null",null)));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, list(new D("foo"),new D("bar"),new D("null"),null)));
@@ -332,9 +332,9 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void d06a_arrayType_collectionFormatNone() throws Exception {
 		var ps = T_ARRAY;
-		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
-		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("foo,bar,null,null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
+		assertEquals("foo,bar,null", serialize(ps, a("foo","bar",null)));
+		assertEquals("foo,bar,null", serialize(ps, ao("foo","bar",null)));
+		assertEquals("foo,bar,null,null", serialize(ps, a(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null,null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
@@ -344,9 +344,9 @@ class OpenApiPartSerializer_Test extends TestBase {
 	@Test void d07_arrayType_collectionFormatMulti() throws Exception {
 		// collectionFormat=multi really shouldn't be applicable to collections of values, so just use csv.
 		var ps = T_ARRAY_MULTI;
-		assertEquals("foo,bar,null", serialize(ps, new String[]{"foo","bar",null}));
-		assertEquals("foo,bar,null", serialize(ps, new Object[]{"foo","bar",null}));
-		assertEquals("foo,bar,null,null", serialize(ps, new D[]{new D("foo"),new D("bar"),new D(null),null}));
+		assertEquals("foo,bar,null", serialize(ps, a("foo","bar",null)));
+		assertEquals("foo,bar,null", serialize(ps, ao("foo","bar",null)));
+		assertEquals("foo,bar,null,null", serialize(ps, a(new D("foo"),new D("bar"),new D(null),null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null,null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
@@ -355,9 +355,9 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void d08_arrayType_collectionFormatCsvAndPipes() throws Exception {
 		var ps = tArrayPipes(tArrayCsv()).build();
-		assertEquals("foo,bar|baz,null|null", serialize(ps, new String[][]{{"foo","bar"},{"baz",null},null}));
-		assertEquals("foo,bar|baz,null|null", serialize(ps, new Object[][]{{"foo","bar"},{"baz",null},null}));
-		assertEquals("foo,bar|baz,null,null|null", serialize(ps, new D[][]{{new D("foo"),new D("bar")},{new D("baz"),new D(null),null},null}));
+		assertEquals("foo,bar|baz,null|null", serialize(ps, a2(a("foo","bar"),a("baz",null),null)));
+		assertEquals("foo,bar|baz,null|null", serialize(ps, a2(ao("foo","bar"),ao("baz",null),null)));
+		assertEquals("foo,bar|baz,null,null|null", serialize(ps, a(a(new D("foo"),new D("bar")),a(new D("baz"),new D(null),null),null)));
 		assertEquals("foo,bar|baz,null|null", serialize(ps, list(list("foo","bar"),list("baz",null),null)));
 		assertEquals("foo,bar|baz,null|null", serialize(ps, list(list("foo","bar"),list("baz",null),null)));
 		assertEquals("foo,bar|baz,null,null|null", serialize(ps, list(list(new D("foo"),new D("bar")),list(new D("baz"),new D(null),null),null)));
@@ -365,17 +365,17 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void d09_arrayType_itemsInteger() throws Exception {
 		var ps = tArrayCsv(tInteger()).build();
-		assertEquals("1,2", serialize(ps, new int[]{1,2}));
-		assertEquals("1,2,null", serialize(ps, new Integer[]{1,2,null}));
-		assertEquals("1,2,null", serialize(ps, new Object[]{1,2,null}));
+		assertEquals("1,2", serialize(ps, ints(1,2)));
+		assertEquals("1,2,null", serialize(ps, a(1,2,null)));
+		assertEquals("1,2,null", serialize(ps, ao(1,2,null)));
 		assertEquals("1,2,null", serialize(ps, list(1,2,null)));
 	}
 
 	@Test void d10_arrayType_itemsInteger_2d() throws Exception {
 		var ps = tArrayPipes(tArrayCsv(tInteger()).allowEmptyValue()).build();
 		assertEquals("1,2||null", serialize(ps, new int[][]{{1,2},{},null}));
-		assertEquals("1,2,null||null", serialize(ps, new Integer[][]{{1,2,null},{},null}));
-		assertEquals("1,2,null||null", serialize(ps, new Object[][]{{1,2,null},{},null}));
+		assertEquals("1,2,null||null", serialize(ps, a(a(1,2,null),a(),null)));
+		assertEquals("1,2,null||null", serialize(ps, a2(ao(1,2,null),ao(),null)));
 		assertEquals("1,2,null||null", serialize(ps, list(list(1,2,null),list(),null)));
 	}
 
@@ -418,14 +418,14 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void e03_booleanType_2d() throws Exception {
 		var ps = tArray(tBoolean()).build();
-		assertEquals("true", serialize(ps, new boolean[]{true}));
-		assertEquals("true,null", serialize(ps, new Boolean[]{true,null}));
+		assertEquals("true", serialize(ps, booleans(true)));
+		assertEquals("true,null", serialize(ps, a(true,null)));
 		assertEquals("true,null", serialize(ps, list(true,null)));
-		assertEquals("true,null", serialize(ps, new String[]{"true",null}));
+		assertEquals("true,null", serialize(ps, a("true",null)));
 		assertEquals("true,null", serialize(ps, list("true",null)));
-		assertEquals("true,null", serialize(ps, new Object[]{true,null}));
+		assertEquals("true,null", serialize(ps, ao(true,null)));
 		assertEquals("true,null", serialize(ps, list(true,null)));
-		assertEquals("true,null,null", serialize(ps, new E1[]{new E1(true),new E1(null),null}));
+		assertEquals("true,null,null", serialize(ps, a(new E1(true),new E1(null),null)));
 		assertEquals("true,null,null", serialize(ps, list(new E1(true),new E1(null),null)));
 		assertEquals("true,null", serialize(ps, new E2(true,null)));
 	}
@@ -433,19 +433,19 @@ class OpenApiPartSerializer_Test extends TestBase {
 	@Test void e04_booleanType_3d() throws Exception {
 		var ps = tArrayPipes(tArray(tBoolean())).build();
 		assertEquals("true,true|false", serialize(ps, new boolean[][]{{true,true},{false}}));
-		assertEquals("true,true|false", serialize(ps, list(new boolean[]{true,true},new boolean[]{false})));
-		assertEquals("true,true|false,null", serialize(ps, new Boolean[][]{{true,true},{false,null}}));
-		assertEquals("true,true|false,null", serialize(ps, list(new Boolean[]{true,true},new Boolean[]{false,null})));
+		assertEquals("true,true|false", serialize(ps, list(booleans(true,true),booleans(false))));
+		assertEquals("true,true|false,null", serialize(ps, a(a(true,true),a(false,null))));
+		assertEquals("true,true|false,null", serialize(ps, list(a(true,true),a(false,null))));
 		assertEquals("true,true|false,null", serialize(ps, list(list(true,true),list(false,null))));
 		assertEquals("true,true|false,null,null", serialize(ps, list(list("true","true"),list("false","null",null))));
-		assertEquals("true,true|false,null,null", serialize(ps, list(new String[]{"true","true"},new String[]{"false","null",null})));
-		assertEquals("true,true|false,null", serialize(ps, new Object[][]{{true,true},{false,null}}));
+		assertEquals("true,true|false,null,null", serialize(ps, list(a("true","true"),a("false","null",null))));
+		assertEquals("true,true|false,null", serialize(ps, a2(ao(true,true),ao(false,null))));
 		assertEquals("true,true|false,null", serialize(ps, list(list((Object)true,(Object)true),list((Object)false,null))));
-		assertEquals("true,true|false,null", serialize(ps, list(new Object[]{true,true},new Object[]{false,null})));
-		assertEquals("true,true|false,null", serialize(ps, new E1[][]{{new E1(true),new E1(true)},{new E1(false),new E1(null)}}));
+		assertEquals("true,true|false,null", serialize(ps, list(ao(true,true),ao(false,null))));
+		assertEquals("true,true|false,null", serialize(ps, a(a(new E1(true),new E1(true)),a(new E1(false),new E1(null)))));
 		assertEquals("true,true|false,null", serialize(ps, list(list(new E1(true),new E1(true)), list(new E1(false),new E1(null)))));
-		assertEquals("true,true|false,null", serialize(ps, list(new E1[]{new E1(true),new E1(true)},new E1[]{new E1(false),new E1(null)})));
-		assertEquals("true,true|false,null", serialize(ps, new E2[]{new E2(true,true),new E2(false,null)}));
+		assertEquals("true,true|false,null", serialize(ps, list(a(new E1(true),new E1(true)),a(new E1(false),new E1(null)))));
+		assertEquals("true,true|false,null", serialize(ps, a(new E2(true,true),new E2(false,null))));
 		assertEquals("true,true|false,null", serialize(ps, list(new E2(true,true),new E2(false,null))));
 	}
 
@@ -509,20 +509,20 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void f02_integerType_int32_2d() throws Exception {
 		var ps = tArray(tInt32()).build();
-		assertEquals("1,2", serialize(ps, new int[]{1,2}));
-		assertEquals("1,2,null", serialize(ps, new Integer[]{1,2,null}));
+		assertEquals("1,2", serialize(ps, ints(1,2)));
+		assertEquals("1,2,null", serialize(ps, a(1,2,null)));
 		assertEquals("1,2,null", serialize(ps, list(1,2,null)));
-		assertEquals("1,2", serialize(ps, new short[]{1,2}));
-		assertEquals("1,2,null", serialize(ps, new Short[]{1,2,null}));
+		assertEquals("1,2", serialize(ps, shorts(1,2)));
+		assertEquals("1,2,null", serialize(ps, a((short)1,(short)2,null)));
 		assertEquals("1,2,null", serialize(ps, list(Short.valueOf((short)1),Short.valueOf((short)2),null)));
-		assertEquals("1,2", serialize(ps, new long[]{1L,2L}));
-		assertEquals("1,2,null", serialize(ps, new Long[]{1L,2L,null}));
+		assertEquals("1,2", serialize(ps, longs(1L,2L)));
+		assertEquals("1,2,null", serialize(ps, a(1L,2L,null)));
 		assertEquals("1,2,null", serialize(ps, list(1L,2L,null)));
-		assertEquals("1,2,null,null", serialize(ps, new String[]{"1","2","null",null}));
+		assertEquals("1,2,null,null", serialize(ps, a("1","2","null",null)));
 		assertEquals("1,2,null,null", serialize(ps, list("1","2","null",null)));
-		assertEquals("1,2,null", serialize(ps, new Object[]{1,2,null}));
+		assertEquals("1,2,null", serialize(ps, ao(1,2,null)));
 		assertEquals("1,2,null", serialize(ps, list(1,2,null)));
-		assertEquals("1,2,null,null", serialize(ps, new F1[]{new F1(1),new F1(2),new F1(null),null}));
+		assertEquals("1,2,null,null", serialize(ps, a(new F1(1),new F1(2),new F1(null),null)));
 		assertEquals("1,2,null,null", serialize(ps, list(new F1(1),new F1(2),new F1(null),null)));
 		assertEquals("1,2,null", serialize(ps, new F2(1,2,null)));
 	}
@@ -530,30 +530,30 @@ class OpenApiPartSerializer_Test extends TestBase {
 	@Test void f03_integerType_int32_3d() throws Exception {
 		var ps = tArrayPipes(tArray(tInt32())).build();
 		assertEquals("1,2|3|null", serialize(ps, new int[][]{{1,2},{3},null}));
-		assertEquals("1,2|3|null", serialize(ps, list(new int[]{1,2},new int[]{3},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Integer[][]{{1,2},{3,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Integer[]{1,2},new Integer[]{3,null},null)));
+		assertEquals("1,2|3|null", serialize(ps, list(ints(1,2),ints(3),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, a(a(1,2),a(3,null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(a(1,2),a(3,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list(1,2),list(3,null),null)));
 		assertEquals("1,2|3|null", serialize(ps, new short[][]{{1,2},{3},null}));
-		assertEquals("1,2|3|null", serialize(ps, list(new short[]{1,2},new short[]{3},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Short[][]{{1,2},{3,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Short[]{1,2},new Short[]{3,null},null)));
+		assertEquals("1,2|3|null", serialize(ps, list(shorts(1,2),shorts(3),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, a(a((short)1,(short)2),a((short)3,null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(a((short)1,(short)2),a((short)3,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list(Short.valueOf((short)1),Short.valueOf((short)2)),list(Short.valueOf((short)3),null),null)));
 		assertEquals("1,2|3|null", serialize(ps, new long[][]{{1L,2L},{3L},null}));
-		assertEquals("1,2|3|null", serialize(ps, list(new long[]{1L,2L},new long[]{3L},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Long[][]{{1L,2L},{3L,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Long[]{1L,2L},new Long[]{3L,null},null)));
+		assertEquals("1,2|3|null", serialize(ps, list(longs(1L,2L),longs(3L),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, a(a(1L,2L),a(3L,null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(a(1L,2L),a(3L,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list(Long.valueOf(1),Long.valueOf(2)),list(Long.valueOf(3),null),null)));
-		assertEquals("1,2|3,null,null|null", serialize(ps, new String[][]{{"1","2"},{"3","null",null},null}));
-		assertEquals("1,2|3,null,null|null", serialize(ps, list(new String[]{"1","2"},new String[]{"3","null",null},null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, a2(a("1","2"),a("3","null",null),null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, list(a("1","2"),a("3","null",null),null)));
 		assertEquals("1,2|3,null,null|null", serialize(ps, list(list("1","2"),list("3","null",null),null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Object[][]{{1,2},{3,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Object[]{1,2},new Object[]{3,null},null)));
+		assertEquals("1,2|3,null|null", serialize(ps, a2(ao(1,2),ao(3,null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(ao(1,2),ao(3,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list(1,2),list(3,null),null)));
-		assertEquals("1,2|3,null,null|null", serialize(ps, new F1[][]{{new F1(1),new F1(2)},{new F1(3),new F1(null),null},null}));
-		assertEquals("1,2|3,null,null|null", serialize(ps, list(new F1[]{new F1(1),new F1(2)},new F1[]{new F1(3),new F1(null),null},null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, a(a(new F1(1),new F1(2)),a(new F1(3),new F1(null),null),null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, list(a(new F1(1),new F1(2)),a(new F1(3),new F1(null),null),null)));
 		assertEquals("1,2|3,null,null|null", serialize(ps, list(list(new F1(1),new F1(2)),list(new F1(3),new F1(null),null),null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new F2[]{new F2(1,2),new F2(3,null),null}));
+		assertEquals("1,2|3,null|null", serialize(ps, a(new F2(1,2),new F2(3,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(new F2(1,2),new F2(3,null),null)));
 	}
 
@@ -573,20 +573,20 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void f05_integerType_int64_2d() throws Exception {
 		var ps = tArray(tInt64()).build();
-		assertEquals("1,2", serialize(ps, new int[]{1,2}));
-		assertEquals("1,2,null", serialize(ps, new Integer[]{1,2,null}));
+		assertEquals("1,2", serialize(ps, ints(1,2)));
+		assertEquals("1,2,null", serialize(ps, a(1,2,null)));
 		assertEquals("1,2,null", serialize(ps, list(1,2,null)));
-		assertEquals("1,2", serialize(ps, new short[]{1,2}));
-		assertEquals("1,2,null", serialize(ps, new Short[]{1,2,null}));
+		assertEquals("1,2", serialize(ps, shorts(1,2)));
+		assertEquals("1,2,null", serialize(ps, a((short)1,(short)2,null)));
 		assertEquals("1,2,null", serialize(ps, list((short)1,(short)2,null)));
-		assertEquals("1,2", serialize(ps, new long[]{1L,2L}));
-		assertEquals("1,2,null", serialize(ps, new Long[]{1L,2L,null}));
+		assertEquals("1,2", serialize(ps, longs(1L,2L)));
+		assertEquals("1,2,null", serialize(ps, a(1L,2L,null)));
 		assertEquals("1,2,null", serialize(ps, list(1L,2L,null)));
-		assertEquals("1,2,null,null", serialize(ps, new String[]{"1","2","null",null}));
+		assertEquals("1,2,null,null", serialize(ps, a("1","2","null",null)));
 		assertEquals("1,2,null,null", serialize(ps, list("1","2","null",null)));
-		assertEquals("1,2,null", serialize(ps, new Object[]{1,2,null}));
+		assertEquals("1,2,null", serialize(ps, ao(1,2,null)));
 		assertEquals("1,2,null", serialize(ps, list((Object)1,(Object)2,null)));
-		assertEquals("1,2,null,null", serialize(ps, new F3[]{new F3(1L),new F3(2L),new F3(null),null}));
+		assertEquals("1,2,null,null", serialize(ps, a(new F3(1L),new F3(2L),new F3(null),null)));
 		assertEquals("1,2,null,null", serialize(ps, list(new F3(1L),new F3(2L),new F3(null),null)));
 		assertEquals("1,2,null", serialize(ps, new F4(1L,2L,null)));
 	}
@@ -594,30 +594,30 @@ class OpenApiPartSerializer_Test extends TestBase {
 	@Test void f06_integerType_int64_3d() throws Exception {
 		var ps = tArrayPipes(tArray(tInt64())).build();
 		assertEquals("1,2|3|null", serialize(ps, new int[][]{{1,2},{3},null}));
-		assertEquals("1,2|3|null", serialize(ps, list(new int[]{1,2},new int[]{3},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Integer[][]{{1,2},{3,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Integer[]{1,2},new Integer[]{3,null},null)));
+		assertEquals("1,2|3|null", serialize(ps, list(ints(1,2),ints(3),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, a(a(1,2),a(3,null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(a(1,2),a(3,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list(1,2),list(3,null),null)));
 		assertEquals("1,2|3|null", serialize(ps, new short[][]{{1,2},{3},null}));
-		assertEquals("1,2|3|null", serialize(ps, list(new short[]{1,2},new short[]{3},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Short[][]{{1,2},{3,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Short[]{1,2},new Short[]{3,null},null)));
+		assertEquals("1,2|3|null", serialize(ps, list(shorts(1,2),shorts(3),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, a(a((short)1,(short)2),a((short)3,null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(a((short)1,(short)2),a((short)3,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list((short)1,(short)2),list((short)3,null),null)));
 		assertEquals("1,2|3|null", serialize(ps, new long[][]{{1L,2L},{3L},null}));
-		assertEquals("1,2|3|null", serialize(ps, list(new long[]{1L,2L},new long[]{3L},null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Long[][]{{1L,2L},{3L,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Long[]{1L,2L},new Long[]{3L,null},null)));
+		assertEquals("1,2|3|null", serialize(ps, list(longs(1L,2L),longs(3L),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, a(a(1L,2L),a(3L,null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(a(1L,2L),a(3L,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list(1L,2L),list(3L,null),null)));
-		assertEquals("1,2|3,null,null|null", serialize(ps, new String[][]{{"1","2"},{"3","null",null},null}));
-		assertEquals("1,2|3,null,null|null", serialize(ps, list(new String[]{"1","2"},new String[]{"3","null",null},null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, a2(a("1","2"),a("3","null",null),null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, list(a("1","2"),a("3","null",null),null)));
 		assertEquals("1,2|3,null,null|null", serialize(ps, list(list("1","2"),list("3","null",null),null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new Object[][]{{1,2},{3,null},null}));
-		assertEquals("1,2|3,null|null", serialize(ps, list(new Object[]{1,2},new Object[]{3,null},null)));
+		assertEquals("1,2|3,null|null", serialize(ps, a2(ao(1,2),ao(3,null),null)));
+		assertEquals("1,2|3,null|null", serialize(ps, list(ao(1,2),ao(3,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(list((Object)1,(Object)2),list((Object)3,null),null)));
-		assertEquals("1,2|3,null,null|null", serialize(ps, new F3[][]{{new F3(1L),new F3(2L)},{new F3(3L),new F3(null),null},null}));
-		assertEquals("1,2|3,null,null|null", serialize(ps, list(new F3[]{new F3(1L),new F3(2L)},new F3[]{new F3(3L),new F3(null),null},null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, a(a(new F3(1L),new F3(2L)),a(new F3(3L),new F3(null),null),null)));
+		assertEquals("1,2|3,null,null|null", serialize(ps, list(a(new F3(1L),new F3(2L)),a(new F3(3L),new F3(null),null),null)));
 		assertEquals("1,2|3,null,null|null", serialize(ps, list(list(new F3(1L),new F3(2L)),list(new F3(3L),new F3(null),null),null)));
-		assertEquals("1,2|3,null|null", serialize(ps, new F4[]{new F4(1L,2L),new F4(3L,null),null}));
+		assertEquals("1,2|3,null|null", serialize(ps, a(new F4(1L,2L),new F4(3L,null),null)));
 		assertEquals("1,2|3,null|null", serialize(ps, list(new F4(1L,2L),new F4(3L,null),null)));
 	}
 
@@ -680,43 +680,43 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void g02_numberType_float_2d() throws Exception {
 		var ps = tArray(tFloat()).build();
-		assertEquals("1.0,2.0", serialize(ps, new float[]{1,2}));
-		assertEquals("1.0,2.0,null", serialize(ps, new Float[]{1f,2f,null}));
+		assertEquals("1.0,2.0", serialize(ps, floats(1,2)));
+		assertEquals("1.0,2.0,null", serialize(ps, a(1f,2f,null)));
 		assertEquals("1.0,2.0,null", serialize(ps, list(1f,2f,null)));
-		assertEquals("1.0,2.0", serialize(ps, new double[]{1,2}));
-		assertEquals("1.0,2.0,null", serialize(ps, new Double[]{1d,2d,null}));
+		assertEquals("1.0,2.0", serialize(ps, doubles(1,2)));
+		assertEquals("1.0,2.0,null", serialize(ps, a(1d,2d,null)));
 		assertEquals("1.0,2.0,null", serialize(ps, list(1d,2d,null)));
-		assertEquals("1.0,2.0,null,null", serialize(ps, new String[]{"1","2","null",null}));
+		assertEquals("1.0,2.0,null,null", serialize(ps, a("1","2","null",null)));
 		assertEquals("1.0,2.0,null,null", serialize(ps, list("1","2","null",null)));
-		assertEquals("1.0,2.0,null", serialize(ps, new Object[]{1,2,null}));
+		assertEquals("1.0,2.0,null", serialize(ps, ao(1,2,null)));
 		assertEquals("1.0,2.0,null", serialize(ps, list((Object)1,(Object)2,null)));
-		assertEquals("1.0,2.0,null,null", serialize(ps, new G1[]{new G1(1f),new G1(2f),new G1(null),null}));
+		assertEquals("1.0,2.0,null,null", serialize(ps, a(new G1(1f),new G1(2f),new G1(null),null)));
 		assertEquals("1.0,2.0,null,null", serialize(ps, list(new G1(1f),new G1(2f),new G1(null),null)));
 		assertEquals("1.0,2.0,null", serialize(ps, new G2(1f,2f,null)));
 	}
 
 	@Test void g03_numberType_float_3d() throws Exception {
 		var ps = tArrayPipes(tArray(tFloat())).build();
-		assertEquals("1.0,2.0|3.0|null", serialize(ps, new float[][]{{1,2},{3},null}));
-		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(new float[]{1,2},new float[]{3},null)));
-		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, new Float[][]{{1f,2f},{3f,null},null}));
-		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(new Float[]{1f,2f},new Float[]{3f,null}, null)));
+		assertEquals("1.0,2.0|3.0|null", serialize(ps, a(a(1f,2f),a(3f),null)));
+		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(floats(1,2),floats(3),null)));
+		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, a(a(1f,2f),a(3f,null),null)));
+		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(a(1f,2f),a(3f,null),null)));
 		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(list(1f,2f),list(3f,null),null)));
-		assertEquals("1.0,2.0|3.0|null", serialize(ps, new double[][]{{1d,2d},{3d},null}));
-		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(new double[]{1d,2d},new double[]{3d},null)));
-		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, new Double[][]{{1d,2d},{3d,null},null}));
-		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(new Double[]{1d,2d},new Double[]{3d,null},null)));
+		assertEquals("1.0,2.0|3.0|null", serialize(ps, a(a(1d,2d),a(3d),null)));
+		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(doubles(1d,2d),doubles(3d),null)));
+		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, a(a(1d,2d),a(3d,null),null)));
+		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(a(1d,2d),a(3d,null),null)));
 		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(list(1d,2d),list(3d,null),null)));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, new String[][]{{"1","2"},{"3","null",null},null}));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(new String[]{"1","2"},new String[]{"3","null",null},null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, a2(a("1","2"),a("3","null",null),null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(a("1","2"),a("3","null",null),null)));
 		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(list(1d,2d),list(3f,"null",null),null)));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, new Object[][]{{1d,2d},{3f,"null",null},null}));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(new Object[]{1d,2d},new Object[]{3f,"null",null},null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, a2(ao(1d,2d),ao(3f,"null",null),null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(ao(1d,2d),ao(3f,"null",null),null)));
 		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(list(1d,2d),list(3f,"null",null),null)));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, new G1[][]{{new G1(1f),new G1(2f)},{new G1(3f),new G1(null),null},null}));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(new G1[]{new G1(1f),new G1(2f)},new G1[]{new G1(3f),new G1(null),null},null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, a(a(new G1(1f),new G1(2f)),a(new G1(3f),new G1(null),null),null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(a(new G1(1f),new G1(2f)),a(new G1(3f),new G1(null),null),null)));
 		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(list(new G1(1f),new G1(2f)),list(new G1(3f),new G1(null),null),null)));
-		assertEquals("1.0,2.0,null|null", serialize(ps, new G2[]{new G2(1f,2f,null),null}));
+		assertEquals("1.0,2.0,null|null", serialize(ps, a(new G2(1f,2f,null),null)));
 		assertEquals("1.0,2.0,null|null", serialize(ps, list(new G2(1f,2f,null),null)));
 	}
 
@@ -735,43 +735,43 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void g05_numberType_double_2d() throws Exception {
 		var ps = tArray(tDouble()).build();
-		assertEquals("1.0,2.0", serialize(ps, new float[]{1,2}));
-		assertEquals("1.0,2.0,null", serialize(ps, new Float[]{1f,2f,null}));
+		assertEquals("1.0,2.0", serialize(ps, floats(1,2)));
+		assertEquals("1.0,2.0,null", serialize(ps, a(1f,2f,null)));
 		assertEquals("1.0,2.0,null", serialize(ps, list(1f,2f,null)));
-		assertEquals("1.0,2.0", serialize(ps, new double[]{1,2}));
-		assertEquals("1.0,2.0,null", serialize(ps, new Double[]{1d,2d,null}));
+		assertEquals("1.0,2.0", serialize(ps, doubles(1,2)));
+		assertEquals("1.0,2.0,null", serialize(ps, a(1d,2d,null)));
 		assertEquals("1.0,2.0,null", serialize(ps, list(1d,2d,null)));
-		assertEquals("1.0,2.0,null,null", serialize(ps, new String[]{"1","2","null",null}));
+		assertEquals("1.0,2.0,null,null", serialize(ps, a("1","2","null",null)));
 		assertEquals("1.0,2.0,null,null", serialize(ps, list("1","2","null",null)));
-		assertEquals("1.0,2.0,null,null", serialize(ps, new Object[]{1d,2f,"null",null}));
+		assertEquals("1.0,2.0,null,null", serialize(ps, ao(1d,2f,"null",null)));
 		assertEquals("1.0,2.0,null,null", serialize(ps, list(1d,2f,"null",null)));
-		assertEquals("1.0,2.0,null,null", serialize(ps, new G3[]{new G3(1d),new G3(2d),new G3(null),null}));
+		assertEquals("1.0,2.0,null,null", serialize(ps, a(new G3(1d),new G3(2d),new G3(null),null)));
 		assertEquals("1.0,2.0,null,null", serialize(ps, list(new G3(1d),new G3(2d),new G3(null),null)));
 		assertEquals("1.0,2.0,null", serialize(ps, new G4(1d,2d,null)));
 	}
 
 	@Test void g06_numberType_double_3d() throws Exception {
 		var ps = tArrayPipes(tArray(tDouble())).build();
-		assertEquals("1.0,2.0|3.0|null", serialize(ps, new float[][]{{1f,2f},{3f},null}));
-		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(new float[]{1f,2f},new float[]{3f},null)));
-		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, new Float[][]{{1f,2f},{3f,null},null}));
-		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(new Float[]{1f,2f},new Float[]{3f,null},null)));
+		assertEquals("1.0,2.0|3.0|null", serialize(ps, a(a(1f,2f),a(3f),null)));
+		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(floats(1f,2f),floats(3f),null)));
+		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, a(a(1f,2f),a(3f,null),null)));
+		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(a(1f,2f),a(3f,null),null)));
 		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(list(1f,2f),list(3f,null),null)));
-		assertEquals("1.0,2.0|3.0|null", serialize(ps, new double[][]{{1d,2d},{3d},null}));
-		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(new double[]{1d,2d},new double[]{3d},null)));
-		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, new Double[][]{{1d,2d},{3d,null},null}));
-		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(new Double[]{1d,2d},new Double[]{3d,null},null)));
+		assertEquals("1.0,2.0|3.0|null", serialize(ps, a(a(1d,2d),a(3d),null)));
+		assertEquals("1.0,2.0|3.0|null", serialize(ps, list(doubles(1d,2d),doubles(3d),null)));
+		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, a(a(1d,2d),a(3d,null),null)));
+		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(a(1d,2d),a(3d,null),null)));
 		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(list(1d,2d),list(3d,null),null)));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, new String[][]{{"1","2"},{"3","null",null},null}));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(new String[]{"1","2"},new String[]{"3","null",null},null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, a2(a("1","2"),a("3","null",null),null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(a("1","2"),a("3","null",null),null)));
 		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(list("1","2"),list("3","null",null),null)));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, new Object[][]{{1d,2d},{"3","null",null},null}));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(new Object[]{1d,2d},new Object[]{"3","null",null},null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, a2(ao(1d,2d),ao("3","null",null),null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(ao(1d,2d),ao("3","null",null),null)));
 		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(list(1d,2f),list(3d,"null",null),null)));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, new G3[][]{{new G3(1d),new G3(2d)},{new G3(3d),new G3(null),null},null}));
-		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(new G3[]{new G3(1d),new G3(2d)},new G3[]{new G3(3d),new G3(null),null},null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, a(a(new G3(1d),new G3(2d)),a(new G3(3d),new G3(null),null),null)));
+		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(a(new G3(1d),new G3(2d)),a(new G3(3d),new G3(null),null),null)));
 		assertEquals("1.0,2.0|3.0,null,null|null", serialize(ps, list(list(new G3(1d),new G3(2d)),list(new G3(3d),new G3(null),null),null)));
-		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, new G4[]{new G4(1d,2d),new G4(3d,null),null}));
+		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, a(new G4(1d,2d),new G4(3d,null),null)));
 		assertEquals("1.0,2.0|3.0,null|null", serialize(ps, list(new G4(1d,2d),new G4(3d,null),null)));
 	}
 
@@ -810,72 +810,72 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 	@Test void h03_objectType_2d() throws Exception {
 		var ps = tArray(tObject().allowEmptyValue()).build();
-		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
+		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, a(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
 		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null}));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
 	@Test void h03_objectType_2d_pipes() throws Exception {
 		var ps = tArrayPipes(tObject().allowEmptyValue()).build();
-		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
+		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, a(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
+		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
 		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null}));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
 	@Test void h04_objectType_2d_uon() throws Exception {
 		var ps = tArrayUon(tObject()).build();
-		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
+		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, a(new H1("1",2,true),new H1(null,null,null),null)));
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
 		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null}));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
 	@Test void h03_objectType_3d() throws Exception {
 		var ps = tArray(tArray(tObject().allowEmptyValue())).build();
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, a(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, list(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, list(list(new H1("1",2,true),new H1("x",3,false)),list(new H1(null,null,null),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, new JsonMap[][]{{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},new JsonMap[]{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, a(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),list(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, new Object[][]{{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, a2(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
 	@Test void h03_objectType_3d_ssvAndPipes() throws Exception {
 		var ps = tArraySsv(tArrayPipes(tObject().allowEmptyValue())).build();
-		assertEquals("null|null null|null null null", serialize(ps, new String[][]{{null,null},{null,null},null,null}));
+		assertEquals("null|null null|null null null", serialize(ps, a2(a(null,null),a(null,null),null,null)));
 //f1=1,f2=2,f3=true|f1=x,f2=3,f3=false null null
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, a(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, list(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
 		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, list(list(new H1("1",2,true),new H1("x",3,false)),list(new H1(null,null,null),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, new JsonMap[][]{{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, list(new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},new JsonMap[]{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, a(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, list(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, list(list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),list(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, new Object[][]{{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, list(new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, a2(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, list(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, list(list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
 	@Test void h03_objectType_3d_uon() throws Exception {
 		var ps = tArrayUon(tArray(tObject())).build();
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, a(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, list(a(new H1("1",2,true),new H1("x",3,false)),a(new H1(null,null,null),null),null)));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, list(list(new H1("1",2,true),new H1("x",3,false)),list(new H1(null,null,null),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, new JsonMap[][]{{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, list(new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},new JsonMap[]{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, a(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, list(a(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),a(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, list(list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),list(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, new Object[][]{{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, list(new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, a2(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, list(ao(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),ao(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, list(list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
@@ -948,7 +948,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 
 		assertEquals(
 			"(f01=@('a,b',null),f02=@(Zm9v,null),f04=@(2012-12-21T12:34:56Z,null),f05=@(666F6F,null),f06=@('66 6F 6F',null),f07=@(a,b,null),f08=@(1,2,null),f09=@(3,4,null),f10=@(1.0,2.0,null),f11=@(3.0,4.0,null),f12=@(true,false,null),f99=@(1,x,null))",
-			serialize(ps, new H2(new String[]{"a,b",null},new byte[][]{foob,null},new Calendar[]{parseIsoCalendar("2012-12-21T12:34:56Z"),null},new byte[][]{foob,null},new byte[][]{foob,null},new String[]{"a","b",null},new Integer[]{1,2,null},new Integer[]{3,4,null},new Float[]{1f,2f,null},new Float[]{3f,4f,null},new Boolean[]{true,false,null},new Object[]{1,"x",null}))
+			serialize(ps, new H2(a("a,b",null),new byte[][]{foob,null},a(parseIsoCalendar("2012-12-21T12:34:56Z"),null),new byte[][]{foob,null},new byte[][]{foob,null},a("a","b",null),a(1,2,null),a(3,4,null),a(1f,2f,null),a(3f,4f,null),a(true,false,null),a(1,"x",null)))
 		);
 
 	}
@@ -961,7 +961,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 			assertEquals(valueOf(v), serialize((HttpPartSchema)null, v));
 	}
 	@Test void i01b_noSchemaTests_IntegerArray() throws Exception {
-		assertEquals("1,2147483647,-2147483648", serialize((HttpPartSchema)null, new Integer[]{Integer.valueOf(1), Integer.MAX_VALUE, Integer.MIN_VALUE}));
+		assertEquals("1,2147483647,-2147483648", serialize((HttpPartSchema)null, a(Integer.valueOf(1), Integer.MAX_VALUE, Integer.MIN_VALUE)));
 	}
 
 	@Test void i02a_noSchemaTests_Short() throws Exception {
@@ -970,7 +970,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 	}
 
 	@Test void i02b_noSchemaTests_ShortArray() throws Exception {
-		assertEquals("1,32767,-32768,null", serialize((HttpPartSchema)null, new Short[]{Short.valueOf((short)1), Short.MAX_VALUE, Short.MIN_VALUE, null}));
+		assertEquals("1,32767,-32768,null", serialize((HttpPartSchema)null, a(Short.valueOf((short)1), Short.MAX_VALUE, Short.MIN_VALUE, null)));
 	}
 
 	@Test void i03a_noSchemaTests_Long() throws Exception {
@@ -979,7 +979,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 	}
 
 	@Test void i03b_noSchemaTests_LongArray() throws Exception {
-		assertEquals("1,9223372036854775807,-9223372036854775808,null", serialize((HttpPartSchema)null, new Long[]{Long.valueOf(1), Long.MAX_VALUE, Long.MIN_VALUE, null}));
+		assertEquals("1,9223372036854775807,-9223372036854775808,null", serialize((HttpPartSchema)null, a(Long.valueOf(1), Long.MAX_VALUE, Long.MIN_VALUE, null)));
 	}
 
 	@Test void i04a_noSchemaTests_Float() throws Exception {
@@ -988,7 +988,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 	}
 
 	@Test void i04b_noSchemaTests_FloatArray() throws Exception {
-		assertEquals("1.0,3.4028235E38,1.4E-45", serialize((HttpPartSchema)null, new Float[]{Float.valueOf(1f), Float.MAX_VALUE, Float.MIN_VALUE}));
+		assertEquals("1.0,3.4028235E38,1.4E-45", serialize((HttpPartSchema)null, a(Float.valueOf(1f), Float.MAX_VALUE, Float.MIN_VALUE)));
 	}
 
 	@Test void i05a_noSchemaTests_Double() throws Exception {
@@ -997,7 +997,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 	}
 
 	@Test void i05b_noSchemaTests_DoubleArray() throws Exception {
-		assertEquals("1.0,1.7976931348623157E308,4.9E-324", serialize((HttpPartSchema)null, new Double[]{Double.valueOf(1), Double.MAX_VALUE, Double.MIN_VALUE}));
+		assertEquals("1.0,1.7976931348623157E308,4.9E-324", serialize((HttpPartSchema)null, a(Double.valueOf(1), Double.MAX_VALUE, Double.MIN_VALUE)));
 	}
 
 	@Test void i06a_noSchemaTests_Boolean() throws Exception {
@@ -1006,7 +1006,7 @@ class OpenApiPartSerializer_Test extends TestBase {
 	}
 
 	@Test void i06b_noSchemaTests_BooleanArray() throws Exception {
-		assertEquals("true,false,null", serialize((HttpPartSchema)null, new Boolean[]{Boolean.TRUE, Boolean.FALSE, null}));
+		assertEquals("true,false,null", serialize((HttpPartSchema)null, a(Boolean.TRUE, Boolean.FALSE, null)));
 	}
 
 	@Test void i07_noSchemaTests_Null() throws Exception {
@@ -1018,6 +1018,6 @@ class OpenApiPartSerializer_Test extends TestBase {
 			assertEquals(v, serialize((HttpPartSchema)null, v));
 	}
 	@Test void i08b_noSchemaTests_StringArray() throws Exception {
-		assertEquals("foo,,null", serialize((HttpPartSchema)null, new String[]{"foo", "", null}));
+		assertEquals("foo,,null", serialize((HttpPartSchema)null, a("foo", "", null)));
 	}
 }

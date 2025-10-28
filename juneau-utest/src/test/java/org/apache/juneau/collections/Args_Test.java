@@ -40,7 +40,7 @@ class Args_Test extends TestBase {
 		assertEquals(0, a.getArgs("foo").size());
 		assertFalse(a.containsKey("foo"));
 
-		a = new Args(new String[]{"foo"});
+		a = new Args(a("foo"));
 		assertEquals("foo", a.getArg(0));
 		assertNull(a.getArg(1));
 		assertNull(a.getArg(-1));
@@ -48,7 +48,7 @@ class Args_Test extends TestBase {
 		assertEquals(0, a.getArgs("foo").size());
 		assertFalse(a.containsKey("foo"));
 
-		a = new Args(new String[]{"foo", "bar bar"});
+		a = new Args(a("foo", "bar bar"));
 		assertEquals("foo", a.getArg(0));
 		assertEquals("bar bar", a.getArg(1));
 		assertNull(a.getArg(-1));
@@ -56,7 +56,7 @@ class Args_Test extends TestBase {
 		assertEquals(0, a.getArgs("foo").size());
 		assertFalse(a.containsKey("foo"));
 
-		a = new Args(new String[]{"foo", "bar bar", "-foo"});
+		a = new Args(a("foo", "bar bar", "-foo"));
 		assertEquals("foo", a.getArg(0));
 		assertEquals("bar bar", a.getArg(1));
 		assertNull(a.getArg(-1));
@@ -64,7 +64,7 @@ class Args_Test extends TestBase {
 		assertEquals(0, a.getArgs("foo").size());
 		assertTrue(a.containsKey("foo"));
 
-		a = new Args(new String[]{"foo", "bar bar", "-foo", "bar bar"});
+		a = new Args(a("foo", "bar bar", "-foo", "bar bar"));
 		assertEquals("foo", a.getArg(0));
 		assertEquals("bar bar", a.getArg(1));
 		assertNull(a.getArg(-1));
@@ -78,7 +78,7 @@ class Args_Test extends TestBase {
 	// test - Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void fluentSetters() {
-		Args a = new Args(new String[]{"main1"});
+		Args a = new Args(a("main1"));
 
 		// Test inner() returns same instance for fluent chaining
 		Map<String,Object> innerMap = new HashMap<>();
@@ -123,7 +123,7 @@ class Args_Test extends TestBase {
 
 	@Test void fluentChaining() {
 		// Test multiple fluent calls can be chained
-		Args a = new Args(new String[]{"main1"})
+		Args a = new Args(a("main1"))
 			.append("key1", "value1")
 			.append("key2", "value2")
 			.appendIf(true, "key3", "value3");

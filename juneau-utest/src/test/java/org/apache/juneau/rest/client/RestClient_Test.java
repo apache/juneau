@@ -373,27 +373,27 @@ class RestClient_Test extends TestBase {
 
 	@Test void e11_httpMessage_setHeaders() throws Exception {
 		var x = client().build().get("/bean");
-		x.setHeaders(new Header[]{header("Foo","bar")});
+		x.setHeaders(a(header("Foo","bar")));
 		assertEquals("bar",x.getFirstHeader("Foo").getValue());
 	}
 
 	@Test void e12_httpMessage_removeHeaders() throws Exception {
 		var x = client().build().get("/bean");
-		x.setHeaders(new Header[]{header("Foo","bar")});
+		x.setHeaders(a(header("Foo","bar")));
 		x.removeHeaders("Foo");
 		assertNull(x.getFirstHeader("Foo"));
 	}
 
 	@Test void e13_httpMessage_removeHeader() throws Exception {
 		var x = client().build().get("/bean");
-		x.setHeaders(new Header[]{header("Foo","bar")});
+		x.setHeaders(a(header("Foo","bar")));
 		x.removeHeader(header("Foo","bar"));
 		//assertNull(x.getFirstHeader("Foo"));  // Bug in HttpClient API?
 	}
 
 	@Test void e14_httpMessage_headerIterator() throws Exception {
 		var x = client().build().get("/bean");
-		x.setHeaders(new Header[]{header("Foo","bar")});
+		x.setHeaders(a(header("Foo","bar")));
 		assertEquals("Foo: bar", x.headerIterator().next().toString());
 		assertEquals("Foo: bar", x.headerIterator("Foo").next().toString());
 	}

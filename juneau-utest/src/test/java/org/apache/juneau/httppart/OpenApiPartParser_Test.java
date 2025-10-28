@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -969,7 +970,7 @@ class OpenApiPartParser_Test extends TestBase {
 		assertInstanceOf(Integer.class, h2.f99);
 
 		var om = parse(s, in, JsonMap.class);
-		assertMap(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "foo,666F6F,2012-12-21T12:34:56Z,666F6F,666F6F,foo,1,1,1.0,1.0,true,1");
+		assertBean(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "foo,666F6F,2012-12-21T12:34:56Z,666F6F,666F6F,foo,1,1,1.0,1.0,true,1");
 		assertInstanceOf(String.class, om.get("f01"));
 		assertInstanceOf(byte[].class, om.get("f02"));
 		assertInstanceOf(GregorianCalendar.class, om.get("f04"));
@@ -984,7 +985,7 @@ class OpenApiPartParser_Test extends TestBase {
 		assertInstanceOf(Integer.class, om.get("f99"));
 
 		om = (JsonMap)parse(s, in, Object.class);
-		assertMap(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "foo,666F6F,2012-12-21T12:34:56Z,666F6F,666F6F,foo,1,1,1.0,1.0,true,1");
+		assertBean(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "foo,666F6F,2012-12-21T12:34:56Z,666F6F,666F6F,foo,1,1,1.0,1.0,true,1");
 		assertInstanceOf(String.class, om.get("f01"));
 		assertInstanceOf(byte[].class, om.get("f02"));
 		assertInstanceOf(GregorianCalendar.class, om.get("f04"));
@@ -1022,10 +1023,10 @@ class OpenApiPartParser_Test extends TestBase {
 		assertBean(h2, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo],[666F6F],[2012-12-21T12:34:56Z],[666F6F],[666F6F],[foo],[1],[1],[1.0],[1.0],[true],[1]");
 
 		var om = parse(s, in, JsonMap.class);
-		assertMap(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo],[666F6F],[2012-12-21T12:34:56Z],[666F6F],[666F6F],[foo],[1],[1],[1.0],[1.0],[true],[1]");
+		assertBean(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo],[666F6F],[2012-12-21T12:34:56Z],[666F6F],[666F6F],[foo],[1],[1],[1.0],[1.0],[true],[1]");
 
 		om = (JsonMap)parse(s, in, Object.class);
-		assertMap(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo],[666F6F],[2012-12-21T12:34:56Z],[666F6F],[666F6F],[foo],[1],[1],[1.0],[1.0],[true],[1]");
+		assertBean(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo],[666F6F],[2012-12-21T12:34:56Z],[666F6F],[666F6F],[foo],[1],[1],[1.0],[1.0],[true],[1]");
 	}
 
 	@Test void h06_objectType_arrayProperties_pipes() throws Exception {
@@ -1052,9 +1053,9 @@ class OpenApiPartParser_Test extends TestBase {
 		assertBean(h2, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo,bar],[666F6F,626172],[2012-12-21T12:34:56Z,2012-12-21T12:34:56Z],[666F6F,626172],[666F6F,626172],[foo,bar],[1,2],[1,2],[1.0,2.0],[1.0,2.0],[true,true],[1,2]");
 
 		var om = parse(s, in, JsonMap.class);
-		assertMap(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo,bar],[666F6F,626172],[2012-12-21T12:34:56Z,2012-12-21T12:34:56Z],[666F6F,626172],[666F6F,626172],[foo,bar],[1,2],[1,2],[1.0,2.0],[1.0,2.0],[true,true],[1,2]");
+		assertBean(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo,bar],[666F6F,626172],[2012-12-21T12:34:56Z,2012-12-21T12:34:56Z],[666F6F,626172],[666F6F,626172],[foo,bar],[1,2],[1,2],[1.0,2.0],[1.0,2.0],[true,true],[1,2]");
 
 		om = (JsonMap)parse(s, in, Object.class);
-		assertMap(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo,bar],[666F6F,626172],[2012-12-21T12:34:56Z,2012-12-21T12:34:56Z],[666F6F,626172],[666F6F,626172],[foo,bar],[1,2],[1,2],[1.0,2.0],[1.0,2.0],[true,true],[1,2]");
+		assertBean(om, "f01,f02,f04,f05,f06,f07,f08,f09,f10,f11,f12,f99", "[foo,bar],[666F6F,626172],[2012-12-21T12:34:56Z,2012-12-21T12:34:56Z],[666F6F,626172],[666F6F,626172],[foo,bar],[1,2],[1,2],[1.0,2.0],[1.0,2.0],[true,true],[1,2]");
 	}
 }

@@ -2711,7 +2711,7 @@ public class StringUtils {
 		if (isEmpty(s))
 			return new String[0];
 		if (s.indexOf(',') == -1)
-			return new String[] { s };
+			return a(s);
 
 		var l = new LinkedList<String>();
 		var sArray = s.toCharArray();
@@ -2897,10 +2897,10 @@ public class StringUtils {
 		s = s.trim();
 
 		if (isEmpty(s))
-			return new String[0];
+			return a();
 
 		if (! containsAny(s, ' ', '\t', '\'', '"'))
-			return new String[] { s };
+			return a(s);
 
 		// S1: Looking for start of token.
 		// S2: Found ', looking for end '
@@ -4019,7 +4019,7 @@ public class StringUtils {
 	 * 	readable(Map.of("foo", "bar", "baz", 123)) <jc>// Returns: "{foo=bar,baz=123}"</jc>
 	 *
 	 * 	<jc>// Arrays</jc>
-	 * 	readable(new int[]{1, 2, 3}) <jc>// Returns: "[1,2,3]"</jc>
+	 * 	readable(ints(1, 2, 3)) <jc>// Returns: "[1,2,3]"</jc>
 	 * 	readable(new String[]{"a", "b"}) <jc>// Returns: "[a,b]"</jc>
 	 *
 	 * 	<jc>// Nested structures</jc>

@@ -60,17 +60,17 @@ public class MockServletResponse implements HttpServletResponse {
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addDateHeader(String name, long date) {
-		headerMap.put(name, new String[] { DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123) });
+		headerMap.put(name, a(DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123)));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addHeader(String name, String value) {
-		headerMap.put(name, new String[] { value });
+		headerMap.put(name, a(value));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addIntHeader(String name, int value) {
-		headerMap.put(name, new String[] { String.valueOf(value) });
+		headerMap.put(name, a(String.valueOf(value)));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
@@ -169,13 +169,13 @@ public class MockServletResponse implements HttpServletResponse {
 	@Override /* Overridden from HttpServletResponse */
 	public void sendRedirect(String location) throws IOException {
 		this.sc = 302;
-		headerMap.put("Location", new String[] { location });
+		headerMap.put("Location", a(location));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void sendRedirect(String location, int sc, boolean clearBuffer) throws IOException {
 		this.sc = sc;
-		headerMap.put("Location", new String[] { location });
+		headerMap.put("Location", a(location));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
@@ -205,17 +205,17 @@ public class MockServletResponse implements HttpServletResponse {
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setDateHeader(String name, long date) {
-		headerMap.put(name, new String[] { DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123) });
+		headerMap.put(name, a(DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123)));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setHeader(String name, String value) {
-		headerMap.put(name, new String[] { value });
+		headerMap.put(name, a(value));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setIntHeader(String name, int value) {
-		headerMap.put(name, new String[] { String.valueOf(value) });
+		headerMap.put(name, a(String.valueOf(value)));
 	}
 
 	@Override /* Overridden from HttpServletResponse */

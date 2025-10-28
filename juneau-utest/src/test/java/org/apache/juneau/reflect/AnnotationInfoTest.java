@@ -18,7 +18,7 @@ package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.lang.annotation.*;
 

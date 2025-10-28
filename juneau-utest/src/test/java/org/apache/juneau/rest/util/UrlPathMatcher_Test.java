@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.rest.util.UrlPathMatcher.*;
 import static org.junit.jupiter.api.Assertions.*;
 

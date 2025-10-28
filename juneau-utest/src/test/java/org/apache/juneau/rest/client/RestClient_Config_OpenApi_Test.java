@@ -68,7 +68,7 @@ class RestClient_Config_OpenApi_Test extends TestBase {
 	@Test void a03_paramFormat() throws Exception {
 		 var m = JsonMap.of(
 			"foo","bar",
-			"baz",new String[]{"qux","true","123"}
+			"baz",a("qux","true","123")
 		);
 		client().urlEnc().paramFormat(PLAINTEXT).build().post("/echoBody",m).run().assertContent("foo=bar&baz=qux,true,123");
 		client().urlEnc().paramFormatPlain().build().post("/echoBody",m).run().assertContent("foo=bar&baz=qux,true,123");

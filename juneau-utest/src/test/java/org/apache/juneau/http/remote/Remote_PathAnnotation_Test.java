@@ -97,8 +97,8 @@ class Remote_PathAnnotation_Test extends TestBase {
 		assertEquals("x=1",x.getX3(Bean.create()));
 		assertEquals("1",x.getX4(Bean.create()));
 		assertEquals("1",x.getX5(Bean.create()));
-		assertEquals("x=1,x=1",x.getX6(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("@((x=1),(x=1))",x.getX7(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("x=1,x=1",x.getX6(a(Bean.create(),Bean.create())));
+		assertEquals("@((x=1),(x=1))",x.getX7(a(Bean.create(),Bean.create())));
 		assertEquals("x=1,x=1",x.getX8(alist(Bean.create(),Bean.create())));
 		assertEquals("@((x=1),(x=1))",x.getX9(alist(Bean.create(),Bean.create())));
 		assertEquals("x=x\\=1",x.getX10(map("x",Bean.create())));
@@ -111,7 +111,7 @@ class Remote_PathAnnotation_Test extends TestBase {
 		assertEquals("(x=(x=1))",x.getX17(map("x",Bean.create())));
 		assertEquals("bar",x.getX18(part("x","bar")));
 		assertEquals("bar",x.getX19(part("x","bar")));
-		assertEquals("bar",x.getX20(new NameValuePair[]{part("x","bar")}));
+		assertEquals("bar",x.getX20(a(part("x","bar"))));
 		assertEquals("{x}",x.getX20(null));
 		assertThrowsWithMessage(Exception.class, "Invalid value type for path arg 'null': java.lang.String", ()->x.getX21("foo"));
 		assertEquals("bar",x.getX22(alist(part("x","bar"))));
@@ -412,17 +412,17 @@ class Remote_PathAnnotation_Test extends TestBase {
 		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", x::getX1);
 		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.getX1("1","2","3"));
 		assertEquals("{x:'null'}",x.getX1((String)null));
-		assertEquals("{x:'1'}",x.getX2(new String[]{"1"}));
-		assertEquals("{x:'1|2'}",x.getX2(new String[]{"1","2"}));
+		assertEquals("{x:'1'}",x.getX2(a("1")));
+		assertEquals("{x:'1|2'}",x.getX2(a("1","2")));
 		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", ()->x.getX2(new String[]{}));
-		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.getX2(new String[]{"1","2","3"}));
-		assertEquals("{x:'null'}",x.getX2(new String[]{null}));
+		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.getX2(a("1","2","3")));
+		assertEquals("{x:'null'}",x.getX2(a((String)null)));
 		assertEquals("{x:'1|1'}",x.getX3("1","1"));
-		assertEquals("{x:'1|1'}",x.getX4(new String[]{"1","1"}));
+		assertEquals("{x:'1|1'}",x.getX4(a("1","1")));
 		assertEquals("{x:'1|2'}",x.getX5("1","2"));
 		assertThrowsWithMessage(Exception.class, "Duplicate items not allowed.", ()->x.getX5("1","1"));
-		assertEquals("{x:'1|2'}",x.getX6(new String[]{"1","2"}));
-		assertThrowsWithMessage(Exception.class, "Duplicate items not allowed.", ()->x.getX6(new String[]{"1","1"}));
+		assertEquals("{x:'1|2'}",x.getX6(a("1","2")));
+		assertThrowsWithMessage(Exception.class, "Duplicate items not allowed.", ()->x.getX6(a("1","1")));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -682,12 +682,10 @@ class Remote_PathAnnotation_Test extends TestBase {
 		@Path("b") public List<Object> getX1() { return alist("foo","","true","123","null",true,123,null); }
 		@Path(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
 		@Path("d") @Schema(aev=true) public List<Object> getX3() { return alist(); }
-		@Path("f") public Object[] getX5() { return new Object[]{"foo","","true","123","null",true,123,null}; }
-		@Path(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return new Object[]{"foo","","true","123","null",true,123,null}; }
+		@Path("f") public Object[] getX5() { return a("foo","","true","123","null",true,123,null); }
+		@Path(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }
 		@Path("h") @Schema(aev=true)
-		public Object[] getX7() {
-			return new Object[]{};
-		}
+		public Object[] getX7() { return a(); }
 	}
 
 	@Test void k04_requestBean_collections() {

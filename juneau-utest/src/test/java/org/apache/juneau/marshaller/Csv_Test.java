@@ -17,6 +17,8 @@
 package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.io.*;
 import java.util.*;
@@ -30,7 +32,7 @@ class Csv_Test extends TestBase{
 
 	@Test void a01_to() throws Exception {
 		var in1 = "foo";
-		var in2 = new Object[]{JsonMap.of("a","foo","b","bar")};
+		var in2 = ao(JsonMap.of("a","foo","b","bar"));
 		var expected1 = "value\nfoo\n";
 		var expected2 = "a,b\nfoo,bar\n";
 

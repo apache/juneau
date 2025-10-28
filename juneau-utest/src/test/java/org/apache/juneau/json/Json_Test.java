@@ -89,8 +89,8 @@ class Json_Test extends TestBase{
 		l.add("1");
 		l.add("2");
 		l.add("3");
-		var o = new Object[] { m, l };
-		var o2 = new Object[] { o, "foo", "bar", Integer.valueOf(1), Boolean.valueOf(false), Float.valueOf(1.2f), null };
+		var o = a(m, l);
+		var o2 = a(o, "foo", "bar", Integer.valueOf(1), Boolean.valueOf(false), Float.valueOf(1.2f), null);
 		assertEquals("[[{J:'f1',B:'b',C:'c'},['1','2','3']],'foo','bar',1,false,1.2,null]", s1.serialize(o2));
 	}
 
@@ -98,7 +98,7 @@ class Json_Test extends TestBase{
 		var m = new LinkedHashMap<String,Object>();
 
 		// Keys with reserved names.
-		for (var attr : new String[]{"","true","false","null","try","123","1x","-123",".123"}) {
+		for (var attr : a("","true","false","null","try","123","1x","-123",".123")) {
 			m.clear();
 			m.put(attr,1);
 			assertJson("{'"+attr+"':1}", m);

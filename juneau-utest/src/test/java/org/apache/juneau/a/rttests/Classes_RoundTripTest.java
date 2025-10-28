@@ -36,7 +36,7 @@ class Classes_RoundTripTest extends RoundTripTest_Base {
 		o = t.roundTrip(o);
 		assertSame(o, String.class);
 
-		var o2 = new Class[]{String.class};
+		var o2 = a(String.class);
 		o2 = t.roundTrip(o2);
 		assertJson("['java.lang.String']", o2);
 

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.encoders.*;
@@ -33,7 +35,7 @@ class Rest_Encoders_Test extends TestBase {
 	public static class MyEncoder extends GzipEncoder {
 		@Override /* ConfigEncoder */
 		public String[] getCodings() {
-			return new String[]{"mycoding"};
+			return a("mycoding");
 		}
 	}
 

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BasicBeanConverter.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -206,8 +208,8 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("b06_stringify() handles arrays")
 		void b06_stringify_handlesArrays() {
-			assertEquals("[1,2,3]", converter.stringify(new int[]{1, 2, 3}));
-			assertEquals("[a,b,c]", converter.stringify(new String[]{"a", "b", "c"}));
+			assertEquals("[1,2,3]", converter.stringify(ints(1, 2, 3)));
+			assertEquals("[a,b,c]", converter.stringify(a("a", "b", "c")));
 			assertEquals("[]", converter.stringify(new Object[0]));
 		}
 
@@ -222,7 +224,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("b08_listify() converts arrays to lists")
 		void b08_listify_convertsArrays() {
-			var result = converter.listify(new String[]{"a", "b", "c"});
+			var result = converter.listify(a("a", "b", "c"));
 			assertEquals(Arrays.asList("a", "b", "c"), result);
 		}
 
@@ -245,7 +247,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@DisplayName("b11_canListify() returns correct values")
 		void b11_canListify_returnsCorrectValues() {
 			assertTrue(converter.canListify(Arrays.asList(1, 2, 3)));
-			assertTrue(converter.canListify(new int[]{1, 2, 3}));
+			assertTrue(converter.canListify(ints(1, 2, 3)));
 			assertTrue(converter.canListify(Set.of("a", "b")));
 			assertFalse(converter.canListify("string"));
 			assertFalse(converter.canListify(null));
@@ -458,9 +460,9 @@ class BasicBeanConverter_Test extends TestBase {
 			var converter = builder().defaultSettings().build();
 
 			// Test different array types
-			var stringArray = new String[]{"a", "b", "c"};
-			var intArray = new int[]{1, 2, 3};
-			var booleanArray = new boolean[]{true, false, true};
+			var stringArray = a("a", "b", "c");
+			var intArray = ints(1, 2, 3);
+			var booleanArray = booleans(true, false, true);
 
 			var stringList = converter.listify(stringArray);
 			assertEquals(3, stringList.size());
@@ -494,7 +496,7 @@ class BasicBeanConverter_Test extends TestBase {
 
 			// Test various types that can/cannot be listified
 			assertTrue(converter.canListify(Arrays.asList("a", "b")));
-			assertTrue(converter.canListify(new String[]{"a", "b"}));
+			assertTrue(converter.canListify(a("a", "b")));
 			assertTrue(converter.canListify(Set.of("a", "b")));
 			assertFalse(converter.canListify(null));
 			assertFalse(converter.canListify("simple string"));

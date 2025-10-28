@@ -22,6 +22,7 @@ import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

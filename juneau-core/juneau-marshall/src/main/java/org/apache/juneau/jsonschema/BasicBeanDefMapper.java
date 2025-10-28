@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.net.*;
 import java.text.*;
 
@@ -65,6 +67,6 @@ public class BasicBeanDefMapper implements BeanDefMapper {
 
 	@Override /* Overridden from BeanDefMapper */
 	public URI getURI(String id) {
-		return URI.create(format.format(new Object[] { id }));
+		return URI.create(format.format(a(id)));
 	}
 }

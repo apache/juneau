@@ -1295,7 +1295,7 @@ public class Serializer extends BeanTraverseContext {
 
 		this.producesMediaType = MediaType.of(produces);
 		this.acceptRanges = nn(accept) ? MediaRanges.of(accept) : MediaRanges.of(produces);
-		this.acceptMediaTypes = nn(builder.accept) ? MediaType.ofAll(StringUtils.splita(builder.accept)) : new MediaType[] { this.producesMediaType };
+		this.acceptMediaTypes = nn(builder.accept) ? MediaType.ofAll(StringUtils.splita(builder.accept)) : a(this.producesMediaType);
 	}
 
 	@Override /* Overridden from Context */

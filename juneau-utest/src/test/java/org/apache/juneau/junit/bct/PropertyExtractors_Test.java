@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -189,7 +190,7 @@ class PropertyExtractors_Test extends TestBase {
 		@DisplayName("canExtract() - returns true for listifiable objects")
 		void b01_canExtract_listifiableObjects() {
 			assertTrue(extractor.canExtract(converter, Arrays.asList("a", "b", "c"), "0"));
-			assertTrue(extractor.canExtract(converter, new String[]{"a", "b", "c"}, "1"));
+			assertTrue(extractor.canExtract(converter, a("a", "b", "c"), "1"));
 			assertTrue(extractor.canExtract(converter, Set.of("a", "b", "c"), "size"));
 			assertFalse(extractor.canExtract(converter, "not listifiable", "0"));
 		}
@@ -217,7 +218,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - arrays")
 		void b04_extract_arrays() {
-			var array = new String[]{"a", "b", "c"};
+			var array = a("a", "b", "c");
 
 			assertEquals("a", extractor.extract(converter, array, "0"));
 			assertEquals("b", extractor.extract(converter, array, "1"));
@@ -228,7 +229,7 @@ class PropertyExtractors_Test extends TestBase {
 		@DisplayName("extract() - length property")
 		void b05_extract_lengthProperty() {
 			var list = Arrays.asList("a", "b", "c");
-			var array = new String[]{"a", "b", "c"};
+			var array = a("a", "b", "c");
 
 			assertEquals(3, extractor.extract(converter, list, "length"));
 			assertEquals(3, extractor.extract(converter, array, "length"));

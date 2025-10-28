@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.html;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,7 +92,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"Arrays-1",
 			String[].class,
-			new String[]{"foo"},
+			a("foo"),
 			"<ul><li>foo</li></ul>",
 			"<ul>\n\t<li>foo</li>\n</ul>\n",
 			"<ul><li>foo</li></ul>",
@@ -100,7 +101,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"Arrays-2",
 			String[].class,
-			new String[]{null},
+			a((String)null),
 			"<ul><li><null/></li></ul>",
 			"<ul>\n\t<li><null/></li>\n</ul>\n",
 			"<ul><li><null/></li></ul>"
@@ -108,7 +109,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"Arrays-3",
 			Object[].class,
-			new Object[]{"foo",123,true},
+			a("foo",123,true),
 			"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>",
 			"<ul>\n\t<li>foo</li>\n\t<li><number>123</number></li>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
 			"<ul><li>foo</li><li><number>123</number></li><li><boolean>true</boolean></li></ul>",
@@ -117,7 +118,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"Arrays-4",
 			int[].class,
-			new int[]{123},
+			ints(123),
 			"<ul><li><number>123</number></li></ul>",
 			"<ul>\n\t<li><number>123</number></li>\n</ul>\n",
 			"<ul><li>123</li></ul>",
@@ -126,7 +127,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"Arrays-5",
 			boolean[].class,
-			new boolean[]{true},
+			booleans(true),
 			"<ul><li><boolean>true</boolean></li></ul>",
 			"<ul>\n\t<li><boolean>true</boolean></li>\n</ul>\n",
 			"<ul><li>true</li></ul>",
@@ -135,7 +136,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"Arrays-6",
 			String[][].class,
-			new String[][]{{"foo"}},
+			a2(a("foo")),
 			"<ul><li><ul><li>foo</li></ul></li></ul>",
 			"<ul>\n\t<li>\n\t\t<ul>\n\t\t\t<li>foo</li>\n\t\t</ul>\n\t</li>\n</ul>\n",
 			"<ul><li><ul><li>foo</li></ul></li></ul>",
@@ -1232,7 +1233,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"LinkBean-2",
 			LinkBean[].class,
-			new LinkBean[]{new LinkBean().init(),new LinkBean().init()},
+			a(new LinkBean().init(),new LinkBean().init()),
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
 			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
@@ -1348,7 +1349,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"LinkBeanC-2",
 			LinkBeanC[].class,
-			new LinkBeanC[]{new LinkBeanC().init(),new LinkBeanC().init()},
+			a(new LinkBeanC().init(),new LinkBeanC().init()),
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
 			"<ul>\n\t<li><a href='http://apache.org'>foo</a></li>\n\t<li><a href='http://apache.org'>foo</a></li>\n</ul>\n",
 			"<ul><li><a href='http://apache.org'>foo</a></li><li><a href='http://apache.org'>foo</a></li></ul>",
@@ -2226,7 +2227,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedFields-3",
 			BeanWithWhitespaceMixedFields.class,
-			new BeanWithWhitespaceMixedFields().init(new String[]{""}),
+			new BeanWithWhitespaceMixedFields().init(a("")),
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
@@ -2235,7 +2236,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedFields-4",
 			BeanWithWhitespaceMixedFields.class,
-			new BeanWithWhitespaceMixedFields().init(new String[]{" "}),
+			new BeanWithWhitespaceMixedFields().init(a(" ")),
 			"<object><sp> </sp></object>",
 			"<object><sp> </sp></object>\n",
 			"<object><sp> </sp></object>",
@@ -2244,7 +2245,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedFields-5",
 			BeanWithWhitespaceMixedFields.class,
-			new BeanWithWhitespaceMixedFields().init(new String[]{"  "}),
+			new BeanWithWhitespaceMixedFields().init(a("  ")),
 			"<object><sp> </sp><sp> </sp></object>",
 			"<object><sp> </sp><sp> </sp></object>\n",
 			"<object><sp> </sp><sp> </sp></object>",
@@ -2253,7 +2254,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedFields-6",
 			BeanWithWhitespaceMixedFields.class,
-			new BeanWithWhitespaceMixedFields().init(new String[]{"  foobar  "}),
+			new BeanWithWhitespaceMixedFields().init(a("  foobar  ")),
 			"<object><sp> </sp> foobar <sp> </sp></object>",
 			"<object><sp> </sp> foobar <sp> </sp></object>\n",
 			"<object><sp> </sp> foobar <sp> </sp></object>",
@@ -2280,7 +2281,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedPwsFields-3",
 			BeanWithWhitespaceMixedPwsFields.class,
-			new BeanWithWhitespaceMixedPwsFields().init(new String[]{""}),
+			new BeanWithWhitespaceMixedPwsFields().init(a("")),
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
@@ -2289,7 +2290,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedPwsFields-4",
 			BeanWithWhitespaceMixedPwsFields.class,
-			new BeanWithWhitespaceMixedPwsFields().init(new String[]{" "}),
+			new BeanWithWhitespaceMixedPwsFields().init(a(" ")),
 			"<object> </object>",
 			"<object> </object>\n",
 			"<object> </object>",
@@ -2298,7 +2299,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedPwsFields-5",
 			BeanWithWhitespaceMixedPwsFields.class,
-			new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  "}),
+			new BeanWithWhitespaceMixedPwsFields().init(a("  ")),
 			"<object>  </object>",
 			"<object>  </object>\n",
 			"<object>  </object>",
@@ -2307,7 +2308,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedPwsFields-6",
 			BeanWithWhitespaceMixedPwsFields.class,
-			new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  foobar  "}),
+			new BeanWithWhitespaceMixedPwsFields().init(a("  foobar  ")),
 			"<object>  foobar  </object>",
 			"<object>  foobar  </object>\n",
 			"<object>  foobar  </object>",
@@ -2424,7 +2425,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedFields2-3",
 			BeanWithWhitespaceMixedFields2.class,
-			new BeanWithWhitespaceMixedFields2().init(new String[]{""}),
+			new BeanWithWhitespaceMixedFields2().init(a("")),
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
@@ -2433,7 +2434,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedFields2-4",
 			BeanWithWhitespaceMixedFields2.class,
-			new BeanWithWhitespaceMixedFields2().init(new String[]{" "}),
+			new BeanWithWhitespaceMixedFields2().init(a(" ")),
 			"<object><sp> </sp></object>",
 			"<object><sp> </sp></object>\n",
 			"<object><sp> </sp></object>",
@@ -2442,7 +2443,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedFields2-5",
 			BeanWithWhitespaceMixedFields2.class,
-			new BeanWithWhitespaceMixedFields2().init(new String[]{"  "}),
+			new BeanWithWhitespaceMixedFields2().init(a("  ")),
 			"<object><sp> </sp><sp> </sp></object>",
 			"<object><sp> </sp><sp> </sp></object>\n",
 			"<object><sp> </sp><sp> </sp></object>",
@@ -2451,7 +2452,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedFields2-6",
 			BeanWithWhitespaceMixedFields2.class,
-			new BeanWithWhitespaceMixedFields2().init(new String[]{"  foobar  "}),
+			new BeanWithWhitespaceMixedFields2().init(a("  foobar  ")),
 			"<object><sp> </sp> foobar <sp> </sp></object>",
 			"<object><sp> </sp> foobar <sp> </sp></object>\n",
 			"<object><sp> </sp> foobar <sp> </sp></object>",
@@ -2478,7 +2479,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-3",
 			BeanWithWhitespaceMixedPwsFields2.class,
-			new BeanWithWhitespaceMixedPwsFields2().init(new String[]{""}),
+			new BeanWithWhitespaceMixedPwsFields2().init(a("")),
 			"<object><sp/></object>",
 			"<object><sp/></object>\n",
 			"<object><sp/></object>",
@@ -2487,7 +2488,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-4",
 			BeanWithWhitespaceMixedPwsFields2.class,
-			new BeanWithWhitespaceMixedPwsFields2().init(new String[]{" "}),
+			new BeanWithWhitespaceMixedPwsFields2().init(a(" ")),
 			"<object> </object>",
 			"<object> </object>\n",
 			"<object> </object>",
@@ -2496,7 +2497,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-5",
 			BeanWithWhitespaceMixedPwsFields2.class,
-			new BeanWithWhitespaceMixedPwsFields2().init(new String[]{"  "}),
+			new BeanWithWhitespaceMixedPwsFields2().init(a("  ")),
 			"<object>  </object>",
 			"<object>  </object>\n",
 			"<object>  </object>",
@@ -2505,7 +2506,7 @@ class BasicHtml_Test extends TestBase {
 		input(
 			"BeanWithWhitespaceMixedPwsFields2-6",
 			BeanWithWhitespaceMixedPwsFields2.class,
-			new BeanWithWhitespaceMixedPwsFields2().init(new String[]{"  foobar  "}),
+			new BeanWithWhitespaceMixedPwsFields2().init(a("  foobar  ")),
 			"<object>  foobar  </object>",
 			"<object>  foobar  </object>\n",
 			"<object>  foobar  </object>",
@@ -2733,8 +2734,8 @@ class BasicHtml_Test extends TestBase {
 			c = "bar";
 			d = 456;
 			e = new Bean1a().init();
-			f = new String[]{ "baz" };
-			g = new int[]{ 789 };
+			f = a("baz");
+			g = ints( 789 );
 			return this;
 		}
 	}
@@ -2795,9 +2796,9 @@ class BasicHtml_Test extends TestBase {
 		public Object[] b3;
 
 		BeanWithPropertiesWithArrayTypeNames init() {
-			b1 = new B[]{new B().init()};
-			b2 = new B[]{new B().init()};
-			b3 = new Object[]{new B().init()};
+			b1 = a(new B().init());
+			b2 = a(new B().init());
+			b3 = ao(new B().init());
 			return this;
 		}
 	}
@@ -2809,9 +2810,9 @@ class BasicHtml_Test extends TestBase {
 		public Object[][] b3;
 
 		BeanWithPropertiesWith2dArrayTypeNames init() {
-			b1 = new B[][]{{new B().init()}};
-			b2 = new B[][]{{new B().init()}};
-			b3 = new Object[][]{{new B().init()}};
+			b1 = a2(a(new B().init()));
+			b2 = a2(a(new B().init()));
+			b3 = a2(ao(new B().init()));
 			return this;
 		}
 	}
@@ -2960,13 +2961,13 @@ class BasicHtml_Test extends TestBase {
 		public Object[] o1, o2;
 
 		BeanWithAbstractArrayFields init() {
-			a = new A[]{new A().init()};
-			ia1 = new A[]{new A().init()};
-			aa1 = new A[]{new A().init()};
-			o1 = new A[]{new A().init()};
-			ia2 = new IA[]{new A().init()};
-			aa2 = new AA[]{new A().init()};
-			o2 = new Object[]{new A().init()};
+			a = a(new A().init());
+			ia1 = a(new A().init());
+			aa1 = a(new A().init());
+			o1 = a(new A().init());
+			ia2 = a(new A().init());
+			aa2 = a(new A().init());
+			o2 = ao(new A().init());
 			return this;
 		}
 	}

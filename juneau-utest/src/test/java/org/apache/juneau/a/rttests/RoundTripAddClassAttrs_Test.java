@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -233,10 +234,10 @@ class RoundTripAddClassAttrs_Test extends TestBase {
 		public D(){}
 		public D(String f1) {
 			var b = new A(f1);
-			f4a = new A[]{b};
-			f4b = new AA[]{b};
-			f4c = new IA[]{b};
-			f4d = new Object[]{b};
+			f4a = a(b);
+			f4b = a(b);
+			f4c = a(b);
+			f4d = a(b);
 		}
 	}
 

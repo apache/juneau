@@ -209,39 +209,39 @@ class PrimitivesBeans_RoundTripTest extends RoundTripTest_Base {
 			paDouble = new double[][]{{1},{2},null};
 
 			// Regular lists of primitives
-			plBoolean = alist(new boolean[]{true}, null);
-			plByte = alist(new byte[]{1}, null);
-			plChar = alist(new char[]{'a'}, null);
-			plShort = alist(new short[]{1}, null);
-			plInt = alist(new int[]{1}, null);
-			plLong = alist(new long[]{1}, null);
-			plFloat = alist(new float[]{1}, null);
-			plDouble = alist(new double[]{1}, null);
+			plBoolean = alist(booleans(true), null);
+			plByte = alist(bytes(1), null);
+			plChar = alist(chars('a'), null);
+			plShort = alist(shorts(1), null);
+			plInt = alist(ints(1), null);
+			plLong = alist(longs(1), null);
+			plFloat = alist(floats(1), null);
+			plDouble = alist(doubles(1), null);
 
 			// Anonymous list of primitives
 			palBoolean = new ArrayList<>();
-			palBoolean.add(new boolean[]{true});
+			palBoolean.add(booleans(true));
 			palBoolean.add(null);
 			palByte = new ArrayList<>();
-			palByte.add(new byte[]{1});
+			palByte.add(bytes(1));
 			palByte.add(null);
 			palChar = new ArrayList<>();
-			palChar.add(new char[]{'a'});
+			palChar.add(chars('a'));
 			palChar.add(null);
 			palShort = new ArrayList<>();
-			palShort.add(new short[]{1});
+			palShort.add(shorts(1));
 			palShort.add(null);
 			palInt = new ArrayList<>();
-			palInt.add(new int[]{1});
+			palInt.add(ints(1));
 			palInt.add(null);
 			palLong = new ArrayList<>();
-			palLong.add(new long[]{1});
+			palLong.add(longs(1));
 			palLong.add(null);
 			palFloat = new ArrayList<>();
-			palFloat.add(new float[]{1});
+			palFloat.add(floats(1));
 			palFloat.add(null);
 			palDouble = new ArrayList<>();
-			palDouble.add(new double[]{1});
+			palDouble.add(doubles(1));
 			palDouble.add(null);
 			return this;
 		}

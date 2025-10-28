@@ -18,7 +18,6 @@ package org.apache.juneau.transforms;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
@@ -346,7 +345,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 	public static class BeanWithSwapped1dField {
 		public PojoToDynamicReader[] f;
 		public BeanWithSwapped1dField(String f) {
-			this.f = new PojoToDynamicReader[]{new PojoToDynamicReader(f + "1"),new PojoToDynamicReader(f + 2),null};
+			this.f = a(new PojoToDynamicReader(f + "1"),new PojoToDynamicReader(f + 2),null);
 		}
 	}
 
@@ -391,7 +390,7 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 
 		public B(String f) {
 			f1 = new PojoToDynamicReader(f + "1a");
-			f2 = new PojoToDynamicReader[]{new PojoToDynamicReader(f + "2a"),new PojoToDynamicReader(f + "2b"),null};
+			f2 = a(new PojoToDynamicReader(f + "2a"),new PojoToDynamicReader(f + "2b"),null);
 			f3 = null;
 			f4 = list(new PojoToDynamicReader(f + "4a"),new PojoToDynamicReader(f + "4b"),null);
 			f5 = map("foo",new PojoToDynamicReader(f + "5a"),"bar",null,null,new PojoToDynamicReader(f + "5c"));

@@ -267,7 +267,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 		var bodies = list(
 			/*[ 0]*/ bean,
 			/*[ 1]*/ parts("f","1"),
-			/*[ 2]*/ new NameValuePair[]{part("f","1")},
+			/*[ 2]*/ a(part("f","1")),
 			/*[ 3]*/ stringEntity("f=1", ContentType.APPLICATION_FORM_URLENCODED),
 			/*[ 4]*/ stringEntity("f=1", null),
 			/*[ 5]*/ part("f","1"),

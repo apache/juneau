@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.encoders;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 import java.util.zip.*;
 
@@ -43,7 +45,7 @@ public class GzipEncoder extends Encoder {
 	 * Returns <code>[<js>"gzip"</js>]</code>.
 	 */
 	@Override /* Overridden from Encoder */
-	public String[] getCodings() { return new String[] { "gzip" }; }
+	public String[] getCodings() { return a("gzip"); }
 
 	@Override /* Overridden from Encoder */
 	public InputStream getInputStream(InputStream is) throws IOException {

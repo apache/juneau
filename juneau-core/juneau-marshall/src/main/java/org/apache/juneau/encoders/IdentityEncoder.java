@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.encoders;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.io.*;
 
 /**
@@ -45,7 +47,7 @@ public class IdentityEncoder extends Encoder {
 	 * Returns <code>[<js>"identity"</js>]</code>.
 	 */
 	@Override /* Overridden from Encoder */
-	public String[] getCodings() { return new String[] { "identity" }; }
+	public String[] getCodings() { return a("identity"); }
 
 	@Override /* Overridden from Encoder */
 	public InputStream getInputStream(InputStream is) throws IOException {

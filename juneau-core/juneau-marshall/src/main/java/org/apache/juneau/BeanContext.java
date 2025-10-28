@@ -4265,7 +4265,7 @@ public class BeanContext extends Context {
 				cm2 = resolveClassMeta(p.type(), typeVarImpls);
 
 			if (cm2.isMap()) {
-				Class<?>[] pParams = (p.params().length == 0 ? new Class[] { Object.class, Object.class } : p.params());
+				Class<?>[] pParams = (p.params().length == 0 ? a(Object.class, Object.class) : p.params());
 				if (pParams.length != 2)
 					throw new BasicRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
 				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
@@ -4276,7 +4276,7 @@ public class BeanContext extends Context {
 			}
 
 			if (cm2.isCollection() || cm2.isOptional()) {
-				Class<?>[] pParams = (p.params().length == 0 ? new Class[] { Object.class } : p.params());
+				Class<?>[] pParams = (p.params().length == 0 ? a(Object.class) : p.params());
 				if (pParams.length != 1)
 					throw new BasicRuntimeException("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length,
 						(cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array"));

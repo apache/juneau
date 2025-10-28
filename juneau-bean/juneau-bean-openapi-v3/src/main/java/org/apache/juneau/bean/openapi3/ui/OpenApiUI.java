@@ -22,6 +22,8 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.a;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
+import static org.apache.juneau.MediaType.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -83,7 +85,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	 */
 	@Override
 	public org.apache.juneau.MediaType[] forMediaTypes() {
-		return new org.apache.juneau.MediaType[] { org.apache.juneau.MediaType.HTML };
+		return Utils.a(HTML);
 	}
 
 	@Override

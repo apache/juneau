@@ -111,15 +111,15 @@ public class RestClient_Headers_Test extends TestBase {
 	}
 
 	@Test void a10_headers_String_Supplier_Schema() throws Exception {
-		var s = MutableSupplier.of(new String[]{"foo","bar"});
+		var s = MutableSupplier.of(a("foo","bar"));
 		var x = checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES)).build();
 		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['foo|bar','foo|bar']");
-		s.set(new String[]{"bar","baz"});
+		s.set(a("bar","baz"));
 		x.get("/headers").header(header("Foo",s,T_ARRAY_PIPES)).run().assertContent("['bar|baz','bar|baz']");
 	}
 
 	@Test void a11_headers_String_Supplier_Schema_Serializer() throws Exception {
-		var s = MutableSupplier.of(new String[]{"foo","bar"});
+		var s = MutableSupplier.of(a("foo","bar"));
 		checkFooClient().headers(header("Foo",s,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/headers").run().assertContent("['@(foo,bar)']");
 	}
 

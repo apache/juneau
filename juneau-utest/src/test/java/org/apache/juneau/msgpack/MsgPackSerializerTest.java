@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -173,10 +174,10 @@ class MsgPackSerializerTest extends TestBase {
 		//		* ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N
 		//		    N is the size of a array
 
-		test(new int[0], "90");
-		test(new int[]{1}, "91 01");
-		test(new int[]{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, "9F 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01");
-		test(new int[]{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, "DC 00 10 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01");
+		test(ints(), "90");
+		test(ints(1), "91 01");
+		test(ints(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1), "9F 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01");
+		test(ints(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1), "DC 00 10 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01");
 
 		//		fixmap stores a map whose length is upto 15 elements
 		//		+--------+~~~~~~~~~~~~~~~~~+

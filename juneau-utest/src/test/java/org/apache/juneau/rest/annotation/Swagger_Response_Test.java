@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -132,10 +133,10 @@ class Swagger_Response_Test extends TestBase {
 		assertEquals("Continue", x.getDescription());
 
 		x = s.getResponseInfo("/k","get",200);
-		assertMap(x.getHeaders(), "foo{type}", "{object}");
+		assertBean(x.getHeaders(), "foo{type}", "{object}");
 
 		x = s.getResponseInfo("/l","get",200);
-		assertMap(x.getHeaders(), "foo{type}", "{object}");
+		assertBean(x.getHeaders(), "foo{type}", "{object}");
 	}
 
 	@Rest
@@ -231,10 +232,10 @@ class Swagger_Response_Test extends TestBase {
 
 		sc.getResponseInfo("/b","put",200);
 
-		assertMap(x.getExamples(), "foo", "b");
+		assertBean(x.getExamples(), "foo", "b");
 
 		x = sc.getResponseInfo("/d","delete",200);
-		assertMap(x.getExamples(), "foo", "b");
+		assertBean(x.getExamples(), "foo", "b");
 	}
 
 	@Rest

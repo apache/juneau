@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -274,7 +275,7 @@ class ThrowingSupplier_Test extends TestBase {
 		@Test
 		void e03_resourceCleanupSimulation() {
 			// Simulate resource that needs cleanup
-			var resourceClosed = new boolean[]{false};
+			var resourceClosed = booleans(false);
 
 			ThrowingSupplier<String> resourceUser = () -> {
 				try {

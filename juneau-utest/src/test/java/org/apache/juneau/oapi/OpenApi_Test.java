@@ -19,6 +19,7 @@ package org.apache.juneau.oapi;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -593,7 +594,7 @@ public class OpenApi_Test extends TestBase {
 		var r = parse(ps, s, int[].class);
 		assertJson(json(in), r);
 
-		in = new int[]{123,456};
+		in = ints(123,456);
 		s = serialize(ps, in);
 		assertEquals("123,456", s);
 		r = parse(ps, s, int[].class);
@@ -655,7 +656,7 @@ public class OpenApi_Test extends TestBase {
 		int[] r = parse(ps, s, int[].class);
 		assertJson(json(in), r);
 
-		in = new int[]{123,456};
+		in = ints(123,456);
 		s = serialize(ps, in);
 		assertEquals("@(123,456)", s);
 		r = parse(ps, s, int[].class);
@@ -686,7 +687,7 @@ public class OpenApi_Test extends TestBase {
 		int[] r = parse(ps, s, int[].class);
 		assertJson(json(in), r);
 
-		in = new int[]{123,456};
+		in = ints(123,456);
 		s = serialize(ps, in);
 		assertEquals("123|456", s);
 		r = parse(ps, s, int[].class);
@@ -717,7 +718,7 @@ public class OpenApi_Test extends TestBase {
 		int[] r = parse(ps, s, int[].class);
 		assertJson(json(in), r);
 
-		in = new int[]{123,456};
+		in = ints(123,456);
 		s = serialize(ps, in);
 		assertEquals("123 456", s);
 		r = parse(ps, s, int[].class);
@@ -748,7 +749,7 @@ public class OpenApi_Test extends TestBase {
 		int[] r = parse(ps, s, int[].class);
 		assertJson(json(in), r);
 
-		in = new int[]{123,456};
+		in = ints(123,456);
 		s = serialize(ps, in);
 		assertEquals("123\t456", s);
 		r = parse(ps, s, int[].class);
@@ -779,7 +780,7 @@ public class OpenApi_Test extends TestBase {
 		int[] r = parse(ps, s, int[].class);
 		assertJson(json(in), r);
 
-		in = new int[]{123,456};
+		in = ints(123,456);
 		s = serialize(ps, in);
 		assertEquals("123,456", s);
 		r = parse(ps, s, int[].class);

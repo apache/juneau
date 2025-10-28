@@ -330,7 +330,7 @@ public class FileStore extends ConfigStore {
 
 		WatcherThread(File dir, WatcherSensitivity s) throws Exception {
 			watchService = FileSystems.getDefault().newWatchService();
-			var kinds = new WatchEvent.Kind[] { ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY };
+			var kinds = a(ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 			var modifier = lookupModifier(s);
 			dir.toPath().register(watchService, kinds, modifier);
 		}
@@ -461,7 +461,7 @@ public class FileStore extends ConfigStore {
 			return "";
 
 		var isWritable = isWritable(p);
-		var oo = isWritable ? new OpenOption[] { READ, WRITE, CREATE } : new OpenOption[] { READ };
+		var oo = isWritable ? a(READ, WRITE, CREATE) : a(READ);
 
 		try (var fc = FileChannel.open(p, oo)) {
 			try (var lock = isWritable ? fc.lock() : null) {

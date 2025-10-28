@@ -18,6 +18,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.io.*;
 import java.util.function.*;

@@ -17,6 +17,7 @@
 package org.apache.juneau.mstat;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -87,23 +88,23 @@ class ThrownStore_Test extends TestBase {
 		Throwable t1 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
-				return new StackTraceElement[] {
+				return a(
 					new StackTraceElement("Foo", "bar", "Foo.class", 1),
 					new StackTraceElement("Foo", "baz", "Foo.class", 2),
 					new StackTraceElement("Stop", "baz", "Stop.class", 3),
 					new StackTraceElement("Object", "baz", "Object.class", 6)
-				};
+				);
 			}
 		};
 		Throwable t2 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
-				return new StackTraceElement[] {
+				return a(
 					new StackTraceElement("Foo", "bar", "Foo.class", 1),
 					new StackTraceElement("Foo", "baz", "Foo.class", 2),
 					new StackTraceElement("Stop", "baz", "Stop.class", 3),
 					new StackTraceElement("Object", "baz", "Object.class", 6)
-				};
+				);
 			}
 		};
 
@@ -120,23 +121,23 @@ class ThrownStore_Test extends TestBase {
 		Throwable t1 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
-				return new StackTraceElement[] {
+				return a(
 					new StackTraceElement("Foo", "bar", "Foo.class", 1),
 					new StackTraceElement("Foo", "baz", "Foo.class", 2),
 					new StackTraceElement("Stop", "baz", "Stop.class", 3),
 					new StackTraceElement("Object", "baz", "Object.class", 6)
-				};
+				);
 			}
 		};
 		Throwable t2 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
-				return new StackTraceElement[] {
+				return a(
 					new StackTraceElement("Foo", "bar", "Foo.class", 1),
 					new StackTraceElement("Foo", "baz", "Foo.class", 2),
 					new StackTraceElement("Stop", "baz", "Stop.class", 3),
 					new StackTraceElement("Object", "baz", "Object.class", 7)
-				};
+				);
 			}
 		};
 
@@ -153,23 +154,23 @@ class ThrownStore_Test extends TestBase {
 		Throwable t1 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
-				return new StackTraceElement[] {
+				return a(
 					new StackTraceElement("Foo", "bar", "Foo.class", 1),
 					new StackTraceElement("Foo", "baz", "Foo.class", 2),
 					new StackTraceElement("Stop$1", "baz", "Stop.class", 6),
 					new StackTraceElement("Object", "baz", "Object.class", 6)
-				};
+				);
 			}
 		};
 		Throwable t2 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
-				return new StackTraceElement[] {
+				return a(
 					new StackTraceElement("Foo", "bar", "Foo.class", 1),
 					new StackTraceElement("Foo", "baz", "Foo.class", 2),
 					new StackTraceElement("Stop$2", "baz", "Stop.class", 6),
 					new StackTraceElement("Object", "baz", "Object.class", 6)
-				};
+				);
 			}
 		};
 
@@ -316,25 +317,25 @@ class ThrownStore_Test extends TestBase {
 		Throwable t1 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
-				return new StackTraceElement[] {
+				return a(
 					new StackTraceElement("Foo", "bar", "Foo.class", 1),
 					new StackTraceElement("Foo", "baz", "Foo.class", 2),
 					new StackTraceElement(D1.class.getName(), "baz", "D1.class", 3),
 					new StackTraceElement(D1.class.getName()+"$X", "baz", "D1.X.class", 4),
 					new StackTraceElement("Object", "baz", "Object.class", 5)
-				};
+				);
 			}
 		};
 		Throwable t2 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
-				return new StackTraceElement[] {
+				return a(
 					new StackTraceElement("Foo", "bar", "Foo.class", 1),
 					new StackTraceElement("Foo", "baz", "Foo.class", 2),
 					new StackTraceElement(D2.class.getName(), "baz", "D2.class", 3),
 					new StackTraceElement(D2.class.getName()+"$X", "baz", "D2.X.class", 4),
 					new StackTraceElement("Object", "baz", "Object.class", 5)
-				};
+				);
 			}
 		};
 

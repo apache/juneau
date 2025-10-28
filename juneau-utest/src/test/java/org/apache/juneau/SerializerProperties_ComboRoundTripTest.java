@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -88,7 +89,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.beanContext(x -> x.beanDictionary(T0.class))
 			.apply(Serializer.Builder.class, Builder::addRootType)
 			.build(),
-		tester(3, "SERIALIZER_sortCollections", String[].class, new String[]{"c","a","b"})
+		tester(3, "SERIALIZER_sortCollections", String[].class, a("c","a","b"))
 			.json("['a','b','c']")
 			.jsonT("['a','b','c']")
 			.jsonR("[\n\t'a',\n\t'b',\n\t'c'\n]")

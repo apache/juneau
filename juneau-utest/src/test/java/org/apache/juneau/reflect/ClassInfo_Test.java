@@ -22,6 +22,7 @@ import static org.apache.juneau.Context.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.reflect.ReflectFlags.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.reflect.ClassInfo.*;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -18,6 +18,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -151,7 +152,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_implArrayClasses(RoundTrip_Tester t) throws Exception {
-		var bean = (IBean[])new CBean[]{new CBean()};
+		var bean = (IBean[])a(new CBean());
 
 		bean[0].setF1("bar");
 		bean = t.roundTrip(bean, IBean[].class);

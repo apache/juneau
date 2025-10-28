@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -34,7 +35,7 @@ class IteratorSwapTest extends TestBase {
 		var s = JsonSerializer.create().json5().swaps(IteratorSwap.class).build();
 
 		// Iterators
-		var l = new ArrayList<>(Arrays.asList(new String[]{"foo","bar","baz"}));
+		var l = new ArrayList<>(Arrays.asList(a("foo","bar","baz")));
 		var i = l.iterator();
 		assertEquals("['foo','bar','baz']", s.serialize(i));
 	}

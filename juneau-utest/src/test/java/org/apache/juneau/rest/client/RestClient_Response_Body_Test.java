@@ -17,12 +17,12 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.TestUtils.assertBean;
-import static org.apache.juneau.TestUtils.assertList;
-import static org.apache.juneau.TestUtils.assertString;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.junit.bct.BctAssertions.assertBean;
+import static org.apache.juneau.junit.bct.BctAssertions.assertList;
+import static org.apache.juneau.junit.bct.BctAssertions.assertString;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;

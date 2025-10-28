@@ -115,8 +115,8 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		assertEquals("{x:'f=1'}",x.x3(Bean.create()));
 		assertEquals("{f:'1'}",x.x4(Bean.create()));
 		assertEquals("{f:'1'}",x.x5(Bean.create()));
-		assertEquals("{x:'f=1,f=1'}",x.x6(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.x7(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("{x:'f=1,f=1'}",x.x6(a(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.x7(a(Bean.create(),Bean.create())));
 		assertEquals("{x:'f=1,f=1'}",x.x8(alist(Bean.create(),Bean.create())));
 		assertEquals("{x:'@((f=1),(f=1))'}",x.x9(alist(Bean.create(),Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.x10(map("k1",Bean.create())));
@@ -501,17 +501,17 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", x::postX1);
 		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.postX1("1","2","3"));
 		assertEquals("{x:null}",x.postX1((String)null));
-		assertEquals("{x:'1'}",x.postX2(new String[]{"1"}));
-		assertEquals("{x:'1|2'}",x.postX2(new String[]{"1","2"}));
+		assertEquals("{x:'1'}",x.postX2(a("1")));
+		assertEquals("{x:'1|2'}",x.postX2(a("1","2")));
 		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", ()->x.postX2(new String[]{}));
-		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.postX2(new String[]{"1","2","3"}));
-		assertEquals("{x:null}",x.postX2(new String[]{null}));
+		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.postX2(a("1","2","3")));
+		assertEquals("{x:null}",x.postX2(a((String)null)));
 		assertEquals("{x:'1|1'}",x.postX3("1","1"));
-		assertEquals("{x:'1|1'}",x.postX4(new String[]{"1","1"}));
+		assertEquals("{x:'1|1'}",x.postX4(a("1","1")));
 		assertEquals("{x:'1|2'}",x.postX5("1","2"));
 		assertThrowsWithMessage(Exception.class, "Duplicate items not allowed.", ()->x.postX5("1","1"));
-		assertEquals("{x:'1|2'}",x.postX6(new String[]{"1","2"}));
-		assertThrowsWithMessage(Exception.class, "Duplicate items not allowed.", ()->x.postX6(new String[]{"1","1"}));
+		assertEquals("{x:'1|2'}",x.postX6(a("1","2")));
+		assertThrowsWithMessage(Exception.class, "Duplicate items not allowed.", ()->x.postX6(a("1","1")));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -845,9 +845,9 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		@FormData(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
 		@FormData("d") @Schema(aev=true) public List<Object> getX3() { return alist(); }
 		@FormData("e") public List<Object> getX4() { return null; }
-		@FormData("f") public Object[] getX5() { return new Object[]{"foo","","true","123","null",true,123,null}; }
-		@FormData(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return new Object[]{"foo","","true","123","null",true,123,null}; }
-		@FormData("h") @Schema(aev=true) public Object[] getX7() { return new Object[]{}; }
+		@FormData("f") public Object[] getX5() { return a("foo","","true","123","null",true,123,null); }
+		@FormData(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }
+		@FormData("h") @Schema(aev=true) public Object[] getX7() { return a(); }
 		@FormData("i") public Object[] getX8() { return null; }
 	}
 

@@ -17,10 +17,14 @@
 package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.compare;
+import static org.apache.juneau.common.utils.StringUtils.contains;
 import static org.apache.juneau.common.utils.StringUtils.eqic;
+import static org.apache.juneau.common.utils.StringUtils.reverse;
 import static org.apache.juneau.common.utils.Utils.eqic;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -370,26 +374,26 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test void a01_join() {
 		assertNull(StringUtils.join((Object[])null, ","));
-		assertEquals("1", StringUtils.join(new Object[]{1}, ","));
-		assertEquals("1,2", StringUtils.join(new Object[]{1,2}, ","));
+		assertEquals("1", StringUtils.join(a(1), ","));
+		assertEquals("1,2", StringUtils.join(a(1,2), ","));
 
 		assertNull(StringUtils.join((Collection<?>)null, ","));
-		assertEquals("1", StringUtils.join(Arrays.asList(new Integer[]{1}), ","));
-		assertEquals("1,2", StringUtils.join(Arrays.asList(new Integer[]{1,2}), ","));
+		assertEquals("1", StringUtils.join(Arrays.asList(a(1)), ","));
+		assertEquals("1,2", StringUtils.join(Arrays.asList(a(1,2)), ","));
 
 		assertNull(StringUtils.join((Object[])null, ','));
-		assertEquals("x,y,z", StringUtils.join(new Object[]{"x,y","z"}, ','));
+		assertEquals("x,y,z", StringUtils.join(a("x,y","z"), ','));
 
 		assertNull(StringUtils.join((int[])null, ','));
-		assertEquals("1", StringUtils.join(new int[]{1}, ','));
-		assertEquals("1,2", StringUtils.join(new int[]{1,2}, ','));
+		assertEquals("1", StringUtils.join(ints(1), ','));
+		assertEquals("1,2", StringUtils.join(ints(1,2), ','));
 
 		assertNull(StringUtils.join((Collection<?>)null, ','));
-		assertEquals("1", StringUtils.join(Arrays.asList(new Integer[]{1}), ','));
-		assertEquals("1,2", StringUtils.join(Arrays.asList(new Integer[]{1,2}), ','));
+		assertEquals("1", StringUtils.join(Arrays.asList(a(1)), ','));
+		assertEquals("1,2", StringUtils.join(Arrays.asList(a(1,2)), ','));
 
 		assertNull(StringUtils.joine((List<?>)null, ','));
-		assertEquals("x\\,y,z", StringUtils.joine(Arrays.asList(new String[]{"x,y","z"}), ','));
+		assertEquals("x\\,y,z", StringUtils.joine(Arrays.asList(a("x,y","z")), ','));
 	}
 
 	//====================================================================================================
@@ -1121,7 +1125,7 @@ class StringUtils_Test extends TestBase {
 	}
 
 	@Test void a51_reverse() {
-		assertNull(reverse(null));
+		assertNull(StringUtils.reverse(null));
 		assertEquals("", reverse(""));
 		assertEquals("olleh", reverse("hello"));
 		assertEquals("321", reverse("123"));
@@ -1240,20 +1244,20 @@ class StringUtils_Test extends TestBase {
 
 	@Test void a64_joinObjectArray() {
 		assertNull(StringUtils.join((Object[])null, ","));
-		assertEquals("", StringUtils.join(new Object[]{}, ","));
-		assertEquals("a,b,c", StringUtils.join(new Object[]{"a", "b", "c"}, ","));
-		assertEquals("1-2-3", StringUtils.join(new Object[]{1, 2, 3}, "-"));
-		assertEquals("abc", StringUtils.join(new Object[]{"a", "b", "c"}, ""));
-		assertEquals("a,null,c", StringUtils.join(new Object[]{"a", null, "c"}, ","));
-		assertEquals("a;b;c", StringUtils.join(new Object[]{"a", "b", "c"}, ";"));
+		assertEquals("", StringUtils.join(a(), ","));
+		assertEquals("a,b,c", StringUtils.join(a("a", "b", "c"), ","));
+		assertEquals("1-2-3", StringUtils.join(a(1, 2, 3), "-"));
+		assertEquals("abc", StringUtils.join(a("a", "b", "c"), ""));
+		assertEquals("a,null,c", StringUtils.join(a("a", null, "c"), ","));
+		assertEquals("a;b;c", StringUtils.join(a("a", "b", "c"), ";"));
 	}
 
 	@Test void a65_joinIntArray() {
 		assertEquals("", StringUtils.join((int[])null, ","));
-		assertEquals("", StringUtils.join(new int[]{}, ","));
-		assertEquals("1,2,3", StringUtils.join(new int[]{1, 2, 3}, ","));
-		assertEquals("1-2-3", StringUtils.join(new int[]{1, 2, 3}, "-"));
-		assertEquals("123", StringUtils.join(new int[]{1, 2, 3}, ""));
+		assertEquals("", StringUtils.join(ints(), ","));
+		assertEquals("1,2,3", StringUtils.join(ints(1, 2, 3), ","));
+		assertEquals("1-2-3", StringUtils.join(ints(1, 2, 3), "-"));
+		assertEquals("123", StringUtils.join(ints(1, 2, 3), ""));
 	}
 
 	@Test void a66_joinCollection() {
@@ -1265,13 +1269,13 @@ class StringUtils_Test extends TestBase {
 	}
 
 	@Test void a67_joinObjectArrayChar() {
-		assertEquals("a,b,c", StringUtils.join(new Object[]{"a", "b", "c"}, ','));
-		assertEquals("1-2-3", StringUtils.join(new Object[]{1, 2, 3}, '-'));
+		assertEquals("a,b,c", StringUtils.join(a("a", "b", "c"), ','));
+		assertEquals("1-2-3", StringUtils.join(a(1, 2, 3), '-'));
 	}
 
 	@Test void a68_joinIntArrayChar() {
-		assertEquals("1,2,3", StringUtils.join(new int[]{1, 2, 3}, ','));
-		assertEquals("1-2-3", StringUtils.join(new int[]{1, 2, 3}, '-'));
+		assertEquals("1,2,3", StringUtils.join(ints(1, 2, 3), ','));
+		assertEquals("1-2-3", StringUtils.join(ints(1, 2, 3), '-'));
 	}
 
 	@Test void a69_joinCollectionChar() {
@@ -1495,7 +1499,7 @@ class StringUtils_Test extends TestBase {
 		assertNull(readable(null));
 		assertEquals("[a,b,c]", readable(List.of("a", "b", "c")));
 		assertEquals("{foo=bar}", readable(Map.of("foo", "bar")));
-		assertEquals("[1,2,3]", readable(new int[]{1, 2, 3}));
+		assertEquals("[1,2,3]", readable(ints(1, 2, 3)));
 		assertEquals("test", readable(Optional.of("test")));
 		assertNull(readable(Optional.empty()));
 	}

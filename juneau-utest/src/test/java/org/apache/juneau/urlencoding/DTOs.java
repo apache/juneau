@@ -17,6 +17,7 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
@@ -89,25 +90,25 @@ public class DTOs {
 
 		static B create() {
 			var t = new B();
-			t.f01 = new String[]{"a","b"};
+			t.f01 = a("a","b");
 			t.f02 = list("c","d");
-			t.f03 = new int[]{1,2};
+			t.f03 = ints(1,2);
 			t.f04 = list(3,4);
-			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = list(new String[]{"i","j"},new String[]{"k","l"});
-			t.f07 = new A[]{A.create(),A.create()};
+			t.f05 = a(a("e","f"),a("g","h"));
+			t.f06 = list(a("i","j"),a("k","l"));
+			t.f07 = a(A.create(),A.create());
 			t.f08 = list(A.create(),A.create());
-			t.f09 = new A[][]{{A.create()},{A.create()}};
+			t.f09 = a(a(A.create()),a(A.create()));
 			t.f10 = list(Arrays.asList(A.create()),Arrays.asList(A.create()));
-			t.setF11(new String[]{"a","b"});
+			t.setF11(a("a","b"));
 			t.setF12(list("c","d"));
-			t.setF13(new int[]{1,2});
+			t.setF13(ints(1,2));
 			t.setF14(list(3,4));
-			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(list(new String[]{"i","j"},new String[]{"k","l"}));
-			t.setF17(new A[]{A.create(),A.create()});
+			t.setF15(a(a("e","f"),a("g","h")));
+			t.setF16(list(a("i","j"),a("k","l")));
+			t.setF17(a(A.create(),A.create()));
 			t.setF18(list(A.create(),A.create()));
-			t.setF19(new A[][]{{A.create()},{A.create()}});
+			t.setF19(a(a(A.create()),a(A.create())));
 			t.setF20(list(Arrays.asList(A.create()),Arrays.asList(A.create())));
 			return t;
 		}
@@ -118,25 +119,25 @@ public class DTOs {
 	public static class C extends B {
 		static C create() {
 			var t = new C();
-			t.f01 = new String[]{"a","b"};
+			t.f01 = a("a","b");
 			t.f02 = list("c","d");
-			t.f03 = new int[]{1,2};
+			t.f03 = ints(1,2);
 			t.f04 = list(3,4);
-			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = list(new String[]{"i","j"},new String[]{"k","l"});
-			t.f07 = new A[]{A.create(),A.create()};
+			t.f05 = a(a("e","f"),a("g","h"));
+			t.f06 = list(a("i","j"),a("k","l"));
+			t.f07 = a(A.create(),A.create());
 			t.f08 = list(A.create(),A.create());
-			t.f09 = new A[][]{{A.create()},{A.create()}};
+			t.f09 = a(a(A.create()),a(A.create()));
 			t.f10 = list(Arrays.asList(A.create()),Arrays.asList(A.create()));
-			t.setF11(new String[]{"a","b"});
+			t.setF11(a("a","b"));
 			t.setF12(list("c","d"));
-			t.setF13(new int[]{1,2});
+			t.setF13(ints(1,2));
 			t.setF14(list(3,4));
-			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(list(new String[]{"i","j"},new String[]{"k","l"}));
-			t.setF17(new A[]{A.create(),A.create()});
+			t.setF15(a(a("e","f"),a("g","h")));
+			t.setF16(list(a("i","j"),a("k","l")));
+			t.setF17(a(A.create(),A.create()));
 			t.setF18(list(A.create(),A.create()));
-			t.setF19(new A[][]{{A.create()},{A.create()}});
+			t.setF19(a(a(A.create()),a(A.create())));
 			t.setF20(list(Arrays.asList(A.create()),Arrays.asList(A.create())));
 			return t;
 		}

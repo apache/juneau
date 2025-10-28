@@ -18,6 +18,7 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -259,13 +260,13 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	@Test void getStringArray2() {
 		var c = init("a1=1,2", "a2= 2 , 3 ", "[S]", "b1=1", "b2=");
-		assertList(c.get("a1").asStringArray().orElse(new String[] {"foo"}), "1", "2");
-		assertList(c.get("a2").asStringArray().orElse(new String[] {"foo"}), "2", "3");
-		assertList(c.get("a3").asStringArray().orElse(new String[] {"foo"}), "foo");
-		assertList(c.get("S/b1").asStringArray().orElse(new String[] {"foo"}), "1");
-		assertEmpty(c.get("S/b2").asStringArray().orElse(new String[] {"foo"}));
-		assertList(c.get("S/b3").asStringArray().orElse(new String[] {"foo"}), "foo");
-		assertList(c.get("T/c1").asStringArray().orElse(new String[] {"foo"}), "foo");
+		assertList(c.get("a1").asStringArray().orElse(a("foo")), "1", "2");
+		assertList(c.get("a2").asStringArray().orElse(a("foo")), "2", "3");
+		assertList(c.get("a3").asStringArray().orElse(a("foo")), "foo");
+		assertList(c.get("S/b1").asStringArray().orElse(a("foo")), "1");
+		assertEmpty(c.get("S/b2").asStringArray().orElse(a("foo")));
+		assertList(c.get("S/b3").asStringArray().orElse(a("foo")), "foo");
+		assertList(c.get("T/c1").asStringArray().orElse(a("foo")), "foo");
 	}
 
 	//====================================================================================================
@@ -419,10 +420,10 @@ class Config_Test extends TestBase {
 	@Test void getBytes2() {
 		var c = init("a1=Zm9v", "a2=Zm", "\t9v", "a3=");
 
-		assertList(c.get("a1").asBytes().orElse(new byte[] {1}), (byte)102, (byte)111, (byte)111);
-		assertList(c.get("a2").asBytes().orElse(new byte[] {1}), (byte)102, (byte)111, (byte)111);
-		assertEmpty(c.get("a3").asBytes().orElse(new byte[] {1}));
-		assertList(c.get("a4").asBytes().orElse(new byte[] {1}), (byte)1);
+		assertList(c.get("a1").asBytes().orElse(bytes(1)), (byte)102, (byte)111, (byte)111);
+		assertList(c.get("a2").asBytes().orElse(bytes(1)), (byte)102, (byte)111, (byte)111);
+		assertEmpty(c.get("a3").asBytes().orElse(bytes(1)));
+		assertList(c.get("a4").asBytes().orElse(bytes(1)), (byte)1);
 	}
 
 	//====================================================================================================
@@ -981,8 +982,8 @@ class Config_Test extends TestBase {
 		assertEquals(1, cf.get("key1").asInteger().get());
 		assertTrue(cf.get("key2").asBoolean().get());
 		assertEquals(3, cf.get("key3").as(int[].class).get()[2]);
-		assertEquals(6, cf.get("xkey3").as(int[].class).orElse(new int[]{4,5,6})[2]);
-		assertEquals(6, cf.get("X/key3").as(int[].class).orElse(new int[]{4,5,6})[2]);
+		assertEquals(6, cf.get("xkey3").as(int[].class).orElse(ints(4,5,6))[2]);
+		assertEquals(6, cf.get("X/key3").as(int[].class).orElse(ints(4,5,6))[2]);
 		assertEquals(url("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
 
 		assertEquals(2, cf.get("section1/key1").asInteger().get());
@@ -997,11 +998,11 @@ class Config_Test extends TestBase {
 
 		cf.set("key1", 1);
 		cf.set("key2", true);
-		cf.set("key3", new int[]{1,2,3});
+		cf.set("key3", ints(1,2,3));
 		cf.set("key4", url("http://foo"));
 		cf.set("section1/key1", 2);
 		cf.set("section1/key2", false);
-		cf.set("section1/key3", new int[]{4,5,6});
+		cf.set("section1/key3", ints(4,5,6));
 		cf.set("section1/key4", url("http://bar"));
 
 		cf.commit();
@@ -1299,8 +1300,8 @@ class Config_Test extends TestBase {
 	@Test void a12_getObjectArray() {
 		var cf = init("[A]", "a1=[1,2,3]");
 		assertJson("[1,2,3]", cf.get("A/a1").as(Integer[].class).get());
-		assertJson("[4,5,6]", cf.get("A/a2").as(Integer[].class).orElse(new Integer[]{4,5,6}));
-		assertJson("[7,8,9]", cf.get("B/a1").as(Integer[].class).orElse(new Integer[]{7,8,9}));
+		assertJson("[4,5,6]", cf.get("A/a2").as(Integer[].class).orElse(a(4,5,6)));
+		assertJson("[7,8,9]", cf.get("B/a1").as(Integer[].class).orElse(a(7,8,9)));
 		assertFalse(cf.get("B/a1").as(Integer[].class).isPresent());
 
 		cf = init("[A]", "a1 = [1 ,\n\t2 ,\n\t3] ");
@@ -1314,18 +1315,18 @@ class Config_Test extends TestBase {
 		assertFalse(cf.get("A/a2").as(int[].class).isPresent());
 		assertEquals("int", cf.get("A/a2").as(int[].class).orElse(new int[0]).getClass().getComponentType().getSimpleName());
 
-		assertJson("[1,2,3]", cf.get("A/a1").as(int[].class).orElse(new int[]{4}));
-		assertEquals("int", cf.get("A/a1").as(int[].class).orElse(new int[]{4}).getClass().getComponentType().getSimpleName());
-		assertJson("[4]", cf.get("B/a1").as(int[].class).orElse(new int[]{4}));
-		assertEquals("int", cf.get("B/a1").as(int[].class).orElse(new int[]{4}).getClass().getComponentType().getSimpleName());
-		assertJson("[4]", cf.get("A/a2").as(int[].class).orElse(new int[]{4}));
-		assertEquals("int", cf.get("A/a2").as(int[].class).orElse(new int[]{4}).getClass().getComponentType().getSimpleName());
+		assertJson("[1,2,3]", cf.get("A/a1").as(int[].class).orElse(ints(4)));
+		assertEquals("int", cf.get("A/a1").as(int[].class).orElse(ints(4)).getClass().getComponentType().getSimpleName());
+		assertJson("[4]", cf.get("B/a1").as(int[].class).orElse(ints(4)));
+		assertEquals("int", cf.get("B/a1").as(int[].class).orElse(ints(4)).getClass().getComponentType().getSimpleName());
+		assertJson("[4]", cf.get("A/a2").as(int[].class).orElse(ints(4)));
+		assertEquals("int", cf.get("A/a2").as(int[].class).orElse(ints(4)).getClass().getComponentType().getSimpleName());
 
 		System.setProperty("X", "[4,5,6]");
 		cf = init("x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "[A]", "a1=[1,2,3]");
-		assertJson("[1,2,3]", cf.get("x1").as(int[].class).orElse(new int[]{9}));
-		assertJson("[4,5,6]", cf.get("x2").as(int[].class).orElse(new int[]{9}));
-		assertJson("[]", cf.get("x3").as(int[].class).orElse(new int[]{9}));
+		assertJson("[1,2,3]", cf.get("x1").as(int[].class).orElse(ints(9)));
+		assertJson("[4,5,6]", cf.get("x2").as(int[].class).orElse(ints(9)));
+		assertJson("[]", cf.get("x3").as(int[].class).orElse(ints(9)));
 		System.clearProperty("X");
 	}
 
@@ -1336,8 +1337,8 @@ class Config_Test extends TestBase {
 	@Test void a13_getStringArray() {
 		var cf = init("[A]", "a1=1,2,3");
 		assertJson("['1','2','3']", cf.get("A/a1").asStringArray().get());
-		assertJson("['4','5','6']", cf.get("A/a2").asStringArray().orElse(new String[]{"4","5","6"}));
-		assertJson("['7','8','9']", cf.get("B/a1").asStringArray().orElse(new String[]{"7","8","9"}));
+		assertJson("['4','5','6']", cf.get("A/a2").asStringArray().orElse(a("4","5","6")));
+		assertJson("['7','8','9']", cf.get("B/a1").asStringArray().orElse(a("7","8","9")));
 		assertNull(cf.get("B/a1").asStringArray().orElse(null));
 
 		cf = init("[A]", "a1 = 1 ,\n\t2 ,\n\t3 ");
@@ -1345,9 +1346,9 @@ class Config_Test extends TestBase {
 
 		System.setProperty("X", "4,5,6");
 		cf = init(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,$S{X}}", "[A]", "a1=1,2,3");
-		assertJson("['1','2','3']", cf.get("x1").asStringArray().orElse(new String[]{"9"}));
-		assertJson("['4','5','6']", cf.get("x2").asStringArray().orElse(new String[]{"9"}));
-		assertJson("['9']", cf.get("x9").asStringArray().orElse(new String[]{"9"}));
+		assertJson("['1','2','3']", cf.get("x1").asStringArray().orElse(a("9")));
+		assertJson("['4','5','6']", cf.get("x2").asStringArray().orElse(a("9")));
+		assertJson("['9']", cf.get("x9").asStringArray().orElse(a("9")));
 
 		System.clearProperty("X");
 	}

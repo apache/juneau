@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.html;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +37,7 @@ class Html_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a01_testTables1() throws Exception {
 		var s = HtmlSerializer.DEFAULT_SQ;
-		var t = new Object[] {new A1(), new A1()};
+		var t = a(new A1(), new A1());
 		var html = s.serialize(t);
 		assertEquals("<table _type='array'><tr><th>f1</th></tr><tr><td>f1</td></tr><tr><td>f1</td></tr></table>", html);
 	}
@@ -404,17 +405,17 @@ class Html_Test extends TestBase {
 	}
 
 	@Test void e01_collectionOfBeansWithBpi() {
-		E[] ee = {
+		E[] ee = a(
 			new E(null, 2, 3),
 			new E(4, 5, 6)
-		};
+		);
 		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td>3</td><td>2</td><td><null/></td></tr><tr><td>6</td><td>5</td><td>4</td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(ee));
 		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td>3</td><td>2</td><td><null/></td></tr><tr><td>6</td><td>5</td><td>4</td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(Arrays.asList(ee)));
 
-		ee = new E[] {
+		ee = a(
 			new E(null, null, null),
 			new E(null, null, null)
-		};
+		);
 		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td><null/></td><td><null/></td><td><null/></td></tr><tr><td><null/></td><td><null/></td><td><null/></td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(ee));
 	}
 

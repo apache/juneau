@@ -17,6 +17,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpMethod.*;
 
 import java.io.*;
@@ -282,7 +283,7 @@ class RestOp_Params_Test extends TestBase {
 	public static class B1c extends IdentityEncoder {
 		@Override /* ConfigEncoder */
 		public String[] getCodings() {
-			return new String[]{"*"};
+			return a("*");
 		}
 	}
 

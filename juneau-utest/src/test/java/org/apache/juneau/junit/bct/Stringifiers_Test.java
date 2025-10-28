@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -148,7 +149,7 @@ class Stringifiers_Test extends TestBase {
 		@Test
 		void d01_stringifyInputStream() {
 			var stringifier = Stringifiers.inputStreamStringifier();
-			var input = new ByteArrayInputStream(new byte[]{0x48, 0x65, 0x6C, 0x6C, 0x6F}); // "Hello"
+			var input = new ByteArrayInputStream(bytes(0x48, 0x65, 0x6C, 0x6C, 0x6F)); // "Hello"
 			var result = stringifier.apply(null, input);
 
 			assertEquals("48656C6C6F", result);
@@ -166,7 +167,7 @@ class Stringifiers_Test extends TestBase {
 		@Test
 		void d03_stringifyInputStreamWithZeros() {
 			var stringifier = Stringifiers.inputStreamStringifier();
-			var input = new ByteArrayInputStream(new byte[]{0x00, (byte)0xFF, 0x7F});
+			var input = new ByteArrayInputStream(bytes(0x00, (byte)0xFF, 0x7F));
 			var result = stringifier.apply(null, input);
 
 			assertEquals("00FF7F", result);
@@ -179,7 +180,7 @@ class Stringifiers_Test extends TestBase {
 		@Test
 		void e01_stringifyByteArray() {
 			var stringifier = Stringifiers.byteArrayStringifier();
-			var input = new byte[]{0x48, 0x65, 0x6C, 0x6C, 0x6F}; // "Hello"
+			var input = bytes(0x48, 0x65, 0x6C, 0x6C, 0x6F); // "Hello"
 			var result = stringifier.apply(null, input);
 
 			assertEquals("48656C6C6F", result);
@@ -197,7 +198,7 @@ class Stringifiers_Test extends TestBase {
 		@Test
 		void e03_stringifyByteArrayWithAllValues() {
 			var stringifier = Stringifiers.byteArrayStringifier();
-			var input = new byte[]{0x00, (byte)0xFF, 0x7F, (byte)0x80};
+			var input = bytes(0x00, (byte)0xFF, 0x7F, (byte)0x80);
 			var result = stringifier.apply(null, input);
 
 			assertEquals("00FF7F80", result);
@@ -210,7 +211,7 @@ class Stringifiers_Test extends TestBase {
 		@Test
 		void f01_stringifyCharArray() {
 			var stringifier = Stringifiers.charArrayStringifier();
-			var input = new char[]{'H', 'e', 'l', 'l', 'o'};
+			var input = chars('H', 'e', 'l', 'l', 'o');
 			var result = stringifier.apply(null, input);
 
 			assertEquals("Hello", result);
@@ -228,7 +229,7 @@ class Stringifiers_Test extends TestBase {
 		@Test
 		void f03_stringifyCharArrayWithHexChars() {
 			var stringifier = Stringifiers.charArrayStringifier();
-			var input = new char[]{'0', '0', '0', '0'};
+			var input = chars('0', '0', '0', '0');
 			var result = stringifier.apply(null, input);
 
 			assertEquals("0000", result);
@@ -237,7 +238,7 @@ class Stringifiers_Test extends TestBase {
 		@Test
 		void f04_stringifyCharArrayWithSpecialChars() {
 			var stringifier = Stringifiers.charArrayStringifier();
-			var input = new char[]{'A', 'B', 'C', 'D', 'E', 'F'};
+			var input = chars('A', 'B', 'C', 'D', 'E', 'F');
 			var result = stringifier.apply(null, input);
 
 			assertEquals("ABCDEF", result);
@@ -246,7 +247,7 @@ class Stringifiers_Test extends TestBase {
 		@Test
 		void f05_stringifyCharArrayWithMixedChars() {
 			var stringifier = Stringifiers.charArrayStringifier();
-			var input = new char[]{'a', '1', 'B', '2', 'c', '3'};
+			var input = chars('a', '1', 'B', '2', 'c', '3');
 			var result = stringifier.apply(null, input);
 
 			assertEquals("a1B2c3", result);

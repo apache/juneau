@@ -82,7 +82,7 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 
 		public A init1() throws Exception {
 			f1 = " f1 ";
-			f2 = new String[]{" f2a ", " f2b "};
+			f2 = a(" f2a ", " f2b ");
 			f3 = JsonList.ofJson("[' f3a ',' f3b ']");
 			f4 = JsonMap.ofJson("{' foo ':' bar '}");
 			return this;
@@ -90,7 +90,7 @@ class TrimStrings_RoundTripTest extends RoundTripTest_Base {
 
 		public A init2() throws Exception {
 			f1 = "f1";
-			f2 = new String[]{"f2a", "f2b"};
+			f2 = a("f2a", "f2b");
 			f3 = JsonList.ofJson("['f3a','f3b']");
 			f4 = JsonMap.ofJson("{'foo':'bar'}");
 			return this;

@@ -111,7 +111,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 */
 	protected BeanDictionaryMap append(String typeName, Class<? extends Collection> collectionClass, Object entryClass) {
 		assertValidParameter(entryClass);
-		put(typeName, new Object[] { collectionClass, entryClass });
+		put(typeName, a(collectionClass, entryClass));
 		return this;
 	}
 
@@ -127,7 +127,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	protected BeanDictionaryMap append(String typeName, Class<? extends Map> mapClass, Object keyClass, Object valueClass) {
 		assertValidParameter(keyClass);
 		assertValidParameter(valueClass);
-		put(typeName, new Object[] { mapClass, keyClass, valueClass });
+		put(typeName, a(mapClass, keyClass, valueClass));
 		return this;
 	}
 }

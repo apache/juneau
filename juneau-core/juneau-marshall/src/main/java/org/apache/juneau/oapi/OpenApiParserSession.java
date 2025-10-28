@@ -374,7 +374,7 @@ public class OpenApiParserSession extends UonParserSession {
 				String[] ss = {};
 
 				if (cf == MULTI)
-					ss = new String[] { in };
+					ss = a(in);
 				else if (cf == CSV)
 					ss = StringUtils.splita(in, ',');
 				else if (cf == PIPES)
@@ -419,7 +419,7 @@ public class OpenApiParserSession extends UonParserSession {
 				String[] ss = {};
 
 				if (cf == MULTI)
-					ss = new String[] { in };
+					ss = a(in);
 				else if (cf == CSV)
 					ss = StringUtils.splita(in, ',');
 				else if (cf == PIPES)

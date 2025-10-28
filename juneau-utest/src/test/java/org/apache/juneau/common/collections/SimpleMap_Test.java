@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -31,12 +32,12 @@ class SimpleMap_Test extends TestBase {
 		assertEquals(2, m.size());
 		assertEquals("A", m.get("a"));
 		assertEquals("B", m.get("b"));
-		assertMap(m, "a,b", "A,B");
+		assertBean(m, "a,b", "A,B");
 		assertList(m.keySet(), "a", "b");
 		m.put("a", "1");
-		assertMap(m, "a,b", "1,B");
+		assertBean(m, "a,b", "1,B");
 		m.entrySet().iterator().next().setValue("2");
-		assertMap(m, "a,b", "2,B");
+		assertBean(m, "a,b", "2,B");
 		assertThrows(IllegalArgumentException.class, ()->m.put("c", "1"));
 
 		assertNull(m.get("c"));

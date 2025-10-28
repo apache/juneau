@@ -163,7 +163,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 					values[0] = "";
 
 				if (values.length == 0)
-					values = new String[] { null };
+					values = a((String)null);
 
 				for (String value : values)
 					add(new RequestFormParam(req, name, value));

@@ -17,6 +17,7 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -73,42 +74,42 @@ class XmlIgnoreComments_Test extends TestBase {
 		input( 	/* 5 */
 			"Arrays-1",
 			String[].class,
-			new String[]{"foo"},
+			a("foo"),
 			"|<array>|<string>|foo|</string>|</array>|",
 			false
 		),
 		input( 	/* 6 */
 			"Arrays-2",
 			String[].class,
-			new String[]{null},
+			a((String)null),
 			"|<array>|<null/>|</array>|",
 			false
 		),
 		input( 	/* 7 */
 			"Arrays-3",
 			Object[].class,
-			new Object[]{"foo"},
+			a("foo"),
 			"|<array>|<string>|foo|</string>|</array>|",
 			false
 		),
 		input( 	/* 8 */
 			"Arrays-4",
 			int[].class,
-			new int[]{123},
+			ints(123),
 			"|<array>|<number>|123|</number>|</array>|",
 			false
 		),
 		input( 	/* 9 */
 			"Arrays-5",
 			boolean[].class,
-			new boolean[]{true},
+			booleans(true),
 			"|<array>|<boolean>|true|</boolean>|</array>|",
 			false
 		),
 		input( 	/* 10 */
 			"Arrays-6",
 			String[][].class,
-			new String[][]{{"foo"}},
+			a2(a("foo")),
 			"|<array>|<array>|<string>|foo|</string>|</array>|</array>|",
 			false
 		),
@@ -611,28 +612,28 @@ class XmlIgnoreComments_Test extends TestBase {
 		input( 	/* 53 */
 			"BeanWithWhitespaceMixedFields-3",
 			BeanWithWhitespaceMixedFields.class,
-			new BeanWithWhitespaceMixedFields().init(new String[]{""}),
+			new BeanWithWhitespaceMixedFields().init(a("")),
 			"|<object>|_xE000_|</object>|",
 			true
 		),
 		input( 	/* 54 */
 			"BeanWithWhitespaceMixedFields-4",
 			BeanWithWhitespaceMixedFields.class,
-			new BeanWithWhitespaceMixedFields().init(new String[]{" "}),
+			new BeanWithWhitespaceMixedFields().init(a(" ")),
 			"|<object>|_x0020_|</object>|",
 			true
 		),
 		input( 	/* 55 */
 			"BeanWithWhitespaceMixedFields-5",
 			BeanWithWhitespaceMixedFields.class,
-			new BeanWithWhitespaceMixedFields().init(new String[]{"  "}),
+			new BeanWithWhitespaceMixedFields().init(a("  ")),
 			"|<object>|_x0020__x0020_|</object>|",
 			true
 		),
 		input( 	/* 56 */
 			"BeanWithWhitespaceMixedFields-6",
 			BeanWithWhitespaceMixedFields.class,
-			new BeanWithWhitespaceMixedFields().init(new String[]{"  foobar  "}),
+			new BeanWithWhitespaceMixedFields().init(a("  foobar  ")),
 			"|<object>|_x0020_ foobar _x0020_|</object>|",
 			true
 		),
@@ -646,28 +647,28 @@ class XmlIgnoreComments_Test extends TestBase {
 		input( 	/* 58 */
 			"BeanWithWhitespaceMixedPwsFields-3",
 			BeanWithWhitespaceMixedPwsFields.class,
-			new BeanWithWhitespaceMixedPwsFields().init(new String[]{""}),
+			new BeanWithWhitespaceMixedPwsFields().init(a("")),
 			"|<object>|_xE000_|</object>|",
 			true
 		),
 		input( 	/* 59 */
 			"BeanWithWhitespaceMixedPwsFields-4",
 			BeanWithWhitespaceMixedPwsFields.class,
-			new BeanWithWhitespaceMixedPwsFields().init(new String[]{" "}),
+			new BeanWithWhitespaceMixedPwsFields().init(a(" ")),
 			"|<object>| |</object>|",
 			true
 		),
 		input( 	/* 60 */
 			"BeanWithWhitespaceMixedPwsFields-5",
 			BeanWithWhitespaceMixedPwsFields.class,
-			new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  "}),
+			new BeanWithWhitespaceMixedPwsFields().init(a("  ")),
 			"|<object>|  |</object>|",
 			true
 		),
 		input( 	/* 61 */
 			"BeanWithWhitespaceMixedPwsFields-6",
 			BeanWithWhitespaceMixedPwsFields.class,
-			new BeanWithWhitespaceMixedPwsFields().init(new String[]{"  foobar  "}),
+			new BeanWithWhitespaceMixedPwsFields().init(a("  foobar  ")),
 			"|<object>|  foobar  |</object>|",
 			true
 		)
@@ -788,8 +789,8 @@ class XmlIgnoreComments_Test extends TestBase {
 			c = "bar";
 			d = 456;
 			e = new Bean1a().init();
-			f = new String[]{ "baz" };
-			g = new int[]{ 789 };
+			f = a("baz");
+			g = ints( 789 );
 			return this;
 		}
 	}
@@ -850,9 +851,9 @@ class XmlIgnoreComments_Test extends TestBase {
 		public Object[] b3;
 
 		BeanWithPropertiesWithArrayTypeNames init() {
-			b1 = new B[]{new B().init()};
-			b2 = new B[]{new B().init()};
-			b3 = new Object[]{new B().init()};
+			b1 = a(new B().init());
+			b2 = a(new B().init());
+			b3 = ao(new B().init());
 			return this;
 		}
 	}
@@ -864,9 +865,9 @@ class XmlIgnoreComments_Test extends TestBase {
 		public Object[][] b3;
 
 		BeanWithPropertiesWith2dArrayTypeNames init() {
-			b1 = new B[][]{{new B().init()}};
-			b2 = new B[][]{{new B().init()}};
-			b3 = new Object[][]{{new B().init()}};
+			b1 = a2(a(new B().init()));
+			b2 = a2(a(new B().init()));
+			b3 = a2(ao(new B().init()));
 			return this;
 		}
 	}
@@ -905,8 +906,8 @@ class XmlIgnoreComments_Test extends TestBase {
 		BeanWithChildTypeNames init() {
 			a = new BeanX().init();
 			b = new BeanX().init();
-			c = new BeanX[]{new BeanX().init()};
-			d = new Object[]{new BeanX().init()};
+			c = a(new BeanX().init());
+			d = a(new BeanX().init());
 			return this;
 		}
 	}
@@ -917,8 +918,8 @@ class XmlIgnoreComments_Test extends TestBase {
 		@Xml(childName = "Y")
 		public int[] b;
 		BeanWithChildName init() {
-			a = new String[] { "foo", "bar" };
-			b = new int[] { 123, 456 };
+			a = a("foo", "bar");
+			b = ints( 123, 456 );
 			return this;
 		}
 	}
@@ -976,8 +977,8 @@ class XmlIgnoreComments_Test extends TestBase {
 		@Xml(childName="B",format=XmlFormat.COLLAPSED)
 		public int[] b;
 		BeanWithXmlFormatCollapsedProperty init() {
-			a = new String[]{"foo","bar"};
-			b = new int[]{123,456};
+			a = a("foo","bar");
+			b = ints(123,456);
 			return this;
 		}
 	}
@@ -1013,7 +1014,7 @@ class XmlIgnoreComments_Test extends TestBase {
 		public Object[] b;
 		BeanWithXmlFormatElementsPropertyCollection init() {
 			a = "foo";
-			b = new Object[]{"bar","baz",123,true,null};
+			b = a("bar","baz",123,true,null);
 			return this;
 		}
 	}
@@ -1023,13 +1024,13 @@ class XmlIgnoreComments_Test extends TestBase {
 		@Beanp(dictionary={BeanXSimple.class, BeanYSimple.class})
 		public Object[] a;
 		BeanWithMixedContent init() {
-			a = new Object[]{
+			a = a(
 				"foo",
 				new BeanXSimple().init(),
 				"bar",
 				new BeanYSimple().init(),
 				"baz"
-			};
+			);
 			return this;
 		}
 	}
@@ -1122,13 +1123,13 @@ class XmlIgnoreComments_Test extends TestBase {
 		public Object[] o1, o2;
 
 		BeanWithAbstractArrayFields init() {
-			a = new A[]{new A().init()};
-			ia1 = new A[]{new A().init()};
-			aa1 = new A[]{new A().init()};
-			o1 = new A[]{new A().init()};
-			ia2 = new IA[]{new A().init()};
-			aa2 = new AA[]{new A().init()};
-			o2 = new Object[]{new A().init()};
+			a = a(new A().init());
+			ia1 = a(new A().init());
+			aa1 = a(new A().init());
+			o1 = a(new A().init());
+			ia2 = a(new A().init());
+			aa2 = a(new A().init());
+			o2 = a(new A().init());
 			return this;
 		}
 	}
@@ -1162,13 +1163,13 @@ class XmlIgnoreComments_Test extends TestBase {
 			ia = new LinkedHashMap<>();
 			aa = new LinkedHashMap<>();
 			o = new LinkedHashMap<>();
-			a.put("a1", new A[]{new A().init()});
-			ia.put("ia1", new A[]{new A().init()});
-			ia.put("ia2", new IA[]{new A().init()});
-			aa.put("aa1", new A[]{new A().init()});
-			aa.put("aa2", new AA[]{new A().init()});
-			o.put("o1", new A[]{new A().init()});
-			o.put("o2", new Object[]{new A().init()});
+			a.put("a1", a(new A().init()));
+			ia.put("ia1", a(new A().init()));
+			ia.put("ia2", a((IA)new A().init()));
+			aa.put("aa1", a(new A().init()));
+			aa.put("aa2", a((AA)new A().init()));
+			o.put("o1", a(new A().init()));
+			o.put("o2", ao(new A().init()));
 			return this;
 		}
 	}

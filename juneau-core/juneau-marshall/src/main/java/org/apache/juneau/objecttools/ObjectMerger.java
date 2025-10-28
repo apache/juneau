@@ -135,7 +135,7 @@ public class ObjectMerger {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T merge(Class<T> interfaceClass, boolean callAllNonGetters, T...pojos) {
-		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new MergeInvocationHandler(callAllNonGetters, pojos));
+		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), new MergeInvocationHandler(callAllNonGetters, pojos));
 	}
 
 	/**

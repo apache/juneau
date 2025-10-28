@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -43,15 +43,15 @@ class CommonParser_UrlEncodingTest extends TestBase {
 
 		in = "a=1&b='foo+bar'";
 		m = (Map)p.parse(in, Object.class);
-		assertMap(m, "a,b", "1,foo bar");
+		assertBean(m, "a,b", "1,foo bar");
 
 		in = "a=1&b='foo+bar'&c=false";
 		m = (Map)p.parse(in, Object.class);
-		assertMap(m, "a,b,c", "1,foo bar,false");
+		assertBean(m, "a,b,c", "1,foo bar,false");
 
 		in = "a=1&b='foo%20bar'&c=false";
 		m = (Map)p.parse(in, Object.class);
-		assertMap(m, "a,b,c", "1,foo bar,false");
+		assertBean(m, "a,b,c", "1,foo bar,false");
 
 		var jm = (JsonMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jm.getList("x").getMap(0).getString("attribute"));

@@ -18,6 +18,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -62,7 +63,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a03_enumArrayA(RoundTrip_Tester t) throws Exception {
-		var x = new AEnum[]{AEnum.FOO,AEnum.BAR,null};
+		var x = a(AEnum.FOO,AEnum.BAR,null);
 		assertJson("['FOO','BAR',null]", x);
 		x = t.roundTrip(x, AEnum[].class);
 		assertEquals(AEnum.FOO, x[0]);
@@ -73,7 +74,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a04_enumArrayB(RoundTrip_Tester t) throws Exception {
-		var x = new BEnum[]{BEnum.FOO,BEnum.BAR,null};
+		var x = a(BEnum.FOO,BEnum.BAR,null);
 		assertJson("['xfoo','xbar',null]", x);
 		x = t.roundTrip(x, BEnum[].class);
 		assertEquals(BEnum.FOO, x[0]);
@@ -88,7 +89,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a05_enum2dArrayA(RoundTrip_Tester t) throws Exception {
-		var x = new AEnum[][]{{AEnum.FOO,AEnum.BAR,null},null};
+		var x = a(a(AEnum.FOO,AEnum.BAR,null),null);
 		assertJson("[['FOO','BAR',null],null]", x);
 		x = t.roundTrip(x, AEnum[][].class);
 		assertEquals(AEnum.FOO, x[0][0]);
@@ -100,7 +101,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a06_enum2dArrayB(RoundTrip_Tester t) throws Exception {
-		var x = new BEnum[][]{{BEnum.FOO,BEnum.BAR,null},null};
+		var x = a(a(BEnum.FOO,BEnum.BAR,null),null);
 		assertJson("[['xfoo','xbar',null],null]", x);
 		x = t.roundTrip(x, BEnum[][].class);
 		assertEquals(BEnum.FOO, x[0][0]);
@@ -193,8 +194,8 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 		public A init() {
 			f1 = AEnum.FOO;
 			f2 = AEnum.BAR;
-			f3 = new AEnum[]{AEnum.FOO,null};
-			f4 = new AEnum[][]{{AEnum.FOO,null},null};
+			f3 = a(AEnum.FOO,null);
+			f4 = a(a(AEnum.FOO,null),null);
 			f5 = alist(AEnum.FOO);
 			f6 = alist(AEnum.FOO);
 			f7 = set(AEnum.FOO);
@@ -235,8 +236,8 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 		public B init() {
 			f1 = BEnum.FOO;
 			f2 = BEnum.BAR;
-			f3 = new BEnum[]{BEnum.FOO,null};
-			f4 = new BEnum[][]{{BEnum.FOO,null},null};
+			f3 = a(BEnum.FOO,null);
+			f4 = a(a(BEnum.FOO,null),null);
 			f5 = alist(BEnum.FOO);
 			f6 = alist(BEnum.FOO);
 			f7 = set(BEnum.FOO);

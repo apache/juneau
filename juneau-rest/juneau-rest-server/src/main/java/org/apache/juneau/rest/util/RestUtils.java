@@ -218,7 +218,7 @@ public class RestUtils {
 			return null;
 		String name = s.substring(0, i).trim().toLowerCase(Locale.ENGLISH);
 		String val = s.substring(i + 1).trim();
-		return new String[] { name, val };
+		return a(name, val);
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class RestUtils {
 			return null;
 		String name = s.substring(0, i).trim();
 		String val = s.substring(i + 1).trim();
-		return new String[] { name, val };
+		return a(name, val);
 	}
 
 	/**
@@ -487,7 +487,7 @@ public class RestUtils {
 		} else if (b && nn(m.get(key))) {
 			m.put(key, addAll(m.get(key), val));
 		} else {
-			m.put(key, new String[] { val });
+			m.put(key, a(val));
 		}
 	}
 

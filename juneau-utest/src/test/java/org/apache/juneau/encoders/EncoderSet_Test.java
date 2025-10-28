@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.encoders;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -44,21 +45,21 @@ class EncoderSet_Test extends TestBase {
 	public static class Encoder1 extends GzipEncoder {
 		@Override /* Encoder */
 		public String[] getCodings() {
-			return new String[]{"gzip1"};
+			return a("gzip1");
 		}
 	}
 
 	public static class Encoder2 extends GzipEncoder {
 		@Override /* Encoder */
 		public String[] getCodings() {
-			return new String[]{"gzip2","gzip2a"};
+			return a("gzip2","gzip2a");
 		}
 	}
 
 	public static class Encoder3 extends GzipEncoder {
 		@Override /* Encoder */
 		public String[] getCodings() {
-			return new String[]{"gzip3","gzip3a"};
+			return a("gzip3","gzip3a");
 		}
 	}
 
@@ -82,35 +83,35 @@ class EncoderSet_Test extends TestBase {
 	public static class E1 extends GzipEncoder {
 		@Override /* Encoder */
 		public String[] getCodings() {
-			return new String[]{"E1"};
+			return a("E1");
 		}
 	}
 
 	public static class E2 extends GzipEncoder {
 		@Override /* Encoder */
 		public String[] getCodings() {
-			return new String[]{"E2","E2a"};
+			return a("E2","E2a");
 		}
 	}
 
 	public static class E3 extends GzipEncoder {
 		@Override /* Encoder */
 		public String[] getCodings() {
-			return new String[]{"E3"};
+			return a("E3");
 		}
 	}
 
 	public static class E4 extends GzipEncoder {
 		@Override /* Encoder */
 		public String[] getCodings() {
-			return new String[]{"E4","E4a"};
+			return a("E4","E4a");
 		}
 	}
 
 	public static class E5 extends GzipEncoder {
 		@Override /* Encoder */
 		public String[] getCodings() {
-			return new String[]{"E5"};
+			return a("E5");
 		}
 	}
 }

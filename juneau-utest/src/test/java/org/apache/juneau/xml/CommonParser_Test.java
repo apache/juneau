@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -38,11 +38,11 @@ class CommonParser_Test extends TestBase {
 		var m = (Map)p.parse("<object><a _type='number'>1</a></object>", Object.class);
 		assertEquals(1, m.get("a"));
 		m = (Map)p.parse("<object><a _type='number'>1</a><b _type='string'>foo bar</b></object>", Object.class);
-		assertMap(m, "a,b", "1,foo bar");
+		assertBean(m, "a,b", "1,foo bar");
 		m = (Map)p.parse("<object><a _type='number'>1</a><b _type='string'>foo bar</b><c _type='boolean'>false</c></object>", Object.class);
-		assertMap(m, "a,c", "1,false");
+		assertBean(m, "a,c", "1,false");
 		m = (Map)p.parse("   <object>	<a _type='number'>	1	</a>	<b _type='string'>	foo	</b>	<c _type='boolean'>	false 	</c>	</object>	", Object.class);
-		assertMap(m, "a,b,c", "1,foo,false");
+		assertBean(m, "a,b,c", "1,foo,false");
 
 		m = (Map)p.parse("<object><x _type='string'>org.apache.juneau.test.Person</x><addresses _type='array'><object><x _type='string'>org.apache.juneau.test.Address</x><city _type='string'>city A</city><state _type='string'>state A</state><street _type='string'>street A</street><zip _type='number'>12345</zip></object></addresses></object>", Object.class);
 		assertEquals("org.apache.juneau.test.Person", m.get("x"));
@@ -50,7 +50,7 @@ class CommonParser_Test extends TestBase {
 		assertNotNull(l);
 		m = (Map)l.get(0);
 		assertNotNull(m);
-		assertMap(m, "x,city,state,street,zip", "org.apache.juneau.test.Address,city A,state A,street A,12345");
+		assertBean(m, "x,city,state,street,zip", "org.apache.juneau.test.Address,city A,state A,street A,12345");
 
 		var jl = (JsonList)p.parse("<array><object><attribute _type='string'>value</attribute></object><object><attribute _type='string'>value</attribute></object></array>", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));

@@ -1058,7 +1058,7 @@ public class BeanMeta<T> {
 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 			if (nn(h)) {
 				ClassLoader cl = classMeta.innerClass.getClassLoader();
-				return (T)Proxy.newProxyInstance(cl, new Class[] { classMeta.innerClass, java.io.Serializable.class }, h);
+				return (T)Proxy.newProxyInstance(cl, a(classMeta.innerClass, java.io.Serializable.class), h);
 			}
 		}
 		return null;

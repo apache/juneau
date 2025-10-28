@@ -17,6 +17,7 @@
 package org.apache.juneau.mstat;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;

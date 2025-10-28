@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.html5;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -93,12 +94,12 @@ class HtmlElementMixed_Test extends TestBase {
 
 	@Test void a12_getChild_varargs_emptyArray() {
 		P x = p("child1");
-		assertNull(x.getChild(new int[]{}));
+		assertNull(x.getChild(ints()));
 	}
 
 	@Test void a13_getChild_varargs_singleIndex() {
 		P x = p("child1", "child2");
-		assertString("child1", x.getChild(new int[]{0}));
+		assertString("child1", x.getChild(ints(0)));
 	}
 
 	@Test void a14_getChild_varargs_multipleIndices() {

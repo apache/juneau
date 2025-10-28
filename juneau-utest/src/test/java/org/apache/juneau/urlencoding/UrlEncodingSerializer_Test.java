@@ -17,6 +17,7 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -97,7 +98,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 
 		// Array containing empty string
 		// Top level
-		t = new String[]{""};
+		t = a("");
 		assertEquals("0=''", s.serialize(t));
 		assertEquals("0=''", sr.serialize(t));
 
@@ -107,7 +108,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("x=@(\n\t''\n)", sr.serialize(t));
 
 		// Array containing 3 empty strings
-		t = new String[]{"","",""};
+		t = a("","","");
 		assertEquals("0=''&1=''&2=''", s.serialize(t));
 		assertEquals("0=''\n&1=''\n&2=''", sr.serialize(t));
 
@@ -532,9 +533,9 @@ class UrlEncodingSerializer_Test extends TestBase {
 
 	@Test void a07_multiPartParametersOnMapOfStringArrays() throws Exception {
 		var t = new LinkedHashMap<>();
-		t.put("f1", new String[]{"bar"});
-		t.put("f2", new String[]{"bar","baz"});
-		t.put("f3", new String[]{});
+		t.put("f1", a("bar"));
+		t.put("f2", a("bar","baz"));
+		t.put("f3", a());
 		var s2 = UrlEncodingSerializer.DEFAULT_EXPANDED;
 		var r = s2.serialize(t);
 		var e = "f1=bar&f2=bar&f2=baz";

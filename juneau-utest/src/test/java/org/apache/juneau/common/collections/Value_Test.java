@@ -138,10 +138,10 @@ class Value_Test extends TestBase {
 
 	@Test
 	void c05_is_equalArrays() {
-		var v = Value.of(new int[]{1, 2, 3});
-		assertTrue(v.is(new int[]{1, 2, 3}), "Should be equal to same array content");
-		assertFalse(v.is(new int[]{1, 2, 4}), "Should not be equal to different array content");
-		assertFalse(v.is(new int[]{1, 2}), "Should not be equal to shorter array");
+		var v = Value.of(ints(1, 2, 3));
+		assertTrue(v.is(ints(1, 2, 3)), "Should be equal to same array content");
+		assertFalse(v.is(ints(1, 2, 4)), "Should not be equal to different array content");
+		assertFalse(v.is(ints(1, 2)), "Should not be equal to shorter array");
 	}
 
 	@Test

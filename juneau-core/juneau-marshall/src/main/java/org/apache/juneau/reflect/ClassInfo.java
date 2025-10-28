@@ -234,7 +234,7 @@ public class ClassInfo {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Annotation[] { a };
+		return a(a);
 	}
 
 	private final Type t;
@@ -992,7 +992,7 @@ public class ClassInfo {
 	 * 		<li>{@link #getSimpleName()}
 	 * 	</ul>
 	 */
-	public String[] getNames() { return new String[] { getFullName(), c.getName(), getShortName(), getSimpleName() }; }
+	public String[] getNames() { return a(getFullName(), c.getName(), getShortName(), getSimpleName()); }
 
 	/**
 	 * Locates the no-arg constructor for this class.

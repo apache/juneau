@@ -164,7 +164,7 @@ public class AnnotationInfo<T extends Annotation> {
 			if (applyConstructors == null) {
 				ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
 				if (cpa == null)
-					applyConstructors = new Constructor[] { AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class) };
+					applyConstructors = a(AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class));
 				else {
 					applyConstructors = new Constructor[cpa.value().length];
 					for (int i = 0; i < cpa.value().length; i++)

@@ -6828,7 +6828,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		final String restUrl2 = StringUtils.trimSlashes(emptyIfNull(rootUrl));
 
-		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new InvocationHandler() {
+		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), new InvocationHandler() {
 
 			final RemoteMeta rm = new RemoteMeta(interfaceClass);
 
@@ -7069,7 +7069,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		final String restUrl2 = s(uri);
 
-		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new InvocationHandler() {
+		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), new InvocationHandler() {
 
 			final RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, restUrl2);
 

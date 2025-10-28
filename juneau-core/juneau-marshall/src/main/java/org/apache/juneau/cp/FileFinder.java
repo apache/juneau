@@ -107,8 +107,8 @@ public interface FileFinder {
 			super(BasicFileFinder.class, beanStore);
 			roots = set();
 			cachingLimit = -1;
-			include = new Pattern[] { Pattern.compile(".*") };
-			exclude = new Pattern[0];
+			include = a(Pattern.compile(".*"));
+			exclude = a();
 		}
 
 		/**

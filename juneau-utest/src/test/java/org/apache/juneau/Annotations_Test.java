@@ -16,7 +16,7 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
@@ -35,7 +35,7 @@ class Annotations_Test extends TestBase {
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertMap(bm, "name,age", "futbol,65");
+		assertBean(bm, "name,age", "futbol,65");
 		assertBean(bm.getBean(), "name,age", "futbol,65");
 	}
 
@@ -58,7 +58,7 @@ class Annotations_Test extends TestBase {
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertMap(bm, "name,age", "futbol,65");
+		assertBean(bm, "name,age", "futbol,65");
 		assertBean(bm.getBean(), "name,age", "futbol,65");
 	}
 
@@ -81,7 +81,7 @@ class Annotations_Test extends TestBase {
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertMap(bm, "name,age", "futbol,65");
+		assertBean(bm, "name,age", "futbol,65");
 		assertBean(bm.getBean(), "name,age", "futbol,65");
 	}
 
@@ -104,7 +104,7 @@ class Annotations_Test extends TestBase {
 
 		bm.put("age", 65);
 		bm.put("name", "futbol");
-		assertMap(bm, "name,age", "futbol,65");
+		assertBean(bm, "name,age", "futbol,65");
 		assertBean(bm.getBean(), "name,age", "futbol,65");
 	}
 
@@ -128,7 +128,7 @@ class Annotations_Test extends TestBase {
 
 		// Make sure only public fields are detected
 		var bm = bc.newBeanMap(A.class).load("{publicField:123}");
-		assertMap(bm, "publicField", "123");
+		assertBean(bm, "publicField", "123");
 	}
 
 	public static class A {

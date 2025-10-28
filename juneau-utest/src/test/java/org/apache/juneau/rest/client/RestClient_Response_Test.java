@@ -26,7 +26,6 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.http.Header;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
@@ -167,7 +166,7 @@ class RestClient_Response_Test extends TestBase {
 		r.getHeader("Foo").assertValue().is("bar, baz, qux");
 		assertFalse(r.getHeader("Bar").isPresent());
 
-		r.setHeaders(new Header[]{basicHeader("Foo", "quux")});
+		r.setHeaders(a(basicHeader("Foo", "quux")));
 		r.getFirstHeader("Foo").assertValue().is("quux");
 		r.getLastHeader("Foo").assertValue().is("quux");
 

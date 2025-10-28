@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.collections.*;
@@ -104,7 +105,7 @@ class UonSerializer_Test {
 
 		// Array containing empty string
 		// Top level
-		t = new String[]{""};
+		t = a("");
 		assertEquals("@('')", s.serialize(t));
 		assertEquals("@('')", su.serialize(t));
 		assertEquals("@(\n\t''\n)", sr.serialize(t));
@@ -116,7 +117,7 @@ class UonSerializer_Test {
 		assertEquals("(\n\tx=@(\n\t\t''\n\t)\n)", sr.serialize(t));
 
 		// Array containing 3 empty strings
-		t = new String[]{"","",""};
+		t = a("","","");
 		assertEquals("@('','','')", s.serialize(t));
 		assertEquals("@('','','')", su.serialize(t));
 		assertEquals("@(\n\t'',\n\t'',\n\t''\n)", sr.serialize(t));

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,7 +62,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a05_stringArray(RoundTrip_Tester t) throws Exception {
-		assertArrayEquals(new String[]{"foo", null, "null", ""}, t.roundTrip(new String[]{"foo", null, "null", ""}, String[].class));
+		assertArrayEquals(a("foo", null, "null", ""), t.roundTrip(a("foo", null, "null", ""), String[].class));
 	}
 
 	@ParameterizedTest
@@ -85,7 +86,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a08_intArray(RoundTrip_Tester t) throws Exception {
-		assertArrayEquals(new int[]{1,2,3}, t.roundTrip(new int[]{1,2,3}, int[].class));
+		assertArrayEquals(ints(1,2,3), t.roundTrip(ints(1,2,3), int[].class));
 	}
 
 	@ParameterizedTest
@@ -124,7 +125,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a12_booleanArray(RoundTrip_Tester t) throws Exception {
-		assertArrayEquals(new boolean[]{true,false}, t.roundTrip(new boolean[]{true,false}, boolean[].class));
+		assertArrayEquals(booleans(true,false), t.roundTrip(booleans(true,false), boolean[].class));
 	}
 
 	@ParameterizedTest
@@ -146,7 +147,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a15_charArray(RoundTrip_Tester t) throws Exception {
-		assertArrayEquals(new char[]{'a',0}, t.roundTrip(new char[]{'a',0}, char[].class));
+		assertArrayEquals(chars('a',(char)0), t.roundTrip(chars('a',(char)0), char[].class));
 	}
 
 	@ParameterizedTest
@@ -168,7 +169,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a18_floatArray(RoundTrip_Tester t) throws Exception {
-		assertArrayEquals(new float[]{1f}, t.roundTrip(new float[]{1f}, float[].class), 0.1f);
+		assertArrayEquals(floats(1f), t.roundTrip(floats(1f), float[].class), 0.1f);
 	}
 
 	@ParameterizedTest
@@ -189,7 +190,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a21_doubleArray(RoundTrip_Tester t) throws Exception {
-		assertArrayEquals(new double[]{1d}, t.roundTrip(new double[]{1d}, double[].class), 0.1);
+		assertArrayEquals(doubles(1d), t.roundTrip(doubles(1d), double[].class), 0.1);
 	}
 
 	@ParameterizedTest
@@ -210,7 +211,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a24_longArray(RoundTrip_Tester t) throws Exception {
-		assertArrayEquals(new long[]{1L}, t.roundTrip(new long[]{1L}, long[].class));
+		assertArrayEquals(longs(1L), t.roundTrip(longs(1L), long[].class));
 	}
 
 	@ParameterizedTest
@@ -231,7 +232,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a27_shortArray(RoundTrip_Tester t) throws Exception {
-		assertArrayEquals(new short[]{(short)1}, t.roundTrip(new short[]{(short)1}, short[].class));
+		assertArrayEquals(shorts((short)1), t.roundTrip(shorts((short)1), short[].class));
 	}
 
 	@ParameterizedTest
@@ -252,7 +253,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a30_integerArray(RoundTrip_Tester t) throws Exception {
-		var x = new Integer[]{123, null};
+		var x = a(123, null);
 		x = t.roundTrip(x, Integer[].class);
 		assertEquals(Integer.valueOf(123), x[0]);
 		assertNull(x[1]);
@@ -261,7 +262,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a31_integer2dArray(RoundTrip_Tester t) throws Exception {
-		var x = new Integer[][]{{123,null},null};
+		var x = a(a(123,null),null);
 		x = t.roundTrip(x, Integer[][].class);
 		assertEquals(Integer.valueOf(123), x[0][0]);
 		assertNull(x[0][1]);
@@ -271,7 +272,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a32_integer3dArray(RoundTrip_Tester t) throws Exception {
-		var x = new Integer[][][]{{{123,null},null},null};
+		var x = a(a(a(123,null),null),null);
 		x = t.roundTrip(x, Integer[][][].class);
 		assertEquals(Integer.valueOf(123), x[0][0][0]);
 		assertNull(x[0][0][1]);
@@ -289,7 +290,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a34_booleanObjectArray(RoundTrip_Tester t) throws Exception {
-		var x = new Boolean[]{true,false,null};
+		var x = a(true,false,null);
 		x = t.roundTrip(x, Boolean[].class);
 		assertTrue(x[0]);
 		assertFalse(x[1]);
@@ -299,7 +300,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a35_booleanObject2dArray(RoundTrip_Tester t) throws Exception {
-		var x = new Boolean[][]{{true,false,null},null};
+		var x = a(a(true,false,null),null);
 		x = t.roundTrip(x, Boolean[][].class);
 		assertTrue(x[0][0]);
 		assertFalse(x[0][1]);
@@ -316,7 +317,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a37_characterArray(RoundTrip_Tester t) throws Exception {
-		var x = new Character[]{'a',null};
+		var x = a('a',null);
 		x = t.roundTrip(x, Character[].class);
 		assertEquals(Character.valueOf('a'), x[0]);
 		assertNull(x[1]);
@@ -325,7 +326,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a38_character2dArray(RoundTrip_Tester t) throws Exception {
-		var x = new Character[][]{{'a',null},null};
+		var x = a(a('a',null),null);
 		x = t.roundTrip(x, Character[][].class);
 		assertEquals(Character.valueOf('a'), x[0][0]);
 		assertNull(x[0][1]);
@@ -341,7 +342,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a40_floatObjectArray(RoundTrip_Tester t) throws Exception {
-		var x = new Float[]{1f, null};
+		var x = a(1f, null);
 		x = t.roundTrip(x, Float[].class);
 		assertEquals(Float.valueOf(1f), x[0]);
 		assertNull(x[1]);
@@ -350,7 +351,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a41_floatObject2dArray(RoundTrip_Tester t) throws Exception {
-		var x = new Float[][]{{1f,null},null};
+		var x = a(a(1f,null),null);
 		x = t.roundTrip(x, Float[][].class);
 		assertEquals(Float.valueOf(1f), x[0][0]);
 		assertNull(x[0][1]);
@@ -366,7 +367,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a43_doubleObjectArray(RoundTrip_Tester t) throws Exception {
-		var x = new Double[]{1d,null};
+		var x = a(1d,null);
 		x = t.roundTrip(x, Double[].class);
 		assertEquals(Double.valueOf(1d), x[0]);
 		assertNull(x[1]);
@@ -375,7 +376,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a44_doubleObject2dArray(RoundTrip_Tester t) throws Exception {
-		var x = new Double[][]{{1d,null},null};
+		var x = a(a(1d,null),null);
 		x = t.roundTrip(x, Double[][].class);
 		assertEquals(Double.valueOf(1d), x[0][0]);
 		assertNull(x[0][1]);
@@ -391,7 +392,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a46_longObjectArray(RoundTrip_Tester t) throws Exception {
-		var x = new Long[]{1L, null};
+		var x = a(1L, null);
 		x = t.roundTrip(x, Long[].class);
 		assertEquals(Long.valueOf(1L), x[0]);
 		assertNull(x[1]);
@@ -400,7 +401,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a47_longObject2dArray(RoundTrip_Tester t) throws Exception {
-		var x = new Long[][]{{1L,null},null};
+		var x = a(a(1L,null),null);
 		x = t.roundTrip(x, Long[][].class);
 		assertEquals(Long.valueOf(1L), x[0][0]);
 		assertNull(x[0][1]);
@@ -416,7 +417,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a49_shortObjectArray(RoundTrip_Tester t) throws Exception {
-		var x = new Short[]{(short)1,null};
+		var x = a((short)1,null);
 		x = t.roundTrip(x, Short[].class);
 		assertEquals(Short.valueOf((short)1), x[0]);
 		assertNull(x[1]);
@@ -425,7 +426,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a50_shortObject2dArray(RoundTrip_Tester t) throws Exception {
-		var x = new Short[][]{{(short)1,null},null};
+		var x = a(a((short)1,null),null);
 		x = t.roundTrip(x, Short[][].class);
 		assertEquals(Short.valueOf((short)1), x[0][0]);
 		assertNull(x[0][1]);

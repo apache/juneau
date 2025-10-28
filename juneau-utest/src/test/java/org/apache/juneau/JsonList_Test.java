@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -33,7 +34,7 @@ class JsonList_Test extends TestBase {
 
 		assertEquals(
 			"['A','B','C']",
-			new JsonList((Object[])new String[]{"A","B","C"}).toString()
+			new JsonList((Object[])a("A","B","C")).toString()
 		);
 
 		assertEquals(
@@ -43,7 +44,7 @@ class JsonList_Test extends TestBase {
 
 		assertEquals(
 			"['A','B','C']",
-			new JsonList(Arrays.asList(new String[]{"A","B","C"})).toString()
+			new JsonList(Arrays.asList(a("A","B","C"))).toString()
 		);
 	}
 

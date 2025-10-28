@@ -18,7 +18,6 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
@@ -241,7 +240,7 @@ public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class BeanWithReader1dField {
 		public Reader[] f;
 		public BeanWithReader1dField init() {
-			f = new Reader[]{reader("fv1"),reader("fv2"),null};
+			f = a(reader("fv1"),reader("fv2"),null);
 			return this;
 		}
 	}
@@ -295,7 +294,7 @@ public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 
 		public B init() {
 			f1 = reader("f1v");
-			f2 = new Reader[]{reader("f2v1"),reader("f2v2"),null};
+			f2 = a(reader("f2v1"),reader("f2v2"),null);
 			f3 = null;
 			f4 = list(reader("f4v1"),reader("f4v2"),null);
 			f5 = map("foo",reader("f5v1"),"bar",null,null,reader("f5v2"));

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -245,7 +246,7 @@ class Header_AcceptEncoding_Test extends TestBase {
 	public static class MyEncoder extends GzipEncoder {
 		@Override /* ConfigEncoder */
 		public String[] getCodings() {
-			return new String[]{"mycoding"};
+			return a("mycoding");
 		}
 	}
 }

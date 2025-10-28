@@ -17,6 +17,7 @@
 package org.apache.juneau.testutils.pojos;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.math.*;
 import java.util.*;
@@ -117,64 +118,64 @@ public class PrimitiveObjectsBean {
 		poBigDecimal = new BigDecimal("9");
 
 		// primitive object arrays
-		poaBoolean = new Boolean[][]{{true},{false},null};
-		poaByte = new Byte[][]{{1},{2},null};
-		poaChar = new Character[][]{{'a'},{'b'},null};
-		poaShort = new Short[][]{{1},{2},null};
-		poaInt = new Integer[][]{{1},{2},null};
-		poaLong = new Long[][]{{1L},{2L},null};
-		poaFloat = new Float[][]{{1f},{2f},null};
-		poaDouble = new Double[][]{{1d},{2d},null};
-		poaNumber = new Number[][]{{1},{2},null};
-		poaBigInteger = new BigInteger[][]{{BigInteger.valueOf(1L)}, {BigInteger.valueOf(2L)}, null};
-		poaBigDecimal = new BigDecimal[][]{{new BigDecimal("1")}, {new BigDecimal("2")}, null};
+		poaBoolean = a(a(true),a(false),null);
+		poaByte = a(a((byte)1),a((byte)2),null);
+		poaChar = a(a('a'),a('b'),null);
+		poaShort = a(a((short)1),a((short)2),null);
+		poaInt = a(a(1),a(2),null);
+		poaLong = a(a(1L),a(2L),null);
+		poaFloat = a(a(1f),a(2f),null);
+		poaDouble = a(a(1d),a(2d),null);
+		poaNumber = a(a((Number)1),a((Number)2),null);
+		poaBigInteger = a(a(BigInteger.valueOf(1L)),a(BigInteger.valueOf(2L)), null);
+		poaBigDecimal = a(a(new BigDecimal("1")),a(new BigDecimal("2")), null);
 
 		// Anonymous list of primitives
-		poalBoolean = alist(new Boolean[]{Boolean.TRUE},null);
-		poalByte = alist(new Byte[]{1},null);
-		poalChar = alist(new Character[]{'a'},null);
-		poalShort = alist(new Short[]{1},null);
-		poalInt = alist(new Integer[]{1},null);
-		poalLong = alist(new Long[]{1L},null);
-		poalFloat = alist(new Float[]{1f},null);
-		poalDouble = alist(new Double[]{1d},null);
-		poalNumber = alist(new Integer[]{1},null);
-		poalBigInteger = alist(new BigInteger[]{BigInteger.valueOf(1L)},null);
-		poalBigDecimal = alist(new BigDecimal[]{new BigDecimal("1")},null);
+		poalBoolean = alist(a(Boolean.TRUE),null);
+		poalByte = alist(a((byte)1),null);
+		poalChar = alist(a('a'),null);
+		poalShort = alist(a((short)1),null);
+		poalInt = alist(a(1),null);
+		poalLong = alist(a(1L),null);
+		poalFloat = alist(a(1f),null);
+		poalDouble = alist(a(1d),null);
+		poalNumber = alist(a(1),null);
+		poalBigInteger = alist(a(BigInteger.valueOf(1L)),null);
+		poalBigDecimal = alist(a(new BigDecimal("1")),null);
 
 		// Regular list of primitives
 		polBoolean = new ArrayList<>();
-		polBoolean.add(new Boolean[]{Boolean.TRUE});
+		polBoolean.add(a(Boolean.TRUE));
 		polBoolean.add(null);
 		polByte = new ArrayList<>();
-		polByte.add(new Byte[]{1});
+		polByte.add(a((byte)1));
 		polByte.add(null);
 		polChar = new ArrayList<>();
-		polChar.add(new Character[]{'a'});
+		polChar.add(a('a'));
 		polChar.add(null);
 		polShort = new ArrayList<>();
-		polShort.add(new Short[]{1});
+		polShort.add(a((short)1));
 		polShort.add(null);
 		polInt = new ArrayList<>();
-		polInt.add(new Integer[]{1});
+		polInt.add(a(1));
 		polInt.add(null);
 		polLong = new ArrayList<>();
-		polLong.add(new Long[]{1L});
+		polLong.add(a(1L));
 		polLong.add(null);
 		polFloat = new ArrayList<>();
-		polFloat.add(new Float[]{1f});
+		polFloat.add(a(1f));
 		polFloat.add(null);
 		polDouble = new ArrayList<>();
-		polDouble.add(new Double[]{1d});
+		polDouble.add(a(1d));
 		polDouble.add(null);
 		polNumber = new ArrayList<>();
-		polNumber.add(new Number[]{1});
+		polNumber.add(a((Number)1));
 		polNumber.add(null);
 		polBigInteger = new ArrayList<>();
-		polBigInteger.add(new BigInteger[]{BigInteger.valueOf(1L)});
+		polBigInteger.add(a(BigInteger.valueOf(1L)));
 		polBigInteger.add(null);
 		polBigDecimal = new ArrayList<>();
-		polBigDecimal.add(new BigDecimal[]{new BigDecimal("1")});
+		polBigDecimal.add(a(new BigDecimal("1")));
 		polBigDecimal.add(null);
 
 		return this;

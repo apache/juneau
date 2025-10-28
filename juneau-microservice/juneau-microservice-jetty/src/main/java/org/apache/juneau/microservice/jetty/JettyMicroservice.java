@@ -266,7 +266,7 @@ public class JettyMicroservice extends Microservice {
 		 * 		<c>8000</c>
 		 * </ul>
 		 *
-		 * Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}
+		 * Jetty/port", mf.getWithDefault("Jetty-Port", ints(8000)
 		 * @param ports The ports to use for the web server.
 		 * @return This object.
 		 */
@@ -546,7 +546,7 @@ public class JettyMicroservice extends Microservice {
 		JsonMap mf = getManifest();
 		VarResolver vr = getVarResolver();
 
-		int[] ports = firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.getWithDefault("Jetty-Port", new int[] { 8000 }, int[].class)));
+		int[] ports = firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(() -> mf.getWithDefault("Jetty-Port", ints(8000), int[].class)));
 		int availablePort = findOpenPort(ports);
 
 		if (System.getProperty("availablePort") == null)

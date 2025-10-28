@@ -22,6 +22,7 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.map;
 import static org.apache.juneau.bean.html5.HtmlBuilder.u;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.map;
+import static org.apache.juneau.common.utils.Utils.a;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -69,7 +70,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(A.class))
 			.build(),
-		tester(2, "A[]", A[].class, new A[]{a2("http://foo", "bar"),a2("http://baz", "qux")})
+		tester(2, "A[]", A[].class, a(a2("http://foo", "bar"),a2("http://baz", "qux")))
 			.json("[{_type:'a',a:{href:'http://foo'},c:['bar']},{_type:'a',a:{href:'http://baz'},c:['qux']}]")
 			.jsonT("[{t:'a',a:{href:'http://foo'},c:['bar']},{t:'a',a:{href:'http://baz'},c:['qux']}]")
 			.jsonR("[\n\t{\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://foo'\n\t\t},\n\t\tc: [\n\t\t\t'bar'\n\t\t]\n\t},\n\t{\n\t\t_type: 'a',\n\t\ta: {\n\t\t\thref: 'http://baz'\n\t\t},\n\t\tc: [\n\t\t\t'qux'\n\t\t]\n\t}\n]")
@@ -120,7 +121,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.verify(x -> verify(x.get(0)).isType(A.class))
 			.verify(x -> verify(x.get(1)).isType(A.class))
 			.build(),
-		tester(4, "A[][]", A[][].class, new A[][]{{a2("http://a", "b"),a2("http://c", "d")},{},{a2("http://e", "f")}})
+		tester(4, "A[][]", A[][].class, a(a(a2("http://a", "b"),a2("http://c", "d")),a(),a(a2("http://e", "f"))))
 			.json("[[{_type:'a',a:{href:'http://a'},c:['b']},{_type:'a',a:{href:'http://c'},c:['d']}],[],[{_type:'a',a:{href:'http://e'},c:['f']}]]")
 			.jsonT("[[{t:'a',a:{href:'http://a'},c:['b']},{t:'a',a:{href:'http://c'},c:['d']}],[],[{t:'a',a:{href:'http://e'},c:['f']}]]")
 			.jsonR("[\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://a'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'b'\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://c'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'd'\n\t\t\t]\n\t\t}\n\t],\n\t[\n\t],\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://e'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'f'\n\t\t\t]\n\t\t}\n\t]\n]")
@@ -246,7 +247,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:f1 rdf:parseType='Resource'>\n      <jp:a rdf:parseType='Resource'>\n        <jp:href rdf:resource='http://b'/>\n      </jp:a>\n      <jp:c>\n        <rdf:Seq>\n          <rdf:li>c</rdf:li>\n        </rdf:Seq>\n      </jp:c>\n    </jp:f1>\n    <jp:f2>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f2>\n    <jp:f3>\n      <rdf:Seq>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:a rdf:parseType='Resource'>\n            <jp:href rdf:resource='http://b'/>\n          </jp:a>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>c</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n      </rdf:Seq>\n    </jp:f3>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(BeanWithAField.class))
 			.build(),
-		tester(9, "BeanWithAField[]", BeanWithAField[].class, new BeanWithAField[]{BeanWithAField.create(a2("http://b", "c"))})
+		tester(9, "BeanWithAField[]", BeanWithAField[].class, a(BeanWithAField.create(a2("http://b", "c"))))
 			.json("[{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}]")
 			.jsonT("[{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}]")
 			.jsonR("[\n\t{\n\t\tf1: {\n\t\t\ta: {\n\t\t\t\thref: 'http://b'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'c'\n\t\t\t]\n\t\t},\n\t\tf2: [\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t}\n\t\t],\n\t\tf3: [\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t},\n\t\t\t{\n\t\t\t\ta: {\n\t\t\t\t\thref: 'http://b'\n\t\t\t\t},\n\t\t\t\tc: [\n\t\t\t\t\t'c'\n\t\t\t\t]\n\t\t\t}\n\t\t]\n\t}\n]")
@@ -318,7 +319,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>a</jp:_type>\n    <jp:a rdf:parseType='Resource'>\n      <jp:href rdf:resource='http://foo'/>\n    </jp:a>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>bar</rdf:li>\n        <rdf:li rdf:parseType='Resource'>\n          <jp:_type>b</jp:_type>\n          <jp:c>\n            <rdf:Seq>\n              <rdf:li>bbb</rdf:li>\n            </rdf:Seq>\n          </jp:c>\n        </rdf:li>\n        <rdf:li>baz</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(A.class))
 			.build(),
-		tester(12, "Test11", A[][].class, new A[][]{{a2("http://a", "b", btag, "c"),a2("http://d", "e", btag, "f")},{},{a2("http://g", "h", btag, "i")}})
+		tester(12, "Test11", A[][].class, a(a(a2("http://a", "b", btag, "c"),a2("http://d", "e", btag, "f")),a(),a(a2("http://g", "h", btag, "i"))))
 			.json("[[{_type:'a',a:{href:'http://a'},c:['b',{_type:'b',c:['bbb']},'c']},{_type:'a',a:{href:'http://d'},c:['e',{_type:'b',c:['bbb']},'f']}],[],[{_type:'a',a:{href:'http://g'},c:['h',{_type:'b',c:['bbb']},'i']}]]")
 			.jsonT("[[{t:'a',a:{href:'http://a'},c:['b',{t:'b',c:['bbb']},'c']},{t:'a',a:{href:'http://d'},c:['e',{t:'b',c:['bbb']},'f']}],[],[{t:'a',a:{href:'http://g'},c:['h',{t:'b',c:['bbb']},'i']}]]")
 			.jsonR("[\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://a'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'b',\n\t\t\t\t{\n\t\t\t\t\t_type: 'b',\n\t\t\t\t\tc: [\n\t\t\t\t\t\t'bbb'\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t'c'\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://d'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'e',\n\t\t\t\t{\n\t\t\t\t\t_type: 'b',\n\t\t\t\t\tc: [\n\t\t\t\t\t\t'bbb'\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t'f'\n\t\t\t]\n\t\t}\n\t],\n\t[\n\t],\n\t[\n\t\t{\n\t\t\t_type: 'a',\n\t\t\ta: {\n\t\t\t\thref: 'http://g'\n\t\t\t},\n\t\t\tc: [\n\t\t\t\t'h',\n\t\t\t\t{\n\t\t\t\t\t_type: 'b',\n\t\t\t\t\tc: [\n\t\t\t\t\t\t'bbb'\n\t\t\t\t\t]\n\t\t\t\t},\n\t\t\t\t'i'\n\t\t\t]\n\t\t}\n\t]\n]")
@@ -1516,7 +1517,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>p</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(P.class))
 			.build(),
-		tester(57, "P[][]", P[][].class, new P[][]{{p("a"),p("b")},{},{p("c")}})
+		tester(57, "P[][]", P[][].class, a(a(p("a"),p("b")),a(),a(p("c"))))
 			.json("[[{_type:'p',c:['a']},{_type:'p',c:['b']}],[],[{_type:'p',c:['c']}]]")
 			.jsonT("[[{t:'p',c:['a']},{t:'p',c:['b']}],[],[{t:'p',c:['c']}]]")
 			.jsonR("[\n\t[\n\t\t{\n\t\t\t_type: 'p',\n\t\t\tc: [\n\t\t\t\t'a'\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t_type: 'p',\n\t\t\tc: [\n\t\t\t\t'b'\n\t\t\t]\n\t\t}\n\t],\n\t[\n\t],\n\t[\n\t\t{\n\t\t\t_type: 'p',\n\t\t\tc: [\n\t\t\t\t'c'\n\t\t\t]\n\t\t}\n\t]\n]")
@@ -1689,7 +1690,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:_type>samp</jp:_type>\n    <jp:c>\n      <rdf:Seq>\n        <rdf:li>foo</rdf:li>\n      </rdf:Seq>\n    </jp:c>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(Samp.class))
 			.build(),
-		tester(64, "Script", Script.class, script("text/javascript", new String[]{"\n\talert('hello world!');\n"}))
+		tester(64, "Script", Script.class, script("text/javascript", a("\n\talert('hello world!');\n")))
 			.json("{_type:'script',a:{type:'text/javascript'},c:'\\n\\talert(\\'hello world!\\');\\n'}")
 			.jsonT("{t:'script',a:{type:'text/javascript'},c:'\\n\\talert(\\'hello world!\\');\\n'}")
 			.jsonR("{\n\t_type: 'script',\n\ta: {\n\t\ttype: 'text/javascript'\n\t},\n\tc: '\\n\\talert(\\'hello world!\\');\\n'\n}")
@@ -2239,7 +2240,7 @@ class Html5_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		public static BeanWithAField create(A a) {
 			var b = new BeanWithAField();
 			b.f1 = a;
-			b.f2 = new A[]{a,a};
+			b.f2 = a(a,a);
 			b.f3 = alist(a,a);
 			return b;
 		}

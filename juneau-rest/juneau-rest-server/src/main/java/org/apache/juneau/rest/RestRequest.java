@@ -1162,7 +1162,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
 			final BeanSession bs = getBeanSession();
 			final BeanMeta<T> bm = bs.getBeanMeta(c);
-			return (T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, (InvocationHandler)(proxy, method, args) -> {
+			return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
 				RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
 				if (nn(pm)) {
 					HttpPartParserSession pp = pm.getParser(getPartParserSession());

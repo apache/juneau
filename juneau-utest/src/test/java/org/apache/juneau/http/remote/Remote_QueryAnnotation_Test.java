@@ -99,8 +99,8 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		assertEquals("{x:'f=1'}",x.getX3(Bean.create()));
 		assertEquals("{f:'1'}",x.getX4(Bean.create()));
 		assertEquals("{f:'1'}",x.getX5(Bean.create()));
-		assertEquals("{x:'f=1,f=1'}",x.getX6(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.getX7(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("{x:'f=1,f=1'}",x.getX6(a(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.getX7(a(Bean.create(),Bean.create())));
 		assertEquals("{x:'f=1,f=1'}",x.getX8(alist(Bean.create(),Bean.create())));
 		assertEquals("{x:'@((f=1),(f=1))'}",x.getX9(alist(Bean.create(),Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.getX10(map("k1",Bean.create())));
@@ -482,17 +482,17 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", x::getX1);
 		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.getX1("1","2","3"));
 		assertEquals("{x:null}",x.getX1((String)null));
-		assertEquals("{x:'1'}",x.getX2(new String[]{"1"}));
-		assertEquals("{x:'1|2'}",x.getX2(new String[]{"1","2"}));
+		assertEquals("{x:'1'}",x.getX2(a("1")));
+		assertEquals("{x:'1|2'}",x.getX2(a("1","2")));
 		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", ()->x.getX2(new String[]{}));
-		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.getX2(new String[]{"1","2","3"}));
-		assertEquals("{x:null}",x.getX2(new String[]{null}));
+		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.getX2(a("1","2","3")));
+		assertEquals("{x:null}",x.getX2(a((String)null)));
 		assertEquals("{x:'1|1'}",x.getX3("1","1"));
-		assertEquals("{x:'1|1'}",x.getX4(new String[]{"1","1"}));
+		assertEquals("{x:'1|1'}",x.getX4(a("1","1")));
 		assertEquals("{x:'1|2'}",x.getX5("1","2"));
 		assertThrowsWithMessage(Exception.class, "Duplicate items not allowed.", ()->x.getX5("1","1"));
-		assertEquals("{x:'1|2'}",x.getX6(new String[]{"1","2"}));
-		assertThrowsWithMessage(Exception.class, "Duplicate items not allowed.", ()->x.getX6(new String[]{"1","1"}));
+		assertEquals("{x:'1|2'}",x.getX6(a("1","2")));
+		assertThrowsWithMessage(Exception.class, "Duplicate items not allowed.", ()->x.getX6(a("1","1")));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -840,9 +840,9 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		@Query(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
 		@Query("d") @Schema(allowEmptyValue=true) public List<Object> getX3() { return alist(); }
 		@Query("e") public List<Object> getX4() { return null; }
-		@Query("f") public Object[] getX5() { return new Object[]{"foo","","true","123","null",true,123,null}; }
-		@Query(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return new Object[]{"foo","","true","123","null",true,123,null}; }
-		@Query("h") @Schema(allowEmptyValue=true) public Object[] getX7() { return new Object[]{}; }
+		@Query("f") public Object[] getX5() { return a("foo","","true","123","null",true,123,null); }
+		@Query(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }
+		@Query("h") @Schema(allowEmptyValue=true) public Object[] getX7() { return a(); }
 		@Query("i") public Object[] getX8() { return null; }
 	}
 

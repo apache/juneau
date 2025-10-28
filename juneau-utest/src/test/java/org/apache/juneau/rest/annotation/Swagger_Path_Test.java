@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.util.*;
 

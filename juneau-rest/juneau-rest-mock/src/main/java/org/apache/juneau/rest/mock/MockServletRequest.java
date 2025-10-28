@@ -540,7 +540,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest header(String name, Object value) {
 		if (nn(value)) {
-			String[] v1 = (value instanceof String[]) ? (String[])value : new String[] { value.toString() };
+			String[] v1 = (value instanceof String[]) ? (String[])value : a(value.toString());
 			String[] v2 = headerMap.get(name);
 			String[] v3 = combine(v2, v1);
 			headerMap.put(name, v3);

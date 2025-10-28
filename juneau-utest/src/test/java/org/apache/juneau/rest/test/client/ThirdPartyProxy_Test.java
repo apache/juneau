@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -99,11 +100,11 @@ class ThirdPartyProxy_Test extends TestBase {
 	void a02_primitiveCollectionHeaders(Input input) {
 		var r = input.proxy.primitiveCollectionHeaders(
 			new int[][][]{{{1,2},null},null},
-			new Integer[][][]{{{1,null},null},null},
-			new String[][][]{{{"foo",null},null},null},
+			a(a(a(1,null),null),null),
+			a(a(a("foo",null),null),null),
 			alist(1,null),
 			alist(alist(alist(1,null),null),null),
-			alist(new Integer[][][]{{{1,null},null},null},null),
+			alist(a(a(a(1,null),null),null),null),
 			alist(new int[][][]{{{1,2},null},null},null),
 			alist("foo","bar",null)
 		);
@@ -116,12 +117,12 @@ class ThirdPartyProxy_Test extends TestBase {
 		var r = input.proxy.beanHeaders(
 			ABean.get(),
 			null,
-			new ABean[][][]{{{ABean.get(),null},null},null},
+			a(a(a(ABean.get(),null),null),null),
 			alist(ABean.get(),null),
-			alist(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			alist(a(a(a(ABean.get(),null),null),null),null),
 			map("foo",ABean.get()),
 			map("foo",alist(ABean.get())),
-			map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			map("foo",alist(a(a(a(ABean.get(),null),null),null),null)),
 			map(1,alist(ABean.get()))
 		);
 		assertEquals("OK", r);
@@ -133,12 +134,12 @@ class ThirdPartyProxy_Test extends TestBase {
 		var r = input.proxy.typedBeanHeaders(
 			TypedBeanImpl.get(),
 			null,
-			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
+			a(a(a(TypedBeanImpl.get(),null),null),null),
 			alist(TypedBeanImpl.get(),null),
-			alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			alist(a(a(a(TypedBeanImpl.get(),null),null),null),null),
 			map("foo",TypedBeanImpl.get()),
 			map("foo",alist((TypedBean)TypedBeanImpl.get())),
-			map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			map("foo",alist(a(a(a(TypedBeanImpl.get(),null),null),null),null)),
 			map(1,alist((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
@@ -149,9 +150,9 @@ class ThirdPartyProxy_Test extends TestBase {
 	void a05_swappedObjectHeaders(Input input) {
 		var r = input.proxy.swappedObjectHeaders(
 			new SwappedObject(),
-			new SwappedObject[][][]{{{new SwappedObject(),null},null},null},
+			a(a(a(new SwappedObject(),null),null),null),
 			map(new SwappedObject(),new SwappedObject()),
-			map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})
+			map(new SwappedObject(),a(a(a(new SwappedObject(),null),null),null))
 		);
 		assertEquals("OK", r);
 	}
@@ -161,9 +162,9 @@ class ThirdPartyProxy_Test extends TestBase {
 	void a06_implicitSwappedObjectHeaders(Input input) {
 		var r = input.proxy.implicitSwappedObjectHeaders(
 			new ImplicitSwappedObject(),
-			new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null},
+			a(a(a(new ImplicitSwappedObject(),null),null),null),
 			map(new ImplicitSwappedObject(),new ImplicitSwappedObject()),
-			map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})
+			map(new ImplicitSwappedObject(),a(a(a(new ImplicitSwappedObject(),null),null),null))
 		);
 		assertEquals("OK", r);
 	}
@@ -174,13 +175,13 @@ class ThirdPartyProxy_Test extends TestBase {
 		var r = input.proxy.enumHeaders(
 			TestEnum.TWO,
 			null,
-			new TestEnum[][][]{{{TestEnum.TWO,null},null},null},
+			a(a(a(TestEnum.TWO,null),null),null),
 			alist(TestEnum.TWO,null),
 			alist(alist(alist(TestEnum.TWO,null),null),null),
-			alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
+			alist(a(a(a(TestEnum.TWO,null),null),null),null),
 			map(TestEnum.ONE,TestEnum.TWO),
-			map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
-			map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
+			map(TestEnum.ONE,a(a(a(TestEnum.TWO,null),null),null)),
+			map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,null),null),null),null))
 		);
 		assertEquals("OK", r);
 	}
@@ -237,11 +238,11 @@ class ThirdPartyProxy_Test extends TestBase {
 	void b02_primitiveCollectionQueries(Input input) {
 		var r = input.proxy.primitiveCollectionQueries(
 			new int[][][]{{{1,2},null},null},
-			new Integer[][][]{{{1,null},null},null},
-			new String[][][]{{{"foo",null},null},null},
+			a(a(a(1,null),null),null),
+			a(a(a("foo",null),null),null),
 			alist(1,null),
 			alist(alist(alist(1,null),null),null),
-			alist(new Integer[][][]{{{1,null},null},null},null),
+			alist(a(a(a(1,null),null),null),null),
 			alist(new int[][][]{{{1,2},null},null},null),
 			alist("foo","bar",null)
 		);
@@ -254,12 +255,12 @@ class ThirdPartyProxy_Test extends TestBase {
 		var r = input.proxy.beanQueries(
 			ABean.get(),
 			null,
-			new ABean[][][]{{{ABean.get(),null},null},null},
+			a(a(a(ABean.get(),null),null),null),
 			alist(ABean.get(),null),
-			alist(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			alist(a(a(a(ABean.get(),null),null),null),null),
 			map("foo",ABean.get()),
 			map("foo",alist(ABean.get())),
-			map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			map("foo",alist(a(a(a(ABean.get(),null),null),null),null)),
 			map(1,alist(ABean.get()))
 		);
 		assertEquals("OK", r);
@@ -271,12 +272,12 @@ class ThirdPartyProxy_Test extends TestBase {
 		var r = input.proxy.typedBeanQueries(
 			TypedBeanImpl.get(),
 			null,
-			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
+			a(a(a(TypedBeanImpl.get(),null),null),null),
 			alist(TypedBeanImpl.get(),null),
-			alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			alist(a(a(a(TypedBeanImpl.get(),null),null),null),null),
 			map("foo",TypedBeanImpl.get()),
 			map("foo",alist((TypedBean)TypedBeanImpl.get())),
-			map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			map("foo",alist(a(a(a(TypedBeanImpl.get(),null),null),null),null)),
 			map(1,alist((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
@@ -287,9 +288,9 @@ class ThirdPartyProxy_Test extends TestBase {
 	void b05_swappedObjectQueries(Input input) {
 		var r = input.proxy.swappedObjectQueries(
 			new SwappedObject(),
-			new SwappedObject[][][]{{{new SwappedObject(),null},null},null},
+			a(a(a(new SwappedObject(),null),null),null),
 			map(new SwappedObject(),new SwappedObject()),
-			map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})
+			map(new SwappedObject(),a(a(a(new SwappedObject(),null),null),null))
 		);
 		assertEquals("OK", r);
 	}
@@ -299,9 +300,9 @@ class ThirdPartyProxy_Test extends TestBase {
 	void b06_implicitSwappedObjectQueries(Input input) {
 		var r = input.proxy.implicitSwappedObjectQueries(
 			new ImplicitSwappedObject(),
-			new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null},
+			a(a(a(new ImplicitSwappedObject(),null),null),null),
 			map(new ImplicitSwappedObject(),new ImplicitSwappedObject()),
-			map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})
+			map(new ImplicitSwappedObject(),a(a(a(new ImplicitSwappedObject(),null),null),null))
 		);
 		assertEquals("OK", r);
 	}
@@ -312,13 +313,13 @@ class ThirdPartyProxy_Test extends TestBase {
 		var r = input.proxy.enumQueries(
 			TestEnum.TWO,
 			null,
-			new TestEnum[][][]{{{TestEnum.TWO,null},null},null},
+			a(a(a(TestEnum.TWO,null),null),null),
 			alist(TestEnum.TWO,null),
 			alist(alist(alist(TestEnum.TWO,null),null),null),
-			alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
+			alist(a(a(a(TestEnum.TWO,null),null),null),null),
 			map(TestEnum.ONE,TestEnum.TWO),
-			map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
-			map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
+			map(TestEnum.ONE,a(a(a(TestEnum.TWO,null),null),null)),
+			map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,null),null),null),null))
 		);
 		assertEquals("OK", r);
 	}
@@ -389,11 +390,11 @@ class ThirdPartyProxy_Test extends TestBase {
 	void c02_primitiveCollectionFormData(Input input) {
 		var r = input.proxy.primitiveCollectionFormData(
 			new int[][][]{{{1,2},null},null},
-			new Integer[][][]{{{1,null},null},null},
-			new String[][][]{{{"foo",null},null},null},
+			a(a(a(1,null),null),null),
+			a(a(a("foo",null),null),null),
 			alist(1,null),
 			alist(alist(alist(1,null),null),null),
-			alist(new Integer[][][]{{{1,null},null},null},null),
+			alist(a(a(a(1,null),null),null),null),
 			alist(new int[][][]{{{1,2},null},null},null),
 			alist("foo","bar",null)
 		);
@@ -406,12 +407,12 @@ class ThirdPartyProxy_Test extends TestBase {
 		var r = input.proxy.beanFormData(
 			ABean.get(),
 			null,
-			new ABean[][][]{{{ABean.get(),null},null},null},
+			a(a(a(ABean.get(),null),null),null),
 			alist(ABean.get(),null),
-			alist(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			alist(a(a(a(ABean.get(),null),null),null),null),
 			map("foo",ABean.get()),
 			map("foo",alist(ABean.get())),
-			map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			map("foo",alist(a(a(a(ABean.get(),null),null),null),null)),
 			map(1,alist(ABean.get()))
 		);
 		assertEquals("OK", r);
@@ -423,12 +424,12 @@ class ThirdPartyProxy_Test extends TestBase {
 		var r = input.proxy.typedBeanFormData(
 			TypedBeanImpl.get(),
 			null,
-			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
+			a(a(a(TypedBeanImpl.get(),null),null),null),
 			alist(TypedBeanImpl.get(),null),
-			alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			alist(a(a(a(TypedBeanImpl.get(),null),null),null),null),
 			map("foo",TypedBeanImpl.get()),
 			map("foo",alist((TypedBean)TypedBeanImpl.get())),
-			map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			map("foo",alist(a(a(a(TypedBeanImpl.get(),null),null),null),null)),
 			map(1,alist((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
@@ -439,9 +440,9 @@ class ThirdPartyProxy_Test extends TestBase {
 	void c05_swappedObjectFormData(Input input) {
 		var r = input.proxy.swappedObjectFormData(
 			new SwappedObject(),
-			new SwappedObject[][][]{{{new SwappedObject(),null},null},null},
+			a(a(a(new SwappedObject(),null),null),null),
 			map(new SwappedObject(),new SwappedObject()),
-			map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})
+			map(new SwappedObject(),a(a(a(new SwappedObject(),null),null),null))
 		);
 		assertEquals("OK", r);
 	}
@@ -451,9 +452,9 @@ class ThirdPartyProxy_Test extends TestBase {
 	void c06_implicitSwappedObjectFormData(Input input) {
 		var r = input.proxy.implicitSwappedObjectFormData(
 			new ImplicitSwappedObject(),
-			new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null},
+			a(a(a(new ImplicitSwappedObject(),null),null),null),
 			map(new ImplicitSwappedObject(),new ImplicitSwappedObject()),
-			map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})
+			map(new ImplicitSwappedObject(),a(a(a(new ImplicitSwappedObject(),null),null),null))
 		);
 		assertEquals("OK", r);
 	}
@@ -464,13 +465,13 @@ class ThirdPartyProxy_Test extends TestBase {
 		var r = input.proxy.enumFormData(
 			TestEnum.TWO,
 			null,
-			new TestEnum[][][]{{{TestEnum.TWO,null},null},null},
+			a(a(a(TestEnum.TWO,null),null),null),
 			alist(TestEnum.TWO,null),
 			alist(alist(alist(TestEnum.TWO,null),null),null),
-			alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
+			alist(a(a(a(TestEnum.TWO,null),null),null),null),
 			map(TestEnum.ONE,TestEnum.TWO),
-			map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
-			map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
+			map(TestEnum.ONE,a(a(a(TestEnum.TWO,null),null),null)),
+			map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,null),null),null),null))
 		);
 		assertEquals("OK", r);
 	}
@@ -649,7 +650,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@MethodSource("input")
 	void db05_returnBeanMap(Input input) {
 		var x = input.proxy.returnBeanMap();
-		assertMap(x, "foo", "{a:1,b:'foo'}");
+		assertBean(x, "foo", "{a:1,b:'foo'}");
 		assertInstanceOf(ABean.class, x.get("foo"));
 	}
 
@@ -657,7 +658,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@MethodSource("input")
 	void db06_returnBeanListMap(Input input) {
 		var x = input.proxy.returnBeanListMap();
-		assertMap(x, "foo", "[{a:1,b:'foo'}]");
+		assertBean(x, "foo", "[{a:1,b:'foo'}]");
 		assertInstanceOf(ABean.class, x.get("foo").get(0));
 	}
 
@@ -665,7 +666,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@MethodSource("input")
 	void db07_returnBean1d3dListMap(Input input) {
 		var x = input.proxy.returnBean1d3dListMap();
-		assertMap(x, "foo", "[[[[{a:1,b:'foo'},<null>],<null>],<null>],<null>]");
+		assertBean(x, "foo", "[[[[{a:1,b:'foo'},<null>],<null>],<null>],<null>]");
 		assertInstanceOf(ABean.class, x.get("foo").get(0)[0][0][0]);
 	}
 
@@ -716,7 +717,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@MethodSource("input")
 	void dc05_returnTypedBeanMap(Input input) {
 		var x = input.proxy.returnTypedBeanMap();
-		assertMap(x, "foo", "a:1;b:foo");
+		assertBean(x, "foo", "a:1;b:foo");
 		assertInstanceOf(TypedBeanImpl.class, x.get("foo"));
 	}
 
@@ -724,7 +725,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@MethodSource("input")
 	void dc06_returnTypedBeanListMap(Input input) {
 		var x = input.proxy.returnTypedBeanListMap();
-		assertMap(x, "foo", "[a:1;b:foo]");
+		assertBean(x, "foo", "[a:1;b:foo]");
 		assertInstanceOf(TypedBeanImpl.class, x.get("foo").get(0));
 	}
 
@@ -732,7 +733,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@MethodSource("input")
 	void dc07_returnTypedBean1d3dListMap(Input input) {
 		var x = input.proxy.returnTypedBean1d3dListMap();
-		assertMap(x, "foo", "[[[[a:1;b:foo,<null>],<null>],<null>],<null>]");
+		assertBean(x, "foo", "[[[[a:1;b:foo,<null>],<null>],<null>],<null>]");
 		assertInstanceOf(TypedBeanImpl.class, x.get("foo").get(0)[0][0][0]);
 	}
 
@@ -959,13 +960,13 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea11_setInteger3dArray(Input input) {
-		assertDoesNotThrow(()->input.proxy.setInteger3dArray(new Integer[][][]{{{1,null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setInteger3dArray(a(a(a(1,null),null),null)));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea12_setString3dArray(Input input) {
-		assertDoesNotThrow(()->input.proxy.setString3dArray(new String[][][]{{{"foo",null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setString3dArray(a(a(a("foo",null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -983,7 +984,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ea15_setInteger1d3dList(Input input) {
-		assertDoesNotThrow(()->input.proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null)));
+		assertDoesNotThrow(()->input.proxy.setInteger1d3dList(alist(a(a(a(1,null),null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -1008,7 +1009,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb02_setBean3dArray(Input input) {
-		assertDoesNotThrow(()->input.proxy.setBean3dArray(new ABean[][][]{{{ABean.get(),null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setBean3dArray(a(a(a(ABean.get(),null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -1020,7 +1021,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb04_setBean1d3dList(Input input) {
-		assertDoesNotThrow(()->input.proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+		assertDoesNotThrow(()->input.proxy.setBean1d3dList(alist(a(a(a(ABean.get(),null),null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -1038,7 +1039,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void eb07_setBean1d3dListMap(Input input) {
-		assertDoesNotThrow(()->input.proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null))));
+		assertDoesNotThrow(()->input.proxy.setBean1d3dListMap(map("foo",alist(a(a(a(ABean.get(),null),null),null),null))));
 	}
 
 	@ParameterizedTest
@@ -1058,7 +1059,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec02_setTypedBean3dArray(Input input) {
-		assertDoesNotThrow(()->input.proxy.setTypedBean3dArray(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setTypedBean3dArray(a(a(a(TypedBeanImpl.get(),null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -1070,7 +1071,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec04_setTypedBean1d3dList(Input input) {
-		assertDoesNotThrow(()->input.proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+		assertDoesNotThrow(()->input.proxy.setTypedBean1d3dList(alist(a(a(a(TypedBeanImpl.get(),null),null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -1088,7 +1089,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ec07_setTypedBean1d3dListMap(Input input) {
-		assertDoesNotThrow(()->input.proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null))));
+		assertDoesNotThrow(()->input.proxy.setTypedBean1d3dListMap(map("foo",alist(a(a(a(TypedBeanImpl.get(),null),null),null),null))));
 	}
 
 	@ParameterizedTest
@@ -1108,7 +1109,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed02_setSwappedObject3dArray(Input input) {
-		assertDoesNotThrow(()->input.proxy.setSwappedObject3dArray(new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setSwappedObject3dArray(a(a(a(new SwappedObject(),null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -1120,7 +1121,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ed04_setSwappedObject3dMap(Input input) {
-		assertDoesNotThrow(()->input.proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null})));
+		assertDoesNotThrow(()->input.proxy.setSwappedObject3dMap(map(new SwappedObject(),a(a(a(new SwappedObject(),null),null),null))));
 	}
 
 	// Implicit swapped POJOs
@@ -1133,7 +1134,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee02_setImplicitSwappedObject3dArray(Input input) {
-		assertDoesNotThrow(()->input.proxy.setImplicitSwappedObject3dArray(new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setImplicitSwappedObject3dArray(a(a(a(new ImplicitSwappedObject(),null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -1145,7 +1146,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ee04_setImplicitSwappedObject3dMap(Input input) {
-		assertDoesNotThrow(()->input.proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null})));
+		assertDoesNotThrow(()->input.proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),a(a(a(new ImplicitSwappedObject(),null),null),null))));
 	}
 
 	// Enums
@@ -1159,7 +1160,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef02_setEnum3d(Input input) {
-		assertDoesNotThrow(()->input.proxy.setEnum3d(new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+		assertDoesNotThrow(()->input.proxy.setEnum3d(a(a(a(TestEnum.TWO,null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -1177,7 +1178,7 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef05_setEnum1d3dList(Input input) {
-		assertDoesNotThrow(()->input.proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		assertDoesNotThrow(()->input.proxy.setEnum1d3dList(alist(a(a(a(TestEnum.TWO,null),null),null),null)));
 	}
 
 	@ParameterizedTest
@@ -1189,13 +1190,13 @@ class ThirdPartyProxy_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef07_setEnum3dArrayMap(Input input) {
-		assertDoesNotThrow(()->input.proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null})));
+		assertDoesNotThrow(()->input.proxy.setEnum3dArrayMap(map(TestEnum.ONE,a(a(a(TestEnum.TWO,null),null),null))));
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void ef08_setEnum1d3dListMap(Input input) {
-		assertDoesNotThrow(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))));
+		assertDoesNotThrow(()->input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,null),null),null),null))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

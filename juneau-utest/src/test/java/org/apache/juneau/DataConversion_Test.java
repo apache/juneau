@@ -81,7 +81,7 @@ class DataConversion_Test extends TestBase {
 		assertEquals(1, m.getList("x").size());
 
 		// *** Array ***
-		m.put("x", new Integer[]{123});
+		m.put("x", a(123));
 		assertEquals("[123]", m.getString("x"));
 		assertEquals(1, m.getList("x").size());
 
