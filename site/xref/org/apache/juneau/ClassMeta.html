@@ -1856,7 +1856,7 @@
 <a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;invoke();
 <a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 		InvocationHandler h = getProxyInvocationHandler();
 <a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 		<strong class="jxr_keyword">if</strong> (nn(h))
-<a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader(), <strong class="jxr_keyword">new</strong> Class[] { getInnerClass(), java.io.Serializable.<strong class="jxr_keyword">class</strong> }, h);
+<a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader(), a(getInnerClass(), java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
 <a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 		<strong class="jxr_keyword">if</strong> (isArray())
 <a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(<strong class="jxr_keyword">this</strong>.elementType.innerClass, 0);
 <a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

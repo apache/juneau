@@ -548,7 +548,7 @@
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<strong class="jxr_keyword">public</strong> <a name="MockServletRequest" href="../../../../../org/apache/juneau/rest/mock/MockServletRequest.html#MockServletRequest">MockServletRequest</a> header(String name, Object value) {
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">if</strong> (nn(value)) {
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			String[] v1 = (value instanceof String[]) ? (String[])value : <strong class="jxr_keyword">new</strong> String[] { value.toString() };
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			String[] v1 = (value instanceof String[]) ? (String[])value : a(value.toString());
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 			String[] v2 = headerMap.get(name);
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 			String[] v3 = combine(v2, v1);
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 			headerMap.put(name, v3);

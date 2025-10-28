@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			e.printStackTrace();
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		}
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Annotation[] { a };
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">return</strong> a(a);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Type t;
@@ -1000,7 +1000,7 @@
 <a class="jxr_linenumber" name="L992" href="#L992">992</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;{@link #getSimpleName()}</em>
 <a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 	<strong class="jxr_keyword">public</strong> String[] getNames() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[] { getFullName(), c.getName(), getShortName(), getSimpleName() }; }
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 	<strong class="jxr_keyword">public</strong> String[] getNames() { <strong class="jxr_keyword">return</strong> a(getFullName(), c.getName(), getShortName(), getSimpleName()); }
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 * Locates the no-arg constructor for this class.</em>

@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">public</strong> A init1() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			f1 = <span class="jxr_string">" f1 "</span>;
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			f2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">" f2a "</span>, <span class="jxr_string">" f2b "</span>};
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			f2 = a(<span class="jxr_string">" f2a "</span>, <span class="jxr_string">" f2b "</span>);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			f3 = JsonList.ofJson(<span class="jxr_string">"[' f3a ',' f3b ']"</span>);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			f4 = JsonMap.ofJson(<span class="jxr_string">"{' foo ':' bar '}"</span>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">public</strong> A init2() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			f1 = <span class="jxr_string">"f1"</span>;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			f2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"f2a"</span>, <span class="jxr_string">"f2b"</span>};
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			f2 = a(<span class="jxr_string">"f2a"</span>, <span class="jxr_string">"f2b"</span>);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			f3 = JsonList.ofJson(<span class="jxr_string">"['f3a','f3b']"</span>);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			f4 = JsonMap.ofJson(<span class="jxr_string">"{'foo':'bar'}"</span>);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;

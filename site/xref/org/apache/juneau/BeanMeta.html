@@ -1066,7 +1066,7 @@
 <a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 <a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			<strong class="jxr_keyword">if</strong> (nn(h)) {
 <a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 				ClassLoader cl = classMeta.innerClass.getClassLoader();
-<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 				<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(cl, <strong class="jxr_keyword">new</strong> Class[] { classMeta.innerClass, java.io.Serializable.<strong class="jxr_keyword">class</strong> }, h);
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 				<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(cl, a(classMeta.innerClass, java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
 <a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 			}
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 		}
 <a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

@@ -338,7 +338,7 @@
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 		WatcherThread(File dir, <a name="WatcherSensitivity" href="../../../../../org/apache/juneau/config/store/WatcherSensitivity.html#WatcherSensitivity">WatcherSensitivity</a> s) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			watchService = FileSystems.getDefault().newWatchService();
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">var</strong> kinds = <strong class="jxr_keyword">new</strong> WatchEvent.Kind[] { ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY };
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">var</strong> kinds = a(ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">var</strong> modifier = lookupModifier(s);
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 			dir.toPath().register(watchService, kinds, modifier);
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 		}
@@ -469,7 +469,7 @@
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">var</strong> isWritable = isWritable(p);
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">var</strong> oo = isWritable ? <strong class="jxr_keyword">new</strong> OpenOption[] { READ, WRITE, CREATE } : <strong class="jxr_keyword">new</strong> OpenOption[] { READ };
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">var</strong> oo = isWritable ? a(READ, WRITE, CREATE) : a(READ);
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fc = FileChannel.open(p, oo)) {
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> lock = isWritable ? fc.lock() : <strong class="jxr_keyword">null</strong>) {

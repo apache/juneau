@@ -6836,7 +6836,7 @@
 <a class="jxr_linenumber" name="L6828" href="#L6828">6828</a> 
 <a class="jxr_linenumber" name="L6829" href="#L6829">6829</a> 		<strong class="jxr_keyword">final</strong> String restUrl2 = StringUtils.trimSlashes(emptyIfNull(rootUrl));
 <a class="jxr_linenumber" name="L6830" href="#L6830">6830</a> 
-<a class="jxr_linenumber" name="L6831" href="#L6831">6831</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), <strong class="jxr_keyword">new</strong> Class[] { interfaceClass }, <strong class="jxr_keyword">new</strong> InvocationHandler() {
+<a class="jxr_linenumber" name="L6831" href="#L6831">6831</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), <strong class="jxr_keyword">new</strong> InvocationHandler() {
 <a class="jxr_linenumber" name="L6832" href="#L6832">6832</a> 
 <a class="jxr_linenumber" name="L6833" href="#L6833">6833</a> 			<strong class="jxr_keyword">final</strong> <a name="RemoteMeta" href="../../../../../org/apache/juneau/rest/client/remote/RemoteMeta.html#RemoteMeta">RemoteMeta</a> rm = <strong class="jxr_keyword">new</strong> <a name="RemoteMeta" href="../../../../../org/apache/juneau/rest/client/remote/RemoteMeta.html#RemoteMeta">RemoteMeta</a>(interfaceClass);
 <a class="jxr_linenumber" name="L6834" href="#L6834">6834</a> 
@@ -7077,7 +7077,7 @@
 <a class="jxr_linenumber" name="L7069" href="#L7069">7069</a> 
 <a class="jxr_linenumber" name="L7070" href="#L7070">7070</a> 		<strong class="jxr_keyword">final</strong> String restUrl2 = s(uri);
 <a class="jxr_linenumber" name="L7071" href="#L7071">7071</a> 
-<a class="jxr_linenumber" name="L7072" href="#L7072">7072</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), <strong class="jxr_keyword">new</strong> Class[] { interfaceClass }, <strong class="jxr_keyword">new</strong> InvocationHandler() {
+<a class="jxr_linenumber" name="L7072" href="#L7072">7072</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), <strong class="jxr_keyword">new</strong> InvocationHandler() {
 <a class="jxr_linenumber" name="L7073" href="#L7073">7073</a> 
 <a class="jxr_linenumber" name="L7074" href="#L7074">7074</a> 			<strong class="jxr_keyword">final</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a> rm = <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a>(interfaceClass, restUrl2);
 <a class="jxr_linenumber" name="L7075" href="#L7075">7075</a> 

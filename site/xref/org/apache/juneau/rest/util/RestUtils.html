@@ -226,7 +226,7 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		String name = s.substring(0, i).trim().toLowerCase(Locale.ENGLISH);
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		String val = s.substring(i + 1).trim();
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[] { name, val };
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">return</strong> a(name, val);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -246,7 +246,7 @@
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		String name = s.substring(0, i).trim();
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		String val = s.substring(i + 1).trim();
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[] { name, val };
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> a(name, val);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -495,7 +495,7 @@
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (b &amp;&amp; nn(m.get(key))) {
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 			m.put(key, addAll(m.get(key), val));
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			m.put(key, <strong class="jxr_keyword">new</strong> String[] { val });
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			m.put(key, a(val));
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 		}
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 	}
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 

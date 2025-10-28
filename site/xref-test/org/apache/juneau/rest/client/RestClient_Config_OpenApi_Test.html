@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Test <strong class="jxr_keyword">void</strong> a03_paramFormat() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		 <strong class="jxr_keyword">var</strong> m = JsonMap.of(
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<span class="jxr_string">"baz"</span>,<strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"qux"</span>,<span class="jxr_string">"true"</span>,<span class="jxr_string">"123"</span>}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<span class="jxr_string">"baz"</span>,a(<span class="jxr_string">"qux"</span>,<span class="jxr_string">"true"</span>,<span class="jxr_string">"123"</span>)
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		client().urlEnc().paramFormat(PLAINTEXT).build().post(<span class="jxr_string">"/echoBody"</span>,m).run().assertContent(<span class="jxr_string">"foo=bar&amp;baz=qux,true,123"</span>);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		client().urlEnc().paramFormatPlain().build().post(<span class="jxr_string">"/echoBody"</span>,m).run().assertContent(<span class="jxr_string">"foo=bar&amp;baz=qux,true,123"</span>);

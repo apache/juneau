@@ -1303,7 +1303,7 @@
 <a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 
 <a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 		<strong class="jxr_keyword">this</strong>.producesMediaType = MediaType.of(produces);
 <a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 		<strong class="jxr_keyword">this</strong>.acceptRanges = nn(accept) ? MediaRanges.of(accept) : MediaRanges.of(produces);
-<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 		<strong class="jxr_keyword">this</strong>.acceptMediaTypes = nn(builder.accept) ? MediaType.ofAll(StringUtils.splita(builder.accept)) : <strong class="jxr_keyword">new</strong> <a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>[] { <strong class="jxr_keyword">this</strong>.producesMediaType };
+<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 		<strong class="jxr_keyword">this</strong>.acceptMediaTypes = nn(builder.accept) ? MediaType.ofAll(StringUtils.splita(builder.accept)) : a(<strong class="jxr_keyword">this</strong>.producesMediaType);
 <a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 	}
 <a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 
 <a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>

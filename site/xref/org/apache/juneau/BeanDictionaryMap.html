@@ -119,7 +119,7 @@
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">protected</strong> <a name="BeanDictionaryMap" href="../../../org/apache/juneau/BeanDictionaryMap.html#BeanDictionaryMap">BeanDictionaryMap</a> append(String typeName, Class&lt;? <strong class="jxr_keyword">extends</strong> Collection&gt; collectionClass, Object entryClass) {
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertValidParameter(entryClass);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		put(typeName, <strong class="jxr_keyword">new</strong> Object[] { collectionClass, entryClass });
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		put(typeName, a(collectionClass, entryClass));
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
@@ -135,7 +135,7 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">protected</strong> <a name="BeanDictionaryMap" href="../../../org/apache/juneau/BeanDictionaryMap.html#BeanDictionaryMap">BeanDictionaryMap</a> append(String typeName, Class&lt;? <strong class="jxr_keyword">extends</strong> Map&gt; mapClass, Object keyClass, Object valueClass) {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertValidParameter(keyClass);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertValidParameter(valueClass);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		put(typeName, <strong class="jxr_keyword">new</strong> Object[] { mapClass, keyClass, valueClass });
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		put(typeName, a(mapClass, keyClass, valueClass));
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> }

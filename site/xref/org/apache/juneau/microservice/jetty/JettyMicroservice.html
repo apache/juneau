@@ -274,7 +274,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">		 * 		&lt;c&gt;8000&lt;/c&gt;</em>
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">		 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">		 * Jetty/port", mf.getWithDefault("Jetty-Port", new int[]{8000}</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">		 * Jetty/port", mf.getWithDefault("Jetty-Port", ints(8000)</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">		 * @param ports The ports to use for the web server.</em>
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">		 */</em>
@@ -554,7 +554,7 @@
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 		JsonMap mf = getManifest();
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 		VarResolver vr = getVarResolver();
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">int</strong>[] ports = firstNonNull(builder.ports, cf.get(<span class="jxr_string">"Jetty/port"</span>).as(<strong class="jxr_keyword">int</strong>[].<strong class="jxr_keyword">class</strong>).orElseGet(() -&gt; mf.getWithDefault(<span class="jxr_string">"Jetty-Port"</span>, <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] { 8000 }, <strong class="jxr_keyword">int</strong>[].<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">int</strong>[] ports = firstNonNull(builder.ports, cf.get(<span class="jxr_string">"Jetty/port"</span>).as(<strong class="jxr_keyword">int</strong>[].<strong class="jxr_keyword">class</strong>).orElseGet(() -&gt; mf.getWithDefault(<span class="jxr_string">"Jetty-Port"</span>, ints(8000), <strong class="jxr_keyword">int</strong>[].<strong class="jxr_keyword">class</strong>)));
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">int</strong> availablePort = findOpenPort(ports);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">if</strong> (System.getProperty(<span class="jxr_string">"availablePort"</span>) == <strong class="jxr_keyword">null</strong>)

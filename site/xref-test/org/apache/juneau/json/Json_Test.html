@@ -97,8 +97,8 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		l.add(<span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		l.add(<span class="jxr_string">"2"</span>);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		l.add(<span class="jxr_string">"3"</span>);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> o = <strong class="jxr_keyword">new</strong> Object[] { m, l };
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> o2 = <strong class="jxr_keyword">new</strong> Object[] { o, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>, Integer.valueOf(1), Boolean.valueOf(false), Float.valueOf(1.2f), <strong class="jxr_keyword">null</strong> };
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> o = a(m, l);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> o2 = a(o, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>, Integer.valueOf(1), Boolean.valueOf(false), Float.valueOf(1.2f), <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(<span class="jxr_string">"[[{J:'f1',B:'b',C:'c'},['1','2','3']],'foo','bar',1,false,1.2,null]"</span>, s1.serialize(o2));
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
@@ -106,7 +106,7 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<em class="jxr_comment">// Keys with reserved names.</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> attr : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">""</span>,<span class="jxr_string">"true"</span>,<span class="jxr_string">"false"</span>,<span class="jxr_string">"null"</span>,<span class="jxr_string">"try"</span>,<span class="jxr_string">"123"</span>,<span class="jxr_string">"1x"</span>,<span class="jxr_string">"-123"</span>,<span class="jxr_string">".123"</span>}) {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> attr : a(<span class="jxr_string">""</span>,<span class="jxr_string">"true"</span>,<span class="jxr_string">"false"</span>,<span class="jxr_string">"null"</span>,<span class="jxr_string">"try"</span>,<span class="jxr_string">"123"</span>,<span class="jxr_string">"1x"</span>,<span class="jxr_string">"-123"</span>,<span class="jxr_string">".123"</span>)) {
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 			m.clear();
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 			m.put(attr,1);
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			assertJson(<span class="jxr_string">"{'"</span>+attr+<span class="jxr_string">"':1}"</span>, m);

@@ -916,7 +916,7 @@
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 	&lt;T&gt; T as(<a name="ResponseBeanMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> rbm) {
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 		Class&lt;T&gt; c = (Class&lt;T&gt;)rbm.getClassMeta().getInnerClass();
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">final</strong> <a name="RestClient" href="../../../../../org/apache/juneau/rest/client/RestClient.html#RestClient">RestClient</a> rc = <strong class="jxr_keyword">this</strong>.client;
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(c.getClassLoader(), <strong class="jxr_keyword">new</strong> Class[] { c }, (InvocationHandler)(proxy, method, args) -&gt; {
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -&gt; {
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 			ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 			HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
 <a class="jxr_linenumber" name="L914" href="#L914">914</a> 			HttpPartSchema schema = pm.getSchema();

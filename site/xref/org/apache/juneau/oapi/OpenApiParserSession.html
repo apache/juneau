@@ -382,7 +382,7 @@
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 				String[] ss = {};
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 				<strong class="jxr_keyword">if</strong> (cf == MULTI)
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 					ss = <strong class="jxr_keyword">new</strong> String[] { in };
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 					ss = a(in);
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == CSV)
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 					ss = StringUtils.splita(in, ',');
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == PIPES)
@@ -427,7 +427,7 @@
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 				String[] ss = {};
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 				<strong class="jxr_keyword">if</strong> (cf == MULTI)
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 					ss = <strong class="jxr_keyword">new</strong> String[] { in };
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 					ss = a(in);
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == CSV)
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 					ss = StringUtils.splita(in, ',');
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cf == PIPES)

@@ -1170,7 +1170,7 @@
 <a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 			Class&lt;T&gt; c = (Class&lt;T&gt;)rbm.getClassMeta().getInnerClass();
 <a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 			<strong class="jxr_keyword">final</strong> BeanSession bs = getBeanSession();
 <a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 			<strong class="jxr_keyword">final</strong> BeanMeta&lt;T&gt; bm = bs.getBeanMeta(c);
-<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(c.getClassLoader(), <strong class="jxr_keyword">new</strong> Class[] { c }, (InvocationHandler)(proxy, method, args) -&gt; {
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -&gt; {
 <a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 				RequestBeanPropertyMeta pm = rbm.getProperty(method.getName());
 <a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 				<strong class="jxr_keyword">if</strong> (nn(pm)) {
 <a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 					HttpPartParserSession pp = pm.getParser(getPartParserSession());

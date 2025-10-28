@@ -146,10 +146,10 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">void</strong> c05_is_equalArrays() {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> v = Value.of(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{1, 2, 3});
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertTrue(v.is(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{1, 2, 3}), <span class="jxr_string">"Should be equal to same array content"</span>);
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertFalse(v.is(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{1, 2, 4}), <span class="jxr_string">"Should not be equal to different array content"</span>);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertFalse(v.is(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[]{1, 2}), <span class="jxr_string">"Should not be equal to shorter array"</span>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> v = Value.of(ints(1, 2, 3));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertTrue(v.is(ints(1, 2, 3)), <span class="jxr_string">"Should be equal to same array content"</span>);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertFalse(v.is(ints(1, 2, 4)), <span class="jxr_string">"Should not be equal to different array content"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertFalse(v.is(ints(1, 2)), <span class="jxr_string">"Should not be equal to shorter array"</span>);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@Test

@@ -24,7 +24,7 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.json;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
@@ -47,11 +47,11 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">var</strong> m = (Map)p.parse(<span class="jxr_string">"{a:1}"</span>, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertEquals(1, m.get(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		m = (Map)p.parse(<span class="jxr_string">"{a:1,b:\&quot;foo bar\&quot;}"</span>, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertMap(m, <span class="jxr_string">"a,b"</span>, <span class="jxr_string">"1,foo bar"</span>);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertBean(m, <span class="jxr_string">"a,b"</span>, <span class="jxr_string">"1,foo bar"</span>);
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		m = (Map)p.parse(<span class="jxr_string">"{a:1,b:\&quot;foo bar\&quot;,c:false}"</span>, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertMap(m, <span class="jxr_string">"a,c"</span>, <span class="jxr_string">"1,false"</span>);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertBean(m, <span class="jxr_string">"a,c"</span>, <span class="jxr_string">"1,false"</span>);
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		m = (Map)p.parse(<span class="jxr_string">" { a : 1 , b : 'foo' , c : false } "</span>, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertMap(m, <span class="jxr_string">"a,b,c"</span>, <span class="jxr_string">"1,foo,false"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertBean(m, <span class="jxr_string">"a,b,c"</span>, <span class="jxr_string">"1,foo,false"</span>);
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		m = (Map)p.parse(<span class="jxr_string">"{x:\&quot;org.apache.juneau.test.Person\&quot;,addresses:[{x:\&quot;org.apache.juneau.test.Address\&quot;,city:\&quot;city A\&quot;,state:\&quot;state A\&quot;,street:\&quot;street A\&quot;,zip:12345}]}"</span>, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertEquals(<span class="jxr_string">"org.apache.juneau.test.Person"</span>, m.get(<span class="jxr_string">"x"</span>));
@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertNotNull(l);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		m = (Map)l.get(0);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertNotNull(m);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertMap(m, <span class="jxr_string">"x,city,state,street,zip"</span>, <span class="jxr_string">"org.apache.juneau.test.Address,city A,state A,street A,12345"</span>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertBean(m, <span class="jxr_string">"x,city,state,street,zip"</span>, <span class="jxr_string">"org.apache.juneau.test.Address,city A,state A,street A,12345"</span>);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> jl = (JsonList)p.parse(<span class="jxr_string">"[{attribute:'value'},{attribute:'value'}]"</span>, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertEquals(<span class="jxr_string">"value"</span>, jl.getMap(0).getString(<span class="jxr_string">"attribute"</span>));

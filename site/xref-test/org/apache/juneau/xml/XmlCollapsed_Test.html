@@ -48,9 +48,9 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> A();
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		t.f1 = list(<span class="jxr_string">"f1a"</span>,<span class="jxr_string">"f1b"</span>);
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		t.f2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"f2a"</span>,<span class="jxr_string">"f2b"</span>};
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		t.f2 = a(<span class="jxr_string">"f2a"</span>,<span class="jxr_string">"f2b"</span>);
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		t.f3 = list(<span class="jxr_string">"f3a"</span>,<span class="jxr_string">"f3b"</span>);
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		t.f4 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"f4a"</span>,<span class="jxr_string">"f4b"</span>};
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		t.f4 = a(<span class="jxr_string">"f4a"</span>,<span class="jxr_string">"f4b"</span>);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;f1a&lt;/f1&gt;&lt;f1&gt;f1b&lt;/f1&gt;&lt;f2&gt;f2a&lt;/f2&gt;&lt;f2&gt;f2b&lt;/f2&gt;&lt;xf3&gt;f3a&lt;/xf3&gt;&lt;xf3&gt;f3b&lt;/xf3&gt;&lt;xf4&gt;f4a&lt;/xf4&gt;&lt;xf4&gt;f4b&lt;/xf4&gt;&lt;/object&gt;"</span>, xml);
@@ -87,9 +87,9 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> B();
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		t.f1 = list(<span class="jxr_string">"f1a"</span>,<span class="jxr_string">"f1b"</span>);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		t.f2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"f2a"</span>,<span class="jxr_string">"f2b"</span>};
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		t.f2 = a(<span class="jxr_string">"f2a"</span>,<span class="jxr_string">"f2b"</span>);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		t.f3 = list(<span class="jxr_string">"f3a"</span>,<span class="jxr_string">"f3b"</span>);
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		t.f4 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"f4a"</span>,<span class="jxr_string">"f4b"</span>};
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		t.f4 = a(<span class="jxr_string">"f4a"</span>,<span class="jxr_string">"f4b"</span>);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;f1a&lt;/f1&gt;&lt;f1&gt;f1b&lt;/f1&gt;&lt;f2&gt;f2a&lt;/f2&gt;&lt;f2&gt;f2b&lt;/f2&gt;&lt;xf3&gt;f3a&lt;/xf3&gt;&lt;xf3&gt;f3b&lt;/xf3&gt;&lt;xf4&gt;f4a&lt;/xf4&gt;&lt;xf4&gt;f4b&lt;/xf4&gt;&lt;/object&gt;"</span>, xml);
@@ -126,9 +126,9 @@
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> C();
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		t.f1 = list(<span class="jxr_string">"f1b"</span>);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		t.f2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"f2b"</span>};
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		t.f2 = a(<span class="jxr_string">"f2b"</span>);
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		t.f3 = list(<span class="jxr_string">"f3b"</span>);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		t.f4 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"f4b"</span>};
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		t.f4 = a(<span class="jxr_string">"f4b"</span>);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;f1b&lt;/f1&gt;&lt;f2&gt;f2b&lt;/f2&gt;&lt;xf3&gt;f3b&lt;/xf3&gt;&lt;xf4&gt;f4b&lt;/xf4&gt;&lt;/object&gt;"</span>, xml);
@@ -171,9 +171,9 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> D();
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		t.f1 = list(<span class="jxr_string">"f1a"</span>);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		t.f2 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"f2a"</span>};
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		t.f2 = a(<span class="jxr_string">"f2a"</span>);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		t.f3 = list(<span class="jxr_string">"f3a"</span>);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		t.f4 = <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"f4a"</span>};
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		t.f4 = a(<span class="jxr_string">"f4a"</span>);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;f1a&lt;/f1&gt;&lt;f2&gt;f2a&lt;/f2&gt;&lt;xf3&gt;f3a&lt;/xf3&gt;&lt;xf4&gt;f4a&lt;/xf4&gt;&lt;/object&gt;"</span>, xml);
@@ -277,10 +277,10 @@
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> FB newInstance() {
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> FB();
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			t.f1 = <strong class="jxr_keyword">new</strong> F1[]{
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			t.f1 = a(
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 				F1.newInstance(<span class="jxr_string">"x1"</span>),
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 				F1.newInstance(<span class="jxr_string">"x2"</span>)
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			};
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			);
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		}
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}

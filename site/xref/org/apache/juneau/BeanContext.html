@@ -4273,7 +4273,7 @@
 <a class="jxr_linenumber" name="L4265" href="#L4265">4265</a> 				cm2 = resolveClassMeta(p.type(), typeVarImpls);
 <a class="jxr_linenumber" name="L4266" href="#L4266">4266</a> 
 <a class="jxr_linenumber" name="L4267" href="#L4267">4267</a> 			<strong class="jxr_keyword">if</strong> (cm2.isMap()) {
-<a class="jxr_linenumber" name="L4268" href="#L4268">4268</a> 				Class&lt;?&gt;[] pParams = (p.params().length == 0 ? <strong class="jxr_keyword">new</strong> Class[] { Object.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong> } : p.params());
+<a class="jxr_linenumber" name="L4268" href="#L4268">4268</a> 				Class&lt;?&gt;[] pParams = (p.params().length == 0 ? a(Object.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>) : p.params());
 <a class="jxr_linenumber" name="L4269" href="#L4269">4269</a> 				<strong class="jxr_keyword">if</strong> (pParams.length != 2)
 <a class="jxr_linenumber" name="L4270" href="#L4270">4270</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid number of parameters specified for Map (must be 2): {0}"</span>, pParams.length);
 <a class="jxr_linenumber" name="L4271" href="#L4271">4271</a> 				ClassMeta&lt;?&gt; keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
@@ -4284,7 +4284,7 @@
 <a class="jxr_linenumber" name="L4276" href="#L4276">4276</a> 			}
 <a class="jxr_linenumber" name="L4277" href="#L4277">4277</a> 
 <a class="jxr_linenumber" name="L4278" href="#L4278">4278</a> 			<strong class="jxr_keyword">if</strong> (cm2.isCollection() || cm2.isOptional()) {
-<a class="jxr_linenumber" name="L4279" href="#L4279">4279</a> 				Class&lt;?&gt;[] pParams = (p.params().length == 0 ? <strong class="jxr_keyword">new</strong> Class[] { Object.<strong class="jxr_keyword">class</strong> } : p.params());
+<a class="jxr_linenumber" name="L4279" href="#L4279">4279</a> 				Class&lt;?&gt;[] pParams = (p.params().length == 0 ? a(Object.<strong class="jxr_keyword">class</strong>) : p.params());
 <a class="jxr_linenumber" name="L4280" href="#L4280">4280</a> 				<strong class="jxr_keyword">if</strong> (pParams.length != 1)
 <a class="jxr_linenumber" name="L4281" href="#L4281">4281</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid number of parameters specified for {1} (must be 1): {0}"</span>, pParams.length,
 <a class="jxr_linenumber" name="L4282" href="#L4282">4282</a> 						(cm2.isCollection() ? <span class="jxr_string">"Collection"</span> : cm2.isOptional() ? <span class="jxr_string">"Optional"</span> : <span class="jxr_string">"Array"</span>));

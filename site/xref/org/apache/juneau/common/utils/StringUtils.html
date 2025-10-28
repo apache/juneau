@@ -2719,7 +2719,7 @@
 <a class="jxr_linenumber" name="L2711" href="#L2711">2711</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(s))
 <a class="jxr_linenumber" name="L2712" href="#L2712">2712</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[0];
 <a class="jxr_linenumber" name="L2713" href="#L2713">2713</a> 		<strong class="jxr_keyword">if</strong> (s.indexOf(',') == -1)
-<a class="jxr_linenumber" name="L2714" href="#L2714">2714</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[] { s };
+<a class="jxr_linenumber" name="L2714" href="#L2714">2714</a> 			<strong class="jxr_keyword">return</strong> a(s);
 <a class="jxr_linenumber" name="L2715" href="#L2715">2715</a> 
 <a class="jxr_linenumber" name="L2716" href="#L2716">2716</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> LinkedList&lt;String&gt;();
 <a class="jxr_linenumber" name="L2717" href="#L2717">2717</a> 		<strong class="jxr_keyword">var</strong> sArray = s.toCharArray();
@@ -2905,10 +2905,10 @@
 <a class="jxr_linenumber" name="L2897" href="#L2897">2897</a> 		s = s.trim();
 <a class="jxr_linenumber" name="L2898" href="#L2898">2898</a> 
 <a class="jxr_linenumber" name="L2899" href="#L2899">2899</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(s))
-<a class="jxr_linenumber" name="L2900" href="#L2900">2900</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[0];
+<a class="jxr_linenumber" name="L2900" href="#L2900">2900</a> 			<strong class="jxr_keyword">return</strong> a();
 <a class="jxr_linenumber" name="L2901" href="#L2901">2901</a> 
 <a class="jxr_linenumber" name="L2902" href="#L2902">2902</a> 		<strong class="jxr_keyword">if</strong> (! containsAny(s, ' ', '\t', '\'', '&quot;'))
-<a class="jxr_linenumber" name="L2903" href="#L2903">2903</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[] { s };
+<a class="jxr_linenumber" name="L2903" href="#L2903">2903</a> 			<strong class="jxr_keyword">return</strong> a(s);
 <a class="jxr_linenumber" name="L2904" href="#L2904">2904</a> 
 <a class="jxr_linenumber" name="L2905" href="#L2905">2905</a> 		<em class="jxr_comment">// S1: Looking for start of token.</em>
 <a class="jxr_linenumber" name="L2906" href="#L2906">2906</a> 		<em class="jxr_comment">// S2: Found ', looking for end '</em>
@@ -4027,7 +4027,7 @@
 <a class="jxr_linenumber" name="L4019" href="#L4019">4019</a> <em class="jxr_javadoccomment">	 * 	readable(Map.of("foo", "bar", "baz", 123)) &lt;jc&gt;// Returns: "{foo=bar,baz=123}"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L4020" href="#L4020">4020</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L4021" href="#L4021">4021</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Arrays&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L4022" href="#L4022">4022</a> <em class="jxr_javadoccomment">	 * 	readable(new int[]{1, 2, 3}) &lt;jc&gt;// Returns: "[1,2,3]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L4022" href="#L4022">4022</a> <em class="jxr_javadoccomment">	 * 	readable(ints(1, 2, 3)) &lt;jc&gt;// Returns: "[1,2,3]"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L4023" href="#L4023">4023</a> <em class="jxr_javadoccomment">	 * 	readable(new String[]{"a", "b"}) &lt;jc&gt;// Returns: "[a,b]"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L4024" href="#L4024">4024</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L4025" href="#L4025">4025</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Nested structures&lt;/jc&gt;</em>

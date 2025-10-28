@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T merge(Class&lt;T&gt; interfaceClass, <strong class="jxr_keyword">boolean</strong> callAllNonGetters, T...pojos) {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), <strong class="jxr_keyword">new</strong> Class[] { interfaceClass }, <strong class="jxr_keyword">new</strong> MergeInvocationHandler(callAllNonGetters, pojos));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), <strong class="jxr_keyword">new</strong> MergeInvocationHandler(callAllNonGetters, pojos));
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_javadoccomment">/**</em>

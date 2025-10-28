@@ -102,14 +102,14 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> a09_integer3dArray() {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		proxy.setInteger3dArray(<strong class="jxr_keyword">new</strong> Integer[][][]{{{1,<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>});
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		proxy.setInteger3dArray(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertJson(<span class="jxr_string">"[[[1,null],null],null]"</span>, proxy.getInteger3dArray());
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"[[[1,null],null],null]"</span>, cf.get(<span class="jxr_string">"A/integer3dArray"</span>).get());
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertInstanceOf(Integer.<strong class="jxr_keyword">class</strong>, proxy.getInteger3dArray()[0][0][0]);
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Test <strong class="jxr_keyword">void</strong> a10_string3dArray() {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		proxy.setString3dArray(<strong class="jxr_keyword">new</strong> String[][][]{{{<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>});
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		proxy.setString3dArray(a(a(a(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertJson(<span class="jxr_string">"[[['foo',null],null],null]"</span>, proxy.getString3dArray());
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertEquals(<span class="jxr_string">"[[['foo',null],null],null]"</span>, cf.get(<span class="jxr_string">"A/string3dArray"</span>).get());
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Test <strong class="jxr_keyword">void</strong> a13_integer1d3dList() {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		proxy.setInteger1d3dList(alist(<strong class="jxr_keyword">new</strong> Integer[][][]{{{1,<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		proxy.setInteger1d3dList(alist(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertJson(<span class="jxr_string">"[[[[1,null],null],null],null]"</span>, proxy.getInteger1d3dList());
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertEquals(<span class="jxr_string">"[[[[1,null],null],null],null]"</span>, cf.get(<span class="jxr_string">"A/integer1d3dList"</span>).get());
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertInstanceOf(Integer.<strong class="jxr_keyword">class</strong>, proxy.getInteger1d3dList().get(0)[0][0][0]);
@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	}
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 	@Test <strong class="jxr_keyword">void</strong> a17_bean3dArray() {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		proxy.setBean3dArray(<strong class="jxr_keyword">new</strong> <a name="ABean" href="../../../../org/apache/juneau/testutils/pojos/ABean.html#ABean">ABean</a>[][][]{{{ABean.get(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>});
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		proxy.setBean3dArray(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertJson(<span class="jxr_string">"[[[{a:1,b:'foo'},null],null],null]"</span>, proxy.getBean3dArray());
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertEquals(<span class="jxr_string">"[[[{a:1,b:'foo'},null],null],null]"</span>, cf.get(<span class="jxr_string">"A/bean3dArray"</span>).get());
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertInstanceOf(ABean.<strong class="jxr_keyword">class</strong>, proxy.getBean3dArray()[0][0][0]);
@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Test <strong class="jxr_keyword">void</strong> a19_bean1d3dList() {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		proxy.setBean1d3dList(alist(<strong class="jxr_keyword">new</strong> <a name="ABean" href="../../../../org/apache/juneau/testutils/pojos/ABean.html#ABean">ABean</a>[][][]{{{ABean.get(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		proxy.setBean1d3dList(alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertJson(<span class="jxr_string">"[[[[{a:1,b:'foo'},null],null],null],null]"</span>, proxy.getBean1d3dList());
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertEquals(<span class="jxr_string">"[[[[{a:1,b:'foo'},null],null],null],null]"</span>, cf.get(<span class="jxr_string">"A/bean1d3dList"</span>).get());
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertInstanceOf(ABean.<strong class="jxr_keyword">class</strong>, proxy.getBean1d3dList().get(0)[0][0][0]);
@@ -193,7 +193,7 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> a22_bean1d3dListMap() {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		proxy.setBean1d3dListMap(map(<span class="jxr_string">"foo"</span>,alist(<strong class="jxr_keyword">new</strong> <a name="ABean" href="../../../../org/apache/juneau/testutils/pojos/ABean.html#ABean">ABean</a>[][][]{{{ABean.get(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		proxy.setBean1d3dListMap(map(<span class="jxr_string">"foo"</span>,alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		assertJson(<span class="jxr_string">"{foo:[[[[{a:1,b:'foo'},null],null],null],null]}"</span>, proxy.getBean1d3dListMap());
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertEquals(<span class="jxr_string">"{foo:[[[[{a:1,b:'foo'},null],null],null],null]}"</span>, cf.get(<span class="jxr_string">"A/bean1d3dListMap"</span>).get());
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertInstanceOf(ABean.<strong class="jxr_keyword">class</strong>, proxy.getBean1d3dListMap().get(<span class="jxr_string">"foo"</span>).get(0)[0][0][0]);
@@ -216,7 +216,7 @@
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@Test <strong class="jxr_keyword">void</strong> a25_typedBean3dArray() {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		proxy.setTypedBean3dArray(<strong class="jxr_keyword">new</strong> TypedBean[][][]{{{TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>});
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		proxy.setTypedBean3dArray(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertJson(<span class="jxr_string">"[[[{a:1,b:'foo'},null],null],null]"</span>, proxy.getTypedBean3dArray());
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertEquals(<span class="jxr_string">"[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null]"</span>, cf.get(<span class="jxr_string">"A/typedBean3dArray"</span>).get());
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertInstanceOf(TypedBeanImpl.<strong class="jxr_keyword">class</strong>, proxy.getTypedBean3dArray()[0][0][0]);
@@ -230,7 +230,7 @@
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	@Test <strong class="jxr_keyword">void</strong> a27_typedBean1d3dList() {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		proxy.setTypedBean1d3dList(alist(<strong class="jxr_keyword">new</strong> TypedBean[][][]{{{TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		proxy.setTypedBean1d3dList(alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertJson(<span class="jxr_string">"[[[[{a:1,b:'foo'},null],null],null],null]"</span>, proxy.getTypedBean1d3dList());
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertEquals(<span class="jxr_string">"[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]"</span>, cf.get(<span class="jxr_string">"A/typedBean1d3dList"</span>).get());
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertInstanceOf(TypedBeanImpl.<strong class="jxr_keyword">class</strong>, proxy.getTypedBean1d3dList().get(0)[0][0][0]);
@@ -251,7 +251,7 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 	@Test <strong class="jxr_keyword">void</strong> a30_typedBean1d3dListMap() {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		proxy.setTypedBean1d3dListMap(map(<span class="jxr_string">"foo"</span>,alist(<strong class="jxr_keyword">new</strong> TypedBean[][][]{{{TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		proxy.setTypedBean1d3dListMap(map(<span class="jxr_string">"foo"</span>,alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertJson(<span class="jxr_string">"{foo:[[[[{a:1,b:'foo'},null],null],null],null]}"</span>, proxy.getTypedBean1d3dListMap());
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertEquals(<span class="jxr_string">"{foo:[[[[{_type:'TypedBeanImpl',a:1,b:'foo'},null],null],null],null]}"</span>, cf.get(<span class="jxr_string">"A/typedBean1d3dListMap"</span>).get());
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		assertInstanceOf(TypedBeanImpl.<strong class="jxr_keyword">class</strong>, proxy.getTypedBean1d3dListMap().get(<span class="jxr_string">"foo"</span>).get(0)[0][0][0]);
@@ -274,7 +274,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	}
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	@Test <strong class="jxr_keyword">void</strong> a33_swappedObject3dArray() {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		proxy.setSwappedObject3dArray(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>[][][]{{{<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>});
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		proxy.setSwappedObject3dArray(a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		assertJson(<span class="jxr_string">"[[['swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/',null],null],null]"</span>, proxy.getSwappedObject3dArray());
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertEquals(<span class="jxr_string">"[[['swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/',null],null],null]"</span>, cf.get(<span class="jxr_string">"A/swappedObject3dArray"</span>).get());
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		assertInstanceOf(SwappedObject.<strong class="jxr_keyword">class</strong>, proxy.getSwappedObject3dArray()[0][0][0]);
@@ -289,7 +289,7 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 	}
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 	@Test <strong class="jxr_keyword">void</strong> a35_swappedObject3dMap() {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		proxy.setSwappedObject3dMap(map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(), <strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>[][][]{{{<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>}));
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		proxy.setSwappedObject3dMap(map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(), a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 		assertJson(<span class="jxr_string">"{'swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/':[[['swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/',null],null],null]}"</span>, proxy.getSwappedObject3dMap());
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 		assertEquals(<span class="jxr_string">"{'swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/':[[['swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/',null],null],null]}"</span>, cf.get(<span class="jxr_string">"A/swappedObject3dMap"</span>).get());
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		assertInstanceOf(SwappedObject.<strong class="jxr_keyword">class</strong>, proxy.getSwappedObject3dMap().keySet().iterator().next());
@@ -306,7 +306,7 @@
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@Test <strong class="jxr_keyword">void</strong> a37_implicitSwappedObject3dArray() {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		proxy.setImplicitSwappedObject3dArray(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>[][][]{{{<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>});
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		proxy.setImplicitSwappedObject3dArray(a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertJson(<span class="jxr_string">"[[['swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/',null],null],null]"</span>, proxy.getImplicitSwappedObject3dArray());
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertEquals(<span class="jxr_string">"[[['swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/',null],null],null]"</span>, cf.get(<span class="jxr_string">"A/implicitSwappedObject3dArray"</span>).get());
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertInstanceOf(ImplicitSwappedObject.<strong class="jxr_keyword">class</strong>, proxy.getImplicitSwappedObject3dArray()[0][0][0]);
@@ -321,7 +321,7 @@
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 	}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Test <strong class="jxr_keyword">void</strong> a39_implicitSwappedObject3dMap() {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		proxy.setImplicitSwappedObject3dMap(map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(), <strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>[][][]{{{<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>}));
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		proxy.setImplicitSwappedObject3dMap(map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(), a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertJson(<span class="jxr_string">"{'swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/':[[['swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/',null],null],null]}"</span>, proxy.getImplicitSwappedObject3dMap());
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		assertEquals(<span class="jxr_string">"{'swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/':[[['swap-~!@#$%^&amp;*()_+`-={}[]|:;\&quot;&lt;,&gt;.?/',null],null],null]}"</span>, cf.get(<span class="jxr_string">"A/implicitSwappedObject3dMap"</span>).get());
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		assertInstanceOf(ImplicitSwappedObject.<strong class="jxr_keyword">class</strong>, proxy.getImplicitSwappedObject3dMap().keySet().iterator().next());
@@ -338,7 +338,7 @@
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> a41_enum3d() {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		proxy.setEnum3d(<strong class="jxr_keyword">new</strong> <a name="TestEnum" href="../../../../org/apache/juneau/testutils/pojos/TestEnum.html#TestEnum">TestEnum</a>[][][]{{{TestEnum.TWO,<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>});
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		proxy.setEnum3d(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertJson(<span class="jxr_string">"[[['TWO',null],null],null]"</span>, proxy.getEnum3d());
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 		assertEquals(<span class="jxr_string">"[[['TWO',null],null],null]"</span>, cf.get(<span class="jxr_string">"A/enum3d"</span>).get());
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertInstanceOf(TestEnum.<strong class="jxr_keyword">class</strong>, proxy.getEnum3d()[0][0][0]);
@@ -359,7 +359,7 @@
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@Test <strong class="jxr_keyword">void</strong> a44_enum1d3dList() {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		proxy.setEnum1d3dList(alist(<strong class="jxr_keyword">new</strong> <a name="TestEnum" href="../../../../org/apache/juneau/testutils/pojos/TestEnum.html#TestEnum">TestEnum</a>[][][]{{{TestEnum.TWO,<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		proxy.setEnum1d3dList(alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertJson(<span class="jxr_string">"[[[['TWO',null],null],null],null]"</span>, proxy.getEnum1d3dList());
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		assertEquals(<span class="jxr_string">"[[[['TWO',null],null],null],null]"</span>, cf.get(<span class="jxr_string">"A/enum1d3dList"</span>).get());
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertInstanceOf(TestEnum.<strong class="jxr_keyword">class</strong>, proxy.getEnum1d3dList().get(0)[0][0][0]);
@@ -374,7 +374,7 @@
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 	}
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 	@Test <strong class="jxr_keyword">void</strong> a46_enum3dArrayMap() {
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		proxy.setEnum3dArrayMap(map(TestEnum.ONE,<strong class="jxr_keyword">new</strong> <a name="TestEnum" href="../../../../org/apache/juneau/testutils/pojos/TestEnum.html#TestEnum">TestEnum</a>[][][]{{{TestEnum.TWO,<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>}));
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		proxy.setEnum3dArrayMap(map(TestEnum.ONE,a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		assertJson(<span class="jxr_string">"{ONE:[[['TWO',null],null],null]}"</span>, proxy.getEnum3dArrayMap());
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertEquals(<span class="jxr_string">"{ONE:[[['TWO',null],null],null]}"</span>, cf.get(<span class="jxr_string">"A/enum3dArrayMap"</span>).get());
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertInstanceOf(TestEnum.<strong class="jxr_keyword">class</strong>, proxy.getEnum3dArrayMap().keySet().iterator().next());
@@ -382,7 +382,7 @@
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 	@Test <strong class="jxr_keyword">void</strong> a47_enum1d3dListMap() {
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(<strong class="jxr_keyword">new</strong> <a name="TestEnum" href="../../../../org/apache/juneau/testutils/pojos/TestEnum.html#TestEnum">TestEnum</a>[][][]{{{TestEnum.TWO,<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertJson(<span class="jxr_string">"{ONE:[[[['TWO',null],null],null],null]}"</span>, proxy.getEnum1d3dListMap());
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(<span class="jxr_string">"{ONE:[[[['TWO',null],null],null],null]}"</span>, cf.get(<span class="jxr_string">"A/enum1d3dListMap"</span>).get());
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertInstanceOf(TestEnum.<strong class="jxr_keyword">class</strong>, proxy.getEnum1d3dListMap().keySet().iterator().next());

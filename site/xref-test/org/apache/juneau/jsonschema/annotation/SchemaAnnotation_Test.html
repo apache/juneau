@@ -25,461 +25,462 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.jsonschema.annotation;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">class</strong> <a name="SchemaAnnotation_Test" href="../../../../../org/apache/juneau/jsonschema/annotation/SchemaAnnotation_Test.html#SchemaAnnotation_Test">SchemaAnnotation_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CNAME = SchemaAnnotation_Test.<strong class="jxr_keyword">class</strong>.getName();
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> X1 {}
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_comment">// Basic tests</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	Schema a1 = SchemaAnnotation.create()
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		._<strong class="jxr_keyword">default</strong>(<span class="jxr_string">"a"</span>)
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		._enum(<span class="jxr_string">"b"</span>)
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		.$ref(<span class="jxr_string">"c"</span>)
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		.additionalProperties(<span class="jxr_string">"d"</span>)
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		.allOf(<span class="jxr_string">"e"</span>)
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		.cf(<span class="jxr_string">"f"</span>)
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		.collectionFormat(<span class="jxr_string">"g"</span>)
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		.d(<span class="jxr_string">"h"</span>)
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		.description(<span class="jxr_string">"i"</span>)
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		.df(<span class="jxr_string">"j"</span>)
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		.discriminator(<span class="jxr_string">"k"</span>)
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		.e(<span class="jxr_string">"l"</span>)
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		.emax(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		.emin(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		.exclusiveMaximum(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		.exclusiveMinimum(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		.externalDocs(ExternalDocsAnnotation.DEFAULT)
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		.f(<span class="jxr_string">"m"</span>)
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		.format(<span class="jxr_string">"n"</span>)
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		.ignore(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		.items(ItemsAnnotation.DEFAULT)
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		.max(<span class="jxr_string">"o"</span>)
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		.maxi(1)
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		.maximum(<span class="jxr_string">"p"</span>)
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		.maxItems(2)
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		.maxl(3)
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		.maxLength(4)
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		.maxp(5)
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		.maxProperties(6)
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		.min(<span class="jxr_string">"q"</span>)
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		.mini(7)
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		.minimum(<span class="jxr_string">"r"</span>)
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		.minItems(8)
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		.minl(9)
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		.minLength(10)
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		.minp(11)
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		.minProperties(12)
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		.mo(<span class="jxr_string">"s"</span>)
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		.multipleOf(<span class="jxr_string">"t"</span>)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		.on(<span class="jxr_string">"u"</span>)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		.onClass(X1.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		.p(<span class="jxr_string">"v"</span>)
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		.pattern(<span class="jxr_string">"w"</span>)
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		.properties(<span class="jxr_string">"x"</span>)
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		.r(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		.readOnly(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		.required(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		.ro(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		.t(<span class="jxr_string">"z"</span>)
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		.title(<span class="jxr_string">"aa"</span>)
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		.type(<span class="jxr_string">"bb"</span>)
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		.ui(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		.uniqueItems(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		.xml(<span class="jxr_string">"cc"</span>)
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		.build();
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	Schema a2 = SchemaAnnotation.create()
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		._<strong class="jxr_keyword">default</strong>(<span class="jxr_string">"a"</span>)
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		._enum(<span class="jxr_string">"b"</span>)
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		.$ref(<span class="jxr_string">"c"</span>)
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		.additionalProperties(<span class="jxr_string">"d"</span>)
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		.allOf(<span class="jxr_string">"e"</span>)
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		.cf(<span class="jxr_string">"f"</span>)
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		.collectionFormat(<span class="jxr_string">"g"</span>)
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		.d(<span class="jxr_string">"h"</span>)
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		.description(<span class="jxr_string">"i"</span>)
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		.df(<span class="jxr_string">"j"</span>)
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		.discriminator(<span class="jxr_string">"k"</span>)
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		.e(<span class="jxr_string">"l"</span>)
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		.emax(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		.emin(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		.exclusiveMaximum(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		.exclusiveMinimum(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		.f(<span class="jxr_string">"m"</span>)
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		.format(<span class="jxr_string">"n"</span>)
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		.ignore(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		.items(ItemsAnnotation.DEFAULT)
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		.max(<span class="jxr_string">"o"</span>)
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		.maxi(1)
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		.maximum(<span class="jxr_string">"p"</span>)
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		.maxItems(2)
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		.maxl(3)
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		.maxLength(4)
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		.maxp(5)
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		.maxProperties(6)
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		.min(<span class="jxr_string">"q"</span>)
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		.mini(7)
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		.minimum(<span class="jxr_string">"r"</span>)
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		.minItems(8)
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		.minl(9)
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		.minLength(10)
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		.minp(11)
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		.minProperties(12)
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		.mo(<span class="jxr_string">"s"</span>)
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		.multipleOf(<span class="jxr_string">"t"</span>)
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		.on(<span class="jxr_string">"u"</span>)
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		.onClass(X1.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		.p(<span class="jxr_string">"v"</span>)
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		.pattern(<span class="jxr_string">"w"</span>)
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		.properties(<span class="jxr_string">"x"</span>)
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		.r(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		.readOnly(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		.required(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		.ro(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		.t(<span class="jxr_string">"z"</span>)
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		.title(<span class="jxr_string">"aa"</span>)
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		.type(<span class="jxr_string">"bb"</span>)
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		.ui(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		.uniqueItems(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		.xml(<span class="jxr_string">"cc"</span>)
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		.build();
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> a01_basic() {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertBean(a1,
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<span class="jxr_string">"$ref,_default,_enum,additionalProperties,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,on,onClass,p,pattern,properties,r,readOnly,required,ro,sie,skipIfEmpty,t,title,type,ui,uniqueItems,xml"</span>,
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<span class="jxr_string">"c,[a],[b],[d],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,[],,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,[u],[X1],v,w,[x],true,true,true,true,false,false,z,aa,bb,true,true,[cc]"</span>);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	@Test <strong class="jxr_keyword">void</strong> a02_testEquivalency() {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertEquals(a2, a1);
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertNotEqualsAny(a1.hashCode(), 0, -1);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertEquals(a1.hashCode(), a2.hashCode());
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<em class="jxr_comment">// PropertyStore equivalency.</em>
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Test <strong class="jxr_keyword">void</strong> b01_testEquivalencyInPropertyStores() {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> bc1 = BeanContext.create().annotations(a1).build();
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> bc2 = BeanContext.create().annotations(a2).build();
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertSame(bc1, bc2);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<em class="jxr_comment">// Other methods.</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C1 {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f1;
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m1() {}  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C2 {
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f2;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m2() {}  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	@Test <strong class="jxr_keyword">void</strong> c01_otherMethods() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> c1 = SchemaAnnotation.create(C1.<strong class="jxr_keyword">class</strong>).on(C2.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> c2 = SchemaAnnotation.create(<span class="jxr_string">"a"</span>).on(<span class="jxr_string">"b"</span>).build();
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> c3 = SchemaAnnotation.create().on(C1.<strong class="jxr_keyword">class</strong>.getField(<span class="jxr_string">"f1"</span>)).on(C2.<strong class="jxr_keyword">class</strong>.getField(<span class="jxr_string">"f2"</span>)).build();
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> c4 = SchemaAnnotation.create().on(C1.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"m1"</span>)).on(C2.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"m2"</span>)).build();
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertBean(c1, <span class="jxr_string">"on"</span>, <span class="jxr_string">"["</span>+CNAME+<span class="jxr_string">"$C1,"</span>+CNAME+<span class="jxr_string">"$C2]"</span>);
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertBean(c2, <span class="jxr_string">"on"</span>, <span class="jxr_string">"[a,b]"</span>);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertBean(c3, <span class="jxr_string">"on"</span>, <span class="jxr_string">"["</span>+CNAME+<span class="jxr_string">"$C1.f1,"</span>+CNAME+<span class="jxr_string">"$C2.f2]"</span>);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertBean(c4, <span class="jxr_string">"on"</span>, <span class="jxr_string">"["</span>+CNAME+<span class="jxr_string">"$C1.m1(),"</span>+CNAME+<span class="jxr_string">"$C2.m2()]"</span>);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<em class="jxr_comment">// Comparison with declared annotations.</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	@Schema(
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		_<strong class="jxr_keyword">default</strong>=<span class="jxr_string">"a"</span>,
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		_enum=<span class="jxr_string">"b"</span>,
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		$ref=<span class="jxr_string">"c"</span>,
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		additionalProperties=<span class="jxr_string">"d"</span>,
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		allOf=<span class="jxr_string">"e"</span>,
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		cf=<span class="jxr_string">"f"</span>,
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		collectionFormat=<span class="jxr_string">"g"</span>,
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		d=<span class="jxr_string">"h"</span>,
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		description=<span class="jxr_string">"i"</span>,
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		df=<span class="jxr_string">"j"</span>,
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		discriminator=<span class="jxr_string">"k"</span>,
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		e=<span class="jxr_string">"l"</span>,
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		emax=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		emin=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		exclusiveMaximum=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		exclusiveMinimum=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		externalDocs=@ExternalDocs,
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		f=<span class="jxr_string">"m"</span>,
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		format=<span class="jxr_string">"n"</span>,
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		ignore=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		items=@Items,
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		max=<span class="jxr_string">"o"</span>,
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		maxi=1,
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		maximum=<span class="jxr_string">"p"</span>,
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		maxItems=2,
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		maxl=3,
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		maxLength=4,
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		maxp=5,
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		maxProperties=6,
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		min=<span class="jxr_string">"q"</span>,
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		mini=7,
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		minimum=<span class="jxr_string">"r"</span>,
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		minItems=8,
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		minl=9,
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		minLength=10,
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		minp=11,
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		minProperties=12,
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		mo=<span class="jxr_string">"s"</span>,
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		multipleOf=<span class="jxr_string">"t"</span>,
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		on=<span class="jxr_string">"u"</span>,
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		onClass=X1.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		p=<span class="jxr_string">"v"</span>,
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		pattern=<span class="jxr_string">"w"</span>,
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		properties=<span class="jxr_string">"x"</span>,
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		r=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		readOnly=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		required=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		ro=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		t=<span class="jxr_string">"z"</span>,
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		title=<span class="jxr_string">"aa"</span>,
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		type=<span class="jxr_string">"bb"</span>,
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		ui=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		uniqueItems=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		xml=<span class="jxr_string">"cc"</span>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	)
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D1 {}
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	Schema d1 = D1.<strong class="jxr_keyword">class</strong>.getAnnotationsByType(Schema.<strong class="jxr_keyword">class</strong>)[0];
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	@Schema(
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		_<strong class="jxr_keyword">default</strong>=<span class="jxr_string">"a"</span>,
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		_enum=<span class="jxr_string">"b"</span>,
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		$ref=<span class="jxr_string">"c"</span>,
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		additionalProperties=<span class="jxr_string">"d"</span>,
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		allOf=<span class="jxr_string">"e"</span>,
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		cf=<span class="jxr_string">"f"</span>,
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		collectionFormat=<span class="jxr_string">"g"</span>,
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		d=<span class="jxr_string">"h"</span>,
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		description=<span class="jxr_string">"i"</span>,
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		df=<span class="jxr_string">"j"</span>,
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		discriminator=<span class="jxr_string">"k"</span>,
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		e=<span class="jxr_string">"l"</span>,
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		emax=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		emin=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		exclusiveMaximum=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		exclusiveMinimum=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		externalDocs=@ExternalDocs,
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		f=<span class="jxr_string">"m"</span>,
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		format=<span class="jxr_string">"n"</span>,
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		ignore=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		items=@Items,
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		max=<span class="jxr_string">"o"</span>,
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		maxi=1,
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		maximum=<span class="jxr_string">"p"</span>,
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		maxItems=2,
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		maxl=3,
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		maxLength=4,
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		maxp=5,
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		maxProperties=6,
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		min=<span class="jxr_string">"q"</span>,
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		mini=7,
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		minimum=<span class="jxr_string">"r"</span>,
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		minItems=8,
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		minl=9,
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		minLength=10,
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		minp=11,
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		minProperties=12,
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		mo=<span class="jxr_string">"s"</span>,
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		multipleOf=<span class="jxr_string">"t"</span>,
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		on=<span class="jxr_string">"u"</span>,
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		onClass=X1.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		p=<span class="jxr_string">"v"</span>,
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		pattern=<span class="jxr_string">"w"</span>,
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		properties=<span class="jxr_string">"x"</span>,
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		r=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		readOnly=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		required=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		ro=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		t=<span class="jxr_string">"z"</span>,
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		title=<span class="jxr_string">"aa"</span>,
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		type=<span class="jxr_string">"bb"</span>,
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		ui=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		uniqueItems=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		xml=<span class="jxr_string">"cc"</span>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	)
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D2 {}
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	Schema d2 = D2.<strong class="jxr_keyword">class</strong>.getAnnotationsByType(Schema.<strong class="jxr_keyword">class</strong>)[0];
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	@Test <strong class="jxr_keyword">void</strong> d01_comparisonWithDeclarativeAnnotations() {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		assertEqualsAll(a1, d1, d2);
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		assertNotEqualsAny(a1.hashCode(), 0, -1);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	}
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<em class="jxr_comment">// JSON Schema Draft 2020-12 properties</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	Schema draft2020_1 = SchemaAnnotation.create()
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		._<strong class="jxr_keyword">const</strong>(<span class="jxr_string">"constantValue"</span>)
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		.examples(<span class="jxr_string">"example1"</span>, <span class="jxr_string">"example2"</span>)
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		.$comment(<span class="jxr_string">"This is a schema comment"</span>)
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		.deprecatedProperty(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		.contentMediaType(<span class="jxr_string">"application/json"</span>)
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		.contentEncoding(<span class="jxr_string">"base64"</span>)
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		.prefixItems(<span class="jxr_string">"string"</span>, <span class="jxr_string">"number"</span>)
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		.unevaluatedItems(<span class="jxr_string">"false"</span>)
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		.unevaluatedProperties(<span class="jxr_string">"false"</span>)
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		.dependentSchemas(<span class="jxr_string">"prop1:{type:'string'}"</span>)
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		.dependentRequired(<span class="jxr_string">"prop1:prop2,prop3"</span>)
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		._<strong class="jxr_keyword">if</strong>(<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>)
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		._then(<span class="jxr_string">"required:['baz']"</span>)
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		._<strong class="jxr_keyword">else</strong>(<span class="jxr_string">"required:['qux']"</span>)
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		.$defs(<span class="jxr_string">"MyDef:{type:'string'}"</span>)
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		.$id(<span class="jxr_string">"https://example.com/schemas/my-schema"</span>)
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		.build();
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	Schema draft2020_2 = SchemaAnnotation.create()
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		._<strong class="jxr_keyword">const</strong>(<span class="jxr_string">"constantValue"</span>)
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		.examples(<span class="jxr_string">"example1"</span>, <span class="jxr_string">"example2"</span>)
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		.$comment(<span class="jxr_string">"This is a schema comment"</span>)
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		.deprecatedProperty(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		.contentMediaType(<span class="jxr_string">"application/json"</span>)
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		.contentEncoding(<span class="jxr_string">"base64"</span>)
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		.prefixItems(<span class="jxr_string">"string"</span>, <span class="jxr_string">"number"</span>)
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		.unevaluatedItems(<span class="jxr_string">"false"</span>)
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		.unevaluatedProperties(<span class="jxr_string">"false"</span>)
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		.dependentSchemas(<span class="jxr_string">"prop1:{type:'string'}"</span>)
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		.dependentRequired(<span class="jxr_string">"prop1:prop2,prop3"</span>)
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		._<strong class="jxr_keyword">if</strong>(<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>)
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		._then(<span class="jxr_string">"required:['baz']"</span>)
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		._<strong class="jxr_keyword">else</strong>(<span class="jxr_string">"required:['qux']"</span>)
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		.$defs(<span class="jxr_string">"MyDef:{type:'string'}"</span>)
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		.$id(<span class="jxr_string">"https://example.com/schemas/my-schema"</span>)
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		.build();
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	@Test <strong class="jxr_keyword">void</strong> e01_draft2020_basic() {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertBean(draft2020_1,
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<span class="jxr_string">"$comment,$defs,$id,_const,_else,_if,_then,contentEncoding,contentMediaType,dependentRequired,dependentSchemas,deprecatedProperty,examples,exclusiveMaximumValue,exclusiveMinimumValue,prefixItems,unevaluatedItems,unevaluatedProperties"</span>,
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			<span class="jxr_string">"[This is a schema comment],[MyDef:{type:'string'}],https://example.com/schemas/my-schema,[constantValue],[required:['qux']],[properties:{foo:{const:'bar'}}],[required:['baz']],base64,application/json,[prop1:prop2,prop3],[prop1:{type:'string'}],true,[example1,example2],100,0,[string,number],[false],[false]"</span>);
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@Test <strong class="jxr_keyword">void</strong> e02_draft2020_testEquivalency() {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertEquals(draft2020_2, draft2020_1);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertNotEqualsAny(draft2020_1.hashCode(), 0, -1);
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertEquals(draft2020_1.hashCode(), draft2020_2.hashCode());
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	}
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	@Test <strong class="jxr_keyword">void</strong> e03_draft2020_testEquivalencyInPropertyStores() {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> bc1 = BeanContext.create().annotations(draft2020_1).build();
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">var</strong> bc2 = BeanContext.create().annotations(draft2020_2).build();
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertSame(bc1, bc2);
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@Schema(
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		_<strong class="jxr_keyword">const</strong>=<span class="jxr_string">"constantValue"</span>,
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		examples={<span class="jxr_string">"example1"</span>, <span class="jxr_string">"example2"</span>},
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		$comment=<span class="jxr_string">"This is a schema comment"</span>,
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		deprecatedProperty=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		exclusiveMaximumValue=<span class="jxr_string">"100"</span>,
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		exclusiveMinimumValue=<span class="jxr_string">"0"</span>,
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		contentMediaType=<span class="jxr_string">"application/json"</span>,
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		contentEncoding=<span class="jxr_string">"base64"</span>,
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		prefixItems={<span class="jxr_string">"string"</span>, <span class="jxr_string">"number"</span>},
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		unevaluatedItems=<span class="jxr_string">"false"</span>,
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		unevaluatedProperties=<span class="jxr_string">"false"</span>,
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		dependentSchemas=<span class="jxr_string">"prop1:{type:'string'}"</span>,
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		dependentRequired=<span class="jxr_string">"prop1:prop2,prop3"</span>,
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		_<strong class="jxr_keyword">if</strong>=<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>,
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		_then=<span class="jxr_string">"required:['baz']"</span>,
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		_<strong class="jxr_keyword">else</strong>=<span class="jxr_string">"required:['qux']"</span>,
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		$defs=<span class="jxr_string">"MyDef:{type:'string'}"</span>,
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		$id=<span class="jxr_string">"https://example.com/schemas/my-schema"</span>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	)
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E1 {}
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	Schema e1 = E1.<strong class="jxr_keyword">class</strong>.getAnnotationsByType(Schema.<strong class="jxr_keyword">class</strong>)[0];
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	@Schema(
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		_<strong class="jxr_keyword">const</strong>=<span class="jxr_string">"constantValue"</span>,
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		examples={<span class="jxr_string">"example1"</span>, <span class="jxr_string">"example2"</span>},
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		$comment=<span class="jxr_string">"This is a schema comment"</span>,
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		deprecatedProperty=<strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		exclusiveMaximumValue=<span class="jxr_string">"100"</span>,
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		exclusiveMinimumValue=<span class="jxr_string">"0"</span>,
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		contentMediaType=<span class="jxr_string">"application/json"</span>,
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		contentEncoding=<span class="jxr_string">"base64"</span>,
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		prefixItems={<span class="jxr_string">"string"</span>, <span class="jxr_string">"number"</span>},
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		unevaluatedItems=<span class="jxr_string">"false"</span>,
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		unevaluatedProperties=<span class="jxr_string">"false"</span>,
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		dependentSchemas=<span class="jxr_string">"prop1:{type:'string'}"</span>,
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		dependentRequired=<span class="jxr_string">"prop1:prop2,prop3"</span>,
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		_<strong class="jxr_keyword">if</strong>=<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>,
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		_then=<span class="jxr_string">"required:['baz']"</span>,
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		_<strong class="jxr_keyword">else</strong>=<span class="jxr_string">"required:['qux']"</span>,
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		$defs=<span class="jxr_string">"MyDef:{type:'string'}"</span>,
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		$id=<span class="jxr_string">"https://example.com/schemas/my-schema"</span>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	)
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E2 {}
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	Schema e2 = E2.<strong class="jxr_keyword">class</strong>.getAnnotationsByType(Schema.<strong class="jxr_keyword">class</strong>)[0];
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	@Test <strong class="jxr_keyword">void</strong> e04_draft2020_comparisonWithDeclarativeAnnotations() {
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		assertEqualsAll(draft2020_1, e1, e2);
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertNotEqualsAny(draft2020_1.hashCode(), 0, -1);
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		assertEqualsAll(draft2020_1.hashCode(), e1.hashCode(), e2.hashCode());
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	}
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	<em class="jxr_comment">// Backward compatibility: exclusiveMaximum/exclusiveMinimum fallback</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	@Test <strong class="jxr_keyword">void</strong> f01_backwardCompatibility_exclusiveMaxMin() {
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<em class="jxr_comment">// Test that old boolean exclusiveMaximum/exclusiveMinimum still work</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		Schema oldStyle = SchemaAnnotation.create()
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			.exclusiveMaximum(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			.exclusiveMinimum(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			.maximum(<span class="jxr_string">"100"</span>)
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			.minimum(<span class="jxr_string">"0"</span>)
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			.build();
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		assertBean(oldStyle, <span class="jxr_string">"exclusiveMaximum,exclusiveMinimum,maximum,minimum"</span>, <span class="jxr_string">"true,true,100,0"</span>);
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<em class="jxr_comment">// Test that new numeric style takes precedence</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		Schema newStyle = SchemaAnnotation.create()
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			.build();
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		assertBean(newStyle, <span class="jxr_string">"exclusiveMaximumValue,exclusiveMinimumValue"</span>, <span class="jxr_string">"100,0"</span>);
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<em class="jxr_comment">// Test that new style takes precedence when both are set</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		Schema mixed = SchemaAnnotation.create()
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			.exclusiveMaximum(false)
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			.exclusiveMinimum(false)
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.build();
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		assertBean(mixed, <span class="jxr_string">"exclusiveMaximum,exclusiveMinimum,exclusiveMaximumValue,exclusiveMinimumValue"</span>, <span class="jxr_string">"false,false,100,0"</span>);
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	}
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> }
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">class</strong> <a name="SchemaAnnotation_Test" href="../../../../../org/apache/juneau/jsonschema/annotation/SchemaAnnotation_Test.html#SchemaAnnotation_Test">SchemaAnnotation_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CNAME = SchemaAnnotation_Test.<strong class="jxr_keyword">class</strong>.getName();
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> X1 {}
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<em class="jxr_comment">// Basic tests</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	Schema a1 = SchemaAnnotation.create()
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		._<strong class="jxr_keyword">default</strong>(<span class="jxr_string">"a"</span>)
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		._enum(<span class="jxr_string">"b"</span>)
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		.$ref(<span class="jxr_string">"c"</span>)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		.additionalProperties(<span class="jxr_string">"d"</span>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		.allOf(<span class="jxr_string">"e"</span>)
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		.cf(<span class="jxr_string">"f"</span>)
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		.collectionFormat(<span class="jxr_string">"g"</span>)
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		.d(<span class="jxr_string">"h"</span>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		.description(<span class="jxr_string">"i"</span>)
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		.df(<span class="jxr_string">"j"</span>)
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		.discriminator(<span class="jxr_string">"k"</span>)
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		.e(<span class="jxr_string">"l"</span>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		.emax(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		.emin(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		.exclusiveMaximum(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		.exclusiveMinimum(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		.externalDocs(ExternalDocsAnnotation.DEFAULT)
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		.f(<span class="jxr_string">"m"</span>)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		.format(<span class="jxr_string">"n"</span>)
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		.ignore(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		.items(ItemsAnnotation.DEFAULT)
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		.max(<span class="jxr_string">"o"</span>)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		.maxi(1)
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		.maximum(<span class="jxr_string">"p"</span>)
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		.maxItems(2)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		.maxl(3)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		.maxLength(4)
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		.maxp(5)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		.maxProperties(6)
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		.min(<span class="jxr_string">"q"</span>)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		.mini(7)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		.minimum(<span class="jxr_string">"r"</span>)
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		.minItems(8)
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		.minl(9)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		.minLength(10)
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		.minp(11)
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		.minProperties(12)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		.mo(<span class="jxr_string">"s"</span>)
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		.multipleOf(<span class="jxr_string">"t"</span>)
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		.on(<span class="jxr_string">"u"</span>)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		.onClass(X1.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		.p(<span class="jxr_string">"v"</span>)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		.pattern(<span class="jxr_string">"w"</span>)
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		.properties(<span class="jxr_string">"x"</span>)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		.r(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		.readOnly(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		.required(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		.ro(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		.t(<span class="jxr_string">"z"</span>)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		.title(<span class="jxr_string">"aa"</span>)
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		.type(<span class="jxr_string">"bb"</span>)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		.ui(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		.uniqueItems(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		.xml(<span class="jxr_string">"cc"</span>)
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		.build();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	Schema a2 = SchemaAnnotation.create()
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		._<strong class="jxr_keyword">default</strong>(<span class="jxr_string">"a"</span>)
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		._enum(<span class="jxr_string">"b"</span>)
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		.$ref(<span class="jxr_string">"c"</span>)
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		.additionalProperties(<span class="jxr_string">"d"</span>)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		.allOf(<span class="jxr_string">"e"</span>)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		.cf(<span class="jxr_string">"f"</span>)
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		.collectionFormat(<span class="jxr_string">"g"</span>)
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		.d(<span class="jxr_string">"h"</span>)
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		.description(<span class="jxr_string">"i"</span>)
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		.df(<span class="jxr_string">"j"</span>)
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		.discriminator(<span class="jxr_string">"k"</span>)
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		.e(<span class="jxr_string">"l"</span>)
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		.emax(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		.emin(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		.exclusiveMaximum(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		.exclusiveMinimum(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		.externalDocs(ExternalDocsAnnotation.DEFAULT)
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		.f(<span class="jxr_string">"m"</span>)
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		.format(<span class="jxr_string">"n"</span>)
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		.ignore(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		.items(ItemsAnnotation.DEFAULT)
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		.max(<span class="jxr_string">"o"</span>)
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		.maxi(1)
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		.maximum(<span class="jxr_string">"p"</span>)
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		.maxItems(2)
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		.maxl(3)
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		.maxLength(4)
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		.maxp(5)
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		.maxProperties(6)
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		.min(<span class="jxr_string">"q"</span>)
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		.mini(7)
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		.minimum(<span class="jxr_string">"r"</span>)
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		.minItems(8)
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		.minl(9)
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		.minLength(10)
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		.minp(11)
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		.minProperties(12)
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		.mo(<span class="jxr_string">"s"</span>)
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		.multipleOf(<span class="jxr_string">"t"</span>)
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		.on(<span class="jxr_string">"u"</span>)
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		.onClass(X1.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		.p(<span class="jxr_string">"v"</span>)
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		.pattern(<span class="jxr_string">"w"</span>)
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		.properties(<span class="jxr_string">"x"</span>)
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		.r(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		.readOnly(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		.required(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		.ro(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		.t(<span class="jxr_string">"z"</span>)
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		.title(<span class="jxr_string">"aa"</span>)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		.type(<span class="jxr_string">"bb"</span>)
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		.ui(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		.uniqueItems(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		.xml(<span class="jxr_string">"cc"</span>)
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		.build();
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@Test <strong class="jxr_keyword">void</strong> a01_basic() {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertBean(a1,
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<span class="jxr_string">"$ref,_default,_enum,additionalProperties,aev,allOf,allowEmptyValue,cf,collectionFormat,d,description,df,discriminator,e,emax,emin,exclusiveMaximum,exclusiveMinimum,externalDocs{description,url},f,format,ignore,items{$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items{$ref,_default,_enum,cf,collectionFormat,description,df,e,emax,emin,exclusiveMaximum,exclusiveMinimum,f,format,items,max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxi,maximum,maxl,min,minItems,minLength,mini,minimum,minl,mo,multipleOf,p,pattern,t,type,ui,uniqueItems},max,maxItems,maxLength,maxProperties,maxi,maximum,maxl,maxp,min,minItems,minLength,minProperties,mini,minimum,minl,minp,mo,multipleOf,on,onClass,p,pattern,properties,r,readOnly,required,ro,sie,skipIfEmpty,t,title,type,ui,uniqueItems,xml"</span>,
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<span class="jxr_string">"c,[a],[b],[d],false,[e],false,f,g,[h],[i],[j],k,[l],true,true,true,true,{[],},m,n,true,{,[],[],,,[],[],[],false,false,false,false,,,{,[],[],,,[],[],[],false,false,false,false,,,[],,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},,-1,-1,-1,,-1,,-1,-1,-1,,-1,,,,,,,false,false},o,2,4,6,1,p,3,5,q,8,10,12,7,r,9,11,s,t,[u],[X1],v,w,[x],true,true,true,true,false,false,z,aa,bb,true,true,[cc]"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> a02_testEquivalency() {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertEquals(a2, a1);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertNotEqualsAny(a1.hashCode(), 0, -1);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertEquals(a1.hashCode(), a2.hashCode());
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_comment">// PropertyStore equivalency.</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> b01_testEquivalencyInPropertyStores() {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> bc1 = BeanContext.create().annotations(a1).build();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> bc2 = BeanContext.create().annotations(a2).build();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertSame(bc1, bc2);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<em class="jxr_comment">// Other methods.</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C1 {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f1;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m1() {}  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C2 {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f2;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m2() {}  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@Test <strong class="jxr_keyword">void</strong> c01_otherMethods() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> c1 = SchemaAnnotation.create(C1.<strong class="jxr_keyword">class</strong>).on(C2.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> c2 = SchemaAnnotation.create(<span class="jxr_string">"a"</span>).on(<span class="jxr_string">"b"</span>).build();
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> c3 = SchemaAnnotation.create().on(C1.<strong class="jxr_keyword">class</strong>.getField(<span class="jxr_string">"f1"</span>)).on(C2.<strong class="jxr_keyword">class</strong>.getField(<span class="jxr_string">"f2"</span>)).build();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> c4 = SchemaAnnotation.create().on(C1.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"m1"</span>)).on(C2.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"m2"</span>)).build();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertBean(c1, <span class="jxr_string">"on"</span>, <span class="jxr_string">"["</span>+CNAME+<span class="jxr_string">"$C1,"</span>+CNAME+<span class="jxr_string">"$C2]"</span>);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertBean(c2, <span class="jxr_string">"on"</span>, <span class="jxr_string">"[a,b]"</span>);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertBean(c3, <span class="jxr_string">"on"</span>, <span class="jxr_string">"["</span>+CNAME+<span class="jxr_string">"$C1.f1,"</span>+CNAME+<span class="jxr_string">"$C2.f2]"</span>);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertBean(c4, <span class="jxr_string">"on"</span>, <span class="jxr_string">"["</span>+CNAME+<span class="jxr_string">"$C1.m1(),"</span>+CNAME+<span class="jxr_string">"$C2.m2()]"</span>);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<em class="jxr_comment">// Comparison with declared annotations.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	@Schema(
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		_<strong class="jxr_keyword">default</strong>=<span class="jxr_string">"a"</span>,
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		_enum=<span class="jxr_string">"b"</span>,
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		$ref=<span class="jxr_string">"c"</span>,
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		additionalProperties=<span class="jxr_string">"d"</span>,
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		allOf=<span class="jxr_string">"e"</span>,
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		cf=<span class="jxr_string">"f"</span>,
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		collectionFormat=<span class="jxr_string">"g"</span>,
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		d=<span class="jxr_string">"h"</span>,
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		description=<span class="jxr_string">"i"</span>,
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		df=<span class="jxr_string">"j"</span>,
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		discriminator=<span class="jxr_string">"k"</span>,
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		e=<span class="jxr_string">"l"</span>,
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		emax=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		emin=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		exclusiveMaximum=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		exclusiveMinimum=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		externalDocs=@ExternalDocs,
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		f=<span class="jxr_string">"m"</span>,
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		format=<span class="jxr_string">"n"</span>,
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		ignore=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		items=@Items,
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		max=<span class="jxr_string">"o"</span>,
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		maxi=1,
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		maximum=<span class="jxr_string">"p"</span>,
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		maxItems=2,
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		maxl=3,
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		maxLength=4,
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		maxp=5,
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		maxProperties=6,
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		min=<span class="jxr_string">"q"</span>,
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		mini=7,
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		minimum=<span class="jxr_string">"r"</span>,
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		minItems=8,
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		minl=9,
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		minLength=10,
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		minp=11,
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		minProperties=12,
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		mo=<span class="jxr_string">"s"</span>,
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		multipleOf=<span class="jxr_string">"t"</span>,
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		on=<span class="jxr_string">"u"</span>,
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		onClass=X1.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		p=<span class="jxr_string">"v"</span>,
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		pattern=<span class="jxr_string">"w"</span>,
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		properties=<span class="jxr_string">"x"</span>,
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		r=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		readOnly=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		required=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		ro=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		t=<span class="jxr_string">"z"</span>,
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		title=<span class="jxr_string">"aa"</span>,
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		type=<span class="jxr_string">"bb"</span>,
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		ui=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		uniqueItems=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		xml=<span class="jxr_string">"cc"</span>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	)
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D1 {}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	Schema d1 = D1.<strong class="jxr_keyword">class</strong>.getAnnotationsByType(Schema.<strong class="jxr_keyword">class</strong>)[0];
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@Schema(
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		_<strong class="jxr_keyword">default</strong>=<span class="jxr_string">"a"</span>,
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		_enum=<span class="jxr_string">"b"</span>,
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		$ref=<span class="jxr_string">"c"</span>,
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		additionalProperties=<span class="jxr_string">"d"</span>,
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		allOf=<span class="jxr_string">"e"</span>,
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		cf=<span class="jxr_string">"f"</span>,
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		collectionFormat=<span class="jxr_string">"g"</span>,
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		d=<span class="jxr_string">"h"</span>,
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		description=<span class="jxr_string">"i"</span>,
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		df=<span class="jxr_string">"j"</span>,
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		discriminator=<span class="jxr_string">"k"</span>,
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		e=<span class="jxr_string">"l"</span>,
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		emax=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		emin=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		exclusiveMaximum=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		exclusiveMinimum=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		externalDocs=@ExternalDocs,
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		f=<span class="jxr_string">"m"</span>,
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		format=<span class="jxr_string">"n"</span>,
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		ignore=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		items=@Items,
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		max=<span class="jxr_string">"o"</span>,
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		maxi=1,
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		maximum=<span class="jxr_string">"p"</span>,
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		maxItems=2,
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		maxl=3,
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		maxLength=4,
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		maxp=5,
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		maxProperties=6,
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		min=<span class="jxr_string">"q"</span>,
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		mini=7,
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		minimum=<span class="jxr_string">"r"</span>,
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		minItems=8,
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		minl=9,
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		minLength=10,
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		minp=11,
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		minProperties=12,
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		mo=<span class="jxr_string">"s"</span>,
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		multipleOf=<span class="jxr_string">"t"</span>,
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		on=<span class="jxr_string">"u"</span>,
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		onClass=X1.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		p=<span class="jxr_string">"v"</span>,
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		pattern=<span class="jxr_string">"w"</span>,
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		properties=<span class="jxr_string">"x"</span>,
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		r=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		readOnly=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		required=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		ro=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		t=<span class="jxr_string">"z"</span>,
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		title=<span class="jxr_string">"aa"</span>,
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		type=<span class="jxr_string">"bb"</span>,
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		ui=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		uniqueItems=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		xml=<span class="jxr_string">"cc"</span>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	)
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D2 {}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	Schema d2 = D2.<strong class="jxr_keyword">class</strong>.getAnnotationsByType(Schema.<strong class="jxr_keyword">class</strong>)[0];
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	@Test <strong class="jxr_keyword">void</strong> d01_comparisonWithDeclarativeAnnotations() {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		assertEqualsAll(a1, d1, d2);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		assertNotEqualsAny(a1.hashCode(), 0, -1);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<em class="jxr_comment">// JSON Schema Draft 2020-12 properties</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	Schema draft2020_1 = SchemaAnnotation.create()
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		._<strong class="jxr_keyword">const</strong>(<span class="jxr_string">"constantValue"</span>)
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		.examples(<span class="jxr_string">"example1"</span>, <span class="jxr_string">"example2"</span>)
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		.$comment(<span class="jxr_string">"This is a schema comment"</span>)
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		.deprecatedProperty(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		.contentMediaType(<span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		.contentEncoding(<span class="jxr_string">"base64"</span>)
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		.prefixItems(<span class="jxr_string">"string"</span>, <span class="jxr_string">"number"</span>)
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		.unevaluatedItems(<span class="jxr_string">"false"</span>)
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		.unevaluatedProperties(<span class="jxr_string">"false"</span>)
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		.dependentSchemas(<span class="jxr_string">"prop1:{type:'string'}"</span>)
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		.dependentRequired(<span class="jxr_string">"prop1:prop2,prop3"</span>)
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		._<strong class="jxr_keyword">if</strong>(<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>)
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		._then(<span class="jxr_string">"required:['baz']"</span>)
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		._<strong class="jxr_keyword">else</strong>(<span class="jxr_string">"required:['qux']"</span>)
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		.$defs(<span class="jxr_string">"MyDef:{type:'string'}"</span>)
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		.$id(<span class="jxr_string">"https://example.com/schemas/my-schema"</span>)
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		.build();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	Schema draft2020_2 = SchemaAnnotation.create()
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		._<strong class="jxr_keyword">const</strong>(<span class="jxr_string">"constantValue"</span>)
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		.examples(<span class="jxr_string">"example1"</span>, <span class="jxr_string">"example2"</span>)
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		.$comment(<span class="jxr_string">"This is a schema comment"</span>)
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		.deprecatedProperty(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		.contentMediaType(<span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		.contentEncoding(<span class="jxr_string">"base64"</span>)
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		.prefixItems(<span class="jxr_string">"string"</span>, <span class="jxr_string">"number"</span>)
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		.unevaluatedItems(<span class="jxr_string">"false"</span>)
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		.unevaluatedProperties(<span class="jxr_string">"false"</span>)
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		.dependentSchemas(<span class="jxr_string">"prop1:{type:'string'}"</span>)
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		.dependentRequired(<span class="jxr_string">"prop1:prop2,prop3"</span>)
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		._<strong class="jxr_keyword">if</strong>(<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>)
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		._then(<span class="jxr_string">"required:['baz']"</span>)
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		._<strong class="jxr_keyword">else</strong>(<span class="jxr_string">"required:['qux']"</span>)
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		.$defs(<span class="jxr_string">"MyDef:{type:'string'}"</span>)
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		.$id(<span class="jxr_string">"https://example.com/schemas/my-schema"</span>)
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		.build();
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	@Test <strong class="jxr_keyword">void</strong> e01_draft2020_basic() {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertBean(draft2020_1,
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			<span class="jxr_string">"$comment,$defs,$id,_const,_else,_if,_then,contentEncoding,contentMediaType,dependentRequired,dependentSchemas,deprecatedProperty,examples,exclusiveMaximumValue,exclusiveMinimumValue,prefixItems,unevaluatedItems,unevaluatedProperties"</span>,
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<span class="jxr_string">"[This is a schema comment],[MyDef:{type:'string'}],https://example.com/schemas/my-schema,[constantValue],[required:['qux']],[properties:{foo:{const:'bar'}}],[required:['baz']],base64,application/json,[prop1:prop2,prop3],[prop1:{type:'string'}],true,[example1,example2],100,0,[string,number],[false],[false]"</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	}
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	@Test <strong class="jxr_keyword">void</strong> e02_draft2020_testEquivalency() {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(draft2020_2, draft2020_1);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertNotEqualsAny(draft2020_1.hashCode(), 0, -1);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertEquals(draft2020_1.hashCode(), draft2020_2.hashCode());
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	@Test <strong class="jxr_keyword">void</strong> e03_draft2020_testEquivalencyInPropertyStores() {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">var</strong> bc1 = BeanContext.create().annotations(draft2020_1).build();
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">var</strong> bc2 = BeanContext.create().annotations(draft2020_2).build();
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertSame(bc1, bc2);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	}
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	@Schema(
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		_<strong class="jxr_keyword">const</strong>=<span class="jxr_string">"constantValue"</span>,
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		examples={<span class="jxr_string">"example1"</span>, <span class="jxr_string">"example2"</span>},
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		$comment=<span class="jxr_string">"This is a schema comment"</span>,
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		deprecatedProperty=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		exclusiveMaximumValue=<span class="jxr_string">"100"</span>,
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		exclusiveMinimumValue=<span class="jxr_string">"0"</span>,
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		contentMediaType=<span class="jxr_string">"application/json"</span>,
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		contentEncoding=<span class="jxr_string">"base64"</span>,
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		prefixItems={<span class="jxr_string">"string"</span>, <span class="jxr_string">"number"</span>},
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		unevaluatedItems=<span class="jxr_string">"false"</span>,
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		unevaluatedProperties=<span class="jxr_string">"false"</span>,
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		dependentSchemas=<span class="jxr_string">"prop1:{type:'string'}"</span>,
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		dependentRequired=<span class="jxr_string">"prop1:prop2,prop3"</span>,
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		_<strong class="jxr_keyword">if</strong>=<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>,
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		_then=<span class="jxr_string">"required:['baz']"</span>,
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		_<strong class="jxr_keyword">else</strong>=<span class="jxr_string">"required:['qux']"</span>,
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		$defs=<span class="jxr_string">"MyDef:{type:'string'}"</span>,
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		$id=<span class="jxr_string">"https://example.com/schemas/my-schema"</span>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	)
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E1 {}
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	Schema e1 = E1.<strong class="jxr_keyword">class</strong>.getAnnotationsByType(Schema.<strong class="jxr_keyword">class</strong>)[0];
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	@Schema(
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		_<strong class="jxr_keyword">const</strong>=<span class="jxr_string">"constantValue"</span>,
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		examples={<span class="jxr_string">"example1"</span>, <span class="jxr_string">"example2"</span>},
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		$comment=<span class="jxr_string">"This is a schema comment"</span>,
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		deprecatedProperty=<strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		exclusiveMaximumValue=<span class="jxr_string">"100"</span>,
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		exclusiveMinimumValue=<span class="jxr_string">"0"</span>,
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		contentMediaType=<span class="jxr_string">"application/json"</span>,
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		contentEncoding=<span class="jxr_string">"base64"</span>,
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		prefixItems={<span class="jxr_string">"string"</span>, <span class="jxr_string">"number"</span>},
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		unevaluatedItems=<span class="jxr_string">"false"</span>,
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		unevaluatedProperties=<span class="jxr_string">"false"</span>,
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		dependentSchemas=<span class="jxr_string">"prop1:{type:'string'}"</span>,
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		dependentRequired=<span class="jxr_string">"prop1:prop2,prop3"</span>,
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		_<strong class="jxr_keyword">if</strong>=<span class="jxr_string">"properties:{foo:{const:'bar'}}"</span>,
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		_then=<span class="jxr_string">"required:['baz']"</span>,
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		_<strong class="jxr_keyword">else</strong>=<span class="jxr_string">"required:['qux']"</span>,
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		$defs=<span class="jxr_string">"MyDef:{type:'string'}"</span>,
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		$id=<span class="jxr_string">"https://example.com/schemas/my-schema"</span>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	)
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E2 {}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	Schema e2 = E2.<strong class="jxr_keyword">class</strong>.getAnnotationsByType(Schema.<strong class="jxr_keyword">class</strong>)[0];
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	@Test <strong class="jxr_keyword">void</strong> e04_draft2020_comparisonWithDeclarativeAnnotations() {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertEqualsAll(draft2020_1, e1, e2);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		assertNotEqualsAny(draft2020_1.hashCode(), 0, -1);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		assertEqualsAll(draft2020_1.hashCode(), e1.hashCode(), e2.hashCode());
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	}
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<em class="jxr_comment">// Backward compatibility: exclusiveMaximum/exclusiveMinimum fallback</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	@Test <strong class="jxr_keyword">void</strong> f01_backwardCompatibility_exclusiveMaxMin() {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<em class="jxr_comment">// Test that old boolean exclusiveMaximum/exclusiveMinimum still work</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		Schema oldStyle = SchemaAnnotation.create()
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			.exclusiveMaximum(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			.exclusiveMinimum(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			.maximum(<span class="jxr_string">"100"</span>)
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			.minimum(<span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			.build();
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		assertBean(oldStyle, <span class="jxr_string">"exclusiveMaximum,exclusiveMinimum,maximum,minimum"</span>, <span class="jxr_string">"true,true,100,0"</span>);
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<em class="jxr_comment">// Test that new numeric style takes precedence</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		Schema newStyle = SchemaAnnotation.create()
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			.build();
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		assertBean(newStyle, <span class="jxr_string">"exclusiveMaximumValue,exclusiveMinimumValue"</span>, <span class="jxr_string">"100,0"</span>);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<em class="jxr_comment">// Test that new style takes precedence when both are set</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		Schema mixed = SchemaAnnotation.create()
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			.exclusiveMaximum(false)
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			.exclusiveMinimum(false)
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			.build();
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		assertBean(mixed, <span class="jxr_string">"exclusiveMaximum,exclusiveMinimum,exclusiveMaximumValue,exclusiveMinimumValue"</span>, <span class="jxr_string">"false,false,100,0"</span>);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	}
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

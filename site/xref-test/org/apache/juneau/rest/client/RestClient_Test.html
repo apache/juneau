@@ -381,27 +381,27 @@
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 	@Test <strong class="jxr_keyword">void</strong> e11_httpMessage_setHeaders() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">var</strong> x = client().build().get(<span class="jxr_string">"/bean"</span>);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		x.setHeaders(<strong class="jxr_keyword">new</strong> Header[]{header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>)});
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		x.setHeaders(a(header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>)));
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertEquals(<span class="jxr_string">"bar"</span>,x.getFirstHeader(<span class="jxr_string">"Foo"</span>).getValue());
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 	}
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 	@Test <strong class="jxr_keyword">void</strong> e12_httpMessage_removeHeaders() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">var</strong> x = client().build().get(<span class="jxr_string">"/bean"</span>);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		x.setHeaders(<strong class="jxr_keyword">new</strong> Header[]{header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>)});
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		x.setHeaders(a(header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>)));
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		x.removeHeaders(<span class="jxr_string">"Foo"</span>);
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertNull(x.getFirstHeader(<span class="jxr_string">"Foo"</span>));
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 	@Test <strong class="jxr_keyword">void</strong> e13_httpMessage_removeHeader() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> x = client().build().get(<span class="jxr_string">"/bean"</span>);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		x.setHeaders(<strong class="jxr_keyword">new</strong> Header[]{header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>)});
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		x.setHeaders(a(header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>)));
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 		x.removeHeader(header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<em class="jxr_comment">//assertNull(x.getFirstHeader("Foo"));  // Bug in HttpClient API?</em>
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 	}
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 	@Test <strong class="jxr_keyword">void</strong> e14_httpMessage_headerIterator() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">var</strong> x = client().build().get(<span class="jxr_string">"/bean"</span>);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		x.setHeaders(<strong class="jxr_keyword">new</strong> Header[]{header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>)});
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		x.setHeaders(a(header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>)));
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 		assertEquals(<span class="jxr_string">"Foo: bar"</span>, x.headerIterator().next().toString());
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		assertEquals(<span class="jxr_string">"Foo: bar"</span>, x.headerIterator(<span class="jxr_string">"Foo"</span>).next().toString());
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}

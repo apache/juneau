@@ -146,35 +146,35 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> c01_beanArray() {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> sa = <strong class="jxr_keyword">new</strong> ViewArgs(<span class="jxr_string">"f1"</span>);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> A[]{A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>)};
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> in = a(A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>));
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertJson(<span class="jxr_string">"[{f1:'x1'}]"</span>, ov.run(bs, in, sa));
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertJson(<span class="jxr_string">"[{f1:'x1'}]"</span>, ov.run(in, <span class="jxr_string">"f1"</span>));
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@Test <strong class="jxr_keyword">void</strong> c02_beanArray_reverseColumns() {
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">var</strong> sa = <strong class="jxr_keyword">new</strong> ViewArgs(<span class="jxr_string">"f2,f1"</span>);
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> A[]{A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>)};
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> in = a(A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>));
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertJson(<span class="jxr_string">"[{f2:'x2',f1:'x1'}]"</span>, ov.run(bs, in, sa));
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertJson(<span class="jxr_string">"[{f2:'x2',f1:'x1'}]"</span>, ov.run(in, <span class="jxr_string">"f2,f1"</span>));
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> c03_beanArray_dupColumns() {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> sa = <strong class="jxr_keyword">new</strong> ViewArgs(<span class="jxr_string">"f1,f1"</span>);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> A[]{A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>)};
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> in = a(A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>));
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertJson(<span class="jxr_string">"[{f1:'x1'}]"</span>, ov.run(bs, in, sa));
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertJson(<span class="jxr_string">"[{f1:'x1'}]"</span>, ov.run(in, <span class="jxr_string">"f1,f1"</span>));
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	@Test <strong class="jxr_keyword">void</strong> c04_beanArray_nonExistentColumns() {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> sa = <strong class="jxr_keyword">new</strong> ViewArgs(<span class="jxr_string">"fx"</span>);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> A[]{A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>)};
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> in = a(A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>));
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertJson(<span class="jxr_string">"[{}]"</span>, ov.run(bs, in, sa));
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertJson(<span class="jxr_string">"[{}]"</span>, ov.run(in, <span class="jxr_string">"fx"</span>));
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> c05_beanArray_emptyArgs() {
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> sa = <strong class="jxr_keyword">new</strong> ViewArgs(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> A[]{A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>)};
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> in = a(A.create(<span class="jxr_string">"x1"</span>,<span class="jxr_string">"x2"</span>));
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertJson(<span class="jxr_string">"[{}]"</span>, ov.run(bs, in, sa));
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertJson(<span class="jxr_string">"[{}]"</span>, ov.run(in, <span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}

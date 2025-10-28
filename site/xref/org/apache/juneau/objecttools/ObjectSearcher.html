@@ -240,7 +240,7 @@
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">public</strong> ObjectSearcher(MatcherFactory...factories) {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">this</strong>.factories = factories.length == 0 ? <strong class="jxr_keyword">new</strong> <a name="MatcherFactory" href="../../../../org/apache/juneau/objecttools/MatcherFactory.html#MatcherFactory">MatcherFactory</a>[] { NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT } : factories;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">this</strong>.factories = factories.length == 0 ? a(NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT) : factories;
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 	}
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Override <em class="jxr_comment">/* Overridden from ObjectTool */</em>

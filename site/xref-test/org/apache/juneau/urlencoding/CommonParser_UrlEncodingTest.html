@@ -24,7 +24,7 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.urlencoding;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
@@ -51,15 +51,15 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		in = <span class="jxr_string">"a=1&amp;b='foo+bar'"</span>;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		m = (Map)p.parse(in, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertMap(m, <span class="jxr_string">"a,b"</span>, <span class="jxr_string">"1,foo bar"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertBean(m, <span class="jxr_string">"a,b"</span>, <span class="jxr_string">"1,foo bar"</span>);
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		in = <span class="jxr_string">"a=1&amp;b='foo+bar'&amp;c=false"</span>;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		m = (Map)p.parse(in, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertMap(m, <span class="jxr_string">"a,b,c"</span>, <span class="jxr_string">"1,foo bar,false"</span>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertBean(m, <span class="jxr_string">"a,b,c"</span>, <span class="jxr_string">"1,foo bar,false"</span>);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		in = <span class="jxr_string">"a=1&amp;b='foo%20bar'&amp;c=false"</span>;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		m = (Map)p.parse(in, Object.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertMap(m, <span class="jxr_string">"a,b,c"</span>, <span class="jxr_string">"1,foo bar,false"</span>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertBean(m, <span class="jxr_string">"a,b,c"</span>, <span class="jxr_string">"1,foo bar,false"</span>);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> jm = (JsonMap)p.parse(<span class="jxr_string">"x=@((attribute=value),(attribute=~'value~'))"</span>, Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertEquals(<span class="jxr_string">"value"</span>, jm.getList(<span class="jxr_string">"x"</span>).getMap(0).getString(<span class="jxr_string">"attribute"</span>));

@@ -68,17 +68,17 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addDateHeader(String name, <strong class="jxr_keyword">long</strong> date) {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		headerMap.put(name, <strong class="jxr_keyword">new</strong> String[] { DateUtils.formatDate(<strong class="jxr_keyword">new</strong> Date(date), DateUtils.PATTERN_RFC1123) });
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		headerMap.put(name, a(DateUtils.formatDate(<strong class="jxr_keyword">new</strong> Date(date), DateUtils.PATTERN_RFC1123)));
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addHeader(String name, String value) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		headerMap.put(name, <strong class="jxr_keyword">new</strong> String[] { value });
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		headerMap.put(name, a(value));
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addIntHeader(String name, <strong class="jxr_keyword">int</strong> value) {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		headerMap.put(name, <strong class="jxr_keyword">new</strong> String[] { String.valueOf(value) });
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		headerMap.put(name, a(String.valueOf(value)));
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
@@ -177,13 +177,13 @@
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sendRedirect(String location) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">this</strong>.sc = 302;
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		headerMap.put(<span class="jxr_string">"Location"</span>, <strong class="jxr_keyword">new</strong> String[] { location });
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		headerMap.put(<span class="jxr_string">"Location"</span>, a(location));
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sendRedirect(String location, <strong class="jxr_keyword">int</strong> sc, <strong class="jxr_keyword">boolean</strong> clearBuffer) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">this</strong>.sc = sc;
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		headerMap.put(<span class="jxr_string">"Location"</span>, <strong class="jxr_keyword">new</strong> String[] { location });
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		headerMap.put(<span class="jxr_string">"Location"</span>, a(location));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
@@ -213,17 +213,17 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDateHeader(String name, <strong class="jxr_keyword">long</strong> date) {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		headerMap.put(name, <strong class="jxr_keyword">new</strong> String[] { DateUtils.formatDate(<strong class="jxr_keyword">new</strong> Date(date), DateUtils.PATTERN_RFC1123) });
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		headerMap.put(name, a(DateUtils.formatDate(<strong class="jxr_keyword">new</strong> Date(date), DateUtils.PATTERN_RFC1123)));
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHeader(String name, String value) {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		headerMap.put(name, <strong class="jxr_keyword">new</strong> String[] { value });
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		headerMap.put(name, a(value));
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setIntHeader(String name, <strong class="jxr_keyword">int</strong> value) {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		headerMap.put(name, <strong class="jxr_keyword">new</strong> String[] { String.valueOf(value) });
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		headerMap.put(name, a(String.valueOf(value)));
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletResponse */</em>
