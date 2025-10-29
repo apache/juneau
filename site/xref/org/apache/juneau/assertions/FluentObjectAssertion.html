@@ -342,7 +342,7 @@
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<strong class="jxr_keyword">public</strong> R isExactType(Class&lt;?&gt; type) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 		assertArgNotNull(<span class="jxr_string">"parent"</span>, type);
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">if</strong> (value().getClass() != type)
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_unexpectedType, className(type), className(value));
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_unexpectedType, cn(type), cn(value));
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 
@@ -514,7 +514,7 @@
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<strong class="jxr_keyword">public</strong> R isType(Class&lt;?&gt; parent) <strong class="jxr_keyword">throws</strong> AssertionError {
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 		assertArgNotNull(<span class="jxr_string">"parent"</span>, parent);
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">if</strong> (!ClassInfo.of(value()).isChildOf(parent))
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_unexpectedType, className(parent), className(value));
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			<strong class="jxr_keyword">throw</strong> error(MSG_unexpectedType, cn(parent), cn(value));
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">return</strong> returns();
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 	}
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 

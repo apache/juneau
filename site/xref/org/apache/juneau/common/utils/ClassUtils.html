@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t instanceof Class) {
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  			Class&lt;?&gt; c = (Class&lt;?&gt;)t;
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">if</strong> (Value.<strong class="jxr_keyword">class</strong>.isAssignableFrom(c)) {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				<strong class="jxr_keyword">return</strong> ClassUtils.getParameterType(c, 0, Value.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				<strong class="jxr_keyword">return</strong> getParameterType(c, 0, Value.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			}
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		}
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
@@ -270,7 +270,7 @@
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 	@SuppressWarnings(<span class="jxr_string">"rawtypes"</span>)
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isNotVoid(Class c) {
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">return</strong> ! ClassUtils.isVoid(c);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">return</strong> ! isVoid(c);
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	}
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<em class="jxr_javadoccomment">/**</em>
