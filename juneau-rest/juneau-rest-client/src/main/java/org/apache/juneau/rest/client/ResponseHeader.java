@@ -108,7 +108,7 @@ public class ResponseHeader extends BasicHeader {
 		try {
 			return opt(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
-			throw new BasicRuntimeException(e, "Could not parse response header {0}.", getName());
+			throw runtimeException(e, "Could not parse response header {0}.", getName());
 		}
 	}
 
@@ -264,7 +264,7 @@ public class ResponseHeader extends BasicHeader {
 				e = e.getCause();
 			throw toRuntimeException(e);
 		}
-		throw new BasicRuntimeException("Could not determine a method to construct type {0}", cn(c));
+		throw runtimeException("Could not determine a method to construct type {0}", cn(c));
 	}
 
 	/**

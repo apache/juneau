@@ -17,6 +17,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.examples.rest.TestUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -55,7 +56,7 @@ public class ContentComboTestBase extends RestTestcase {
 			case "text/uon" -> getClient(mt, UonSerializer.DEFAULT, UonParser.DEFAULT);
 			case "application/x-www-form-urlencoded" -> getClient(mt, UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT);
 			case "text/xml" -> getClient(mt, XmlSerializer.DEFAULT, XmlParser.DEFAULT);
-			default -> throw new BasicRuntimeException("Client for mediaType ''{0}'' not found", mt);
+			default -> throw runtimeException("Client for mediaType ''{0}'' not found", mt);
 		};
 	}
 

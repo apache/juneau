@@ -221,6 +221,42 @@ This file contains TODO items that have been completed and moved from TODO.md.
   - **Status**: COMPLETED
   - **Details**: Refactored codebase to use static imports for BctUtils methods.
 
+## Exception Creation Utilities
+
+- **TODO-67** ✅ Add to ThrowableUtils: unsupportedOp, ioException.
+  - **Status**: COMPLETED
+  - **Details**: Added exception creation methods to `ThrowableUtils` following the same pattern as `runtimeException()` and `illegalArg()`:
+    - `unsupportedOp(String msg, Object...args)` - Creates `UnsupportedOperationException` with formatted message
+    - `unsupportedOp(Throwable cause, String msg, Object...args)` - Creates `UnsupportedOperationException` with cause and formatted message
+    - `ioException(String msg, Object...args)` - Creates `IOException` with formatted message
+    - `ioException(Throwable cause, String msg, Object...args)` - Creates `IOException` with cause and formatted message
+    - Also added overloads with cause parameter for existing methods:
+      - `illegalArg(Throwable cause, String msg, Object...args)`
+      - `runtimeException(Throwable cause, String msg, Object...args)`
+    - All methods support `MessageFormat` style formatting with varargs
+    - Comprehensive unit tests added covering all new methods and overloads (19 total tests)
+    - Tests verify message formatting, cause chaining, exception types, and exception throwing
+
+- **TODO-68** ✅ Replace BasicRuntimeException with ThrowableUtils.runtimeException.
+  - **Status**: COMPLETED
+  - **Details**: Replaced all instances of `throw new BasicRuntimeException(...)` with `throw runtimeException(...)` across the entire codebase:
+    - **45 source files** updated (excluding javadocs and generated files)
+    - Added `import static org.apache.juneau.common.utils.ThrowableUtils.*;` to all affected files
+    - **File breakdown:**
+      - juneau-core/juneau-marshall: 11 files (BeanPropertyMeta, ExecutableInfo, FieldInfo, Context, HttpPartSchema, BeanContext, SerializerSet, ParserSet, Args, XmlParserSession, Namespace)
+      - juneau-core/juneau-marshall-rdf: 1 file (RdfSerializerSession)
+      - juneau-core/juneau-assertions: 1 file (Assertion)
+      - juneau-bean/juneau-bean-swagger-v2: 5 files (Swagger, Items, HeaderInfo, SecurityScheme, ParameterInfo)
+      - juneau-bean/juneau-bean-openapi-v3: 4 files (Items, SecuritySchemeInfo, Parameter, OpenApi)
+      - juneau-rest: 17 files (MockPathResolver, SerializedEntity, HttpHeaders, HttpParts, SerializedPart, BasicPart, BasicIntegerHeader, IfRange, BasicLongHeader, RetryAfter, SerializedHeader, RestRequest, ResponseHeader, RestClient, RemoteMeta, RestUtils, BeanDescription)
+      - juneau-microservice: 2 files (JettyMicroservice, Microservice)
+      - juneau-examples: 1 file (ContentComboTestBase - test file)
+      - Additional files: UonWriter, ReflectionMap, BeanStore
+    - **Total replacements:** All `throw new BasicRuntimeException(...)` calls replaced with `throw runtimeException(...)`
+    - Fixed several files that had missing or duplicate static imports
+    - **Compilation verified:** Full clean compile successful (`mvn clean compile -DskipTests`)
+    - This change provides consistency across the codebase and leverages the new utility methods from TODO-67
+
 ## Notes
 
 Items are marked as completed when:

@@ -61,7 +61,7 @@ class BasicIntegerHeader_Test extends TestBase {
 
 		// Invalid usage.
 		c.get().header(integerHeader(HEADER,(Supplier<Integer>)null)).run().assertContent().isEmpty();
-		assertThrowsWithMessage(BasicRuntimeException.class, "Value 'foo' could not be parsed as an integer.", ()->integerHeader(HEADER,"foo"));
+		assertThrowsWithMessage(RuntimeException.class, "Value 'foo' could not be parsed as an integer.", ()->integerHeader(HEADER,"foo"));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->integerHeader("", VALUE));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->integerHeader(null, VALUE));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->integerHeader("", PARSED));

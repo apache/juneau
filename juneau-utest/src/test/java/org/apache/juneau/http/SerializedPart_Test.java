@@ -44,7 +44,7 @@ class SerializedPart_Test extends TestBase {
 
 	@Test void a02_type() {
 		var x1 = serializedPart("Foo",2).type(HEADER).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
-		assertThrowsWithMessage(BasicRuntimeException.class, "Validation error on request HEADER part 'Foo'='2'", x1::toString);
+		assertThrowsWithMessage(RuntimeException.class, "Validation error on request HEADER part 'Foo'='2'", x1::toString);
 	}
 
 	@Test void a03_serializer() {

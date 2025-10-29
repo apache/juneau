@@ -81,8 +81,8 @@ class BasicPart_Test extends TestBase {
 		assertTypeAndJson(NameValuePair.class, "'X7=7'", BasicPart.cast(x7));
 		assertTypeAndJson(NameValuePair.class, "'X8=8'", BasicPart.cast(x8));
 
-		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type java.lang.String could not be converted to a Part.", ()->BasicPart.cast("X"));
-		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type null could not be converted to a Part.", ()->BasicPart.cast(null));
+		assertThrowsWithMessage(RuntimeException.class, "Object of type java.lang.String could not be converted to a Part.", ()->BasicPart.cast("X"));
+		assertThrowsWithMessage(RuntimeException.class, "Object of type null could not be converted to a Part.", ()->BasicPart.cast(null));
 
 		assertTrue(BasicPart.canCast(x1));
 		assertTrue(BasicPart.canCast(x2));

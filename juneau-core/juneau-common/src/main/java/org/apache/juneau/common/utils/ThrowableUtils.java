@@ -133,6 +133,18 @@ public class ThrowableUtils {
 	}
 
 	/**
+	 * Creates an {@link IllegalArgumentException} with a cause.
+	 *
+	 * @param cause The cause of the exception.
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new IllegalArgumentException with the formatted message and cause.
+	 */
+	public static IllegalArgumentException illegalArg(Throwable cause, String msg, Object...args) {
+		return new IllegalArgumentException(args.length == 0 ? msg : f(msg, args), cause);
+	}
+
+	/**
 	 * Creates a {@link RuntimeException}.
 	 *
 	 * @param msg The exception message.
@@ -141,6 +153,64 @@ public class ThrowableUtils {
 	 */
 	public static RuntimeException runtimeException(String msg, Object...args) {
 		return new RuntimeException(args.length == 0 ? msg : f(msg, args));
+	}
+
+	/**
+	 * Creates a {@link RuntimeException} with a cause.
+	 *
+	 * @param cause The cause of the exception.
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new RuntimeException with the formatted message and cause.
+	 */
+	public static RuntimeException runtimeException(Throwable cause, String msg, Object...args) {
+		return new RuntimeException(args.length == 0 ? msg : f(msg, args), cause);
+	}
+
+	/**
+	 * Creates an {@link UnsupportedOperationException}.
+	 *
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new UnsupportedOperationException with the formatted message.
+	 */
+	public static UnsupportedOperationException unsupportedOp(String msg, Object...args) {
+		return new UnsupportedOperationException(args.length == 0 ? msg : f(msg, args));
+	}
+
+	/**
+	 * Creates an {@link UnsupportedOperationException} with a cause.
+	 *
+	 * @param cause The cause of the exception.
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new UnsupportedOperationException with the formatted message and cause.
+	 */
+	public static UnsupportedOperationException unsupportedOp(Throwable cause, String msg, Object...args) {
+		return new UnsupportedOperationException(args.length == 0 ? msg : f(msg, args), cause);
+	}
+
+	/**
+	 * Creates an {@link java.io.IOException}.
+	 *
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new IOException with the formatted message.
+	 */
+	public static java.io.IOException ioException(String msg, Object...args) {
+		return new java.io.IOException(args.length == 0 ? msg : f(msg, args));
+	}
+
+	/**
+	 * Creates an {@link java.io.IOException} with a cause.
+	 *
+	 * @param cause The cause of the exception.
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new IOException with the formatted message and cause.
+	 */
+	public static java.io.IOException ioException(Throwable cause, String msg, Object...args) {
+		return new java.io.IOException(args.length == 0 ? msg : f(msg, args), cause);
 	}
 
 	/**

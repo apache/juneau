@@ -183,7 +183,7 @@ class FieldInfo_Test extends TestBase {
 	}
 
 	@Test void isAll_invalidFlag() {
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid flag for field: HAS_PARAMS", ()->c_deprecated.isAll(HAS_PARAMS));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for field: HAS_PARAMS", ()->c_deprecated.isAll(HAS_PARAMS));
 	}
 
 	@Test void isAny() {
@@ -207,7 +207,7 @@ class FieldInfo_Test extends TestBase {
 	}
 
 	@Test void isAny_invalidFlag() {
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid flag for field: HAS_PARAMS", ()->c_deprecated.isAny(HAS_PARAMS));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for field: HAS_PARAMS", ()->c_deprecated.isAny(HAS_PARAMS));
 	}
 
 	@Test void isDeprecated() {

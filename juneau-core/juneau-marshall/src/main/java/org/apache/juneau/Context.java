@@ -656,7 +656,7 @@ public abstract class Context implements AnnotationProvider {
 				);
 				// @formatter:on
 				if (cci == null)
-					throw new BasicRuntimeException("Public constructor not found: {0}({1})", cn(type), cn(this));
+					throw runtimeException("Public constructor not found: {0}({1})", cn(type), cn(this));
 				CONTEXT_CONSTRUCTORS.put(type, cci);
 			}
 			return cci;
@@ -664,7 +664,7 @@ public abstract class Context implements AnnotationProvider {
 
 		private Context innerBuild() {
 			if (type == null)
-				throw new BasicRuntimeException("Type not specified for context builder {0}", getClass().getName());
+				throw runtimeException("Type not specified for context builder {0}", cn(getClass()));
 			if (nn(impl) && type.isInstance(impl))
 				return type.cast(impl);
 			if (nn(cache))
@@ -745,7 +745,7 @@ public abstract class Context implements AnnotationProvider {
 					}
 				}
 				if (mi == null)
-					throw new BasicRuntimeException("Could not find builder create method on class {0}", type);
+					throw runtimeException("Could not find builder create method on class {0}", cn(type));
 				BUILDER_CREATE_METHODS.put(type, mi);
 			}
 			Builder b = (Builder)mi.invoke(null);

@@ -17,6 +17,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -229,7 +230,7 @@ public class Assertion {
 					.run();
 			} catch (@SuppressWarnings("unused") ExecutableException e) {
 				// If we couldn't create requested exception, just throw a RuntimeException.
-				throw new BasicRuntimeException(cause, msg);
+				throw runtimeException(cause, msg);
 			}
 		}
 		return new BasicAssertionError(cause, msg);

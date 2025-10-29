@@ -18,6 +18,7 @@ package org.apache.juneau.serializer;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -157,7 +158,7 @@ public class SerializerSet {
 				if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
 				} else {
-					throw new BasicRuntimeException("Invalid type passed to SerializeGroup.Builder.add(): {0}", e.getName());
+					throw runtimeException("Invalid type passed to SerializeGroup.Builder.add(): {0}", cn(e));
 				}
 			}
 			entries.addAll(0, l);
@@ -344,7 +345,7 @@ public class SerializerSet {
 				} else if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
 				} else {
-					throw new BasicRuntimeException("Invalid type passed to SerializeGroup.Builder.set(): {0}", e.getName());
+					throw runtimeException("Invalid type passed to SerializeGroup.Builder.set(): {0}", cn(e));
 				}
 			}
 			entries = l;
@@ -371,7 +372,7 @@ public class SerializerSet {
 				Serializer.Builder x = (Serializer.Builder)o;
 				Serializer.Builder x2 = x.copy();
 				if (ne(x.getClass(), x2.getClass()))
-					throw new BasicRuntimeException("Copy method not implemented on class {0}", x.getClass().getName());
+					throw runtimeException("Copy method not implemented on class {0}", cn(x));
 				x = x2;
 				if (nn(bcBuilder))
 					x.beanContext(bcBuilder);

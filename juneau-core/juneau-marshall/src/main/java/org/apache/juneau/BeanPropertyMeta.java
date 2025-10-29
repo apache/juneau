@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -155,7 +156,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			}
 			if (ci.isChildOf(Surrogate.class))
 				throw new UnsupportedOperationException("TODO - Surrogate swaps not yet supported on bean properties.");
-			throw new BasicRuntimeException("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", c);
+			throw runtimeException("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
 		}
 
 		Builder canRead() {

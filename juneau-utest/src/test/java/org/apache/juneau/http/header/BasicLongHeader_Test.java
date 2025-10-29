@@ -60,7 +60,7 @@ class BasicLongHeader_Test extends TestBase {
 
 		// Invalid usage.
 		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertContent().isEmpty();
-		assertThrowsWithMessage(BasicRuntimeException.class, "Value 'foo' could not be parsed as a long.", ()->longHeader(HEADER,"foo"));
+		assertThrowsWithMessage(RuntimeException.class, "Value 'foo' could not be parsed as a long.", ()->longHeader(HEADER,"foo"));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->longHeader("", VALUE));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->longHeader(null, VALUE));
 		assertThrowsWithMessage(IllegalArgumentException.class, "Name cannot be empty on header.", ()->longHeader("", PARSED));

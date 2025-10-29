@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
@@ -24,7 +25,6 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
@@ -81,7 +81,7 @@ public class RemoteMeta {
 				try {
 					headers.append(r.headerList().getDeclaredConstructor().newInstance().getAll());
 				} catch (Exception e) {
-					throw new BasicRuntimeException(e, "Could not instantiate HeaderSupplier class");
+					throw runtimeException(e, "Could not instantiate HeaderSupplier class");
 				}
 			}
 		}

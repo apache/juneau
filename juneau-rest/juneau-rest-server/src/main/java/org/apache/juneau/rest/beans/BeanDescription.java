@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.rest.beans;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
@@ -84,7 +87,7 @@ public class BeanDescription {
 		type = c.getName();
 		BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(c);
 		if (bm == null)
-			throw new BasicRuntimeException("Class ''{0}'' is not a valid bean.", c);
+			throw runtimeException("Class ''{0}'' is not a valid bean.", cn(c));
 		properties = new BeanPropertyDescription[bm.getPropertyMetas().size()];
 		int i = 0;
 		for (BeanPropertyMeta pm : bm.getPropertyMetas())

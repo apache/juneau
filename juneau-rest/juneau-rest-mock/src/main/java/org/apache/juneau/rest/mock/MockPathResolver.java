@@ -17,11 +17,11 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.common.utils.StateEnum.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.rest.util.*;
@@ -220,19 +220,19 @@ class MockPathResolver {
 		} else if (state == S7) {
 			this.remainder = uri.substring(mark);
 		} else {
-			throw new BasicRuntimeException("Invalid URI pattern encountered:  {0}", uri);
+			throw runtimeException("Invalid URI pattern encountered:  {0}", uri);
 		}
 
 		if (! contextPath.isEmpty()) {
 			UrlPathMatcher p = UrlPathMatcher.of(contextPath);
 			if (p.match(UrlPath.of(this.contextPath)) == null)
-				throw new BasicRuntimeException("Context path [{0}] not found in URI:  {1}", contextPath, uri);
+				throw runtimeException("Context path [{0}] not found in URI:  {1}", contextPath, uri);
 		}
 
 		if (! servletPath.isEmpty()) {
 			UrlPathMatcher p = UrlPathMatcher.of(servletPath);
 			if (p.match(UrlPath.of(this.servletPath)) == null)
-				throw new BasicRuntimeException("Servlet path [{0}] not found in URI:  {1}", servletPath, uri);
+				throw runtimeException("Servlet path [{0}] not found in URI:  {1}", servletPath, uri);
 		}
 	}
 }

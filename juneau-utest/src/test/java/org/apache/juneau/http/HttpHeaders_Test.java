@@ -54,8 +54,8 @@ class HttpHeaders_Test extends TestBase {
 		assertTypeAndJson(Header.class, "'X8: 8'", HttpHeaders.cast(x8));
 		assertTypeAndJson(Header.class, "'X9: 9'", HttpHeaders.cast(x9));
 
-		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type java.lang.String could not be converted to a Header.", ()->HttpHeaders.cast("X"));
-		assertThrowsWithMessage(BasicRuntimeException.class, "Object of type null could not be converted to a Header.", ()->HttpHeaders.cast(null));
+		assertThrowsWithMessage(RuntimeException.class, "Object of type java.lang.String could not be converted to a Header.", ()->HttpHeaders.cast("X"));
+		assertThrowsWithMessage(RuntimeException.class, "Object of type null could not be converted to a Header.", ()->HttpHeaders.cast(null));
 
 		assertTrue(HttpHeaders.canCast(x1));
 		assertTrue(HttpHeaders.canCast(x2));

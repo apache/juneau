@@ -18,6 +18,7 @@ package org.apache.juneau.parser;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -161,7 +162,7 @@ public class ParserSet {
 				if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else if (! v.getSimpleName().equals("NoInherit")) {
-					throw new BasicRuntimeException("Invalid type passed to ParserSet.Builder.add(): {0}", v.getName());
+					throw runtimeException("Invalid type passed to ParserSet.Builder.add(): {0}", cn(v));
 				}
 			}
 			entries.addAll(0, l);
@@ -348,7 +349,7 @@ public class ParserSet {
 				} else if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else {
-					throw new BasicRuntimeException("Invalid type passed to ParserGrouup.Builder.set(): {0}", v.getName());
+					throw runtimeException("Invalid type passed to ParserGrouup.Builder.set(): {0}", cn(v));
 				}
 			}
 			entries = l;
@@ -375,7 +376,7 @@ public class ParserSet {
 				Parser.Builder x = (Parser.Builder)o;
 				Parser.Builder x2 = x.copy();
 				if (ne(x.getClass(), x2.getClass()))
-					throw new BasicRuntimeException("Copy method not implemented on class {0}", x.getClass().getName());
+					throw runtimeException("Copy method not implemented on class {0}", cn(x));
 				x = x2;
 				if (nn(bcBuilder))
 					x.beanContext(bcBuilder);

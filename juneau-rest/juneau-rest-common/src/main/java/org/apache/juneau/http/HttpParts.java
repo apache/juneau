@@ -17,6 +17,7 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.net.*;
 import java.time.*;
@@ -180,7 +181,7 @@ public class HttpParts {
 			Map.Entry e = (Map.Entry)o;
 			return BasicPart.of(s(e.getKey()), e.getValue());
 		}
-		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", o == null ? null : o.getClass().getName());
+		throw runtimeException("Object of type {0} could not be converted to a Part.", cn(o));
 	}
 
 	/**

@@ -4600,7 +4600,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (isEmpty(s))
 				rootUrl = null;
 			else if (s.indexOf("://") == -1)
-				throw new BasicRuntimeException("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
+				throw runtimeException("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
 			else
 				rootUrl = s;
 			return this;

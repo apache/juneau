@@ -383,7 +383,7 @@ public class HttpPartSchema {
 			else if (a.annotationType().getName().startsWith("jakarta.validation.constraints."))
 				applyJakartaValidation(a);
 			else
-				throw new BasicRuntimeException("Builder.apply(@{0}) not defined", cn(a));
+				throw runtimeException("Builder.apply(@{0}) not defined", cn(a));
 			return this;
 		}
 

@@ -19,13 +19,13 @@ package org.apache.juneau.utils;
 import static java.lang.Character.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -182,7 +182,7 @@ public class ReflectionMap<V> {
 		 */
 		public Builder<V> append(String key, V value) {
 			if (isEmpty(key))
-				throw new BasicRuntimeException("Invalid reflection signature: [{0}]", key);
+				throw runtimeException("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {
 					if (k.endsWith(")")) {
@@ -206,7 +206,7 @@ public class ReflectionMap<V> {
 					}
 				});
 			} catch (@SuppressWarnings("unused") IndexOutOfBoundsException e) {
-				throw new BasicRuntimeException("Invalid reflection signature: [{0}]", key);
+				throw runtimeException("Invalid reflection signature: [{0}]", key);
 			}
 
 			return this;

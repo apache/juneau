@@ -309,7 +309,7 @@ class OpenApi_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> x.findRef(null, SchemaInfo.class));
 			assertThrows(IllegalArgumentException.class, () -> x.findRef("a", null));
 			assertThrows(IllegalArgumentException.class, () -> x.findRef("", SchemaInfo.class));
-			assertThrowsWithMessage(BasicRuntimeException.class, "Unsupported reference:  'invalid'", () -> x.findRef("invalid", SchemaInfo.class));
+			assertThrowsWithMessage(RuntimeException.class, "Unsupported reference:  'invalid'", () -> x.findRef("invalid", SchemaInfo.class));
 		}
 	}
 

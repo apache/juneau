@@ -325,15 +325,15 @@ class ReflectionMapTest extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_blankInput() {
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid reflection signature: []", ()->create().append("", 1));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid reflection signature: []", ()->create().append("", 1));
 	}
 
 	@Test void e02_nullInput() {
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid reflection signature: [null]", ()->create().append(null, 1));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid reflection signature: [null]", ()->create().append(null, 1));
 	}
 
 	@Test void e03_badInput() {
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid reflection signature: [foo)]", ()->create().append("foo)", 1));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid reflection signature: [foo)]", ()->create().append("foo)", 1));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -19,6 +19,7 @@ package org.apache.juneau.reflect;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -26,7 +27,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.common.reflect.*;
 
 /**
@@ -613,7 +613,7 @@ public abstract class ExecutableInfo {
 						return false;
 					break;
 				default:
-					throw new BasicRuntimeException("Invalid flag for executable: {0}", f);
+					throw runtimeException("Invalid flag for executable: {0}", f);
 			}
 		}
 		return true;
@@ -677,7 +677,7 @@ public abstract class ExecutableInfo {
 						return true;
 					break;
 				default:
-					throw new BasicRuntimeException("Invalid flag for executable: {0}", f);
+					throw runtimeException("Invalid flag for executable: {0}", f);
 			}
 		}
 		return false;

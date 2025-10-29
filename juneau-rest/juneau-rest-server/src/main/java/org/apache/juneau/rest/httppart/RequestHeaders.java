@@ -19,6 +19,7 @@ package org.apache.juneau.rest.httppart;
 import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -311,7 +312,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(HEADER, cm).orElseThrow(() -> new BasicRuntimeException("@Header(name) not found on class {0}", cn(type)));
+		String name = HttpParts.getName(HEADER, cm).orElseThrow(() -> runtimeException("@Header(name) not found on class {0}", cn(type)));
 		return get(name).as(type);
 	}
 

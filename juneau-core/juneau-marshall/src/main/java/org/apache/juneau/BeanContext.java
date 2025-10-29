@@ -3527,7 +3527,7 @@ public class BeanContext extends Context {
 				else if (ci.isChildOf(Surrogate.class))
 					_swaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else
-					throw new BasicRuntimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", ci.inner());
+					throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", cn(ci.inner()));
 			}
 		});
 		swapArray = _swaps.toArray(new ObjectSwap[_swaps.size()]);
@@ -4267,7 +4267,7 @@ public class BeanContext extends Context {
 			if (cm2.isMap()) {
 				Class<?>[] pParams = (p.params().length == 0 ? a(Object.class, Object.class) : p.params());
 				if (pParams.length != 2)
-					throw new BasicRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
+					throw runtimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
 				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
 				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 				if (keyType.isObject() && valueType.isObject())
@@ -4277,9 +4277,9 @@ public class BeanContext extends Context {
 
 			if (cm2.isCollection() || cm2.isOptional()) {
 				Class<?>[] pParams = (p.params().length == 0 ? a(Object.class) : p.params());
-				if (pParams.length != 1)
-					throw new BasicRuntimeException("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length,
-						(cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array"));
+			if (pParams.length != 1)
+				throw runtimeException("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length,
+					(cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array"));
 				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())
 					return cm2;

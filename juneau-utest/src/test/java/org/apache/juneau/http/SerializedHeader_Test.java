@@ -43,7 +43,7 @@ class SerializedHeader_Test extends TestBase {
 
 	@Test void a02_type() {
 		var x1 = serializedHeader("Foo",2).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
-		assertThrowsWithMessage(BasicRuntimeException.class, "Validation error on request HEADER parameter 'Foo'='2'", x1::toString);
+		assertThrowsWithMessage(RuntimeException.class, "Validation error on request HEADER parameter 'Foo'='2'", x1::toString);
 	}
 
 	@Test void a03_serializer() {

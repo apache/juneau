@@ -17,11 +17,11 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
@@ -203,7 +203,7 @@ public class BasicIntegerHeader extends BasicHeader {
 		try {
 			return value == null ? null : Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			throw new BasicRuntimeException(e, "Value ''{0}'' could not be parsed as an integer.", value);
+			throw runtimeException(e, "Value ''{0}'' could not be parsed as an integer.", value);
 		}
 	}
 

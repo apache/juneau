@@ -18,6 +18,7 @@ package org.apache.juneau.collections;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -157,7 +158,7 @@ public class Args extends JsonMap {
 			if (startsWith(s, '-')) {
 				key = s.substring(1);
 				if (key.matches("\\d*"))
-					throw new BasicRuntimeException("Invalid optional key name ''{0}''", key);
+					throw runtimeException("Invalid optional key name ''{0}''", key);
 				if (! containsKey(key))
 					put(key, new JsonList());
 			} else {

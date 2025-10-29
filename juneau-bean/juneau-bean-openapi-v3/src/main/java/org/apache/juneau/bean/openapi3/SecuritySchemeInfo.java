@@ -17,14 +17,15 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Defines a security scheme that can be used by the operations.
@@ -340,7 +341,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 */
 	public SecuritySchemeInfo setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
-			throw new BasicRuntimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, VALID_IN);
+			throw runtimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values=[{1}]", value, StringUtils.toCdl(VALID_IN));
 		in = value;
 		return this;
 	}
@@ -430,7 +431,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 */
 	public SecuritySchemeInfo setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, VALID_TYPES);
+			throw runtimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values=[{1}]", value, StringUtils.toCdl(VALID_TYPES));
 		type = value;
 		return this;
 	}

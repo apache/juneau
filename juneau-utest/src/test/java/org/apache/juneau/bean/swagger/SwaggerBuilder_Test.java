@@ -59,7 +59,7 @@ class SwaggerBuilder_Test extends TestBase {
 
 		t = headerInfoStrict("string");
 		assertJson("{type:'string'}", t);
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->headerInfoStrict("foo"));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->headerInfoStrict("foo"));
 	}
 
 	@Test void a04_info() {
@@ -79,7 +79,7 @@ class SwaggerBuilder_Test extends TestBase {
 
 		t = itemsStrict("string");
 		assertJson("{type:'string'}", t);
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->itemsStrict("foo"));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->itemsStrict("foo"));
 	}
 
 	@Test void a06_license() {
@@ -104,7 +104,7 @@ class SwaggerBuilder_Test extends TestBase {
 
 		t = parameterInfoStrict("query", "bar");
 		assertJson("{'in':'query',name:'bar'}", t);
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']", ()->parameterInfoStrict("foo", "bar"));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']", ()->parameterInfoStrict("foo", "bar"));
 	}
 
 	@Test void a09_responseInfo() {
@@ -176,12 +176,12 @@ class SwaggerBuilder_Test extends TestBase {
 	@Test void a18_itemsStrict() {
 		var t = itemsStrict("string");
 		assertJson("{type:'string'}", t);
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->itemsStrict("foo"));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']", ()->itemsStrict("foo"));
 	}
 
 	@Test void a19_securitySchemeStrict() {
 		var t = securitySchemeStrict("basic");
 		assertJson("{type:'basic'}", t);
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['basic','apiKey','oauth2']", ()->securitySchemeStrict("foo"));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid value passed in to setType(String).  Value='foo', valid values=['basic','apiKey','oauth2']", ()->securitySchemeStrict("foo"));
 	}
 }

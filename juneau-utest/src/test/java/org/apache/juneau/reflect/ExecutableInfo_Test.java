@@ -374,7 +374,7 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	@Test void isAll_invalidFlag() {
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid flag for executable: TRANSIENT", ()->e_deprecated.isAll(TRANSIENT));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for executable: TRANSIENT", ()->e_deprecated.isAll(TRANSIENT));
 	}
 
 	@Test void isAny() {
@@ -402,7 +402,7 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	@Test void isAny_invalidFlag() {
-		assertThrowsWithMessage(BasicRuntimeException.class, "Invalid flag for executable: TRANSIENT", ()->e_deprecated.isAny(TRANSIENT));
+		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for executable: TRANSIENT", ()->e_deprecated.isAny(TRANSIENT));
 	}
 
 	@Test void hasArgs() {

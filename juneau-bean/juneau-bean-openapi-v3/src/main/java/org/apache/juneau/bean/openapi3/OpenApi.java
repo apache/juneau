@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
@@ -245,7 +246,7 @@ public class OpenApi extends OpenApiElement {
 		assertArgNotNullOrBlank("ref", ref);
 		assertArgNotNull("c", c);
 		if (! ref.startsWith("#/"))
-			throw new BasicRuntimeException("Unsupported reference:  ''{0}''", ref);
+			throw runtimeException("Unsupported reference:  ''{0}''", ref);
 		try {
 			return new ObjectRest(this).get(ref.substring(1), c);
 		} catch (Exception e) {

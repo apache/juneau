@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.isEmpty;
 
@@ -30,7 +31,6 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
@@ -135,7 +135,7 @@ public class BeanStore {
 			if (nn(ci))
 				return ci.accessible().invoke(this);
 
-			throw new BasicRuntimeException("Could not find a way to instantiate class {0}", type);
+			throw runtimeException("Could not find a way to instantiate class {0}", cn(type));
 		}
 
 		/**

@@ -72,7 +72,7 @@ class Assertion_Test extends TestBase {
 
 		a.setThrowable(A3.class);
 		assertThrown(a::doError)
-			.isExactType(BasicRuntimeException.class)
+			.isExactType(RuntimeException.class)
 			.asMessage().is("bar baz")
 			.asCausedBy().isExactType(A1.class)
 			.asCausedBy().asMessage().is("foo")

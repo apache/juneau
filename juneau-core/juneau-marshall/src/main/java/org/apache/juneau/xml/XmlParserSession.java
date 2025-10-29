@@ -19,6 +19,7 @@ package org.apache.juneau.xml;
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
@@ -248,7 +249,7 @@ public class XmlParserSession extends ReaderParserSession {
 	private String getElementAsString(XmlReader r) {
 		int t = r.getEventType();
 		if (t > 2)
-			throw new BasicRuntimeException("Invalid event type on stream reader for elementToString() method: ''{0}''", XmlUtils.toReadableEvent(r));
+			throw runtimeException("Invalid event type on stream reader for elementToString() method: ''{0}''", XmlUtils.toReadableEvent(r));
 		rsb.setLength(0);
 		rsb.append("<").append(t == 1 ? "" : "/").append(r.getLocalName());
 		if (t == 1)

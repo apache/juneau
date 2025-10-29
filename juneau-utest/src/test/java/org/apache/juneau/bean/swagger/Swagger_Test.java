@@ -430,7 +430,7 @@ class Swagger_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> x.findRef(null, JsonMap.class));
 			assertThrows(IllegalArgumentException.class, () -> x.findRef("a", null));
 			assertThrows(IllegalArgumentException.class, () -> x.findRef("", JsonMap.class));
-			assertThrowsWithMessage(BasicRuntimeException.class, "Unsupported reference:  'invalid'", () -> x.findRef("invalid", JsonMap.class));
+			assertThrowsWithMessage(RuntimeException.class, "Unsupported reference:  'invalid'", () -> x.findRef("invalid", JsonMap.class));
 		}
 
 		@Test void d02_findRefInvalidType() {

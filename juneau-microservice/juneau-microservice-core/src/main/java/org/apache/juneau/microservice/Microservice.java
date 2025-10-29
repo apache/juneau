@@ -17,6 +17,7 @@
 package org.apache.juneau.microservice;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.FileUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -29,7 +30,6 @@ import java.util.concurrent.*;
 import java.util.jar.*;
 import java.util.logging.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.config.*;
@@ -425,7 +425,7 @@ public class Microservice implements ConfigEventListener {
 			else if (value instanceof Class clazz)
 				this.manifest = new ManifestFile(clazz);
 			else
-				throw new BasicRuntimeException("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", cn(value));
+				throw runtimeException("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", cn(value));
 
 			return this;
 		}
