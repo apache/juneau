@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,17 +59,17 @@ class Listifiers_Test extends TestBase {
 			var listifier = Listifiers.collectionListifier();
 
 			// HashSet (unordered) -> converted to TreeSet for natural ordering
-			var hashSet = new HashSet<>(Arrays.asList("z", "a", "m"));
+			var hashSet = new HashSet<>(l("z", "a", "m"));
 			var hashResult = listifier.apply(null, hashSet);
 			assertList(hashResult, "a", "m", "z");
 
 			// LinkedHashSet preserves insertion order
-			var linkedSet = new LinkedHashSet<>(Arrays.asList("z", "a", "m"));
+			var linkedSet = new LinkedHashSet<>(l("z", "a", "m"));
 			var linkedResult = listifier.apply(null, linkedSet);
 			assertList(linkedResult, "z", "a", "m"); // Insertion order
 
 			// TreeSet already sorted, preserves its order
-			var treeSet = new TreeSet<>(Arrays.asList("z", "a", "m"));
+			var treeSet = new TreeSet<>(l("z", "a", "m"));
 			var treeResult = listifier.apply(null, treeSet);
 			assertList(treeResult, "a", "m", "z"); // Natural order
 		}
@@ -411,7 +412,7 @@ class Listifiers_Test extends TestBase {
 		void g01_useInBasicBeanConverter() {
 			// Test various listifiable objects
 			assertList(List.of("a", "b"), "a", "b");
-			assertList(new LinkedHashSet<>(Arrays.asList("x", "y")), "x", "y");
+			assertList(new LinkedHashSet<>(l("x", "y")), "x", "y");
 			assertSize(3, Stream.of(1, 2, 3));
 			assertEmpty(Optional.empty());
 		}

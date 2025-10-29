@@ -475,7 +475,7 @@ public class SerializerSet {
 	protected SerializerSet(Builder builder) {
 
 		this.entries = builder.entries.stream().map(this::build).toArray(Serializer[]::new);
-		this.entriesList = u(alist(entries));
+		this.entriesList = u(l(entries));
 
 		List<MediaRange> lmtr = list();
 		Set<MediaType> lmt = set();
@@ -489,9 +489,9 @@ public class SerializerSet {
 		}
 
 		this.mediaRanges = lmtr.toArray(new MediaRange[lmtr.size()]);
-		this.mediaRangesList = u(alist(mediaRanges));
+		this.mediaRangesList = u(l(mediaRanges));
 		this.mediaTypes = lmt.toArray(new MediaType[lmt.size()]);
-		this.mediaTypesList = u(alist(mediaTypes));
+		this.mediaTypesList = u(l(mediaTypes));
 		this.mediaTypeRangeSerializers = l.toArray(new Serializer[l.size()]);
 	}
 

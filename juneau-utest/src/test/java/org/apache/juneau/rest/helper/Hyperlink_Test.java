@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.helper;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -40,7 +42,7 @@ class Hyperlink_Test extends TestBase {
 		}
 		@RestGet
 		public Collection<Hyperlink> c() {
-			return Arrays.asList(b());
+			return l(b());
 		}
 	}
 

@@ -1451,7 +1451,7 @@ public class SchemaAnnotation {
 			.appendIf(ne, "$ref", a.$ref())
 			// JSON Schema Draft 2020-12 properties
 			.appendIf(ne, "const", joinnl(a._const()))
-			.appendIf(nec, "examples", a.examples().length == 0 ? null : Arrays.asList(a.examples()))
+			.appendIf(nec, "examples", a.examples().length == 0 ? null : l(a.examples()))
 			.appendIf(ne, "$comment", joinnl(a.$comment()))
 			.appendIf(nf, "deprecated", a.deprecatedProperty())
 			.appendIf(ne, "contentMediaType", a.contentMediaType())

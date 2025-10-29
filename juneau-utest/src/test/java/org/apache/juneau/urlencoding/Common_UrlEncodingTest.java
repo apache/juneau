@@ -114,8 +114,8 @@ class Common_UrlEncodingTest extends TestBase {
 
 		public static C create() {
 			var t = new C();
-			t.f1 = list();
-			t.f2 = list(null,A.create());
+			t.f1 = l();
+			t.f2 = l(null,A.create());
 			return t;
 		}
 	}
@@ -161,11 +161,11 @@ class Common_UrlEncodingTest extends TestBase {
 
 	public static class E1 {
 		@Beanp(properties="f1") public E2 x1 = new E2();
-		@Beanp(properties="f1") public Map<String,Integer> x2 = map("f1",1,"f2",2);
+		@Beanp(properties="f1") public Map<String,Integer> x2 = m("f1",1,"f2",2);
 		@Beanp(properties="f1") public E2[] x3 = {new E2()};
-		@Beanp(properties="f1") public List<E2> x4 = list(new E2());
+		@Beanp(properties="f1") public List<E2> x4 = l(new E2());
 		@Beanp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",1,"f2",2)};
-		@Beanp(properties="f1") public List<JsonMap> x6 = list(JsonMap.of("f1",1,"f2",2));
+		@Beanp(properties="f1") public List<JsonMap> x6 = l(JsonMap.of("f1",1,"f2",2));
 	}
 
 	public static class E2 {
@@ -237,7 +237,7 @@ class Common_UrlEncodingTest extends TestBase {
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrowsWithMessage(Exception.class, list("[0] root:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1", "->[1] r2:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R2", "->[2] r3:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R3", "->[3] r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"), ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, l("[0] root:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1", "->[1] r2:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R2", "->[2] r3:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R3", "->[3] r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"), ()->s.build().serialize(r1));
 
 		s.ignoreRecursions();
 		assertEquals("name=foo&r2=(name=bar,r3=(name=baz))", s.build().serialize(r1));

@@ -90,7 +90,7 @@ class Version_Test extends TestBase {
 	}
 
 	@Test void a05_compareTo() {
-		var l = list(
+		var l = l(
 			of("1.2.3"),
 			of("1.2"),
 			of(""),

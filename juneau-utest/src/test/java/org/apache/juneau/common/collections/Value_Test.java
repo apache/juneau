@@ -146,9 +146,9 @@ class Value_Test extends TestBase {
 
 	@Test
 	void c06_is_equalLists() {
-		var v = Value.of(list("a", "b", "c"));
-		assertTrue(v.is(list("a", "b", "c")), "Should be equal to same list content");
-		assertFalse(v.is(list("a", "b", "d")), "Should not be equal to different list content");
+		var v = Value.of(l("a", "b", "c"));
+		assertTrue(v.is(l("a", "b", "c")), "Should be equal to same list content");
+		assertFalse(v.is(l("a", "b", "d")), "Should not be equal to different list content");
 	}
 
 	@Test

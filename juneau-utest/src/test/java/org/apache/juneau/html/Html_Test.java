@@ -17,7 +17,6 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -411,7 +410,7 @@ class Html_Test extends TestBase {
 			new E(4, 5, 6)
 		);
 		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td>3</td><td>2</td><td><null/></td></tr><tr><td>6</td><td>5</td><td>4</td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(ee));
-		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td>3</td><td>2</td><td><null/></td></tr><tr><td>6</td><td>5</td><td>4</td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(Arrays.asList(ee)));
+		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td>3</td><td>2</td><td><null/></td></tr><tr><td>6</td><td>5</td><td>4</td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(l(ee)));
 
 		ee = a(
 			new E(null, null, null),

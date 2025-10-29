@@ -134,7 +134,7 @@ public class VarList extends ArrayList<Object> {
 	 */
 	@SafeVarargs
 	public final VarList append(Class<? extends Var>...vars) {
-		addAll(alist(vars));
+		addAll(l(vars));
 		return this;
 	}
 
@@ -145,7 +145,7 @@ public class VarList extends ArrayList<Object> {
 	 * @return This object.
 	 */
 	public VarList append(Var...vars) {
-		addAll(alist(vars));
+		addAll(l(vars));
 		return this;
 	}
 

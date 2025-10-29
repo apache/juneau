@@ -979,7 +979,7 @@ public class StringUtils {
 		if (end > lines.length)
 			end = lines.length;
 		var sb = new StringBuilder();
-		for (var l : Arrays.asList(lines).subList(start - 1, end))
+		for (var l : l(lines).subList(start - 1, end))
 			sb.append(String.format("%0" + digits + "d", start++)).append(": ").append(l).append("\n");  // NOSONAR - Intentional.
 		return sb.toString();
 	}
@@ -3719,7 +3719,7 @@ public class StringUtils {
 				l.add(Array.get(array, i));
 			return l;
 		}
-		return Arrays.asList((Object[])array);
+		return l((Object[])array);
 	}
 
 	/**

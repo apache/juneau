@@ -162,7 +162,7 @@ class Server_Test extends TestBase {
 				bean()
 					.set("description", "a")
 					.set("url", "b")
-					.set("variables", map("c1", serverVariable().setDefault("c2")))
+					.set("variables", m("c1", serverVariable().setDefault("c2")))
 					.set("x1", "x1a")
 					.set("x2", null)
 			)

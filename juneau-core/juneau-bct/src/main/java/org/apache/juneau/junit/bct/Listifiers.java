@@ -19,6 +19,7 @@ package org.apache.juneau.junit.bct;
 import static java.util.Collections.*;
 import static java.util.Spliterators.*;
 import static java.util.stream.StreamSupport.*;
+import static java.util.Comparator.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -134,7 +135,9 @@ public class Listifiers {
 	public static Listifier<Collection> collectionListifier() {
 		return (bc, collection) -> {
 			if (collection instanceof Set && !(collection instanceof SortedSet) && !(collection instanceof LinkedHashSet)) {
-				collection = new TreeSet<>(collection);
+				var collection2 = new TreeSet<>(nullsFirst(naturalOrder()));
+				collection2.addAll(collection);
+				collection = collection2;
 			}
 			return new ArrayList<>(collection);
 		};
@@ -311,7 +314,9 @@ public class Listifiers {
 	public static Listifier<Map> mapListifier() {
 		return (bc, map) -> {
 			if (!(map instanceof SortedMap) && !(map instanceof LinkedHashMap)) {
-				map = new TreeMap<>(map);
+				var map2 = new TreeMap<>(nullsFirst(naturalOrder()));
+				map2.putAll(map);
+				map = map2;
 			}
 			return new ArrayList<>(map.entrySet());
 		};

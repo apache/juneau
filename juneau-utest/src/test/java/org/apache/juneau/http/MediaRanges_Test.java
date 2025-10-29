@@ -132,13 +132,13 @@ class MediaRanges_Test extends TestBase {
 
 	@Test void a04_match() {
 		var x1 = of("text/json");
-		assertEquals(0, x1.match(alist(MediaType.of("text/json"))));
-		assertEquals(-1, x1.match(alist(MediaType.of("text/foo"))));
-		assertEquals(-1, x1.match(alist((MediaType)null)));
+		assertEquals(0, x1.match(l(MediaType.of("text/json"))));
+		assertEquals(-1, x1.match(l(MediaType.of("text/foo"))));
+		assertEquals(-1, x1.match(l((MediaType)null)));
 		assertEquals(-1, x1.match(null));
 
 		var x2 = of("");
-		assertEquals(-1, x2.match(alist(MediaType.of("text/json"))));
+		assertEquals(-1, x2.match(l(MediaType.of("text/json"))));
 	}
 
 	@Test void a05_getRanges() {

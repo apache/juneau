@@ -519,7 +519,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setEnum(Object...value) {
-		return setEnum(Arrays.asList(value));
+		return setEnum(l(value));
 	}
 
 	/**

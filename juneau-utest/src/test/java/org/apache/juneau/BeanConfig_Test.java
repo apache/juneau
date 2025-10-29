@@ -279,7 +279,7 @@ class BeanConfig_Test extends TestBase {
 		assertEquals(Integer.valueOf(1), bc.convertToType(o, LinkedList.class).get(0));
 
 		// HashMap to TreeMap
-		o = map(1, "foo");
+		o = m(1, "foo");
 		assertEquals("foo", bc.convertToType(o, TreeMap.class).firstEntry().getValue());
 
 		// String to TreeMap

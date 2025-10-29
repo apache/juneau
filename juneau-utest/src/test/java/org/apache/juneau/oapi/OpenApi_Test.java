@@ -553,14 +553,14 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void f02a_tArray_StringList() throws Exception {
-		var in = list("a1");
+		var in = l("a1");
 		var ps = T_ARRAY;
 		var s = serialize(ps, in);
 		assertEquals("a1", s);
 		var r = parse(ps, s, List.class, String.class);
 		assertBean(r, "0", "a1");
 
-		in = list("a1","a2");
+		in = l("a1","a2");
 		s = serialize(ps, in);
 		assertEquals("a1,a2", s);
 		r = parse(ps, s, List.class, String.class);
@@ -568,7 +568,7 @@ public class OpenApi_Test extends TestBase {
 	}
 
 	@Test void f02b_tArray_3dStringList() throws Exception {
-		var in = list(list(list("a")));
+		var in = l(l(l("a")));
 		var ps = tArray().items(
 			tArray().items(
 				tArray()
@@ -579,7 +579,7 @@ public class OpenApi_Test extends TestBase {
 		var r = parse(ps, s, List.class, List.class, List.class, String.class);
 		assertEquals(in, r);
 
-		in =  list(list(list("a","b"),list("c","d")),list(list("e","f"),list("g","h")));
+		in =  l(l(l("a","b"),l("c","d")),l(l("e","f"),l("g","h")));
 		s = serialize(ps, in);
 		assertEquals("a\\\\\\,b\\,c\\\\\\,d,e\\\\\\,f\\,g\\\\\\,h", s);
 		r = parse(ps, s, List.class, List.class, List.class, String.class);

@@ -143,7 +143,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentListAssertion<String,BasicCsvArrayPart> assertList() {
-		return new FluentListAssertion<>(u(alist(value())), this);
+		return new FluentListAssertion<>(u(l(value())), this);
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as a {@link List}, or <jk>null</jk> if the value <jk>null</jk>.
 	 */
 	public List<String> toList() {
-		return u(alist(value()));
+		return u(l(value()));
 	}
 
 	private String[] value() {

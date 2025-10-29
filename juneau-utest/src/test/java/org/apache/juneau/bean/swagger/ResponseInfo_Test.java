@@ -216,8 +216,8 @@ class ResponseInfo_Test extends TestBase {
 			testBean(
 				bean()
 					.set("description", "a")
-					.set("examples", map("x1", "x2"))
-					.set("headers", map("x3", headerInfo().setType("x4")))
+					.set("examples", m("x1", "x2"))
+					.set("headers", m("x3", headerInfo().setType("x4")))
 					.set("schema", schemaInfo().setType("b"))
 					.set("x5", "x5a")
 					.set("x6", null)

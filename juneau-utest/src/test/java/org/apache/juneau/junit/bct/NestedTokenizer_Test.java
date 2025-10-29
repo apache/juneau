@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.junit.bct.NestedTokenizer.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -306,17 +307,17 @@ class NestedTokenizer_Test extends TestBase {
 
 		// Tokens with nested content
 		var nested1 = new Token("parent");
-		nested1.setNested(Arrays.asList(new Token("child1"), new Token("child2")));
+		nested1.setNested(l(new Token("child1"), new Token("child2")));
 
 		var nested2 = new Token("parent");
-		nested2.setNested(Arrays.asList(new Token("child1"), new Token("child2")));
+		nested2.setNested(l(new Token("child1"), new Token("child2")));
 
 		assertEquals(nested1, nested2);
 		assertEquals(nested1.hashCode(), nested2.hashCode());
 
 		// Different nested content
 		var nested3 = new Token("parent");
-		nested3.setNested(Arrays.asList(new Token("child1"), new Token("different")));
+		nested3.setNested(l(new Token("child1"), new Token("different")));
 
 		assertNotEquals(nested1, nested3);
 	}
@@ -342,14 +343,14 @@ class NestedTokenizer_Test extends TestBase {
 		// Case 5: Same value, different nested content
 		var token1 = new Token("same");
 		var token2 = new Token("same");
-		token1.setNested(Arrays.asList(new Token("child1")));
-		token2.setNested(Arrays.asList(new Token("child2")));
+		token1.setNested(l(new Token("child1")));
+		token2.setNested(l(new Token("child2")));
 		assertNotEquals(token1, token2);
 
 		// Case 6: Same value, one has nested, other doesn't
 		var token3 = new Token("same");
 		var token4 = new Token("same");
-		token3.setNested(Arrays.asList(new Token("child")));
+		token3.setNested(l(new Token("child")));
 		// token4 has no nested content
 		assertNotEquals(token3, token4);
 
@@ -368,14 +369,14 @@ class NestedTokenizer_Test extends TestBase {
 
 		// Token with nested content
 		token = new Token("parent");
-		token.setNested(Arrays.asList(new Token("child1"), new Token("child2")));
+		token.setNested(l(new Token("child1"), new Token("child2")));
 		assertEquals("parent{child1,child2}", token.toString());
 
 		// Deep nesting
 		var child = new Token("child");
-		child.setNested(Arrays.asList(new Token("grandchild")));
+		child.setNested(l(new Token("grandchild")));
 		token = new Token("parent");
-		token.setNested(Arrays.asList(child));
+		token.setNested(l(child));
 		assertEquals("parent{child{grandchild}}", token.toString());
 	}
 
@@ -387,7 +388,7 @@ class NestedTokenizer_Test extends TestBase {
 		assertTrue(parent.getNested().isEmpty());
 
 		// Add nested content
-		parent.setNested(Arrays.asList(new Token("child1"), new Token("child2")));
+		parent.setNested(l(new Token("child1"), new Token("child2")));
 		assertTrue(parent.hasNested());
 		assertEquals(2, parent.getNested().size());
 
@@ -409,11 +410,11 @@ class NestedTokenizer_Test extends TestBase {
 		assertFalse(token.hasNested()); // Should return false when nested is empty
 
 		// Case 3: non-empty nested list
-		token.setNested(Arrays.asList(new Token("child")));
+		token.setNested(l(new Token("child")));
 		assertTrue(token.hasNested()); // Should return true when nested has content
 
 		// Case 4: nested list with multiple items
-		token.setNested(Arrays.asList(new Token("child1"), new Token("child2")));
+		token.setNested(l(new Token("child1"), new Token("child2")));
 		assertTrue(token.hasNested()); // Should return true when nested has multiple items
 	}
 

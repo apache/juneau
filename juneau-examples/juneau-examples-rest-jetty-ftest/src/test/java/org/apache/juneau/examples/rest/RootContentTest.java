@@ -29,7 +29,7 @@ public class RootContentTest extends ContentComboTestBase {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
-		return alist(new Object[][] {
+		return l(new Object[][] {
 			{ 	/* 0 */
 				new ComboInput("HTML-stylesheet", "/", MediaType.HTML,
 					"@import '/htdocs/themes/dark.css';",

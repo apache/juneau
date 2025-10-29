@@ -554,7 +554,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList prepend(Header...values) {
 		if (nn(values))
-			prepend(alist(values));
+			prepend(l(values));
 		return this;
 	}
 
@@ -760,7 +760,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList set(Header...values) {
 		if (nn(values))
-			set(alist(values));
+			set(l(values));
 		return this;
 	}
 
@@ -831,7 +831,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList setDefault(Header...headers) {
 		if (nn(headers))
-			setDefault(Arrays.asList(headers));
+			setDefault(l(headers));
 		return this;
 	}
 

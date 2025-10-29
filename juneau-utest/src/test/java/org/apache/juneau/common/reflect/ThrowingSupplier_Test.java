@@ -225,7 +225,7 @@ class ThrowingSupplier_Test extends TestBase {
 			ThrowingSupplier<Map<String, Object>> complexOperation = () -> {
 				var result = new HashMap<String, Object>();
 				result.put("status", "success");
-				result.put("data", Arrays.asList("item1", "item2", "item3"));
+				result.put("data", l("item1", "item2", "item3"));
 				result.put("timestamp", System.currentTimeMillis());
 				return result;
 			};
@@ -382,7 +382,7 @@ class ThrowingSupplier_Test extends TestBase {
 
 		@Test
 		void g03_listTypeSupplier() throws Exception {
-			ThrowingSupplier<List<String>> listSupplier = () -> Arrays.asList("a", "b", "c");
+			ThrowingSupplier<List<String>> listSupplier = () -> l("a", "b", "c");
 			var result = listSupplier.get();
 			assertEquals(3, result.size());
 			assertEquals("a", result.get(0));

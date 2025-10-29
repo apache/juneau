@@ -160,7 +160,7 @@ public interface FileFinder {
 		 * @return This object.
 		 */
 		public Builder exclude(String...patterns) {
-			this.exclude = alist(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
+			this.exclude = l(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
 			return this;
 		}
 
@@ -179,7 +179,7 @@ public interface FileFinder {
 		 * @return This object.
 		 */
 		public Builder include(String...patterns) {
-			this.include = alist(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
+			this.include = l(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
 			return this;
 		}
 

@@ -209,8 +209,8 @@ class AnyAssertion_Test extends TestBase {
 	}
 
 	@Test void bb12_asCollection() {
-		var x1 = alist(1);
-		var nil = nlist(Integer.class);
+		var x1 = l(1);
+		var nil = listn(Integer.class);
 		var x2 = "";
 		test(x1).asCollection().isString("[1]");
 		test(nil).asCollection().isNull();
@@ -218,8 +218,8 @@ class AnyAssertion_Test extends TestBase {
 	}
 
 	@Test void bb13_asCollection_wType() {
-		var x1 = alist(1);
-		var nil = nlist(Integer.class);
+		var x1 = l(1);
+		var nil = listn(Integer.class);
 		var x2 = "";
 		test(x1).asCollection(Integer.class).isString("[1]");
 		test(nil).asCollection(Integer.class).isNull();
@@ -264,8 +264,8 @@ class AnyAssertion_Test extends TestBase {
 	}
 
 	@Test void bb18_asList() {
-		var x1 = alist(1);
-		var nil = nlist(Integer.class);
+		var x1 = l(1);
+		var nil = listn(Integer.class);
 		var x2 = "";
 		test(x1).asList().isString("[1]");
 		test(nil).asList().isNull();
@@ -273,8 +273,8 @@ class AnyAssertion_Test extends TestBase {
 	}
 
 	@Test void bb19_asList_wType() {
-		var x1 = alist(1);
-		var nil = nlist(Integer.class);
+		var x1 = l(1);
+		var nil = listn(Integer.class);
 		var x2 = "";
 		test(x1).asList(Integer.class).isString("[1]");
 		test(nil).asList(Integer.class).isNull();
@@ -283,7 +283,7 @@ class AnyAssertion_Test extends TestBase {
 	}
 
 	@Test void bb20_asMap() {
-		var x1 = map("a",2);
+		var x1 = m("a",2);
 		var nil = (Map<String,Integer>)null;
 		var x2 = "";
 		test(x1).asMap().isString("{a=2}");
@@ -292,7 +292,7 @@ class AnyAssertion_Test extends TestBase {
 	}
 
 	@Test void bb21_asMap_wTypes() {
-		var x1 = map("a",2);
+		var x1 = m("a",2);
 		var nil = (Map<String,Integer>)null;
 		var x2 = "";
 		test(x1).asMap(String.class,Integer.class).isString("{a=2}");
@@ -320,8 +320,8 @@ class AnyAssertion_Test extends TestBase {
 	}
 
 	@Test void bb24_asBeanList() {
-		var x1 = alist(A1);
-		var nil = nlist(A1.class);
+		var x1 = l(A1);
+		var nil = listn(A1.class);
 		var x2 = "";
 		test(x1).asBeanList(A1.class).isString("[a=1,b=2]");
 		test(nil).asBeanList(A1.class).isNull();
@@ -339,8 +339,8 @@ class AnyAssertion_Test extends TestBase {
 	}
 
 	@Test void bb26_asStringList() {
-		var x1 = alist("1");
-		var nil = nlist(String.class);
+		var x1 = l("1");
+		var nil = listn(String.class);
 		var x2 = "";
 		test(x1).asStringList().isString("[1]");
 		test(nil).asStringList().isNull();

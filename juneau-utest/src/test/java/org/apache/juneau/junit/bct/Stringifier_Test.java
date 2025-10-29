@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -229,8 +230,8 @@ class Stringifier_Test extends TestBase {
 
 			var converter = BasicBeanConverter.DEFAULT;
 
-			assertEquals("EMPTY_COLLECTION", collectionFormatter.apply(converter, Arrays.asList()));
-			assertEquals("COLLECTION[3]:,a,b,c", collectionFormatter.apply(converter, Arrays.asList("a", "b", "c")));
+			assertEquals("EMPTY_COLLECTION", collectionFormatter.apply(converter, l()));
+			assertEquals("COLLECTION[3]:,a,b,c", collectionFormatter.apply(converter, l("a", "b", "c")));
 		}
 
 		@Test
@@ -307,7 +308,7 @@ class Stringifier_Test extends TestBase {
 			};
 
 			var converter = BasicBeanConverter.DEFAULT;
-			var testList = Arrays.asList("a", 42, true);
+			var testList = l("a", 42, true);
 			var result = listStringifier.apply(converter, testList);
 
 			assertEquals("[a,42,true]", result);
@@ -322,7 +323,7 @@ class Stringifier_Test extends TestBase {
 			};
 
 			var converter = BasicBeanConverter.DEFAULT;
-			var container = new TestContainer(Arrays.asList("x", "y", "z"));
+			var container = new TestContainer(l("x", "y", "z"));
 			var result = containerStringifier.apply(converter, container);
 
 			assertTrue(result.contains("Container{items="));

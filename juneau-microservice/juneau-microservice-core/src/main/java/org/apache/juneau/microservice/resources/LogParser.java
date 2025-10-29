@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.microservice.resources;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -153,9 +154,9 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		this.end = end;
 		this.threadFilter = thread;
 		if (nn(loggers))
-			this.loggerFilter = new LinkedHashSet<>(Arrays.asList(loggers));
+			this.loggerFilter = new LinkedHashSet<>(l(loggers));
 		if (nn(severity))
-			this.severityFilter = new LinkedHashSet<>(Arrays.asList(severity));
+			this.severityFilter = new LinkedHashSet<>(l(severity));
 
 		// Find the first line.
 		String line;

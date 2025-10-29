@@ -75,7 +75,7 @@ public class ComboSerialize_Tester<T> {
 
 		public Builder<T> skipTest(Predicate<String> v) { skipTest = v; return this; }
 
-		public Builder<T> swaps(Class<?>...c) { swaps.addAll(list(c)); return this; }
+		public Builder<T> swaps(Class<?>...c) { swaps.addAll(l(c)); return this; }
 
 		public Builder<T> serializerApply(Consumer<Serializer.Builder> v) { serializerApply = v; return this; }
 

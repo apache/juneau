@@ -308,7 +308,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	protected Cache(Builder<K,V> builder) {
 		this.maxSize = builder.maxSize;
 		this.disableCaching = builder.disableCaching;
-		this.supplier = builder.supplier;
+		this.supplier = builder.supplier != null ? builder.supplier : (K)->null;
 		if (builder.logOnExit) {
 			SystemUtils.shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
 		}
@@ -392,7 +392,10 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 			if (size() > maxSize)
 				clear();
 			v = supplier.get();
-			putIfAbsent(key, v);
+			if (v == null)
+				remove(key);
+			else
+				putIfAbsent(key, v);
 		} else {
 			cacheHits.incrementAndGet();
 		}

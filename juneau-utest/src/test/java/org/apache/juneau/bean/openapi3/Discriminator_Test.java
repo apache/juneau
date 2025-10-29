@@ -157,7 +157,7 @@ class Discriminator_Test extends TestBase {
 		private static final BeanTester<Discriminator> TESTER =
 			testBean(
 				bean()
-					.set("mapping", map("a1", "a2"))
+					.set("mapping", m("a1", "a2"))
 					.set("propertyName", "b")
 					.set("x1", "x1a")
 					.set("x2", null)

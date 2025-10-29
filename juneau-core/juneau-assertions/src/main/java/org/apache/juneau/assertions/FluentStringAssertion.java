@@ -17,6 +17,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.eqic;
@@ -274,7 +275,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public FluentListAssertion<String,R> asSplit(String regex) {
 		assertArgNotNull("regex", regex);
-		return new FluentListAssertion<>(this, valueIsNull() ? null : Arrays.asList(value().trim().split(regex)), returns());
+		return new FluentListAssertion<>(this, valueIsNull() ? null : l(value().trim().split(regex)), returns());
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */

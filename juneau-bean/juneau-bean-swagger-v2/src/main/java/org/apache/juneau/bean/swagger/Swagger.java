@@ -366,7 +366,7 @@ public class Swagger extends SwaggerElement {
 	public Swagger addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
 		var m = map();
-		m.put(scheme, alist(alternatives));
+		m.put(scheme, l(alternatives));
 		security = listb(Map.class).to((List)security).sparse().addAll(Collections.singleton(m)).build();
 		return this;
 	}

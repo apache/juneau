@@ -137,7 +137,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes addDefault(NamedAttribute...pairs) {
-		return addDefault(alist(pairs));
+		return addDefault(l(pairs));
 	}
 
 	/**

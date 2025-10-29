@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({"rawtypes"})
 class AutoListSwapTest extends TestBase {
 
-	private static final List<String> STRINGLIST = list("foo");
+	private static final List<String> STRINGLIST = l("foo");
 	private static final JsonList JSONLIST = JsonList.ofJsonOrCdl("foo");
 
 	private static ObjectSwap find(Class<?> c) {

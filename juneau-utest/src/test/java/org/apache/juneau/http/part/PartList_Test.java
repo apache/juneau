@@ -103,7 +103,7 @@ class PartList_Test extends TestBase {
 
 		assertEquals("Foo=1&Foo=2", s(x));
 
-		x = partList(alist(FOO_1, FOO_2, null));
+		x = partList(l(FOO_1, FOO_2, null));
 		assertEquals("Foo=1&Foo=2", s(x));
 
 		x = partList("Foo","1","Foo","2");
@@ -117,7 +117,7 @@ class PartList_Test extends TestBase {
 		x = PartList.of(Collections.emptyList());
 		assertEquals("", s(x));
 
-		x = PartList.of(alist(FOO_1));
+		x = PartList.of(l(FOO_1));
 		assertEquals("Foo=1", s(x));
 
 		x = PartList.of((NameValuePair[])null);
@@ -338,7 +338,7 @@ class PartList_Test extends TestBase {
 			.append("Bar", "b1")
 			.append("Bar", ()->"b2")
 			.append((List<NameValuePair>)null)
-			.append(alist(FOO_4));
+			.append(l(FOO_4));
 		assertEquals("Foo=1&Foo=2&Foo=3&Bar=b1&Bar=b2&Foo=4", s(x2));
 	}
 
@@ -355,7 +355,7 @@ class PartList_Test extends TestBase {
 			.prepend("Bar", "b1")
 			.prepend("Bar", ()->"b2")
 			.prepend((List<NameValuePair>)null)
-			.prepend(alist(FOO_4));
+			.prepend(l(FOO_4));
 		assertEquals("Foo=4&Bar=b2&Bar=b1&Foo=2&Foo=3&Foo=1", s(x2));
 	}
 
@@ -368,7 +368,7 @@ class PartList_Test extends TestBase {
 			.remove(PartList.of(FOO_1))
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
-			.remove(alist(FOO_5));
+			.remove(l(FOO_5));
 		assertEquals("Foo=6&Foo=7", s(x));
 
 		x = PartList.create().append(FOO_1,FOO_2).remove((String[])null).remove("Bar","Foo");
@@ -402,7 +402,7 @@ class PartList_Test extends TestBase {
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<NameValuePair>)null)
-			.set(alist(null,FOO_3,FOO_4,FOO_5));
+			.set(l(null,FOO_3,FOO_4,FOO_5));
 		assertEquals("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5", s(x));
 
 		x = PartList
@@ -505,16 +505,16 @@ class PartList_Test extends TestBase {
 		var x11 = PartList.create().setDefault("a",()->"x");
 		assertEquals("a=x", s(x11));
 
-		var x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(alist(APart.X,BPart.Z,null));
+		var x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(l(APart.X,BPart.Z,null));
 		assertEquals("b=x&b=y&a=x", s(x12));
 
 		var x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null));
 		assertEquals("b=x&b=y&a=x", s(x13));
 
 		var x14 = PartList.create().set(BPart.X,BPart.Y)
-			.setDefault(alist(APart.X,BPart.X,null))
-			.setDefault(alist(APart.Y,BPart.Y,null))
-			.setDefault(alist(CPart.X));
+			.setDefault(l(APart.X,BPart.X,null))
+			.setDefault(l(APart.Y,BPart.Y,null))
+			.setDefault(l(CPart.X));
 		assertEquals("b=x&b=y&a=x&c=x", s(x14));
 	}
 

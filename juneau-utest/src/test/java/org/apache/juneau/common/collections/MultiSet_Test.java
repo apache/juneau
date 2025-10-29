@@ -31,8 +31,8 @@ class MultiSet_Test extends TestBase {
 		List<String> l1, l2;
 		MultiSet<String> ms;
 
-		l1 = Arrays.asList(a("1","2"));
-		l2 = Arrays.asList(a("3","4"));
+		l1 = l(a("1","2"));
+		l2 = l(a("3","4"));
 		ms = new MultiSet<>(l1, l2);
 		var i1 = ms.iterator();
 		assertTrue(i1.hasNext());
@@ -46,8 +46,8 @@ class MultiSet_Test extends TestBase {
 		assertFalse(i1.hasNext());
 		assertThrows(NoSuchElementException.class, i1::next);
 
-		l1 = Arrays.asList(a("1","2"));
-		l2 = Arrays.asList(a());
+		l1 = l(a("1","2"));
+		l2 = l(a());
 		ms = new MultiSet<>(l1, l2);
 		var i2 = ms.iterator();
 		assertTrue(i2.hasNext());
@@ -57,8 +57,8 @@ class MultiSet_Test extends TestBase {
 		assertFalse(i2.hasNext());
 		assertThrows(NoSuchElementException.class, i2::next);
 
-		l1 = Arrays.asList(a());
-		l2 = Arrays.asList(a("3","4"));
+		l1 = l(a());
+		l2 = l(a("3","4"));
 		ms = new MultiSet<>(l1, l2);
 		var i3 = ms.iterator();
 		assertTrue(i3.hasNext());
@@ -68,14 +68,14 @@ class MultiSet_Test extends TestBase {
 		assertFalse(i3.hasNext());
 		assertThrows(NoSuchElementException.class, i3::next);
 
-		l1 = Arrays.asList(a());
-		l2 = Arrays.asList(a());
+		l1 = l(a());
+		l2 = l(a());
 		ms = new MultiSet<>(l1, l2);
 		var i4 = ms.iterator();
 		assertFalse(i4.hasNext());
 		assertThrows(NoSuchElementException.class, i4::next);
 
-		l1 = Arrays.asList(a("1","2"));
+		l1 = l(a("1","2"));
 		ms = new MultiSet<>(l1);
 		var i5 = ms.iterator();
 		assertTrue(i5.hasNext());
@@ -85,8 +85,8 @@ class MultiSet_Test extends TestBase {
 		assertFalse(i5.hasNext());
 		assertThrows(NoSuchElementException.class, i5::next);
 
-		l1 = new LinkedList<>(Arrays.asList(a("1","2")));
-		l2 = new LinkedList<>(Arrays.asList(a("3","4")));
+		l1 = new LinkedList<>(l(a("1","2")));
+		l2 = new LinkedList<>(l(a("3","4")));
 		ms = new MultiSet<>(l1, l2);
 		assertList(ms, "1", "2", "3", "4");
 		assertList(ms.enumerator(), "1", "2", "3", "4");

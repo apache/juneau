@@ -17,7 +17,6 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -86,7 +85,7 @@ class ObjectPaginator_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_collections_basic() {
-		var in = list(1,2,3);
+		var in = l(1,2,3);
 		assertList(op.run(in, 0, 3), 1,2,3);
 		assertList(op.run(in, 1, 3), 2,3);
 		assertList(op.run(in, 1, 1), 2);

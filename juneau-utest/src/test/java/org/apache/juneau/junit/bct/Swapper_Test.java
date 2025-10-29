@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -215,8 +216,8 @@ class Swapper_Test extends TestBase {
 
 			var converter = BasicBeanConverter.DEFAULT;
 
-			assertEquals("EMPTY_COLLECTION", collectionSwapper.apply(converter, Arrays.asList()));
-			assertEquals("COLLECTION[3]:a", collectionSwapper.apply(converter, Arrays.asList("a", "b", "c")));
+			assertEquals("EMPTY_COLLECTION", collectionSwapper.apply(converter, l()));
+			assertEquals("COLLECTION[3]:a", collectionSwapper.apply(converter, l("a", "b", "c")));
 		}
 
 		@Test
@@ -341,7 +342,7 @@ class Swapper_Test extends TestBase {
 			};
 
 			var converter = BasicBeanConverter.DEFAULT;
-			var complex = new TestComplexObject(Arrays.asList("x", "y", "z"));
+			var complex = new TestComplexObject(l("x", "y", "z"));
 			var result = complexSwapper.apply(converter, complex);
 
 			assertTrue(result.toString().contains("COMPLEX{items="));
@@ -369,7 +370,7 @@ class Swapper_Test extends TestBase {
 			// Test swapper integration with listification
 			var converter = BasicBeanConverter.builder()
 				.defaultSettings()
-				.addSwapper(TestContainer.class, (conv, container) -> Arrays.asList(container.content, "extra"))
+				.addSwapper(TestContainer.class, (conv, container) -> l(container.content, "extra"))
 				.build();
 
 			var container = new TestContainer("test");
@@ -414,7 +415,7 @@ class Swapper_Test extends TestBase {
 			};
 
 			var converter = BasicBeanConverter.DEFAULT;
-			var testList = Arrays.asList("z", "a", "m", "c", "x");
+			var testList = l("z", "a", "m", "c", "x");
 
 			var start = System.nanoTime();
 			for (int i = 0; i < 100; i++) {

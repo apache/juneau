@@ -179,7 +179,7 @@ class LongValue_Test extends TestBase {
 	void d01_countingInLambda() {
 		var counter = LongValue.create();
 
-		list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
+		l(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
 			if (x % 2 == 0) {
 				counter.getAndIncrement();
 			}
@@ -192,7 +192,7 @@ class LongValue_Test extends TestBase {
 	void d02_trackingBytesProcessed() {
 		var bytesProcessed = LongValue.create();
 
-		list(1024L, 2048L, 512L, 4096L).forEach(bytes -> {
+		l(1024L, 2048L, 512L, 4096L).forEach(bytes -> {
 			bytesProcessed.set(bytesProcessed.get() + bytes);
 		});
 
@@ -203,7 +203,7 @@ class LongValue_Test extends TestBase {
 	void d03_trackingMaxTimestamp() {
 		var maxTimestamp = LongValue.of(0L);
 
-		list(1000L, 5000L, 3000L, 8000L, 2000L).forEach(timestamp -> {
+		l(1000L, 5000L, 3000L, 8000L, 2000L).forEach(timestamp -> {
 			if (timestamp > maxTimestamp.get()) {
 				maxTimestamp.set(timestamp);
 			}

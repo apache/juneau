@@ -101,8 +101,8 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		assertEquals("{f:'1'}",x.getX5(Bean.create()));
 		assertEquals("{x:'f=1,f=1'}",x.getX6(a(Bean.create(),Bean.create())));
 		assertEquals("{x:'@((f=1),(f=1))'}",x.getX7(a(Bean.create(),Bean.create())));
-		assertEquals("{x:'f=1,f=1'}",x.getX8(alist(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.getX9(alist(Bean.create(),Bean.create())));
+		assertEquals("{x:'f=1,f=1'}",x.getX8(l(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.getX9(l(Bean.create(),Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.getX10(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.getX11(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.getX12(map("k1",Bean.create())));
@@ -118,7 +118,7 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		assertEquals("{foo:'bar'}",x.getX22(parts("foo","bar").getAll()));
 		assertEquals("{foo:'bar'}",x.getX24("foo=bar"));
 		assertEquals("{}",x.getX24(null));
-		assertEquals("{foo:'bar'}",x.getX25(alist(part("foo","bar"))));
+		assertEquals("{foo:'bar'}",x.getX25(l(part("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -835,10 +835,10 @@ class Remote_QueryAnnotation_Test extends TestBase {
 	}
 
 	public static class K6a {
-		@Query public List<Object> getA() { return alist("foo","","true","123","null",true,123,null); }
-		@Query("b") public List<Object> getX1() { return alist("foo","","true","123","null",true,123,null); }
-		@Query(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
-		@Query("d") @Schema(allowEmptyValue=true) public List<Object> getX3() { return alist(); }
+		@Query public List<Object> getA() { return l("foo","","true","123","null",true,123,null); }
+		@Query("b") public List<Object> getX1() { return l("foo","","true","123","null",true,123,null); }
+		@Query(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return l("foo","","true","123","null",true,123,null); }
+		@Query("d") @Schema(allowEmptyValue=true) public List<Object> getX3() { return l(); }
 		@Query("e") public List<Object> getX4() { return null; }
 		@Query("f") public Object[] getX5() { return a("foo","","true","123","null",true,123,null); }
 		@Query(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }

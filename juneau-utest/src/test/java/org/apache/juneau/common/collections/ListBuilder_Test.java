@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,7 +57,7 @@ class ListBuilder_Test extends TestBase {
 
 	@Test
 	void a04_addAll() {
-		var existing = Arrays.asList("x", "y", "z");
+		var existing = l("x", "y", "z");
 		var list = ListBuilder.create(String.class)
 			.add("a")
 			.addAll(existing)
@@ -250,7 +251,7 @@ class ListBuilder_Test extends TestBase {
 
 	@Test
 	void h01_multipleOperations() {
-		var existing = Arrays.asList("x", "y");
+		var existing = l("x", "y");
 		var list = ListBuilder.create(String.class)
 			.add("a")
 			.addAll(existing)

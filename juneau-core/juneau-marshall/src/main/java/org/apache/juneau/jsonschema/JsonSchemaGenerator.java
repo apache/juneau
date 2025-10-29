@@ -885,7 +885,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */
-	public List<Pattern> getIgnoreTypes() { return alist(ignoreTypePatterns); }
+	public List<Pattern> getIgnoreTypes() { return l(ignoreTypePatterns); }
 
 	@Override
 	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {

@@ -285,7 +285,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		if (r instanceof Collection)
 			return new ArrayList<R>((Collection)r);
 		if (isArray(r))
-			return Arrays.asList((R[])r);
+			return l((R[])r);
 		return null;
 	}
 }

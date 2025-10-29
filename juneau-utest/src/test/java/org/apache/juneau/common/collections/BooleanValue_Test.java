@@ -184,7 +184,7 @@ class BooleanValue_Test extends TestBase {
 	void d01_trackingConditionMet() {
 		var found = BooleanValue.of(false);
 
-		list(1, 2, 3, 4, 5).forEach(x -> {
+		l(1, 2, 3, 4, 5).forEach(x -> {
 			if (x > 3) {
 				found.set(true);
 			}
@@ -197,7 +197,7 @@ class BooleanValue_Test extends TestBase {
 	void d02_allConditionsMet() {
 		var allValid = BooleanValue.of(true);
 
-		list(2, 4, 6, 8, 10).forEach(x -> {
+		l(2, 4, 6, 8, 10).forEach(x -> {
 			if (x % 2 != 0) {
 				allValid.set(false);
 			}

@@ -133,7 +133,7 @@ class AnnotationInheritance_Test extends TestBase {
 	/* Commented out - complex serialization test
 	@Test
 	void b02_xml_serialization_withInheritance() throws Exception {
-		var bean = new B1_Child().setItems(Arrays.asList("one", "two", "three"));
+		var bean = new B1_Child().setItems(l("one", "two", "three"));
 		var xml = XmlSerializer.DEFAULT.serialize(bean);
 
 		// The @Xml annotation is on the getter in the parent, which is not overridden

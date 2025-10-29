@@ -163,7 +163,7 @@ class Encoding_Test extends TestBase {
 					.set("allowReserved", true)
 					.set("contentType", "a")
 					.set("explode", true)
-					.set("headers", map("b1", headerInfo(schemaInfo("b2"))))
+					.set("headers", m("b1", headerInfo(schemaInfo("b2"))))
 					.set("style", "c")
 					.set("x1", "x1a")
 					.set("x2", null)

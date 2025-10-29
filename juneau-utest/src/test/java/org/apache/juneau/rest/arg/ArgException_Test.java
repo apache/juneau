@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -88,7 +89,7 @@ class ArgException_Test extends TestBase {
 		assertSame(x, x.setStatusLine(BasicStatusLine.create(500, "Test")));
 
 		// Test setHeaders(List<Header>) returns same instance
-		List<Header> headerList = Arrays.asList(BasicHeader.of("X-Header3", "value3"));
+		List<Header> headerList = l(BasicHeader.of("X-Header3", "value3"));
 		assertSame(x, x.setHeaders(headerList));
 		assertEquals("value3", x.getFirstHeader("X-Header3").getValue());
 
@@ -106,7 +107,7 @@ class ArgException_Test extends TestBase {
 	@Test void a04_fluentChaining() {
 		// Test multiple fluent calls can be chained
 		var x = new ArgException(testParamInfo, "Initial")
-			.setHeaders(Arrays.asList(BasicHeader.of("X-Chain", "chained")))
+			.setHeaders(l(BasicHeader.of("X-Chain", "chained")))
 			.setContent("Chained content");
 
 		assertEquals("chained", x.getFirstHeader("X-Chain").getValue());

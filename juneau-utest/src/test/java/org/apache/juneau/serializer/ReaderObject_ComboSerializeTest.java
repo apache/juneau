@@ -256,7 +256,7 @@ public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class BeanWithReaderListField {
 		public List<Reader> f;
 		public BeanWithReaderListField init() {
-			f = list(reader("fv1"),reader("fv2"),null);
+			f = l(reader("fv1"),reader("fv2"),null);
 			return this;
 		}
 	}
@@ -264,7 +264,7 @@ public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class BeanWithReaderMapField {
 		public Map<String,Reader> f;
 		public BeanWithReaderMapField init() {
-			f = map("foo",reader("fv1"),"bar",null,null,reader("fv2"));
+			f = m("foo",reader("fv1"),"bar",null,null,reader("fv2"));
 			return this;
 		}
 	}
@@ -272,7 +272,7 @@ public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class BeanWithReaderBeanListField {
 		public List<B> f;
 		public BeanWithReaderBeanListField init() {
-			f = list(new B().init(),null);
+			f = l(new B().init(),null);
 			return this;
 		}
 	}
@@ -280,7 +280,7 @@ public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 	public static class BeanWithReaderBeanMapField {
 		public Map<String,B> f;
 		public BeanWithReaderBeanMapField init() {
-			f = map("foo",new B().init(),"bar",null,null,new B().init());
+			f = m("foo",new B().init(),"bar",null,null,new B().init());
 			return this;
 		}
 	}
@@ -296,8 +296,8 @@ public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 			f1 = reader("f1v");
 			f2 = a(reader("f2v1"),reader("f2v2"),null);
 			f3 = null;
-			f4 = list(reader("f4v1"),reader("f4v2"),null);
-			f5 = map("foo",reader("f5v1"),"bar",null,null,reader("f5v2"));
+			f4 = l(reader("f4v1"),reader("f4v2"),null);
+			f5 = m("foo",reader("f5v1"),"bar",null,null,reader("f5v2"));
 			return this;
 		}
 	}

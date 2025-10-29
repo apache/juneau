@@ -356,28 +356,28 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 	public static class BeanWithSwappedListField {
 		public List<PojoToDynamicReader> f;
 		public BeanWithSwappedListField(String f) {
-			this.f = list(new PojoToDynamicReader(f + "1"),new PojoToDynamicReader(f + "2"),null);
+			this.f = l(new PojoToDynamicReader(f + "1"),new PojoToDynamicReader(f + "2"),null);
 		}
 	}
 
 	public static class BeanWithSwappedMapField {
 		public Map<String,PojoToDynamicReader> f;
 		public BeanWithSwappedMapField(String f) {
-			this.f = map("foo",new PojoToDynamicReader(f + "1"),"bar",null,null,new PojoToDynamicReader(f + "2"));
+			this.f = m("foo",new PojoToDynamicReader(f + "1"),"bar",null,null,new PojoToDynamicReader(f + "2"));
 		}
 	}
 
 	public static class BeanWithListBeanSwappedField {
 		public List<B> f;
 		public BeanWithListBeanSwappedField(String f) {
-			this.f = list(new B(f),null);
+			this.f = l(new B(f),null);
 		}
 	}
 
 	public static class BeanWithMapBeanSwappedField {
 		public Map<String,B> f;
 		public BeanWithMapBeanSwappedField(String f) {
-			this.f = map("foo",new B(f),"bar",null,null,new B(f));
+			this.f = m("foo",new B(f),"bar",null,null,new B(f));
 		}
 	}
 
@@ -392,8 +392,8 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 			f1 = new PojoToDynamicReader(f + "1a");
 			f2 = a(new PojoToDynamicReader(f + "2a"),new PojoToDynamicReader(f + "2b"),null);
 			f3 = null;
-			f4 = list(new PojoToDynamicReader(f + "4a"),new PojoToDynamicReader(f + "4b"),null);
-			f5 = map("foo",new PojoToDynamicReader(f + "5a"),"bar",null,null,new PojoToDynamicReader(f + "5c"));
+			f4 = l(new PojoToDynamicReader(f + "4a"),new PojoToDynamicReader(f + "4b"),null);
+			f5 = m("foo",new PojoToDynamicReader(f + "5a"),"bar",null,null,new PojoToDynamicReader(f + "5c"));
 		}
 	}
 }

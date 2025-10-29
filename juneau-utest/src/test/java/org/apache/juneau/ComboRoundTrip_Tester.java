@@ -88,7 +88,7 @@ public class ComboRoundTrip_Tester<T> {
 
 		public Builder<T> verify(Predicate<T> p, String msg, Object...args) { verify.add(x -> p.test(x) ? null : f(msg, args)); return this; }
 
-		public Builder<T> swaps(Class<?>...c) { swaps.addAll(list(c)); return this; }
+		public Builder<T> swaps(Class<?>...c) { swaps.addAll(l(c)); return this; }
 
 		public Builder<T> serializerApply(Consumer<Serializer.Builder> v) { serializerApply = v; return this; }
 

@@ -17,7 +17,6 @@
 package org.apache.juneau.svl;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,7 +44,7 @@ class ResolvingJsonMapTest extends TestBase {
 		m.put("foo", list("$X{a}"));
 		assertList(m.get("foo"), "1");
 
-		m.put("foo", map("k1","$X{a}"));
+		m.put("foo", m("k1","$X{a}"));
 		assertBean(m, "foo{k1}", "{1}");
 	}
 
@@ -68,10 +67,10 @@ class ResolvingJsonMapTest extends TestBase {
 		m.put("foo", a((String)null));
 		assertList(m.get("foo"), (Object)null);
 
-		m.put("foo", list((String)null));
+		m.put("foo", l((String)null));
 		assertList(m.get("foo"), (Object)null);
 
-		m.put("foo", map("k1",null));
+		m.put("foo", m("k1",null));
 		assertBean(m, "foo{k1}", "{<null>}");
 	}
 
@@ -87,10 +86,10 @@ class ResolvingJsonMapTest extends TestBase {
 		m.put("foo", ao(FooEnum.ONE));
 		assertList(m.get("foo"), "ONE");
 
-		m.put("foo", list(FooEnum.ONE));
+		m.put("foo", l(FooEnum.ONE));
 		assertList(m.get("foo"), "ONE");
 
-		m.put("foo", map(FooEnum.ONE,FooEnum.ONE));
+		m.put("foo", m(FooEnum.ONE,FooEnum.ONE));
 		assertBean(m, "foo", "{ONE=ONE}");
 	}
 
@@ -115,10 +114,10 @@ class ResolvingJsonMapTest extends TestBase {
 		m3.put("foo", a("$X{a}"));
 		assertList(m.get("foo"), "1");
 
-		m3.put("foo", list("$X{a}"));
+		m3.put("foo", l("$X{a}"));
 		assertList(m.get("foo"), "1");
 
-		m3.put("foo", map("k1","$X{a}"));
+		m3.put("foo", m("k1","$X{a}"));
 		assertBean(m, "foo{k1}", "{1}");
 	}
 

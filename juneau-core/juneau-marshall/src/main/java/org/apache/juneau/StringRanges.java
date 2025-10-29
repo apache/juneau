@@ -227,7 +227,7 @@ public class StringRanges {
 	 * @return The string ranges that make up this object.
 	 */
 	public List<StringRange> toList() {
-		return alist(value);
+		return l(value);
 	}
 
 	@Override /* Overridden from Object */

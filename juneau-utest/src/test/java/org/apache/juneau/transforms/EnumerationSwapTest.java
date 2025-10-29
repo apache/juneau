@@ -17,7 +17,6 @@
 package org.apache.juneau.transforms;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -34,7 +33,7 @@ class EnumerationSwapTest extends TestBase {
 	//====================================================================================================
 	@Test void a01_test() throws Exception {
 		var s = JsonSerializer.create().json5().swaps(EnumerationSwap.class).build();
-		var v = new Vector<>(Arrays.asList(a("foo","bar","baz")));
+		var v = new Vector<>(l(a("foo","bar","baz")));
 		var e = v.elements();
 		assertEquals("['foo','bar','baz']", s.serialize(e));
 	}

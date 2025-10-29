@@ -80,7 +80,7 @@ public class ComboInput<T> {
 	}
 
 	public ComboInput<T> swaps(Class<?>...c) {
-		this.swaps.addAll(Arrays.asList(c));
+		this.swaps.addAll(l(c));
 		return this;
 	}
 

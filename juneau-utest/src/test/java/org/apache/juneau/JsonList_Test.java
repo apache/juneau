@@ -45,7 +45,7 @@ class JsonList_Test extends TestBase {
 
 		assertEquals(
 			"['A','B','C']",
-			new JsonList(Arrays.asList(a("A","B","C"))).toString()
+			new JsonList(l(a("A","B","C"))).toString()
 		);
 	}
 

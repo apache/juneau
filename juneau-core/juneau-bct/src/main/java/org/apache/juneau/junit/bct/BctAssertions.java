@@ -460,7 +460,7 @@ public class BctAssertions {
 	 * <p class='bjava'>
 	 *    <jc>// Test parsed object collections</jc>
 	 *    <jk>var</jk> <jv>parsed</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>jsonArray</jv>, MyBean[].class);
-	 *    <jsm>assertBeans</jsm>(<jsm>Arrays.asList</jsm>(<jv>parsed</jv>), <js>"prop1,prop2"</js>,
+	 *    <jsm>assertBeans</jsm>(<jsm>l</jsm>(<jv>parsed</jv>), <js>"prop1,prop2"</js>,
 	 *       <js>"val1,val2"</js>, <js>"val3,val4"</js>);
 	 * </p>
 	 *

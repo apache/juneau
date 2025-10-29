@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.response.BadRequest.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
@@ -59,7 +58,7 @@ class BadRequest_Test extends TestBase {
 		}
 		@RestGet
 		public void f7() throws BadRequest {
-			throw badRequest().setHeaders(Arrays.asList(
+			throw badRequest().setHeaders(l(
 				BasicHeader.of("Foo", "bar"),
 				BasicHeader.of("Baz", "qux")
 			));
@@ -112,7 +111,7 @@ class BadRequest_Test extends TestBase {
 		var x = badRequest();
 
 		// Test setHeaders(List<Header>)
-		assertSame(x, x.setHeaders(Arrays.asList(
+		assertSame(x, x.setHeaders(l(
 			BasicHeader.of("X-Test", "test-value")
 		)));
 		assertEquals("test-value", x.getFirstHeader("X-Test").getValue());

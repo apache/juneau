@@ -53,19 +53,19 @@ class RestClient_Query_Test extends TestBase {
 	}
 
 	@Test void a02_query_String_Object_Schema() throws Exception {
-		var l = list("bar","baz");
+		var l = l("bar","baz");
 		client().build().get("/query").queryData(part("foo",l,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=bar|baz");
 		client().queryData(part("foo",l,T_ARRAY_PIPES)).build().get("/query").run().assertContent().asString().asUrlDecode().is("foo=bar|baz");
 	}
 
 	@Test void a03_query_String_Object_Schema_Serializer() throws Exception {
-		var l = list("bar","baz");
+		var l = l("bar","baz");
 		client().queryData(part("foo",l,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/query").run().assertContent().asString().asUrlDecode().is("foo=@(bar,baz)");
 	}
 
 	@Test void a06_query_String_Supplier() throws Exception {
-		var l1 = list("foo","bar");
-		var l2 = list("bar","baz");
+		var l1 = l("foo","bar");
+		var l2 = l("bar","baz");
 		var s = MutableSupplier.of(l1);
 		var x = client().queryData(part("foo",s,null)).build();
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=foo,bar");
@@ -84,8 +84,8 @@ class RestClient_Query_Test extends TestBase {
 	}
 
 	@Test void a08_query_String_Supplier_Schema_Serializer() throws Exception {
-		var l1 = list("foo","bar");
-		var l2 = list("bar","baz");
+		var l1 = l("foo","bar");
+		var l2 = l("bar","baz");
 		var s = MutableSupplier.of(l1);
 		var x = client().queryData(part("foo",s,T_ARRAY_PIPES).serializer(FakeWriterSerializer.X)).build();
 		x.get("/query").run().assertContent().asString().asUrlDecode().is("foo=xfoo|barx");

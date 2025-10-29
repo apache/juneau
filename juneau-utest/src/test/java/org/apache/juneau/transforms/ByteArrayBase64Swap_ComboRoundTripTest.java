@@ -82,7 +82,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>AQID</rdf:li>\n    <rdf:li>BAUG</rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n")
 			.verify(x -> verify(x).isType(byte[][].class))
 			.build(),
-		tester(3, "ListOfByteArrays", getType(List.class,byte[].class), list(bytes(1,2,3),bytes(4,5,6),null))
+		tester(3, "ListOfByteArrays", getType(List.class,byte[].class), l(bytes(1,2,3),bytes(4,5,6),null))
 			.json("['AQID','BAUG',null]")
 			.jsonT("['AQID','BAUG',null]")
 			.jsonR("[\n\t'AQID',\n\t'BAUG',\n\tnull\n]")
@@ -334,7 +334,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	public static class BeanWithByteArrayListField {
 		public List<byte[]> f;
 		public BeanWithByteArrayListField init() {
-			f = list(bytes(1,2,3),bytes(4,5,6),null);
+			f = l(bytes(1,2,3),bytes(4,5,6),null);
 			return this;
 		}
 	}
@@ -342,7 +342,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	public static class BeanWithByteArrayMapField {
 		public Map<String,byte[]> f;
 		public BeanWithByteArrayMapField init() {
-			f = map("foo",bytes(1,2,3),"bar",null,null,bytes(4,5,6));
+			f = m("foo",bytes(1,2,3),"bar",null,null,bytes(4,5,6));
 			return this;
 		}
 	}
@@ -350,7 +350,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	public static class BeanWithByteArrayBeanListField {
 		public List<B> f;
 		public BeanWithByteArrayBeanListField init() {
-			f = list(new B().init(),null);
+			f = l(new B().init(),null);
 			return this;
 		}
 	}
@@ -358,7 +358,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	public static class BeanWithByteArrayBeanMapField {
 		public Map<String,B> f;
 		public BeanWithByteArrayBeanMapField init() {
-			f = map("foo",new B().init(),"bar",null,null,new B().init());
+			f = m("foo",new B().init(),"bar",null,null,new B().init());
 			return this;
 		}
 	}
@@ -374,8 +374,8 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			f1 = bytes(1,2,3);
 			f2 = new byte[][]{{1,2,3},{4,5,6},null};
 			f3 = null;
-			f4 = list(bytes(1,2,3),bytes(4,5,6),null);
-			f5 = map("foo",bytes(1,2,3),"bar",null,null,bytes(4,5,6));
+			f4 = l(bytes(1,2,3),bytes(4,5,6),null);
+			f5 = m("foo",bytes(1,2,3),"bar",null,null,bytes(4,5,6));
 			return this;
 		}
 	}

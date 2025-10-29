@@ -109,7 +109,7 @@ public class MediaRange extends MediaType {
 	 *
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
-	public List<NameValuePair> getExtensions() { return u(alist(extensions)); }
+	public List<NameValuePair> getExtensions() { return u(l(extensions)); }
 
 	/**
 	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.

@@ -47,7 +47,7 @@ class Swagger_Test extends TestBase {
 					.setProduces(MediaType.of("i"))
 					.setResponses(map("j1", responseInfo().setDescription("j2")))
 					.setSchemes("k")
-					.setSecurity(list(map("l1", list("l2"))))
+					.setSecurity(l(map("l1", l("l2"))))
 					.setSecurityDefinitions(map("m1", securityScheme().setType("m2")))
 					.setSwagger("n")
 					.setTags(tag().setName("o"))
@@ -139,19 +139,19 @@ class Swagger_Test extends TestBase {
 		@Test void a10_collectionSetters() {
 			// Test Collection variants of setters
 			var x = bean()
-				.setConsumes(list(
+				.setConsumes(l(
 					MediaType.of("a1"),
 					MediaType.of("a2")
 				))
-				.setProduces(list(
+				.setProduces(l(
 					MediaType.of("b1"),
 					MediaType.of("b2")
 				))
-				.setSchemes(list("c1", "c2"))
-				.setTags(list(tag().setName("d1"), tag().setName("d2")))
-				.setSecurity(list(
-					map("e1", list("e2")),
-					map("e3", list("e4"))
+				.setSchemes(l("c1", "c2"))
+				.setTags(l(tag().setName("d1"), tag().setName("d2")))
+				.setSecurity(l(
+					m("e1", l("e2")),
+					m("e3", l("e4"))
 				));
 
 			assertBean(x,
@@ -181,16 +181,16 @@ class Swagger_Test extends TestBase {
 		@Test void a12_collectionAdders() {
 			// Test Collection addX methods - call each method twice
 			var x = bean()
-				.addConsumes(list(MediaType.of("a1")))
-				.addConsumes(list(MediaType.of("a2")))
-				.addProduces(list(MediaType.of("b1")))
-				.addProduces(list(MediaType.of("b2")))
-				.addSchemes(list("c1"))
-				.addSchemes(list("c2"))
-				.addSecurity(list(map("d1",list("d2"))))
-				.addSecurity(list(map("d3",list("d4"))))
-				.addTags(list(tag().setName("e1")))
-				.addTags(list(tag().setName("e2")));
+				.addConsumes(l(MediaType.of("a1")))
+				.addConsumes(l(MediaType.of("a2")))
+				.addProduces(l(MediaType.of("b1")))
+				.addProduces(l(MediaType.of("b2")))
+				.addSchemes(l("c1"))
+				.addSchemes(l("c2"))
+				.addSecurity(l(map("d1",l("d2"))))
+				.addSecurity(l(map("d3",l("d4"))))
+				.addTags(l(tag().setName("e1")))
+				.addTags(l(tag().setName("e2")));
 
 			assertBean(x,
 				"consumes,produces,schemes,security,tags{0{name},1{name}}",
@@ -341,20 +341,20 @@ class Swagger_Test extends TestBase {
 			testBean(
 				bean()
 					.set("basePath", "a")
-					.set("consumes", list(MediaType.of("b")))
-					.set("definitions", map("c1", JsonMap.of("type", "c2")))
+					.set("consumes", l(MediaType.of("b")))
+					.set("definitions", m("c1", JsonMap.of("type", "c2")))
 					.set("externalDocs", externalDocumentation("d"))
 					.set("host", "e")
 					.set("info", info("f1", "f2"))
-					.set("parameters", map("g1", parameterInfo("g2", "g3")))
-					.set("paths", map("h1", operationMap().append("get", operation().setSummary("h2"))))
-					.set("produces", list(MediaType.of("i")))
-					.set("responses", map("j1", responseInfo().setDescription("j2")))
-					.set("schemes", list("k"))
-					.set("security", list(map("l1", list("l2"))))
-					.set("securityDefinitions", map("m1", securityScheme().setType("m2")))
+					.set("parameters", m("g1", parameterInfo("g2", "g3")))
+					.set("paths", m("h1", operationMap().append("get", operation().setSummary("h2"))))
+					.set("produces", l(MediaType.of("i")))
+					.set("responses", m("j1", responseInfo().setDescription("j2")))
+					.set("schemes", l("k"))
+					.set("security", l(m("l1", l("l2"))))
+					.set("securityDefinitions", m("m1", securityScheme().setType("m2")))
 					.set("swagger", "n")
-					.set("tags", list(tag().setName("o")))
+					.set("tags", l(tag().setName("o")))
 					.set("x1", "x1a")
 					.set("x2", null)
 			)

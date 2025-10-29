@@ -645,7 +645,7 @@ public class ClassInfo {
 	 * 	All declared fields on this class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<FieldInfo> getAllFields() { return u(alist(_getAllFields())); }
+	public List<FieldInfo> getAllFields() { return u(l(_getAllFields())); }
 
 	/**
 	 * Returns all declared methods on this class and all parent classes.
@@ -655,7 +655,7 @@ public class ClassInfo {
 	 * 	<br>Results are ordered parent-to-child, and then alphabetically per class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<MethodInfo> getAllMethodsParentFirst() { return u(alist(_getAllMethodsParentFirst())); }
+	public List<MethodInfo> getAllMethodsParentFirst() { return u(l(_getAllMethodsParentFirst())); }
 
 	/**
 	 * Returns a list including this class and all parent classes and interfaces.
@@ -666,7 +666,7 @@ public class ClassInfo {
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are ordered child-to-parent order with classes listed before interfaces.
 	 */
-	public List<ClassInfo> getAllParents() { return u(alist(_getAllParents())); }
+	public List<ClassInfo> getAllParents() { return u(l(_getAllParents())); }
 
 	/**
 	 * Finds the annotation of the specified type defined on this class or parent class/interface.
@@ -828,7 +828,7 @@ public class ClassInfo {
 	 * 	All constructors defined on this class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<ConstructorInfo> getDeclaredConstructors() { return u(alist(_getDeclaredConstructors())); }
+	public List<ConstructorInfo> getDeclaredConstructors() { return u(l(_getDeclaredConstructors())); }
 
 	/**
 	 * Returns the first matching declared field on this class.
@@ -851,7 +851,7 @@ public class ClassInfo {
 	 * 	<br>Results are in alphabetical order.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<FieldInfo> getDeclaredFields() { return u(alist(_getDeclaredFields())); }
+	public List<FieldInfo> getDeclaredFields() { return u(l(_getDeclaredFields())); }
 
 	/**
 	 * Returns a list of interfaces declared on this class.
@@ -866,7 +866,7 @@ public class ClassInfo {
 	 * 	An unmodifiable list of interfaces declared on this class.
 	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
 	 */
-	public List<ClassInfo> getDeclaredInterfaces() { return u(alist(_getDeclaredInterfaces())); }
+	public List<ClassInfo> getDeclaredInterfaces() { return u(l(_getDeclaredInterfaces())); }
 
 	/**
 	 * Returns the first matching declared method on this class.
@@ -889,7 +889,7 @@ public class ClassInfo {
 	 * 	<br>Results are ordered alphabetically.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<MethodInfo> getDeclaredMethods() { return u(alist(_getDeclaredMethods())); }
+	public List<MethodInfo> getDeclaredMethods() { return u(l(_getDeclaredMethods())); }
 
 	/**
 	 * Returns the number of dimensions if this is an array type.
@@ -948,7 +948,7 @@ public class ClassInfo {
 	 * 	An unmodifiable list of interfaces defined on this class and superclasses.
 	 * 	<br>Results are in child-to-parent order.
 	 */
-	public List<ClassInfo> getInterfaces() { return u(alist(_getInterfaces())); }
+	public List<ClassInfo> getInterfaces() { return u(l(_getInterfaces())); }
 
 	/**
 	 * Returns the first matching method on this class.
@@ -971,7 +971,7 @@ public class ClassInfo {
 	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<MethodInfo> getMethods() { return u(alist(_getAllMethods())); }
+	public List<MethodInfo> getMethods() { return u(l(_getAllMethods())); }
 
 	/**
 	 * Returns the name of the underlying class.
@@ -1110,7 +1110,7 @@ public class ClassInfo {
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are in child-to-parent order.
 	 */
-	public List<ClassInfo> getParents() { return u(alist(_getParents())); }
+	public List<ClassInfo> getParents() { return u(l(_getParents())); }
 
 	/**
 	 * Returns the default value for this primitive class.
@@ -1153,7 +1153,7 @@ public class ClassInfo {
 	 *
 	 * @return All public constructors defined on this class.
 	 */
-	public List<ConstructorInfo> getPublicConstructors() { return u(alist(_getPublicConstructors())); }
+	public List<ConstructorInfo> getPublicConstructors() { return u(l(_getPublicConstructors())); }
 
 	/**
 	 * Returns the first matching public field on this class.
@@ -1179,7 +1179,7 @@ public class ClassInfo {
 	 * 	<br>Results are in alphabetical order.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<FieldInfo> getPublicFields() { return u(alist(_getPublicFields())); }
+	public List<FieldInfo> getPublicFields() { return u(l(_getPublicFields())); }
 
 	/**
 	 * Returns the first matching public method on this class.
@@ -1204,7 +1204,7 @@ public class ClassInfo {
 	 * 	All public methods on this class.
 	 * 	<br>Results are ordered alphabetically.
 	 */
-	public List<MethodInfo> getPublicMethods() { return u(alist(_getPublicMethods())); }
+	public List<MethodInfo> getPublicMethods() { return u(l(_getPublicMethods())); }
 
 	/**
 	 * Same as {@link #getSimpleName()} but uses <js>"Array"</js> instead of <js>"[]"</js>.

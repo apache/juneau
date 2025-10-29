@@ -75,7 +75,7 @@ public class ObjectSearcher_Test extends TestBase {
 		}
 	}
 
-	public static List<A> A_LIST = list(A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null));
+	public static List<A> A_LIST = l(A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null));
 	public static Set<A> A_SET = set(A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null));
 	public static A[] A_ARRAY = {A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null)};
 
@@ -143,52 +143,52 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void a11_stringSearch_regExp_noEndSlash() {
-		var in = list(A.create("/foo"), A.create("bar"));
+		var in = l(A.create("/foo"), A.create("bar"));
 		for (var s : a("f=/foo","f='/foo'"))
 			assertBeans(run(in, s), "f", "/foo");
 	}
 
 	@Test void a12_stringSearch_regExp_onlySlash() {
-		var in = list(A.create("/"), A.create("bar"));
+		var in = l(A.create("/"), A.create("bar"));
 		for (var s : a("f=/", "f='/'"))
 			assertBeans(run(in, s), "f", "/");
 	}
 
 	@Test void a13_stringSearch_or_pattern() {
-		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = l(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertBeans(run(in, "f=f* *r"), "f", "foo", "bar");
 		assertEmpty(run(in, "f='f* *r'"));
 		assertBeans(run(in, "f='f*oo'"), "f", "foo");
 	}
 
 	@Test void a14_stringSearch_explicit_or_pattern() {
-		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = l(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertBeans(run(in, "f=^f* ^*r"), "f", "foo", "bar");
 		assertEmpty(run(in, "f=^'f* *r'"));
 		assertBeans(run(in, "f=^'f*oo'"), "f", "foo");
 	}
 
 	@Test void a15_stringSearch_and_pattern() {
-		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = l(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertBeans(run(in, "f=+b* +*r"), "f", "bar");
 		assertBeans(run(in, "f=+'b*' +'*r'"), "f", "bar");
 	}
 
 	@Test void a16_stringSearch_not_pattern() {
-		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = l(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertBeans(run(in, "f=b* -*r"), "f", "baz");
 		assertBeans(run(in, "f=+'b*' -'*r'"), "f", "baz");
 	}
 
 	@Test void a17_stringSearch_caseSensitive() {
-		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = l(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertEmpty(run(in, "f=F*"));
 		assertEmpty(run(in, "f=\"F*\""));
 		assertBeans(run(in, "f='F*'"), "f", "foo");
 	}
 
 	@Test void a18_stringSearch_malformedQuotes() {
-		var in = list(A.create("'foo"), A.create("\"bar"), A.create("baz"));
+		var in = l(A.create("'foo"), A.create("\"bar"), A.create("baz"));
 
 		assertThrowsWithMessage(Exception.class, "Unmatched string quotes", ()->run(in, "f='*"));
 
@@ -200,25 +200,25 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void a19_stringSearch_regexChars() {
-		var in = list(A.create("+\\[]{}()^$."), A.create("bar"), A.create("baz"));
+		var in = l(A.create("+\\[]{}()^$."), A.create("bar"), A.create("baz"));
 		assertBeans(run(in, "f=*+*"), "f", "+\\[]{}()^$.");
 		assertBeans(run(in, "f='+\\\\[]{}()^$.'"), "f", "+\\[]{}()^$.");
 		assertBeans(run(in, "f=++\\\\[]{}()^$."), "f", "+\\[]{}()^$.");
 	}
 
 	@Test void a20_stringSearch_metaChars() {
-		var in = list(A.create("*?\\'\""), A.create("bar"), A.create("baz"));
+		var in = l(A.create("*?\\'\""), A.create("bar"), A.create("baz"));
 		assertBeans(run(in, "f='\\*\\?\\\\\\'\"'"), "f", "*?\\'\"");
 	}
 
 	@Test void a21_stringSearch_metaChars_escapedQuotes() {
-		var in = list(A.create("'"), A.create("\""), A.create("baz"));
+		var in = l(A.create("'"), A.create("\""), A.create("baz"));
 		assertBeans(run(in, "f=\\'"), "f", "'");
 		assertBeans(run(in, "f=\\\""), "f", "\"");
 	}
 
 	@Test void a22_stringSearch_metaChars_falseEscape() {
-		var in = list(A.create("foo"), A.create("bar"), A.create("baz"));
+		var in = l(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertBeans(run(in, "f=\\f\\o\\o"), "f", "foo");
 	}
 
@@ -625,49 +625,49 @@ public class ObjectSearcher_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_d2ListOfMaps() {
-		var in = list(
-			map("f","foo"),
-			map("f","bar"),
+		var in = l(
+			m("f","foo"),
+			m("f","bar"),
 			null,
-			map(null,"qux"),
-			map("quux",null),
-			map(null,null)
+			m(null,"qux"),
+			m("quux",null),
+			m(null,null)
 		);
 		assertBeans(run(in, "f=foo"), "f", "foo");
 	}
 
 	@Test void d02_d2SetOfMaps() {
 		var in = set(
-			map("f","foo"),
-			map("f","bar"),
+			m("f","foo"),
+			m("f","bar"),
 			null,
-			map(null,"qux"),
-			map("quux",null),
-			map(null,null)
+			m(null,"qux"),
+			m("quux",null),
+			m(null,null)
 		);
 		assertBeans(run(in, "f=foo"), "f", "foo");
 	}
 
 	@Test void d03_d2ArrayOfMaps() {
 		var in = CollectionUtils.a(
-			map("f","foo"),
-			map("f","bar"),
+			m("f","foo"),
+			m("f","bar"),
 			null,
-			map(null,"qux"),
-			map("quux",null),
-			map(null,null)
+			m(null,"qux"),
+			m("quux",null),
+			m(null,null)
 		);
 		assertBeans(run(in, "f=foo"), "f", "foo");
 	}
 
 	@Test void d04_d2ListOfObjects() {
-		var in = list(
-			map("f","foo"),
-			map("f","bar"),
+		var in = l(
+			m("f","foo"),
+			m("f","bar"),
 			null,
-			map(null,"qux"),
-			map("quux",null),
-			map(null,null),
+			m(null,"qux"),
+			m("quux",null),
+			m(null,null),
 			"xxx",
 			123
 		);
@@ -676,12 +676,12 @@ public class ObjectSearcher_Test extends TestBase {
 
 	@Test void d05_d2SetOfObjects() {
 		var in = set(
-			map("f","foo"),
-			map("f","bar"),
+			m("f","foo"),
+			m("f","bar"),
 			null,
-			map(null,"qux"),
-			map("quux",null),
-			map(null,null),
+			m(null,"qux"),
+			m("quux",null),
+			m(null,null),
 			"xxx",
 			123
 		);
@@ -690,12 +690,12 @@ public class ObjectSearcher_Test extends TestBase {
 
 	@Test void d06_d2ArrayOfObjects() {
 		var in = a(
-			map("f","foo"),
-			map("f","bar"),
+			m("f","foo"),
+			m("f","bar"),
 			null,
-			map(null,"qux"),
-			map("quux",null),
-			map(null,null),
+			m(null,"qux"),
+			m("quux",null),
+			m(null,null),
 			"xxx",
 			123
 		);
@@ -703,43 +703,43 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d07_d2ListOfMapsWithLists() {
-		var in = list(
-			map("f",list("foo")),
-			map("f",list("bar")),
+		var in = l(
+			m("f",l("foo")),
+			m("f",l("bar")),
 			null,
-			map(null,list("qux")),
-			map("quux",list((Object)null)),
-			map(null,list((Object)null))
+			m(null,l("qux")),
+			m("quux",l((Object)null)),
+			m(null,l((Object)null))
 		);
 		assertBeans(run(in, "f=foo"), "f", "[foo]");
 	}
 
 	@Test void d08_d2SetOfMapsWithSets() {
 		var in = set(
-			map("f",set("foo")),
-			map("f",set("bar")),
+			m("f",set("foo")),
+			m("f",set("bar")),
 			null,
-			map(null,set("qux")),
-			map("quux",set((Object)null)),
-			map(null,set((Object)null))
+			m(null,set("qux")),
+			m("quux",set((Object)null)),
+			m(null,set((Object)null))
 		);
 		assertBeans(run(in, "f=foo"), "f", "[foo]");
 	}
 
 	@Test void d09_d2ArrayOfMapsWithArrays() {
 		var in = a(
-			map("f",ao("foo")),
-			map("f",ao("bar")),
+			m("f",ao("foo")),
+			m("f",ao("bar")),
 			null,
-			map(null,ao("qux")),
-			map("quux",ao((String)null)),
-			map(null,ao((String)null))
+			m(null,ao("qux")),
+			m("quux",ao((String)null)),
+			m(null,ao((String)null))
 		);
 		assertBeans(run(in, "f=foo"), "f", "[foo]");
 	}
 
 	@Test void d10_d2ListOfBeans() {
-		var in = list(
+		var in = l(
 			A.create("foo"),
 			A.create("bar"),
 			null,
@@ -749,13 +749,13 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d11_d3ListOfListOfMaps() {
-		var in = list(
-			list(map("f","foo")),
-			list(map("f","bar")),
-			list((Map<?,?>)null),
-			list(map(null,"qux")),
-			list(map("quux",null)),
-			list(map(null,null)),
+		var in = l(
+			l(m("f","foo")),
+			l(m("f","bar")),
+			l((Map<?,?>)null),
+			l(m(null,"qux")),
+			l(m("quux",null)),
+			l(m(null,null)),
 			null
 		);
 		assertBeans(run(in, "f=foo"), "#{f}", "[{foo}]");
@@ -790,14 +790,14 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d14_d3ListOfListOfObjects() {
-		var in = list(
-			list(map("f","foo")),
-			list(map("f","bar")),
-			list((Object)null),
-			list(map(null,"qux")),
-			list(map("quux",null)),
-			list(map(null,null)),
-			list("xxx"),
+		var in = l(
+			l(map("f","foo")),
+			l(map("f","bar")),
+			l((Object)null),
+			l(map(null,"qux")),
+			l(map("quux",null)),
+			l(map(null,null)),
+			l("xxx"),
 			null
 		);
 		assertBeans(run(in, "f=foo"), "#{f}", "[{foo}]");
@@ -834,13 +834,13 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d17_d3ListOfListOfMapsWithCollections() {
-		var in = list(
-			list(map("f",list("foo"))),
-			list(map("f",list("bar"))),
-			list((Map<?,?>)null),
-			list(map(null,list("qux"))),
-			list(map("quux",list((Object)null))),
-			list(map(null,list((Object)null))),
+		var in = l(
+			l(map("f",l("foo"))),
+			l(map("f",l("bar"))),
+			l((Map<?,?>)null),
+			l(map(null,l("qux"))),
+			l(map("quux",l((Object)null))),
+			l(map(null,l((Object)null))),
 			null
 		);
 		assertBeans(run(in, "f=foo"), "#{f}", "[{[foo]}]");

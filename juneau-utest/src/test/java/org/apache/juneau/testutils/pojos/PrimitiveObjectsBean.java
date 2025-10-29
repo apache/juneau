@@ -17,8 +17,6 @@
 package org.apache.juneau.testutils.pojos;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
-
 import java.math.*;
 import java.util.*;
 
@@ -131,17 +129,17 @@ public class PrimitiveObjectsBean {
 		poaBigDecimal = a(a(new BigDecimal("1")),a(new BigDecimal("2")), null);
 
 		// Anonymous list of primitives
-		poalBoolean = alist(a(Boolean.TRUE),null);
-		poalByte = alist(a((byte)1),null);
-		poalChar = alist(a('a'),null);
-		poalShort = alist(a((short)1),null);
-		poalInt = alist(a(1),null);
-		poalLong = alist(a(1L),null);
-		poalFloat = alist(a(1f),null);
-		poalDouble = alist(a(1d),null);
-		poalNumber = alist(a(1),null);
-		poalBigInteger = alist(a(BigInteger.valueOf(1L)),null);
-		poalBigDecimal = alist(a(new BigDecimal("1")),null);
+		poalBoolean = l(a(Boolean.TRUE),null);
+		poalByte = l(a((byte)1),null);
+		poalChar = l(a('a'),null);
+		poalShort = l(a((short)1),null);
+		poalInt = l(a(1),null);
+		poalLong = l(a(1L),null);
+		poalFloat = l(a(1f),null);
+		poalDouble = l(a(1d),null);
+		poalNumber = l(a(1),null);
+		poalBigInteger = l(a(BigInteger.valueOf(1L)),null);
+		poalBigDecimal = l(a(new BigDecimal("1")),null);
 
 		// Regular list of primitives
 		polBoolean = new ArrayList<>();

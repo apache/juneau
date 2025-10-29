@@ -258,7 +258,7 @@ public class ThrownStore {
 	 * @return A modifiable list of strings.
 	 */
 	protected List<String> createStackTrace(Throwable t) {
-		return alist(t.getStackTrace()).stream().filter(this::include).map(this::normalize).collect(toList());
+		return l(t.getStackTrace()).stream().filter(this::include).map(this::normalize).collect(toList());
 	}
 
 	/**

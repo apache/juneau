@@ -73,10 +73,10 @@ class BasicMediaRangesHeader_Test extends TestBase {
 	}
 
 	@Test void a02_match() {
-		assertEquals(0, accept("text/foo").match(alist(MediaType.of("text/foo"))));
-		assertEquals(-1, accept("text/foo").match(alist(MediaType.of("text/bar"))));
-		assertEquals(-1, new Accept((String)null).match(alist(MediaType.of("text/bar"))));
-		assertEquals(-1, accept("text/foo").match(alist(MediaType.of(null))));
+		assertEquals(0, accept("text/foo").match(l(MediaType.of("text/foo"))));
+		assertEquals(-1, accept("text/foo").match(l(MediaType.of("text/bar"))));
+		assertEquals(-1, new Accept((String)null).match(l(MediaType.of("text/bar"))));
+		assertEquals(-1, accept("text/foo").match(l(MediaType.of(null))));
 		assertEquals(-1, accept("text/foo").match(null));
 	}
 

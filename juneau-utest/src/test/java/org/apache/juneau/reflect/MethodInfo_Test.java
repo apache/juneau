@@ -19,6 +19,7 @@ package org.apache.juneau.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.Context.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -409,7 +410,7 @@ class MethodInfo_Test extends TestBase {
 		g_a3 = ofm(G.class, "a3");  // NOSONAR
 
 	@Test void compareTo() {
-		var s = new TreeSet<>(Arrays.asList(g_a1a, g_a1b, g_a1c, g_a1d, g_a2, g_a3));
+		var s = new TreeSet<>(l(g_a1a, g_a1b, g_a1c, g_a1d, g_a2, g_a3));
 		check("[a1(), a1(int), a1(String), a1(int,int), a2(), a3()]", s);
 	}
 

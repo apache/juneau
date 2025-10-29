@@ -476,7 +476,7 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items setEnum(Object...value) {
-		return setEnum(Arrays.asList(value));
+		return setEnum(l(value));
 	}
 
 	/**

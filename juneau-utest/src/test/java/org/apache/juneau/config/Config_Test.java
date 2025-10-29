@@ -172,12 +172,12 @@ class Config_Test extends TestBase {
 		var c = init("a1=1", "[S]", "b1=1");
 
 		var b = new ABean().init();
-		c.set("a1", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
-		c.set("a2", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
-		c.set("a3", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
-		c.set("S/b1", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
-		c.set("S/b2", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
-		c.set("T/c1", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
+		c.set("a1", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
+		c.set("a2", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
+		c.set("a3", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
+		c.set("S/b1", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
+		c.set("S/b2", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
+		c.set("T/c1", b, UonSerializer.DEFAULT, "*", "comment", l("#c1","#c2"));
 
 		assertEquals("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|", pipedLines(c));
 		c.commit();
@@ -901,13 +901,13 @@ class Config_Test extends TestBase {
 	@Test void setSection1() {
 		var c = init();
 
-		c.setSection("", Arrays.asList("#C1", "#C2"));
+		c.setSection("", l("#C1", "#C2"));
 		assertEquals("#C1|#C2||", pipedLines(c));
 
-		c.setSection("", Arrays.asList("#C3", "#C4"));
+		c.setSection("", l("#C3", "#C4"));
 		assertEquals("#C3|#C4||", pipedLines(c));
 
-		c.setSection("S1", Arrays.asList("", "#C5", "#C6"));
+		c.setSection("S1", l("", "#C5", "#C6"));
 		assertEquals("#C3|#C4|||#C5|#C6|[S1]|", pipedLines(c));
 
 		c.setSection("S1", null);
@@ -916,7 +916,7 @@ class Config_Test extends TestBase {
 		c.setSection("S1", Collections.<String>emptyList());
 		assertEquals("#C3|#C4||[S1]|", pipedLines(c));
 
-		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.setSection(null, Arrays.asList("", "#C5", "#C6")));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.setSection(null, l("", "#C5", "#C6")));
 	}
 
 	//====================================================================================================
@@ -926,13 +926,13 @@ class Config_Test extends TestBase {
 		var c = init();
 		var m = JsonMap.of("a", "b");
 
-		c.setSection("", Arrays.asList("#C1", "#C2"), m);
+		c.setSection("", l("#C1", "#C2"), m);
 		assertEquals("#C1|#C2||a = b|", pipedLines(c));
 
-		c.setSection("", Arrays.asList("#C3", "#C4"), m);
+		c.setSection("", l("#C3", "#C4"), m);
 		assertEquals("#C3|#C4||a = b|", pipedLines(c));
 
-		c.setSection("S1", Arrays.asList("", "#C5", "#C6"), m);
+		c.setSection("S1", l("", "#C5", "#C6"), m);
 		assertEquals("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|", pipedLines(c));
 
 		c.setSection("S1", null, m);
@@ -941,7 +941,7 @@ class Config_Test extends TestBase {
 		c.setSection("S1", Collections.<String>emptyList(), m);
 		assertEquals("#C3|#C4||a = b|[S1]|a = b|", pipedLines(c));
 
-		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.setSection(null, Arrays.asList("", "#C5", "#C6"), m));
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.setSection(null, l("", "#C5", "#C6"), m));
 	}
 
 	//====================================================================================================
@@ -1270,13 +1270,13 @@ class Config_Test extends TestBase {
 		// Add section
 		// Shouldn't trigger listener.
 		changes.clear();
-		cf.setSection("D", Arrays.asList("#comment"));
+		cf.setSection("D", l("#comment"));
 		cf.commit();
 		assertJson("[]", changes);
 
 		// Add section with contents
 		changes.clear();
-		cf.setSection("E", null, map("e1","1","e2","2"));
+		cf.setSection("E", null, m("e1","1","e2","2"));
 		cf.commit();
 		assertJson("['E/e1=1','E/e2=2']", changes);
 

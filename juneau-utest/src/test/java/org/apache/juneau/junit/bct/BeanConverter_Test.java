@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,7 +62,7 @@ class BeanConverter_Test extends TestBase {
 			assertEquals("true", converter.stringify(true));
 
 			// Test collection stringify
-			var list = Arrays.asList("a", "b", "c");
+			var list = l("a", "b", "c");
 			var result = converter.stringify(list);
 			assertTrue(result.contains("a") && result.contains("b") && result.contains("c"));
 		}
@@ -75,7 +76,7 @@ class BeanConverter_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> converter.listify("single")); // Strings are not listifiable by default
 
 			// Test collection listify
-			var input = Arrays.asList("a", "b", "c");
+			var input = l("a", "b", "c");
 			var result = converter.listify(input);
 			assertEquals(3, result.size());
 			assertEquals("a", result.get(0));

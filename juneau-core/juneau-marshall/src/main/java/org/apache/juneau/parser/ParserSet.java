@@ -543,7 +543,7 @@ public class ParserSet {
 			return pm;
 
 		MediaType ct = MediaType.of(contentTypeHeader);
-		int match = ct.match(alist(mediaTypes));
+		int match = ct.match(l(mediaTypes));
 
 		if (match >= 0) {
 			pm = new ParserMatch(mediaTypes[match], mediaTypeParsers[match]);
@@ -558,7 +558,7 @@ public class ParserSet {
 	 *
 	 * @return An unmodifiable list of parsers in this group.
 	 */
-	public List<Parser> getParsers() { return u(alist(entries)); }
+	public List<Parser> getParsers() { return u(l(entries)); }
 
 	/**
 	 * Returns the media types that all parsers in this group can handle
@@ -568,7 +568,7 @@ public class ParserSet {
 	 *
 	 * @return An unmodifiable list of media types.
 	 */
-	public List<MediaType> getSupportedMediaTypes() { return u(alist(mediaTypes)); }
+	public List<MediaType> getSupportedMediaTypes() { return u(l(mediaTypes)); }
 
 	/**
 	 * Returns <jk>true</jk> if this group contains no parsers.

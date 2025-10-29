@@ -38,7 +38,7 @@ class SerializedPart_Test extends TestBase {
 	private static final OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 
 	@Test void a01_basic() {
-		var x1 = new SerializedPart("Foo",alist("bar","baz"),HEADER,OAPI_SESSION,T_ARRAY_PIPES,true);
+		var x1 = new SerializedPart("Foo",l("bar","baz"),HEADER,OAPI_SESSION,T_ARRAY_PIPES,true);
 		assertString("Foo=bar|baz", x1);
 	}
 
@@ -48,15 +48,15 @@ class SerializedPart_Test extends TestBase {
 	}
 
 	@Test void a03_serializer() {
-		var x1 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null);
+		var x1 = serializedPart("Foo",l("bar","baz")).serializer((HttpPartSerializer)null);
 		assertEquals("[bar, baz]", x1.getValue());
-		var x2 = serializedPart("Foo",alist("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
+		var x2 = serializedPart("Foo",l("bar","baz")).serializer((HttpPartSerializer)null).serializer(OAPI_SERIALIZER);
 		assertEquals("bar,baz", x2.getValue());
-		var x3 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
+		var x3 = serializedPart("Foo",l("bar","baz")).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)null);
 		assertEquals("[bar, baz]", x3.getValue());
-		var x4 = serializedPart("Foo",alist("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
+		var x4 = serializedPart("Foo",l("bar","baz")).serializer(OAPI_SERIALIZER).copyWith(null,null);
 		assertEquals("bar,baz", x4.getValue());
-		var x5 = serializedPart("Foo",alist("bar","baz")).copyWith(OAPI_SERIALIZER.getPartSession(),null);
+		var x5 = serializedPart("Foo",l("bar","baz")).copyWith(OAPI_SERIALIZER.getPartSession(),null);
 		assertEquals("bar,baz", x5.getValue());
 	}
 

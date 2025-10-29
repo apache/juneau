@@ -91,7 +91,7 @@ class Callback_Test extends TestBase {
 		@Test void a10_asMap() {
 			assertBean(
 				bean()
-					.set("callbacks", map("a1", pathItem().setGet(operation().setSummary("a2"))))
+					.set("callbacks", m("a1", pathItem().setGet(operation().setSummary("a2"))))
 					.set("x1", "x1a")
 					.asMap(),
 				"callbacks{a1{get{summary}}},x1",
@@ -158,7 +158,7 @@ class Callback_Test extends TestBase {
 		private static final BeanTester<Callback> TESTER =
 			testBean(
 				bean()
-					.set("callbacks", map("a1", pathItem().setGet(operation().setSummary("a2"))))
+					.set("callbacks", m("a1", pathItem().setGet(operation().setSummary("a2"))))
 					.set("x1", "x1a")
 					.set("x2", null)
 			)

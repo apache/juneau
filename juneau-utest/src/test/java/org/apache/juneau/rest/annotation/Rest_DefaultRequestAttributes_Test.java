@@ -159,7 +159,7 @@ class Rest_DefaultRequestAttributes_Test extends TestBase {
 		public static Map<String,String> headers(SerializerSession s) {
 			var sp = s.getSessionProperties();
 			if (sp.containsKey("Override-Content-Type"))
-				return map("Content-Type",sp.getString("Override-Content-Type",null));
+				return m("Content-Type",sp.getString("Override-Content-Type",null));
 			return emptyMap();
 		}
 	}

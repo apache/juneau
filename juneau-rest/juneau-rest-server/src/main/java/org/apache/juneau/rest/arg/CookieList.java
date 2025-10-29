@@ -51,6 +51,6 @@ public class CookieList extends ArrayList<Cookie> {
 	 * @param values The values to set in the cookie list.
 	 */
 	public CookieList(Cookie[] values) {
-		super(alist(values));
+		super(l(values));
 	}
 }

@@ -17,7 +17,6 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -556,7 +555,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		var m = mapb(String.class,Object.class).add("foo","foo").add("'foo'","'foo'").add("(foo)","(foo)").add("@(foo)","@(foo)").build();
 		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s2.serialize(m));
 
-		var l = list("foo", "'foo'", "(foo)", "@(foo)");
+		var l = l("foo", "'foo'", "(foo)", "@(foo)");
 		assertEquals("0=foo&1='foo'&2=(foo)&3=@(foo)", s2.serialize(l));
 
 		var a = new A();

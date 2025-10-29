@@ -160,9 +160,9 @@ class MediaType_Test extends TestBase {
 		private static final BeanTester<MediaType> TESTER =
 			testBean(
 				bean()
-					.set("encoding", map("a1", encoding().setContentType("a2")))
+					.set("encoding", m("a1", encoding().setContentType("a2")))
 					.set("x-example", "b")
-					.set("examples", map("c1", example().setSummary("c2")))
+					.set("examples", m("c1", example().setSummary("c2")))
 					.set("schema", schemaInfo("d"))
 					.set("x1", "x1a")
 					.set("x2", null)

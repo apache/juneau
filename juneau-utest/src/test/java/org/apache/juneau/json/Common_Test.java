@@ -116,8 +116,8 @@ class Common_Test extends TestBase {
 
 		public static C create() {
 			var t = new C();
-			t.f1 = list();
-			t.f2 = list(null,A.create());
+			t.f1 = l();
+			t.f2 = l(null,A.create());
 			return t;
 		}
 	}
@@ -168,11 +168,11 @@ class Common_Test extends TestBase {
 
 	public static class E1 {
 		@Beanp(properties="f1") public E2 x1 = new E2();
-		@Beanp(properties="f1") public Map<String,Integer> x2 = map("f1",1,"f2",2);
+		@Beanp(properties="f1") public Map<String,Integer> x2 = m("f1",1,"f2",2);
 		@Beanp(properties="f1") public E2[] x3 = {new E2()};
-		@Beanp(properties="f1") public List<E2> x4 = list(new E2());
+		@Beanp(properties="f1") public List<E2> x4 = l(new E2());
 		@Beanp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",1,"f2",2)};
-		@Beanp(properties="f1") public List<JsonMap> x6 = list(JsonMap.of("f1",1,"f2",2));
+		@Beanp(properties="f1") public List<JsonMap> x6 = l(JsonMap.of("f1",1,"f2",2));
 	}
 
 	public static class E2 {

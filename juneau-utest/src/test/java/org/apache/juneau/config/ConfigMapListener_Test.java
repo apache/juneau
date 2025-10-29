@@ -19,6 +19,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -127,8 +128,8 @@ class ConfigMapListener_Test extends TestBase {
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setEntry("", "k", "kb", "^*", "C", Arrays.asList("#k"));
-		cm.setEntry("S1", "k1", "k1b", "^*", "C1", Arrays.asList("#k1"));
+		cm.setEntry("", "k", "kb", "^*", "C", l("#k"));
+		cm.setEntry("S1", "k1", "k1b", "^*", "C1", l("#k1"));
 		cm.commit();
 		wait(latch);
 		assertNull(l.error);
@@ -158,8 +159,8 @@ class ConfigMapListener_Test extends TestBase {
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setEntry("", "k", "kb", "^*", "Cb", Arrays.asList("#kb"));
-		cm.setEntry("S1", "k1", "k1b", "^*", "Cb1", Arrays.asList("#k1b"));
+		cm.setEntry("", "k", "kb", "^*", "Cb", l("#kb"));
+		cm.setEntry("S1", "k1", "k1b", "^*", "Cb1", l("#k1b"));
 		cm.commit();
 		wait(latch);
 		assertNull(l.error);
@@ -249,8 +250,8 @@ class ConfigMapListener_Test extends TestBase {
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setSection("", Arrays.asList("#D1"));
-		cm.setSection("S1", Arrays.asList("#S1"));
+		cm.setSection("", l("#D1"));
+		cm.setSection("S1", l("#S1"));
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
 		cm.setEntry("S3", "k3", "v3", null, null, null);
@@ -283,8 +284,8 @@ class ConfigMapListener_Test extends TestBase {
 
 		var cm = s.getMap("A.cfg");
 		cm.register(l);
-		cm.setSection("", Arrays.asList("#Db"));
-		cm.setSection("S1", Arrays.asList("#S1b"));
+		cm.setSection("", l("#Db"));
+		cm.setSection("S1", l("#S1b"));
 		cm.setSection("S2", null);
 		cm.setSection("S3", Collections.<String>emptyList());
 		cm.setEntry("S3", "k3", "v3", null, null, null);

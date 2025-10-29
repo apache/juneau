@@ -543,7 +543,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder beanDictionary(Class<?>...values) {
-			return beanDictionary(alist(values));
+			return beanDictionary(l(values));
 		}
 
 		/**
@@ -2630,7 +2630,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder notBeanClasses(Class<?>...values) {
-			return notBeanClasses(alist(values));
+			return notBeanClasses(l(values));
 		}
 
 		/**
@@ -2711,7 +2711,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder notBeanPackages(String...values) {
-			return notBeanPackages(alist(values));
+			return notBeanPackages(l(values));
 		}
 
 		/**
@@ -3497,16 +3497,16 @@ public class BeanContext extends Context {
 		locale = nn(builder.locale) ? builder.locale : Locale.getDefault();
 		timeZone = builder.timeZone;
 		mediaType = builder.mediaType;
-		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(list());
-		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(list());
-		notBeanClasses = opt(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(list());
-		notBeanPackages = opt(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(list());
+		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(l());
+		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(l());
+		notBeanClasses = opt(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(l());
+		notBeanPackages = opt(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(l());
 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.class;
 
-		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, alist(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
+		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, l(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
 
 		String[] _notBeanPackages = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES
-			: Stream.of(notBeanPackages, alist(DEFAULT_NOTBEAN_PACKAGES)).flatMap(Collection::stream).toArray(String[]::new);
+			: Stream.of(notBeanPackages, l(DEFAULT_NOTBEAN_PACKAGES)).flatMap(Collection::stream).toArray(String[]::new);
 		notBeanPackageNames = Stream.of(_notBeanPackages).filter(x -> ! x.endsWith(".*")).toArray(String[]::new);
 		notBeanPackagePrefixes = Stream.of(_notBeanPackages).filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length() - 2)).toArray(String[]::new);
 

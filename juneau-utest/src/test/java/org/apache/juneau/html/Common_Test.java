@@ -117,8 +117,8 @@ class Common_Test extends TestBase {
 
 		public static C create() {
 			var t = new C();
-			t.f1 = alist();
-			t.f2 = alist(null,A.create());
+			t.f1 = l();
+			t.f2 = l(null,A.create());
 			return t;
 		}
 	}
@@ -263,11 +263,11 @@ class Common_Test extends TestBase {
 
 	public static class E1 {
 		@Beanp(properties="f1") public E2 x1 = new E2();
-		@Beanp(properties="f1") public Map<String,Integer> x2 = map("f1",3,"f2",4);
+		@Beanp(properties="f1") public Map<String,Integer> x2 = m("f1",3,"f2",4);
 		@Beanp(properties="f1") public E2[] x3 = {new E2()};
-		@Beanp(properties="f1") public List<E2> x4 = alist(new E2());
+		@Beanp(properties="f1") public List<E2> x4 = l(new E2());
 		@Beanp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",5,"f2",6)};
-		@Beanp(properties="f1") public List<JsonMap> x6 = alist(JsonMap.of("f1",7,"f2",8));
+		@Beanp(properties="f1") public List<JsonMap> x6 = l(JsonMap.of("f1",7,"f2",8));
 	}
 
 	public static class E2 {
@@ -350,7 +350,7 @@ class Common_Test extends TestBase {
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrowsWithMessage(Exception.class, list("[0] <noname>:org.apache.juneau.html.Common_Test$R1", "->[1] r2:org.apache.juneau.html.Common_Test$R2", "->[2] r3:org.apache.juneau.html.Common_Test$R3", "->[3] r1:org.apache.juneau.html.Common_Test$R1"), ()->s.build().serialize(r1));
+		assertThrowsWithMessage(Exception.class, l("[0] <noname>:org.apache.juneau.html.Common_Test$R1", "->[1] r2:org.apache.juneau.html.Common_Test$R2", "->[2] r3:org.apache.juneau.html.Common_Test$R3", "->[3] r1:org.apache.juneau.html.Common_Test$R1"), ()->s.build().serialize(r1));
 
 		s.ignoreRecursions();
 		assertEquals(

@@ -1776,7 +1776,7 @@ class BeanMap_Test extends TestBase {
 		var aa = new AA();
 		var bm = BeanContext.DEFAULT.toBeanMap(aa);
 
-		bm.put("a", alist("x"));
+		bm.put("a", l("x"));
 		assertList(aa.a, "x");
 	}
 

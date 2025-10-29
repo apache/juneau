@@ -72,7 +72,7 @@ class Accept_Test extends TestBase {
 
 	@Test void a02_asRanges() {
 		assertNull(new Accept((String)null).asMediaRanges().orElse(null));
-		assertEquals(-1, new Accept((String)null).match(alist(MediaType.JSON)));
+		assertEquals(-1, new Accept((String)null).match(l(MediaType.JSON)));
 		assertNull(new Accept((String)null).getRange(0));
 		assertString("Accept: application/json", new Accept(MediaRanges.of("application/json")));
 	}

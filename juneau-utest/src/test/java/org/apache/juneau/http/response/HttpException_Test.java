@@ -16,12 +16,11 @@
  */
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
-import java.util.*;
-
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
@@ -55,7 +54,7 @@ class HttpException_Test extends TestBase {
 		}
 		@RestGet
 		public void f6() throws BasicHttpException {
-			throw httpException().setStatusCode2(225).setHeaders(Arrays.asList(
+			throw httpException().setStatusCode2(225).setHeaders(l(
 				BasicHeader.of("X-Custom", "value1"),
 				BasicHeader.of("X-Test", "value2")
 			));
@@ -133,7 +132,7 @@ class HttpException_Test extends TestBase {
 		var x = httpException().setStatusCode2(500);
 
 		// Test setHeaders(List<Header>) returns same instance for fluent chaining
-		assertSame(x, x.setHeaders(Arrays.asList(
+		assertSame(x, x.setHeaders(l(
 			BasicHeader.of("X-Fluent-Test", "fluent-value")
 		)));
 		assertEquals("fluent-value", x.getFirstHeader("X-Fluent-Test").getValue());

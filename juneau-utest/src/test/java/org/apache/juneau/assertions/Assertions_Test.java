@@ -65,11 +65,11 @@ class Assertions_Test extends TestBase {
 	}
 
 	@Test void a08_assertCollection() {
-		assertCollection(alist()).isEmpty();
+		assertCollection(l()).isEmpty();
 	}
 
 	@Test void a09_assertList() {
-		assertList(alist()).isEmpty();
+		assertList(l()).isEmpty();
 	}
 
 	@Test void a10_assertStream() throws Exception {
@@ -113,7 +113,7 @@ class Assertions_Test extends TestBase {
 	}
 
 	@Test void a19_assertBeanList() {
-		assertBeanList(alist(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
+		assertBeanList(l(ABean.get())).asJson().is("[{a:1,b:'foo'}]");
 	}
 
 	@Test void a20a_assertIntArray() {
@@ -157,7 +157,7 @@ class Assertions_Test extends TestBase {
 	}
 
 	@Test void a25_assertStringList() {
-		assertStringList(alist()).isNotNull();
+		assertStringList(l()).isNotNull();
 		assertStringList(null).isNull();
 	}
 }

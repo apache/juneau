@@ -138,7 +138,7 @@ class FloatValue_Test extends TestBase {
 		var sum = FloatValue.create();
 		var count = FloatValue.create();
 
-		list(1.5f, 2.5f, 3.5f, 4.5f).forEach(x -> {
+		l(1.5f, 2.5f, 3.5f, 4.5f).forEach(x -> {
 			sum.set(sum.get() + x);
 			count.set(count.get() + 1);
 		});
@@ -151,7 +151,7 @@ class FloatValue_Test extends TestBase {
 	void c02_accumulatingValues() {
 		var total = FloatValue.create();
 
-		list(0.1f, 0.2f, 0.3f, 0.4f).forEach(x -> {
+		l(0.1f, 0.2f, 0.3f, 0.4f).forEach(x -> {
 			total.set(total.get() + x);
 		});
 
@@ -162,7 +162,7 @@ class FloatValue_Test extends TestBase {
 	void c03_trackingMinValue() {
 		var min = FloatValue.of(Float.MAX_VALUE);
 
-		list(5.5f, 1.2f, 3.8f, 0.9f, 2.1f).forEach(x -> {
+		l(5.5f, 1.2f, 3.8f, 0.9f, 2.1f).forEach(x -> {
 			if (x < min.get()) {
 				min.set(x);
 			}
@@ -175,7 +175,7 @@ class FloatValue_Test extends TestBase {
 	void c04_multiplierChaining() {
 		var multiplier = FloatValue.of(1.0f);
 
-		list(2.0f, 3.0f, 1.5f).forEach(x -> {
+		l(2.0f, 3.0f, 1.5f).forEach(x -> {
 			multiplier.set(multiplier.get() * x);
 		});
 

@@ -184,7 +184,7 @@ class SecurityScheme_Test extends TestBase {
 					.set("flow", "c")
 					.set("in", "d")
 					.set("name", "e")
-					.set("scopes", map("x1", "x2"))
+					.set("scopes", m("x1", "x2"))
 					.set("tokenUrl", "f")
 					.set("type", "g")
 					.set("x3", "x3a")

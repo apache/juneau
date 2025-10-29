@@ -143,7 +143,7 @@ public class Thrown extends BasicCsvHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Thrown of(Throwable...values) {
-		return new Thrown(alist(values).stream().map(Part::new).collect(Collectors.toList()));
+		return new Thrown(l(values).stream().map(Part::new).collect(Collectors.toList()));
 	}
 
 	private final List<Part> value;

@@ -1246,27 +1246,27 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnIntegerList")
 	public List<Integer> returnIntegerList() {
-		return alist(a(1,null));
+		return l(a(1,null));
 	}
 
 	@RestGet(path="/returnInteger3dList")
 	public List<List<List<Integer>>> returnInteger3dList() {
-		return list(list(list(1,null),null),null);
+		return l(l(l(1,null),null),null);
 	}
 
 	@RestGet(path="/returnInteger1d3dList")
 	public List<Integer[][][]> returnInteger1d3dList() {
-		return list(a(a(a(1,null),null),null),null);
+		return l(a(a(a(1,null),null),null),null);
 	}
 
 	@RestGet(path="/returnInt1d3dList")
 	public List<int[][][]> returnInt1d3dList() {
-		return list(new int[][][]{{{1,2},null},null},null);
+		return l(new int[][][]{{{1,2},null},null},null);
 	}
 
 	@RestGet(path="/returnStringList")
 	public List<String> returnStringList() {
-		return alist(a("foo","bar",null));
+		return l(a("foo","bar",null));
 	}
 
 	// Beans
@@ -1283,32 +1283,32 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnBeanList")
 	public List<ABean> returnBeanList() {
-		return alist(ABean.get());
+		return l(ABean.get());
 	}
 
 	@RestGet(path="/returnBean1d3dList")
 	public List<ABean[][][]> returnBean1d3dList() {
-		return alist(a(a(a(ABean.get(),null),null),null),null);
+		return l(a(a(a(ABean.get(),null),null),null),null);
 	}
 
 	@RestGet(path="/returnBeanMap")
 	public Map<String,ABean> returnBeanMap() {
-		return map("foo",ABean.get());
+		return m("foo",ABean.get());
 	}
 
 	@RestGet(path="/returnBeanListMap")
 	public Map<String,List<ABean>> returnBeanListMap() {
-		return map("foo",alist(ABean.get()));
+		return m("foo",l(ABean.get()));
 	}
 
 	@RestGet(path="/returnBean1d3dListMap")
 	public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-		return map("foo", alist(a(a(a(ABean.get(),null),null),null),null));
+		return m("foo", l(a(a(a(ABean.get(),null),null),null),null));
 	}
 
 	@RestGet(path="/returnBeanListMapIntegerKeys")
 	public Map<Integer,List<ABean>> returnBeanListMapIntegerKeys() {
-		return map(1,alist(ABean.get()));
+		return m(1,l(ABean.get()));
 	}
 
 	// Typed beans
@@ -1325,32 +1325,32 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnTypedBeanList")
 	public List<TypedBean> returnTypedBeanList() {
-		return alist((TypedBean)TypedBeanImpl.get());
+		return l((TypedBean)TypedBeanImpl.get());
 	}
 
 	@RestGet(path="/returnTypedBean1d3dList")
 	public List<TypedBean[][][]> returnTypedBean1d3dList() {
-		return list(a(a(a(TypedBeanImpl.get(),null),null),null),null);
+		return l(a(a(a(TypedBeanImpl.get(),null),null),null),null);
 	}
 
 	@RestGet(path="/returnTypedBeanMap")
 	public Map<String,TypedBean> returnTypedBeanMap() {
-		return map("foo",TypedBeanImpl.get());
+		return m("foo",TypedBeanImpl.get());
 	}
 
 	@RestGet(path="/returnTypedBeanListMap")
 	public Map<String,List<TypedBean>> returnTypedBeanListMap() {
-		return map("foo",alist((TypedBean)TypedBeanImpl.get()));
+		return m("foo",l((TypedBean)TypedBeanImpl.get()));
 	}
 
 	@RestGet(path="/returnTypedBean1d3dListMap")
 	public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-		return map("foo", list(a(a(a(TypedBeanImpl.get(),null),null),null),null));
+		return m("foo", l(a(a(a(TypedBeanImpl.get(),null),null),null),null));
 	}
 
 	@RestGet(path="/returnTypedBeanListMapIntegerKeys")
 	public Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys() {
-		return map(1,alist((TypedBean)TypedBeanImpl.get()));
+		return m(1,l((TypedBean)TypedBeanImpl.get()));
 	}
 
 	// Swapped POJOs
@@ -1367,12 +1367,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnSwappedObjectMap")
 	public Map<SwappedObject,SwappedObject> returnSwappedObjectMap() {
-		return map(new SwappedObject(),new SwappedObject());
+		return m(new SwappedObject(),new SwappedObject());
 	}
 
 	@RestGet(path="/returnSwappedObject3dMap")
 	public Map<SwappedObject,SwappedObject[][][]> returnSwappedObject3dMap() {
-		return map(new SwappedObject(),a(a(a(new SwappedObject(),null),null),null));
+		return m(new SwappedObject(),a(a(a(new SwappedObject(),null),null),null));
 	}
 
 	// Implicit swapped POJOs
@@ -1389,12 +1389,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnImplicitSwappedObjectMap")
 	public Map<ImplicitSwappedObject,ImplicitSwappedObject> returnImplicitSwappedObjectMap() {
-		return map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
+		return m(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 	}
 
 	@RestGet(path="/returnImplicitSwappedObject3dMap")
 	public Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> returnImplicitSwappedObject3dMap() {
-		return map(new ImplicitSwappedObject(),a(a(a(new ImplicitSwappedObject(),null),null),null));
+		return m(new ImplicitSwappedObject(),a(a(a(new ImplicitSwappedObject(),null),null),null));
 	}
 
 	// Enums
@@ -1411,32 +1411,32 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 	@RestGet(path="/returnEnumList")
 	public List<TestEnum> returnEnumList() {
-		return alist(TestEnum.TWO,null);
+		return l(TestEnum.TWO,null);
 	}
 
 	@RestGet(path="/returnEnum3dList")
 	public List<List<List<TestEnum>>> returnEnum3dList() {
-		return alist(alist(alist(TestEnum.TWO,null),null),null);
+		return l(l(l(TestEnum.TWO,null),null),null);
 	}
 
 	@RestGet(path="/returnEnum1d3dList")
 	public List<TestEnum[][][]> returnEnum1d3dList() {
-		return alist(a(a(a(TestEnum.TWO,null),null),null),null);
+		return l(a(a(a(TestEnum.TWO,null),null),null),null);
 	}
 
 	@RestGet(path="/returnEnumMap")
 	public Map<TestEnum,TestEnum> returnEnumMap() {
-		return map(TestEnum.ONE,TestEnum.TWO);
+		return m(TestEnum.ONE,TestEnum.TWO);
 	}
 
 	@RestGet(path="/returnEnum3dArrayMap")
 	public Map<TestEnum,TestEnum[][][]> returnEnum3dArrayMap() {
-		return map(TestEnum.ONE,a(a(a(TestEnum.TWO,null),null),null));
+		return m(TestEnum.ONE,a(a(a(TestEnum.TWO,null),null),null));
 	}
 
 	@RestGet(path="/returnEnum1d3dListMap")
 	public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-		return map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,null),null),null),null));
+		return m(TestEnum.ONE,l(a(a(a(TestEnum.TWO,null),null),null),null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

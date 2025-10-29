@@ -88,8 +88,8 @@ public class RestClient_Headers_Test extends TestBase {
 	}
 
 	@Test void a02_header_String_Object_Schema() throws Exception {
-		var l1 = list("bar","baz");
-		var l2 = list("qux","quux");
+		var l1 = l("bar","baz");
+		var l2 = l("qux","quux");
 		checkFooClient().headers(header("Foo",l1,T_ARRAY_PIPES)).build().get("/headers").header(header("Foo",l2,T_ARRAY_PIPES)).run().assertContent("['bar|baz','qux|quux']");
 	}
 

@@ -75,7 +75,7 @@ public class ViewArgs {
 	 * 	<br>Values are column names.
 	 */
 	public ViewArgs(String viewArgs) {
-		this(alist(StringUtils.splita(viewArgs)));
+		this(l(StringUtils.splita(viewArgs)));
 	}
 
 	/**

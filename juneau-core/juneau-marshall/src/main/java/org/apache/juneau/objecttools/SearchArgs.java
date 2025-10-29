@@ -77,7 +77,7 @@ public class SearchArgs {
 	 * @param searchArgs Search arguments.
 	 */
 	public SearchArgs(String searchArgs) {
-		this(alist(StringUtils.splita(searchArgs)));
+		this(l(StringUtils.splita(searchArgs)));
 	}
 
 	/**

@@ -42,9 +42,9 @@ class OpenApi_Test extends TestBase {
 					.setInfo(info().setTitle("c1").setVersion("c2"))
 					.setOpenapi("3.0.0")
 					.setPaths(map("d1", pathItem().setGet(operation().setSummary("d2"))))
-					.setSecurity(list(securityRequirement().setRequirements(map("e1",list("e2")))))
-					.setServers(list(server().setUrl(URI.create("f"))))
-					.setTags(list(tag().setName("g")))
+					.setSecurity(l(securityRequirement().setRequirements(map("e1",l("e2")))))
+					.setServers(l(server().setUrl(URI.create("f"))))
+					.setTags(l(tag().setName("g")))
 			)
 			.props("components{schemas{a1{type}}},externalDocs{url},info{title,version},openapi,paths{d1{get{summary}}},security{0{requirements{e1}}},servers{0{url}},tags{0{name}}")
 			.vals("{{{a2}}},{b},{c1,c2},3.0.0,{{{d2}}},{{{[e2]}}},{{f}},{{g}}")
@@ -97,19 +97,19 @@ class OpenApi_Test extends TestBase {
 			// Test addTags
 			var x1 = bean()
 				.addTags(tag("b1"), tag("b2"))
-				.addTags(list(tag("b3")));
+				.addTags(l(tag("b3")));
 			assertBean(x1, "tags{#{name}}", "{[{b1},{b2},{b3}]}");
 
 			// Test addServers
 			var x2 = bean()
 				.addServers(server().setUrl(URI.create("http://c1.com")), server().setUrl(URI.create("http://c2.com")))
-				.addServers(list(server().setUrl(URI.create("http://c3.com"))));
+				.addServers(l(server().setUrl(URI.create("http://c3.com"))));
 			assertBean(x2, "servers{#{url}}", "{[{http://c1.com},{http://c2.com},{http://c3.com}]}");
 
 			// Test addSecurity
 			var x3 = bean()
-				.addSecurity(securityRequirement().setRequirements(map("d1", list("d2"))))
-				.addSecurity(list(securityRequirement().setRequirements(map("d3", list("d4")))));
+				.addSecurity(securityRequirement().setRequirements(map("d1", l("d2"))))
+				.addSecurity(l(securityRequirement().setRequirements(map("d3", l("d4")))));
 			assertBean(x3, "security{#{requirements}}", "{[{{d1=[d2]}},{{d3=[d4]}}]}");
 		}
 
@@ -147,9 +147,9 @@ class OpenApi_Test extends TestBase {
 
 		@Test void a13_collectionSetters() {
 			var x = bean()
-				.setSecurity(list(securityRequirement().setRequirements(map("a1", list("a2"))), securityRequirement().setRequirements(map("b1", list("b2")))))
-				.setServers(list(server().setUrl(URI.create("http://example1.com")), server().setUrl(URI.create("http://example2.com"))))
-				.setTags(list(tag().setName("c1"), tag().setName("c2")));
+				.setSecurity(l(securityRequirement().setRequirements(map("a1", l("a2"))), securityRequirement().setRequirements(map("b1", l("b2")))))
+				.setServers(l(server().setUrl(URI.create("http://example1.com")), server().setUrl(URI.create("http://example2.com"))))
+				.setTags(l(tag().setName("c1"), tag().setName("c2")));
 
 			assertBean(x,
 				"security{#{requirements}},servers{#{url}},tags{#{name}}",
@@ -228,10 +228,10 @@ class OpenApi_Test extends TestBase {
 					.set("externalDocs", externalDocumentation().setUrl(URI.create("b")))
 					.set("info", info().setTitle("c").setVersion("d"))
 					.set("openapi", "e")
-					.set("paths", map("f1", pathItem().setGet(operation().setSummary("f2"))))
-					.set("security", list(securityRequirement().setRequirements(map("g1",list("g2")))))
-					.set("servers", list(server().setUrl(URI.create("h"))))
-					.set("tags", list(tag("i")))
+					.set("paths", m("f1", pathItem().setGet(operation().setSummary("f2"))))
+					.set("security", l(securityRequirement().setRequirements(map("g1",l("g2")))))
+					.set("servers", l(server().setUrl(URI.create("h"))))
+					.set("tags", l(tag("i")))
 					.set("x1", "x1a")
 					.set("x2", null)
 			)

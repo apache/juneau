@@ -209,14 +209,14 @@ class PrimitivesBeans_RoundTripTest extends RoundTripTest_Base {
 			paDouble = new double[][]{{1},{2},null};
 
 			// Regular lists of primitives
-			plBoolean = alist(booleans(true), null);
-			plByte = alist(bytes(1), null);
-			plChar = alist(chars('a'), null);
-			plShort = alist(shorts(1), null);
-			plInt = alist(ints(1), null);
-			plLong = alist(longs(1), null);
-			plFloat = alist(floats(1), null);
-			plDouble = alist(doubles(1), null);
+			plBoolean = l(booleans(true), null);
+			plByte = l(bytes(1), null);
+			plChar = l(chars('a'), null);
+			plShort = l(shorts(1), null);
+			plInt = l(ints(1), null);
+			plLong = l(longs(1), null);
+			plFloat = l(floats(1), null);
+			plDouble = l(doubles(1), null);
 
 			// Anonymous list of primitives
 			palBoolean = new ArrayList<>();
@@ -254,7 +254,7 @@ class PrimitivesBeans_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_primitivesBeanList(RoundTrip_Tester t) throws Exception {
-		var x = alist(new PrimitivesBean().init(), null, new PrimitivesBean().init());
+		var x = l(new PrimitivesBean().init(), null, new PrimitivesBean().init());
 		if (t.getParser() == null)
 			return;
 		x = t.roundTrip(x, List.class, PrimitivesBean.class);

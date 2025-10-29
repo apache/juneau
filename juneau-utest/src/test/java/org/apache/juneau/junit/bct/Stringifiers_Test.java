@@ -492,7 +492,7 @@ class Stringifiers_Test extends TestBase {
 		void l04_stringifyWithNullElements() {
 			var converter = BasicBeanConverter.builder().defaultSettings().build();
 			var stringifier = Stringifiers.listStringifier();
-			var input = Arrays.asList("a", null, "c");
+			var input = l("a", null, "c");
 			var result = stringifier.apply(converter, input);
 
 			assertEquals("[a,<null>,c]", result);

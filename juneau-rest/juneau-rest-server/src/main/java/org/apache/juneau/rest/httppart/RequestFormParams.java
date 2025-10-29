@@ -283,7 +283,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParams addDefault(NameValuePair...pairs) {
-		return addDefault(alist(pairs));
+		return addDefault(l(pairs));
 	}
 
 	/**

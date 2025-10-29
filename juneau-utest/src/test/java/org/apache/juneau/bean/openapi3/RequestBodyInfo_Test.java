@@ -159,7 +159,7 @@ class RequestBodyInfo_Test extends TestBase {
 		private static final BeanTester<RequestBodyInfo> TESTER =
 			testBean(
 				bean()
-					.set("content", map("a1", mediaType().setSchema(schemaInfo("a2"))))
+					.set("content", m("a1", mediaType().setSchema(schemaInfo("a2"))))
 					.set("description", "b")
 					.set("required", true)
 					.set("x1", "x1a")

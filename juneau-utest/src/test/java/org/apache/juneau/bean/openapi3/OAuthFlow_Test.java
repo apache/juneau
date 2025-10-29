@@ -161,7 +161,7 @@ class OAuthFlow_Test extends TestBase {
 				bean()
 					.set("authorizationUrl", "a")
 					.set("refreshUrl", "b")
-					.set("scopes", map("c1", "c2"))
+					.set("scopes", m("c1", "c2"))
 					.set("tokenUrl", "d")
 					.set("x1", "x1a")
 					.set("x2", null)

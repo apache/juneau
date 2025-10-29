@@ -149,7 +149,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
 		assertEquals("[{f:1}]",x.postX4(a(Bean.create())));
-		assertEquals("[{f:1}]",x.postX5(alist(Bean.create())));
+		assertEquals("[{f:1}]",x.postX5(l(Bean.create())));
 		assertEquals("{k1:{f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(reader("xxx")));
 		assertEquals("xxx",x.postX8(inputStream("xxx")));
@@ -243,7 +243,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
 		assertEquals("[{f:1}]",x.postX4(a(Bean.create())));
-		assertEquals("[{f:1}]",x.postX5(alist(Bean.create())));
+		assertEquals("[{f:1}]",x.postX5(l(Bean.create())));
 		assertEquals("{k1:{f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(reader("xxx")));
 		assertEquals("xxx",x.postX8(inputStream("xxx")));
@@ -322,7 +322,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 		assertEquals("1",x.postX1(1));
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
-		assertEquals("[{f:1}]",x.postX5(alist(Bean.create())));
+		assertEquals("[{f:1}]",x.postX5(l(Bean.create())));
 		assertEquals("{k1={f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(reader("xxx")));
 		assertEquals("xxx",x.postX8(inputStream("xxx")));

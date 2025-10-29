@@ -17,8 +17,6 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -300,7 +298,7 @@ class Response_Test extends TestBase {
 	public static class G {
 		@RestGet
 		public void a(@Response Value<List<Integer>> body) {
-			body.set(list(1,2));
+			body.set(l(1,2));
 		}
 		@RestGet
 		public void b(Value<G1> body) {
@@ -309,7 +307,7 @@ class Response_Test extends TestBase {
 		@RestGet
 		@Response
 		public List<Integer> c() {
-			return list(1,2);
+			return l(1,2);
 		}
 		@RestGet
 		public G1 d() {

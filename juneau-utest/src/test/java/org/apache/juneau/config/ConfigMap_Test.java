@@ -500,7 +500,7 @@ class ConfigMap_Test extends TestBase {
 		cm.setEntry("S1", "k1", "v1b", null, null, null);
 		cm.setEntry("S1", "k2", null, null, null, null);
 		cm.setEntry("S1", "k3", "v3b", null, null, null);
-		cm.setEntry("S1", "k4", "v4b", null, null, Arrays.asList("","#k4",""));
+		cm.setEntry("S1", "k4", "v4b", null, null, l("","#k4",""));
 
 		assertEquals("|#S1||[S1]||#k1||k1 = v1b||#k2||k2 = v2a|k3 = v3b||#k4||k4 = v4b|", pipedLines(cm));
 
@@ -560,7 +560,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setSection("S1", Arrays.asList("#S1"));
+		cm.setSection("S1", l("#S1"));
 		assertEquals("#S1|[S1]|k1 = v1|", pipedLines(cm));
 		cm.setSection("S1", Collections.<String>emptyList());
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
@@ -575,7 +575,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setSection("", Arrays.asList("#D"));
+		cm.setSection("", l("#D"));
 		assertEquals("#D||[S1]|k1 = v1|", pipedLines(cm));
 		cm.setSection("", Collections.<String>emptyList());
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
@@ -590,7 +590,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setSection("S2", Arrays.asList("#S2"));
+		cm.setSection("S2", l("#S2"));
 		assertEquals("[S1]|k1 = v1|#S2|[S2]|", pipedLines(cm));
 		cm.setSection("S3", Collections.<String>emptyList());
 		assertEquals("[S1]|k1 = v1|#S2|[S2]|[S3]|", pipedLines(cm));
@@ -623,12 +623,12 @@ class ConfigMap_Test extends TestBase {
 
 		for (var c : validChars.toCharArray()) {
 			var test = ""+c;
-			cm.setSection(test, Arrays.asList("test"));
+			cm.setSection(test, l("test"));
 			cm.commit();
 			assertEquals("test", cm.getPreLines(test).get(0));
 
 			test = "foo"+c+"bar";
-			cm.setSection(test, Arrays.asList("test"));
+			cm.setSection(test, l("test"));
 			cm.commit();
 			assertEquals("test", cm.getPreLines(test).get(0));
 		}
@@ -710,7 +710,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", null, null, null, Arrays.asList("#k1"));
+		cm.setEntry("S1", "k1", null, null, null, l("#k1"));
 		assertEquals("[S1]|#k1|k1 = v1|", pipedLines(cm));
 		cm.setEntry("S1", "k1", null, null, null, Collections.<String>emptyList());
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
@@ -726,7 +726,7 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k1", null, null, null, Arrays.asList("#k1b"));
+		cm.setEntry("S1", "k1", null, null, null, l("#k1b"));
 		assertEquals("[S1]|#k1b|k1 = v1 # comment|", pipedLines(cm));
 	}
 
@@ -737,14 +737,14 @@ class ConfigMap_Test extends TestBase {
 		);
 		var cm = s.getMap("A.cfg");
 
-		cm.setEntry("S1", "k2", null, null, null, Arrays.asList("#k2"));
+		cm.setEntry("S1", "k2", null, null, null, l("#k2"));
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 		cm.setEntry("S1", "k2", null, null, null, Collections.<String>emptyList());
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 		cm.setEntry("S1", "k2", null, null, null, null);
 		assertEquals("[S1]|k1 = v1|", pipedLines(cm));
 
-		cm.setEntry("S2", "k2", null, null, null, Arrays.asList("#k2"));
+		cm.setEntry("S2", "k2", null, null, null, l("#k2"));
 		assertEquals("[S1]|k1 = v1|[S2]|", pipedLines(cm));
 		cm.setEntry("S2", "k2", null, null, null, Collections.<String>emptyList());
 		assertEquals("[S1]|k1 = v1|[S2]|", pipedLines(cm));
@@ -928,10 +928,10 @@ class ConfigMap_Test extends TestBase {
 		cm.setEntry("S1", "k1", "v2", null, null, null);
 		assertEquals("[S1]|k1 = v2|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", Arrays.asList("#k1a"));
+		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", l("#k1a"));
 		assertEquals("[S1]|#k1a|k1<*> = v3 # c3|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", "v4", BASE64, "c4", Arrays.asList("#k1b"));
+		cm.setEntry("S1", "k1", "v4", BASE64, "c4", l("#k1b"));
 		assertEquals("[S1]|#k1b|k1<^> = v4 # c4|", pipedLines(cm));
 	}
 
@@ -946,10 +946,10 @@ class ConfigMap_Test extends TestBase {
 		cm.setEntry("S1", "k1", "v2", null, null, null);
 		assertEquals("[S1]|#k1|k1 = v2 # comment|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", Arrays.asList("#k1a"));
+		cm.setEntry("S1", "k1", "v3", ENCODED, "c3", l("#k1a"));
 		assertEquals("[S1]|#k1a|k1<*> = v3 # c3|", pipedLines(cm));
 
-		cm.setEntry("S1", "k1", "v4", BASE64, "c4", Arrays.asList("#k1b"));
+		cm.setEntry("S1", "k1", "v4", BASE64, "c4", l("#k1b"));
 		assertEquals("[S1]|#k1b|k1<^> = v4 # c4|", pipedLines(cm));
 	}
 

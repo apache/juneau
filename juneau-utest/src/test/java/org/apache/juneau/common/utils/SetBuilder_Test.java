@@ -30,9 +30,9 @@ public class SetBuilder_Test {
         Set<String> s = setb(String.class)
             .add("a")
             .add("b", "c")
-            .addAll(new LinkedHashSet<>(Arrays.asList("d", "e")))
+            .addAll(new LinkedHashSet<>(l("d", "e")))
             .build();
-        assertEquals(new LinkedHashSet<>(Arrays.asList("a","b","c","d","e")), s);
+        assertEquals(new LinkedHashSet<>(l("a","b","c","d","e")), s);
     }
 
     @Test
@@ -45,10 +45,10 @@ public class SetBuilder_Test {
     @Test
     void sorted_natural_and_custom() {
         Set<Integer> s1 = setb(Integer.class).add(3,1,2).sorted().build();
-        assertEquals(new TreeSet<>(Arrays.asList(1,2,3)), s1);
+        assertEquals(new TreeSet<>(l(1,2,3)), s1);
 
         Set<Integer> s2 = setb(Integer.class).add(3,1,2).sorted(Comparator.reverseOrder()).build();
-        assertEquals(new TreeSet<>(Arrays.asList(3,2,1)), s2);
+        assertEquals(new TreeSet<>(l(3,2,1)), s2);
     }
 }
 

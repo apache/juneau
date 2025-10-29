@@ -30,9 +30,9 @@ public class ListBuilder_Test {
         List<String> l = listb(String.class)
             .add("a")
             .add("b", "c")
-            .addAll(Arrays.asList("d", "e"))
+            .addAll(l("d", "e"))
             .build();
-        assertEquals(Arrays.asList("a","b","c","d","e"), l);
+        assertEquals(l("a","b","c","d","e"), l);
     }
 
     @Test
@@ -45,10 +45,10 @@ public class ListBuilder_Test {
     @Test
     void sorted_natural_and_custom() {
         List<Integer> l1 = listb(Integer.class).add(3,1,2).sorted().build();
-        assertEquals(Arrays.asList(1,2,3), l1);
+        assertEquals(l(1,2,3), l1);
 
         List<Integer> l2 = listb(Integer.class).add(3,1,2).sorted(Comparator.reverseOrder()).build();
-        assertEquals(Arrays.asList(3,2,1), l2);
+        assertEquals(l(3,2,1), l2);
     }
 }
 

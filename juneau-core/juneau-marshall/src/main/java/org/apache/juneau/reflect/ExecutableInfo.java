@@ -203,7 +203,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The exception types on this executable.
 	 */
-	public final List<ClassInfo> getExceptionTypes() { return u(alist(_getExceptionTypes())); }
+	public final List<ClassInfo> getExceptionTypes() { return u(l(_getExceptionTypes())); }
 
 	/**
 	 * Returns the full name of this executable.
@@ -265,7 +265,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
-	public final List<ParamInfo> getParams() { return u(alist(_getParams())); }
+	public final List<ParamInfo> getParams() { return u(l(_getParams())); }
 
 	/**
 	 * Returns the parameter type of the parameter at the specified index.
@@ -283,7 +283,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The parameter types on this executable.
 	 */
-	public final List<ClassInfo> getParamTypes() { return u(alist(_getParameterTypes())); }
+	public final List<ClassInfo> getParamTypes() { return u(l(_getParameterTypes())); }
 
 	/**
 	 * Returns the raw generic parameter type of the parameter at the specified index.
@@ -301,7 +301,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The raw generic parameter types on this executable.
 	 */
-	public final List<Type> getRawGenericParamTypes() { return u(alist(_getRawGenericParamTypes())); }
+	public final List<Type> getRawGenericParamTypes() { return u(l(_getRawGenericParamTypes())); }
 
 	/**
 	 * Returns the raw {@link Parameter} object that represents the parameter at the specified index.
@@ -321,7 +321,7 @@ public abstract class ExecutableInfo {
 	 * @return An array of raw {@link Parameter} objects, or an empty array if executable has no parameters.
 	 * @see Executable#getParameters()
 	 */
-	public final List<Parameter> getRawParameters() { return u(alist(_getRawParameters())); }
+	public final List<Parameter> getRawParameters() { return u(l(_getRawParameters())); }
 
 	/**
 	 * Returns the raw parameter type of the parameter at the specified index.
@@ -339,7 +339,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The raw parameter types on this executable.
 	 */
-	public final List<Class<?>> getRawParamTypes() { return u(alist(_getRawParamTypes())); }
+	public final List<Class<?>> getRawParamTypes() { return u(l(_getRawParamTypes())); }
 
 	/**
 	 * Returns the short name of this executable.

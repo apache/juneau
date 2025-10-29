@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.jsonschema;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -229,7 +230,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 		result = p.addDependentSchema("dep2", new JsonSchema());
 		assertSame(p, result);
 
-		result = p.addDependentRequired("dep3", Arrays.asList("field1"));
+		result = p.addDependentRequired("dep3", l("field1"));
 		assertSame(p, result);
 	}
 

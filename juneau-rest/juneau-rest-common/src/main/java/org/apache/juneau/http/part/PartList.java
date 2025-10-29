@@ -551,7 +551,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList prepend(NameValuePair...values) {
 		if (nn(values))
-			prepend(alist(values));
+			prepend(l(values));
 		return this;
 	}
 
@@ -769,7 +769,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList set(NameValuePair...values) {
 		if (nn(values))
-			set(alist(values));
+			set(l(values));
 		return this;
 	}
 
@@ -821,7 +821,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList setDefault(NameValuePair...parts) {
 		if (nn(parts))
-			setDefault(Arrays.asList(parts));
+			setDefault(l(parts));
 		return this;
 	}
 

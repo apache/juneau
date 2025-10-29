@@ -99,7 +99,7 @@ public class EntityTags {
 	 * @return The entity tags in this object as a list.  Can be <jk>null</jk>.
 	 */
 	public List<EntityTag> toList() {
-		return u(alist(value));
+		return u(l(value));
 	}
 
 	@Override /* Overridden from Object */

@@ -37,7 +37,7 @@ class SecurityRequirement_Test extends TestBase {
 		private static final BeanTester<SecurityRequirement> TESTER =
 			testBean(
 				bean()
-					.setRequirements(map("a1", list("a2")))
+					.setRequirements(map("a1", l("a2")))
 			)
 			.props("requirements{a1}")
 			.vals("{[a2]}")
@@ -93,8 +93,8 @@ class SecurityRequirement_Test extends TestBase {
 
 		@Test void a10_getAndSetUsingPropertyName() {
 			var x = bean()
-				.set("requirements", map("a1", list("a2")))
-				.set("b1", list("b2"));
+				.set("requirements", m("a1", l("a2")))
+				.set("b1", l("b2"));
 
 			assertBean(x, "requirements{a1},b1", "{[a2]},[b2]");
 			assertBean(x.get("requirements", Map.class), "a1", "[a2]");
@@ -104,7 +104,7 @@ class SecurityRequirement_Test extends TestBase {
 		@Test void a11_asMap() {
 			assertBean(
 				bean()
-					.set("a1", list("a2"))
+					.set("a1", l("a2"))
 					.set("x1", "x1a")
 					.asMap(),
 				"a1,x1",
@@ -173,8 +173,8 @@ class SecurityRequirement_Test extends TestBase {
 		private static final BeanTester<SecurityRequirement> TESTER =
 			testBean(
 				bean()
-					.set("a1", list("a2", "a3"))
-					.set("b1", list("b2"))
+					.set("a1", l("a2", "a3"))
+					.set("b1", l("b2"))
 					.set("x1", "x1a")
 					.set("x2", null)
 			)

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,7 +57,7 @@ class SetBuilder_Test extends TestBase {
 
 	@Test
 	void a04_addAll() {
-		var existing = Arrays.asList("x", "y", "z");
+		var existing = l("x", "y", "z");
 		var set = SetBuilder.create(String.class)
 			.add("a")
 			.addAll(existing)
@@ -92,7 +93,7 @@ class SetBuilder_Test extends TestBase {
 
 	@Test
 	void b02_addAllWithDuplicates() {
-		var existing = Arrays.asList("a", "b", "c");
+		var existing = l("a", "b", "c");
 		var set = SetBuilder.create(String.class)
 			.add("a", "b")  // a and b already in next collection
 			.addAll(existing)
@@ -280,7 +281,7 @@ class SetBuilder_Test extends TestBase {
 
 	@Test
 	void i01_multipleOperations() {
-		var existing = Arrays.asList("x", "y");
+		var existing = l("x", "y");
 		var set = SetBuilder.create(String.class)
 			.add("a")
 			.addAll(existing)

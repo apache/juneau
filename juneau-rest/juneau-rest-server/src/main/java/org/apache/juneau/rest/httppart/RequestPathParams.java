@@ -238,7 +238,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @return This object.
 	 */
 	public RequestPathParams addDefault(NameValuePair...pairs) {
-		return addDefault(alist(pairs));
+		return addDefault(l(pairs));
 	}
 
 	/**

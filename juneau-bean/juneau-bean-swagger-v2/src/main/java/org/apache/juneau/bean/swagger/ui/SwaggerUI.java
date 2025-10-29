@@ -20,7 +20,6 @@ import static java.util.Collections.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.a;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.list;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;

@@ -17,7 +17,6 @@
 package org.apache.juneau.junit.bct;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -190,7 +189,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("canExtract() - returns true for listifiable objects")
 		void b01_canExtract_listifiableObjects() {
-			assertTrue(extractor.canExtract(converter, Arrays.asList("a", "b", "c"), "0"));
+			assertTrue(extractor.canExtract(converter, l("a", "b", "c"), "0"));
 			assertTrue(extractor.canExtract(converter, a("a", "b", "c"), "1"));
 			assertTrue(extractor.canExtract(converter, Set.of("a", "b", "c"), "size"));
 			assertFalse(extractor.canExtract(converter, "not listifiable", "0"));
@@ -199,7 +198,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - numeric indices")
 		void b02_extract_numericIndices() {
-			var list = Arrays.asList("first", "second", "third");
+			var list = l("first", "second", "third");
 
 			assertEquals("first", extractor.extract(converter, list, "0"));
 			assertEquals("second", extractor.extract(converter, list, "1"));
@@ -209,7 +208,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - negative indices")
 		void b03_extract_negativeIndices() {
-			var list = Arrays.asList("first", "second", "third");
+			var list = l("first", "second", "third");
 
 			assertEquals("third", extractor.extract(converter, list, "-1"));
 			assertEquals("second", extractor.extract(converter, list, "-2"));
@@ -229,7 +228,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - length property")
 		void b05_extract_lengthProperty() {
-			var list = Arrays.asList("a", "b", "c");
+			var list = l("a", "b", "c");
 			var array = a("a", "b", "c");
 
 			assertEquals(3, extractor.extract(converter, list, "length"));
@@ -239,7 +238,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - size property")
 		void b06_extract_sizeProperty() {
-			var list = Arrays.asList("a", "b", "c");
+			var list = l("a", "b", "c");
 			var set = Set.of("a", "b", "c");
 
 			assertEquals(3, extractor.extract(converter, list, "size"));
@@ -249,7 +248,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - falls back to ObjectPropertyExtractor")
 		void b07_extract_fallbackToObjectPropertyExtractor() {
-			var list = new ArrayList<>(Arrays.asList("a", "b", "c"));
+			var list = new ArrayList<>(l("a", "b", "c"));
 
 			// Should fall back to ArrayList.isEmpty() method
 			assertEquals(false, extractor.extract(converter, list, "empty"));
@@ -271,7 +270,7 @@ class PropertyExtractors_Test extends TestBase {
 		void c01_canExtract_mapObjects() {
 			assertTrue(extractor.canExtract(converter, Map.of("key", "value"), "key"));
 			assertTrue(extractor.canExtract(converter, new HashMap<>(), "size"));
-			assertFalse(extractor.canExtract(converter, Arrays.asList("a", "b"), "0"));
+			assertFalse(extractor.canExtract(converter, l("a", "b"), "0"));
 			assertFalse(extractor.canExtract(converter, "not a map", "length"));
 		}
 

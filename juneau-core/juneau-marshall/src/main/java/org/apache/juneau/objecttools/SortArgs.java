@@ -109,7 +109,7 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(String sortArgs) {
-		this(alist(StringUtils.splita(sortArgs)));
+		this(l(StringUtils.splita(sortArgs)));
 	}
 
 	/**

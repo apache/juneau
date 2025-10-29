@@ -94,6 +94,6 @@ class ContentType_Match_Test extends TestBase {
 	void a01_basic(Input input) throws Exception {
 		var ct = contentType(input.contentType);
 		var mt = JsonParser.DEFAULT.parse(input.mediaTypes, MediaType[].class);
-		assertEquals(input.expected, ct.match(alist(mt)), fs("{0} failed", input.label));
+		assertEquals(input.expected, ct.match(l(mt)), fs("{0} failed", input.label));
 	}
 }

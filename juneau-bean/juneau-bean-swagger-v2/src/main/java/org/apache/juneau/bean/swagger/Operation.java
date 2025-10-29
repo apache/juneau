@@ -390,7 +390,7 @@ public class Operation extends SwaggerElement {
 	public Operation addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
 		Map<String,List<String>> m = map();
-		m.put(scheme, alist(alternatives));
+		m.put(scheme, l(alternatives));
 		security = listb(Map.class).to((List)security).add(m).build();
 		return this;
 	}
@@ -717,7 +717,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setConsumes(MediaType...value) {
-		return setConsumes(Arrays.asList(value));
+		return setConsumes(l(value));
 	}
 
 	/**
@@ -815,7 +815,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setParameters(ParameterInfo...value) {
-		return setParameters(Arrays.asList(value));
+		return setParameters(l(value));
 	}
 
 	/**
@@ -848,7 +848,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setProduces(MediaType...value) {
-		return setProduces(Arrays.asList(value));
+		return setProduces(l(value));
 	}
 
 	/**
@@ -936,7 +936,7 @@ public class Operation extends SwaggerElement {
 	 */
 	@SafeVarargs
 	public final Operation setSecurity(Map<String,List<String>>...value) {
-		security = alist(value);
+		security = l(value);
 		return this;
 	}
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -43,7 +44,7 @@ class Listifier_Test extends TestBase {
 		@Test
 		void a01_functionalInterfaceContract() {
 			// Verify it's a proper functional interface
-			Listifier<String> listifier = (converter, obj) -> Arrays.asList(obj, obj.toUpperCase());
+			Listifier<String> listifier = (converter, obj) -> l(obj, obj.toUpperCase());
 
 			assertNotNull(listifier);
 			assertTrue(listifier instanceof BiFunction);
@@ -53,7 +54,7 @@ class Listifier_Test extends TestBase {
 		@Test
 		void a02_lambdaExpressionCompatibility() {
 			// Test lambda expression usage
-			Listifier<String> lambda = (converter, str) -> Arrays.asList(str.toLowerCase(), str.toUpperCase());
+			Listifier<String> lambda = (converter, str) -> l(str.toLowerCase(), str.toUpperCase());
 
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = lambda.apply(converter, "Test");
@@ -80,7 +81,7 @@ class Listifier_Test extends TestBase {
 		@Test
 		void a04_biFunctionInheritance() {
 			// Verify BiFunction methods are inherited
-			Listifier<String> listifier = (converter, str) -> Arrays.asList((Object[])str.split(""));
+			Listifier<String> listifier = (converter, str) -> l((Object[])str.split(""));
 
 			// Test BiFunction.apply method
 			var converter = BasicBeanConverter.DEFAULT;
@@ -98,7 +99,7 @@ class Listifier_Test extends TestBase {
 
 		@Test
 		void b01_andThenComposition() {
-			Listifier<String> base = (converter, str) -> Arrays.asList(str.toLowerCase());
+			Listifier<String> base = (converter, str) -> l(str.toLowerCase());
 			Function<List<Object>, List<Object>> mapper = list -> {
 				List<Object> result = new ArrayList<>(list);
 				result.add("ADDED");
@@ -118,8 +119,8 @@ class Listifier_Test extends TestBase {
 		@Test
 		void b02_functionalComposition() {
 			// Compose multiple listifiers
-			Listifier<String> splitter = (converter, str) -> Arrays.asList((Object[])str.split(","));
-			Listifier<String> trimmer = (converter, str) -> Arrays.asList((Object[])str.trim().split("\\s+"));
+			Listifier<String> splitter = (converter, str) -> l((Object[])str.split(","));
+			Listifier<String> trimmer = (converter, str) -> l((Object[])str.trim().split("\\s+"));
 
 			var converter = BasicBeanConverter.DEFAULT;
 
@@ -143,8 +144,8 @@ class Listifier_Test extends TestBase {
 		@Test
 		void c01_nullInputHandling() {
 			Listifier<String> nullSafe = (converter, str) -> {
-				if (str == null) return Arrays.asList("NULL_INPUT");
-				return Arrays.asList(str);
+				if (str == null) return l("NULL_INPUT");
+				return l(str);
 			};
 
 			var converter = BasicBeanConverter.DEFAULT;
@@ -171,7 +172,7 @@ class Listifier_Test extends TestBase {
 				if ("ERROR".equals(str)) {
 					throw new RuntimeException("Intentional test exception");
 				}
-				return Arrays.asList(str);
+				return l(str);
 			};
 
 			var converter = BasicBeanConverter.DEFAULT;
@@ -217,7 +218,7 @@ class Listifier_Test extends TestBase {
 			var customConverter = BasicBeanConverter.builder()
 				.defaultSettings()
 				.addListifier(TestObject.class, (converter, obj) ->
-				Arrays.asList(obj.name, obj.value, "LISTIFIED"))
+				l(obj.name, obj.value, "LISTIFIED"))
 				.build();
 
 			var test = new TestObject("test", 42);
@@ -233,8 +234,8 @@ class Listifier_Test extends TestBase {
 		void d02_multipleListifierRegistration() {
 			var customConverter = BasicBeanConverter.builder()
 				.defaultSettings()
-				.addListifier(String.class, (converter, str) -> Arrays.asList(str.toLowerCase()))
-				.addListifier(Integer.class, (converter, num) -> Arrays.asList(num, num * 2))
+				.addListifier(String.class, (converter, str) -> l(str.toLowerCase()))
+				.addListifier(Integer.class, (converter, num) -> l(num, num * 2))
 				.build();
 
 			// Test string listifier
@@ -254,8 +255,8 @@ class Listifier_Test extends TestBase {
 			// Test that converter parameter is properly passed
 			Listifier<String> converterUser = (converter, str) -> {
 				// Use the converter parameter to stringify something
-				String stringified = converter.stringify(Arrays.asList("nested", "call"));
-				return Arrays.asList(str, stringified);
+				String stringified = converter.stringify(l("nested", "call"));
+				return l(str, stringified);
 			};
 
 			var converter = BasicBeanConverter.DEFAULT;
@@ -320,7 +321,7 @@ class Listifier_Test extends TestBase {
 
 	static class ListifierMethods {
 		static List<Object> splitToChars(BeanConverter converter, String str) {
-			return Arrays.asList((Object[])str.split(""));
+			return l((Object[])str.split(""));
 		}
 	}
 

@@ -182,7 +182,7 @@ class HeaderInfo_Test extends TestBase {
 					.set("deprecated", true)
 					.set("description", "a")
 					.set("x-example", "b")
-					.set("examples", map("c1", example().setSummary("c2")))
+					.set("examples", m("c1", example().setSummary("c2")))
 					.set("explode", true)
 					.set("required", true)
 					.set("schema", schemaInfo("d"))

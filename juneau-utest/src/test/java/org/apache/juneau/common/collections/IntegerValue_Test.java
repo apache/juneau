@@ -280,7 +280,7 @@ class IntegerValue_Test extends TestBase {
 	void d01_counterInLambda() {
 		var a = IntegerValue.create();
 
-		var list = list("a", "b", "c", "d", "e");
+		var list = l("a", "b", "c", "d", "e");
 		list.forEach(x -> a.getAndIncrement());
 
 		assertEquals(5, a.get());
@@ -290,7 +290,7 @@ class IntegerValue_Test extends TestBase {
 	void d02_conditionalCounting() {
 		var a = IntegerValue.create();
 
-		list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
+		l(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
 			if (x % 2 == 0) {
 				a.getAndIncrement();
 			}
@@ -304,7 +304,7 @@ class IntegerValue_Test extends TestBase {
 		var a = IntegerValue.create();
 		var b = IntegerValue.create();
 
-		list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
+		l(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -> {
 			if (x % 2 == 0) {
 				a.getAndIncrement();
 			} else {

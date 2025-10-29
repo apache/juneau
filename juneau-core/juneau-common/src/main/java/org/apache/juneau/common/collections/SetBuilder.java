@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -250,7 +251,7 @@ public class SetBuilder<E> {
 			return this;
 		if (converters == null)
 			converters = new ArrayList<>();
-		converters.addAll(Arrays.asList(values));
+		converters.addAll(l(values));
 		return this;
 	}
 

@@ -225,7 +225,7 @@ public class MediaRanges {
 	 * @return The media ranges that make up this object.
 	 */
 	public List<MediaRange> toList() {
-		return alist(ranges);
+		return l(ranges);
 	}
 
 	@Override /* Overridden from Object */

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.bean.jsonschema;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -148,13 +149,13 @@ class JsonSchemaProperty_Test extends TestBase {
 		assertSame(p, result);
 		assertInstanceOf(JsonSchemaProperty.class, result);
 
-		result = p.setRequired(Arrays.asList("field3"));
+		result = p.setRequired(l("field3"));
 		assertSame(p, result);
 
 		result = p.addEnum("value1", "value2");
 		assertSame(p, result);
 
-		result = p.setEnum(Arrays.asList("value3"));
+		result = p.setEnum(l("value3"));
 		assertSame(p, result);
 	}
 
@@ -168,19 +169,19 @@ class JsonSchemaProperty_Test extends TestBase {
 		assertSame(p, result);
 		assertInstanceOf(JsonSchemaProperty.class, result);
 
-		result = p.setAllOf(Arrays.asList(new JsonSchema()));
+		result = p.setAllOf(l(new JsonSchema()));
 		assertSame(p, result);
 
 		result = p.addAnyOf(new JsonSchema());
 		assertSame(p, result);
 
-		result = p.setAnyOf(Arrays.asList(new JsonSchema()));
+		result = p.setAnyOf(l(new JsonSchema()));
 		assertSame(p, result);
 
 		result = p.addOneOf(new JsonSchema());
 		assertSame(p, result);
 
-		result = p.setOneOf(Arrays.asList(new JsonSchema()));
+		result = p.setOneOf(l(new JsonSchema()));
 		assertSame(p, result);
 
 		result = p.setNot(new JsonSchema());
@@ -203,7 +204,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		result = p.addExamples("example1", "example2");
 		assertSame(p, result);
 
-		result = p.setExamples(Arrays.asList("example3"));
+		result = p.setExamples(l("example3"));
 		assertSame(p, result);
 
 		result = p.setConst("constantValue");
@@ -284,7 +285,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		result = p.setDependentSchemas(new HashMap<>());
 		assertSame(p, result);
 
-		result = p.addDependentRequired("dep3", Arrays.asList("field1"));
+		result = p.addDependentRequired("dep3", l("field1"));
 		assertSame(p, result);
 
 		result = p.setDependentRequired(new HashMap<>());

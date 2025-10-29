@@ -39,9 +39,9 @@ class XmlCollapsed_Test extends TestBase {
 		var p = XmlParser.DEFAULT;
 		var t = new A();
 
-		t.f1 = list("f1a","f1b");
+		t.f1 = l("f1a","f1b");
 		t.f2 = a("f2a","f2b");
-		t.f3 = list("f3a","f3b");
+		t.f3 = l("f3a","f3b");
 		t.f4 = a("f4a","f4b");
 
 		var xml = s.serialize(t);
@@ -78,9 +78,9 @@ class XmlCollapsed_Test extends TestBase {
 		var p = XmlParser.DEFAULT;
 		var t = new B();
 
-		t.f1 = list("f1a","f1b");
+		t.f1 = l("f1a","f1b");
 		t.f2 = a("f2a","f2b");
-		t.f3 = list("f3a","f3b");
+		t.f3 = l("f3a","f3b");
 		t.f4 = a("f4a","f4b");
 
 		var xml = s.serialize(t);
@@ -142,13 +142,13 @@ class XmlCollapsed_Test extends TestBase {
 	public static class C {
 
 		@Xml(format=COLLAPSED)
-		public List<String> f1 = list("f1a");
+		public List<String> f1 = l("f1a");
 
 		@Xml(format=COLLAPSED)
 		public String[] f2 = {"f2a"};
 
 		@Xml(format=COLLAPSED,childName="xf3")
-		public List<String> f3 = list("f3a");
+		public List<String> f3 = l("f3a");
 
 		@Xml(format=COLLAPSED,childName="xf4")
 		public String[] f4 = {"f4a"};
@@ -162,9 +162,9 @@ class XmlCollapsed_Test extends TestBase {
 		var p = XmlParser.DEFAULT;
 		var t = new D();
 
-		t.f1 = list("f1a");
+		t.f1 = l("f1a");
 		t.f2 = a("f2a");
-		t.f3 = list("f3a");
+		t.f3 = l("f3a");
 		t.f4 = a("f4a");
 
 		var xml = s.serialize(t);

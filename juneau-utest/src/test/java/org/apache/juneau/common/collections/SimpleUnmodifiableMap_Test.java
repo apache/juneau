@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-class SimpleMap_Test extends TestBase {
+class SimpleUnmodifiableMap_Test extends TestBase {
 
 	//====================================================================================================
 	// Null key support
@@ -31,7 +31,7 @@ class SimpleMap_Test extends TestBase {
 		String[] keys = {null};
 		String[] values = {"value1"};
 		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
 		assertEquals(1, map.size());
 		assertEquals("value1", map.get(null));
@@ -43,7 +43,7 @@ class SimpleMap_Test extends TestBase {
 		String[] keys = {"key1", null, "key3"};
 		String[] values = {"value1", "value2", "value3"};
 		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
 		assertEquals(3, map.size());
 		assertEquals("value1", map.get("key1"));
@@ -53,17 +53,18 @@ class SimpleMap_Test extends TestBase {
 	}
 
 	@Test
-	void a03_nullKey_updateValue() {
+	void a03_nullKey_cannotModify() {
 		String[] keys = {"key1", null};
 		String[] values = {"value1", "value2"};
 		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
-		String oldValue = map.put(null, "newValue");
+		assertThrows(UnsupportedOperationException.class, () -> {
+			map.put(null, "newValue");
+		});
 		
-		assertEquals("value2", oldValue);
-		assertEquals("newValue", map.get(null));
-		assertEquals(2, map.size());
+		// Verify original value unchanged
+		assertEquals("value2", map.get(null));
 	}
 
 	@Test
@@ -71,7 +72,7 @@ class SimpleMap_Test extends TestBase {
 		String[] keys = {null};
 		String[] values = {null};
 		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
 		assertEquals(1, map.size());
 		assertNull(map.get(null));
@@ -83,13 +84,18 @@ class SimpleMap_Test extends TestBase {
 		String[] keys = {"key1", null, "key3"};
 		String[] values = {"value1", "value2", "value3"};
 		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
 		boolean foundNullKey = false;
 		for (var entry : map.entrySet()) {
 			if (entry.getKey() == null) {
 				foundNullKey = true;
 				assertEquals("value2", entry.getValue());
+				
+				// Verify entry is also unmodifiable
+				assertThrows(UnsupportedOperationException.class, () -> {
+					entry.setValue("modified");
+				});
 			}
 		}
 		assertTrue(foundNullKey, "Null key not found in entrySet");
@@ -100,7 +106,7 @@ class SimpleMap_Test extends TestBase {
 		String[] keys = {"key1", null, "key3"};
 		String[] values = {"value1", "value2", "value3"};
 		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
 		assertTrue(map.keySet().contains(null), "Null key not found in keySet");
 		assertEquals(3, map.keySet().size());
@@ -115,7 +121,7 @@ class SimpleMap_Test extends TestBase {
 		String[] values = {"value1", "value2", "value3"};
 		
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-			new SimpleMap<>(keys, values);
+			new SimpleUnmodifiableMap<>(keys, values);
 		});
 		
 		assertTrue(ex.getMessage().contains("Duplicate key found: key1"));
@@ -127,7 +133,7 @@ class SimpleMap_Test extends TestBase {
 		String[] values = {"value1", "value2", "value3"};
 		
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-			new SimpleMap<>(keys, values);
+			new SimpleUnmodifiableMap<>(keys, values);
 		});
 		
 		assertTrue(ex.getMessage().contains("Duplicate key found: null"));
@@ -139,7 +145,7 @@ class SimpleMap_Test extends TestBase {
 		String[] values = {"value1", "value2", "value3", "value4"};
 		
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-			new SimpleMap<>(keys, values);
+			new SimpleUnmodifiableMap<>(keys, values);
 		});
 		
 		assertTrue(ex.getMessage().contains("Duplicate key found: key1"));
@@ -150,7 +156,9 @@ class SimpleMap_Test extends TestBase {
 		String[] keys = {"key1", null, "key2", "key3"};
 		String[] values = {"value1", "value2", "value3", "value4"};
 		
-		SimpleMap<String, String> map = assertDoesNotThrow(() -> new SimpleMap<>(keys, values));
+		SimpleUnmodifiableMap<String, String> map = assertDoesNotThrow(() -> 
+			new SimpleUnmodifiableMap<>(keys, values)
+		);
 		
 		assertEquals(4, map.size());
 		assertEquals("value1", map.get("key1"));
@@ -160,14 +168,45 @@ class SimpleMap_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// Immutability verification
+	//====================================================================================================
+	@Test
+	void c01_put_throwsException() {
+		String[] keys = {"key1"};
+		String[] values = {"value1"};
+		
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
+		
+		assertThrows(UnsupportedOperationException.class, () -> {
+			map.put("key1", "newValue");
+		});
+		
+		assertEquals("value1", map.get("key1"));
+	}
+
+	@Test
+	void c02_entrySetValues_cannotModify() {
+		String[] keys = {"key1", "key2"};
+		String[] values = {"value1", "value2"};
+		
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
+		
+		for (var entry : map.entrySet()) {
+			assertThrows(UnsupportedOperationException.class, () -> {
+				entry.setValue("modified");
+			});
+		}
+	}
+
+	//====================================================================================================
 	// Edge cases
 	//====================================================================================================
 	@Test
-	void c01_emptyMap_noNullKeys() {
+	void d01_emptyMap_noNullKeys() {
 		String[] keys = {};
 		String[] values = {};
 		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
 		assertEquals(0, map.size());
 		assertNull(map.get(null));
@@ -175,39 +214,61 @@ class SimpleMap_Test extends TestBase {
 	}
 
 	@Test
-	void c02_getLookup_nullKeyNotInMap() {
+	void d02_getLookup_nullKeyNotInMap() {
 		String[] keys = {"key1", "key2"};
 		String[] values = {"value1", "value2"};
 		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
 		assertNull(map.get(null));
 		assertFalse(map.containsKey(null));
 	}
 
 	@Test
-	void c03_putOperation_cannotAddNewNullKey() {
-		String[] keys = {"key1"};
-		String[] values = {"value1"};
-		
-		SimpleMap<String, String> map = new SimpleMap<>(keys, values);
-		
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-			map.put(null, "newValue");
-		});
-		
-		assertTrue(ex.getMessage().contains("No key 'null' defined in map"));
-	}
-
-	@Test
-	void c04_complexTypes_nullKey() {
+	void d03_complexTypes_nullKey() {
 		Integer[] keys = {1, null, 3};
 		String[] values = {"one", "null-key", "three"};
 		
-		SimpleMap<Integer, String> map = new SimpleMap<>(keys, values);
+		SimpleUnmodifiableMap<Integer, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
 		assertEquals("one", map.get(1));
 		assertEquals("null-key", map.get(null));
 		assertEquals("three", map.get(3));
 	}
+
+	//====================================================================================================
+	// Thread safety verification
+	//====================================================================================================
+	@Test
+	void e01_concurrentAccess_safe() throws InterruptedException {
+		String[] keys = {"key1", null, "key3"};
+		String[] values = {"value1", "value2", "value3"};
+		
+		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
+		
+		// Create multiple threads reading from the map
+		Thread[] threads = new Thread[10];
+		for (int i = 0; i < threads.length; i++) {
+			threads[i] = new Thread(() -> {
+				for (int j = 0; j < 1000; j++) {
+					assertEquals("value1", map.get("key1"));
+					assertEquals("value2", map.get(null));
+					assertEquals("value3", map.get("key3"));
+				}
+			});
+			threads[i].start();
+		}
+		
+		// Wait for all threads to complete
+		for (Thread thread : threads) {
+			thread.join();
+		}
+		
+		// Verify map is still intact
+		assertEquals(3, map.size());
+		assertEquals("value1", map.get("key1"));
+		assertEquals("value2", map.get(null));
+		assertEquals("value3", map.get("key3"));
+	}
 }
+

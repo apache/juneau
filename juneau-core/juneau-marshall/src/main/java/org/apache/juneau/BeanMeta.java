@@ -985,7 +985,7 @@ public class BeanMeta<T> {
 	 *
 	 * @return Metadata on all properties associated with this bean.
 	 */
-	public Collection<BeanPropertyMeta> getPropertyMetas() { return u(alist(propertyArray)); }
+	public Collection<BeanPropertyMeta> getPropertyMetas() { return u(l(propertyArray)); }
 
 	/**
 	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the

@@ -196,8 +196,8 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 			f2 = AEnum.BAR;
 			f3 = a(AEnum.FOO,null);
 			f4 = a(a(AEnum.FOO,null),null);
-			f5 = alist(AEnum.FOO);
-			f6 = alist(AEnum.FOO);
+			f5 = l(AEnum.FOO);
+			f6 = l(AEnum.FOO);
 			f7 = set(AEnum.FOO);
 			f8 = set(AEnum.FOO);
 
@@ -238,8 +238,8 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 			f2 = BEnum.BAR;
 			f3 = a(BEnum.FOO,null);
 			f4 = a(a(BEnum.FOO,null),null);
-			f5 = alist(BEnum.FOO);
-			f6 = alist(BEnum.FOO);
+			f5 = l(BEnum.FOO);
+			f6 = l(BEnum.FOO);
 			f7 = set(BEnum.FOO);
 			f8 = set(BEnum.FOO);
 

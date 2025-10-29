@@ -52,7 +52,7 @@ public class Tooltip {
 	 */
 	public Tooltip(String display, Object...content) {
 		this.display = new HtmlText(display);
-		this.content = u(alist(content));
+		this.content = u(l(content));
 	}
 
 	/**

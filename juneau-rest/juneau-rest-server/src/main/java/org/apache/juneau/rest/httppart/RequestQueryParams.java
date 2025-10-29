@@ -257,7 +257,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return This object.
 	 */
 	public RequestQueryParams addDefault(NameValuePair...pairs) {
-		return addDefault(alist(pairs));
+		return addDefault(l(pairs));
 	}
 
 	/**

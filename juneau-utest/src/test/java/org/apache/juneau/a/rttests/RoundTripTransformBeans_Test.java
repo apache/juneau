@@ -203,8 +203,8 @@ class RoundTripTransformBeans_Test extends TestBase {
 			fByte = bytes(0,1,2,3);
 			fnByte = null;
 			faByte = new byte[][]{{0,1},{2,3},{4,5}};
-			flByte = alist(bytes(1,2,3),bytes(4,5,6),null);
-			fmByte = map("foo",bytes(1,2,3),"bar",bytes(4,5,6),"baz",null);
+			flByte = l(bytes(1,2,3),bytes(4,5,6),null);
+			fmByte = m("foo",bytes(1,2,3),"bar",bytes(4,5,6),"baz",null);
 
 			fCalendar = new GregorianCalendar() {{
 				set(2001, 01, 02, 03, 04, 05);
@@ -224,8 +224,8 @@ class RoundTripTransformBeans_Test extends TestBase {
 			faDate = a(
 				new Date(1000), new Date(2000), new Date(3000)
 			);
-			flDate = alist(new Date(4000),null);
-			fmDate = map("foo",new Date(5000),"bar",null);
+			flDate = l(new Date(4000),null);
+			fmDate = m("foo",new Date(5000),"bar",null);
 			return this;
 		}
 	}

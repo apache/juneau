@@ -661,7 +661,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * @return A simple collection of properties for this bean map.
 	 */
-	protected Collection<BeanPropertyMeta> getProperties() { return alist(meta.propertyArray); }
+	protected Collection<BeanPropertyMeta> getProperties() { return l(meta.propertyArray); }
 
 	@SuppressWarnings("unchecked")
 	void setBean(Object bean) { this.bean = (T)bean; }

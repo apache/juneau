@@ -31,6 +31,93 @@ import org.apache.juneau.common.collections.*;
 /**
  * Utility methods for working with collections and maps.
  *
+ * <h5 class='section'>Complex Data Structure Construction:</h5>
+ * <p>
+ * This class provides convenient shorthand methods for creating complex nested data structures.
+ * The primary methods for building structures are:
+ * <ul>
+ *    <li>{@link #a(Object...)} - Creates arrays
+ *    <li>{@link #ao(Object...)} - Creates Object arrays (when type inference needs help)
+ *    <li>{@link #list(Object...)} / {@link #l(Object...)} - Creates modifiable lists
+ *    <li>{@link #map(Object, Object, Object, Object, Object, Object)} - Creates modifiable maps
+ *    <li>{@link #m(Object, Object, Object, Object, Object, Object)} - Creates unmodifiable maps
+ * </ul>
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Array of lists of maps</jc>
+ * 	<jk>var</jk> <jv>data</jv> = <jsm>a</jsm>(
+ * 		<jsm>l</jsm>(<jsm>m</jsm>(<js>"name"</js>, <js>"John"</js>, <js>"age"</js>, 30)),
+ * 		<jsm>l</jsm>(<jsm>m</jsm>(<js>"name"</js>, <js>"Jane"</js>, <js>"age"</js>, 25))
+ * 	);
+ *
+ * 	<jc>// Compare with traditional Java syntax:</jc>
+ * 	List&lt;Map&lt;String,Object&gt;&gt;[] <jv>data</jv> = <jk>new</jk> List[]{
+ * 		<jk>new</jk> ArrayList&lt;&gt;(Arrays.asList(
+ * 			<jk>new</jk> LinkedHashMap&lt;&gt;(){{
+ * 				put(<js>"name"</js>, <js>"John"</js>);
+ * 				put(<js>"age"</js>, 30);
+ * 			}}
+ * 		)),
+ * 		<jk>new</jk> ArrayList&lt;&gt;(Arrays.asList(
+ * 			<jk>new</jk> LinkedHashMap&lt;&gt;(){{
+ * 				put(<js>"name"</js>, <js>"Jane"</js>);
+ * 				put(<js>"age"</js>, 25);
+ * 			}}
+ * 		))
+ * 	};
+ * </p>
+ *
+ * <p class='bjava'>
+ * 	<jc>// Complex nested structure: Array of lists containing maps and arrays</jc>
+ * 	<jk>var</jk> <jv>complex</jv> = <jsm>a</jsm>(
+ * 		<jsm>l</jsm>(
+ * 			<jsm>m</jsm>(<js>"user"</js>, <js>"admin"</js>, <js>"roles"</js>, <jsm>a</jsm>(<js>"read"</js>, <js>"write"</js>, <js>"delete"</js>)),
+ * 			<jsm>m</jsm>(<js>"user"</js>, <js>"guest"</js>, <js>"roles"</js>, <jsm>a</jsm>(<js>"read"</js>))
+ * 		),
+ * 		<jsm>l</jsm>(
+ * 			<jsm>m</jsm>(<js>"status"</js>, <js>"active"</js>, <js>"count"</js>, 42)
+ * 		)
+ * 	);
+ *
+ * 	<jc>// Traditional Java equivalent (significantly more verbose):</jc>
+ * 	List&lt;Map&lt;String,Object&gt;&gt;[] <jv>complex</jv> = <jk>new</jk> List[]{
+ * 		<jk>new</jk> ArrayList&lt;&gt;(Arrays.asList(
+ * 			<jk>new</jk> LinkedHashMap&lt;&gt;(){{
+ * 				put(<js>"user"</js>, <js>"admin"</js>);
+ * 				put(<js>"roles"</js>, <jk>new</jk> String[]{<js>"read"</js>, <js>"write"</js>, <js>"delete"</js>});
+ * 			}},
+ * 			<jk>new</jk> LinkedHashMap&lt;&gt;(){{
+ * 				put(<js>"user"</js>, <js>"guest"</js>);
+ * 				put(<js>"roles"</js>, <jk>new</jk> String[]{<js>"read"</js>});
+ * 			}}
+ * 		)),
+ * 		<jk>new</jk> ArrayList&lt;&gt;(Arrays.asList(
+ * 			<jk>new</jk> LinkedHashMap&lt;&gt;(){{
+ * 				put(<js>"status"</js>, <js>"active"</js>);
+ * 				put(<js>"count"</js>, 42);
+ * 			}}
+ * 		))
+ * 	};
+ * </p>
+ *
+ * <p class='bjava'>
+ * 	<jc>// Using unmodifiable maps for immutable data</jc>
+ * 	<jk>var</jk> <jv>config</jv> = <jsm>a</jsm>(
+ * 		<jsm>m</jsm>(<js>"env"</js>, <js>"production"</js>, <js>"debug"</js>, <jk>false</jk>),
+ * 		<jsm>m</jsm>(<js>"env"</js>, <js>"development"</js>, <js>"debug"</js>, <jk>true</jk>)
+ * 	);
+ * </p>
+ *
+ * <h5 class='section'>Best Practices:</h5>
+ * <ul>
+ *    <li>Use {@link #a(Object...)} for arrays when type can be inferred, {@link #ao(Object...)} for Object arrays
+ *    <li>Use {@link #map(Object, Object, Object, Object, Object, Object)} when you need modifiable maps
+ *    <li>Use {@link #m(Object, Object, Object, Object, Object, Object)} when you need immutable/unmodifiable maps
+ *    <li>Use {@link #list(Object...)} or {@link #l(Object...)} for modifiable lists
+ *    <li>Static import these methods for maximum readability: <code>import static org.apache.juneau.common.utils.CollectionUtils.*;</code>
+ * </ul>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-common">juneau-common</a>
  * </ul>
@@ -411,6 +498,478 @@ public class CollectionUtils {
 	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @return A new modifiable map.
+	 */
+	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		m.put(k1, v1);
+		m.put(k2, v2);
+		m.put(k3, v3);
+		m.put(k4, v4);
+		return m;
+	}
+
+	/**
+	 * Convenience method for creating a {@link LinkedHashMap}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @return A new modifiable map.
+	 */
+	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		m.put(k1, v1);
+		m.put(k2, v2);
+		m.put(k3, v3);
+		m.put(k4, v4);
+		m.put(k5, v5);
+		return m;
+	}
+
+	/**
+	 * Convenience method for creating a {@link LinkedHashMap}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @return A new modifiable map.
+	 */
+	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
+		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		m.put(k1, v1);
+		m.put(k2, v2);
+		m.put(k3, v3);
+		m.put(k4, v4);
+		m.put(k5, v5);
+		m.put(k6, v6);
+		return m;
+	}
+
+	/**
+	 * Convenience method for creating a {@link LinkedHashMap}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @param k7 Key 7.
+	 * @param v7 Value 7.
+	 * @return A new modifiable map.
+	 */
+	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
+		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		m.put(k1, v1);
+		m.put(k2, v2);
+		m.put(k3, v3);
+		m.put(k4, v4);
+		m.put(k5, v5);
+		m.put(k6, v6);
+		m.put(k7, v7);
+		return m;
+	}
+
+	/**
+	 * Convenience method for creating a {@link LinkedHashMap}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @param k7 Key 7.
+	 * @param v7 Value 7.
+	 * @param k8 Key 8.
+	 * @param v8 Value 8.
+	 * @return A new modifiable map.
+	 */
+	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
+		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		m.put(k1, v1);
+		m.put(k2, v2);
+		m.put(k3, v3);
+		m.put(k4, v4);
+		m.put(k5, v5);
+		m.put(k6, v6);
+		m.put(k7, v7);
+		m.put(k8, v8);
+		return m;
+	}
+
+	/**
+	 * Convenience method for creating a {@link LinkedHashMap}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @param k7 Key 7.
+	 * @param v7 Value 7.
+	 * @param k8 Key 8.
+	 * @param v8 Value 8.
+	 * @param k9 Key 9.
+	 * @param v9 Value 9.
+	 * @return A new modifiable map.
+	 */
+	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
+		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		m.put(k1, v1);
+		m.put(k2, v2);
+		m.put(k3, v3);
+		m.put(k4, v4);
+		m.put(k5, v5);
+		m.put(k6, v6);
+		m.put(k7, v7);
+		m.put(k8, v8);
+		m.put(k9, v9);
+		return m;
+	}
+
+	/**
+	 * Convenience method for creating a {@link LinkedHashMap}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @param k7 Key 7.
+	 * @param v7 Value 7.
+	 * @param k8 Key 8.
+	 * @param v8 Value 8.
+	 * @param k9 Key 9.
+	 * @param v9 Value 9.
+	 * @param k10 Key 10.
+	 * @param v10 Value 10.
+	 * @return A new modifiable map.
+	 */
+	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
+		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		m.put(k1, v1);
+		m.put(k2, v2);
+		m.put(k3, v3);
+		m.put(k4, v4);
+		m.put(k5, v5);
+		m.put(k6, v6);
+		m.put(k7, v7);
+		m.put(k8, v8);
+		m.put(k9, v9);
+		m.put(k10, v10);
+		return m;
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @return A new unmodifiable empty map.
+	 */
+	public static <K,V> Map<K,V> m() {
+		return Map.of();
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1) {
+		return new SimpleUnmodifiableMap<>(a(k1), a(v1));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2) {
+		return new SimpleUnmodifiableMap<>(a(k1, k2), a(v1, v2));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3) {
+		return new SimpleUnmodifiableMap<>(a(k1, k2, k3), a(v1, v2, v3));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4), a(v1, v2, v3, v4));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5), a(v1, v2, v3, v4, v5));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
+		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6), a(v1, v2, v3, v4, v5, v6));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @param k7 Key 7.
+	 * @param v7 Value 7.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
+		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6, k7), a(v1, v2, v3, v4, v5, v6, v7));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @param k7 Key 7.
+	 * @param v7 Value 7.
+	 * @param k8 Key 8.
+	 * @param v8 Value 8.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
+		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8), a(v1, v2, v3, v4, v5, v6, v7, v8));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @param k7 Key 7.
+	 * @param v7 Value 7.
+	 * @param k8 Key 8.
+	 * @param v8 Value 8.
+	 * @param k9 Key 9.
+	 * @param v9 Value 9.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
+		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9), a(v1, v2, v3, v4, v5, v6, v7, v8, v9));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable map.
+	 * Unlike Map.of(...), supports null keys/values and preserves insertion order.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param k1 Key 1.
+	 * @param v1 Value 1.
+	 * @param k2 Key 2.
+	 * @param v2 Value 2.
+	 * @param k3 Key 3.
+	 * @param v3 Value 3.
+	 * @param k4 Key 4.
+	 * @param v4 Value 4.
+	 * @param k5 Key 5.
+	 * @param v5 Value 5.
+	 * @param k6 Key 6.
+	 * @param v6 Value 6.
+	 * @param k7 Key 7.
+	 * @param v7 Value 7.
+	 * @param k8 Key 8.
+	 * @param v8 Value 8.
+	 * @param k9 Key 9.
+	 * @param v9 Value 9.
+	 * @param k10 Key 10.
+	 * @param v10 Value 10.
+	 * @return A new unmodifiable map.
+	 */
+	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
+		return new SimpleUnmodifiableMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9, k10), a(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10));
+	}
+
+	/**
+	 * Convenience method for creating a {@link LinkedHashMap}.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param keyType The key type.
 	 * @param valueType The value type.
 	 * @return A new modifiable map.
@@ -434,7 +993,7 @@ public class CollectionUtils {
 			if (value == null)
 				value = list(entries);
 			else
-				value.addAll(0, alist(entries));
+				value.addAll(0, l(entries));
 		}
 		return value;
 	}
@@ -944,7 +1503,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <T> List<T> list(T...values) {  // NOSONAR
-		return new ArrayList<>(Arrays.asList(values));
+		return new ArrayList<>(l(values));
 	}
 
 	/**
@@ -968,7 +1527,7 @@ public class CollectionUtils {
 	 * @return An unmodifiable list containing the specified values, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
 	@SafeVarargs
-	public static <T> List<T> alist(T...values) {  // NOSONAR
+	public static <T> List<T> l(T...values) {  // NOSONAR
 		return values == null ? null : Arrays.asList(values);
 	}
 
@@ -1000,10 +1559,101 @@ public class CollectionUtils {
 		return x;
 	}
 
+	/**
+	 * Creates a 2-dimensional array.
+	 *
+	 * <p>
+	 * This method provides a convenient way to create 2D arrays with cleaner syntax than traditional Java.
+	 * While you could technically use {@code a(a(...), a(...))}, that approach fails for single-row arrays
+	 * like {@code a(a(...))} because the type system collapses it into a 1D array.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// 2D array with multiple rows</jc>
+	 * 	String[][] <jv>matrix</jv> = a2(
+	 * 		a(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>),
+	 * 		a(<js>"d"</js>, <js>"e"</js>, <js>"f"</js>),
+	 * 		a(<js>"g"</js>, <js>"h"</js>, <js>"i"</js>)
+	 * 	);
+	 *
+	 * 	<jc>// Single row - this works correctly with a2()</jc>
+	 * 	String[][] <jv>singleRow</jv> = a2(a(<js>"x"</js>, <js>"y"</js>, <js>"z"</js>));  <jc>// Returns String[1][3]</jc>
+	 *
+	 * 	<jc>// Without a2(), this would fail (becomes 1D array):</jc>
+	 * 	<jc>// String[] badAttempt = a(a("x", "y", "z"));  // Wrong! Returns String[3]</jc>
+	 *
+	 * 	<jc>// Empty 2D array</jc>
+	 * 	String[][] <jv>empty</jv> = a2();  <jc>// Returns String[0][]</jc>
+	 *
+	 * 	<jc>// Compare with traditional Java syntax:</jc>
+	 * 	String[][] <jv>traditional</jv> = <jk>new</jk> String[][] {
+	 * 		{<js>"a"</js>, <js>"b"</js>, <js>"c"</js>},
+	 * 		{<js>"d"</js>, <js>"e"</js>, <js>"f"</js>},
+	 * 		{<js>"g"</js>, <js>"h"</js>, <js>"i"</js>}
+	 * 	};
+	 * </p>
+	 *
+	 * <h5 class='section'>Use Cases:</h5>
+	 * <ul>
+	 * 	<li>Creating matrices or grids
+	 * 	<li>Building test data with multiple rows
+	 * 	<li>Representing tabular data
+	 * 	<li>Any scenario requiring a 2D array structure
+	 * </ul>
+	 *
+	 * @param <E> The element type of the inner arrays.
+	 * @param value The 1D arrays that will become rows in the 2D array.
+	 * @return A 2D array containing the specified rows.
+	 */
+	@SafeVarargs
 	public static <E> E[][] a2(E[]...value) {
 		return value;
 	}
 
+	/**
+	 * Creates an array of objects with the return type explicitly set to {@code Object[]}.
+	 *
+	 * <p>
+	 * This method is useful when you need to force the return type to be {@code Object[]} regardless of
+	 * the actual types of the elements passed in. This is particularly helpful in scenarios where:
+	 * <ul>
+	 * 	<li>You're mixing different types in the same array
+	 * 	<li>You need to avoid type inference issues with the generic {@link #a(Object...) a()} method
+	 * 	<li>You're working with APIs that specifically require {@code Object[]}
+	 * 	<li>You want to ensure maximum flexibility in what can be stored in the array
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Mixed types - works perfectly with ao()</jc>
+	 * 	Object[] <jv>mixed</jv> = ao(<js>"string"</js>, 42, <jk>true</jk>, 3.14, <jk>null</jk>);
+	 *
+	 * 	<jc>// Force Object[] return type even for uniform types</jc>
+	 * 	Object[] <jv>strings</jv> = ao(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);  <jc>// Returns Object[], not String[]</jc>
+	 *
+	 * 	<jc>// Compare with a() which infers the most specific type:</jc>
+	 * 	String[] <jv>typed</jv> = a(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);     <jc>// Returns String[]</jc>
+	 *
+	 * 	<jc>// Useful when you need Object[] for APIs:</jc>
+	 * 	<jk>void</jk> someMethod(Object[] args) { ... }
+	 * 	someMethod(ao(<js>"test"</js>, 123, <jk>true</jk>));  <jc>// No type issues</jc>
+	 *
+	 * 	<jc>// Empty Object array</jc>
+	 * 	Object[] <jv>empty</jv> = ao();
+	 *
+	 * 	<jc>// With null values</jc>
+	 * 	Object[] <jv>withNulls</jv> = ao(<js>"value"</js>, <jk>null</jk>, 42, <jk>null</jk>);
+	 * </p>
+	 *
+	 * <h5 class='section'>When to Use:</h5>
+	 * <ul>
+	 * 	<li>Use {@link #a(Object...) a()} when you want type inference for homogeneous arrays
+	 * 	<li>Use {@code ao()} when you explicitly need {@code Object[]} or have mixed types
+	 * </ul>
+	 *
+	 * @param value The objects to place in the array.
+	 * @return A new {@code Object[]} containing the specified objects.
+	 */
 	public static Object[] ao(Object...value) {
 		return value;
 	}
@@ -1087,7 +1737,7 @@ public class CollectionUtils {
 	 * @param type The element type class.
 	 * @return An empty list.
 	 */
-	public static <T> List<T> elist(Class<T> type) {
+	public static <T> List<T> liste(Class<T> type) {
 		return Collections.emptyList();
 	}
 
@@ -1100,7 +1750,7 @@ public class CollectionUtils {
 	 * @param valueType The value type class.
 	 * @return An empty unmodifiable map.
 	 */
-	public static <K,V> Map<K,V> emap(Class<K> keyType, Class<V> valueType) {
+	public static <K,V> Map<K,V> mape(Class<K> keyType, Class<V> valueType) {
 		return Collections.emptyMap();
 	}
 
@@ -1111,7 +1761,7 @@ public class CollectionUtils {
 	 * @param type The element type class.
 	 * @return <jk>null</jk>.
 	 */
-	public static <T> List<T> nlist(Class<T> type) {
+	public static <T> List<T> listn(Class<T> type) {
 		return null;
 	}
 
@@ -1124,7 +1774,7 @@ public class CollectionUtils {
 	 * @param valueType The value type class.
 	 * @return <jk>null</jk>.
 	 */
-	public static <K,V> Map<K,V> nmap(Class<K> keyType, Class<V> valueType) {
+	public static <K,V> Map<K,V> mapn(Class<K> keyType, Class<V> valueType) {
 		return null;
 	}
 

@@ -88,7 +88,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a03_get_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),
@@ -116,7 +116,7 @@ class RestClient_BasicCalls_Test extends TestBase {
  	}
 
 	@Test void a06_put_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),
@@ -132,7 +132,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a07_put_exhaustiveBodyTypes() throws Exception {
-		var bodies = list(
+		var bodies = l(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
 			stringResource("{f:1}"),
@@ -155,7 +155,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a10_post_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),
@@ -171,7 +171,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a11_exhaustiveBodyTypes() throws Exception {
-		var bodies = list(
+		var bodies = l(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
 			stringResource("{f:1}"),
@@ -189,7 +189,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a13_delete_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),
@@ -207,7 +207,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a15_options_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),
@@ -225,7 +225,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a17_head_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),
@@ -247,7 +247,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a19_formPost_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),
@@ -264,7 +264,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 		Supplier<Object>
 			s1 = () -> reader("f=1"),
 			s2 = () -> inputStream("f=1");
-		var bodies = list(
+		var bodies = l(
 			/*[ 0]*/ bean,
 			/*[ 1]*/ parts("f","1"),
 			/*[ 2]*/ a(part("f","1")),
@@ -298,7 +298,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a24_patch_exhaustiveBodyTypes() throws Exception {
-		var bodies = list(
+		var bodies = l(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
 			stringResource("{f:1}"),
@@ -313,7 +313,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a25_patch_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),
@@ -332,7 +332,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a27_request_PATCH_exhaustiveBodyTypes() throws Exception {
-		var bodies = list(
+		var bodies = l(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
 			stringResource("{f:1}"),
@@ -347,7 +347,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a28_request_PATCH_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),
@@ -365,7 +365,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 	}
 
 	@Test void a30_request_GET_exhaustiveUrls() throws Exception {
-		var urls = list(
+		var urls = l(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			url("http://localhost/bean"),

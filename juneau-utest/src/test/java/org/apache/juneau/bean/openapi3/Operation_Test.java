@@ -42,7 +42,7 @@ class Operation_Test extends TestBase {
 					.setParameters(parameter().setIn("c1").setName("c2"))
 					.setRequestBody(requestBodyInfo().setDescription("d"))
 					.setResponses(map("200", response().setDescription("e")))
-					.setSecurity(securityRequirement().setRequirements(map("f1",list("f2"))))
+					.setSecurity(securityRequirement().setRequirements(map("f1",l("f2"))))
 					.setServers(server().setUrl(java.net.URI.create("http://example.com")))
 					.setSummary("g")
 					.setTags("h")
@@ -109,15 +109,15 @@ class Operation_Test extends TestBase {
 		@Test void a10_collectionSetters() {
 			// Test Collection variants of setters
 			var x = bean()
-				.setParameters(list(
+				.setParameters(l(
 					parameter().setIn("a1").setName("a2"),
 					parameter().setIn("a3").setName("a4")
 				))
-				.setSecurity(list(
-					securityRequirement().setRequirements(map("b1", list("b2"))),
-					securityRequirement().setRequirements(map("b3", list("b4")))
+				.setSecurity(l(
+					securityRequirement().setRequirements(map("b1", l("b2"))),
+					securityRequirement().setRequirements(map("b3", l("b4")))
 				))
-				.setTags(list("c1", "c2"));
+				.setTags(l("c1", "c2"));
 
 			assertBean(x,
 				"parameters{#{in,name}},security{0{requirements{b1}},1{requirements{b3}}},tags",
@@ -154,15 +154,15 @@ class Operation_Test extends TestBase {
 		@Test void a14_addMethods() {
 			var x = bean()
 				.addTags("a1", "a2")
-				.addTags(list("a3"))
+				.addTags(l("a3"))
 				.addParameters(parameter().setIn("b1").setName("b2"))
-				.addParameters(list(parameter().setIn("b3").setName("b4")))
+				.addParameters(l(parameter().setIn("b3").setName("b4")))
 				.addResponse("200", response().setDescription("c1"))
 				.addCallback("d1", callback())
-				.addSecurity(securityRequirement().setRequirements(map("e1", list("e2"))))
-				.addSecurity(list(securityRequirement().setRequirements(map("e3", list("e4")))))
+				.addSecurity(securityRequirement().setRequirements(map("e1", l("e2"))))
+				.addSecurity(l(securityRequirement().setRequirements(map("e3", l("e4")))))
 				.addServers(server().setUrl(URI.create("http://f1.com")))
-				.addServers(list(server().setUrl(URI.create("http://f2.com"))));
+				.addServers(l(server().setUrl(URI.create("http://f2.com"))));
 
 			assertBean(x,
 				"tags,parameters{#{in,name}},responses{200{description}},callbacks{d1},security{#{requirements}},servers{#{url}}",
@@ -172,10 +172,10 @@ class Operation_Test extends TestBase {
 
 		@Test void a15_collectionSetters() {
 			var x = bean()
-				.setParameters(list(parameter().setIn("a1").setName("a2"), parameter().setIn("b1").setName("b2")))
-				.setSecurity(list(securityRequirement().setRequirements(map("c1", list("c2"))), securityRequirement().setRequirements(map("d1", list("d2")))))
-				.setServers(list(server().setUrl(java.net.URI.create("http://example1.com")), server().setUrl(java.net.URI.create("http://example2.com"))))
-				.setTags(list("f1", "f2"));
+				.setParameters(l(parameter().setIn("a1").setName("a2"), parameter().setIn("b1").setName("b2")))
+				.setSecurity(l(securityRequirement().setRequirements(map("c1", l("c2"))), securityRequirement().setRequirements(map("d1", l("d2")))))
+				.setServers(l(server().setUrl(java.net.URI.create("http://example1.com")), server().setUrl(java.net.URI.create("http://example2.com"))))
+				.setTags(l("f1", "f2"));
 
 			assertBean(x,
 				"parameters{#{in,name}},security{#{requirements}},servers{#{url}},tags",
@@ -190,7 +190,7 @@ class Operation_Test extends TestBase {
 
 			// Test with parameters set
 			var x = bean()
-				.setParameters(list(
+				.setParameters(l(
 					parameter().setIn("query").setName("param1"),
 					parameter().setIn("path").setName("param2")
 				));
@@ -275,18 +275,18 @@ class Operation_Test extends TestBase {
 		private static final BeanTester<Operation> TESTER =
 			testBean(
 				bean()
-					.set("callbacks", map("a1", callback()))
+					.set("callbacks", m("a1", callback()))
 					.set("deprecated", true)
 					.set("description", "b")
 					.set("externalDocs", externalDocumentation().setUrl(URI.create("c")))
 					.set("operationId", "d")
-					.set("parameters", list(parameter("e1", "e2")))
+					.set("parameters", l(parameter("e1", "e2")))
 					.set("requestBody", requestBodyInfo().setDescription("f"))
-					.set("responses", map("g1", response("g2")))
-					.set("security", list(securityRequirement().set("h1", list("h2"))))
-					.set("servers", list(server().setUrl(URI.create("i"))))
+					.set("responses", m("g1", response("g2")))
+					.set("security", l(securityRequirement().set("h1", l("h2"))))
+					.set("servers", l(server().setUrl(URI.create("i"))))
 					.set("summary", "j")
-					.set("tags", list("k"))
+					.set("tags", l("k"))
 					.set("x1", "x1a")
 					.set("x2", null)
 			)

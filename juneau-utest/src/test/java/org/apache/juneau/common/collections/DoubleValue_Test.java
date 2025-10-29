@@ -137,7 +137,7 @@ class DoubleValue_Test extends TestBase {
 	void c01_trackingPreciseSum() {
 		var sum = DoubleValue.create();
 
-		list(1.111, 2.222, 3.333, 4.444).forEach(x -> {
+		l(1.111, 2.222, 3.333, 4.444).forEach(x -> {
 			sum.set(sum.get() + x);
 		});
 
@@ -149,7 +149,7 @@ class DoubleValue_Test extends TestBase {
 		var sum = DoubleValue.create();
 		var count = DoubleValue.create();
 
-		list(10.5, 20.3, 15.7, 30.1).forEach(x -> {
+		l(10.5, 20.3, 15.7, 30.1).forEach(x -> {
 			sum.set(sum.get() + x);
 			count.set(count.get() + 1);
 		});
@@ -162,7 +162,7 @@ class DoubleValue_Test extends TestBase {
 	void c03_trackingMaxValue() {
 		var max = DoubleValue.of(Double.MIN_VALUE);
 
-		list(5.5, 12.3, 3.8, 20.1, 1.2).forEach(x -> {
+		l(5.5, 12.3, 3.8, 20.1, 1.2).forEach(x -> {
 			if (x > max.get()) {
 				max.set(x);
 			}

@@ -1067,7 +1067,7 @@ public class Parser extends BeanContextable {
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public final List<MediaType> getMediaTypes() { return alist(consumesArray); }
+	public final List<MediaType> getMediaTypes() { return l(consumesArray); }
 
 	/**
 	 * Returns the first media type handled based on the values passed to the <c>consumes</c> constructor parameter.

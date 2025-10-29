@@ -773,8 +773,8 @@ class HttpPartSchema_Header_Test extends TestBase {
 		var s = HttpPartSchema.create().applyAll(Header.class, D01.class).build();
 
 		List<String>
-			good = alist("a","b"),
-			bad = alist("a","a");
+			good = l("a","b"),
+			bad = l("a","a");
 
 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

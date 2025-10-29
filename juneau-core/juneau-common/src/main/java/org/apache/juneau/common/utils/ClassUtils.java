@@ -275,4 +275,93 @@ public class ClassUtils {
 	public static boolean isVoid(Class c) {
 		return (c == null || c == void.class || c == Void.class || c.getSimpleName().equalsIgnoreCase("void"));
 	}
+
+	@SuppressWarnings("rawtypes")
+	private static Cache<Class,Boolean> MODIFIABLE_COLLECTION_TYPES = Cache.of(Class.class, Boolean.class).build();
+
+	/**
+	 * Determines whether the specified collection supports modification operations (e.g., {@code add()}, {@code remove()}).
+	 *
+	 * <p>
+	 * This method performs a heuristic check based on the collection's class name to determine if it's likely modifiable.
+	 * It checks whether the class name contains indicators of immutability such as "Immutable", "Unmodifiable",
+	 * or "Arrays$ArrayList" (which represents the unmodifiable list returned by {@link Arrays#asList(Object...)}).
+	 *
+	 * <p>
+	 * Results are cached for performance, so repeated calls for the same collection type are very fast.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Modifiable collections</jc>
+	 * 	canAddTo(<jk>new</jk> ArrayList&lt;&gt;());        <jc>// true</jc>
+	 * 	canAddTo(<jk>new</jk> LinkedList&lt;&gt;());       <jc>// true</jc>
+	 * 	canAddTo(<jk>new</jk> HashSet&lt;&gt;());          <jc>// true</jc>
+	 *
+	 * 	<jc>// Unmodifiable collections</jc>
+	 * 	canAddTo(Collections.unmodifiableList(...));    <jc>// false</jc>
+	 * 	canAddTo(Collections.unmodifiableSet(...));     <jc>// false</jc>
+	 * 	canAddTo(Arrays.asList(<js>"a"</js>, <js>"b"</js>));               <jc>// false</jc>
+	 * 	canAddTo(List.of(<js>"a"</js>, <js>"b"</js>));                     <jc>// false (ImmutableCollections)</jc>
+	 * </p>
+	 *
+	 * <p>
+	 * <b>Note:</b> This is a heuristic check based on naming conventions. It does not attempt to actually
+	 * modify the collection, so it never throws exceptions. However, it may produce false positives for
+	 * custom collection implementations with misleading names.
+	 *
+	 * @param value The collection to check. Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the collection is likely modifiable, <jk>false</jk> if it's likely unmodifiable.
+	 * @throws IllegalArgumentException If value is <jk>null</jk>.
+	 */
+	public static boolean canAddTo(Collection<?> value) {
+		assertArgNotNull("value", value);
+		return canAddTo(value.getClass());
+	}
+
+	/**
+	 * Determines whether the specified map supports modification operations (e.g., {@code put()}, {@code remove()}).
+	 *
+	 * <p>
+	 * This method performs a heuristic check based on the map's class name to determine if it's likely modifiable.
+	 * It checks whether the class name contains indicators of immutability such as "Immutable", "Unmodifiable",
+	 * or "Arrays$ArrayList" (which represents unmodifiable collections).
+	 *
+	 * <p>
+	 * Results are cached for performance, so repeated calls for the same map type are very fast.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Modifiable maps</jc>
+	 * 	canPutTo(<jk>new</jk> HashMap&lt;&gt;());          <jc>// true</jc>
+	 * 	canPutTo(<jk>new</jk> LinkedHashMap&lt;&gt;());    <jc>// true</jc>
+	 * 	canPutTo(<jk>new</jk> TreeMap&lt;&gt;());          <jc>// true</jc>
+	 *
+	 * 	<jc>// Unmodifiable maps</jc>
+	 * 	canPutTo(Collections.unmodifiableMap(...));     <jc>// false</jc>
+	 * 	canPutTo(Map.of(<js>"key"</js>, <js>"value"</js>));              <jc>// false (ImmutableCollections)</jc>
+	 * </p>
+	 *
+	 * <p>
+	 * <b>Note:</b> This is a heuristic check based on naming conventions. It does not attempt to actually
+	 * modify the map, so it never throws exceptions. However, it may produce false positives for
+	 * custom map implementations with misleading names.
+	 *
+	 * @param value The map to check. Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the map is likely modifiable, <jk>false</jk> if it's likely unmodifiable.
+	 * @throws IllegalArgumentException If value is <jk>null</jk>.
+	 */
+	public static boolean canPutTo(Map<?,?> value) {
+		assertArgNotNull("value", value);
+		return canAddTo(value.getClass());
+	}
+
+	private static boolean canAddTo(Class<?> c) {
+		var b = MODIFIABLE_COLLECTION_TYPES.get(c);
+		if (b == null) {
+			var name = c.getName();
+			b = ! (name.contains("Immutable") || name.contains("Unmodifiable") || name.contains("Arrays$ArrayList"));
+			MODIFIABLE_COLLECTION_TYPES.put(c, b);
+		}
+		return b;
+	}
 }

@@ -290,7 +290,7 @@ class Xml_Test extends TestBase {
 
 	@Bean(typeName="foo")
 	public static class J1 {
-		@Beanp(properties="f2") public List<J2> f1 = list(new J2());
+		@Beanp(properties="f2") public List<J2> f1 = l(new J2());
 	}
 
 	@Bean(typeName="bar")

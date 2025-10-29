@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -101,7 +102,7 @@ class ShortValue_Test extends TestBase {
 		ShortValue v = new ShortValue(null);
 		v.setIfEmpty((short)10);
 		assertEquals((short)10, v.get());
-		
+
 		v.setIfEmpty((short)20);
 		assertEquals((short)10, v.get()); // Should not change
 	}
@@ -110,7 +111,7 @@ class ShortValue_Test extends TestBase {
 	void c03_orElse() {
 		ShortValue v = new ShortValue(null);
 		assertEquals((short)99, v.orElse((short)99));
-		
+
 		v.set((short)42);
 		assertEquals((short)42, v.orElse((short)99));
 	}
@@ -134,7 +135,7 @@ class ShortValue_Test extends TestBase {
 	void c06_isPresent() {
 		ShortValue v = new ShortValue(null);
 		assertFalse(v.isPresent());
-		
+
 		v.set((short)1);
 		assertTrue(v.isPresent());
 	}
@@ -143,7 +144,7 @@ class ShortValue_Test extends TestBase {
 	void c07_isEmpty() {
 		ShortValue v = new ShortValue(null);
 		assertTrue(v.isEmpty());
-		
+
 		v.set((short)1);
 		assertFalse(v.isEmpty());
 	}
@@ -169,37 +170,37 @@ class ShortValue_Test extends TestBase {
 	@Test
 	void d01_countingInLambda() {
 		ShortValue counter = ShortValue.create();
-		
-		java.util.Arrays.asList(1, 2, 3, 4, 5).forEach(x -> {
+
+		l(1, 2, 3, 4, 5).forEach(x -> {
 			if (x % 2 == 0) {
 				counter.getAndIncrement();
 			}
 		});
-		
+
 		assertEquals((short)2, counter.get());
 	}
 
 	@Test
 	void d02_trackingMaxValue() {
 		ShortValue max = ShortValue.of((short)0);
-		
-		java.util.Arrays.asList((short)5, (short)12, (short)3, (short)8, (short)20, (short)1).forEach(x -> {
+
+		l((short)5, (short)12, (short)3, (short)8, (short)20, (short)1).forEach(x -> {
 			if (x > max.get()) {
 				max.set(x);
 			}
 		});
-		
+
 		assertEquals((short)20, max.get());
 	}
 
 	@Test
 	void d03_accumulatingValues() {
 		ShortValue sum = ShortValue.create();
-		
-		java.util.Arrays.asList((short)1, (short)2, (short)3, (short)4, (short)5).forEach(x -> {
+
+		l((short)1, (short)2, (short)3, (short)4, (short)5).forEach(x -> {
 			sum.set((short)(sum.get() + x));
 		});
-		
+
 		assertEquals((short)15, sum.get());
 	}
 }

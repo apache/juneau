@@ -166,7 +166,7 @@ class Link_Test extends TestBase {
 					.set("description", "a")
 					.set("operationId", "b")
 					.set("operationRef", "c")
-					.set("parameters", map("d1", "d2"))
+					.set("parameters", m("d1", "d2"))
 					.set("requestBody", "e")
 					.set("server", server().setUrl(URI.create("f")))
 					.set("x1", "x1a")

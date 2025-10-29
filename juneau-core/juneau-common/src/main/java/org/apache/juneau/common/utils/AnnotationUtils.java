@@ -122,7 +122,7 @@ public class AnnotationUtils {
 	}
 
 	private static Stream<Method> getAnnotationMethods(Class<? extends Annotation> type) {
-		return alist(type.getDeclaredMethods()).stream().filter(x -> x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation());
+		return l(type.getDeclaredMethods()).stream().filter(x -> x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation());
 	}
 
 	private static int hashMember(String name, Object value) {

@@ -139,7 +139,7 @@ public class StringRange {
 	 *
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
-	public List<NameValuePair> getExtensions() { return alist(extensions); }
+	public List<NameValuePair> getExtensions() { return l(extensions); }
 
 	/**
 	 * Returns the name of this string range.

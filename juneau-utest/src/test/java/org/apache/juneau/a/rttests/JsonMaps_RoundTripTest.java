@@ -17,7 +17,6 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.util.*;
@@ -48,11 +47,11 @@ class JsonMaps_RoundTripTest extends RoundTripTest_Base {
 		x2 = t.roundTrip(x2, A[].class);
 		assertBean(x2, "length,#{f1,f2}", "1,[{a,2}]");
 
-		var x3 = alist(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		var x3 = l(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		x3 = t.roundTrip(x3, List.class, A.class);
 		assertBean(x3, "size,0{f1,f2}", "1,{a,2}");
 
-		var x4 = map("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
+		var x4 = m("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		x4 = t.roundTrip(x4, Map.class, String.class, A.class);
 		assertBean(x4, "size,a{f1,f2}", "1,{a,2}");
 	}

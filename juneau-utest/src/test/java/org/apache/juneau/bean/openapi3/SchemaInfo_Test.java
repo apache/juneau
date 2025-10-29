@@ -41,7 +41,7 @@ class SchemaInfo_Test extends TestBase {
 					.setDefault("a")
 					.setDeprecated(true)
 					.setDescription("b")
-					.setEnum(list("c1", "c2"))
+					.setEnum(l("c1", "c2"))
 					.setExample("d")
 					.setExclusiveMaximum(true)
 					.setExclusiveMinimum(true)
@@ -60,7 +60,7 @@ class SchemaInfo_Test extends TestBase {
 					.setPattern("g")
 					.setReadOnly(true)
 					.setRef("h")
-					.setRequired(list("i"))
+					.setRequired(l("i"))
 					.setTitle("j")
 					.setType("k")
 					.setUniqueItems(true)
@@ -155,8 +155,8 @@ class SchemaInfo_Test extends TestBase {
 
 		@Test void a13_collectionSetters() {
 			var x = bean()
-				.setEnum(list("a1", "a2"))
-				.setRequired(list("b1", "b2"));
+				.setEnum(l("a1", "a2"))
+				.setRequired(l("b1", "b2"));
 
 			assertBean(x,
 				"enum,required",
@@ -210,12 +210,12 @@ class SchemaInfo_Test extends TestBase {
 				bean()
 					.set("additionalItems", schemaInfo("a"))
 					.set("additionalProperties", schemaInfo("b"))
-					.set("allOf", list(schemaInfo("c1"), schemaInfo("c2")))
-					.set("anyOf", list(schemaInfo("d1"), schemaInfo("d2")))
+					.set("allOf", l(schemaInfo("c1"), schemaInfo("c2")))
+					.set("anyOf", l(schemaInfo("d1"), schemaInfo("d2")))
 					.set("default", "e")
 					.set("description", "f")
 					.set("discriminator", discriminator("g"))
-					.set("enum", list("h1", "h2"))
+					.set("enum", l("h1", "h2"))
 					.set("example", "i")
 					.set("exclusiveMaximum", true)
 					.set("exclusiveMinimum", true)
@@ -233,11 +233,11 @@ class SchemaInfo_Test extends TestBase {
 					.set("multipleOf", 9)
 					.set("not", schemaInfo("m"))
 					.set("nullable", true)
-					.set("oneOf", list(schemaInfo("n1"), schemaInfo("n2")))
+					.set("oneOf", l(schemaInfo("n1"), schemaInfo("n2")))
 					.set("pattern", "o")
-					.set("properties", map("p1", schemaInfo("p2")))
+					.set("properties", m("p1", schemaInfo("p2")))
 					.set("readOnly", true)
-					.set("required", list("q1", "q2"))
+					.set("required", l("q1", "q2"))
 					.set("title", "r")
 					.set("type", "s")
 					.set("uniqueItems", true)

@@ -17,7 +17,6 @@
 package org.apache.juneau.junit.bct;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -362,7 +361,7 @@ class BctAssertions_Test extends TestBase {
 		void h06_predicateValidation() {
 			// Test lines 765-766: Predicate-based element validation
 			var args = args().setMessage("Custom predicate message");
-			var numbers = Arrays.asList(1, 2, 3, 4, 5);
+			var numbers = l(1, 2, 3, 4, 5);
 
 			// Test successful predicate validation
 			assertDoesNotThrow(() -> assertList(args, numbers,
@@ -374,7 +373,7 @@ class BctAssertions_Test extends TestBase {
 			));
 
 			// Test failed predicate validation - use single element list to avoid length mismatch
-			var singleNumber = Arrays.asList(1);
+			var singleNumber = l(1);
 			var e = assertThrows(AssertionFailedError.class, () ->
 				assertList(args, singleNumber, (Predicate<Integer>) x -> x == 99)); // Should fail
 			assertContains("Element at index 0 did not pass predicate", e.getMessage());
@@ -384,7 +383,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h07_multipleErrors() {
 			// Test that multiple assertion errors are collected and reported together
-			var list = Arrays.asList("a", "wrong1", "c", "wrong2", "e");
+			var list = l("a", "wrong1", "c", "wrong2", "e");
 			var expected = ao("a", "b", "c", "d", "e");
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertList(list, expected));
@@ -405,7 +404,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h08_singleError() {
 			// Test that single errors are still reported as single assertion failures
-			var list = Arrays.asList("a", "wrong", "c");
+			var list = l("a", "wrong", "c");
 			var expected = ao("a", "b", "c");
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertList(list, expected));
@@ -755,7 +754,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h01_assertListWithMixedTypes() {
 			// Test list with mixed data types
-			var mixedList = Arrays.asList("string", 42, true, 3.14, null);
+			var mixedList = l("string", 42, true, 3.14, null);
 
 			assertList(mixedList, "string", 42, true, 3.14, null);
 			assertSize(5, mixedList);
@@ -766,7 +765,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h02_assertMatchesGlobWithComplexPatterns() {
 			// Test glob matching with various patterns
-			var testStrings = Arrays.asList(
+			var testStrings = l(
 				"hello.txt", "test_file.log", "document.pdf",
 				"IMG_001.jpg", "data.xml", "script.js"
 			);
@@ -782,7 +781,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h03_assertEmptyWithVariousEmptyTypes() {
 			// Test empty assertions with different empty types
-			assertEmpty(Arrays.asList());
+			assertEmpty(l());
 			assertEmpty(new HashMap<>());
 			assertEmpty(new HashSet<>());
 			assertEmpty(Optional.empty());
@@ -791,7 +790,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h04_assertNotEmptyWithVariousNonEmptyTypes() {
 			// Test non-empty assertions
-			assertNotEmpty(Arrays.asList("item"));
+			assertNotEmpty(l("item"));
 			assertNotEmpty(Map.of("key", "value"));
 			assertNotEmpty(Set.of("element"));
 			assertNotEmpty(Optional.of("value"));

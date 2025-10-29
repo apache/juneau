@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.beans;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -56,7 +57,7 @@ class SeeOtherRoot_Test extends TestBase {
 		assertSame(x, x.setHeader2("X-Test2", "test-value2"));
 
 		// Test setHeaders(List<Header>) returns same instance
-		List<Header> headerList = Arrays.asList(BasicHeader.of("X-Header1", "value1"));
+		List<Header> headerList = l(BasicHeader.of("X-Header1", "value1"));
 		assertSame(x, x.setHeaders(headerList));
 		assertEquals("value1", x.getFirstHeader("X-Header1").getValue());
 
@@ -98,7 +99,7 @@ class SeeOtherRoot_Test extends TestBase {
 	@Test void a04_fluentChaining() throws Exception {
 		// Test multiple fluent calls can be chained
 		var x = new SeeOtherRoot()
-			.setHeaders(Arrays.asList(BasicHeader.of("X-Chain", "chained")))
+			.setHeaders(l(BasicHeader.of("X-Chain", "chained")))
 			.setContent("Redirect content");
 
 		assertEquals("chained", x.getFirstHeader("X-Chain").getValue());

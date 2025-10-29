@@ -140,7 +140,7 @@ class DefaultSwaps_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Iterator.class, new IteratorSwap())
 	//------------------------------------------------------------------------------------------------------------------
-	private static List<String> B = list("foo","bar");
+	private static List<String> B = l("foo","bar");
 
 	public static class BSwap extends StringSwap<Iterator<?>> {
 		@Override /* ObjectSwap */
@@ -167,7 +167,7 @@ class DefaultSwaps_Test extends TestBase {
 		test1("{f1:['foo','bar'],f2:'FOO'}", new BBean());
 	}
 
-	private static List<String> Bc = list("foo","bar");
+	private static List<String> Bc = l("foo","bar");
 
 	public static class BcSwap extends StringSwap<Iterator<?>> {
 		@Override /* ObjectSwap */

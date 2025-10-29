@@ -60,7 +60,7 @@ class SerializedHttpEntity_Test extends TestBase {
 	}
 
 	@Test void a02_schema() throws Exception {
-		serializedEntity(alist("foo","bar"),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is("foo|bar");
+		serializedEntity(l("foo","bar"),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is("foo|bar");
 	}
 
 	@Test void a03_serializer_streaming() throws Exception {

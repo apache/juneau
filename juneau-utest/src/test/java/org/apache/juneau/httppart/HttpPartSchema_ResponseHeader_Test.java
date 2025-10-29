@@ -754,8 +754,8 @@ class HttpPartSchema_ResponseHeader_Test extends TestBase {
 	@Test void d01b_uniqueItems_collections() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Header.class, D01.class).build();
 
-		var good = alist("a","b");
-		var bad = alist("a","a");
+		var good = l("a","b");
+		var bad = l("a","a");
 
 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

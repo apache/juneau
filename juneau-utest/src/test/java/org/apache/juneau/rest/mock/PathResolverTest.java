@@ -206,7 +206,7 @@ class PathResolverTest extends TestBase {
 	}
 
 	@Test void basicWithPathVars() {
-		Map<String,Object> vars = map("foo","123");
+		Map<String,Object> vars = m("foo","123");
 
 		create(null, null, null, "/foo", vars)
 			.assertUri().is("http://localhost/foo")
@@ -224,7 +224,7 @@ class PathResolverTest extends TestBase {
 	}
 
 	@Test void fullPaths() {
-		Map<String,Object> vars = map("foo","123");
+		Map<String,Object> vars = m("foo","123");
 
 		create(null, null, null, "http://foobar/foo", vars)
 			.assertUri().is("http://foobar/foo")
@@ -311,14 +311,14 @@ class PathResolverTest extends TestBase {
 			.assertContextPath().is("/foo")
 			.assertServletPath().is("/bar/baz")
 			.assertPathInfo().is("/qux/quux");
-		create(null, "/{x}", "/{x}/{x}", "http://foobar/foo/bar/baz/qux/quux", vars)
+		create(null, "/{x}", "/{x}/{y}", "http://foobar/foo/bar/baz/qux/quux", vars)
 			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz/qux/quux")
 			.assertTarget().is("http://foobar")
 			.assertContextPath().is("/foo")
 			.assertServletPath().is("/bar/baz")
 			.assertPathInfo().is("/qux/quux");
-		create(null, "/{bar}", "/{bar}/{bar}", "http://foobar/foo/bar/baz/qux/quux", vars)
+		create(null, "/{bar}", "/{bar}/{baz}", "http://foobar/foo/bar/baz/qux/quux", vars)
 			.assertError().isNull()
 			.assertUri().is("http://foobar/foo/bar/baz/qux/quux")
 			.assertTarget().is("http://foobar")

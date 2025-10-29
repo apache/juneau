@@ -94,7 +94,7 @@ class HtmlElementContainer_Test extends TestBase {
 
 	@Test void a03_setChildren() {
 		Div x = new Div();
-		java.util.List<Object> children = java.util.Arrays.asList("child1", "child2");
+		java.util.List<Object> children = l("child1", "child2");
 		x.setChildren(children);
 		assertString("[child1,child2]", x.getChildren());
 	}

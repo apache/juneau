@@ -235,7 +235,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			ClassMeta<?> cm = getClassMetaForObject(o);
 			Collection<?> l = null;
 			if (cm.isArray()) {
-				l = alist((Object[])o);
+				l = l((Object[])o);
 			} else if (cm.isCollection()) {
 				l = (Collection<?>)o;
 			} else {

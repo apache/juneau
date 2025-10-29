@@ -117,8 +117,8 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		assertEquals("{f:'1'}",x.x5(Bean.create()));
 		assertEquals("{x:'f=1,f=1'}",x.x6(a(Bean.create(),Bean.create())));
 		assertEquals("{x:'@((f=1),(f=1))'}",x.x7(a(Bean.create(),Bean.create())));
-		assertEquals("{x:'f=1,f=1'}",x.x8(alist(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.x9(alist(Bean.create(),Bean.create())));
+		assertEquals("{x:'f=1,f=1'}",x.x8(l(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.x9(l(Bean.create(),Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.x10(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.x11(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.x12(map("k1",Bean.create())));
@@ -136,7 +136,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		assertEquals("{foo:'bar'}",x.x23(inputStream("foo=bar")));
 		assertEquals("{foo:'bar'}",x.x24(reader("foo=bar")));
 		assertEquals("{f:'1'}",x.x25(Bean2.create()));
-		assertEquals("{foo:'bar'}",x.x26(alist(part("foo","bar"))));
+		assertEquals("{foo:'bar'}",x.x26(l(part("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -840,10 +840,10 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 	}
 
 	public static class K6a {
-		@FormData public List<Object> getA() { return alist("foo","","true","123","null",true,123,null); }
-		@FormData("b") public List<Object> getX1() { return alist("foo","","true","123","null",true,123,null); }
-		@FormData(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return alist("foo","","true","123","null",true,123,null); }
-		@FormData("d") @Schema(aev=true) public List<Object> getX3() { return alist(); }
+		@FormData public List<Object> getA() { return l("foo","","true","123","null",true,123,null); }
+		@FormData("b") public List<Object> getX1() { return l("foo","","true","123","null",true,123,null); }
+		@FormData(name="c",serializer=FakeWriterSerializer.X.class) public List<Object> getX2() { return l("foo","","true","123","null",true,123,null); }
+		@FormData("d") @Schema(aev=true) public List<Object> getX3() { return l(); }
 		@FormData("e") public List<Object> getX4() { return null; }
 		@FormData("f") public Object[] getX5() { return a("foo","","true","123","null",true,123,null); }
 		@FormData(name="g",serializer=FakeWriterSerializer.X.class) public Object[] getX6() { return a("foo","","true","123","null",true,123,null); }

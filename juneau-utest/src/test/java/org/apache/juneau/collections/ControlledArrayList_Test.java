@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.collections;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -36,16 +35,16 @@ class ControlledArrayList_Test extends TestBase {
 		x = new ControlledArrayList<>(true);
 		assertFalse(x.isModifiable());
 
-		x = new ControlledArrayList<>(false, Arrays.asList(1));
+		x = new ControlledArrayList<>(false, l(1));
 		assertTrue(x.isModifiable());
 
-		x = new ControlledArrayList<>(true, Arrays.asList(1));
+		x = new ControlledArrayList<>(true, l(1));
 		assertFalse(x.isModifiable());
 	}
 
 	@Test void a02_basicMethods() {
-		var x1 = new ControlledArrayList<>(false, Arrays.asList(1));
-		var x2 = new ControlledArrayList<>(true, Arrays.asList(1));
+		var x1 = new ControlledArrayList<>(false, l(1));
+		var x2 = new ControlledArrayList<>(true, l(1));
 
 		x1.set(0, 2);
 		assertThrows(UnsupportedOperationException.class, () -> x2.set(0, 2));
@@ -62,9 +61,9 @@ class ControlledArrayList_Test extends TestBase {
 		x2.overrideRemove(0);
 		assertEquals(x2, x1);
 
-		x1.addAll(0, Arrays.asList(3));
-		assertThrows(UnsupportedOperationException.class, () -> x2.addAll(0, Arrays.asList(3)));
-		x2.overrideAddAll(0, Arrays.asList(3));
+		x1.addAll(0, l(3));
+		assertThrows(UnsupportedOperationException.class, () -> x2.addAll(0, l(3)));
+		x2.overrideAddAll(0, l(3));
 		assertEquals(x2, x1);
 
 		x1.replaceAll(x -> x);
@@ -87,19 +86,19 @@ class ControlledArrayList_Test extends TestBase {
 		x2.overrideRemove((Integer)1);
 		assertEquals(x2, x1);
 
-		x1.addAll(Arrays.asList(3));
-		assertThrows(UnsupportedOperationException.class, () -> x2.addAll(Arrays.asList(3)));
-		x2.overrideAddAll(Arrays.asList(3));
+		x1.addAll(l(3));
+		assertThrows(UnsupportedOperationException.class, () -> x2.addAll(l(3)));
+		x2.overrideAddAll(l(3));
 		assertEquals(x2, x1);
 
-		x1.removeAll(Arrays.asList(3));
-		assertThrows(UnsupportedOperationException.class, () -> x2.removeAll(Arrays.asList(3)));
-		x2.overrideRemoveAll(Arrays.asList(3));
+		x1.removeAll(l(3));
+		assertThrows(UnsupportedOperationException.class, () -> x2.removeAll(l(3)));
+		x2.overrideRemoveAll(l(3));
 		assertEquals(x2, x1);
 
-		x1.retainAll(Arrays.asList(2));
-		assertThrows(UnsupportedOperationException.class, () -> x2.retainAll(Arrays.asList(2)));
-		x2.overrideRetainAll(Arrays.asList(2));
+		x1.retainAll(l(2));
+		assertThrows(UnsupportedOperationException.class, () -> x2.retainAll(l(2)));
+		x2.overrideRetainAll(l(2));
 		assertEquals(x2, x1);
 
 		x1.clear();
@@ -125,8 +124,8 @@ class ControlledArrayList_Test extends TestBase {
 	}
 
 	@Test void a03_iterator() {
-		var x1 = new ControlledArrayList<>(false, Arrays.asList(1));
-		var x2 = new ControlledArrayList<>(true, Arrays.asList(1));
+		var x1 = new ControlledArrayList<>(false, l(1));
+		var x2 = new ControlledArrayList<>(true, l(1));
 
 		var i1 = x1.iterator();
 		var i2 = x2.iterator();
@@ -145,8 +144,8 @@ class ControlledArrayList_Test extends TestBase {
 	}
 
 	@Test void a04_listIterator() {
-		var x1 = new ControlledArrayList<>(false, Arrays.asList(1));
-		var x2 = new ControlledArrayList<>(true, Arrays.asList(1));
+		var x1 = new ControlledArrayList<>(false, l(1));
+		var x2 = new ControlledArrayList<>(true, l(1));
 
 		var i1a = x1.listIterator();
 		var i2a = x2.listIterator();

@@ -118,7 +118,7 @@ class RestClient_Config_Serializer_Test extends TestBase {
 	}
 
 	@Test void a08_sortMapsBoolean() throws Exception {
-		var x = map("c",3,"a",1,"b",2);
+		var x = m("c",3,"a",1,"b",2);
 		client().sortMaps().build().post("/echoBody",x).run().assertContent("{a:1,b:2,c:3}");
 	}
 

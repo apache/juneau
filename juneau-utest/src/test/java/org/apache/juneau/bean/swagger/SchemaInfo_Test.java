@@ -147,9 +147,9 @@ class SchemaInfo_Test extends TestBase {
 
 		@Test void a12_collectionSetters() {
 			var x = bean()
-				.setAllOf(list(schemaInfo().setType("a"), schemaInfo().setType("b")))
-				.setEnum(list("c", "d"))
-				.setRequiredProperties(list("e", "f"));
+				.setAllOf(l(schemaInfo().setType("a"), schemaInfo().setType("b")))
+				.setEnum(l("c", "d"))
+				.setRequiredProperties(l("e", "f"));
 
 			assertBean(x,
 				"allOf{#{type}},enum,requiredProperties",
@@ -177,12 +177,12 @@ class SchemaInfo_Test extends TestBase {
 			// Due to Java method resolution preferring varargs over Collection,
 			// we test the basic functionality with varargs versions
 			var x = bean()
-				.addAllOf(list(schemaInfo().setType("a1")))
-				.addAllOf(list(schemaInfo().setType("a2")))
-				.addEnum(list("b1"))
-				.addEnum(list("b2"))
-				.addRequiredProperties(list("c1"))
-				.addRequiredProperties(list("c2"));
+				.addAllOf(l(schemaInfo().setType("a1")))
+				.addAllOf(l(schemaInfo().setType("a2")))
+				.addEnum(l("b1"))
+				.addEnum(l("b2"))
+				.addRequiredProperties(l("c1"))
+				.addRequiredProperties(l("c2"));
 
 			assertBean(x,
 				"allOf{#{type}},enum,requiredProperties",
@@ -263,7 +263,7 @@ class SchemaInfo_Test extends TestBase {
 					.set("minProperties", 8)
 					.set("multipleOf", 9)
 					.set("pattern", "k")
-					.set("properties", map("x1", schemaInfo().setType("x2")))
+					.set("properties", m("x1", schemaInfo().setType("x2")))
 					.set("readOnly", true)
 					.set("$ref", "l")
 					.set("required", true)

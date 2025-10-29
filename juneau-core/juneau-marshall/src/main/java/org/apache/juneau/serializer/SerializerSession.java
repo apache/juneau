@@ -306,7 +306,7 @@ public class SerializerSession extends BeanTraverseSession {
 				list.add(Array.get(array, i));
 			return list;
 		}
-		return alist((Object[])array);
+		return l((Object[])array);
 	}
 
 	private final Serializer ctx;

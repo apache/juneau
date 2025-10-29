@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.reflect.ConstructorInfo.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -123,7 +124,7 @@ class ConstructorInfoTest extends TestBase {
 	}
 
 	@Test void compareTo() {
-		var s = new TreeSet<>(Arrays.asList(b_c1, b_c2, b_c3, b_c4, a));
+		var s = new TreeSet<>(l(b_c1, b_c2, b_c3, b_c4, a));
 		check("A(),B(),B(int),B(String),B(String,String)", s);
 
 	}

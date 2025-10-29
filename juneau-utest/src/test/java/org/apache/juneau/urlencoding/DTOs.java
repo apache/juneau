@@ -17,8 +17,6 @@
 package org.apache.juneau.urlencoding;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
-
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -91,25 +89,25 @@ public class DTOs {
 		static B create() {
 			var t = new B();
 			t.f01 = a("a","b");
-			t.f02 = list("c","d");
+			t.f02 = l("c","d");
 			t.f03 = ints(1,2);
-			t.f04 = list(3,4);
+			t.f04 = l(3,4);
 			t.f05 = a(a("e","f"),a("g","h"));
-			t.f06 = list(a("i","j"),a("k","l"));
+			t.f06 = l(a("i","j"),a("k","l"));
 			t.f07 = a(A.create(),A.create());
-			t.f08 = list(A.create(),A.create());
+			t.f08 = l(A.create(),A.create());
 			t.f09 = a(a(A.create()),a(A.create()));
-			t.f10 = list(Arrays.asList(A.create()),Arrays.asList(A.create()));
+			t.f10 = l(l(A.create()),l(A.create()));
 			t.setF11(a("a","b"));
-			t.setF12(list("c","d"));
+			t.setF12(l("c","d"));
 			t.setF13(ints(1,2));
-			t.setF14(list(3,4));
+			t.setF14(l(3,4));
 			t.setF15(a(a("e","f"),a("g","h")));
-			t.setF16(list(a("i","j"),a("k","l")));
+			t.setF16(l(a("i","j"),a("k","l")));
 			t.setF17(a(A.create(),A.create()));
-			t.setF18(list(A.create(),A.create()));
+			t.setF18(l(A.create(),A.create()));
 			t.setF19(a(a(A.create()),a(A.create())));
-			t.setF20(list(Arrays.asList(A.create()),Arrays.asList(A.create())));
+			t.setF20(l(l(A.create()),l(A.create())));
 			return t;
 		}
 	}
@@ -120,25 +118,25 @@ public class DTOs {
 		static C create() {
 			var t = new C();
 			t.f01 = a("a","b");
-			t.f02 = list("c","d");
+			t.f02 = l("c","d");
 			t.f03 = ints(1,2);
-			t.f04 = list(3,4);
+			t.f04 = l(3,4);
 			t.f05 = a(a("e","f"),a("g","h"));
-			t.f06 = list(a("i","j"),a("k","l"));
+			t.f06 = l(a("i","j"),a("k","l"));
 			t.f07 = a(A.create(),A.create());
-			t.f08 = list(A.create(),A.create());
+			t.f08 = l(A.create(),A.create());
 			t.f09 = a(a(A.create()),a(A.create()));
-			t.f10 = list(Arrays.asList(A.create()),Arrays.asList(A.create()));
+			t.f10 = l(l(A.create()),l(A.create()));
 			t.setF11(a("a","b"));
-			t.setF12(list("c","d"));
+			t.setF12(l("c","d"));
 			t.setF13(ints(1,2));
-			t.setF14(list(3,4));
+			t.setF14(l(3,4));
 			t.setF15(a(a("e","f"),a("g","h")));
-			t.setF16(list(a("i","j"),a("k","l")));
+			t.setF16(l(a("i","j"),a("k","l")));
 			t.setF17(a(A.create(),A.create()));
-			t.setF18(list(A.create(),A.create()));
+			t.setF18(l(A.create(),A.create()));
 			t.setF19(a(a(A.create()),a(A.create())));
-			t.setF20(list(Arrays.asList(A.create()),Arrays.asList(A.create())));
+			t.setF20(l(l(A.create()),l(A.create())));
 			return t;
 		}
 	}

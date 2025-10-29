@@ -1102,9 +1102,9 @@ public class ClassInfo_Test extends TestBase {
 	// Primitive wrappers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static List<Class<?>> primitives = list(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
-	static List<Class<?>> primitiveWrappers = list(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
-	static List<Object> primitiveDefaults = list(false,(byte)0,(short)0,(char)0,0,0L,0f,0d);
+	static List<Class<?>> primitives = l(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
+	static List<Class<?>> primitiveWrappers = l(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
+	static List<Object> primitiveDefaults = l(false,(byte)0,(short)0,(char)0,0,0L,0f,0d);
 
 	@Test void hasPrimitiveWrapper() {
 		for (Class<?> c : primitives)

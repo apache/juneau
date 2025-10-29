@@ -135,7 +135,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 		if (o instanceof Map)
 			return ((Map<?,?>)o).entrySet();
 		if (isArray(o))
-			return alist((Object[])o);
+			return l((Object[])o);
 		if (o instanceof Collection)
 			return (Collection<?>)o;
 		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", cn(o));

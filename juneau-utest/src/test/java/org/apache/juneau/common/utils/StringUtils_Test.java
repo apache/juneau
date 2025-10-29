@@ -378,8 +378,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("1,2", StringUtils.join(a(1,2), ","));
 
 		assertNull(StringUtils.join((Collection<?>)null, ","));
-		assertEquals("1", StringUtils.join(Arrays.asList(a(1)), ","));
-		assertEquals("1,2", StringUtils.join(Arrays.asList(a(1,2)), ","));
+		assertEquals("1", StringUtils.join(l(a(1)), ","));
+		assertEquals("1,2", StringUtils.join(l(a(1,2)), ","));
 
 		assertNull(StringUtils.join((Object[])null, ','));
 		assertEquals("x,y,z", StringUtils.join(a("x,y","z"), ','));
@@ -389,11 +389,11 @@ class StringUtils_Test extends TestBase {
 		assertEquals("1,2", StringUtils.join(ints(1,2), ','));
 
 		assertNull(StringUtils.join((Collection<?>)null, ','));
-		assertEquals("1", StringUtils.join(Arrays.asList(a(1)), ','));
-		assertEquals("1,2", StringUtils.join(Arrays.asList(a(1,2)), ','));
+		assertEquals("1", StringUtils.join(l(a(1)), ','));
+		assertEquals("1,2", StringUtils.join(l(a(1,2)), ','));
 
 		assertNull(StringUtils.joine((List<?>)null, ','));
-		assertEquals("x\\,y,z", StringUtils.joine(Arrays.asList(a("x,y","z")), ','));
+		assertEquals("x\\,y,z", StringUtils.joine(l(a("x,y","z")), ','));
 	}
 
 	//====================================================================================================
@@ -1263,9 +1263,9 @@ class StringUtils_Test extends TestBase {
 	@Test void a66_joinCollection() {
 		assertNull(StringUtils.join((Collection<?>)null, ","));
 		assertEquals("", StringUtils.join(Collections.emptyList(), ","));
-		assertEquals("a,b,c", StringUtils.join(Arrays.asList("a", "b", "c"), ","));
-		assertEquals("1-2-3", StringUtils.join(Arrays.asList(1, 2, 3), "-"));
-		assertEquals("a,null,c", StringUtils.join(Arrays.asList("a", null, "c"), ","));
+		assertEquals("a,b,c", StringUtils.join(l("a", "b", "c"), ","));
+		assertEquals("1-2-3", StringUtils.join(l(1, 2, 3), "-"));
+		assertEquals("a,null,c", StringUtils.join(l("a", null, "c"), ","));
 	}
 
 	@Test void a67_joinObjectArrayChar() {
@@ -1279,8 +1279,8 @@ class StringUtils_Test extends TestBase {
 	}
 
 	@Test void a69_joinCollectionChar() {
-		assertEquals("a,b,c", StringUtils.join(Arrays.asList("a", "b", "c"), ','));
-		assertEquals("1-2-3", StringUtils.join(Arrays.asList(1, 2, 3), '-'));
+		assertEquals("a,b,c", StringUtils.join(l("a", "b", "c"), ','));
+		assertEquals("1-2-3", StringUtils.join(l(1, 2, 3), '-'));
 	}
 
 	//====================================================================================================

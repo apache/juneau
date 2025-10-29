@@ -17,7 +17,6 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,7 +46,7 @@ class ObjectSorter_Test extends TestBase {
 	}
 
 	@Test void a03_invalidDataType() {
-		var in = map("a","b");
+		var in = m("a","b");
 		assertBean(os.run(bs, in, sa("x")), "a", "b");
 		assertNull(os.run(in, "x"));
 	}
@@ -95,25 +94,25 @@ class ObjectSorter_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_beanList() {
-		var in = list(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
+		var in = l(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		assertBeans(os.run(bs, in, sa("f")), "f", "a", "b", "c", "d", "e");
 		assertBeans(os.run(in, "f"), "f", "a", "b", "c", "d", "e");
 	}
 
 	@Test void c02_beanList_reverse() {
-		var in = list(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
+		var in = l(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		assertBeans(os.run(bs, in, sa("f-")), "f", "e", "d", "c", "b", "a");
 		assertBeans(os.run(in, "f-"), "f", "e", "d", "c", "b", "a");
 	}
 
 	@Test void c03_beanListContainingNull() {
-		var in = list(A.create("c"),A.create("a"),null,null,A.create("b"));
+		var in = l(A.create("c"),A.create("a"),null,null,A.create("b"));
 		assertBeans(os.run(bs, in, sa("f")), "f", "<null>", "<null>", "a", "b", "c");
 		assertBeans(os.run(in, "f"), "f", "<null>", "<null>", "a", "b", "c");
 	}
 
 	@Test void c04_beanListContainingDups() {
-		var in = list(A.create("c"),A.create("a"),null,A.create("a"),A.create("b"));
+		var in = l(A.create("c"),A.create("a"),null,A.create("a"),A.create("b"));
 		assertBeans(os.run(bs, in, sa("f")), "f", "<null>", "a", "a", "b", "c");
 		assertBeans(os.run(in, "f"), "f", "<null>", "a", "a", "b", "c");
 	}
@@ -151,14 +150,14 @@ class ObjectSorter_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_listOfMaps() {
-		var in = list(map("f","c"),map("f","a"),map("f","b"),map("f","e"),map("f","d"));
+		var in = l(map("f","c"),map("f","a"),map("f","b"),map("f","e"),map("f","d"));
 		var sa = sa("f");
 		assertBeans(os.run(bs, in, sa), "f", "a", "b", "c", "d", "e");
 		assertBeans(os.run(in, "f"), "f", "a", "b", "c", "d", "e");
 	}
 
 	@Test void e02_listOfMaps_reverse() {
-		var in = list(map("f","c"),map("f","a"),map("f","b"),map("f","e"),map("f","d"));
+		var in = l(map("f","c"),map("f","a"),map("f","b"),map("f","e"),map("f","d"));
 		assertBeans(os.run(bs, in, sa("f-")), "f", "e", "d", "c", "b", "a");
 		assertBeans(os.run(in, "f-"), "f", "e", "d", "c", "b", "a");
 	}
@@ -168,13 +167,13 @@ class ObjectSorter_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_listOfOther() {
-		var in = list(list("c"),list("a"),list("b"));
+		var in = l(l("c"),l("a"),l("b"));
 		assertList(os.run(bs, in, sa("f")), "[c]", "[a]", "[b]");
 		assertList(os.run(in, "f"), "[c]", "[a]", "[b]");
 	}
 
 	@Test void f02_listOfOther_reverse() {
-		var in = list(list("c"),list("a"),list("b"));
+		var in = l(l("c"),l("a"),l("b"));
 		assertList(os.run(bs, in, sa("f-")), "[c]", "[a]", "[b]");
 		assertList(os.run(in, "f-"), "[c]", "[a]", "[b]");
 	}

@@ -170,7 +170,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a03_implListClasses(RoundTrip_Tester t) throws Exception {
-		var l = alist(new CBean());
+		var l = l(new CBean());
 
 		l.get(0).setF1("bar");
 		l = t.roundTrip(l, List.class, IBean.class);
@@ -192,7 +192,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a04_implMap(RoundTrip_Tester t) throws Exception {
-		var l = map("foo",new CBean());
+		var l = m("foo",new CBean());
 
 		l.get("foo").setF1("bar");
 		l = t.roundTrip(l, Map.class, String.class, IBean.class);

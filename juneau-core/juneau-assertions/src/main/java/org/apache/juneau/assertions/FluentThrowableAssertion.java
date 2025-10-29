@@ -18,7 +18,7 @@ package org.apache.juneau.assertions;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.CollectionUtils.list;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -333,7 +333,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * @return An assertion against the throwable stacktrace.  Never <jk>null</jk>.
 	 */
 	public FluentStringListAssertion<R> asStackTrace() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : Arrays.asList(getStackTrace(value())), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : l(getStackTrace(value())), returns());
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */

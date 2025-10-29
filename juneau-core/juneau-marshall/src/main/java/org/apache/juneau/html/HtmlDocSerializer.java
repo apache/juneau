@@ -99,7 +99,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		private static <T> List<T> copy(T[] s) {
-			return s.length == 0 ? null : list(s);
+			return s.length == 0 ? null : l(s);
 		}
 
 		List<String> aside, footer, head, header, nav, navlinks, script, style, stylesheet;

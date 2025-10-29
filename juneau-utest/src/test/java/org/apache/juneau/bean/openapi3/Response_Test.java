@@ -245,10 +245,10 @@ class Response_Test extends TestBase {
 		private static final BeanTester<Response> TESTER =
 			testBean(
 				bean()
-					.set("content", map("a1", mediaType().setSchema(schemaInfo("a2"))))
+					.set("content", m("a1", mediaType().setSchema(schemaInfo("a2"))))
 					.set("description", "b")
-					.set("headers", map("c1", headerInfo(schemaInfo("c2"))))
-					.set("links", map("d1", link().setOperationId("d2")))
+					.set("headers", m("c1", headerInfo(schemaInfo("c2"))))
+					.set("links", m("d1", link().setOperationId("d2")))
 					.set("x1", "x1a")
 					.set("x2", null)
 			)

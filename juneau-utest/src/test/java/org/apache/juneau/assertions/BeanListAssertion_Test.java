@@ -69,14 +69,14 @@ class BeanListAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void ba01a_asString() {
-		var x = alist(A1);
+		var x = l(A1);
 		var nil = (List<A>)null;
 		test(x).asString().is("[(a=1,b=2)]");
 		test(nil).asString().isNull();
 	}
 
 	@Test void ba01b_asString_wSerializer() {
-		var x = alist(A1);
+		var x = l(A1);
 		var nil = (List<A>)null;
 		var s = Json5Serializer.DEFAULT;
 		test(x).asString(s).is("[{a:1,b:2}]");
@@ -84,52 +84,52 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ba01c_asString_wPredicate() {
-		var x1 = alist(A1);
+		var x1 = l(A1);
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test void ba02_asJson() {
-		var x = alist(A1);
+		var x = l(A1);
 		var nil = (List<A>)null;
 		test(x).asJson().is("[{a:1,b:2}]");
 		test(nil).asJson().is("null");
 	}
 
 	@Test void ba03_asJsonSorted() {
-		var x1 = alist(A2,A1);
+		var x1 = l(A2,A1);
 		var nil = (List<A>)null;
 		test(x1).asJsonSorted().is("[{a:1,b:2},{a:3,b:4}]");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test void ba04_apply() {
-		var x1 = alist(A1);
-		var x2 = alist(A2);
+		var x1 = l(A1);
+		var x2 = l(A2);
 		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test void bb01_asStrings() {
-		var x1 = alist(A1);
+		var x1 = l(A1);
 		var nil = (List<A>)null;
 		test(x1).asStrings().asJoin().is("(a=1,b=2)");
 		test(nil).asStrings().isNull();
 	}
 
 	@Test void bb02_size() {
-		var x1 = alist(A1);
+		var x1 = l(A1);
 		var nil = (List<A>)null;
 		test(x1).asSize().is(1);
 		test(nil).asSize().isNull();
 	}
 
 	@Test void bc01_apply2() {
-		var x1 = alist(A1);
-		var x2 = alist(A2);
+		var x1 = l(A1);
+		var x2 = l(A2);
 		test(x1).asApplied2(x -> x2).is(x2);
 	}
 
 	@Test void bc02_item() {
-		var x = alist(A1);
+		var x = l(A1);
 		var nil = (List<A>)null;
 		test(x).asItem(0).isNotNull();
 		test(x).asItem(1).isNull();
@@ -138,21 +138,21 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void bc03a_sorted() {
-		var x = alist(A2,A1);
+		var x = l(A2,A1);
 		var nil = (List<A>)null;
 		test(x).asSorted().isString("[(a=1,b=2), (a=3,b=4)]");
 		test(nil).asSorted().isNull();
 	}
 
 	@Test void bc03b_sorted_wComparator() {
-		var x = alist(A2,A1);
+		var x = l(A2,A1);
 		var nil = (List<A>)null;
 		test(x).asSorted(null).isString("[(a=1,b=2), (a=3,b=4)]");
 		test(nil).asSorted(null).isNull();
 	}
 
 	@Test void bd01_extract() {
-		var x = alist(A1,A2);
+		var x = l(A1,A2);
 		test(x)
 			.asPropertyMaps("a").asJson().is("[{a:1},{a:3}]")
 			.asPropertyMaps("a,b").asJson().is("[{a:1,b:2},{a:3,b:4}]")
@@ -162,7 +162,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void bd02_property() {
-		var x = alist(A1,A2);
+		var x = l(A1,A2);
 		test(x)
 			.asProperty("a").asJson().is("[1,3]")
 			.asProperty("bad").asJson().is("[null,null]")
@@ -174,30 +174,30 @@ class BeanListAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void ca01_exists() {
-		var x = CollectionUtils.<A>alist();
+		var x = CollectionUtils.<A>l();
 		var nil = (List<A>)null;
 		test(x).isExists().isExists();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isExists(), "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
-		var x = CollectionUtils.<A>alist();
+		var x = CollectionUtils.<A>l();
 		var nil = (List<A>)null;
 		test(nil).isNull();
 		assertThrows(BasicAssertionError.class, ()->test(x).isNull(), "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
-		var x = CollectionUtils.<A>alist();
+		var x = CollectionUtils.<A>l();
 		var nil = (List<A>)null;
 		test(x).isNotNull();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotNull(), "Value was null.");
 	}
 
 	@Test void ca04a_is_T() {
-		var x1 = alist(A1,A2);
-		var x1a = alist(A1a,A2);
-		var x2 = alist(A1,A3);
+		var x1 = l(A1,A2);
+		var x1a = l(A1a,A2);
+		var x2 = l(A1,A3);
 		var nil = (List<A>)null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
@@ -208,16 +208,16 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca04b_is_predicate() {
-		var x1 = alist(A1,A2);
+		var x1 = l(A1,A2);
 		test(x1).is(x->x.size()==2);
 		assertThrown(()->test(x1).is(x->x.size()==3)).asMessage().asOneLine().is("Unexpected value: '[(a=1,b=2), (a=3,b=4)]'.");
 		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='[(a=1,b=2), (a=3,b=4)]'.");
 	}
 
 	@Test void ca05_isNot() {
-		var x1 = alist(A1,A2);
-		var x1a = alist(A1a,A2);
-		var x2 = alist(A1,A3);
+		var x1 = l(A1,A2);
+		var x1a = l(A1a,A2);
+		var x2 = l(A1,A3);
 		var nil = (List<A>)null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
@@ -227,9 +227,9 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca06_isAny() {
-		var x1 = alist(A1,A2);
-		var x1a = alist(A1a,A2);
-		var x2 = alist(A1,A3);
+		var x1 = l(A1,A2);
+		var x1a = l(A1a,A2);
+		var x2 = l(A1,A3);
 		var nil = (List<A>)null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[(a=1,b=2), (a=5,b=6)]]'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
@@ -238,9 +238,9 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca07_isNotAny() {
-		var x1 = alist(A1,A2);
-		var x1a = alist(A1a,A2);
-		var x2 = alist(A1,A3);
+		var x1 = l(A1,A2);
+		var x1a = l(A1a,A2);
+		var x2 = l(A1,A3);
 		var nil = (List<A>)null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
@@ -250,20 +250,20 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca08_isSame() {
-		var x1 = list(A1,A2);
-		var x1a = list(A1a,A2);
+		var x1 = l(A1,A2);
+		var x1a = l(A1a,A2);
 		var nil = (List<A>)null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](ArrayList@*)'.  Actual='[(a=1,b=2), (a=3,b=4)](ArrayList@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](ArrayList@*)'.  Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='[(a=1,b=2), (a=3,b=4)](ArrayList@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](*)'.  Actual='[(a=1,b=2), (a=3,b=4)](*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='[(a=1,b=2), (a=3,b=4)](*)'.");
 	}
 
 	@Test void ca09_isSameJsonAs() {
-		var x1 = alist(A1,A2);
-		var x1a = alist(A1a,A2);
-		var x2 = alist(A1,A3);
+		var x1 = l(A1,A2);
+		var x1a = l(A1a,A2);
+		var x2 = l(A1,A3);
 		var nil = (List<A>)null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
@@ -273,9 +273,9 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca10_isSameSortedJsonAs() {
-		var x1 = alist(A1,A2);
-		var x1a = alist(A1a,A2);
-		var x2 = alist(A1,A3);
+		var x1 = l(A1,A2);
+		var x1a = l(A1a,A2);
+		var x2 = l(A1,A3);
 		var nil = (List<A>)null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
@@ -285,9 +285,9 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca11_isSameSerializedAs() {
-		var x1 = alist(A1,A2);
-		var x1a = alist(A1a,A2);
-		var x2 = alist(A1,A3);
+		var x1 = l(A1,A2);
+		var x1a = l(A1a,A2);
+		var x2 = l(A1,A3);
 		var nil = (List<A>)null;
 		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
@@ -298,26 +298,25 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca12_isType() {
-		var x = list(A1,A2);
+		var x = l(A1,A2);
 		var nil = (List<A>)null;
 		test(x).isType(List.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.ArrayList'.");
+		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().isMatches("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.Array*'.");
 		assertThrown(()->test(nil).isType(String.class)).asMessage().asOneLine().is("Value was null.");
 		assertThrown(()->test(x).isType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
 	@Test void ca13_isExactType() {
-		var x = list(A1,A2);
+		var x = l(A1,A2);
 		var nil = (List<A>)null;
-		test(x).isExactType(ArrayList.class);
-		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.ArrayList'.");
+		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().isMatches("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.Array*'.");
 		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
 	@Test void ca14_isString() {
-		var x = alist(A1,A2);
+		var x = l(A1,A2);
 		var nil = (List<A>)null;
 		test(x).isString("[(a=1,b=2), (a=3,b=4)]");
 		test(nil).isString(null);
@@ -327,7 +326,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca15_isJson() {
-		var x = alist(A1,A2);
+		var x = l(A1,A2);
 		var nil = (List<A>)null;
 		test(x).isJson("[{a:1,b:2},{a:3,b:4}]");
 		test(nil).isJson("null");
@@ -337,8 +336,8 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb01_isEmpty() {
-		var x1 = CollectionUtils.<A>alist();
-		var x2 = alist(A1);
+		var x1 = CollectionUtils.<A>l();
+		var x2 = l(A1);
 		var nil = (List<A>)null;
 		test(x1).isEmpty();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isEmpty(), "Value was null.");
@@ -346,8 +345,8 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb02_isNotEmpty() {
-		var x1 = CollectionUtils.<A>alist();
-		var x2 = alist(A1);
+		var x1 = CollectionUtils.<A>l();
+		var x2 = l(A1);
 		var nil = (List<A>)null;
 		test(x2).isNotEmpty();
 		assertThrows(BasicAssertionError.class, ()->test(nil).isNotEmpty(), "Value was null.");
@@ -355,7 +354,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb03_contains() {
-		var x = alist(A1);
+		var x = l(A1);
 		var nil = (List<A>)null;
 		test(x).isContains(A1);
 		assertThrown(()->test(x).isContains(A2)).asMessage().asOneLine().is("Collection did not contain expected value.  Expect='(a=3,b=4)'.  Value='[(a=1,b=2)]'.");
@@ -363,7 +362,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb04_doesNotContain() {
-		var x = alist(A1);
+		var x = l(A1);
 		var nil = (List<A>)null;
 		test(x).isNotContains(A2);
 		assertThrown(()->test(x).isNotContains(A1)).asMessage().asOneLine().is("Collection contained unexpected value.  Unexpected='(a=1,b=2)'.  Value='[(a=1,b=2)]'.");
@@ -371,7 +370,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb05_any() {
-		var x1 = alist(A1);
+		var x1 = l(A1);
 		var nil = (List<A>)null;
 		test(x1).isAny(x->x.equals(A1));
 		assertThrown(()->test(x1).isAny(x->x.equals(A2))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[(a=1,b=2)]'.");
@@ -379,7 +378,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb06_all() {
-		var x1 = alist(A1);
+		var x1 = l(A1);
 		var nil = (List<A>)null;
 		test(x1).isAll(x->x!=null);
 		assertThrown(()->test(x1).isAll(x->x.equals(A2))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[(a=1,b=2)]'.");
@@ -387,7 +386,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb07_isSize() {
-		var x = alist(A1);
+		var x = l(A1);
 		var nil = (List<A>)null;
 		test(x).isSize(1);
 		assertThrown(()->test(x).isSize(0)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=0.  Actual=1.");
@@ -395,7 +394,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cc01_has() {
-		var x = alist(A1,A2);
+		var x = l(A1,A2);
 		var nil = (List<A>)null;
 		test(x).isHas(A1,A2);
 		assertThrown(()->test(x).isHas(A1)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
@@ -404,7 +403,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cc02_each() {
-		var x1 = alist(A1,A2);
+		var x1 = l(A1,A2);
 		var nil = (List<A>)null;
 		test(x1).isEach(x->x!=null,x->x!=null);
 		assertThrown(()->test(x1).isEach(x->x==null)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");

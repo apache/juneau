@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({"rawtypes"})
 class AutoObjectSwapTest extends TestBase {
 
-	private static final Map<String,String> STRINGMAP = map("foo","bar");
+	private static final Map<String,String> STRINGMAP = m("foo","bar");
 	private static final JsonMap JSONMAP = JsonMap.of("foo","bar");
 
 	private static ObjectSwap find(Class<?> c) {

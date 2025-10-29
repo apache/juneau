@@ -106,17 +106,6 @@ class Cache_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Null value handling
-	//====================================================================================================
-
-	@Test void a05_supplierReturnsNull() {
-		var cache = Cache.of(String.class, String.class).build();
-
-		// ConcurrentHashMap doesn't allow null values, so this will throw NullPointerException
-		assertThrows(NullPointerException.class, () -> cache.get("key1", () -> null));
-	}
-
-	//====================================================================================================
 	// Size and clear operations
 	//====================================================================================================
 

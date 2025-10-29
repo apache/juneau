@@ -47,7 +47,7 @@ class Operation_Test extends TestBase {
 					.setProduces(MediaType.of("f"))
 					.setResponses(map("x1", responseInfo().setDescription("x2")))
 					.setSchemes("g")
-					.setSecurity(map("h", list("i")))
+					.setSecurity(map("h", l("i")))
 					.setSummary("j")
 					.setTags("k")
 			)
@@ -99,9 +99,9 @@ class Operation_Test extends TestBase {
 
 			// Test Collection variant of addSecurity
 			x = bean()
-				.addSecurity(list(
-					map("c1", list("c2")),
-					map("c3", list("c4"))
+				.addSecurity(l(
+					m("c1", l("c2")),
+					m("c3", l("c4"))
 				));
 
 			assertBean(x, "security{0{c1},1{c3}}", "{{[c2]},{[c4]}}");
@@ -121,22 +121,22 @@ class Operation_Test extends TestBase {
 		@Test void a10_collectionSetters() {
 			// Test Collection variants of setters
 			var x = bean()
-				.setParameters(list(
+				.setParameters(l(
 					parameterInfo("a1", "a2"),
 					parameterInfo("a3", "a4")
 				))
-				.setConsumes(list(
+				.setConsumes(l(
 					MediaType.of("b1"),
 					MediaType.of("b2")
 				))
-				.setProduces(list(
+				.setProduces(l(
 					MediaType.of("c1"),
 					MediaType.of("c2")
 				))
-				.setSchemes(list("d1", "d2"))
-				.setSecurity(list(
-					map("e1", list("e2")),
-					map("e3", list("e4"))
+				.setSchemes(l("d1", "d2"))
+				.setSecurity(l(
+					m("e1", l("e2")),
+					m("e3", l("e4"))
 				));
 
 			assertBean(x,
@@ -166,16 +166,16 @@ class Operation_Test extends TestBase {
 		@Test void a12_collectionAdders() {
 			// Test Collection addX methods - call each method twice
 			var x = bean()
-				.addConsumes(list(MediaType.of("a1")))
-				.addConsumes(list(MediaType.of("a2")))
-				.addParameters(list(parameterInfo("query", "a")))
-				.addParameters(list(parameterInfo("path", "b")))
-				.addProduces(list(MediaType.of("b1")))
-				.addProduces(list(MediaType.of("b2")))
-				.addSchemes(list("c1"))
-				.addSchemes(list("c2"))
-				.addTags(list("d1"))
-				.addTags(list("d2"));
+				.addConsumes(l(MediaType.of("a1")))
+				.addConsumes(l(MediaType.of("a2")))
+				.addParameters(l(parameterInfo("query", "a")))
+				.addParameters(l(parameterInfo("path", "b")))
+				.addProduces(l(MediaType.of("b1")))
+				.addProduces(l(MediaType.of("b2")))
+				.addSchemes(l("c1"))
+				.addSchemes(l("c2"))
+				.addTags(l("d1"))
+				.addTags(l("d2"));
 
 			assertBean(x,
 				"consumes,produces,schemes,tags",
@@ -216,12 +216,12 @@ class Operation_Test extends TestBase {
 		@Test void a16_addSecurityCollection() {
 			// Test addSecurity with Collection
 			Map<String,List<String>> map1 = new LinkedHashMap<>();
-			map1.put("scheme1", list("a"));
+			map1.put("scheme1", l("a"));
 			Map<String,List<String>> map2 = new LinkedHashMap<>();
-			map2.put("scheme2", list("b"));
+			map2.put("scheme2", l("b"));
 
-			Collection<Map<String,List<String>>> coll1 = list(map1);
-			Collection<Map<String,List<String>>> coll2 = list(map2);
+			Collection<Map<String,List<String>>> coll1 = l(map1);
+			Collection<Map<String,List<String>>> coll2 = l(map2);
 
 			var x = bean()
 				.addSecurity(coll1)
@@ -261,7 +261,7 @@ class Operation_Test extends TestBase {
 
 			// Test with parameters that include a body parameter (covers the "body" branch)
 			x = bean()
-				.setParameters(list(
+				.setParameters(l(
 					parameterInfo("query", "param1"),
 					parameterInfo("body", null) // body parameter with null name
 				));
@@ -355,11 +355,11 @@ class Operation_Test extends TestBase {
 					.set("description", "b")
 					.set("externalDocs", externalDocumentation().setUrl(URI.create("c")))
 					.set("operationId", "d")
-					.set("parameters", list(parameterInfo().setName("e")))
+					.set("parameters", l(parameterInfo().setName("e")))
 					.set("produces", set(MediaType.of("f")))
-					.set("responses", map("x1", responseInfo().setDescription("x2")))
+					.set("responses", m("x1", responseInfo().setDescription("x2")))
 					.set("schemes", set("g"))
-					.set("security", list(map("h", list("i"))))
+					.set("security", l(map("h", l("i"))))
 					.set("summary", "j")
 					.set("tags", set("k"))
 					.set("x3", "x3a")

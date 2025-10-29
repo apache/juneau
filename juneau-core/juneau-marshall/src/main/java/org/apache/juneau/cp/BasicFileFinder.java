@@ -74,8 +74,8 @@ public class BasicFileFinder implements FileFinder {
 		this.cachingLimit = builder.cachingLimit;
 		this.include = builder.include;
 		this.exclude = builder.exclude;
-		this.includePatterns = alist(include).stream().map(Pattern::pattern).toArray(String[]::new);
-		this.excludePatterns = alist(exclude).stream().map(Pattern::pattern).toArray(String[]::new);
+		this.includePatterns = l(include).stream().map(Pattern::pattern).toArray(String[]::new);
+		this.excludePatterns = l(exclude).stream().map(Pattern::pattern).toArray(String[]::new);
 		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
 	}
 

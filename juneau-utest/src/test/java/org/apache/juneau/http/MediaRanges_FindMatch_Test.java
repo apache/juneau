@@ -177,7 +177,7 @@ class MediaRanges_FindMatch_Test extends TestBase {
 	void a01_basic(Input input) throws Exception {
 		var a = accept(input.accept);
 		var mt = JsonParser.DEFAULT.parse(input.mediaTypes, MediaType[].class);
-		var r = a.match(alist(mt));
+		var r = a.match(l(mt));
 		assertEquals(input.expected, r, fs("{0} failed", input.label));
 	}
 
@@ -186,8 +186,8 @@ class MediaRanges_FindMatch_Test extends TestBase {
 	void a02_reversed(Input input) throws Exception {
 		var a = accept(input.accept);
 		var mt = JsonParser.DEFAULT.parse(input.mediaTypes, MediaType[].class);
-		Collections.reverse(Arrays.asList(mt));
-		var r = a.match(alist(mt));
+		Collections.reverse(l(mt));
+		var r = a.match(l(mt));
 		var expected2 = input.expectedReverse == -1 ? -1 : mt.length-input.expectedReverse-1;
 		assertEquals(expected2, r);
 	}

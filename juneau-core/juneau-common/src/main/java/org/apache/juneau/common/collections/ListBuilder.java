@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -75,7 +76,7 @@ import org.apache.juneau.common.utils.*;
  * 		.build();  <jc>// Returns null, not empty list</jc>
  *
  * 	<jc>// From multiple sources</jc>
- * 	List&lt;Integer&gt; <jv>existing</jv> = Arrays.asList(1, 2, 3);
+ * 	List&lt;Integer&gt; <jv>existing</jv> = l(1, 2, 3);
  * 	List&lt;Integer&gt; <jv>combined</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
  * 		.addAll(<jv>existing</jv>)
  * 		.add(4, 5, 6)
@@ -201,7 +202,7 @@ public class ListBuilder<E> {
 			return this;
 		if (converters == null)
 			converters = new ArrayList<>();
-		converters.addAll(Arrays.asList(values));
+		converters.addAll(l(values));
 		return this;
 	}
 
@@ -222,7 +223,7 @@ public class ListBuilder<E> {
 	 * 	<jc>// Mix different input types</jc>
 	 * 	List&lt;Integer&gt; <jv>list</jv> = ListBuilder.<jsm>create</jsm>(Integer.<jk>class</jk>)
 	 * 		.addAny(1, 2, 3)                           <jc>// Direct values</jc>
-	 * 		.addAny(Arrays.asList(4, 5, 6))            <jc>// Collection</jc>
+	 * 		.addAny(l(4, 5, 6))            <jc>// Collection</jc>
 	 * 		.addAny(<jk>new int</jk>[]{7, 8, 9})                 <jc>// Array</jc>
 	 * 		.build();
 	 * </p>

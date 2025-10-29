@@ -17,7 +17,6 @@
 package org.apache.juneau.junit.bct;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BasicBeanConverter.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,7 +68,7 @@ class BasicBeanConverter_Test extends TestBase {
 			assertEquals("test", converter.stringify("test"));
 			assertEquals("123", converter.stringify(123));
 			assertEquals("true", converter.stringify(true));
-			assertEquals("[1,2,3]", converter.stringify(Arrays.asList(1, 2, 3)));
+			assertEquals("[1,2,3]", converter.stringify(l(1, 2, 3)));
 
 			// Test that default settings are applied
 			assertEquals("<null>", converter.stringify(null));
@@ -92,11 +91,11 @@ class BasicBeanConverter_Test extends TestBase {
 		void a05_addListifier_addsCustomListifier() {
 			var converter = BasicBeanConverter.builder()
 				.defaultSettings()
-				.addListifier(String.class, (conv, str) -> Arrays.asList((Object[])str.split(",")))
+				.addListifier(String.class, (conv, str) -> l((Object[])str.split(",")))
 				.build();
 
 			var result = converter.listify("a,b,c");
-			assertEquals(Arrays.asList("a", "b", "c"), result);
+			assertEquals(l("a", "b", "c"), result);
 		}
 
 		@Test
@@ -187,7 +186,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("b04_stringify() handles collections")
 		void b04_stringify_handlesCollections() {
-			assertEquals("[1,2,3]", converter.stringify(Arrays.asList(1, 2, 3)));
+			assertEquals("[1,2,3]", converter.stringify(l(1, 2, 3)));
 			assertEquals("[]", converter.stringify(Collections.emptyList()));
 			// Set converted to TreeSet for deterministic ordering
 			var setResult = converter.stringify(Set.of("z", "a", "m"));
@@ -225,7 +224,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@DisplayName("b08_listify() converts arrays to lists")
 		void b08_listify_convertsArrays() {
 			var result = converter.listify(a("a", "b", "c"));
-			assertEquals(Arrays.asList("a", "b", "c"), result);
+			assertEquals(l("a", "b", "c"), result);
 		}
 
 		@Test
@@ -246,7 +245,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("b11_canListify() returns correct values")
 		void b11_canListify_returnsCorrectValues() {
-			assertTrue(converter.canListify(Arrays.asList(1, 2, 3)));
+			assertTrue(converter.canListify(l(1, 2, 3)));
 			assertTrue(converter.canListify(ints(1, 2, 3)));
 			assertTrue(converter.canListify(Set.of("a", "b")));
 			assertFalse(converter.canListify("string"));
@@ -331,7 +330,7 @@ class BasicBeanConverter_Test extends TestBase {
 				.addSetting(SETTING_fieldSeparator, " | ")
 				.build();
 
-			assertEquals("[1 | 2 | 3]", converter.stringify(Arrays.asList(1, 2, 3)));
+			assertEquals("[1 | 2 | 3]", converter.stringify(l(1, 2, 3)));
 		}
 
 		@Test
@@ -343,7 +342,7 @@ class BasicBeanConverter_Test extends TestBase {
 				.addSetting(SETTING_collectionSuffix, ")")
 				.build();
 
-			assertEquals("(1,2,3)", converter.stringify(Arrays.asList(1, 2, 3)));
+			assertEquals("(1,2,3)", converter.stringify(l(1, 2, 3)));
 		}
 
 		@Test
@@ -495,7 +494,7 @@ class BasicBeanConverter_Test extends TestBase {
 			var converter = builder().defaultSettings().build();
 
 			// Test various types that can/cannot be listified
-			assertTrue(converter.canListify(Arrays.asList("a", "b")));
+			assertTrue(converter.canListify(l("a", "b")));
 			assertTrue(converter.canListify(a("a", "b")));
 			assertTrue(converter.canListify(Set.of("a", "b")));
 			assertFalse(converter.canListify(null));
@@ -543,7 +542,7 @@ class BasicBeanConverter_Test extends TestBase {
 			var converter = builder().defaultSettings().build();
 
 			// Test with list of objects
-			var people = Arrays.asList(
+			var people = l(
 				Map.of("name", "John", "age", 30),
 				Map.of("name", "Jane", "age", 25)
 			);
@@ -622,7 +621,7 @@ class BasicBeanConverter_Test extends TestBase {
 				.defaultSettings()
 				// Register listifier only for MiddleInterface, not BaseInterface or the class
 				.addListifier(MiddleInterface.class, (conv, obj) ->
-					Arrays.asList("FROM_MIDDLE_INTERFACE", obj.getMiddle()))
+					l("FROM_MIDDLE_INTERFACE", obj.getMiddle()))
 				.build();
 
 			// MultiInterfaceClass won't directly match, BaseInterface won't match,

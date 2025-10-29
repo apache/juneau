@@ -178,7 +178,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * 		.equals(<js>"value1"</js>,<js>"value2"</js>,<js>"value3"</js>);
 	 * </p>
 	 *
-	 * @return A new fluent string assertion.
+	 * @return A new fluent string assertion containing a copy of the values in this assertion.
 	 */
 	public FluentBeanListAssertion<E,R> asBeanList() {
 		return new FluentBeanListAssertion<>(this, toList(), returns());

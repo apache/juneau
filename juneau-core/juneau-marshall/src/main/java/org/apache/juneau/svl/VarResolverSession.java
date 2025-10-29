@@ -28,6 +28,7 @@ import java.util.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * A var resolver session that combines a {@link VarResolver} with one or more session objects.
@@ -260,13 +261,39 @@ public class VarResolverSession {
 				Array.set(o2, i, resolve(Array.get(o, i)));
 			return (T)o2;
 		}
-		if (o instanceof Collection) {
+		if (o instanceof Set c) {
 			try {
-				Collection c = (Collection)o;
 				if (! containsVars(c))
 					return o;
-				Collection c2 = c.getClass().getDeclaredConstructor().newInstance();
-				c.forEach(x -> c2.add(resolve(x)));
+				Set c2 = null;
+				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.hasNoParams());
+				if (ci != null) {
+					c2 = (Set)ci.inner().newInstance();
+				} else {
+					c2 = new LinkedHashSet<>();
+				}
+				Set c3 = c2;
+				c.forEach(x -> c3.add(resolve(x)));
+				return (T)c2;
+			} catch (VarResolverException e) {
+				throw e;
+			} catch (Exception e) {
+				throw new VarResolverException(e, "Problem occurred resolving set.");
+			}
+		}
+		if (o instanceof List c) {
+			try {
+				if (! containsVars(c))
+					return o;
+				List c2 = null;
+				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.hasNoParams());
+				if (ci != null) {
+					c2 = (List)ci.inner().newInstance();
+				} else {
+					c2 = new ArrayList<>();
+				}
+				List c3 = c2;
+				c.forEach(x -> c3.add(resolve(x)));
 				return (T)c2;
 			} catch (VarResolverException e) {
 				throw e;
@@ -274,13 +301,19 @@ public class VarResolverSession {
 				throw new VarResolverException(e, "Problem occurred resolving collection.");
 			}
 		}
-		if (o instanceof Map) {
+		if (o instanceof Map m) {
 			try {
-				Map m = (Map)o;
 				if (! containsVars(m))
 					return o;
-				Map m2 = m.getClass().getDeclaredConstructor().newInstance();
-				m.forEach((k, v) -> m2.put(k, resolve(v)));
+				Map m2 = null;
+				var ci = ClassInfo.of(o).getDeclaredConstructor(x -> x.isPublic() && x.hasNoParams());
+				if (ci != null) {
+					m2 = (Map)ci.inner().newInstance();
+				} else {
+					m2 = new LinkedHashMap<>();
+				}
+				Map m3 = m2;
+				m.forEach((k, v) -> m3.put(k, resolve(v)));
 				return (T)m2;
 			} catch (VarResolverException e) {
 				throw e;

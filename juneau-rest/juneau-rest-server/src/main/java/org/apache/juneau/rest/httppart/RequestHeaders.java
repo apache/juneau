@@ -217,7 +217,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 * @return This object.
 	 */
 	public RequestHeaders addDefault(Header...pairs) {
-		return addDefault(alist(pairs));
+		return addDefault(l(pairs));
 	}
 
 	/**

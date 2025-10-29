@@ -88,7 +88,7 @@ class SwaggerUI_Test extends TestBase {
 	@Test void a03_swaggerWithTags() throws Exception {
 		var swagger = swagger()
 			.setInfo(info("Test API", "1.0.0"))
-			.setTags(list(
+			.setTags(l(
 				tag("users").setDescription("User operations"),
 				tag("orders").setDescription("Order operations")
 			));

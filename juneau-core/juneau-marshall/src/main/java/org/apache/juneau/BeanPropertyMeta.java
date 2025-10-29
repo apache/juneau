@@ -467,15 +467,22 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (isCollection) {
 				Collection c = (Collection)invokeGetter(bean, pName);
 
+				Collection c2 = null;
 				if (nn(c)) {
-					c.add(v);
-					return;
+					if (canAddTo(c)) {
+						c.add(v);
+						return;
+					}
+					c2 = c;
 				}
 
 				if (rawTypeMeta.canCreateNewInstance())
 					c = (Collection)rawTypeMeta.newInstance();
 				else
 					c = new JsonList(session);
+
+				if (c2 != null)
+					c.addAll(c2);
 
 				c.add(v);
 

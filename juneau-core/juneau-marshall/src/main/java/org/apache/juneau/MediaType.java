@@ -265,7 +265,7 @@ public class MediaType implements Comparable<MediaType> {
 	 *
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
-	public List<NameValuePair> getParameters() { return alist(parameters); }
+	public List<NameValuePair> getParameters() { return l(parameters); }
 
 	/**
 	 * Returns the <js>'subType'</js> fragment of the <js>'type/subType'</js> string.
@@ -283,7 +283,7 @@ public class MediaType implements Comparable<MediaType> {
 	 *
 	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
-	public final List<String> getSubTypes() { return alist(subTypes); }
+	public final List<String> getSubTypes() { return l(subTypes); }
 
 	/**
 	 * Returns the <js>'type'</js> fragment of the <js>'type/subType'</js> string.

@@ -963,7 +963,7 @@ class Content_Test extends TestBase {
 			.assertStatus(200)
 			.assertContent("null");
 
-		var body1 = Json5.of(list(ABean.get()));
+		var body1 = Json5.of(l(ABean.get()));
 		j.post("/c", body1, APPLICATION_JSON)
 			.run()
 			.assertStatus(200)
@@ -973,7 +973,7 @@ class Content_Test extends TestBase {
 			.assertStatus(200)
 			.assertContent("null");
 
-		var body2 = Json5.of(list(opt(ABean.get())));
+		var body2 = Json5.of(l(opt(ABean.get())));
 		j.post("/d", body2, APPLICATION_JSON)
 			.run()
 			.assertStatus(200)

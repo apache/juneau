@@ -62,7 +62,7 @@ class HtmlElementMixed_Test extends TestBase {
 
 	@Test void a07_child_withCollection() {
 		P x = new P();
-		x.child(java.util.Arrays.asList("text1", "text2"));
+		x.child(l("text1", "text2"));
 		assertString("<p>text1text2</p>", x);
 	}
 
@@ -137,7 +137,7 @@ class HtmlElementMixed_Test extends TestBase {
 
 	@Test void a17_setChildren() {
 		P x = new P();
-		java.util.List<Object> children = java.util.Arrays.asList("child1", "child2");
+		java.util.List<Object> children = l("child1", "child2");
 		x.setChildren(children);
 		assertString("[child1,child2]", x.getChildren());
 	}
@@ -146,7 +146,7 @@ class HtmlElementMixed_Test extends TestBase {
 		// Test adding a collection when children list already exists
 		P x = new P();
 		x.child("existing");  // Initialize children list
-		x.child(java.util.Arrays.asList("new1", "new2"));  // Add collection to existing list
+		x.child(l("new1", "new2"));  // Add collection to existing list
 		assertString("<p>existingnew1new2</p>", x);
 	}
 }
