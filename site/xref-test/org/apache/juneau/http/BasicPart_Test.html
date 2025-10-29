@@ -89,8 +89,8 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertTypeAndJson(NameValuePair.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"'X7=7'"</span>, BasicPart.<strong class="jxr_keyword">cast</strong>(x7));
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertTypeAndJson(NameValuePair.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"'X8=8'"</span>, BasicPart.<strong class="jxr_keyword">cast</strong>(x8));
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Object of type java.lang.String could not be converted to a Part."</span>, ()-&gt;BasicPart.<strong class="jxr_keyword">cast</strong>(<span class="jxr_string">"X"</span>));
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Object of type null could not be converted to a Part."</span>, ()-&gt;BasicPart.<strong class="jxr_keyword">cast</strong>(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Object of type java.lang.String could not be converted to a Part."</span>, ()-&gt;BasicPart.<strong class="jxr_keyword">cast</strong>(<span class="jxr_string">"X"</span>));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Object of type null could not be converted to a Part."</span>, ()-&gt;BasicPart.<strong class="jxr_keyword">cast</strong>(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertTrue(BasicPart.canCast(x1));
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertTrue(BasicPart.canCast(x2));

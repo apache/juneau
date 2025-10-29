@@ -27,14 +27,14 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.PredicateUtils.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">/**</em>
@@ -621,7 +621,7 @@
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 						<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 					<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 				<strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid flag for executable: {0}"</span>, f);
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid flag for executable: {0}"</span>, f);
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 			}
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 		}
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
@@ -685,7 +685,7 @@
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 					<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 				<strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid flag for executable: {0}"</span>, f);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid flag for executable: {0}"</span>, f);
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 			}
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 		}
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">return</strong> false;

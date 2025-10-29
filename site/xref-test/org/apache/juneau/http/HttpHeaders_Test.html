@@ -62,8 +62,8 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertTypeAndJson(Header.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"'X8: 8'"</span>, HttpHeaders.<strong class="jxr_keyword">cast</strong>(x8));
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertTypeAndJson(Header.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"'X9: 9'"</span>, HttpHeaders.<strong class="jxr_keyword">cast</strong>(x9));
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Object of type java.lang.String could not be converted to a Header."</span>, ()-&gt;HttpHeaders.<strong class="jxr_keyword">cast</strong>(<span class="jxr_string">"X"</span>));
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Object of type null could not be converted to a Header."</span>, ()-&gt;HttpHeaders.<strong class="jxr_keyword">cast</strong>(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Object of type java.lang.String could not be converted to a Header."</span>, ()-&gt;HttpHeaders.<strong class="jxr_keyword">cast</strong>(<span class="jxr_string">"X"</span>));
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Object of type null could not be converted to a Header."</span>, ()-&gt;HttpHeaders.<strong class="jxr_keyword">cast</strong>(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertTrue(HttpHeaders.canCast(x1));
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertTrue(HttpHeaders.canCast(x2));

@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<strong class="jxr_keyword">null</strong>, SchemaInfo.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">""</span>, SchemaInfo.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Unsupported reference:  'invalid'"</span>, () -&gt; x.findRef(<span class="jxr_string">"invalid"</span>, SchemaInfo.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Unsupported reference:  'invalid'"</span>, () -&gt; x.findRef(<span class="jxr_string">"invalid"</span>, SchemaInfo.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 	}
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 

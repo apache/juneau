@@ -25,10 +25,10 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.http.header;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.oapi.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.serializer.*;
@@ -242,9 +242,9 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">return</strong> serializer == <strong class="jxr_keyword">null</strong> ? s(v) : serializer.serialize(HttpPartType.HEADER, schema, v);
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="SchemaValidationException" href="../../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> e) {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(e, <span class="jxr_string">"Validation error on request {0} parameter ''{1}''=''{2}''"</span>, HttpPartType.HEADER, getName(), value);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(e, <span class="jxr_string">"Validation error on request {0} parameter ''{1}''=''{2}''"</span>, HttpPartType.HEADER, getName(), value);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="SerializeException" href="../../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(e, <span class="jxr_string">"Serialization error on request {0} parameter ''{1}''"</span>, HttpPartType.HEADER, getName());
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(e, <span class="jxr_string">"Serialization error on request {0} parameter ''{1}''"</span>, HttpPartType.HEADER, getName());
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		}
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 

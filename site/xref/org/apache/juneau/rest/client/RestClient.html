@@ -4608,7 +4608,7 @@
 <a class="jxr_linenumber" name="L4600" href="#L4600">4600</a> 			<strong class="jxr_keyword">if</strong> (isEmpty(s))
 <a class="jxr_linenumber" name="L4601" href="#L4601">4601</a> 				rootUrl = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L4602" href="#L4602">4602</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (s.indexOf(<span class="jxr_string">"://"</span>) == -1)
-<a class="jxr_linenumber" name="L4603" href="#L4603">4603</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL."</span>, value);
+<a class="jxr_linenumber" name="L4603" href="#L4603">4603</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL."</span>, value);
 <a class="jxr_linenumber" name="L4604" href="#L4604">4604</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L4605" href="#L4605">4605</a> 				rootUrl = s;
 <a class="jxr_linenumber" name="L4606" href="#L4606">4606</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;

@@ -25,13 +25,13 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.bean.swagger;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.internal.ConverterUtils.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshaller.*;
@@ -461,7 +461,7 @@
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderInfo" href="../../../../../org/apache/juneau/bean/swagger/HeaderInfo.html#HeaderInfo">HeaderInfo</a> setCollectionFormat(String value) {
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_COLLECTION_FORMATS))
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_COLLECTION_FORMATS));
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_COLLECTION_FORMATS));
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 		collectionFormat = value;
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 	}
@@ -743,7 +743,7 @@
 <a class="jxr_linenumber" name="L735" href="#L735">735</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L736" href="#L736">736</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderInfo" href="../../../../../org/apache/juneau/bean/swagger/HeaderInfo.html#HeaderInfo">HeaderInfo</a> setType(String value) {
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_TYPES))
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_TYPES));
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}"</span>, value, Json5.of(VALID_TYPES));
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 		type = value;
 <a class="jxr_linenumber" name="L740" href="#L740">740</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> 	}

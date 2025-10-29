@@ -664,7 +664,7 @@
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 				);
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 				<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 				<strong class="jxr_keyword">if</strong> (cci == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Public constructor not found: {0}({1})"</span>, cn(type), cn(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Public constructor not found: {0}({1})"</span>, cn(type), cn(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 				CONTEXT_CONSTRUCTORS.put(type, cci);
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 			}
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 			<strong class="jxr_keyword">return</strong> cci;
@@ -672,7 +672,7 @@
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<strong class="jxr_keyword">private</strong> <a name="Context" href="../../../org/apache/juneau/Context.html#Context">Context</a> innerBuild() {
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 			<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Type not specified for context builder {0}"</span>, getClass().getName());
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Type not specified for context builder {0}"</span>, cn(getClass()));
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> 			<strong class="jxr_keyword">if</strong> (nn(impl) &amp;&amp; type.isInstance(impl))
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 				<strong class="jxr_keyword">return</strong> type.<strong class="jxr_keyword">cast</strong>(impl);
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 			<strong class="jxr_keyword">if</strong> (nn(cache))
@@ -753,7 +753,7 @@
 <a class="jxr_linenumber" name="L745" href="#L745">745</a> 					}
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> 				}
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> 				<strong class="jxr_keyword">if</strong> (mi == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Could not find builder create method on class {0}"</span>, type);
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Could not find builder create method on class {0}"</span>, cn(type));
 <a class="jxr_linenumber" name="L749" href="#L749">749</a> 				BUILDER_CREATE_METHODS.put(type, mi);
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 			}
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> 			Builder b = (Builder)mi.invoke(<strong class="jxr_keyword">null</strong>);

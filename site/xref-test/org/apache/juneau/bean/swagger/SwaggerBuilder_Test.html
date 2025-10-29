@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		t = headerInfoStrict(<span class="jxr_string">"string"</span>);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertJson(<span class="jxr_string">"{type:'string'}"</span>, t);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']"</span>, ()-&gt;headerInfoStrict(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']"</span>, ()-&gt;headerInfoStrict(<span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test <strong class="jxr_keyword">void</strong> a04_info() {
@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		t = itemsStrict(<span class="jxr_string">"string"</span>);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertJson(<span class="jxr_string">"{type:'string'}"</span>, t);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']"</span>, ()-&gt;itemsStrict(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']"</span>, ()-&gt;itemsStrict(<span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a06_license() {
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		t = parameterInfoStrict(<span class="jxr_string">"query"</span>, <span class="jxr_string">"bar"</span>);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertJson(<span class="jxr_string">"{'in':'query',name:'bar'}"</span>, t);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']"</span>, ()-&gt;parameterInfoStrict(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setIn(String).  Value='foo', valid values=['query','header','path','formData','body']"</span>, ()-&gt;parameterInfoStrict(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Test <strong class="jxr_keyword">void</strong> a09_responseInfo() {
@@ -184,13 +184,13 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Test <strong class="jxr_keyword">void</strong> a18_itemsStrict() {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> t = itemsStrict(<span class="jxr_string">"string"</span>);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertJson(<span class="jxr_string">"{type:'string'}"</span>, t);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']"</span>, ()-&gt;itemsStrict(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['string','number','integer','boolean','array']"</span>, ()-&gt;itemsStrict(<span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test <strong class="jxr_keyword">void</strong> a19_securitySchemeStrict() {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> t = securitySchemeStrict(<span class="jxr_string">"basic"</span>);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertJson(<span class="jxr_string">"{type:'basic'}"</span>, t);
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['basic','apiKey','oauth2']"</span>, ()-&gt;securitySchemeStrict(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid value passed in to setType(String).  Value='foo', valid values=['basic','apiKey','oauth2']"</span>, ()-&gt;securitySchemeStrict(<span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> }
 </pre>
