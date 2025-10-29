@@ -359,7 +359,7 @@
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletRequest */</em>
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<strong class="jxr_keyword">public</strong> Enumeration&lt;String&gt; getHeaders(String name) {
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 		String[] s = headerMap.get(name);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">return</strong> Collections.enumeration(alist(s == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">new</strong> String[0] : s));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">return</strong> Collections.enumeration(l(s == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">new</strong> String[0] : s));
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletRequest */</em>
@@ -382,7 +382,7 @@
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<strong class="jxr_keyword">public</strong> Locale getLocale() { <strong class="jxr_keyword">return</strong> locale; }
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletRequest */</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">public</strong> Enumeration&lt;Locale&gt; getLocales() { <strong class="jxr_keyword">return</strong> Collections.enumeration(alist(locale)); }
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">public</strong> Enumeration&lt;Locale&gt; getLocales() { <strong class="jxr_keyword">return</strong> Collections.enumeration(l(locale)); }
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 	@Override <em class="jxr_comment">/* Overridden from HttpServletRequest */</em>
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<strong class="jxr_keyword">public</strong> String getLocalName() { <strong class="jxr_keyword">return</strong> localName; }

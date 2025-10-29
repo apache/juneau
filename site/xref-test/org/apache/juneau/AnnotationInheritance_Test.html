@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<em class="jxr_comment">/* Commented out - complex serialization test</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_comment">	@Test</em>
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_comment">	void b02_xml_serialization_withInheritance() throws Exception {</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_comment">		var bean = new B1_Child().setItems(Arrays.asList("one", "two", "three"));</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_comment">		var bean = new B1_Child().setItems(l("one", "two", "three"));</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_comment">		var xml = XmlSerializer.DEFAULT.serialize(bean);</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_comment">		// The @Xml annotation is on the getter in the parent, which is not overridden</em>

@@ -45,7 +45,7 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> OpenApiSerializer OAPI_SERIALIZER = OpenApiSerializer.DEFAULT;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> x1 = <strong class="jxr_keyword">new</strong> SerializedHeader(<span class="jxr_string">"Foo"</span>,alist(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>),OAPI_SESSION,T_ARRAY_PIPES,<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> x1 = <strong class="jxr_keyword">new</strong> SerializedHeader(<span class="jxr_string">"Foo"</span>,l(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>),OAPI_SESSION,T_ARRAY_PIPES,<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertString(<span class="jxr_string">"Foo: bar|baz"</span>, x1);
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	}
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
@@ -55,15 +55,15 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Test <strong class="jxr_keyword">void</strong> a03_serializer() {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> x1 = serializedHeader(<span class="jxr_string">"Foo"</span>,alist(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).serializer((HttpPartSerializer)<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> x1 = serializedHeader(<span class="jxr_string">"Foo"</span>,l(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).serializer((HttpPartSerializer)<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertEquals(<span class="jxr_string">"[bar, baz]"</span>, x1.getValue());
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">var</strong> x2 = serializedHeader(<span class="jxr_string">"Foo"</span>,alist(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).serializer((HttpPartSerializer)<strong class="jxr_keyword">null</strong>).serializer(OAPI_SERIALIZER);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">var</strong> x2 = serializedHeader(<span class="jxr_string">"Foo"</span>,l(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).serializer((HttpPartSerializer)<strong class="jxr_keyword">null</strong>).serializer(OAPI_SERIALIZER);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertEquals(<span class="jxr_string">"bar,baz"</span>, x2.getValue());
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> x3 = serializedHeader(<span class="jxr_string">"Foo"</span>,alist(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> x3 = serializedHeader(<span class="jxr_string">"Foo"</span>,l(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).serializer(OAPI_SERIALIZER).serializer((HttpPartSerializerSession)<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertEquals(<span class="jxr_string">"[bar, baz]"</span>, x3.getValue());
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> x4 = serializedHeader(<span class="jxr_string">"Foo"</span>,alist(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).serializer(OAPI_SERIALIZER).copyWith(<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> x4 = serializedHeader(<span class="jxr_string">"Foo"</span>,l(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).serializer(OAPI_SERIALIZER).copyWith(<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertEquals(<span class="jxr_string">"bar,baz"</span>, x4.getValue());
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> x5 = serializedHeader(<span class="jxr_string">"Foo"</span>,alist(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).copyWith(OAPI_SERIALIZER.getSession(),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> x5 = serializedHeader(<span class="jxr_string">"Foo"</span>,l(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"baz"</span>)).copyWith(OAPI_SERIALIZER.getSession(),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertEquals(<span class="jxr_string">"bar,baz"</span>, x5.getValue());
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	}
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  

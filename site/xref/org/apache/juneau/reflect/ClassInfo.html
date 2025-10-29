@@ -653,7 +653,7 @@
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">	 * 	All declared fields on this class.</em>
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is unmodifiable.</em>
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	<strong class="jxr_keyword">public</strong> List&lt;FieldInfo&gt; getAllFields() { <strong class="jxr_keyword">return</strong> u(alist(_getAllFields())); }
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	<strong class="jxr_keyword">public</strong> List&lt;FieldInfo&gt; getAllFields() { <strong class="jxr_keyword">return</strong> u(l(_getAllFields())); }
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 * Returns all declared methods on this class and all parent classes.</em>
@@ -663,7 +663,7 @@
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are ordered parent-to-child, and then alphabetically per class.</em>
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is unmodifiable.</em>
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">public</strong> List&lt;MethodInfo&gt; getAllMethodsParentFirst() { <strong class="jxr_keyword">return</strong> u(alist(_getAllMethodsParentFirst())); }
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">public</strong> List&lt;MethodInfo&gt; getAllMethodsParentFirst() { <strong class="jxr_keyword">return</strong> u(l(_getAllMethodsParentFirst())); }
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">	 * Returns a list including this class and all parent classes and interfaces.</em>
@@ -674,7 +674,7 @@
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list including this class and all parent classes.</em>
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are ordered child-to-parent order with classes listed before interfaces.</em>
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getAllParents() { <strong class="jxr_keyword">return</strong> u(alist(_getAllParents())); }
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getAllParents() { <strong class="jxr_keyword">return</strong> u(l(_getAllParents())); }
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * Finds the annotation of the specified type defined on this class or parent class/interface.</em>
@@ -836,7 +836,7 @@
 <a class="jxr_linenumber" name="L828" href="#L828">828</a> <em class="jxr_javadoccomment">	 * 	All constructors defined on this class.</em>
 <a class="jxr_linenumber" name="L829" href="#L829">829</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is unmodifiable.</em>
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 	<strong class="jxr_keyword">public</strong> List&lt;ConstructorInfo&gt; getDeclaredConstructors() { <strong class="jxr_keyword">return</strong> u(alist(_getDeclaredConstructors())); }
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 	<strong class="jxr_keyword">public</strong> List&lt;ConstructorInfo&gt; getDeclaredConstructors() { <strong class="jxr_keyword">return</strong> u(l(_getDeclaredConstructors())); }
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 
 <a class="jxr_linenumber" name="L833" href="#L833">833</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> <em class="jxr_javadoccomment">	 * Returns the first matching declared field on this class.</em>
@@ -859,7 +859,7 @@
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are in alphabetical order.</em>
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is unmodifiable.</em>
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 	<strong class="jxr_keyword">public</strong> List&lt;FieldInfo&gt; getDeclaredFields() { <strong class="jxr_keyword">return</strong> u(alist(_getDeclaredFields())); }
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 	<strong class="jxr_keyword">public</strong> List&lt;FieldInfo&gt; getDeclaredFields() { <strong class="jxr_keyword">return</strong> u(l(_getDeclaredFields())); }
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 * Returns a list of interfaces declared on this class.</em>
@@ -874,7 +874,7 @@
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> <em class="jxr_javadoccomment">	 * 	An unmodifiable list of interfaces declared on this class.</em>
 <a class="jxr_linenumber" name="L867" href="#L867">867</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are in the same order as {@link Class#getInterfaces()}.</em>
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getDeclaredInterfaces() { <strong class="jxr_keyword">return</strong> u(alist(_getDeclaredInterfaces())); }
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getDeclaredInterfaces() { <strong class="jxr_keyword">return</strong> u(l(_getDeclaredInterfaces())); }
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> 
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L872" href="#L872">872</a> <em class="jxr_javadoccomment">	 * Returns the first matching declared method on this class.</em>
@@ -897,7 +897,7 @@
 <a class="jxr_linenumber" name="L889" href="#L889">889</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are ordered alphabetically.</em>
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is unmodifiable.</em>
 <a class="jxr_linenumber" name="L891" href="#L891">891</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 	<strong class="jxr_keyword">public</strong> List&lt;MethodInfo&gt; getDeclaredMethods() { <strong class="jxr_keyword">return</strong> u(alist(_getDeclaredMethods())); }
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 	<strong class="jxr_keyword">public</strong> List&lt;MethodInfo&gt; getDeclaredMethods() { <strong class="jxr_keyword">return</strong> u(l(_getDeclaredMethods())); }
 <a class="jxr_linenumber" name="L893" href="#L893">893</a> 
 <a class="jxr_linenumber" name="L894" href="#L894">894</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L895" href="#L895">895</a> <em class="jxr_javadoccomment">	 * Returns the number of dimensions if this is an array type.</em>
@@ -956,7 +956,7 @@
 <a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 * 	An unmodifiable list of interfaces defined on this class and superclasses.</em>
 <a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are in child-to-parent order.</em>
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getInterfaces() { <strong class="jxr_keyword">return</strong> u(alist(_getInterfaces())); }
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getInterfaces() { <strong class="jxr_keyword">return</strong> u(l(_getInterfaces())); }
 <a class="jxr_linenumber" name="L952" href="#L952">952</a> 
 <a class="jxr_linenumber" name="L953" href="#L953">953</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">	 * Returns the first matching method on this class.</em>
@@ -979,7 +979,7 @@
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are ordered child-to-parent, and then alphabetically per class.</em>
 <a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is unmodifiable.</em>
 <a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	<strong class="jxr_keyword">public</strong> List&lt;MethodInfo&gt; getMethods() { <strong class="jxr_keyword">return</strong> u(alist(_getAllMethods())); }
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 	<strong class="jxr_keyword">public</strong> List&lt;MethodInfo&gt; getMethods() { <strong class="jxr_keyword">return</strong> u(l(_getAllMethods())); }
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 
 <a class="jxr_linenumber" name="L976" href="#L976">976</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 * Returns the name of the underlying class.</em>
@@ -1118,7 +1118,7 @@
 <a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list including this class and all parent classes.</em>
 <a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are in child-to-parent order.</em>
 <a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getParents() { <strong class="jxr_keyword">return</strong> u(alist(_getParents())); }
+<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 	<strong class="jxr_keyword">public</strong> List&lt;ClassInfo&gt; getParents() { <strong class="jxr_keyword">return</strong> u(l(_getParents())); }
 <a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 
 <a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> <em class="jxr_javadoccomment">	 * Returns the default value for this primitive class.</em>
@@ -1161,7 +1161,7 @@
 <a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> <em class="jxr_javadoccomment">	 * @return All public constructors defined on this class.</em>
 <a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 	<strong class="jxr_keyword">public</strong> List&lt;ConstructorInfo&gt; getPublicConstructors() { <strong class="jxr_keyword">return</strong> u(alist(_getPublicConstructors())); }
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 	<strong class="jxr_keyword">public</strong> List&lt;ConstructorInfo&gt; getPublicConstructors() { <strong class="jxr_keyword">return</strong> u(l(_getPublicConstructors())); }
 <a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 
 <a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> <em class="jxr_javadoccomment">	 * Returns the first matching public field on this class.</em>
@@ -1187,7 +1187,7 @@
 <a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are in alphabetical order.</em>
 <a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;List is unmodifiable.</em>
 <a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 	<strong class="jxr_keyword">public</strong> List&lt;FieldInfo&gt; getPublicFields() { <strong class="jxr_keyword">return</strong> u(alist(_getPublicFields())); }
+<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 	<strong class="jxr_keyword">public</strong> List&lt;FieldInfo&gt; getPublicFields() { <strong class="jxr_keyword">return</strong> u(l(_getPublicFields())); }
 <a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 
 <a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> <em class="jxr_javadoccomment">	 * Returns the first matching public method on this class.</em>
@@ -1212,7 +1212,7 @@
 <a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">	 * 	All public methods on this class.</em>
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Results are ordered alphabetically.</em>
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 	<strong class="jxr_keyword">public</strong> List&lt;MethodInfo&gt; getPublicMethods() { <strong class="jxr_keyword">return</strong> u(alist(_getPublicMethods())); }
+<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 	<strong class="jxr_keyword">public</strong> List&lt;MethodInfo&gt; getPublicMethods() { <strong class="jxr_keyword">return</strong> u(l(_getPublicMethods())); }
 <a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 
 <a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> <em class="jxr_javadoccomment">	 * Same as {@link #getSimpleName()} but uses &lt;js&gt;"Array"&lt;/js&gt; instead of &lt;js&gt;"[]"&lt;/js&gt;.</em>

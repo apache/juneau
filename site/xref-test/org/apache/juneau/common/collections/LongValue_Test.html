@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<strong class="jxr_keyword">void</strong> d01_countingInLambda() {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> counter = LongValue.create();
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		l(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">if</strong> (x % 2 == 0) {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				counter.getAndIncrement();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			}
@@ -200,7 +200,7 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">void</strong> d02_trackingBytesProcessed() {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> bytesProcessed = LongValue.create();
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		list(1024L, 2048L, 512L, 4096L).forEach(bytes -&gt; {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		l(1024L, 2048L, 512L, 4096L).forEach(bytes -&gt; {
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			bytesProcessed.set(bytesProcessed.get() + bytes);
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		});
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 
@@ -211,7 +211,7 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<strong class="jxr_keyword">void</strong> d03_trackingMaxTimestamp() {
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> maxTimestamp = LongValue.of(0L);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		list(1000L, 5000L, 3000L, 8000L, 2000L).forEach(timestamp -&gt; {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		l(1000L, 5000L, 3000L, 8000L, 2000L).forEach(timestamp -&gt; {
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">if</strong> (timestamp &gt; maxTimestamp.get()) {
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 				maxTimestamp.set(timestamp);
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 			}

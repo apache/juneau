@@ -781,8 +781,8 @@
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Header.<strong class="jxr_keyword">class</strong>, D01.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 		List&lt;String&gt;
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 			good = alist(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>),
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 			bad = alist(<span class="jxr_string">"a"</span>,<span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 			good = l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>),
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 			bad = l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"a"</span>);
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

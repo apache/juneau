@@ -1386,7 +1386,7 @@
 <a class="jxr_linenumber" name="L1378" href="#L1378">1378</a> 				<strong class="jxr_keyword">if</strong> (from.isCollection())
 <a class="jxr_linenumber" name="L1379" href="#L1379">1379</a> 					<strong class="jxr_keyword">return</strong> (T)toArray(to, (Collection)value);
 <a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (from.isArray())
-<a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> 					<strong class="jxr_keyword">return</strong> (T)toArray(to, alist((Object[])value));
+<a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> 					<strong class="jxr_keyword">return</strong> (T)toArray(to, l((Object[])value));
 <a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (startsWith(value.toString(), '['))
 <a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> 					<strong class="jxr_keyword">return</strong> (T)toArray(to, JsonList.ofJson(value.toString()).setBeanSession(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L1384" href="#L1384">1384</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (to.hasMutaterFrom(from))

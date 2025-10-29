@@ -763,8 +763,8 @@
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 	@Test <strong class="jxr_keyword">void</strong> d01b_uniqueItems_collections() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D01.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">var</strong> good = alist(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>);
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">var</strong> bad = alist(<span class="jxr_string">"a"</span>,<span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">var</strong> good = l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">var</strong> bad = l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"a"</span>);
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

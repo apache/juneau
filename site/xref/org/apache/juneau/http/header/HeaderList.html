@@ -562,7 +562,7 @@
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> prepend(Header...values) {
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">if</strong> (nn(values))
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			prepend(alist(values));
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			prepend(l(values));
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 	}
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 
@@ -768,7 +768,7 @@
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> set(Header...values) {
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 		<strong class="jxr_keyword">if</strong> (nn(values))
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 			set(alist(values));
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 			set(l(values));
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L765" href="#L765">765</a> 	}
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 
@@ -839,7 +839,7 @@
 <a class="jxr_linenumber" name="L831" href="#L831">831</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> setDefault(Header...headers) {
 <a class="jxr_linenumber" name="L833" href="#L833">833</a> 		<strong class="jxr_keyword">if</strong> (nn(headers))
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 			setDefault(Arrays.asList(headers));
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 			setDefault(l(headers));
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 	}
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> 

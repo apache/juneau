@@ -140,13 +140,13 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Test <strong class="jxr_keyword">void</strong> a04_match() {
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> x1 = of(<span class="jxr_string">"text/json"</span>);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(0, x1.match(alist(MediaType.of(<span class="jxr_string">"text/json"</span>))));
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertEquals(-1, x1.match(alist(MediaType.of(<span class="jxr_string">"text/foo"</span>))));
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertEquals(-1, x1.match(alist((MediaType)<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(0, x1.match(l(MediaType.of(<span class="jxr_string">"text/json"</span>))));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertEquals(-1, x1.match(l(MediaType.of(<span class="jxr_string">"text/foo"</span>))));
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertEquals(-1, x1.match(l((MediaType)<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertEquals(-1, x1.match(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> x2 = of(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(-1, x2.match(alist(MediaType.of(<span class="jxr_string">"text/json"</span>))));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(-1, x2.match(l(MediaType.of(<span class="jxr_string">"text/json"</span>))));
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	@Test <strong class="jxr_keyword">void</strong> a05_getRanges() {

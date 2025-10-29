@@ -180,12 +180,12 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">var</strong> c = init(<span class="jxr_string">"a1=1"</span>, <span class="jxr_string">"[S]"</span>, <span class="jxr_string">"b1=1"</span>);
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> ABean().init();
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		c.set(<span class="jxr_string">"a1"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, Arrays.asList(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		c.set(<span class="jxr_string">"a2"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, Arrays.asList(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		c.set(<span class="jxr_string">"a3"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, Arrays.asList(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		c.set(<span class="jxr_string">"S/b1"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, Arrays.asList(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		c.set(<span class="jxr_string">"S/b2"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, Arrays.asList(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		c.set(<span class="jxr_string">"T/c1"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, Arrays.asList(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		c.set(<span class="jxr_string">"a1"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, l(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		c.set(<span class="jxr_string">"a2"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, l(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		c.set(<span class="jxr_string">"a3"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, l(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		c.set(<span class="jxr_string">"S/b1"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, l(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		c.set(<span class="jxr_string">"S/b2"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, l(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		c.set(<span class="jxr_string">"T/c1"</span>, b, UonSerializer.DEFAULT, <span class="jxr_string">"*"</span>, <span class="jxr_string">"comment"</span>, l(<span class="jxr_string">"#c1"</span>,<span class="jxr_string">"#c2"</span>));
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(<span class="jxr_string">"#c1|#c2|a1&lt;*&gt; = {RhMWWFIFVksf} # comment|#c1|#c2|a2&lt;*&gt; = {RhMWWFIFVksf} # comment|#c1|#c2|a3&lt;*&gt; = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1&lt;*&gt; = {RhMWWFIFVksf} # comment|#c1|#c2|b2&lt;*&gt; = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1&lt;*&gt; = {RhMWWFIFVksf} # comment|"</span>, pipedLines(c));
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		c.commit();
@@ -909,13 +909,13 @@
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> 	@Test <strong class="jxr_keyword">void</strong> setSection1() {
 <a class="jxr_linenumber" name="L902" href="#L902">902</a> 		<strong class="jxr_keyword">var</strong> c = init();
 <a class="jxr_linenumber" name="L903" href="#L903">903</a> 
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		c.setSection(<span class="jxr_string">""</span>, Arrays.asList(<span class="jxr_string">"#C1"</span>, <span class="jxr_string">"#C2"</span>));
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		c.setSection(<span class="jxr_string">""</span>, l(<span class="jxr_string">"#C1"</span>, <span class="jxr_string">"#C2"</span>));
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 		assertEquals(<span class="jxr_string">"#C1|#C2||"</span>, pipedLines(c));
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		c.setSection(<span class="jxr_string">""</span>, Arrays.asList(<span class="jxr_string">"#C3"</span>, <span class="jxr_string">"#C4"</span>));
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		c.setSection(<span class="jxr_string">""</span>, l(<span class="jxr_string">"#C3"</span>, <span class="jxr_string">"#C4"</span>));
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 		assertEquals(<span class="jxr_string">"#C3|#C4||"</span>, pipedLines(c));
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		c.setSection(<span class="jxr_string">"S1"</span>, Arrays.asList(<span class="jxr_string">""</span>, <span class="jxr_string">"#C5"</span>, <span class="jxr_string">"#C6"</span>));
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		c.setSection(<span class="jxr_string">"S1"</span>, l(<span class="jxr_string">""</span>, <span class="jxr_string">"#C5"</span>, <span class="jxr_string">"#C6"</span>));
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> 		assertEquals(<span class="jxr_string">"#C3|#C4|||#C5|#C6|[S1]|"</span>, pipedLines(c));
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 		c.setSection(<span class="jxr_string">"S1"</span>, <strong class="jxr_keyword">null</strong>);
@@ -924,7 +924,7 @@
 <a class="jxr_linenumber" name="L916" href="#L916">916</a> 		c.setSection(<span class="jxr_string">"S1"</span>, Collections.&lt;String&gt;emptyList());
 <a class="jxr_linenumber" name="L917" href="#L917">917</a> 		assertEquals(<span class="jxr_string">"#C3|#C4||[S1]|"</span>, pipedLines(c));
 <a class="jxr_linenumber" name="L918" href="#L918">918</a> 
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'section' cannot be null."</span>, ()-&gt;c.setSection(<strong class="jxr_keyword">null</strong>, Arrays.asList(<span class="jxr_string">""</span>, <span class="jxr_string">"#C5"</span>, <span class="jxr_string">"#C6"</span>)));
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'section' cannot be null."</span>, ()-&gt;c.setSection(<strong class="jxr_keyword">null</strong>, l(<span class="jxr_string">""</span>, <span class="jxr_string">"#C5"</span>, <span class="jxr_string">"#C6"</span>)));
 <a class="jxr_linenumber" name="L920" href="#L920">920</a> 	}
 <a class="jxr_linenumber" name="L921" href="#L921">921</a> 
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> 	<em class="jxr_comment">//====================================================================================================</em>
@@ -934,13 +934,13 @@
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 		<strong class="jxr_keyword">var</strong> c = init();
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 		<strong class="jxr_keyword">var</strong> m = JsonMap.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L928" href="#L928">928</a> 
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		c.setSection(<span class="jxr_string">""</span>, Arrays.asList(<span class="jxr_string">"#C1"</span>, <span class="jxr_string">"#C2"</span>), m);
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		c.setSection(<span class="jxr_string">""</span>, l(<span class="jxr_string">"#C1"</span>, <span class="jxr_string">"#C2"</span>), m);
 <a class="jxr_linenumber" name="L930" href="#L930">930</a> 		assertEquals(<span class="jxr_string">"#C1|#C2||a = b|"</span>, pipedLines(c));
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> 
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		c.setSection(<span class="jxr_string">""</span>, Arrays.asList(<span class="jxr_string">"#C3"</span>, <span class="jxr_string">"#C4"</span>), m);
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		c.setSection(<span class="jxr_string">""</span>, l(<span class="jxr_string">"#C3"</span>, <span class="jxr_string">"#C4"</span>), m);
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 		assertEquals(<span class="jxr_string">"#C3|#C4||a = b|"</span>, pipedLines(c));
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> 
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		c.setSection(<span class="jxr_string">"S1"</span>, Arrays.asList(<span class="jxr_string">""</span>, <span class="jxr_string">"#C5"</span>, <span class="jxr_string">"#C6"</span>), m);
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		c.setSection(<span class="jxr_string">"S1"</span>, l(<span class="jxr_string">""</span>, <span class="jxr_string">"#C5"</span>, <span class="jxr_string">"#C6"</span>), m);
 <a class="jxr_linenumber" name="L936" href="#L936">936</a> 		assertEquals(<span class="jxr_string">"#C3|#C4||a = b||#C5|#C6|[S1]|a = b|"</span>, pipedLines(c));
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 		c.setSection(<span class="jxr_string">"S1"</span>, <strong class="jxr_keyword">null</strong>, m);
@@ -949,7 +949,7 @@
 <a class="jxr_linenumber" name="L941" href="#L941">941</a> 		c.setSection(<span class="jxr_string">"S1"</span>, Collections.&lt;String&gt;emptyList(), m);
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 		assertEquals(<span class="jxr_string">"#C3|#C4||a = b|[S1]|a = b|"</span>, pipedLines(c));
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'section' cannot be null."</span>, ()-&gt;c.setSection(<strong class="jxr_keyword">null</strong>, Arrays.asList(<span class="jxr_string">""</span>, <span class="jxr_string">"#C5"</span>, <span class="jxr_string">"#C6"</span>), m));
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'section' cannot be null."</span>, ()-&gt;c.setSection(<strong class="jxr_keyword">null</strong>, l(<span class="jxr_string">""</span>, <span class="jxr_string">"#C5"</span>, <span class="jxr_string">"#C6"</span>), m));
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> 	}
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> 
 <a class="jxr_linenumber" name="L947" href="#L947">947</a> 	<em class="jxr_comment">//====================================================================================================</em>
@@ -1278,13 +1278,13 @@
 <a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 		<em class="jxr_comment">// Add section</em>
 <a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		<em class="jxr_comment">// Shouldn't trigger listener.</em>
 <a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 		changes.clear();
-<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 		cf.setSection(<span class="jxr_string">"D"</span>, Arrays.asList(<span class="jxr_string">"#comment"</span>));
+<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 		cf.setSection(<span class="jxr_string">"D"</span>, l(<span class="jxr_string">"#comment"</span>));
 <a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 		cf.commit();
 <a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 		assertJson(<span class="jxr_string">"[]"</span>, changes);
 <a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 		<em class="jxr_comment">// Add section with contents</em>
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 		changes.clear();
-<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 		cf.setSection(<span class="jxr_string">"E"</span>, <strong class="jxr_keyword">null</strong>, map(<span class="jxr_string">"e1"</span>,<span class="jxr_string">"1"</span>,<span class="jxr_string">"e2"</span>,<span class="jxr_string">"2"</span>));
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 		cf.setSection(<span class="jxr_string">"E"</span>, <strong class="jxr_keyword">null</strong>, m(<span class="jxr_string">"e1"</span>,<span class="jxr_string">"1"</span>,<span class="jxr_string">"e2"</span>,<span class="jxr_string">"2"</span>));
 <a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		cf.commit();
 <a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		assertJson(<span class="jxr_string">"['E/e1=1','E/e2=2']"</span>, changes);
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 

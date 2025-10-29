@@ -266,7 +266,7 @@
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * @return A modifiable list of strings.</em>
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 	<strong class="jxr_keyword">protected</strong> List&lt;String&gt; createStackTrace(Throwable t) {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">return</strong> alist(t.getStackTrace()).stream().filter(<strong class="jxr_keyword">this</strong>::include).map(<strong class="jxr_keyword">this</strong>::normalize).collect(toList());
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">return</strong> l(t.getStackTrace()).stream().filter(<strong class="jxr_keyword">this</strong>::include).map(<strong class="jxr_keyword">this</strong>::normalize).collect(toList());
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 	}
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<em class="jxr_javadoccomment">/**</em>

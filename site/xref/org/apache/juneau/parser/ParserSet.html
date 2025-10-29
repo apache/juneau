@@ -551,7 +551,7 @@
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 			<strong class="jxr_keyword">return</strong> pm;
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 		MediaType ct = MediaType.of(contentTypeHeader);
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">int</strong> match = ct.match(alist(mediaTypes));
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">int</strong> match = ct.match(l(mediaTypes));
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<strong class="jxr_keyword">if</strong> (match &gt;= 0) {
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 			pm = <strong class="jxr_keyword">new</strong> <a name="ParserMatch" href="../../../../org/apache/juneau/parser/ParserMatch.html#ParserMatch">ParserMatch</a>(mediaTypes[match], mediaTypeParsers[match]);
@@ -566,7 +566,7 @@
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list of parsers in this group.</em>
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	<strong class="jxr_keyword">public</strong> List&lt;Parser&gt; getParsers() { <strong class="jxr_keyword">return</strong> u(alist(entries)); }
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	<strong class="jxr_keyword">public</strong> List&lt;Parser&gt; getParsers() { <strong class="jxr_keyword">return</strong> u(l(entries)); }
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 * Returns the media types that all parsers in this group can handle</em>
@@ -576,7 +576,7 @@
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list of media types.</em>
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	<strong class="jxr_keyword">public</strong> List&lt;MediaType&gt; getSupportedMediaTypes() { <strong class="jxr_keyword">return</strong> u(alist(mediaTypes)); }
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	<strong class="jxr_keyword">public</strong> List&lt;MediaType&gt; getSupportedMediaTypes() { <strong class="jxr_keyword">return</strong> u(l(mediaTypes)); }
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this group contains no parsers.</em>

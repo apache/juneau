@@ -364,28 +364,28 @@
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithSwappedListField {
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">public</strong> List&lt;PojoToDynamicReader&gt; f;
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">public</strong> BeanWithSwappedListField(String f) {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">this</strong>.f = list(<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"1"</span>),<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"2"</span>),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">this</strong>.f = l(<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"1"</span>),<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"2"</span>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		}
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 	}
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithSwappedMapField {
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,PojoToDynamicReader&gt; f;
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">public</strong> BeanWithSwappedMapField(String f) {
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">this</strong>.f = map(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"1"</span>),<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"2"</span>));
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">this</strong>.f = m(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"1"</span>),<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"2"</span>));
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 		}
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithListBeanSwappedField {
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">public</strong> List&lt;B&gt; f;
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">public</strong> BeanWithListBeanSwappedField(String f) {
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">this</strong>.f = list(<strong class="jxr_keyword">new</strong> B(f),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">this</strong>.f = l(<strong class="jxr_keyword">new</strong> B(f),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 		}
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithMapBeanSwappedField {
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,B&gt; f;
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">public</strong> BeanWithMapBeanSwappedField(String f) {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">this</strong>.f = map(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">new</strong> B(f),<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">new</strong> B(f));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">this</strong>.f = m(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">new</strong> B(f),<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">new</strong> B(f));
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 		}
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 
@@ -400,8 +400,8 @@
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 			f1 = <strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"1a"</span>);
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 			f2 = a(<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"2a"</span>),<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"2b"</span>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 			f3 = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			f4 = list(<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"4a"</span>),<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"4b"</span>),<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			f5 = map(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"5a"</span>),<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"5c"</span>));
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			f4 = l(<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"4a"</span>),<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"4b"</span>),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			f5 = m(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"5a"</span>),<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">new</strong> PojoToDynamicReader(f + <span class="jxr_string">"5c"</span>));
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 		}
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 	}
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> }

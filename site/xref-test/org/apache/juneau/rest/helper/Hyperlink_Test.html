@@ -24,50 +24,52 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.helper;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.beans.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.servlet.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  @SuppressWarnings(<span class="jxr_string">"serial"</span>)
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">class</strong> <a name="Hyperlink_Test" href="../../../../../org/apache/juneau/rest/beans/Hyperlink_Test.html#Hyperlink_Test">Hyperlink_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	@Rest
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> BasicRestServlet {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		@RestGet
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">public</strong> Hyperlink a() {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Hyperlink(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		}
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		@RestGet
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">public</strong> Hyperlink[] b() {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Hyperlink[]{a(),a()};
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		}
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		@RestGet
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">public</strong> Collection&lt;Hyperlink&gt; c() {
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			<strong class="jxr_keyword">return</strong> Arrays.asList(b());
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		}
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> a = MockRestClient.build(A.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		a.get(<span class="jxr_string">"/a"</span>)
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.accept(<span class="jxr_string">"text/html+stripped"</span>)
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			.run()
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			.assertContent(<span class="jxr_string">"&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;"</span>);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		a.get(<span class="jxr_string">"/b"</span>)
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			.accept(<span class="jxr_string">"text/html+stripped"</span>)
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.run()
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.assertContent(<span class="jxr_string">"&lt;ul&gt;&lt;li&gt;&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;"</span>);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		a.get(<span class="jxr_string">"/c"</span>)
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			.accept(<span class="jxr_string">"text/html+stripped"</span>)
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			.run()
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.assertContent(<span class="jxr_string">"&lt;ul&gt;&lt;li&gt;&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;"</span>);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  }
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.beans.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.servlet.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  @SuppressWarnings(<span class="jxr_string">"serial"</span>)
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">class</strong> <a name="Hyperlink_Test" href="../../../../../org/apache/juneau/rest/beans/Hyperlink_Test.html#Hyperlink_Test">Hyperlink_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Rest
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		@RestGet
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">public</strong> Hyperlink a() {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Hyperlink(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		}
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		@RestGet
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">public</strong> Hyperlink[] b() {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Hyperlink[]{a(),a()};
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		}
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		@RestGet
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">public</strong> Collection&lt;Hyperlink&gt; c() {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			<strong class="jxr_keyword">return</strong> l(b());
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		}
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> a = MockRestClient.build(A.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		a.get(<span class="jxr_string">"/a"</span>)
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			.accept(<span class="jxr_string">"text/html+stripped"</span>)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			.run()
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			.assertContent(<span class="jxr_string">"&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;"</span>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		a.get(<span class="jxr_string">"/b"</span>)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.accept(<span class="jxr_string">"text/html+stripped"</span>)
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			.run()
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			.assertContent(<span class="jxr_string">"&lt;ul&gt;&lt;li&gt;&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		a.get(<span class="jxr_string">"/c"</span>)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.accept(<span class="jxr_string">"text/html+stripped"</span>)
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.run()
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			.assertContent(<span class="jxr_string">"&lt;ul&gt;&lt;li&gt;&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=\&quot;/foo\&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

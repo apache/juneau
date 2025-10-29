@@ -122,8 +122,8 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C create() {
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> C();
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			t.f1 = list();
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			t.f2 = list(<strong class="jxr_keyword">null</strong>,A.create());
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			t.f1 = l();
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			t.f2 = l(<strong class="jxr_keyword">null</strong>,A.create());
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		}
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
@@ -169,11 +169,11 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E1 {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		@Beanp(properties=<span class="jxr_string">"f1"</span>) <strong class="jxr_keyword">public</strong> E2 x1 = <strong class="jxr_keyword">new</strong> E2();
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		@Beanp(properties=<span class="jxr_string">"f1"</span>) <strong class="jxr_keyword">public</strong> Map&lt;String,Integer&gt; x2 = map(<span class="jxr_string">"f1"</span>,1,<span class="jxr_string">"f2"</span>,2);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		@Beanp(properties=<span class="jxr_string">"f1"</span>) <strong class="jxr_keyword">public</strong> Map&lt;String,Integer&gt; x2 = m(<span class="jxr_string">"f1"</span>,1,<span class="jxr_string">"f2"</span>,2);
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		@Beanp(properties=<span class="jxr_string">"f1"</span>) <strong class="jxr_keyword">public</strong> E2[] x3 = {<strong class="jxr_keyword">new</strong> E2()};
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		@Beanp(properties=<span class="jxr_string">"f1"</span>) <strong class="jxr_keyword">public</strong> List&lt;E2&gt; x4 = list(<strong class="jxr_keyword">new</strong> E2());
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		@Beanp(properties=<span class="jxr_string">"f1"</span>) <strong class="jxr_keyword">public</strong> List&lt;E2&gt; x4 = l(<strong class="jxr_keyword">new</strong> E2());
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		@Beanp(properties=<span class="jxr_string">"f1"</span>) <strong class="jxr_keyword">public</strong> JsonMap[] x5 = {JsonMap.of(<span class="jxr_string">"f1"</span>,1,<span class="jxr_string">"f2"</span>,2)};
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		@Beanp(properties=<span class="jxr_string">"f1"</span>) <strong class="jxr_keyword">public</strong> List&lt;JsonMap&gt; x6 = list(JsonMap.of(<span class="jxr_string">"f1"</span>,1,<span class="jxr_string">"f2"</span>,2));
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		@Beanp(properties=<span class="jxr_string">"f1"</span>) <strong class="jxr_keyword">public</strong> List&lt;JsonMap&gt; x6 = l(JsonMap.of(<span class="jxr_string">"f1"</span>,1,<span class="jxr_string">"f2"</span>,2));
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E2 {
@@ -245,7 +245,7 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<em class="jxr_comment">// Recursion detection, no ignore</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		s.detectRecursions();
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, list(<span class="jxr_string">"[0] root:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"</span>, <span class="jxr_string">"-&gt;[1] r2:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R2"</span>, <span class="jxr_string">"-&gt;[2] r3:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R3"</span>, <span class="jxr_string">"-&gt;[3] r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"</span>), ()-&gt;s.build().serialize(r1));
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, l(<span class="jxr_string">"[0] root:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"</span>, <span class="jxr_string">"-&gt;[1] r2:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R2"</span>, <span class="jxr_string">"-&gt;[2] r3:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R3"</span>, <span class="jxr_string">"-&gt;[3] r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1"</span>), ()-&gt;s.build().serialize(r1));
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		s.ignoreRecursions();
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertEquals(<span class="jxr_string">"name=foo&amp;r2=(name=bar,r3=(name=baz))"</span>, s.build().serialize(r1));

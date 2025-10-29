@@ -316,7 +316,7 @@
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	<strong class="jxr_keyword">protected</strong> <a name="Cache" href="../../../../../org/apache/juneau/common/collections/Cache.html#Cache">Cache</a>(Builder&lt;K,V&gt; builder) {
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">this</strong>.maxSize = builder.maxSize;
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">this</strong>.disableCaching = builder.disableCaching;
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">this</strong>.supplier = builder.supplier;
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">this</strong>.supplier = builder.supplier != <strong class="jxr_keyword">null</strong> ? builder.supplier : (K)-&gt;<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">if</strong> (builder.logOnExit) {
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			SystemUtils.shutdownMessage(() -&gt; builder.type.getSimpleName() + <span class="jxr_string">" cache:  hits="</span> + cacheHits.get() + <span class="jxr_string">", misses: "</span> + size());
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 		}
@@ -400,63 +400,66 @@
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">if</strong> (size() &gt; maxSize)
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 				clear();
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 			v = supplier.get();
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			putIfAbsent(key, v);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			cacheHits.incrementAndGet();
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		}
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">return</strong> v;
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	}
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * Associates the specified value with the specified key in this cache.</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * 	Cache&amp;lt;String,Pattern&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; = Cache.&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Pattern.&lt;jk&gt;class&lt;/jk&gt;).build();</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * 	Pattern &lt;jv&gt;pattern&lt;/jv&gt; = Pattern.compile(&lt;js&gt;"[0-9]+"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;cache&lt;/jv&gt;.put(&lt;js&gt;"digits"&lt;/js&gt;, &lt;jv&gt;pattern&lt;/jv&gt;);</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * @param key The cache key. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * @param value The value to associate with the key.</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 * @return The previous value associated with the key, or &lt;jk&gt;null&lt;/jk&gt; if there was no mapping for the key.</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException if key is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	@Override <em class="jxr_comment">/* ConcurrentHashMap */</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	<strong class="jxr_keyword">public</strong> V put(K key, V value) {
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertArgNotNull(<span class="jxr_string">"key"</span>, key);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.put(key, value);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	}
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * Returns the total number of cache hits since this cache was created.</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * A cache hit occurs when {@link #get(Object)} or {@link #get(Object, Supplier)} finds an existing</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * cached value for the requested key, avoiding the need to invoke the supplier.</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Cache Effectiveness:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * You can calculate the cache hit ratio using:</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;hits&lt;/jv&gt; = &lt;jv&gt;cache&lt;/jv&gt;.getCacheHits();</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;misses&lt;/jv&gt; = &lt;jv&gt;cache&lt;/jv&gt;.size();</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;total&lt;/jv&gt; = &lt;jv&gt;hits&lt;/jv&gt; + &lt;jv&gt;misses&lt;/jv&gt;;</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;double&lt;/jk&gt; &lt;jv&gt;hitRatio&lt;/jv&gt; = (&lt;jk&gt;double&lt;/jk&gt;) &lt;jv&gt;hits&lt;/jv&gt; / &lt;jv&gt;total&lt;/jv&gt;;  &lt;jc&gt;// 0.0 to 1.0&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;This counter is never reset, even when {@link #clear()} is called</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Thread-safe using {@link AtomicInteger}</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Returns 0 if the cache is disabled</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * @return The total number of cache hits since creation.</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getCacheHits() { <strong class="jxr_keyword">return</strong> cacheHits.get(); }
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> }
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 				remove(key);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 				putIfAbsent(key, v);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			cacheHits.incrementAndGet();
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		}
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">return</strong> v;
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * Associates the specified value with the specified key in this cache.</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * 	Cache&amp;lt;String,Pattern&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; = Cache.&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Pattern.&lt;jk&gt;class&lt;/jk&gt;).build();</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 * 	Pattern &lt;jv&gt;pattern&lt;/jv&gt; = Pattern.compile(&lt;js&gt;"[0-9]+"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * 	&lt;jv&gt;cache&lt;/jv&gt;.put(&lt;js&gt;"digits"&lt;/js&gt;, &lt;jv&gt;pattern&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * @param key The cache key. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * @param value The value to associate with the key.</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 * @return The previous value associated with the key, or &lt;jk&gt;null&lt;/jk&gt; if there was no mapping for the key.</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException if key is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	@Override <em class="jxr_comment">/* ConcurrentHashMap */</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<strong class="jxr_keyword">public</strong> V put(K key, V value) {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertArgNotNull(<span class="jxr_string">"key"</span>, key);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.put(key, value);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * Returns the total number of cache hits since this cache was created.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * A cache hit occurs when {@link #get(Object)} or {@link #get(Object, Supplier)} finds an existing</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * cached value for the requested key, avoiding the need to invoke the supplier.</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Cache Effectiveness:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * You can calculate the cache hit ratio using:</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;hits&lt;/jv&gt; = &lt;jv&gt;cache&lt;/jv&gt;.getCacheHits();</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;misses&lt;/jv&gt; = &lt;jv&gt;cache&lt;/jv&gt;.size();</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;total&lt;/jv&gt; = &lt;jv&gt;hits&lt;/jv&gt; + &lt;jv&gt;misses&lt;/jv&gt;;</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;double&lt;/jk&gt; &lt;jv&gt;hitRatio&lt;/jv&gt; = (&lt;jk&gt;double&lt;/jk&gt;) &lt;jv&gt;hits&lt;/jv&gt; / &lt;jv&gt;total&lt;/jv&gt;;  &lt;jc&gt;// 0.0 to 1.0&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;This counter is never reset, even when {@link #clear()} is called</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Thread-safe using {@link AtomicInteger}</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Returns 0 if the cache is disabled</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * @return The total number of cache hits since creation.</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getCacheHits() { <strong class="jxr_keyword">return</strong> cacheHits.get(); }
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

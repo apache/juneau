@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a03_setChildren() {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		Div x = <strong class="jxr_keyword">new</strong> Div();
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		java.util.List&lt;Object&gt; children = java.util.Arrays.asList(<span class="jxr_string">"child1"</span>, <span class="jxr_string">"child2"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		java.util.List&lt;Object&gt; children = l(<span class="jxr_string">"child1"</span>, <span class="jxr_string">"child2"</span>);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		x.setChildren(children);
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertString(<span class="jxr_string">"[child1,child2]"</span>, x.getChildren());
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}

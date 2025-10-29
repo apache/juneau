@@ -39,8 +39,8 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  		List&lt;String&gt; l1, l2;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  		MultiSet&lt;String&gt; ms;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		l1 = Arrays.asList(a(<span class="jxr_string">"1"</span>,<span class="jxr_string">"2"</span>));
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		l2 = Arrays.asList(a(<span class="jxr_string">"3"</span>,<span class="jxr_string">"4"</span>));
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		l1 = l(a(<span class="jxr_string">"1"</span>,<span class="jxr_string">"2"</span>));
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		l2 = l(a(<span class="jxr_string">"3"</span>,<span class="jxr_string">"4"</span>));
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		ms = <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(l1, l2);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">var</strong> i1 = ms.iterator();
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertTrue(i1.hasNext());
@@ -54,8 +54,8 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertFalse(i1.hasNext());
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertThrows(NoSuchElementException.<strong class="jxr_keyword">class</strong>, i1::next);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		l1 = Arrays.asList(a(<span class="jxr_string">"1"</span>,<span class="jxr_string">"2"</span>));
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		l2 = Arrays.asList(a());
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		l1 = l(a(<span class="jxr_string">"1"</span>,<span class="jxr_string">"2"</span>));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		l2 = l(a());
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		ms = <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(l1, l2);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">var</strong> i2 = ms.iterator();
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertTrue(i2.hasNext());
@@ -65,8 +65,8 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		assertFalse(i2.hasNext());
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertThrows(NoSuchElementException.<strong class="jxr_keyword">class</strong>, i2::next);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		l1 = Arrays.asList(a());
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		l2 = Arrays.asList(a(<span class="jxr_string">"3"</span>,<span class="jxr_string">"4"</span>));
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		l1 = l(a());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		l2 = l(a(<span class="jxr_string">"3"</span>,<span class="jxr_string">"4"</span>));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		ms = <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(l1, l2);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> i3 = ms.iterator();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertTrue(i3.hasNext());
@@ -76,14 +76,14 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertFalse(i3.hasNext());
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertThrows(NoSuchElementException.<strong class="jxr_keyword">class</strong>, i3::next);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		l1 = Arrays.asList(a());
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		l2 = Arrays.asList(a());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		l1 = l(a());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		l2 = l(a());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		ms = <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(l1, l2);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> i4 = ms.iterator();
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertFalse(i4.hasNext());
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertThrows(NoSuchElementException.<strong class="jxr_keyword">class</strong>, i4::next);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		l1 = Arrays.asList(a(<span class="jxr_string">"1"</span>,<span class="jxr_string">"2"</span>));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		l1 = l(a(<span class="jxr_string">"1"</span>,<span class="jxr_string">"2"</span>));
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		ms = <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(l1);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> i5 = ms.iterator();
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertTrue(i5.hasNext());
@@ -93,8 +93,8 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertFalse(i5.hasNext());
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertThrows(NoSuchElementException.<strong class="jxr_keyword">class</strong>, i5::next);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		l1 = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;(Arrays.asList(a(<span class="jxr_string">"1"</span>,<span class="jxr_string">"2"</span>)));
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		l2 = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;(Arrays.asList(a(<span class="jxr_string">"3"</span>,<span class="jxr_string">"4"</span>)));
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		l1 = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;(l(a(<span class="jxr_string">"1"</span>,<span class="jxr_string">"2"</span>)));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		l2 = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;(l(a(<span class="jxr_string">"3"</span>,<span class="jxr_string">"4"</span>)));
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		ms = <strong class="jxr_keyword">new</strong> MultiSet&lt;&gt;(l1, l2);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertList(ms, <span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"4"</span>);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertList(ms.enumerator(), <span class="jxr_string">"1"</span>, <span class="jxr_string">"2"</span>, <span class="jxr_string">"3"</span>, <span class="jxr_string">"4"</span>);

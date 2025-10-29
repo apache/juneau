@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertVarargsNotNull(<span class="jxr_string">"scopes"</span>, scopes);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (requirements == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			requirements = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		requirements.put(schemeName, Arrays.asList(scopes));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		requirements.put(schemeName, l(scopes));
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  

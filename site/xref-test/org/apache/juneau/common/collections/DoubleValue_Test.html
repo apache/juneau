@@ -145,7 +145,7 @@
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">void</strong> c01_trackingPreciseSum() {
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> sum = DoubleValue.create();
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		list(1.111, 2.222, 3.333, 4.444).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		l(1.111, 2.222, 3.333, 4.444).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			sum.set(sum.get() + x);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		});
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> sum = DoubleValue.create();
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> count = DoubleValue.create();
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		list(10.5, 20.3, 15.7, 30.1).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		l(10.5, 20.3, 15.7, 30.1).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			sum.set(sum.get() + x);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			count.set(count.get() + 1);
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		});
@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">void</strong> c03_trackingMaxValue() {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> max = DoubleValue.of(Double.MIN_VALUE);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		list(5.5, 12.3, 3.8, 20.1, 1.2).forEach(x -&gt; {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		l(5.5, 12.3, 3.8, 20.1, 1.2).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">if</strong> (x &gt; max.get()) {
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 				max.set(x);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			}

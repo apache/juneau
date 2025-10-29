@@ -987,7 +987,7 @@
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 		<strong class="jxr_keyword">if</strong> (end &gt; lines.length)
 <a class="jxr_linenumber" name="L980" href="#L980">980</a> 			end = lines.length;
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> l : Arrays.asList(lines).subList(start - 1, end))
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> l : l(lines).subList(start - 1, end))
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> 			sb.append(String.format(<span class="jxr_string">"%0"</span> + digits + <span class="jxr_string">"d"</span>, start++)).append(<span class="jxr_string">": "</span>).append(l).append(<span class="jxr_string">"\n"</span>);  <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 	}
@@ -3727,7 +3727,7 @@
 <a class="jxr_linenumber" name="L3719" href="#L3719">3719</a> 				l.add(Array.get(array, i));
 <a class="jxr_linenumber" name="L3720" href="#L3720">3720</a> 			<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L3721" href="#L3721">3721</a> 		}
-<a class="jxr_linenumber" name="L3722" href="#L3722">3722</a> 		<strong class="jxr_keyword">return</strong> Arrays.asList((Object[])array);
+<a class="jxr_linenumber" name="L3722" href="#L3722">3722</a> 		<strong class="jxr_keyword">return</strong> l((Object[])array);
 <a class="jxr_linenumber" name="L3723" href="#L3723">3723</a> 	}
 <a class="jxr_linenumber" name="L3724" href="#L3724">3724</a> 
 <a class="jxr_linenumber" name="L3725" href="#L3725">3725</a> 	<em class="jxr_javadoccomment">/**</em>

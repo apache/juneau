@@ -110,11 +110,11 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 			a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			a(a(a(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			alist(1,<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			alist(alist(alist(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			alist(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			alist(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			alist(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			l(1,<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			l(l(l(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			l(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			l(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			l(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
@@ -126,12 +126,12 @@
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			ABean.get(),
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 			a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			alist(ABean.get(),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			map(<span class="jxr_string">"foo"</span>,ABean.get()),
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			map(<span class="jxr_string">"foo"</span>,alist(ABean.get())),
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			map(<span class="jxr_string">"foo"</span>,alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			map(1,alist(ABean.get()))
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			l(ABean.get(),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			m(<span class="jxr_string">"foo"</span>,ABean.get()),
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			m(<span class="jxr_string">"foo"</span>,l(ABean.get())),
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			m(<span class="jxr_string">"foo"</span>,l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			m(1,l(ABean.get()))
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
@@ -143,12 +143,12 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			TypedBeanImpl.get(),
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			alist(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			map(<span class="jxr_string">"foo"</span>,TypedBeanImpl.get()),
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			map(<span class="jxr_string">"foo"</span>,alist((TypedBean)TypedBeanImpl.get())),
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			map(<span class="jxr_string">"foo"</span>,alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			map(1,alist((TypedBean)TypedBeanImpl.get()))
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			l(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			m(<span class="jxr_string">"foo"</span>,TypedBeanImpl.get()),
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			m(<span class="jxr_string">"foo"</span>,l((TypedBean)TypedBeanImpl.get())),
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			m(<span class="jxr_string">"foo"</span>,l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			m(1,l((TypedBean)TypedBeanImpl.get()))
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
@@ -159,8 +159,8 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.swappedObjectHeaders(
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>()),
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>()),
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
@@ -171,8 +171,8 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.implicitSwappedObjectHeaders(
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>()),
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>()),
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
@@ -184,12 +184,12 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 			TestEnum.TWO,
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			alist(alist(alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			map(TestEnum.ONE,TestEnum.TWO),
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			map(TestEnum.ONE,a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			l(l(l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			m(TestEnum.ONE,TestEnum.TWO),
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			m(TestEnum.ONE,a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			m(TestEnum.ONE,l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		);
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 	}
@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">void</strong> a08_mapHeader(Input input) {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.mapHeader(
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			map(<span class="jxr_string">"a"</span>,<span class="jxr_string">"foo"</span>,<span class="jxr_string">"b"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"c"</span>,<strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			m(<span class="jxr_string">"a"</span>,<span class="jxr_string">"foo"</span>,<span class="jxr_string">"b"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"c"</span>,<strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
@@ -248,11 +248,11 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 			a(a(a(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			alist(1,<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			alist(alist(alist(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			alist(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			alist(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			alist(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			l(1,<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			l(l(l(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			l(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			l(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			l(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 		);
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 	}
@@ -264,12 +264,12 @@
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			ABean.get(),
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 			a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			alist(ABean.get(),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			map(<span class="jxr_string">"foo"</span>,ABean.get()),
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			map(<span class="jxr_string">"foo"</span>,alist(ABean.get())),
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			map(<span class="jxr_string">"foo"</span>,alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			map(1,alist(ABean.get()))
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			l(ABean.get(),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			m(<span class="jxr_string">"foo"</span>,ABean.get()),
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			m(<span class="jxr_string">"foo"</span>,l(ABean.get())),
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			m(<span class="jxr_string">"foo"</span>,l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			m(1,l(ABean.get()))
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		);
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
@@ -281,12 +281,12 @@
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 			TypedBeanImpl.get(),
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			alist(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			map(<span class="jxr_string">"foo"</span>,TypedBeanImpl.get()),
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			map(<span class="jxr_string">"foo"</span>,alist((TypedBean)TypedBeanImpl.get())),
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			map(<span class="jxr_string">"foo"</span>,alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			map(1,alist((TypedBean)TypedBeanImpl.get()))
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			l(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			m(<span class="jxr_string">"foo"</span>,TypedBeanImpl.get()),
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			m(<span class="jxr_string">"foo"</span>,l((TypedBean)TypedBeanImpl.get())),
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			m(<span class="jxr_string">"foo"</span>,l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			m(1,l((TypedBean)TypedBeanImpl.get()))
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		);
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
@@ -297,8 +297,8 @@
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.swappedObjectQueries(
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>()),
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>()),
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		);
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
@@ -309,8 +309,8 @@
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.implicitSwappedObjectQueries(
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 			a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>()),
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>()),
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 		);
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
@@ -322,12 +322,12 @@
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			TestEnum.TWO,
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			alist(alist(alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			map(TestEnum.ONE,TestEnum.TWO),
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			map(TestEnum.ONE,a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			l(l(l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			m(TestEnum.ONE,TestEnum.TWO),
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			m(TestEnum.ONE,a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			m(TestEnum.ONE,l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		);
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 	}
@@ -350,7 +350,7 @@
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">void</strong> b10_mapQuery(Input input) {
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.mapQuery(
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			map(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			m(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 		);
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 	}
@@ -400,11 +400,11 @@
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 			a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 			a(a(a(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			alist(1,<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			alist(alist(alist(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			alist(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			alist(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			alist(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			l(1,<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			l(l(l(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			l(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			l(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			l(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 		);
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
@@ -416,12 +416,12 @@
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 			ABean.get(),
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 			a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			alist(ABean.get(),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			map(<span class="jxr_string">"foo"</span>,ABean.get()),
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			map(<span class="jxr_string">"foo"</span>,alist(ABean.get())),
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			map(<span class="jxr_string">"foo"</span>,alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			map(1,alist(ABean.get()))
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			l(ABean.get(),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			m(<span class="jxr_string">"foo"</span>,ABean.get()),
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			m(<span class="jxr_string">"foo"</span>,l(ABean.get())),
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			m(<span class="jxr_string">"foo"</span>,l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			m(1,l(ABean.get()))
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		);
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 	}
@@ -433,12 +433,12 @@
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			TypedBeanImpl.get(),
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 			a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			alist(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			map(<span class="jxr_string">"foo"</span>,TypedBeanImpl.get()),
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			map(<span class="jxr_string">"foo"</span>,alist((TypedBean)TypedBeanImpl.get())),
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			map(<span class="jxr_string">"foo"</span>,alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			map(1,alist((TypedBean)TypedBeanImpl.get()))
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			l(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			m(<span class="jxr_string">"foo"</span>,TypedBeanImpl.get()),
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			m(<span class="jxr_string">"foo"</span>,l((TypedBean)TypedBeanImpl.get())),
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			m(<span class="jxr_string">"foo"</span>,l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			m(1,l((TypedBean)TypedBeanImpl.get()))
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 		);
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
@@ -449,8 +449,8 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.swappedObjectFormData(
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 			a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>()),
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>()),
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 		);
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 	}
@@ -461,8 +461,8 @@
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.implicitSwappedObjectFormData(
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 			a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>()),
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>()),
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 		);
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 	}
@@ -474,12 +474,12 @@
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 			TestEnum.TWO,
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">null</strong>,
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			alist(alist(alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			map(TestEnum.ONE,TestEnum.TWO),
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			map(TestEnum.ONE,a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			l(l(l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			m(TestEnum.ONE,TestEnum.TWO),
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			m(TestEnum.ONE,a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)),
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			m(TestEnum.ONE,l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 		);
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 	}
@@ -488,7 +488,7 @@
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">void</strong> c08_mapFormData(Input input) {
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.mapFormData(
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			map(<span class="jxr_string">"a"</span>,<span class="jxr_string">"foo"</span>,<span class="jxr_string">"b"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"c"</span>,<strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			m(<span class="jxr_string">"a"</span>,<span class="jxr_string">"foo"</span>,<span class="jxr_string">"b"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"c"</span>,<strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 		);
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 	}
@@ -980,31 +980,31 @@
 <a class="jxr_linenumber" name="L972" href="#L972">972</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L973" href="#L973">973</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 	<strong class="jxr_keyword">void</strong> ea13_setIntegerList(Input input) {
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		assertDoesNotThrow(()-&gt;input.proxy.setIntegerList(alist(1,<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		assertDoesNotThrow(()-&gt;input.proxy.setIntegerList(l(1,<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L976" href="#L976">976</a> 	}
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> 
 <a class="jxr_linenumber" name="L978" href="#L978">978</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L980" href="#L980">980</a> 	<strong class="jxr_keyword">void</strong> ea14_setInteger3dList(Input input) {
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 		assertDoesNotThrow(()-&gt;input.proxy.setInteger3dList(alist(alist(alist(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 		assertDoesNotThrow(()-&gt;input.proxy.setInteger3dList(l(l(l(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 	}
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> 
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L986" href="#L986">986</a> 	<strong class="jxr_keyword">void</strong> ea15_setInteger1d3dList(Input input) {
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		assertDoesNotThrow(()-&gt;input.proxy.setInteger1d3dList(alist(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		assertDoesNotThrow(()-&gt;input.proxy.setInteger1d3dList(l(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L988" href="#L988">988</a> 	}
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> 
 <a class="jxr_linenumber" name="L990" href="#L990">990</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L991" href="#L991">991</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L992" href="#L992">992</a> 	<strong class="jxr_keyword">void</strong> ea16_setInt1d3dList(Input input) {
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		assertDoesNotThrow(()-&gt;input.proxy.setInt1d3dList(alist(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		assertDoesNotThrow(()-&gt;input.proxy.setInt1d3dList(l(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> 	}
 <a class="jxr_linenumber" name="L995" href="#L995">995</a> 
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L998" href="#L998">998</a> 	<strong class="jxr_keyword">void</strong> ea17_setStringList(Input input) {
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		assertDoesNotThrow(()-&gt;input.proxy.setStringList(alist(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		assertDoesNotThrow(()-&gt;input.proxy.setStringList(l(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	}
 <a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 
 <a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 	<em class="jxr_comment">// Beans</em>
@@ -1023,13 +1023,13 @@
 <a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 	<strong class="jxr_keyword">void</strong> eb03_setBeanList(Input input) {
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBeanList(alist(ABean.get())));
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBeanList(l(ABean.get())));
 <a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 	}
 <a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 
 <a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 	<strong class="jxr_keyword">void</strong> eb04_setBean1d3dList(Input input) {
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBean1d3dList(alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBean1d3dList(l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	}
 <a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 	@ParameterizedTest
@@ -1041,19 +1041,19 @@
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 	<strong class="jxr_keyword">void</strong> eb06_setBeanListMap(Input input) {
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBeanListMap(map(<span class="jxr_string">"foo"</span>,alist(ABean.get()))));
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBeanListMap(map(<span class="jxr_string">"foo"</span>,l(ABean.get()))));
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 	}
 <a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 
 <a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 	<strong class="jxr_keyword">void</strong> eb07_setBean1d3dListMap(Input input) {
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBean1d3dListMap(map(<span class="jxr_string">"foo"</span>,alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))));
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBean1d3dListMap(map(<span class="jxr_string">"foo"</span>,l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))));
 <a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 	}
 <a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 
 <a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 	<strong class="jxr_keyword">void</strong> eb08_setBeanListMapIntegerKeys(Input input) {
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBeanListMapIntegerKeys(map(1,alist(ABean.get()))));
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		assertDoesNotThrow(()-&gt;input.proxy.setBeanListMapIntegerKeys(map(1,l(ABean.get()))));
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 	}
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 	<em class="jxr_comment">// Typed beans</em>
@@ -1073,13 +1073,13 @@
 <a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 	<strong class="jxr_keyword">void</strong> ec03_setTypedBeanList(Input input) {
-<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBeanList(alist((TypedBean)TypedBeanImpl.get())));
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBeanList(l((TypedBean)TypedBeanImpl.get())));
 <a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 	}
 <a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 
 <a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 	<strong class="jxr_keyword">void</strong> ec04_setTypedBean1d3dList(Input input) {
-<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBean1d3dList(alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBean1d3dList(l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 	}
 <a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 
 <a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 	@ParameterizedTest
@@ -1091,19 +1091,19 @@
 <a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 	<strong class="jxr_keyword">void</strong> ec06_setTypedBeanListMap(Input input) {
-<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBeanListMap(map(<span class="jxr_string">"foo"</span>,alist((TypedBean)TypedBeanImpl.get()))));
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBeanListMap(map(<span class="jxr_string">"foo"</span>,l((TypedBean)TypedBeanImpl.get()))));
 <a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 	}
 <a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 	<strong class="jxr_keyword">void</strong> ec07_setTypedBean1d3dListMap(Input input) {
-<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBean1d3dListMap(map(<span class="jxr_string">"foo"</span>,alist(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))));
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBean1d3dListMap(map(<span class="jxr_string">"foo"</span>,l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))));
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 	}
 <a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 
 <a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 	<strong class="jxr_keyword">void</strong> ec08_setTypedBeanListMapIntegerKeys(Input input) {
-<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBeanListMapIntegerKeys(map(1,alist((TypedBean)TypedBeanImpl.get()))));
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		assertDoesNotThrow(()-&gt;input.proxy.setTypedBeanListMapIntegerKeys(map(1,l((TypedBean)TypedBeanImpl.get()))));
 <a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 	}
 <a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 
 <a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 	<em class="jxr_comment">// Swapped POJOs</em>
@@ -1174,19 +1174,19 @@
 <a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 	<strong class="jxr_keyword">void</strong> ef03_setEnumList(Input input) {
-<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 		assertDoesNotThrow(()-&gt;input.proxy.setEnumList(alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 		assertDoesNotThrow(()-&gt;input.proxy.setEnumList(l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 	}
 <a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 
 <a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 	<strong class="jxr_keyword">void</strong> ef04_setEnum3dList(Input input) {
-<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 		assertDoesNotThrow(()-&gt;input.proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 		assertDoesNotThrow(()-&gt;input.proxy.setEnum3dList(l(l(l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 	}
 <a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 
 <a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 	<strong class="jxr_keyword">void</strong> ef05_setEnum1d3dList(Input input) {
-<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 		assertDoesNotThrow(()-&gt;input.proxy.setEnum1d3dList(alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
+<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 		assertDoesNotThrow(()-&gt;input.proxy.setEnum1d3dList(l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>)));
 <a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 	}
 <a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 
 <a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 	@ParameterizedTest
@@ -1204,7 +1204,7 @@
 <a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 	<strong class="jxr_keyword">void</strong> ef08_setEnum1d3dListMap(Input input) {
-<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		assertDoesNotThrow(()-&gt;input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))));
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		assertDoesNotThrow(()-&gt;input.proxy.setEnum1d3dListMap(map(TestEnum.ONE,l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>))));
 <a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 	}
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
@@ -1222,7 +1222,7 @@
 <a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 	<strong class="jxr_keyword">void</strong> f02_pathVars2(Input input) {
 <a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.pathVars2(
-<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 			map(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 			m(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 		);
 <a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 	}
@@ -1285,7 +1285,7 @@
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 	<strong class="jxr_keyword">void</strong> ga06_reqBeanPath6(Input input) {
-<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.reqBeanPath6(() -&gt; map(<span class="jxr_string">"a"</span>, 1, <span class="jxr_string">"b"</span>, <span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.reqBeanPath6(() -&gt; m(<span class="jxr_string">"a"</span>, 1, <span class="jxr_string">"b"</span>, <span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 	}
 <a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 
@@ -1346,7 +1346,7 @@
 <a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> 	<strong class="jxr_keyword">void</strong> gb06_reqBeanQuery6(Input input) {
 <a class="jxr_linenumber" name="L1340" href="#L1340">1340</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.reqBeanQuery6(
-<a class="jxr_linenumber" name="L1341" href="#L1341">1341</a> 			() -&gt; map(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L1341" href="#L1341">1341</a> 			() -&gt; m(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L1342" href="#L1342">1342</a> 		);
 <a class="jxr_linenumber" name="L1343" href="#L1343">1343</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L1344" href="#L1344">1344</a> 	}
@@ -1410,7 +1410,7 @@
 <a class="jxr_linenumber" name="L1402" href="#L1402">1402</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1403" href="#L1403">1403</a> 	<strong class="jxr_keyword">void</strong> gd06_reqBeanFormData6(Input input) {
 <a class="jxr_linenumber" name="L1404" href="#L1404">1404</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.reqBeanFormData6(
-<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> 			() -&gt; map(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> 			() -&gt; m(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L1406" href="#L1406">1406</a> 		);
 <a class="jxr_linenumber" name="L1407" href="#L1407">1407</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> 	}
@@ -1474,7 +1474,7 @@
 <a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 	@MethodSource(<span class="jxr_string">"input"</span>)
 <a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 	<strong class="jxr_keyword">void</strong> gf06_reqBeanHeader6(Input input) {
 <a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 		<strong class="jxr_keyword">var</strong> r = input.proxy.reqBeanHeader6(
-<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 			() -&gt; map(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 			() -&gt; m(<span class="jxr_string">"a"</span>,1,<span class="jxr_string">"b"</span>,<span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 		);
 <a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 		assertEquals(<span class="jxr_string">"OK"</span>, r);
 <a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> 	}

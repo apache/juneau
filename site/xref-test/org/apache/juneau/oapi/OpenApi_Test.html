@@ -561,14 +561,14 @@
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 	}
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 	@Test <strong class="jxr_keyword">void</strong> f02a_tArray_StringList() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">var</strong> in = list(<span class="jxr_string">"a1"</span>);
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">var</strong> in = l(<span class="jxr_string">"a1"</span>);
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">var</strong> ps = T_ARRAY;
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<strong class="jxr_keyword">var</strong> s = serialize(ps, in);
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		assertEquals(<span class="jxr_string">"a1"</span>, s);
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">var</strong> r = parse(ps, s, List.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 		assertBean(r, <span class="jxr_string">"0"</span>, <span class="jxr_string">"a1"</span>);
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		in = list(<span class="jxr_string">"a1"</span>,<span class="jxr_string">"a2"</span>);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		in = l(<span class="jxr_string">"a1"</span>,<span class="jxr_string">"a2"</span>);
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 		s = serialize(ps, in);
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 		assertEquals(<span class="jxr_string">"a1,a2"</span>, s);
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 		r = parse(ps, s, List.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
@@ -576,7 +576,7 @@
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 	}
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 	@Test <strong class="jxr_keyword">void</strong> f02b_tArray_3dStringList() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">var</strong> in = list(list(list(<span class="jxr_string">"a"</span>)));
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">var</strong> in = l(l(l(<span class="jxr_string">"a"</span>)));
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">var</strong> ps = tArray().items(
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 			tArray().items(
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 				tArray()
@@ -587,7 +587,7 @@
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">var</strong> r = parse(ps, s, List.<strong class="jxr_keyword">class</strong>, List.<strong class="jxr_keyword">class</strong>, List.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 		assertEquals(in, r);
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		in =  list(list(list(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>),list(<span class="jxr_string">"c"</span>,<span class="jxr_string">"d"</span>)),list(list(<span class="jxr_string">"e"</span>,<span class="jxr_string">"f"</span>),list(<span class="jxr_string">"g"</span>,<span class="jxr_string">"h"</span>)));
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		in =  l(l(l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>),l(<span class="jxr_string">"c"</span>,<span class="jxr_string">"d"</span>)),l(l(<span class="jxr_string">"e"</span>,<span class="jxr_string">"f"</span>),l(<span class="jxr_string">"g"</span>,<span class="jxr_string">"h"</span>)));
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 		s = serialize(ps, in);
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 		assertEquals(<span class="jxr_string">"a&#92;&#92;&#92;&#92;&#92;&#92;,b&#92;&#92;,c&#92;&#92;&#92;&#92;&#92;&#92;,d,e&#92;&#92;&#92;&#92;&#92;&#92;,f&#92;&#92;,g&#92;&#92;&#92;&#92;&#92;&#92;,h"</span>, s);
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 		r = parse(ps, s, List.<strong class="jxr_keyword">class</strong>, List.<strong class="jxr_keyword">class</strong>, List.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);

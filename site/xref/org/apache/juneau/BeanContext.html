@@ -551,7 +551,7 @@
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> beanDictionary(Class&lt;?&gt;...values) {
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">return</strong> beanDictionary(alist(values));
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">return</strong> beanDictionary(l(values));
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 		}
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -2638,7 +2638,7 @@
 <a class="jxr_linenumber" name="L2630" href="#L2630">2630</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2631" href="#L2631">2631</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2632" href="#L2632">2632</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> notBeanClasses(Class&lt;?&gt;...values) {
-<a class="jxr_linenumber" name="L2633" href="#L2633">2633</a> 			<strong class="jxr_keyword">return</strong> notBeanClasses(alist(values));
+<a class="jxr_linenumber" name="L2633" href="#L2633">2633</a> 			<strong class="jxr_keyword">return</strong> notBeanClasses(l(values));
 <a class="jxr_linenumber" name="L2634" href="#L2634">2634</a> 		}
 <a class="jxr_linenumber" name="L2635" href="#L2635">2635</a> 
 <a class="jxr_linenumber" name="L2636" href="#L2636">2636</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -2719,7 +2719,7 @@
 <a class="jxr_linenumber" name="L2711" href="#L2711">2711</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L2712" href="#L2712">2712</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2713" href="#L2713">2713</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> notBeanPackages(String...values) {
-<a class="jxr_linenumber" name="L2714" href="#L2714">2714</a> 			<strong class="jxr_keyword">return</strong> notBeanPackages(alist(values));
+<a class="jxr_linenumber" name="L2714" href="#L2714">2714</a> 			<strong class="jxr_keyword">return</strong> notBeanPackages(l(values));
 <a class="jxr_linenumber" name="L2715" href="#L2715">2715</a> 		}
 <a class="jxr_linenumber" name="L2716" href="#L2716">2716</a> 
 <a class="jxr_linenumber" name="L2717" href="#L2717">2717</a> 		<em class="jxr_javadoccomment">/**</em>
@@ -3505,16 +3505,16 @@
 <a class="jxr_linenumber" name="L3497" href="#L3497">3497</a> 		locale = nn(builder.locale) ? builder.locale : Locale.getDefault();
 <a class="jxr_linenumber" name="L3498" href="#L3498">3498</a> 		timeZone = builder.timeZone;
 <a class="jxr_linenumber" name="L3499" href="#L3499">3499</a> 		mediaType = builder.mediaType;
-<a class="jxr_linenumber" name="L3500" href="#L3500">3500</a> 		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(list());
-<a class="jxr_linenumber" name="L3501" href="#L3501">3501</a> 		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(list());
-<a class="jxr_linenumber" name="L3502" href="#L3502">3502</a> 		notBeanClasses = opt(builder.notBeanClasses).map(ArrayList::<strong class="jxr_keyword">new</strong>).map(Collections::unmodifiableList).orElse(list());
-<a class="jxr_linenumber" name="L3503" href="#L3503">3503</a> 		notBeanPackages = opt(builder.notBeanPackages).map(ArrayList::<strong class="jxr_keyword">new</strong>).map(Collections::unmodifiableList).orElse(list());
+<a class="jxr_linenumber" name="L3500" href="#L3500">3500</a> 		beanDictionary = opt(builder.beanDictionary).map(Collections::unmodifiableList).orElse(l());
+<a class="jxr_linenumber" name="L3501" href="#L3501">3501</a> 		swaps = opt(builder.swaps).map(Collections::unmodifiableList).orElse(l());
+<a class="jxr_linenumber" name="L3502" href="#L3502">3502</a> 		notBeanClasses = opt(builder.notBeanClasses).map(ArrayList::<strong class="jxr_keyword">new</strong>).map(Collections::unmodifiableList).orElse(l());
+<a class="jxr_linenumber" name="L3503" href="#L3503">3503</a> 		notBeanPackages = opt(builder.notBeanPackages).map(ArrayList::<strong class="jxr_keyword">new</strong>).map(Collections::unmodifiableList).orElse(l());
 <a class="jxr_linenumber" name="L3504" href="#L3504">3504</a> 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.<strong class="jxr_keyword">class</strong>;
 <a class="jxr_linenumber" name="L3505" href="#L3505">3505</a> 
-<a class="jxr_linenumber" name="L3506" href="#L3506">3506</a> 		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, alist(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L3506" href="#L3506">3506</a> 		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, l(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L3507" href="#L3507">3507</a> 
 <a class="jxr_linenumber" name="L3508" href="#L3508">3508</a> 		String[] _notBeanPackages = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES
-<a class="jxr_linenumber" name="L3509" href="#L3509">3509</a> 			: Stream.of(notBeanPackages, alist(DEFAULT_NOTBEAN_PACKAGES)).flatMap(Collection::stream).toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L3509" href="#L3509">3509</a> 			: Stream.of(notBeanPackages, l(DEFAULT_NOTBEAN_PACKAGES)).flatMap(Collection::stream).toArray(String[]::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L3510" href="#L3510">3510</a> 		notBeanPackageNames = Stream.of(_notBeanPackages).filter(x -&gt; ! x.endsWith(<span class="jxr_string">".*"</span>)).toArray(String[]::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L3511" href="#L3511">3511</a> 		notBeanPackagePrefixes = Stream.of(_notBeanPackages).filter(x -&gt; x.endsWith(<span class="jxr_string">".*"</span>)).map(x -&gt; x.substring(0, x.length() - 2)).toArray(String[]::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L3512" href="#L3512">3512</a> 

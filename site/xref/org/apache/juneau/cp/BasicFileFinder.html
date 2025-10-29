@@ -82,8 +82,8 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">this</strong>.cachingLimit = builder.cachingLimit;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">this</strong>.include = builder.include;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">this</strong>.exclude = builder.exclude;
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">this</strong>.includePatterns = alist(include).stream().map(Pattern::pattern).toArray(String[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">this</strong>.excludePatterns = alist(exclude).stream().map(Pattern::pattern).toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">this</strong>.includePatterns = l(include).stream().map(Pattern::pattern).toArray(String[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">this</strong>.excludePatterns = l(exclude).stream().map(Pattern::pattern).toArray(String[]::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">this</strong>.hashCode = HashCode.of(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  

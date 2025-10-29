@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * @throws AssertionError If assertion failed.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">public</strong> FluentListAssertion&lt;String,BasicCsvArrayPart&gt; assertList() {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentListAssertion&lt;&gt;(u(alist(value())), <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentListAssertion&lt;&gt;(u(l(value())), <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -226,7 +226,7 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * @return The part value as a {@link List}, or &lt;jk&gt;null&lt;/jk&gt; if the value &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">public</strong> List&lt;String&gt; toList() {
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">return</strong> u(alist(value()));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">return</strong> u(l(value()));
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">private</strong> String[] value() {

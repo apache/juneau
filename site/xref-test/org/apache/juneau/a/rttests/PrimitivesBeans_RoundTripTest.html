@@ -217,14 +217,14 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 			paDouble = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[][]{{1},{2},<strong class="jxr_keyword">null</strong>};
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<em class="jxr_comment">// Regular lists of primitives</em>
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			plBoolean = alist(booleans(<strong class="jxr_keyword">true</strong>), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			plByte = alist(bytes(1), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			plChar = alist(chars('a'), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			plShort = alist(shorts(1), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			plInt = alist(ints(1), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			plLong = alist(longs(1), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			plFloat = alist(floats(1), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			plDouble = alist(doubles(1), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			plBoolean = l(booleans(<strong class="jxr_keyword">true</strong>), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			plByte = l(bytes(1), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			plChar = l(chars('a'), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			plShort = l(shorts(1), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			plInt = l(ints(1), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			plLong = l(longs(1), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			plFloat = l(floats(1), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			plDouble = l(doubles(1), <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<em class="jxr_comment">// Anonymous list of primitives</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			palBoolean = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
@@ -262,7 +262,7 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 	@ParameterizedTest
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<strong class="jxr_keyword">void</strong> a02_primitivesBeanList(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">var</strong> x = alist(<strong class="jxr_keyword">new</strong> PrimitivesBean().init(), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> PrimitivesBean().init());
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">var</strong> x = l(<strong class="jxr_keyword">new</strong> PrimitivesBean().init(), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> PrimitivesBean().init());
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (t.getParser() == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 		x = t.roundTrip(x, List.<strong class="jxr_keyword">class</strong>, PrimitivesBean.<strong class="jxr_keyword">class</strong>);

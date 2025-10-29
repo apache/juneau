@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		@Test <strong class="jxr_keyword">void</strong> a10_asMap() {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			assertBean(
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  				bean()
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					.set(<span class="jxr_string">"callbacks"</span>, map(<span class="jxr_string">"a1"</span>, pathItem().setGet(operation().setSummary(<span class="jxr_string">"a2"</span>))))
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					.set(<span class="jxr_string">"callbacks"</span>, m(<span class="jxr_string">"a1"</span>, pathItem().setGet(operation().setSummary(<span class="jxr_string">"a2"</span>))))
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  					.set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>)
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  					.asMap(),
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  				<span class="jxr_string">"callbacks{a1{get{summary}}},x1"</span>,
@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Callback&gt; TESTER =
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			testBean(
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				bean()
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 					.set(<span class="jxr_string">"callbacks"</span>, map(<span class="jxr_string">"a1"</span>, pathItem().setGet(operation().setSummary(<span class="jxr_string">"a2"</span>))))
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 					.set(<span class="jxr_string">"callbacks"</span>, m(<span class="jxr_string">"a1"</span>, pathItem().setGet(operation().setSummary(<span class="jxr_string">"a2"</span>))))
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 					.set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>)
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 					.set(<span class="jxr_string">"x2"</span>, <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			)

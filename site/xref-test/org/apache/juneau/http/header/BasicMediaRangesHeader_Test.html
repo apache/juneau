@@ -81,10 +81,10 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Test <strong class="jxr_keyword">void</strong> a02_match() {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(0, accept(<span class="jxr_string">"text/foo"</span>).match(alist(MediaType.of(<span class="jxr_string">"text/foo"</span>))));
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(-1, accept(<span class="jxr_string">"text/foo"</span>).match(alist(MediaType.of(<span class="jxr_string">"text/bar"</span>))));
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertEquals(-1, <strong class="jxr_keyword">new</strong> Accept((String)<strong class="jxr_keyword">null</strong>).match(alist(MediaType.of(<span class="jxr_string">"text/bar"</span>))));
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertEquals(-1, accept(<span class="jxr_string">"text/foo"</span>).match(alist(MediaType.of(<strong class="jxr_keyword">null</strong>))));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(0, accept(<span class="jxr_string">"text/foo"</span>).match(l(MediaType.of(<span class="jxr_string">"text/foo"</span>))));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(-1, accept(<span class="jxr_string">"text/foo"</span>).match(l(MediaType.of(<span class="jxr_string">"text/bar"</span>))));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertEquals(-1, <strong class="jxr_keyword">new</strong> Accept((String)<strong class="jxr_keyword">null</strong>).match(l(MediaType.of(<span class="jxr_string">"text/bar"</span>))));
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertEquals(-1, accept(<span class="jxr_string">"text/foo"</span>).match(l(MediaType.of(<strong class="jxr_keyword">null</strong>))));
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertEquals(-1, accept(<span class="jxr_string">"text/foo"</span>).match(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  

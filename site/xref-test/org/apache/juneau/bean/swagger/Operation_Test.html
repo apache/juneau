@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  					.setProduces(MediaType.of(<span class="jxr_string">"f"</span>))
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  					.setResponses(map(<span class="jxr_string">"x1"</span>, responseInfo().setDescription(<span class="jxr_string">"x2"</span>)))
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  					.setSchemes(<span class="jxr_string">"g"</span>)
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  					.setSecurity(map(<span class="jxr_string">"h"</span>, list(<span class="jxr_string">"i"</span>)))
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  					.setSecurity(map(<span class="jxr_string">"h"</span>, l(<span class="jxr_string">"i"</span>)))
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  					.setSummary(<span class="jxr_string">"j"</span>)
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  					.setTags(<span class="jxr_string">"k"</span>)
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  			)
@@ -107,9 +107,9 @@
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<em class="jxr_comment">// Test Collection variant of addSecurity</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			x = bean()
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 				.addSecurity(list(
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 					map(<span class="jxr_string">"c1"</span>, list(<span class="jxr_string">"c2"</span>)),
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					map(<span class="jxr_string">"c3"</span>, list(<span class="jxr_string">"c4"</span>))
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 				.addSecurity(l(
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 					m(<span class="jxr_string">"c1"</span>, l(<span class="jxr_string">"c2"</span>)),
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					m(<span class="jxr_string">"c3"</span>, l(<span class="jxr_string">"c4"</span>))
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 				));
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			assertBean(x, <span class="jxr_string">"security{0{c1},1{c3}}"</span>, <span class="jxr_string">"{{[c2]},{[c4]}}"</span>);
@@ -129,22 +129,22 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		@Test <strong class="jxr_keyword">void</strong> a10_collectionSetters() {
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<em class="jxr_comment">// Test Collection variants of setters</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">var</strong> x = bean()
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 				.setParameters(list(
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 				.setParameters(l(
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 					parameterInfo(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>),
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 					parameterInfo(<span class="jxr_string">"a3"</span>, <span class="jxr_string">"a4"</span>)
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 				))
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 				.setConsumes(list(
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 				.setConsumes(l(
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 					MediaType.of(<span class="jxr_string">"b1"</span>),
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 					MediaType.of(<span class="jxr_string">"b2"</span>)
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 				))
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				.setProduces(list(
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				.setProduces(l(
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 					MediaType.of(<span class="jxr_string">"c1"</span>),
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 					MediaType.of(<span class="jxr_string">"c2"</span>)
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 				))
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 				.setSchemes(list(<span class="jxr_string">"d1"</span>, <span class="jxr_string">"d2"</span>))
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 				.setSecurity(list(
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 					map(<span class="jxr_string">"e1"</span>, list(<span class="jxr_string">"e2"</span>)),
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 					map(<span class="jxr_string">"e3"</span>, list(<span class="jxr_string">"e4"</span>))
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 				.setSchemes(l(<span class="jxr_string">"d1"</span>, <span class="jxr_string">"d2"</span>))
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 				.setSecurity(l(
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 					m(<span class="jxr_string">"e1"</span>, l(<span class="jxr_string">"e2"</span>)),
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 					m(<span class="jxr_string">"e3"</span>, l(<span class="jxr_string">"e4"</span>))
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 				));
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			assertBean(x,
@@ -174,16 +174,16 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		@Test <strong class="jxr_keyword">void</strong> a12_collectionAdders() {
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<em class="jxr_comment">// Test Collection addX methods - call each method twice</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">var</strong> x = bean()
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				.addConsumes(list(MediaType.of(<span class="jxr_string">"a1"</span>)))
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				.addConsumes(list(MediaType.of(<span class="jxr_string">"a2"</span>)))
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				.addParameters(list(parameterInfo(<span class="jxr_string">"query"</span>, <span class="jxr_string">"a"</span>)))
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				.addParameters(list(parameterInfo(<span class="jxr_string">"path"</span>, <span class="jxr_string">"b"</span>)))
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				.addProduces(list(MediaType.of(<span class="jxr_string">"b1"</span>)))
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				.addProduces(list(MediaType.of(<span class="jxr_string">"b2"</span>)))
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				.addSchemes(list(<span class="jxr_string">"c1"</span>))
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				.addSchemes(list(<span class="jxr_string">"c2"</span>))
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				.addTags(list(<span class="jxr_string">"d1"</span>))
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				.addTags(list(<span class="jxr_string">"d2"</span>));
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				.addConsumes(l(MediaType.of(<span class="jxr_string">"a1"</span>)))
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				.addConsumes(l(MediaType.of(<span class="jxr_string">"a2"</span>)))
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				.addParameters(l(parameterInfo(<span class="jxr_string">"query"</span>, <span class="jxr_string">"a"</span>)))
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				.addParameters(l(parameterInfo(<span class="jxr_string">"path"</span>, <span class="jxr_string">"b"</span>)))
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				.addProduces(l(MediaType.of(<span class="jxr_string">"b1"</span>)))
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				.addProduces(l(MediaType.of(<span class="jxr_string">"b2"</span>)))
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				.addSchemes(l(<span class="jxr_string">"c1"</span>))
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				.addSchemes(l(<span class="jxr_string">"c2"</span>))
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				.addTags(l(<span class="jxr_string">"d1"</span>))
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				.addTags(l(<span class="jxr_string">"d2"</span>));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			assertBean(x,
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 				<span class="jxr_string">"consumes,produces,schemes,tags"</span>,
@@ -224,12 +224,12 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		@Test <strong class="jxr_keyword">void</strong> a16_addSecurityCollection() {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<em class="jxr_comment">// Test addSecurity with Collection</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 			Map&lt;String,List&lt;String&gt;&gt; map1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			map1.put(<span class="jxr_string">"scheme1"</span>, list(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			map1.put(<span class="jxr_string">"scheme1"</span>, l(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			Map&lt;String,List&lt;String&gt;&gt; map2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			map2.put(<span class="jxr_string">"scheme2"</span>, list(<span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			map2.put(<span class="jxr_string">"scheme2"</span>, l(<span class="jxr_string">"b"</span>));
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; coll1 = list(map1);
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; coll2 = list(map2);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; coll1 = l(map1);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; coll2 = l(map2);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">var</strong> x = bean()
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 				.addSecurity(coll1)
@@ -269,7 +269,7 @@
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<em class="jxr_comment">// Test with parameters that include a body parameter (covers the "body" branch)</em>
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 			x = bean()
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				.setParameters(list(
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				.setParameters(l(
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 					parameterInfo(<span class="jxr_string">"query"</span>, <span class="jxr_string">"param1"</span>),
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 					parameterInfo(<span class="jxr_string">"body"</span>, <strong class="jxr_keyword">null</strong>) <em class="jxr_comment">// body parameter with null name</em>
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 				));
@@ -363,11 +363,11 @@
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 					.set(<span class="jxr_string">"description"</span>, <span class="jxr_string">"b"</span>)
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 					.set(<span class="jxr_string">"externalDocs"</span>, externalDocumentation().setUrl(URI.create(<span class="jxr_string">"c"</span>)))
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 					.set(<span class="jxr_string">"operationId"</span>, <span class="jxr_string">"d"</span>)
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 					.set(<span class="jxr_string">"parameters"</span>, list(parameterInfo().setName(<span class="jxr_string">"e"</span>)))
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 					.set(<span class="jxr_string">"parameters"</span>, l(parameterInfo().setName(<span class="jxr_string">"e"</span>)))
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 					.set(<span class="jxr_string">"produces"</span>, set(MediaType.of(<span class="jxr_string">"f"</span>)))
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 					.set(<span class="jxr_string">"responses"</span>, map(<span class="jxr_string">"x1"</span>, responseInfo().setDescription(<span class="jxr_string">"x2"</span>)))
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 					.set(<span class="jxr_string">"responses"</span>, m(<span class="jxr_string">"x1"</span>, responseInfo().setDescription(<span class="jxr_string">"x2"</span>)))
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 					.set(<span class="jxr_string">"schemes"</span>, set(<span class="jxr_string">"g"</span>))
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 					.set(<span class="jxr_string">"security"</span>, list(map(<span class="jxr_string">"h"</span>, list(<span class="jxr_string">"i"</span>))))
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 					.set(<span class="jxr_string">"security"</span>, l(map(<span class="jxr_string">"h"</span>, l(<span class="jxr_string">"i"</span>))))
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 					.set(<span class="jxr_string">"summary"</span>, <span class="jxr_string">"j"</span>)
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 					.set(<span class="jxr_string">"tags"</span>, set(<span class="jxr_string">"k"</span>))
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 					.set(<span class="jxr_string">"x3"</span>, <span class="jxr_string">"x3a"</span>)

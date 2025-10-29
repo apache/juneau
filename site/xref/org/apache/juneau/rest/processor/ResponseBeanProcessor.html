@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Map)
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">return</strong> ((Map&lt;?,?&gt;)o).entrySet();
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">if</strong> (isArray(o))
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<strong class="jxr_keyword">return</strong> alist((Object[])o);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<strong class="jxr_keyword">return</strong> l((Object[])o);
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Collection)
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">return</strong> (Collection&lt;?&gt;)o;
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(<span class="jxr_string">"Could not iterate over Headers of type ''{0}''"</span>, cn(o));

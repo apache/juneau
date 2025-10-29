@@ -155,9 +155,9 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		@Test <strong class="jxr_keyword">void</strong> a12_collectionSetters() {
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">var</strong> x = bean()
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				.setAllOf(list(schemaInfo().setType(<span class="jxr_string">"a"</span>), schemaInfo().setType(<span class="jxr_string">"b"</span>)))
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 				.setEnum(list(<span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>))
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				.setRequiredProperties(list(<span class="jxr_string">"e"</span>, <span class="jxr_string">"f"</span>));
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				.setAllOf(l(schemaInfo().setType(<span class="jxr_string">"a"</span>), schemaInfo().setType(<span class="jxr_string">"b"</span>)))
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 				.setEnum(l(<span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>))
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				.setRequiredProperties(l(<span class="jxr_string">"e"</span>, <span class="jxr_string">"f"</span>));
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			assertBean(x,
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<span class="jxr_string">"allOf{#{type}},enum,requiredProperties"</span>,
@@ -185,12 +185,12 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<em class="jxr_comment">// Due to Java method resolution preferring varargs over Collection,</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<em class="jxr_comment">// we test the basic functionality with varargs versions</em>
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">var</strong> x = bean()
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				.addAllOf(list(schemaInfo().setType(<span class="jxr_string">"a1"</span>)))
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				.addAllOf(list(schemaInfo().setType(<span class="jxr_string">"a2"</span>)))
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				.addEnum(list(<span class="jxr_string">"b1"</span>))
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				.addEnum(list(<span class="jxr_string">"b2"</span>))
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				.addRequiredProperties(list(<span class="jxr_string">"c1"</span>))
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				.addRequiredProperties(list(<span class="jxr_string">"c2"</span>));
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				.addAllOf(l(schemaInfo().setType(<span class="jxr_string">"a1"</span>)))
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				.addAllOf(l(schemaInfo().setType(<span class="jxr_string">"a2"</span>)))
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				.addEnum(l(<span class="jxr_string">"b1"</span>))
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				.addEnum(l(<span class="jxr_string">"b2"</span>))
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				.addRequiredProperties(l(<span class="jxr_string">"c1"</span>))
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				.addRequiredProperties(l(<span class="jxr_string">"c2"</span>));
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			assertBean(x,
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<span class="jxr_string">"allOf{#{type}},enum,requiredProperties"</span>,
@@ -271,7 +271,7 @@
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 					.set(<span class="jxr_string">"minProperties"</span>, 8)
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 					.set(<span class="jxr_string">"multipleOf"</span>, 9)
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 					.set(<span class="jxr_string">"pattern"</span>, <span class="jxr_string">"k"</span>)
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 					.set(<span class="jxr_string">"properties"</span>, map(<span class="jxr_string">"x1"</span>, schemaInfo().setType(<span class="jxr_string">"x2"</span>)))
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 					.set(<span class="jxr_string">"properties"</span>, m(<span class="jxr_string">"x1"</span>, schemaInfo().setType(<span class="jxr_string">"x2"</span>)))
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 					.set(<span class="jxr_string">"readOnly"</span>, <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 					.set(<span class="jxr_string">"$ref"</span>, <span class="jxr_string">"l"</span>)
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 					.set(<span class="jxr_string">"required"</span>, <strong class="jxr_keyword">true</strong>)

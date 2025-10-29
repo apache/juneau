@@ -1254,27 +1254,27 @@
 <a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 
 <a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 	@RestGet(path=<span class="jxr_string">"/returnIntegerList"</span>)
 <a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 	<strong class="jxr_keyword">public</strong> List&lt;Integer&gt; returnIntegerList() {
-<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 		<strong class="jxr_keyword">return</strong> alist(a(1,<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 		<strong class="jxr_keyword">return</strong> l(a(1,<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 	}
 <a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> 
 <a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> 	@RestGet(path=<span class="jxr_string">"/returnInteger3dList"</span>)
 <a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> 	<strong class="jxr_keyword">public</strong> List&lt;List&lt;List&lt;Integer&gt;&gt;&gt; returnInteger3dList() {
-<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 		<strong class="jxr_keyword">return</strong> list(list(list(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 		<strong class="jxr_keyword">return</strong> l(l(l(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 	}
 <a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> 
 <a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 	@RestGet(path=<span class="jxr_string">"/returnInteger1d3dList"</span>)
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 	<strong class="jxr_keyword">public</strong> List&lt;Integer[][][]&gt; returnInteger1d3dList() {
-<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 		<strong class="jxr_keyword">return</strong> list(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 		<strong class="jxr_keyword">return</strong> l(a(a(a(1,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 	}
 <a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 	@RestGet(path=<span class="jxr_string">"/returnInt1d3dList"</span>)
 <a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 	<strong class="jxr_keyword">public</strong> List&lt;<strong class="jxr_keyword">int</strong>[][][]&gt; returnInt1d3dList() {
-<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 		<strong class="jxr_keyword">return</strong> list(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 		<strong class="jxr_keyword">return</strong> l(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[][][]{{{1,2},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>},<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 	}
 <a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 
 <a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 	@RestGet(path=<span class="jxr_string">"/returnStringList"</span>)
 <a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 	<strong class="jxr_keyword">public</strong> List&lt;String&gt; returnStringList() {
-<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 		<strong class="jxr_keyword">return</strong> alist(a(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 		<strong class="jxr_keyword">return</strong> l(a(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>,<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 	}
 <a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 
 <a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 	<em class="jxr_comment">// Beans</em>
@@ -1291,32 +1291,32 @@
 <a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 
 <a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 	@RestGet(path=<span class="jxr_string">"/returnBeanList"</span>)
 <a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 	<strong class="jxr_keyword">public</strong> List&lt;ABean&gt; returnBeanList() {
-<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 		<strong class="jxr_keyword">return</strong> alist(ABean.get());
+<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 		<strong class="jxr_keyword">return</strong> l(ABean.get());
 <a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 	}
 <a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 
 <a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 	@RestGet(path=<span class="jxr_string">"/returnBean1d3dList"</span>)
 <a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 	<strong class="jxr_keyword">public</strong> List&lt;ABean[][][]&gt; returnBean1d3dList() {
-<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 		<strong class="jxr_keyword">return</strong> alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 		<strong class="jxr_keyword">return</strong> l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 	}
 <a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 
 <a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 	@RestGet(path=<span class="jxr_string">"/returnBeanMap"</span>)
 <a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,ABean&gt; returnBeanMap() {
-<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 		<strong class="jxr_keyword">return</strong> map(<span class="jxr_string">"foo"</span>,ABean.get());
+<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 		<strong class="jxr_keyword">return</strong> m(<span class="jxr_string">"foo"</span>,ABean.get());
 <a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 	}
 <a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 
 <a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 	@RestGet(path=<span class="jxr_string">"/returnBeanListMap"</span>)
 <a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,List&lt;ABean&gt;&gt; returnBeanListMap() {
-<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 		<strong class="jxr_keyword">return</strong> map(<span class="jxr_string">"foo"</span>,alist(ABean.get()));
+<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 		<strong class="jxr_keyword">return</strong> m(<span class="jxr_string">"foo"</span>,l(ABean.get()));
 <a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 	}
 <a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 
 <a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 	@RestGet(path=<span class="jxr_string">"/returnBean1d3dListMap"</span>)
 <a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,List&lt;ABean[][][]&gt;&gt; returnBean1d3dListMap() {
-<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 		<strong class="jxr_keyword">return</strong> map(<span class="jxr_string">"foo"</span>, alist(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 		<strong class="jxr_keyword">return</strong> m(<span class="jxr_string">"foo"</span>, l(a(a(a(ABean.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 	}
 <a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 
 <a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 	@RestGet(path=<span class="jxr_string">"/returnBeanListMapIntegerKeys"</span>)
 <a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 	<strong class="jxr_keyword">public</strong> Map&lt;Integer,List&lt;ABean&gt;&gt; returnBeanListMapIntegerKeys() {
-<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 		<strong class="jxr_keyword">return</strong> map(1,alist(ABean.get()));
+<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 		<strong class="jxr_keyword">return</strong> m(1,l(ABean.get()));
 <a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 	}
 <a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 
 <a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 	<em class="jxr_comment">// Typed beans</em>
@@ -1333,32 +1333,32 @@
 <a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> 
 <a class="jxr_linenumber" name="L1326" href="#L1326">1326</a> 	@RestGet(path=<span class="jxr_string">"/returnTypedBeanList"</span>)
 <a class="jxr_linenumber" name="L1327" href="#L1327">1327</a> 	<strong class="jxr_keyword">public</strong> List&lt;TypedBean&gt; returnTypedBeanList() {
-<a class="jxr_linenumber" name="L1328" href="#L1328">1328</a> 		<strong class="jxr_keyword">return</strong> alist((TypedBean)TypedBeanImpl.get());
+<a class="jxr_linenumber" name="L1328" href="#L1328">1328</a> 		<strong class="jxr_keyword">return</strong> l((TypedBean)TypedBeanImpl.get());
 <a class="jxr_linenumber" name="L1329" href="#L1329">1329</a> 	}
 <a class="jxr_linenumber" name="L1330" href="#L1330">1330</a> 
 <a class="jxr_linenumber" name="L1331" href="#L1331">1331</a> 	@RestGet(path=<span class="jxr_string">"/returnTypedBean1d3dList"</span>)
 <a class="jxr_linenumber" name="L1332" href="#L1332">1332</a> 	<strong class="jxr_keyword">public</strong> List&lt;TypedBean[][][]&gt; returnTypedBean1d3dList() {
-<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 		<strong class="jxr_keyword">return</strong> list(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1333" href="#L1333">1333</a> 		<strong class="jxr_keyword">return</strong> l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1334" href="#L1334">1334</a> 	}
 <a class="jxr_linenumber" name="L1335" href="#L1335">1335</a> 
 <a class="jxr_linenumber" name="L1336" href="#L1336">1336</a> 	@RestGet(path=<span class="jxr_string">"/returnTypedBeanMap"</span>)
 <a class="jxr_linenumber" name="L1337" href="#L1337">1337</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,TypedBean&gt; returnTypedBeanMap() {
-<a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> 		<strong class="jxr_keyword">return</strong> map(<span class="jxr_string">"foo"</span>,TypedBeanImpl.get());
+<a class="jxr_linenumber" name="L1338" href="#L1338">1338</a> 		<strong class="jxr_keyword">return</strong> m(<span class="jxr_string">"foo"</span>,TypedBeanImpl.get());
 <a class="jxr_linenumber" name="L1339" href="#L1339">1339</a> 	}
 <a class="jxr_linenumber" name="L1340" href="#L1340">1340</a> 
 <a class="jxr_linenumber" name="L1341" href="#L1341">1341</a> 	@RestGet(path=<span class="jxr_string">"/returnTypedBeanListMap"</span>)
 <a class="jxr_linenumber" name="L1342" href="#L1342">1342</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,List&lt;TypedBean&gt;&gt; returnTypedBeanListMap() {
-<a class="jxr_linenumber" name="L1343" href="#L1343">1343</a> 		<strong class="jxr_keyword">return</strong> map(<span class="jxr_string">"foo"</span>,alist((TypedBean)TypedBeanImpl.get()));
+<a class="jxr_linenumber" name="L1343" href="#L1343">1343</a> 		<strong class="jxr_keyword">return</strong> m(<span class="jxr_string">"foo"</span>,l((TypedBean)TypedBeanImpl.get()));
 <a class="jxr_linenumber" name="L1344" href="#L1344">1344</a> 	}
 <a class="jxr_linenumber" name="L1345" href="#L1345">1345</a> 
 <a class="jxr_linenumber" name="L1346" href="#L1346">1346</a> 	@RestGet(path=<span class="jxr_string">"/returnTypedBean1d3dListMap"</span>)
 <a class="jxr_linenumber" name="L1347" href="#L1347">1347</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,List&lt;TypedBean[][][]&gt;&gt; returnTypedBean1d3dListMap() {
-<a class="jxr_linenumber" name="L1348" href="#L1348">1348</a> 		<strong class="jxr_keyword">return</strong> map(<span class="jxr_string">"foo"</span>, list(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1348" href="#L1348">1348</a> 		<strong class="jxr_keyword">return</strong> m(<span class="jxr_string">"foo"</span>, l(a(a(a(TypedBeanImpl.get(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> 	}
 <a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> 
 <a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> 	@RestGet(path=<span class="jxr_string">"/returnTypedBeanListMapIntegerKeys"</span>)
 <a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 	<strong class="jxr_keyword">public</strong> Map&lt;Integer,List&lt;TypedBean&gt;&gt; returnTypedBeanListMapIntegerKeys() {
-<a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> 		<strong class="jxr_keyword">return</strong> map(1,alist((TypedBean)TypedBeanImpl.get()));
+<a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> 		<strong class="jxr_keyword">return</strong> m(1,l((TypedBean)TypedBeanImpl.get()));
 <a class="jxr_linenumber" name="L1354" href="#L1354">1354</a> 	}
 <a class="jxr_linenumber" name="L1355" href="#L1355">1355</a> 
 <a class="jxr_linenumber" name="L1356" href="#L1356">1356</a> 	<em class="jxr_comment">// Swapped POJOs</em>
@@ -1375,12 +1375,12 @@
 <a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> 
 <a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> 	@RestGet(path=<span class="jxr_string">"/returnSwappedObjectMap"</span>)
 <a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> 	<strong class="jxr_keyword">public</strong> Map&lt;SwappedObject,SwappedObject&gt; returnSwappedObjectMap() {
-<a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> 		<strong class="jxr_keyword">return</strong> map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>());
+<a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> 		<strong class="jxr_keyword">return</strong> m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>());
 <a class="jxr_linenumber" name="L1371" href="#L1371">1371</a> 	}
 <a class="jxr_linenumber" name="L1372" href="#L1372">1372</a> 
 <a class="jxr_linenumber" name="L1373" href="#L1373">1373</a> 	@RestGet(path=<span class="jxr_string">"/returnSwappedObject3dMap"</span>)
 <a class="jxr_linenumber" name="L1374" href="#L1374">1374</a> 	<strong class="jxr_keyword">public</strong> Map&lt;SwappedObject,SwappedObject[][][]&gt; returnSwappedObject3dMap() {
-<a class="jxr_linenumber" name="L1375" href="#L1375">1375</a> 		<strong class="jxr_keyword">return</strong> map(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1375" href="#L1375">1375</a> 		<strong class="jxr_keyword">return</strong> m(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="SwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/SwappedObject.html#SwappedObject">SwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1376" href="#L1376">1376</a> 	}
 <a class="jxr_linenumber" name="L1377" href="#L1377">1377</a> 
 <a class="jxr_linenumber" name="L1378" href="#L1378">1378</a> 	<em class="jxr_comment">// Implicit swapped POJOs</em>
@@ -1397,12 +1397,12 @@
 <a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 
 <a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 	@RestGet(path=<span class="jxr_string">"/returnImplicitSwappedObjectMap"</span>)
 <a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 	<strong class="jxr_keyword">public</strong> Map&lt;ImplicitSwappedObject,ImplicitSwappedObject&gt; returnImplicitSwappedObjectMap() {
-<a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 		<strong class="jxr_keyword">return</strong> map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>());
+<a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 		<strong class="jxr_keyword">return</strong> m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>());
 <a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> 	}
 <a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> 
 <a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> 	@RestGet(path=<span class="jxr_string">"/returnImplicitSwappedObject3dMap"</span>)
 <a class="jxr_linenumber" name="L1396" href="#L1396">1396</a> 	<strong class="jxr_keyword">public</strong> Map&lt;ImplicitSwappedObject,ImplicitSwappedObject[][][]&gt; returnImplicitSwappedObject3dMap() {
-<a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> 		<strong class="jxr_keyword">return</strong> map(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> 		<strong class="jxr_keyword">return</strong> m(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),a(a(a(<strong class="jxr_keyword">new</strong> <a name="ImplicitSwappedObject" href="../../../../../../org/apache/juneau/testutils/pojos/ImplicitSwappedObject.html#ImplicitSwappedObject">ImplicitSwappedObject</a>(),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1398" href="#L1398">1398</a> 	}
 <a class="jxr_linenumber" name="L1399" href="#L1399">1399</a> 
 <a class="jxr_linenumber" name="L1400" href="#L1400">1400</a> 	<em class="jxr_comment">// Enums</em>
@@ -1419,32 +1419,32 @@
 <a class="jxr_linenumber" name="L1411" href="#L1411">1411</a> 
 <a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> 	@RestGet(path=<span class="jxr_string">"/returnEnumList"</span>)
 <a class="jxr_linenumber" name="L1413" href="#L1413">1413</a> 	<strong class="jxr_keyword">public</strong> List&lt;TestEnum&gt; returnEnumList() {
-<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> 		<strong class="jxr_keyword">return</strong> alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> 		<strong class="jxr_keyword">return</strong> l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> 	}
 <a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> 
 <a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> 	@RestGet(path=<span class="jxr_string">"/returnEnum3dList"</span>)
 <a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 	<strong class="jxr_keyword">public</strong> List&lt;List&lt;List&lt;TestEnum&gt;&gt;&gt; returnEnum3dList() {
-<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 		<strong class="jxr_keyword">return</strong> alist(alist(alist(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 		<strong class="jxr_keyword">return</strong> l(l(l(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 	}
 <a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 
 <a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 	@RestGet(path=<span class="jxr_string">"/returnEnum1d3dList"</span>)
 <a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 	<strong class="jxr_keyword">public</strong> List&lt;TestEnum[][][]&gt; returnEnum1d3dList() {
-<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 		<strong class="jxr_keyword">return</strong> alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 		<strong class="jxr_keyword">return</strong> l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> 	}
 <a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> 
 <a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> 	@RestGet(path=<span class="jxr_string">"/returnEnumMap"</span>)
 <a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> 	<strong class="jxr_keyword">public</strong> Map&lt;TestEnum,TestEnum&gt; returnEnumMap() {
-<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 		<strong class="jxr_keyword">return</strong> map(TestEnum.ONE,TestEnum.TWO);
+<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 		<strong class="jxr_keyword">return</strong> m(TestEnum.ONE,TestEnum.TWO);
 <a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 	}
 <a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 
 <a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 	@RestGet(path=<span class="jxr_string">"/returnEnum3dArrayMap"</span>)
 <a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 	<strong class="jxr_keyword">public</strong> Map&lt;TestEnum,TestEnum[][][]&gt; returnEnum3dArrayMap() {
-<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 		<strong class="jxr_keyword">return</strong> map(TestEnum.ONE,a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 		<strong class="jxr_keyword">return</strong> m(TestEnum.ONE,a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 	}
 <a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 
 <a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> 	@RestGet(path=<span class="jxr_string">"/returnEnum1d3dListMap"</span>)
 <a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 	<strong class="jxr_keyword">public</strong> Map&lt;TestEnum,List&lt;TestEnum[][][]&gt;&gt; returnEnum1d3dListMap() {
-<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 		<strong class="jxr_keyword">return</strong> map(TestEnum.ONE,alist(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 		<strong class="jxr_keyword">return</strong> m(TestEnum.ONE,l(a(a(a(TestEnum.TWO,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 	}
 <a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>

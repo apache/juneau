@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  					.setDefault(<span class="jxr_string">"a"</span>)
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  					.setDeprecated(<strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  					.setDescription(<span class="jxr_string">"b"</span>)
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  					.setEnum(list(<span class="jxr_string">"c1"</span>, <span class="jxr_string">"c2"</span>))
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  					.setEnum(l(<span class="jxr_string">"c1"</span>, <span class="jxr_string">"c2"</span>))
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  					.setExample(<span class="jxr_string">"d"</span>)
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  					.setExclusiveMaximum(<strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  					.setExclusiveMinimum(<strong class="jxr_keyword">true</strong>)
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  					.setPattern(<span class="jxr_string">"g"</span>)
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  					.setReadOnly(<strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  					.setRef(<span class="jxr_string">"h"</span>)
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  					.setRequired(list(<span class="jxr_string">"i"</span>))
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  					.setRequired(l(<span class="jxr_string">"i"</span>))
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  					.setTitle(<span class="jxr_string">"j"</span>)
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  					.setType(<span class="jxr_string">"k"</span>)
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  					.setUniqueItems(<strong class="jxr_keyword">true</strong>)
@@ -163,8 +163,8 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		@Test <strong class="jxr_keyword">void</strong> a13_collectionSetters() {
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">var</strong> x = bean()
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 				.setEnum(list(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>))
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				.setRequired(list(<span class="jxr_string">"b1"</span>, <span class="jxr_string">"b2"</span>));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 				.setEnum(l(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>))
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				.setRequired(l(<span class="jxr_string">"b1"</span>, <span class="jxr_string">"b2"</span>));
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			assertBean(x,
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<span class="jxr_string">"enum,required"</span>,
@@ -218,12 +218,12 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 				bean()
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 					.set(<span class="jxr_string">"additionalItems"</span>, schemaInfo(<span class="jxr_string">"a"</span>))
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 					.set(<span class="jxr_string">"additionalProperties"</span>, schemaInfo(<span class="jxr_string">"b"</span>))
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					.set(<span class="jxr_string">"allOf"</span>, list(schemaInfo(<span class="jxr_string">"c1"</span>), schemaInfo(<span class="jxr_string">"c2"</span>)))
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 					.set(<span class="jxr_string">"anyOf"</span>, list(schemaInfo(<span class="jxr_string">"d1"</span>), schemaInfo(<span class="jxr_string">"d2"</span>)))
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					.set(<span class="jxr_string">"allOf"</span>, l(schemaInfo(<span class="jxr_string">"c1"</span>), schemaInfo(<span class="jxr_string">"c2"</span>)))
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 					.set(<span class="jxr_string">"anyOf"</span>, l(schemaInfo(<span class="jxr_string">"d1"</span>), schemaInfo(<span class="jxr_string">"d2"</span>)))
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 					.set(<span class="jxr_string">"default"</span>, <span class="jxr_string">"e"</span>)
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 					.set(<span class="jxr_string">"description"</span>, <span class="jxr_string">"f"</span>)
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 					.set(<span class="jxr_string">"discriminator"</span>, discriminator(<span class="jxr_string">"g"</span>))
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					.set(<span class="jxr_string">"enum"</span>, list(<span class="jxr_string">"h1"</span>, <span class="jxr_string">"h2"</span>))
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					.set(<span class="jxr_string">"enum"</span>, l(<span class="jxr_string">"h1"</span>, <span class="jxr_string">"h2"</span>))
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 					.set(<span class="jxr_string">"example"</span>, <span class="jxr_string">"i"</span>)
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 					.set(<span class="jxr_string">"exclusiveMaximum"</span>, <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 					.set(<span class="jxr_string">"exclusiveMinimum"</span>, <strong class="jxr_keyword">true</strong>)
@@ -241,11 +241,11 @@
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 					.set(<span class="jxr_string">"multipleOf"</span>, 9)
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 					.set(<span class="jxr_string">"not"</span>, schemaInfo(<span class="jxr_string">"m"</span>))
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 					.set(<span class="jxr_string">"nullable"</span>, <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 					.set(<span class="jxr_string">"oneOf"</span>, list(schemaInfo(<span class="jxr_string">"n1"</span>), schemaInfo(<span class="jxr_string">"n2"</span>)))
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 					.set(<span class="jxr_string">"oneOf"</span>, l(schemaInfo(<span class="jxr_string">"n1"</span>), schemaInfo(<span class="jxr_string">"n2"</span>)))
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 					.set(<span class="jxr_string">"pattern"</span>, <span class="jxr_string">"o"</span>)
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					.set(<span class="jxr_string">"properties"</span>, map(<span class="jxr_string">"p1"</span>, schemaInfo(<span class="jxr_string">"p2"</span>)))
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					.set(<span class="jxr_string">"properties"</span>, m(<span class="jxr_string">"p1"</span>, schemaInfo(<span class="jxr_string">"p2"</span>)))
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 					.set(<span class="jxr_string">"readOnly"</span>, <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 					.set(<span class="jxr_string">"required"</span>, list(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"q2"</span>))
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 					.set(<span class="jxr_string">"required"</span>, l(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"q2"</span>))
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 					.set(<span class="jxr_string">"title"</span>, <span class="jxr_string">"r"</span>)
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 					.set(<span class="jxr_string">"type"</span>, <span class="jxr_string">"s"</span>)
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 					.set(<span class="jxr_string">"uniqueItems"</span>, <strong class="jxr_keyword">true</strong>)

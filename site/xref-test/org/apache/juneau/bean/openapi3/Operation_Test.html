@@ -50,7 +50,7 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  					.setParameters(parameter().setIn(<span class="jxr_string">"c1"</span>).setName(<span class="jxr_string">"c2"</span>))
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  					.setRequestBody(requestBodyInfo().setDescription(<span class="jxr_string">"d"</span>))
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  					.setResponses(map(<span class="jxr_string">"200"</span>, response().setDescription(<span class="jxr_string">"e"</span>)))
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  					.setSecurity(securityRequirement().setRequirements(map(<span class="jxr_string">"f1"</span>,list(<span class="jxr_string">"f2"</span>))))
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  					.setSecurity(securityRequirement().setRequirements(map(<span class="jxr_string">"f1"</span>,l(<span class="jxr_string">"f2"</span>))))
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  					.setServers(server().setUrl(java.net.URI.create(<span class="jxr_string">"http://example.com"</span>)))
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  					.setSummary(<span class="jxr_string">"g"</span>)
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  					.setTags(<span class="jxr_string">"h"</span>)
@@ -117,15 +117,15 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		@Test <strong class="jxr_keyword">void</strong> a10_collectionSetters() {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<em class="jxr_comment">// Test Collection variants of setters</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">var</strong> x = bean()
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				.setParameters(list(
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				.setParameters(l(
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 					parameter().setIn(<span class="jxr_string">"a1"</span>).setName(<span class="jxr_string">"a2"</span>),
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 					parameter().setIn(<span class="jxr_string">"a3"</span>).setName(<span class="jxr_string">"a4"</span>)
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 				))
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				.setSecurity(list(
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 					securityRequirement().setRequirements(map(<span class="jxr_string">"b1"</span>, list(<span class="jxr_string">"b2"</span>))),
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 					securityRequirement().setRequirements(map(<span class="jxr_string">"b3"</span>, list(<span class="jxr_string">"b4"</span>)))
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				.setSecurity(l(
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 					securityRequirement().setRequirements(map(<span class="jxr_string">"b1"</span>, l(<span class="jxr_string">"b2"</span>))),
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 					securityRequirement().setRequirements(map(<span class="jxr_string">"b3"</span>, l(<span class="jxr_string">"b4"</span>)))
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 				))
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 				.setTags(list(<span class="jxr_string">"c1"</span>, <span class="jxr_string">"c2"</span>));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 				.setTags(l(<span class="jxr_string">"c1"</span>, <span class="jxr_string">"c2"</span>));
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 			assertBean(x,
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 				<span class="jxr_string">"parameters{#{in,name}},security{0{requirements{b1}},1{requirements{b3}}},tags"</span>,
@@ -162,15 +162,15 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		@Test <strong class="jxr_keyword">void</strong> a14_addMethods() {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">var</strong> x = bean()
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 				.addTags(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>)
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				.addTags(list(<span class="jxr_string">"a3"</span>))
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				.addTags(l(<span class="jxr_string">"a3"</span>))
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 				.addParameters(parameter().setIn(<span class="jxr_string">"b1"</span>).setName(<span class="jxr_string">"b2"</span>))
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				.addParameters(list(parameter().setIn(<span class="jxr_string">"b3"</span>).setName(<span class="jxr_string">"b4"</span>)))
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				.addParameters(l(parameter().setIn(<span class="jxr_string">"b3"</span>).setName(<span class="jxr_string">"b4"</span>)))
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				.addResponse(<span class="jxr_string">"200"</span>, response().setDescription(<span class="jxr_string">"c1"</span>))
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 				.addCallback(<span class="jxr_string">"d1"</span>, callback())
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				.addSecurity(securityRequirement().setRequirements(map(<span class="jxr_string">"e1"</span>, list(<span class="jxr_string">"e2"</span>))))
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 				.addSecurity(list(securityRequirement().setRequirements(map(<span class="jxr_string">"e3"</span>, list(<span class="jxr_string">"e4"</span>)))))
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				.addSecurity(securityRequirement().setRequirements(map(<span class="jxr_string">"e1"</span>, l(<span class="jxr_string">"e2"</span>))))
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 				.addSecurity(l(securityRequirement().setRequirements(map(<span class="jxr_string">"e3"</span>, l(<span class="jxr_string">"e4"</span>)))))
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 				.addServers(server().setUrl(URI.create(<span class="jxr_string">"http://f1.com"</span>)))
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 				.addServers(list(server().setUrl(URI.create(<span class="jxr_string">"http://f2.com"</span>))));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 				.addServers(l(server().setUrl(URI.create(<span class="jxr_string">"http://f2.com"</span>))));
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			assertBean(x,
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<span class="jxr_string">"tags,parameters{#{in,name}},responses{200{description}},callbacks{d1},security{#{requirements}},servers{#{url}}"</span>,
@@ -180,10 +180,10 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		@Test <strong class="jxr_keyword">void</strong> a15_collectionSetters() {
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 			<strong class="jxr_keyword">var</strong> x = bean()
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				.setParameters(list(parameter().setIn(<span class="jxr_string">"a1"</span>).setName(<span class="jxr_string">"a2"</span>), parameter().setIn(<span class="jxr_string">"b1"</span>).setName(<span class="jxr_string">"b2"</span>)))
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				.setSecurity(list(securityRequirement().setRequirements(map(<span class="jxr_string">"c1"</span>, list(<span class="jxr_string">"c2"</span>))), securityRequirement().setRequirements(map(<span class="jxr_string">"d1"</span>, list(<span class="jxr_string">"d2"</span>)))))
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				.setServers(list(server().setUrl(java.net.URI.create(<span class="jxr_string">"http://example1.com"</span>)), server().setUrl(java.net.URI.create(<span class="jxr_string">"http://example2.com"</span>))))
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				.setTags(list(<span class="jxr_string">"f1"</span>, <span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				.setParameters(l(parameter().setIn(<span class="jxr_string">"a1"</span>).setName(<span class="jxr_string">"a2"</span>), parameter().setIn(<span class="jxr_string">"b1"</span>).setName(<span class="jxr_string">"b2"</span>)))
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				.setSecurity(l(securityRequirement().setRequirements(map(<span class="jxr_string">"c1"</span>, l(<span class="jxr_string">"c2"</span>))), securityRequirement().setRequirements(map(<span class="jxr_string">"d1"</span>, l(<span class="jxr_string">"d2"</span>)))))
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				.setServers(l(server().setUrl(java.net.URI.create(<span class="jxr_string">"http://example1.com"</span>)), server().setUrl(java.net.URI.create(<span class="jxr_string">"http://example2.com"</span>))))
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				.setTags(l(<span class="jxr_string">"f1"</span>, <span class="jxr_string">"f2"</span>));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			assertBean(x,
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 				<span class="jxr_string">"parameters{#{in,name}},security{#{requirements}},servers{#{url}},tags"</span>,
@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<em class="jxr_comment">// Test with parameters set</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">var</strong> x = bean()
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				.setParameters(list(
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				.setParameters(l(
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 					parameter().setIn(<span class="jxr_string">"query"</span>).setName(<span class="jxr_string">"param1"</span>),
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 					parameter().setIn(<span class="jxr_string">"path"</span>).setName(<span class="jxr_string">"param2"</span>)
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 				));
@@ -283,18 +283,18 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Operation&gt; TESTER =
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			testBean(
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 				bean()
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 					.set(<span class="jxr_string">"callbacks"</span>, map(<span class="jxr_string">"a1"</span>, callback()))
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 					.set(<span class="jxr_string">"callbacks"</span>, m(<span class="jxr_string">"a1"</span>, callback()))
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 					.set(<span class="jxr_string">"deprecated"</span>, <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 					.set(<span class="jxr_string">"description"</span>, <span class="jxr_string">"b"</span>)
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 					.set(<span class="jxr_string">"externalDocs"</span>, externalDocumentation().setUrl(URI.create(<span class="jxr_string">"c"</span>)))
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 					.set(<span class="jxr_string">"operationId"</span>, <span class="jxr_string">"d"</span>)
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 					.set(<span class="jxr_string">"parameters"</span>, list(parameter(<span class="jxr_string">"e1"</span>, <span class="jxr_string">"e2"</span>)))
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 					.set(<span class="jxr_string">"parameters"</span>, l(parameter(<span class="jxr_string">"e1"</span>, <span class="jxr_string">"e2"</span>)))
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 					.set(<span class="jxr_string">"requestBody"</span>, requestBodyInfo().setDescription(<span class="jxr_string">"f"</span>))
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 					.set(<span class="jxr_string">"responses"</span>, map(<span class="jxr_string">"g1"</span>, response(<span class="jxr_string">"g2"</span>)))
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 					.set(<span class="jxr_string">"security"</span>, list(securityRequirement().set(<span class="jxr_string">"h1"</span>, list(<span class="jxr_string">"h2"</span>))))
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 					.set(<span class="jxr_string">"servers"</span>, list(server().setUrl(URI.create(<span class="jxr_string">"i"</span>))))
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 					.set(<span class="jxr_string">"responses"</span>, m(<span class="jxr_string">"g1"</span>, response(<span class="jxr_string">"g2"</span>)))
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 					.set(<span class="jxr_string">"security"</span>, l(securityRequirement().set(<span class="jxr_string">"h1"</span>, l(<span class="jxr_string">"h2"</span>))))
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 					.set(<span class="jxr_string">"servers"</span>, l(server().setUrl(URI.create(<span class="jxr_string">"i"</span>))))
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 					.set(<span class="jxr_string">"summary"</span>, <span class="jxr_string">"j"</span>)
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 					.set(<span class="jxr_string">"tags"</span>, list(<span class="jxr_string">"k"</span>))
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 					.set(<span class="jxr_string">"tags"</span>, l(<span class="jxr_string">"k"</span>))
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 					.set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>)
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 					.set(<span class="jxr_string">"x2"</span>, <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			)

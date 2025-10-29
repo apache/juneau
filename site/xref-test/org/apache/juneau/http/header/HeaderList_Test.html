@@ -73,12 +73,12 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Test <strong class="jxr_keyword">void</strong> a02_creators() {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertList(headerList(FOO_1, FOO_2, <strong class="jxr_keyword">null</strong>), <span class="jxr_string">"Foo: 1"</span>, <span class="jxr_string">"Foo: 2"</span>);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertList(headerList(alist(FOO_1, FOO_2, <strong class="jxr_keyword">null</strong>)), <span class="jxr_string">"Foo: 1"</span>, <span class="jxr_string">"Foo: 2"</span>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertList(headerList(l(FOO_1, FOO_2, <strong class="jxr_keyword">null</strong>)), <span class="jxr_string">"Foo: 1"</span>, <span class="jxr_string">"Foo: 2"</span>);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertList(headerList(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"1"</span>,<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"2"</span>), <span class="jxr_string">"Foo: 1"</span>, <span class="jxr_string">"Foo: 2"</span>);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Odd number of parameters passed into HeaderList.ofPairs()"</span>, ()-&gt;headerList(<span class="jxr_string">"Foo"</span>));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertEmpty(HeaderList.of((List&lt;Header&gt;)<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEmpty(HeaderList.of(Collections.emptyList()));
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertList(HeaderList.of(alist(FOO_1)), <span class="jxr_string">"Foo: 1"</span>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertList(HeaderList.of(l(FOO_1)), <span class="jxr_string">"Foo: 1"</span>);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEmpty(HeaderList.of((Header[])<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertEmpty(HeaderList.of());
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertList(HeaderList.of(FOO_1), <span class="jxr_string">"Foo: 1"</span>);
@@ -282,7 +282,7 @@
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			.append(<span class="jxr_string">"Bar"</span>, <span class="jxr_string">"b1"</span>)
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			.append(<span class="jxr_string">"Bar"</span>, ()-&gt;<span class="jxr_string">"b2"</span>)
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			.append((List&lt;Header&gt;)<strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			.append(alist(FOO_4));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			.append(l(FOO_4));
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertList(x2, <span class="jxr_string">"Foo: 1"</span>, <span class="jxr_string">"Foo: 2"</span>, <span class="jxr_string">"Foo: 3"</span>, <span class="jxr_string">"Bar: b1"</span>, <span class="jxr_string">"Bar: b2"</span>, <span class="jxr_string">"Foo: 4"</span>);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 
@@ -299,7 +299,7 @@
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			.prepend(<span class="jxr_string">"Bar"</span>, <span class="jxr_string">"b1"</span>)
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			.prepend(<span class="jxr_string">"Bar"</span>, ()-&gt;<span class="jxr_string">"b2"</span>)
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 			.prepend((List&lt;Header&gt;)<strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			.prepend(alist(FOO_4));
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			.prepend(l(FOO_4));
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 		assertList(x2, <span class="jxr_string">"Foo: 4"</span>, <span class="jxr_string">"Bar: b2"</span>, <span class="jxr_string">"Bar: b1"</span>, <span class="jxr_string">"Foo: 2"</span>, <span class="jxr_string">"Foo: 3"</span>, <span class="jxr_string">"Foo: 1"</span>);
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 
@@ -312,7 +312,7 @@
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 			.remove(HeaderList.of(FOO_1))
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			.remove(FOO_2)
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 			.remove(FOO_3, FOO_4)
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			.remove(alist(FOO_5));
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			.remove(l(FOO_5));
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		assertList(x, <span class="jxr_string">"Foo: 6"</span>, <span class="jxr_string">"Foo: 7"</span>);
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		x = HeaderList.create().append(FOO_1,FOO_2).remove((String[])<strong class="jxr_keyword">null</strong>).remove(<span class="jxr_string">"Bar"</span>,<span class="jxr_string">"Foo"</span>);
@@ -346,7 +346,7 @@
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 			.create()
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 			.set((List&lt;Header&gt;)<strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			.set(alist(<strong class="jxr_keyword">null</strong>,FOO_3,FOO_4,FOO_5));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			.set(l(<strong class="jxr_keyword">null</strong>,FOO_3,FOO_4,FOO_5));
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertList(x, <span class="jxr_string">"Bar: 1"</span>, <span class="jxr_string">"Bar: 2"</span>, <span class="jxr_string">"Foo: 3"</span>, <span class="jxr_string">"Foo: 4"</span>, <span class="jxr_string">"Foo: 5"</span>);
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 		x = HeaderList
@@ -451,16 +451,16 @@
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">var</strong> x11 = HeaderList.create().setDefault(<span class="jxr_string">"Accept"</span>,()-&gt;<span class="jxr_string">"text/xml"</span>);
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		assertList(x11, <span class="jxr_string">"Accept: text/xml"</span>);
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">var</strong> x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(alist(Accept.TEXT_XML,ContentType.TEXT_HTML,<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">var</strong> x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(l(Accept.TEXT_XML,ContentType.TEXT_HTML,<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 		assertList(x12, <span class="jxr_string">"Content-Type: text/xml"</span>, <span class="jxr_string">"Content-Type: text/plain"</span>, <span class="jxr_string">"Accept: text/xml"</span>);
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 		<strong class="jxr_keyword">var</strong> x13 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(HeaderList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 		assertList(x13, <span class="jxr_string">"Content-Type: text/xml"</span>, <span class="jxr_string">"Content-Type: text/plain"</span>, <span class="jxr_string">"Accept: text/xml"</span>);
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> x14 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN)
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			.setDefault(alist(Accept.TEXT_XML,ContentType.TEXT_HTML,<strong class="jxr_keyword">null</strong>))
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			.setDefault(alist(Accept.TEXT_HTML,ContentType.TEXT_XML,<strong class="jxr_keyword">null</strong>))
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			.setDefault(alist(Age.of(1)));
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			.setDefault(l(Accept.TEXT_XML,ContentType.TEXT_HTML,<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			.setDefault(l(Accept.TEXT_HTML,ContentType.TEXT_XML,<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			.setDefault(l(Age.of(1)));
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		assertList(x14, <span class="jxr_string">"Content-Type: text/xml"</span>, <span class="jxr_string">"Content-Type: text/plain"</span>, <span class="jxr_string">"Accept: text/xml"</span>, <span class="jxr_string">"Age: 1"</span>);
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 	}
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 

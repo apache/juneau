@@ -1354,7 +1354,7 @@
 <a class="jxr_linenumber" name="L1346" href="#L1346">1346</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (s instanceof String[])
 <a class="jxr_linenumber" name="L1347" href="#L1347">1347</a> 			r = (String[])s;
 <a class="jxr_linenumber" name="L1348" href="#L1348">1348</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (s instanceof Object[])
-<a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> 			r = toStringArray(alist((Object[])s));
+<a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> 			r = toStringArray(l((Object[])s));
 <a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> 		<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> 			r = StringUtils.splita(s(s));
 <a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 		<strong class="jxr_keyword">return</strong> (r.length == 0 ? def : r);

@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	}
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Test <strong class="jxr_keyword">void</strong> a02_schema() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		serializedEntity(alist(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is(<span class="jxr_string">"foo|bar"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		serializedEntity(l(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is(<span class="jxr_string">"foo|bar"</span>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Test <strong class="jxr_keyword">void</strong> a03_serializer_streaming() <strong class="jxr_keyword">throws</strong> Exception {

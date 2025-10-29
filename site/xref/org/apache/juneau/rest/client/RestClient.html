@@ -6613,9 +6613,9 @@
 <a class="jxr_linenumber" name="L6605" href="#L6605">6605</a> 			<strong class="jxr_keyword">if</strong> (body instanceof Supplier)
 <a class="jxr_linenumber" name="L6606" href="#L6606">6606</a> 				body = ((Supplier&lt;?&gt;)body).get();
 <a class="jxr_linenumber" name="L6607" href="#L6607">6607</a> 			<strong class="jxr_keyword">if</strong> (body instanceof NameValuePair)
-<a class="jxr_linenumber" name="L6608" href="#L6608">6608</a> 				<strong class="jxr_keyword">return</strong> req.content(<strong class="jxr_keyword">new</strong> UrlEncodedFormEntity(alist((NameValuePair)body)));
+<a class="jxr_linenumber" name="L6608" href="#L6608">6608</a> 				<strong class="jxr_keyword">return</strong> req.content(<strong class="jxr_keyword">new</strong> UrlEncodedFormEntity(l((NameValuePair)body)));
 <a class="jxr_linenumber" name="L6609" href="#L6609">6609</a> 			<strong class="jxr_keyword">if</strong> (body instanceof NameValuePair[])
-<a class="jxr_linenumber" name="L6610" href="#L6610">6610</a> 				<strong class="jxr_keyword">return</strong> req.content(<strong class="jxr_keyword">new</strong> UrlEncodedFormEntity(alist((NameValuePair[])body)));
+<a class="jxr_linenumber" name="L6610" href="#L6610">6610</a> 				<strong class="jxr_keyword">return</strong> req.content(<strong class="jxr_keyword">new</strong> UrlEncodedFormEntity(l((NameValuePair[])body)));
 <a class="jxr_linenumber" name="L6611" href="#L6611">6611</a> 			<strong class="jxr_keyword">if</strong> (body instanceof <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a>)
 <a class="jxr_linenumber" name="L6612" href="#L6612">6612</a> 				<strong class="jxr_keyword">return</strong> req.content(<strong class="jxr_keyword">new</strong> UrlEncodedFormEntity(((<a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a>)body)));
 <a class="jxr_linenumber" name="L6613" href="#L6613">6613</a> 			<strong class="jxr_keyword">if</strong> (body instanceof <a name="HttpResource" href="../../../../../org/apache/juneau/http/resource/HttpResource.html#HttpResource">HttpResource</a>)

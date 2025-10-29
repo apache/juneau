@@ -384,8 +384,8 @@
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 		assertEquals(<span class="jxr_string">"1,2"</span>, StringUtils.join(a(1,2), <span class="jxr_string">","</span>));
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertNull(StringUtils.join((Collection&lt;?&gt;)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">","</span>));
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(<span class="jxr_string">"1"</span>, StringUtils.join(Arrays.asList(a(1)), <span class="jxr_string">","</span>));
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertEquals(<span class="jxr_string">"1,2"</span>, StringUtils.join(Arrays.asList(a(1,2)), <span class="jxr_string">","</span>));
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(<span class="jxr_string">"1"</span>, StringUtils.join(l(a(1)), <span class="jxr_string">","</span>));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertEquals(<span class="jxr_string">"1,2"</span>, StringUtils.join(l(a(1,2)), <span class="jxr_string">","</span>));
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 		assertNull(StringUtils.join((Object[])<strong class="jxr_keyword">null</strong>, ','));
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertEquals(<span class="jxr_string">"x,y,z"</span>, StringUtils.join(a(<span class="jxr_string">"x,y"</span>,<span class="jxr_string">"z"</span>), ','));
@@ -395,11 +395,11 @@
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertEquals(<span class="jxr_string">"1,2"</span>, StringUtils.join(ints(1,2), ','));
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertNull(StringUtils.join((Collection&lt;?&gt;)<strong class="jxr_keyword">null</strong>, ','));
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertEquals(<span class="jxr_string">"1"</span>, StringUtils.join(Arrays.asList(a(1)), ','));
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertEquals(<span class="jxr_string">"1,2"</span>, StringUtils.join(Arrays.asList(a(1,2)), ','));
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertEquals(<span class="jxr_string">"1"</span>, StringUtils.join(l(a(1)), ','));
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertEquals(<span class="jxr_string">"1,2"</span>, StringUtils.join(l(a(1,2)), ','));
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertNull(StringUtils.joine((List&lt;?&gt;)<strong class="jxr_keyword">null</strong>, ','));
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertEquals(<span class="jxr_string">"x&#92;&#92;,y,z"</span>, StringUtils.joine(Arrays.asList(a(<span class="jxr_string">"x,y"</span>,<span class="jxr_string">"z"</span>)), ','));
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertEquals(<span class="jxr_string">"x&#92;&#92;,y,z"</span>, StringUtils.joine(l(a(<span class="jxr_string">"x,y"</span>,<span class="jxr_string">"z"</span>)), ','));
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_comment">//====================================================================================================</em>
@@ -1269,9 +1269,9 @@
 <a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 	@Test <strong class="jxr_keyword">void</strong> a66_joinCollection() {
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 		assertNull(StringUtils.join((Collection&lt;?&gt;)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">","</span>));
 <a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 		assertEquals(<span class="jxr_string">""</span>, StringUtils.join(Collections.emptyList(), <span class="jxr_string">","</span>));
-<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 		assertEquals(<span class="jxr_string">"a,b,c"</span>, StringUtils.join(Arrays.asList(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>), <span class="jxr_string">","</span>));
-<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 		assertEquals(<span class="jxr_string">"1-2-3"</span>, StringUtils.join(Arrays.asList(1, 2, 3), <span class="jxr_string">"-"</span>));
-<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 		assertEquals(<span class="jxr_string">"a,null,c"</span>, StringUtils.join(Arrays.asList(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>), <span class="jxr_string">","</span>));
+<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 		assertEquals(<span class="jxr_string">"a,b,c"</span>, StringUtils.join(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>), <span class="jxr_string">","</span>));
+<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 		assertEquals(<span class="jxr_string">"1-2-3"</span>, StringUtils.join(l(1, 2, 3), <span class="jxr_string">"-"</span>));
+<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 		assertEquals(<span class="jxr_string">"a,null,c"</span>, StringUtils.join(l(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>), <span class="jxr_string">","</span>));
 <a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 	}
 <a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 
 <a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 	@Test <strong class="jxr_keyword">void</strong> a67_joinObjectArrayChar() {
@@ -1285,8 +1285,8 @@
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 	}
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 
 <a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 	@Test <strong class="jxr_keyword">void</strong> a69_joinCollectionChar() {
-<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		assertEquals(<span class="jxr_string">"a,b,c"</span>, StringUtils.join(Arrays.asList(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>), ','));
-<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		assertEquals(<span class="jxr_string">"1-2-3"</span>, StringUtils.join(Arrays.asList(1, 2, 3), '-'));
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		assertEquals(<span class="jxr_string">"a,b,c"</span>, StringUtils.join(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>), ','));
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		assertEquals(<span class="jxr_string">"1-2-3"</span>, StringUtils.join(l(1, 2, 3), '-'));
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 	}
 <a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 
 <a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 	<em class="jxr_comment">//====================================================================================================</em>

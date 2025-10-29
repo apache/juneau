@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertEquals(<span class="jxr_string">"Foo=1&amp;Foo=2"</span>, s(x));
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		x = partList(alist(FOO_1, FOO_2, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		x = partList(l(FOO_1, FOO_2, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(<span class="jxr_string">"Foo=1&amp;Foo=2"</span>, s(x));
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		x = partList(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"1"</span>,<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"2"</span>);
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		x = PartList.of(Collections.emptyList());
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(<span class="jxr_string">""</span>, s(x));
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		x = PartList.of(alist(FOO_1));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		x = PartList.of(l(FOO_1));
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertEquals(<span class="jxr_string">"Foo=1"</span>, s(x));
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		x = PartList.of((NameValuePair[])<strong class="jxr_keyword">null</strong>);
@@ -346,7 +346,7 @@
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 			.append(<span class="jxr_string">"Bar"</span>, <span class="jxr_string">"b1"</span>)
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 			.append(<span class="jxr_string">"Bar"</span>, ()-&gt;<span class="jxr_string">"b2"</span>)
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 			.append((List&lt;NameValuePair&gt;)<strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			.append(alist(FOO_4));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			.append(l(FOO_4));
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertEquals(<span class="jxr_string">"Foo=1&amp;Foo=2&amp;Foo=3&amp;Bar=b1&amp;Bar=b2&amp;Foo=4"</span>, s(x2));
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 	}
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 
@@ -363,7 +363,7 @@
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 			.prepend(<span class="jxr_string">"Bar"</span>, <span class="jxr_string">"b1"</span>)
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 			.prepend(<span class="jxr_string">"Bar"</span>, ()-&gt;<span class="jxr_string">"b2"</span>)
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 			.prepend((List&lt;NameValuePair&gt;)<strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			.prepend(alist(FOO_4));
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			.prepend(l(FOO_4));
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertEquals(<span class="jxr_string">"Foo=4&amp;Bar=b2&amp;Bar=b1&amp;Foo=2&amp;Foo=3&amp;Foo=1"</span>, s(x2));
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 
@@ -376,7 +376,7 @@
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 			.remove(PartList.of(FOO_1))
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 			.remove(FOO_2)
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 			.remove(FOO_3, FOO_4)
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			.remove(alist(FOO_5));
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			.remove(l(FOO_5));
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertEquals(<span class="jxr_string">"Foo=6&amp;Foo=7"</span>, s(x));
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 		x = PartList.create().append(FOO_1,FOO_2).remove((String[])<strong class="jxr_keyword">null</strong>).remove(<span class="jxr_string">"Bar"</span>,<span class="jxr_string">"Foo"</span>);
@@ -410,7 +410,7 @@
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 			.create()
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 			.set((List&lt;NameValuePair&gt;)<strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			.set(alist(<strong class="jxr_keyword">null</strong>,FOO_3,FOO_4,FOO_5));
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			.set(l(<strong class="jxr_keyword">null</strong>,FOO_3,FOO_4,FOO_5));
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertEquals(<span class="jxr_string">"Bar=1&amp;Bar=2&amp;Foo=3&amp;Foo=4&amp;Foo=5"</span>, s(x));
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		x = PartList
@@ -513,16 +513,16 @@
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">var</strong> x11 = PartList.create().setDefault(<span class="jxr_string">"a"</span>,()-&gt;<span class="jxr_string">"x"</span>);
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 		assertEquals(<span class="jxr_string">"a=x"</span>, s(x11));
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">var</strong> x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(alist(APart.X,BPart.Z,<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">var</strong> x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(l(APart.X,BPart.Z,<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 		assertEquals(<span class="jxr_string">"b=x&amp;b=y&amp;a=x"</span>, s(x12));
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">var</strong> x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 		assertEquals(<span class="jxr_string">"b=x&amp;b=y&amp;a=x"</span>, s(x13));
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<strong class="jxr_keyword">var</strong> x14 = PartList.create().set(BPart.X,BPart.Y)
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 			.setDefault(alist(APart.X,BPart.X,<strong class="jxr_keyword">null</strong>))
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 			.setDefault(alist(APart.Y,BPart.Y,<strong class="jxr_keyword">null</strong>))
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 			.setDefault(alist(CPart.X));
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 			.setDefault(l(APart.X,BPart.X,<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 			.setDefault(l(APart.Y,BPart.Y,<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 			.setDefault(l(CPart.X));
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 		assertEquals(<span class="jxr_string">"b=x&amp;b=y&amp;a=x&amp;c=x"</span>, s(x14));
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 	}
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 

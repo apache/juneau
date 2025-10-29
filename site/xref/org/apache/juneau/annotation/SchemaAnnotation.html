@@ -1459,7 +1459,7 @@
 <a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> 			.appendIf(ne, <span class="jxr_string">"$ref"</span>, a.$ref())
 <a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> 			<em class="jxr_comment">// JSON Schema Draft 2020-12 properties</em>
 <a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 			.appendIf(ne, <span class="jxr_string">"const"</span>, joinnl(a._<strong class="jxr_keyword">const</strong>()))
-<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 			.appendIf(nec, <span class="jxr_string">"examples"</span>, a.examples().length == 0 ? <strong class="jxr_keyword">null</strong> : Arrays.asList(a.examples()))
+<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 			.appendIf(nec, <span class="jxr_string">"examples"</span>, a.examples().length == 0 ? <strong class="jxr_keyword">null</strong> : l(a.examples()))
 <a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 			.appendIf(ne, <span class="jxr_string">"$comment"</span>, joinnl(a.$comment()))
 <a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 			.appendIf(nf, <span class="jxr_string">"deprecated"</span>, a.deprecatedProperty())
 <a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 			.appendIf(ne, <span class="jxr_string">"contentMediaType"</span>, a.contentMediaType())

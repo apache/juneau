@@ -398,7 +398,7 @@
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> addSecurity(String scheme, String...alternatives) {
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertArgNotNull(<span class="jxr_string">"scheme"</span>, scheme);
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 		Map&lt;String,List&lt;String&gt;&gt; m = map();
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		m.put(scheme, alist(alternatives));
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		m.put(scheme, l(alternatives));
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 		security = listb(Map.<strong class="jxr_keyword">class</strong>).to((List)security).add(m).build();
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 	}
@@ -725,7 +725,7 @@
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setConsumes(MediaType...value) {
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<strong class="jxr_keyword">return</strong> setConsumes(Arrays.asList(value));
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<strong class="jxr_keyword">return</strong> setConsumes(l(value));
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> 	}
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> 
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -823,7 +823,7 @@
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setParameters(ParameterInfo...value) {
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">return</strong> setParameters(Arrays.asList(value));
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">return</strong> setParameters(l(value));
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 	}
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -856,7 +856,7 @@
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> 	<strong class="jxr_keyword">public</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setProduces(MediaType...value) {
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> 		<strong class="jxr_keyword">return</strong> setProduces(Arrays.asList(value));
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 		<strong class="jxr_keyword">return</strong> setProduces(l(value));
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 	}
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -944,7 +944,7 @@
 <a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="Operation" href="../../../../../org/apache/juneau/bean/swagger/Operation.html#Operation">Operation</a> setSecurity(Map&lt;String,List&lt;String&gt;&gt;...value) {
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		security = alist(value);
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		security = l(value);
 <a class="jxr_linenumber" name="L940" href="#L940">940</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L941" href="#L941">941</a> 	}
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 

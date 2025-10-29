@@ -374,7 +374,7 @@
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<strong class="jxr_keyword">public</strong> <a name="Swagger" href="../../../../../org/apache/juneau/bean/swagger/Swagger.html#Swagger">Swagger</a> addSecurity(String scheme, String...alternatives) {
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertArgNotNull(<span class="jxr_string">"scheme"</span>, scheme);
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> m = map();
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		m.put(scheme, alist(alternatives));
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		m.put(scheme, l(alternatives));
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 		security = listb(Map.<strong class="jxr_keyword">class</strong>).to((List)security).sparse().addAll(Collections.singleton(m)).build();
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}

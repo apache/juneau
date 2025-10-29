@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,String&gt; headers(SerializerSession s) {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">var</strong> sp = s.getSessionProperties();
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">if</strong> (sp.containsKey(<span class="jxr_string">"Override-Content-Type"</span>))
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">return</strong> map(<span class="jxr_string">"Content-Type"</span>,sp.getString(<span class="jxr_string">"Override-Content-Type"</span>,<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">return</strong> m(<span class="jxr_string">"Content-Type"</span>,sp.getString(<span class="jxr_string">"Override-Content-Type"</span>,<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">return</strong> emptyMap();
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}

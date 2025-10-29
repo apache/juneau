@@ -38,9 +38,9 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>          Set&lt;String&gt; s = setb(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>              .add(<span class="jxr_string">"a"</span>)
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>              .add(<span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>              .addAll(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(Arrays.asList(<span class="jxr_string">"d"</span>, <span class="jxr_string">"e"</span>)))
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>              .addAll(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"d"</span>, <span class="jxr_string">"e"</span>)))
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>              .build();
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>          assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(Arrays.asList(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>,<span class="jxr_string">"c"</span>,<span class="jxr_string">"d"</span>,<span class="jxr_string">"e"</span>)), s);
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>          assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>,<span class="jxr_string">"c"</span>,<span class="jxr_string">"d"</span>,<span class="jxr_string">"e"</span>)), s);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      }
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      @Test
@@ -53,10 +53,10 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>      @Test
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>      <strong class="jxr_keyword">void</strong> sorted_natural_and_custom() {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          Set&lt;Integer&gt; s1 = setb(Integer.<strong class="jxr_keyword">class</strong>).add(3,1,2).sorted().build();
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>          assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(Arrays.asList(1,2,3)), s1);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(l(1,2,3)), s1);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>          Set&lt;Integer&gt; s2 = setb(Integer.<strong class="jxr_keyword">class</strong>).add(3,1,2).sorted(Comparator.reverseOrder()).build();
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>          assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(Arrays.asList(3,2,1)), s2);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          assertEquals(<strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(l(3,2,1)), s2);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  

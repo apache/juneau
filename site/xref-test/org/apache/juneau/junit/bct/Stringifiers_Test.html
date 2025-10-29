@@ -500,7 +500,7 @@
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<strong class="jxr_keyword">void</strong> l04_stringifyWithNullElements() {
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 			<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.listStringifier();
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			<strong class="jxr_keyword">var</strong> input = Arrays.asList(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>);
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			<strong class="jxr_keyword">var</strong> input = l(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"c"</span>);
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 			assertEquals(<span class="jxr_string">"[a,&lt;null&gt;,c]"</span>, result);

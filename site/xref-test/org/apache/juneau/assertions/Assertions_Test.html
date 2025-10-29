@@ -73,11 +73,11 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@Test <strong class="jxr_keyword">void</strong> a08_assertCollection() {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertCollection(alist()).isEmpty();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertCollection(l()).isEmpty();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Test <strong class="jxr_keyword">void</strong> a09_assertList() {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertList(alist()).isEmpty();
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertList(l()).isEmpty();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Test <strong class="jxr_keyword">void</strong> a10_assertStream() <strong class="jxr_keyword">throws</strong> Exception {
@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@Test <strong class="jxr_keyword">void</strong> a19_assertBeanList() {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertBeanList(alist(ABean.get())).asJson().is(<span class="jxr_string">"[{a:1,b:'foo'}]"</span>);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertBeanList(l(ABean.get())).asJson().is(<span class="jxr_string">"[{a:1,b:'foo'}]"</span>);
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	@Test <strong class="jxr_keyword">void</strong> a20a_assertIntArray() {
@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	}
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	@Test <strong class="jxr_keyword">void</strong> a25_assertStringList() {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertStringList(alist()).isNotNull();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertStringList(l()).isNotNull();
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertStringList(<strong class="jxr_keyword">null</strong>).isNull();
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> }

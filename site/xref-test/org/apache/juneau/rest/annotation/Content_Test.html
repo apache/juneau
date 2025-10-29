@@ -971,7 +971,7 @@
 <a class="jxr_linenumber" name="L963" href="#L963">963</a> 			.assertStatus(200)
 <a class="jxr_linenumber" name="L964" href="#L964">964</a> 			.assertContent(<span class="jxr_string">"null"</span>);
 <a class="jxr_linenumber" name="L965" href="#L965">965</a> 
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		<strong class="jxr_keyword">var</strong> body1 = Json5.of(list(ABean.get()));
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		<strong class="jxr_keyword">var</strong> body1 = Json5.of(l(ABean.get()));
 <a class="jxr_linenumber" name="L967" href="#L967">967</a> 		j.post(<span class="jxr_string">"/c"</span>, body1, APPLICATION_JSON)
 <a class="jxr_linenumber" name="L968" href="#L968">968</a> 			.run()
 <a class="jxr_linenumber" name="L969" href="#L969">969</a> 			.assertStatus(200)
@@ -981,7 +981,7 @@
 <a class="jxr_linenumber" name="L973" href="#L973">973</a> 			.assertStatus(200)
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 			.assertContent(<span class="jxr_string">"null"</span>);
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		<strong class="jxr_keyword">var</strong> body2 = Json5.of(list(opt(ABean.get())));
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		<strong class="jxr_keyword">var</strong> body2 = Json5.of(l(opt(ABean.get())));
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> 		j.post(<span class="jxr_string">"/d"</span>, body2, APPLICATION_JSON)
 <a class="jxr_linenumber" name="L978" href="#L978">978</a> 			.run()
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 			.assertStatus(200)

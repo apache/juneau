@@ -559,7 +559,7 @@
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 	<strong class="jxr_keyword">public</strong> <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> prepend(NameValuePair...values) {
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">if</strong> (nn(values))
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			prepend(alist(values));
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			prepend(l(values));
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 	}
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 
@@ -777,7 +777,7 @@
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> 	<strong class="jxr_keyword">public</strong> <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> set(NameValuePair...values) {
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 		<strong class="jxr_keyword">if</strong> (nn(values))
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 			set(alist(values));
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 			set(l(values));
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 	}
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 
@@ -829,7 +829,7 @@
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> 	<strong class="jxr_keyword">public</strong> <a name="PartList" href="../../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> setDefault(NameValuePair...parts) {
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 		<strong class="jxr_keyword">if</strong> (nn(parts))
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 			setDefault(Arrays.asList(parts));
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 			setDefault(l(parts));
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> 	}
 <a class="jxr_linenumber" name="L827" href="#L827">827</a> 
