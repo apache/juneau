@@ -1945,6 +1945,12 @@ public class StringUtils {
 		return Integer.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR - NPE not possible here.
 	}
 
+	// TODO: See if we can remove StringUtils.parseIsoCalendar.
+	// Currently used by:
+	//   - OpenApiParserSession.java for DATE/DATE_TIME format parsing
+	//   - StringUtils.parseIsoDate() (which wraps this method)
+	// Investigation needed: Can we replace this with java.time APIs or other standard date parsing?
+
 	/**
 	 * Parses an ISO8601 string into a calendar.
 	 *

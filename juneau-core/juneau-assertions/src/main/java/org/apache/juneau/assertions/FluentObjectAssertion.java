@@ -334,7 +334,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R isExactType(Class<?> type) throws AssertionError {
 		assertArgNotNull("parent", type);
 		if (value().getClass() != type)
-			throw error(MSG_unexpectedType, className(type), className(value));
+			throw error(MSG_unexpectedType, cn(type), cn(value));
 		return returns();
 	}
 
@@ -506,7 +506,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	public R isType(Class<?> parent) throws AssertionError {
 		assertArgNotNull("parent", parent);
 		if (!ClassInfo.of(value()).isChildOf(parent))
-			throw error(MSG_unexpectedType, className(parent), className(value));
+			throw error(MSG_unexpectedType, cn(parent), cn(value));
 		return returns();
 	}
 

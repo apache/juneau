@@ -17,8 +17,6 @@
 package org.apache.juneau.svl;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
-
 import org.apache.juneau.common.utils.*;
 
 /**

@@ -24,7 +24,6 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -79,16 +78,6 @@ public class Assertion {
 	@SuppressWarnings("unchecked")
 	protected static <E> Class<E[]> arrayClass(Class<E> c) {
 		return (Class<E[]>)Array.newInstance(c, 0).getClass();
-	}
-
-	/**
-	 * Convenience method for getting the class name for an object.
-	 *
-	 * @param o The object to get the class name for.
-	 * @return The class name for an object.
-	 */
-	protected static String className(Object o) {
-		return ClassUtils.className(o);
 	}
 
 	private String msg;

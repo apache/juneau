@@ -358,7 +358,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	public R isExactType(Class<?> type) {
 		assertArgNotNull("type", type);
 		if (type != value().getClass())
-			throw error(MSG_exceptionWasNotExpectedType, className(type), className(value()));
+			throw error(MSG_exceptionWasNotExpectedType, cn(type), cn(value()));
 		return returns();
 	}
 
@@ -397,7 +397,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	public R isType(Class<?> parent) {
 		assertArgNotNull("parent", parent);
 		if (!parent.isInstance(value()))
-			throw error(MSG_exceptionWasNotExpectedType, className(parent), className(value()));
+			throw error(MSG_exceptionWasNotExpectedType, cn(parent), cn(value()));
 		return returns();
 	}
 

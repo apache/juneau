@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.DateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.time.*;
@@ -114,7 +115,7 @@ public class GranularZonedDateTime {
 	 */
 	public GranularZonedDateTime roll(ChronoField field, int amount) {
 		// Use DateUtils utility method to convert ChronoField to ChronoUnit
-		ChronoUnit unit = DateUtils.toChronoUnit(field);
+		ChronoUnit unit = toChronoUnit(field);
 		if (nn(unit)) {
 			ZonedDateTime newZdt = zdt.plus(amount, unit);
 			return new GranularZonedDateTime(newZdt, precision);
@@ -135,10 +136,10 @@ public class GranularZonedDateTime {
 	 */
 	public static GranularZonedDateTime parse(String seg) {
 		// Try DateUtils.fromIso8601 first for consistency
-		ZonedDateTime zdt = DateUtils.fromIso8601(seg);
+		ZonedDateTime zdt = fromIso8601(seg);
 		if (nn(zdt)) {
 			// Determine precision based on the input string
-			var precision = DateUtils.getPrecisionFromString(seg);
+			var precision = getPrecisionFromString(seg);
 			return new GranularZonedDateTime(zdt, precision);
 		}
 

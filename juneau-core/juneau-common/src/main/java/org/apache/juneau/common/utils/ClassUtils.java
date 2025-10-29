@@ -97,7 +97,7 @@ public class ClassUtils {
 		} else if (t instanceof Class) {
 			Class<?> c = (Class<?>)t;
 			if (Value.class.isAssignableFrom(c)) {
-				return ClassUtils.getParameterType(c, 0, Value.class);
+				return getParameterType(c, 0, Value.class);
 			}
 		}
 
@@ -262,7 +262,7 @@ public class ClassUtils {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static boolean isNotVoid(Class c) {
-		return ! ClassUtils.isVoid(c);
+		return ! isVoid(c);
 	}
 
 	/**

@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.bean.atom;
 
+import static org.apache.juneau.common.utils.DateUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Represents an individual entry within an Atom feed or as a standalone Atom document.
@@ -328,7 +329,7 @@ public class Entry extends CommonEntry {
 	 * @return This object.
 	 */
 	public Entry setPublished(String value) {
-		setPublished(DateUtils.fromIso8601Calendar(value));
+		setPublished(fromIso8601Calendar(value));
 		return this;
 	}
 

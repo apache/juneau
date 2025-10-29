@@ -143,7 +143,7 @@ public class DateUtils {
 	 * @param pattern The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).
 	 * @return The formatter.
 	 */
-	public static DateTimeFormatter getFormatter(String pattern) {
+	public static DateTimeFormatter getDateTimeFormatter(String pattern) {
 		if (StringUtils.isEmpty(pattern))
 			return DateTimeFormatter.ISO_INSTANT;
 		try {

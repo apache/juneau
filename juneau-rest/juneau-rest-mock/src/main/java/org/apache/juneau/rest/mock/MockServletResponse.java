@@ -17,12 +17,12 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.DateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.rest.util.*;
 
 import jakarta.servlet.*;
@@ -60,7 +60,7 @@ public class MockServletResponse implements HttpServletResponse {
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addDateHeader(String name, long date) {
-		headerMap.put(name, a(DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123)));
+		headerMap.put(name, a(formatDate(new Date(date), PATTERN_RFC1123)));
 	}
 
 	@Override /* Overridden from HttpServletResponse */
@@ -205,7 +205,7 @@ public class MockServletResponse implements HttpServletResponse {
 
 	@Override /* Overridden from HttpServletResponse */
 	public void setDateHeader(String name, long date) {
-		headerMap.put(name, a(DateUtils.formatDate(new Date(date), DateUtils.PATTERN_RFC1123)));
+		headerMap.put(name, a(formatDate(new Date(date), PATTERN_RFC1123)));
 	}
 
 	@Override /* Overridden from HttpServletResponse */

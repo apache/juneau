@@ -20,6 +20,7 @@ import static java.time.temporal.ChronoField.*;
 import static java.time.temporal.ChronoUnit.*;
 import static java.util.Calendar.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.common.utils.DateUtils.*;
 
 import java.time.*;
 import java.time.temporal.*;
@@ -97,7 +98,7 @@ class DateUtils_Test extends TestBase {
 		@ParameterizedTest
 		@MethodSource("input")
 		void a01_basic(Input input) {
-			assertEquals(input.expectedPrecision, DateUtils.getPrecisionFromString(input.dateString));
+			assertEquals(input.expectedPrecision, getPrecisionFromString(input.dateString));
 		}
 	}
 
@@ -147,7 +148,7 @@ class DateUtils_Test extends TestBase {
 		@ParameterizedTest
 		@MethodSource("input")
 		void d01_toChronoField(Input input) {
-			ChronoField result = DateUtils.toChronoField(input.unit);
+			ChronoField result = toChronoField(input.unit);
 			assertEquals(input.expectedField, result, "Test " + input.index + ": " + input.unit);
 		}
 	}
@@ -198,7 +199,7 @@ class DateUtils_Test extends TestBase {
 		@ParameterizedTest
 		@MethodSource("input")
 		void e01_toChronoUnit(Input input) {
-			ChronoUnit result = DateUtils.toChronoUnit(input.field);
+			ChronoUnit result = toChronoUnit(input.field);
 			assertEquals(input.expectedUnit, result, "Test " + input.index + ": " + input.field);
 		}
 	}
@@ -246,7 +247,7 @@ class DateUtils_Test extends TestBase {
 		@ParameterizedTest
 		@MethodSource("input")
 		void f01_toCalendarField(Input input) {
-			int result = DateUtils.toCalendarField(input.field);
+			int result = toCalendarField(input.field);
 			assertEquals(input.expectedCalendarField, result, "Test " + input.index + ": " + input.field);
 		}
 	}
@@ -289,9 +290,9 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void g01_chronoFieldToChronoUnitToChronoField(Input input) {
 			// ChronoField -> ChronoUnit -> ChronoField should be idempotent
-			ChronoUnit unit = DateUtils.toChronoUnit(input.field);
+			ChronoUnit unit = toChronoUnit(input.field);
 			if (unit != null) {
-				ChronoField result = DateUtils.toChronoField(unit);
+				ChronoField result = toChronoField(unit);
 				assertEquals(input.field, result, "Test " + input.index + ": " + input.field + " -> " + unit + " -> " + result);
 			}
 		}
@@ -300,7 +301,7 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void g02_chronoFieldToCalendarField(Input input) {
 			// ChronoField -> Calendar field should always work
-			int calendarField = DateUtils.toCalendarField(input.field);
+			int calendarField = toCalendarField(input.field);
 			assertTrue(calendarField >= 0, "Test " + input.index + ": Calendar field should be non-negative");
 			assertTrue(calendarField <= 18, "Test " + input.index + ": Calendar field should be valid Calendar constant");
 		}
@@ -373,7 +374,7 @@ class DateUtils_Test extends TestBase {
 			cal.set(Calendar.MILLISECOND, input.millisecond);
 
 			// Convert to ISO8601 string
-			String result = DateUtils.toIso8601(cal);
+			String result = toIso8601(cal);
 
 			// Verify the result matches expected format
 			assertEquals(input.expectedIso8601, result, "Test " + input.index + ": " + input.year + "-" + (input.month + 1) + "-" + input.day + " " + input.timezone);
@@ -388,7 +389,7 @@ class DateUtils_Test extends TestBase {
 			cal.set(Calendar.MILLISECOND, input.millisecond);
 
 			// Convert to ISO8601 string
-			String result = DateUtils.toIso8601(cal);
+			String result = toIso8601(cal);
 
 			// Validate format structure
 			assertTrue(result.matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2}|\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z"),
@@ -414,7 +415,7 @@ class DateUtils_Test extends TestBase {
 		@Test
 		void i01_nullCalendar() {
 			assertThrows(NullPointerException.class, () -> {
-				DateUtils.toIso8601(null);
+				toIso8601(null);
 			});
 		}
 
@@ -424,7 +425,7 @@ class DateUtils_Test extends TestBase {
 			cal.set(1, Calendar.JANUARY, 1, 0, 0, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 
-			String result = DateUtils.toIso8601(cal);
+			String result = toIso8601(cal);
 			assertEquals("0001-01-01T00:00:00Z", result);
 		}
 
@@ -434,7 +435,7 @@ class DateUtils_Test extends TestBase {
 			cal.set(9999, Calendar.DECEMBER, 31, 23, 59, 59);
 			cal.set(Calendar.MILLISECOND, 999);
 
-			String result = DateUtils.toIso8601(cal);
+			String result = toIso8601(cal);
 			assertEquals("9999-12-31T23:59:59Z", result);
 		}
 
@@ -444,7 +445,7 @@ class DateUtils_Test extends TestBase {
 			cal.set(2024, Calendar.FEBRUARY, 29, 12, 0, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 
-			String result = DateUtils.toIso8601(cal);
+			String result = toIso8601(cal);
 			assertEquals("2024-02-29T12:00:00Z", result);
 		}
 
@@ -454,7 +455,7 @@ class DateUtils_Test extends TestBase {
 			cal.set(2023, Calendar.FEBRUARY, 28, 12, 0, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 
-			String result = DateUtils.toIso8601(cal);
+			String result = toIso8601(cal);
 			assertEquals("2023-02-28T12:00:00Z", result);
 		}
 
@@ -465,7 +466,7 @@ class DateUtils_Test extends TestBase {
 			cal.set(2024, Calendar.MARCH, 10, 2, 30, 0); // 2:30 AM on DST transition day
 			cal.set(Calendar.MILLISECOND, 0);
 
-			String result = DateUtils.toIso8601(cal);
+			String result = toIso8601(cal);
 			// The exact result depends on how Java handles the DST transition
 			assertTrue(result.contains("2024-03-10T"), "Should contain the date");
 			assertTrue(result.contains(":30:00"), "Should contain the time");
@@ -532,7 +533,7 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void j01_fromIso8601Calendar(Input input) {
 			// Parse the ISO8601 string
-			Calendar result = DateUtils.fromIso8601Calendar(input.iso8601String);
+			Calendar result = fromIso8601Calendar(input.iso8601String);
 
 			// Verify the result is not null
 			assertNotNull(result, "Test " + input.index + ": Result should not be null");
@@ -556,11 +557,11 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void j02_fromIso8601Calendar_roundTrip(Input input) {
 			// Parse the ISO8601 string
-			Calendar cal = DateUtils.fromIso8601Calendar(input.iso8601String);
+			Calendar cal = fromIso8601Calendar(input.iso8601String);
 			assertNotNull(cal, "Test " + input.index + ": Calendar should not be null");
 
 			// Convert back to ISO8601
-			String result = DateUtils.toIso8601(cal);
+			String result = toIso8601(cal);
 
 			// The result should be a valid ISO8601 string
 			assertNotNull(result, "Test " + input.index + ": Result should not be null");
@@ -629,7 +630,7 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void k01_fromIso8601(Input input) {
 			// Parse the ISO8601 string
-			ZonedDateTime result = DateUtils.fromIso8601(input.iso8601String);
+			ZonedDateTime result = fromIso8601(input.iso8601String);
 
 			// Verify the result is not null
 			assertNotNull(result, "Test " + input.index + ": Result should not be null");
@@ -653,7 +654,7 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void k02_fromIso8601_immutability(Input input) {
 			// Parse the ISO8601 string
-			ZonedDateTime result = DateUtils.fromIso8601(input.iso8601String);
+			ZonedDateTime result = fromIso8601(input.iso8601String);
 			assertNotNull(result, "Test " + input.index + ": Result should not be null");
 
 			// Verify immutability - operations should return new instances
@@ -675,42 +676,42 @@ class DateUtils_Test extends TestBase {
 
 		@Test
 		void l01_nullInput() {
-			assertNull(DateUtils.fromIso8601Calendar(null));
-			assertNull(DateUtils.fromIso8601(null));
+			assertNull(fromIso8601Calendar(null));
+			assertNull(fromIso8601(null));
 		}
 
 		@Test
 		void l02_emptyInput() {
-			assertNull(DateUtils.fromIso8601Calendar(""));
-			assertNull(DateUtils.fromIso8601(""));
+			assertNull(fromIso8601Calendar(""));
+			assertNull(fromIso8601(""));
 		}
 
 		@Test
 		void l03_whitespaceInput() {
-			assertNull(DateUtils.fromIso8601Calendar("   "));
-			assertNull(DateUtils.fromIso8601("   "));
+			assertNull(fromIso8601Calendar("   "));
+			assertNull(fromIso8601("   "));
 		}
 
 		@Test
 		void l04_invalidFormat() {
 			// These should throw DateTimeParseException
 			assertThrows(Exception.class, () -> {
-				DateUtils.fromIso8601Calendar("invalid-date");
+				fromIso8601Calendar("invalid-date");
 			});
 			assertThrows(Exception.class, () -> {
-				DateUtils.fromIso8601("invalid-date");
+				fromIso8601("invalid-date");
 			});
 		}
 
 		@Test
 		void l05_minimumDate() {
-			Calendar cal = DateUtils.fromIso8601Calendar("0001-01-01T00:00:00Z");
+			Calendar cal = fromIso8601Calendar("0001-01-01T00:00:00Z");
 			assertNotNull(cal);
 			assertEquals(1, cal.get(Calendar.YEAR));
 			assertEquals(Calendar.JANUARY, cal.get(Calendar.MONTH));
 			assertEquals(1, cal.get(Calendar.DAY_OF_MONTH));
 
-			ZonedDateTime zdt = DateUtils.fromIso8601("0001-01-01T00:00:00Z");
+			ZonedDateTime zdt = fromIso8601("0001-01-01T00:00:00Z");
 			assertNotNull(zdt);
 			assertEquals(1, zdt.getYear());
 			assertEquals(1, zdt.getMonthValue());
@@ -719,13 +720,13 @@ class DateUtils_Test extends TestBase {
 
 		@Test
 		void l06_maximumDate() {
-			Calendar cal = DateUtils.fromIso8601Calendar("9999-12-31T23:59:59Z");
+			Calendar cal = fromIso8601Calendar("9999-12-31T23:59:59Z");
 			assertNotNull(cal);
 			assertEquals(9999, cal.get(Calendar.YEAR));
 			assertEquals(Calendar.DECEMBER, cal.get(Calendar.MONTH));
 			assertEquals(31, cal.get(Calendar.DAY_OF_MONTH));
 
-			ZonedDateTime zdt = DateUtils.fromIso8601("9999-12-31T23:59:59Z");
+			ZonedDateTime zdt = fromIso8601("9999-12-31T23:59:59Z");
 			assertNotNull(zdt);
 			assertEquals(9999, zdt.getYear());
 			assertEquals(12, zdt.getMonthValue());
@@ -734,13 +735,13 @@ class DateUtils_Test extends TestBase {
 
 		@Test
 		void l07_leapYear() {
-			Calendar cal = DateUtils.fromIso8601Calendar("2024-02-29T12:00:00Z");
+			Calendar cal = fromIso8601Calendar("2024-02-29T12:00:00Z");
 			assertNotNull(cal);
 			assertEquals(2024, cal.get(Calendar.YEAR));
 			assertEquals(Calendar.FEBRUARY, cal.get(Calendar.MONTH));
 			assertEquals(29, cal.get(Calendar.DAY_OF_MONTH));
 
-			ZonedDateTime zdt = DateUtils.fromIso8601("2024-02-29T12:00:00Z");
+			ZonedDateTime zdt = fromIso8601("2024-02-29T12:00:00Z");
 			assertNotNull(zdt);
 			assertEquals(2024, zdt.getYear());
 			assertEquals(2, zdt.getMonthValue());
@@ -750,13 +751,13 @@ class DateUtils_Test extends TestBase {
 		@Test
 		void l08_dstTransition() {
 			// Test DST transition in America/New_York (Spring forward)
-			Calendar cal = DateUtils.fromIso8601Calendar("2024-03-10T02:30:00-05:00");
+			Calendar cal = fromIso8601Calendar("2024-03-10T02:30:00-05:00");
 			assertNotNull(cal);
 			assertEquals(2024, cal.get(Calendar.YEAR));
 			assertEquals(Calendar.MARCH, cal.get(Calendar.MONTH));
 			assertEquals(10, cal.get(Calendar.DAY_OF_MONTH));
 
-			ZonedDateTime zdt = DateUtils.fromIso8601("2024-03-10T02:30:00-05:00");
+			ZonedDateTime zdt = fromIso8601("2024-03-10T02:30:00-05:00");
 			assertNotNull(zdt);
 			assertEquals(2024, zdt.getYear());
 			assertEquals(3, zdt.getMonthValue());
@@ -773,17 +774,17 @@ class DateUtils_Test extends TestBase {
 		cal.set(2024, Calendar.JANUARY, 15, 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 
-		Calendar result = DateUtils.addSubtractDays(cal, 10);
+		Calendar result = addSubtractDays(cal, 10);
 		assertNotNull(result);
 		assertNotSame(cal, result); // Should be a clone
 		assertEquals(25, result.get(Calendar.DAY_OF_MONTH));
 
-		result = DateUtils.addSubtractDays(cal, -5);
+		result = addSubtractDays(cal, -5);
 		assertNotNull(result);
 		assertEquals(10, result.get(Calendar.DAY_OF_MONTH));
 
 		// Null calendar
-		assertNull(DateUtils.addSubtractDays(null, 10));
+		assertNull(addSubtractDays(null, 10));
 	}
 
 	@Test
@@ -793,28 +794,28 @@ class DateUtils_Test extends TestBase {
 		cal.set(Calendar.MILLISECOND, 0);
 
 		// Add days
-		Calendar result = DateUtils.add(cal, Calendar.DAY_OF_MONTH, 5);
+		Calendar result = add(cal, Calendar.DAY_OF_MONTH, 5);
 		assertSame(cal, result); // Returns same instance
 		assertEquals(20, cal.get(Calendar.DAY_OF_MONTH));
 
 		// Add months
 		cal.set(2024, Calendar.JANUARY, 15, 0, 0, 0);
-		DateUtils.add(cal, Calendar.MONTH, 2);
+		add(cal, Calendar.MONTH, 2);
 		assertEquals(Calendar.MARCH, cal.get(Calendar.MONTH));
 
 		// Add hours
 		cal.set(2024, Calendar.JANUARY, 15, 10, 0, 0);
-		DateUtils.add(cal, Calendar.HOUR_OF_DAY, 5);
+		add(cal, Calendar.HOUR_OF_DAY, 5);
 		assertEquals(15, cal.get(Calendar.HOUR_OF_DAY));
 	}
 
 	@Test
 	void test_toZonedDateTime() {
 		Calendar cal = new GregorianCalendar(2024, Calendar.JANUARY, 15, 12, 30, 45);
-		
-		Optional<ZonedDateTime> result = DateUtils.toZonedDateTime(cal);
+
+		Optional<ZonedDateTime> result = toZonedDateTime(cal);
 		assertTrue(result.isPresent());
-		
+
 		ZonedDateTime zdt = result.get();
 		assertEquals(2024, zdt.getYear());
 		assertEquals(1, zdt.getMonthValue());
@@ -824,7 +825,7 @@ class DateUtils_Test extends TestBase {
 		assertEquals(45, zdt.getSecond());
 
 		// Null calendar
-		assertFalse(DateUtils.toZonedDateTime(null).isPresent());
+		assertFalse(toZonedDateTime(null).isPresent());
 	}
 
 	@Test
@@ -832,10 +833,10 @@ class DateUtils_Test extends TestBase {
 		TimeZone tz = TimeZone.getTimeZone("America/New_York");
 		Calendar cal = new GregorianCalendar(tz);
 		cal.set(2024, Calendar.JANUARY, 15, 12, 30, 45);
-		
-		Optional<ZonedDateTime> result = DateUtils.toZonedDateTime(cal);
+
+		Optional<ZonedDateTime> result = toZonedDateTime(cal);
 		assertTrue(result.isPresent());
-		
+
 		ZonedDateTime zdt = result.get();
 		assertEquals(tz.toZoneId(), zdt.getZone());
 	}

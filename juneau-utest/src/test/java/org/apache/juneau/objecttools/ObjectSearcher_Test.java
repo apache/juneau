@@ -18,6 +18,7 @@ package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.DateUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.util.*;
@@ -386,7 +387,7 @@ public class ObjectSearcher_Test extends TestBase {
 			var bb = new B[dates.length];
 			for (var i = 0; i < dates.length; i++) {
 				bb[i] = new B();
-				bb[i].f = DateUtils.fromIso8601Calendar(dates[i]);
+				bb[i].f = fromIso8601Calendar(dates[i]);
 			}
 			return bb;
 		}

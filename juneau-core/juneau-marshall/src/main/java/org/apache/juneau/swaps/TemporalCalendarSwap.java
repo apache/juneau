@@ -16,13 +16,14 @@
  */
 package org.apache.juneau.swaps;
 
+import static org.apache.juneau.common.utils.DateUtils.*;
+
 import java.time.*;
 import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -286,7 +287,7 @@ public class TemporalCalendarSwap extends StringSwap<Calendar> {
 	 */
 	public TemporalCalendarSwap(String pattern) {
 		super(Calendar.class);
-		this.formatter = DateUtils.getFormatter(pattern);
+		this.formatter = getDateTimeFormatter(pattern);
 	}
 
 	@Override /* Overridden from ObjectSwap */

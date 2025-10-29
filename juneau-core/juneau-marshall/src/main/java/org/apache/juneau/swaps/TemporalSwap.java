@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.swaps;
 
+import static org.apache.juneau.common.utils.DateUtils.*;
+
 import java.lang.reflect.*;
 import java.time.*;
 import java.time.chrono.*;
@@ -26,7 +28,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.swap.*;
 
@@ -366,7 +367,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	 */
 	public TemporalSwap(String pattern, boolean zoneOptional) {
 		super(Temporal.class);
-		this.formatter = DateUtils.getFormatter(pattern);
+		this.formatter = getDateTimeFormatter(pattern);
 		this.zoneOptional = zoneOptional;
 	}
 

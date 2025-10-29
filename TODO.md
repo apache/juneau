@@ -15,12 +15,12 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-15 It appears StringUtils is going to become a commonly-used external class. Let's see if we can enhance it with commonly used string utility methods.
 - [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
 - [ ] TODO-29 Finish setting up SonarQube analysis in git workflow.
-- [ ] TODO-39 Use static imports for all method calls to AnnotationUtils.
-- [ ] TODO-40 Use static imports for all method calls to ArrayUtils.
-- [ ] TODO-41 Use static imports for all method calls to AssertionUtils.
-- [ ] TODO-42 Use static imports for all method calls to ClassUtils.
-- [ ] TODO-43 Use static imports for all method calls to CollectionUtils.
-- [ ] TODO-44 Use static imports for all method calls to DateUtils.
+- [x] TODO-39 Use static imports for all method calls to AnnotationUtils.
+- [x] TODO-40 Use static imports for all method calls to ArrayUtils.
+- [x] TODO-41 Use static imports for all method calls to AssertionUtils.
+- [x] TODO-42 Use static imports for all method calls to ClassUtils.
+- [x] TODO-43 Use static imports for all method calls to CollectionUtils.
+- [x] TODO-44 Use static imports for all method calls to DateUtils.
 - [ ] TODO-45 Use static imports for all method calls to FileUtils.
 - [ ] TODO-46 Use static imports for all method calls to IOUtils.
 - [ ] TODO-47 Use static imports for all method calls to PredicateUtils.
