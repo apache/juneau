@@ -26,7 +26,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.params.*;
@@ -3112,7 +3111,7 @@ class BasicHtml_Test extends TestBase {
 
 	private static void assertInstancesOf(Class<?> c, Object...values) {
 		for (int i = 0; i < values.length; i++) {
-			assertInstanceOf(c, values[i], fs("Object {0} not expected type.  Expected={1}, Actual={2}", i, c, Utils.scn(values[i])));
+			assertInstanceOf(c, values[i], fs("Object {0} not expected type.  Expected={1}, Actual={2}", i, c, scn(values[i])));
 		}
 	}
 }

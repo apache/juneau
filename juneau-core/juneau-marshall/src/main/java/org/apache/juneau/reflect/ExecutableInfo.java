@@ -17,6 +17,7 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -27,7 +28,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Contains common methods between {@link ConstructorInfo} and {@link MethodInfo}.
@@ -97,7 +97,7 @@ public abstract class ExecutableInfo {
 	 */
 	public ExecutableInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
 		for (ParamInfo pi : _getParams())
-			if (PredicateUtils.test(filter, pi))
+			if (test(filter, pi))
 				action.accept(pi);
 		return this;
 	}
@@ -115,7 +115,7 @@ public abstract class ExecutableInfo {
 	public final <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
 		for (Annotation a : _getParameterAnnotations(index))
 			if (type.isInstance(a))
-				PredicateUtils.consumeIf(predicate, consumer, type.cast(a));
+				consumeIf(predicate, consumer, type.cast(a));
 		return this;
 	}
 

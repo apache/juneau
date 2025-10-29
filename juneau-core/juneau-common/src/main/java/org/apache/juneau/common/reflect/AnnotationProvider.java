@@ -17,13 +17,13 @@
 package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Interface that provides the ability to look up annotations on classes/methods/constructors/fields.
@@ -57,7 +57,7 @@ public interface AnnotationProvider {
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (nn(type) && nn(onClass))
 				for (A a : annotations(type, onClass))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						return a;
 			return null;
 		}
@@ -66,7 +66,7 @@ public interface AnnotationProvider {
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 			if (nn(type) && nn(onConstructor))
 				for (A a : annotations(type, onConstructor))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						return a;
 			return null;
 		}
@@ -75,7 +75,7 @@ public interface AnnotationProvider {
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 			if (nn(type) && nn(onField))
 				for (A a : annotations(type, onField))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						return a;
 			return null;
 		}
@@ -84,7 +84,7 @@ public interface AnnotationProvider {
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 			if (nn(type) && nn(onMethod))
 				for (A a : annotations(type, onMethod))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						return a;
 			return null;
 		}
@@ -93,7 +93,7 @@ public interface AnnotationProvider {
 		public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (nn(type) && nn(onClass))
 				for (A a : declaredAnnotations(type, onClass))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						return a;
 			return null;
 		}
@@ -102,35 +102,35 @@ public interface AnnotationProvider {
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onClass))
 				for (A a : annotations(type, onClass))
-					PredicateUtils.consumeIf(filter, action, a);
+					consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onConstructor))
 				for (A a : annotations(type, onConstructor))
-					PredicateUtils.consumeIf(filter, action, a);
+					consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onField))
 				for (A a : annotations(type, onField))
-					PredicateUtils.consumeIf(filter, action, a);
+					consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onMethod))
 				for (A a : annotations(type, onMethod))
-					PredicateUtils.consumeIf(filter, action, a);
+					consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onClass))
 				for (A a : declaredAnnotations(type, onClass))
-					PredicateUtils.consumeIf(filter, action, a);
+					consumeIf(filter, action, a);
 		}
 
 		@Override /* Overridden from MetaProvider */
@@ -138,7 +138,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (nn(type) && nn(onClass))
 				for (A a : annotations(type, onClass))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						x = a;
 			return x;
 		}
@@ -148,7 +148,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (nn(type) && nn(onConstructor))
 				for (A a : annotations(type, onConstructor))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						x = a;
 			return x;
 		}
@@ -158,7 +158,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (nn(type) && nn(onField))
 				for (A a : annotations(type, onField))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						x = a;
 			return x;
 		}
@@ -168,7 +168,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (nn(type) && nn(onMethod))
 				for (A a : annotations(type, onMethod))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						x = a;
 			return x;
 		}
@@ -178,7 +178,7 @@ public interface AnnotationProvider {
 			A x = null;
 			if (nn(type) && nn(onClass))
 				for (A a : declaredAnnotations(type, onClass))
-					if (PredicateUtils.test(filter, a))
+					if (test(filter, a))
 						x = a;
 			return x;
 		}

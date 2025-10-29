@@ -25,7 +25,6 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -186,7 +185,7 @@ public class FileEntity extends BasicHttpEntity {
 			out.write(asBytes());
 		} else {
 			try (InputStream is = getContent()) {
-				IOUtils.pipe(is, out, getMaxLength());
+				pipe(is, out, getMaxLength());
 			}
 		}
 	}

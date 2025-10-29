@@ -17,6 +17,7 @@
 package org.apache.juneau.common.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 
 import java.util.function.*;
 
@@ -26,21 +27,21 @@ public class PredicateUtils_Test {
 
     @Test
     void and_allNull_returnsTrue() {
-        Predicate<String> p = PredicateUtils.and(null, null);
+        Predicate<String> p = and(null, null);
         assertTrue(p.test("anything"));
         assertTrue(p.test(null));
     }
 
     @Test
     void and_empty_returnsTrue() {
-        Predicate<String> p = PredicateUtils.and();
+        Predicate<String> p = and();
         assertTrue(p.test("x"));
     }
 
     @Test
     void and_single_predicate() {
         Predicate<Integer> isEven = x -> x != null && x % 2 == 0;
-        Predicate<Integer> p = PredicateUtils.and(isEven);
+        Predicate<Integer> p = and(isEven);
         assertTrue(p.test(2));
         assertFalse(p.test(3));
         assertFalse(p.test(null));
@@ -50,7 +51,7 @@ public class PredicateUtils_Test {
     void and_multiple_predicates() {
         Predicate<Integer> isEven = x -> x != null && x % 2 == 0;
         Predicate<Integer> gt10 = x -> x != null && x > 10;
-        Predicate<Integer> p = PredicateUtils.and(isEven, gt10);
+        Predicate<Integer> p = and(isEven, gt10);
         assertTrue(p.test(12));
         assertFalse(p.test(11));
         assertFalse(p.test(10));
@@ -61,28 +62,28 @@ public class PredicateUtils_Test {
     @Test
     void and_ignoresNullEntries() {
         Predicate<String> startsA = s -> s != null && s.startsWith("A");
-        Predicate<String> p = PredicateUtils.and(null, startsA, null);
+        Predicate<String> p = and(null, startsA, null);
         assertTrue(p.test("Alpha"));
         assertFalse(p.test("Beta"));
     }
 
     @Test
     void or_allNull_returnsFalse() {
-        Predicate<String> p = PredicateUtils.or(null, null);
+        Predicate<String> p = or(null, null);
         assertFalse(p.test("anything"));
         assertFalse(p.test(null));
     }
 
     @Test
     void or_empty_returnsFalse() {
-        Predicate<String> p = PredicateUtils.or();
+        Predicate<String> p = or();
         assertFalse(p.test("x"));
     }
 
     @Test
     void or_single_predicate() {
         Predicate<Integer> isEven = x -> x != null && x % 2 == 0;
-        Predicate<Integer> p = PredicateUtils.or(isEven);
+        Predicate<Integer> p = or(isEven);
         assertTrue(p.test(2));
         assertFalse(p.test(3));
         assertFalse(p.test(null));
@@ -92,7 +93,7 @@ public class PredicateUtils_Test {
     void or_multiple_predicates() {
         Predicate<Integer> isEven = x -> x != null && x % 2 == 0;
         Predicate<Integer> gt10 = x -> x != null && x > 10;
-        Predicate<Integer> p = PredicateUtils.or(isEven, gt10);
+        Predicate<Integer> p = or(isEven, gt10);
         assertTrue(p.test(12));
         assertTrue(p.test(11));
         assertTrue(p.test(10));
@@ -103,7 +104,7 @@ public class PredicateUtils_Test {
     @Test
     void or_ignoresNullEntries() {
         Predicate<String> startsA = s -> s != null && s.startsWith("A");
-        Predicate<String> p = PredicateUtils.or(null, startsA, null);
+        Predicate<String> p = or(null, startsA, null);
         assertTrue(p.test("Alpha"));
         assertFalse(p.test("Beta"));
     }

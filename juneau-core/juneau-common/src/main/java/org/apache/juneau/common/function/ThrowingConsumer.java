@@ -36,7 +36,7 @@ public interface ThrowingConsumer<T> extends Consumer<T> {
 		try {
 			acceptThrows(t);
 		} catch (Exception e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

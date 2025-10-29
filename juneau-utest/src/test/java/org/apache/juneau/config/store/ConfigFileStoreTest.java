@@ -17,6 +17,7 @@
 package org.apache.juneau.config.store;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.FileUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +25,6 @@ import java.io.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class ConfigFileStoreTest extends TestBase {
@@ -32,7 +32,7 @@ class ConfigFileStoreTest extends TestBase {
 	private static final File DIR = new File("./target/config");
 
 	@AfterEach void cleanUp() {
-		FileUtils.delete(DIR);
+		deleteFile(DIR);
 	}
 
 	@Test void a01_noFile() throws Exception {
@@ -118,14 +118,14 @@ class ConfigFileStoreTest extends TestBase {
 	}
 
 	@Test void a09_charset() throws Exception {
-		var fs = FileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
+		var fs = FileStore.create().directory(DIR).charset(UTF8).build();
 		assertNull(fs.write("X.cfg", null, "foo"));
 		assertEquals("foo", fs.read("X.cfg"));
 		assertEquals("foo", fs.read("X"));
 	}
 
 	@Test void a10_charsetNoExtension() throws Exception {
-		var fs = FileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
+		var fs = FileStore.create().directory(DIR).charset(UTF8).build();
 		assertNull(fs.write("X", null, "foo"));
 		assertEquals("foo", fs.read("X"));
 		assertEquals("foo", fs.read("X.cfg"));

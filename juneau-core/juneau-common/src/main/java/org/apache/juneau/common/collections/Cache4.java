@@ -17,12 +17,12 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Simple in-memory cache for storing and retrieving objects by four-part keys.
@@ -183,7 +183,7 @@ public class Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V> 
 		this.disableCaching = builder.disableCaching;
 		this.supplier = builder.supplier;
 		if (builder.logOnExit) {
-			SystemUtils.shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
+			shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
 

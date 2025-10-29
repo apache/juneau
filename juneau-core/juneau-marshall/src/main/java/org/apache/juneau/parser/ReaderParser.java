@@ -17,6 +17,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -28,7 +29,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -63,7 +63,7 @@ public class ReaderParser extends Parser {
 		 */
 		protected Builder() {
 			fileCharset = env("ReaderParser.fileCharset", Charset.defaultCharset());
-			streamCharset = env("ReaderParser.streamCharset", IOUtils.UTF8);
+			streamCharset = env("ReaderParser.streamCharset", UTF8);
 		}
 
 		/**

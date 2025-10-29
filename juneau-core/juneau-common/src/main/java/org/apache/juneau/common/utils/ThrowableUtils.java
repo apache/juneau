@@ -49,8 +49,8 @@ public class ThrowableUtils {
 	 * @param cause The caused-by exception.
 	 * @return A new {@link RuntimeException}, or the same exception if it's already of that type.
 	 */
-	public static RuntimeException asRuntimeException(Throwable cause) {
-		return cast(RuntimeException.class, cause);
+	public static RuntimeException toRuntimeException(Throwable cause) {
+		return castException(RuntimeException.class, cause);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class ThrowableUtils {
 	 * @param t The throwable to cast.
 	 * @return Either the same exception if it's already the specified type, or a wrapped exception.
 	 */
-	public static <T> T cast(Class<T> type, Throwable t) {
+	public static <T> T castException(Class<T> type, Throwable t) {
 		try {
 			return type.isInstance(t) ? type.cast(t) : type.getConstructor(Throwable.class).newInstance(t);
 		} catch (Exception e) {
@@ -77,7 +77,7 @@ public class ThrowableUtils {
 	 * @param t The throwable to search.
 	 * @return The exception, or <jk>null</jk> if not found.
 	 */
-	public static <T extends Throwable> T getCause(Class<T> c, Throwable t) {
+	public static <T extends Throwable> T getThrowableCause(Class<T> c, Throwable t) {
 		while (nn(t)) {
 			t = t.getCause();
 			if (c.isInstance(t))

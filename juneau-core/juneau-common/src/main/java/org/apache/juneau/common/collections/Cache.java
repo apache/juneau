@@ -17,13 +17,12 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Simple in-memory cache for storing and retrieving objects by key.
@@ -310,7 +309,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 		this.disableCaching = builder.disableCaching;
 		this.supplier = builder.supplier != null ? builder.supplier : (K)->null;
 		if (builder.logOnExit) {
-			SystemUtils.shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
+			shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
 

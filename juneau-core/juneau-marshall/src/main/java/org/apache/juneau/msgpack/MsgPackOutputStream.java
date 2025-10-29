@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.msgpack.DataType.*;
 
 import java.io.*;
 import java.math.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -205,7 +205,7 @@ public class MsgPackOutputStream extends OutputStream {
 	MsgPackOutputStream appendBinary(InputStream is) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		IOUtils.pipe(is, baos, x -> {
+		pipe(is, baos, x -> {
 			throw new SerializeException(x);
 		});
 

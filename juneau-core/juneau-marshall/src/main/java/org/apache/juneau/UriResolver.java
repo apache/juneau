@@ -259,7 +259,7 @@ public class UriResolver {
 
 			return a;
 		} catch (IOException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

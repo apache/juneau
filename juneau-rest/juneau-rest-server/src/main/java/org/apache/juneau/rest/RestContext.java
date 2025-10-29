@@ -264,7 +264,7 @@ public class RestContext extends Context {
 			debugOn = env("RestContext.debugOn", null), path = null, uriAuthority = env("RestContext.uriAuthority", (String)null), uriContext = env("RestContext.uriContext", (String)null);
 		UriRelativity uriRelativity = env("RestContext.uriRelativity", UriRelativity.RESOURCE);
 		UriResolution uriResolution = env("RestContext.uriResolution", UriResolution.ROOT_RELATIVE);
-		Charset defaultCharset = env("RestContext.defaultCharset", IOUtils.UTF8);
+		Charset defaultCharset = env("RestContext.defaultCharset", UTF8);
 		long maxInput = parseLongWithSuffix(env("RestContext.maxInput", "100M"));
 
 		List<MediaType> consumes, produces;

@@ -18,6 +18,8 @@ package org.apache.juneau.collections;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -341,7 +343,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
-		if (! Utils.isEmpty(in))
+		if (isNotEmpty(in))
 			p.parseIntoMap(in, this, bs().string(), bs().object());
 	}
 
@@ -440,7 +442,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	@SafeVarargs
 	public final <T> JsonMap appendFirst(Predicate<T> test, String key, T...values) {
 		for (T v : values)
-			if (PredicateUtils.test(test, v))
+			if (test(test, v))
 				return append(key, v);
 		return this;
 	}
@@ -469,7 +471,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return This object.
 	 */
 	public <T> JsonMap appendIf(Predicate<T> test, String key, T value) {
-		return appendIf(PredicateUtils.test(test, value), key, value);
+		return appendIf(test(test, value), key, value);
 	}
 
 	/**
@@ -604,7 +606,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		if (val == null)
 			return false;
 		if (val instanceof CharSequence val2)
-			return ! Utils.isBlank(val2);
+			return isNotBlank(val2);
 		return false;
 	}
 

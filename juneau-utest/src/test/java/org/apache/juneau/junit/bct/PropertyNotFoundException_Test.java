@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -80,7 +81,7 @@ class PropertyNotFoundException_Test extends TestBase {
 
 			// This should throw PropertyNotFoundException
 			PropertyNotFoundException ex = assertThrows(PropertyNotFoundException.class, () -> {
-				converter.getNested(bean, BctUtils.tokenize("nonExistentProperty").get(0));
+				converter.getNested(bean, tokenize("nonExistentProperty").get(0));
 			});
 
 			assertTrue(ex.getMessage().contains("nonExistentProperty"));

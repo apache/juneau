@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static java.util.Arrays.*;
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -470,7 +471,7 @@ public class ClassMeta<T> implements Type {
 				if (! ba.isEmpty())
 					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
-				throw asRuntimeException(e);
+				throw toRuntimeException(e);
 			}
 			return null;
 		}
@@ -485,7 +486,7 @@ public class ClassMeta<T> implements Type {
 				if (! ba.isEmpty())
 					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
-				throw asRuntimeException(e);
+				throw toRuntimeException(e);
 			}
 			return null;
 		}
@@ -868,7 +869,7 @@ public class ClassMeta<T> implements Type {
 			return Optional.empty();
 		}
 		for (A a : array)
-			if (PredicateUtils.test(filter, a))
+			if (test(filter, a))
 				return Optional.of(a);
 		return Optional.empty();
 	}
@@ -1790,7 +1791,7 @@ public class ClassMeta<T> implements Type {
 			return Optional.empty();
 		}
 		for (int i = array.length - 1; i >= 0; i--)
-			if (PredicateUtils.test(filter, array[i]))
+			if (test(filter, array[i]))
 				return Optional.of(array[i]);
 		return Optional.empty();
 	}

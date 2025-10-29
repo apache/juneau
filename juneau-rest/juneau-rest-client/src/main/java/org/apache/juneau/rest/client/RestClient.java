@@ -6957,7 +6957,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						} catch (Exception e) {
 							throw e;
 						} catch (Throwable e) {
-							throw asRuntimeException(e);
+							throw toRuntimeException(e);
 						}
 					});
 				} else if (ror.isCompletableFuture()) {
@@ -7107,7 +7107,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					for (Class<?> t2 : method.getExceptionTypes())
 						if (t2.isInstance(e))
 							throw e;
-					throw asRuntimeException(e);
+					throw toRuntimeException(e);
 				}
 			}
 		});
@@ -7613,7 +7613,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			try {
 				x = beanStore.createBean(c).run();
 			} catch (ExecutableException e) {
-				throw asRuntimeException(e);
+				throw toRuntimeException(e);
 			}
 			partParsers.put(c, x);
 		}
@@ -7639,7 +7639,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			try {
 				x = beanStore.createBean(c).run();
 			} catch (ExecutableException e) {
-				throw asRuntimeException(e);
+				throw toRuntimeException(e);
 			}
 			partSerializers.put(c, x);
 		}
@@ -7909,7 +7909,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			for (Class<?> t2 : method.getExceptionTypes())
 				if (t2.isInstance(t))
 					throw t;
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

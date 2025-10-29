@@ -2033,7 +2033,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				try {
 					b.append(new RoleBasedRestGuard(rolesDeclared, rg));
 				} catch (java.text.ParseException e1) {
-					throw asRuntimeException(e1);
+					throw toRuntimeException(e1);
 				}
 			}
 

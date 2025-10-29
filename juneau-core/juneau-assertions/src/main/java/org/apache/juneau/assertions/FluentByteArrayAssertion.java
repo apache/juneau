@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -207,7 +207,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 */
 	@Override
 	public FluentStringAssertion<R> asString() {
-		return asString(IOUtils.UTF8);
+		return asString(UTF8);
 	}
 
 	/**

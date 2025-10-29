@@ -17,6 +17,7 @@
 package org.apache.juneau.reflect;
 
 
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -28,7 +29,6 @@ import java.util.function.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Lightweight utility class for introspecting information about a method parameter.
@@ -110,7 +110,7 @@ public class ParamInfo {
 	public <A extends Annotation> ParamInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		for (Annotation a : eInfo._getParameterAnnotations(index))
 			if (type.isInstance(a))
-				PredicateUtils.consumeIf(filter, action, type.cast(a));
+				consumeIf(filter, action, type.cast(a));
 		return this;
 	}
 
@@ -162,7 +162,7 @@ public class ParamInfo {
 			if (nn(o))
 				return o;
 			for (Annotation a2 : eInfo._getParameterAnnotations(index))
-				if (type.isInstance(a2) && PredicateUtils.test(filter, type.cast(a2)))
+				if (type.isInstance(a2) && test(filter, type.cast(a2)))
 					return (A)a2;
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
@@ -289,7 +289,7 @@ public class ParamInfo {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<ParamInfo> test) {
-		return PredicateUtils.test(test, this);
+		return test(test, this);
 	}
 
 	@Override
@@ -326,7 +326,7 @@ public class ParamInfo {
 			ci.forEachAnnotation(ap, a, filter, action);
 			for (Annotation a2 : annotations)
 				if (a.isInstance(a2))
-					PredicateUtils.consumeIf(filter, action, a.cast(a2));
+					consumeIf(filter, action, a.cast(a2));
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);

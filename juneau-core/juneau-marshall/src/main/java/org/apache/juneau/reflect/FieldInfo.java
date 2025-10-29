@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.reflect;
 
-
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -27,7 +27,6 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Lightweight utility class for introspecting information about a field.
@@ -452,7 +451,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<FieldInfo> test) {
-		return PredicateUtils.test(test, this);
+		return test(test, this);
 	}
 
 	/**

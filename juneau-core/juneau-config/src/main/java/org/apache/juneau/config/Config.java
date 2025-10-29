@@ -1021,7 +1021,7 @@ public class Config extends Context implements ConfigEventListener {
 		try {
 			return setSection(section(name), preLines, null);
 		} catch (SerializeException e) {
-			throw asRuntimeException(e);  // Impossible.
+			throw toRuntimeException(e);  // Impossible.
 		}
 	}
 

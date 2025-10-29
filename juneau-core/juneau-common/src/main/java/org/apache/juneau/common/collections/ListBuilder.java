@@ -18,6 +18,7 @@ package org.apache.juneau.common.collections;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -256,7 +257,7 @@ public class ListBuilder<E> {
 								if (nn(l))
 									addAny(l);
 								else
-									throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), elementType);
+									throw runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), elementType);
 							}
 						}
 					}

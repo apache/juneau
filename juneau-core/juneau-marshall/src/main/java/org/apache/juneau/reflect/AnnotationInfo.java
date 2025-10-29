@@ -17,6 +17,7 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -28,7 +29,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.svl.*;
 
@@ -147,7 +147,7 @@ public class AnnotationInfo<T extends Annotation> {
 	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
 		for (Method m : _getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type))
-				safe(() -> PredicateUtils.consumeIf(test, action, (V)m.invoke(a)));
+				safe(() -> consumeIf(test, action, (V)m.invoke(a)));
 		return this;
 	}
 
@@ -236,7 +236,7 @@ public class AnnotationInfo<T extends Annotation> {
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
 					V v = (V)m.invoke(a);
-					if (PredicateUtils.test(test, v))
+					if (test(test, v))
 						return opt(v);
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.
@@ -296,7 +296,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<AnnotationInfo<?>> test) {
-		return PredicateUtils.test(test, this);
+		return test(test, this);
 	}
 
 	/**

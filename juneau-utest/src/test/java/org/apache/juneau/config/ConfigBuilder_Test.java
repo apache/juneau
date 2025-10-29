@@ -40,7 +40,7 @@ class ConfigBuilder_Test extends TestBase {
 
 	@AfterAll
 	static void teardown() {
-		delete(tempDir);
+		deleteFile(tempDir);
 	}
 
 	@Test void a01_get_LONGRUNNING() throws Exception {

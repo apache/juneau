@@ -20,6 +20,7 @@ import static java.nio.file.StandardOpenOption.*;
 import static java.nio.file.StandardWatchEventKinds.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.FileUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -341,7 +342,7 @@ public class FileStore extends ConfigStore {
 			try {
 				watchService.close();
 			} catch (IOException e) {
-				throw asRuntimeException(e);
+				throw toRuntimeException(e);
 			} finally {
 				super.interrupt();
 			}
@@ -362,7 +363,7 @@ public class FileStore extends ConfigStore {
 						break;
 				}
 			} catch (Exception e) {
-				throw asRuntimeException(e);
+				throw toRuntimeException(e);
 			}
 		}
 
@@ -424,7 +425,7 @@ public class FileStore extends ConfigStore {
 			if (nn(watcher))
 				watcher.start();
 		} catch (Exception e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 
@@ -591,13 +592,13 @@ public class FileStore extends ConfigStore {
 			var n = (String)null;
 
 			// Does file exist as-is?
-			if (FileUtils.exists(dir, name))
+			if (fileExists(dir, name))
 				n = name;
 
 			// Does name already have an extension?
 			if (n == null) {
 				for (var ext : exts) {
-					if (FileUtils.hasExtension(name, ext)) {
+					if (hasExtension(name, ext)) {
 						n = name;
 						break;
 					}
@@ -607,7 +608,7 @@ public class FileStore extends ConfigStore {
 			// Find file with the correct extension.
 			if (n == null) {
 				for (var ext : exts) {
-					if (FileUtils.exists(dir, name + '.' + ext)) {
+					if (fileExists(dir, name + '.' + ext)) {
 						n = name + '.' + ext;
 						break;
 					}

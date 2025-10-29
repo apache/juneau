@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +37,6 @@ import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
@@ -218,7 +218,7 @@ class RestClient_Test extends TestBase {
 		var x = new HttpGet("http://localhost/bean");
 		x.addHeader("Accept","text/json5");
 		var res = MockRestClient.create(A.class).build().execute(x);
-		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
+		assertEquals("{f:1}",read(res.getEntity().getContent()));
 	}
 
 	@Test void c08_httpClient_executeHttpHostHttpRequest() throws Exception {
@@ -226,7 +226,7 @@ class RestClient_Test extends TestBase {
 		var target = new HttpHost("localhost");
 		x.addHeader("Accept","text/json5");
 		var res = MockRestClient.create(A.class).build().execute(target,x);
-		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
+		assertEquals("{f:1}",read(res.getEntity().getContent()));
 	}
 
 	@Test void c09_httpClient_executeHttpHostHttpRequestHttpContext() throws Exception {
@@ -235,7 +235,7 @@ class RestClient_Test extends TestBase {
 		var context = new BasicHttpContext();
 		x.addHeader("Accept","text/json5");
 		var res = MockRestClient.create(A.class).build().execute(target,x,context);
-		assertEquals("{f:1}",IOUtils.read(res.getEntity().getContent()));
+		assertEquals("{f:1}",read(res.getEntity().getContent()));
 	}
 
 	@Test void c10_httpClient_executeResponseHandler() throws Exception {

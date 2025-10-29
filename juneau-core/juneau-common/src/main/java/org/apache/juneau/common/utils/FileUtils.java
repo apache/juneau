@@ -17,6 +17,7 @@
 package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -46,9 +47,9 @@ public class FileUtils {
 			return;
 		try {
 			if (! f.createNewFile())
-				throw ThrowableUtils.runtimeException("Could not create file ''{0}''", f.getAbsolutePath());
+				throw runtimeException("Could not create file ''{0}''", f.getAbsolutePath());
 		} catch (IOException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 
@@ -91,7 +92,7 @@ public class FileUtils {
 	public static File createTempFile(String name, String contents) throws IOException {
 		File f = createTempFile(name);
 		try (Reader r = new StringReader(contents); Writer w = new FileWriter(f)) {
-			IOUtils.pipe(r, w);
+			pipe(r, w);
 			w.flush();
 		}
 		return f;
@@ -103,14 +104,14 @@ public class FileUtils {
 	 * @param f The file or directory to delete.
 	 * @return <jk>true</jk> if file or directory was successfully deleted.
 	 */
-	public static boolean delete(File f) {
+	public static boolean deleteFile(File f) {
 		if (f == null)
 			return true;
 		if (f.isDirectory()) {
 			File[] cf = f.listFiles();
 			if (nn(cf))
 				for (File c : cf)
-					delete(c);
+					deleteFile(c);
 		}
 		return f.delete();
 	}
@@ -122,7 +123,7 @@ public class FileUtils {
 	 * @param fileName The file name.
 	 * @return <jk>true</jk> if the specified file exists in the specified directory.
 	 */
-	public static boolean exists(File dir, String fileName) {
+	public static boolean fileExists(File dir, String fileName) {
 		if (dir == null || fileName == null)
 			return false;
 		return Files.exists(dir.toPath().resolve(fileName));
@@ -149,7 +150,7 @@ public class FileUtils {
 	 * @param name The file name.
 	 * @return The the extension, or <jk>null</jk> if name was <jk>null</jk>.
 	 */
-	public static String getExtension(String name) {
+	public static String getFileExtension(String name) {
 		if (name == null)
 			return null;
 		int i = name.lastIndexOf('.');
@@ -182,7 +183,7 @@ public class FileUtils {
 	public static boolean hasExtension(String name, String ext) {
 		if (name == null || ext == null)
 			return false;
-		return ext.equals(getExtension(name));
+		return ext.equals(getFileExtension(name));
 	}
 
 	/**
@@ -197,14 +198,14 @@ public class FileUtils {
 		assertArgNotNull("f", f);
 		if (f.exists()) {
 			if (clean) {
-				if (! delete(f))
-					throw ThrowableUtils.runtimeException("Could not clean directory ''{0}''", f.getAbsolutePath());
+				if (! deleteFile(f))
+					throw runtimeException("Could not clean directory ''{0}''", f.getAbsolutePath());
 			} else {
 				return f;
 			}
 		}
 		if (! f.mkdirs())
-			throw ThrowableUtils.runtimeException("Could not create directory ''{0}''", f.getAbsolutePath());
+			throw runtimeException("Could not create directory ''{0}''", f.getAbsolutePath());
 		return f;
 	}
 
@@ -234,13 +235,13 @@ public class FileUtils {
 		if (lm == l)
 			l++;
 		if (! f.setLastModified(l))
-			throw ThrowableUtils.runtimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
+			throw runtimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
 
 		// Linux only gives 1s precision, so set the date 1s into the future.
 		if (lm == f.lastModified()) {
 			l += 1000;
 			if (! f.setLastModified(l))
-				throw ThrowableUtils.runtimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
+				throw runtimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
 		}
 	}
 }

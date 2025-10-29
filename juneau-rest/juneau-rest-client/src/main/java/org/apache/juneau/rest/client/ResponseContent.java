@@ -239,7 +239,7 @@ public class ResponseContent implements HttpEntity {
 				try {
 					return (T)ci.invoke(response);
 				} catch (ExecutableException e) {
-					throw asRuntimeException(e);
+					throw toRuntimeException(e);
 				}
 			}
 
@@ -764,7 +764,7 @@ public class ResponseContent implements HttpEntity {
 			if (ct.contains("charset="))
 				cs = ct.substring(ct.indexOf("charset=") + 8).trim();
 
-		return asReader(cs == null ? IOUtils.UTF8 : Charset.forName(cs));
+		return asReader(cs == null ? UTF8 : Charset.forName(cs));
 	}
 
 	/**
@@ -789,7 +789,7 @@ public class ResponseContent implements HttpEntity {
 	 * @throws IOException If an exception occurred.
 	 */
 	public Reader asReader(Charset charset) throws IOException {
-		return new InputStreamReader(asInputStream(), charset == null ? IOUtils.UTF8 : charset);
+		return new InputStreamReader(asInputStream(), charset == null ? UTF8 : charset);
 	}
 
 	/**

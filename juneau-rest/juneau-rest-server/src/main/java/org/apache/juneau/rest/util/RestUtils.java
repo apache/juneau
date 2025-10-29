@@ -327,7 +327,7 @@ public class RestUtils {
 				return m;
 			}
 		} catch (IOException e) {
-			throw asRuntimeException(e); // Should never happen.
+			throw toRuntimeException(e); // Should never happen.
 		}
 	}
 

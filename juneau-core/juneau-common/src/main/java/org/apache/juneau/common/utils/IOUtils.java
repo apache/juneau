@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.SystemUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -53,8 +54,8 @@ public class IOUtils {
 	static final AtomicInteger CHAR_BUFFER_CACHE_HITS = new AtomicInteger();
 	static final AtomicInteger CHAR_BUFFER_CACHE_MISSES = new AtomicInteger();
 	static {
-		SystemUtils.shutdownMessage(() -> "Byte buffer cache:  hits=" + BYTE_BUFFER_CACHE_HITS.get() + ", misses=" + BYTE_BUFFER_CACHE_MISSES);
-		SystemUtils.shutdownMessage(() -> "Char buffer cache:  hits=" + CHAR_BUFFER_CACHE_HITS.get() + ", misses=" + CHAR_BUFFER_CACHE_MISSES);
+		shutdownMessage(() -> "Byte buffer cache:  hits=" + BYTE_BUFFER_CACHE_HITS.get() + ", misses=" + BYTE_BUFFER_CACHE_MISSES);
+		shutdownMessage(() -> "Char buffer cache:  hits=" + CHAR_BUFFER_CACHE_HITS.get() + ", misses=" + CHAR_BUFFER_CACHE_MISSES);
 	}
 
 	/** Reusable empty reader. */

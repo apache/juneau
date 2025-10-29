@@ -17,6 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -29,7 +30,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
 
@@ -60,7 +60,7 @@ public class WriterSerializer extends Serializer {
 		 */
 		protected Builder() {
 			fileCharset = Charset.defaultCharset();
-			streamCharset = IOUtils.UTF8;
+			streamCharset = UTF8;
 			maxIndent = env("WriterSerializer.maxIndent", 100);
 			quoteChar = env("WriterSerializer.quoteChar", (Character)null);
 			quoteCharOverride = env("WriterSerializer.quoteCharOverride", (Character)null);
@@ -1049,7 +1049,7 @@ public class WriterSerializer extends Serializer {
 		try {
 			return serialize(o);
 		} catch (Exception e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

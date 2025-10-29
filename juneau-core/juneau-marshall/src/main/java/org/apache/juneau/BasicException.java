@@ -17,10 +17,9 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.text.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Subclass of non-runtime exceptions that take in a message and zero or more arguments.
@@ -74,7 +73,7 @@ public abstract class BasicException extends Exception {
 	 * @return The exception, or <jk>null</jk> if not found.
 	 */
 	public <T extends Throwable> T getCause(Class<T> c) {
-		return ThrowableUtils.getCause(c, this);
+		return getThrowableCause(c, this);
 	}
 
 	/**

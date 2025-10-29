@@ -18,6 +18,7 @@ package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
@@ -27,8 +28,6 @@ import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
 import java.util.regex.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Log entry formatter.
@@ -223,7 +222,7 @@ public class LogEntryFormatter extends Formatter {
 		String s = String.format(format, df.format(new Date(r.getMillis())), r.getSourceClassName(), r.getSourceMethodName(), r.getLoggerName(), r.getLevel(), msg, r.getThreadID(),
 			r.getThrown() == null ? "" : r.getThrown().getMessage());
 		if (nn(t))
-			s += String.format("%n%s", ThrowableUtils.getStackTrace(r.getThrown()));
+			s += String.format("%n%s", getStackTrace(r.getThrown()));
 		return s;
 	}
 

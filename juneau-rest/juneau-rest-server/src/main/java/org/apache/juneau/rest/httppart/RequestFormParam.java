@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.httppart;
 
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -184,7 +185,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 */
 	public InputStream getStream() throws IOException {
 		if (nn(value))
-			return new ByteArrayInputStream(value.getBytes(IOUtils.UTF8));
+			return new ByteArrayInputStream(value.getBytes(UTF8));
 		return part.getInputStream();
 	}
 
@@ -201,7 +202,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 			try {
 				value = IOUtils.read(part.getInputStream());
 			} catch (IOException e) {
-				throw asRuntimeException(e);
+				throw toRuntimeException(e);
 			}
 		return value;
 	}

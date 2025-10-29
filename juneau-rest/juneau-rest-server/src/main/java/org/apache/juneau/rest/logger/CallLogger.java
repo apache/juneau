@@ -20,6 +20,7 @@ import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
@@ -627,7 +628,7 @@ public class CallLogger {
 			if (nn(reqContent) && reqContent.length > 0 && reqd == ENTITY) {
 				try {
 					sb.append("\n---Request Content UTF-8---");
-					sb.append("\n").append(new String(reqContent, IOUtils.UTF8));
+					sb.append("\n").append(new String(reqContent, UTF8));
 					sb.append("\n---Request Content Hex---");
 					sb.append("\n").append(toSpacedHex(reqContent));
 				} catch (Exception e1) {
@@ -638,7 +639,7 @@ public class CallLogger {
 			if (nn(resContent) && resContent.length > 0 && resd == ENTITY) {
 				try {
 					sb.append("\n---Response Content UTF-8---");
-					sb.append("\n").append(new String(resContent, IOUtils.UTF8));
+					sb.append("\n").append(new String(resContent, UTF8));
 					sb.append("\n---Response Content Hex---");
 					sb.append("\n").append(toSpacedHex(resContent));
 				} catch (Exception e1) {

@@ -17,6 +17,7 @@
 package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.FileUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.nio.file.*;
@@ -324,7 +325,7 @@ public class MimeTypeDetector {
 		}
 
 		// Fall back to extension-based detection
-		var extension = FileUtils.getExtension(fileName);
+		var extension = getFileExtension(fileName);
 		if (isNotEmpty(extension)) {
 			var mimeType = extMap.get(extension.toLowerCase());
 			if (nn(mimeType)) {

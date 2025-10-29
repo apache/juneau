@@ -17,6 +17,7 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.beans.*;
@@ -27,7 +28,6 @@ import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -222,7 +222,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		for (int i = m.length - 1; i >= 0; i--)
 			for (Annotation a2 : m[i]._getDeclaredAnnotations())
 				if (type.isInstance(a2))
-					PredicateUtils.consumeIf(filter, action, type.cast(a2));
+					consumeIf(filter, action, type.cast(a2));
 		getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
 		return this;
 	}
@@ -280,7 +280,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public MethodInfo forEachMatching(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo m : _getMatching())
-			PredicateUtils.consumeIf(filter, action, m);
+			consumeIf(filter, action, m);
 		return this;
 	}
 
@@ -297,7 +297,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public MethodInfo forEachMatchingParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		MethodInfo[] m = _getMatching();
 		for (int i = m.length - 1; i >= 0; i--)
-			PredicateUtils.consumeIf(filter, action, m[i]);
+			consumeIf(filter, action, m[i]);
 		return this;
 	}
 
@@ -684,7 +684,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<MethodInfo> test) {
-		return PredicateUtils.test(test, this);
+		return test(test, this);
 	}
 
 	private MethodInfo findMatchingOnClass(ClassInfo c) {

@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -206,7 +207,7 @@ public class MapBuilder<K,V> {
 					if (nn(m))
 						addAny(m);
 					else
-						throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), "Map");
+						throw runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), "Map");
 				}
 			}
 		}
@@ -245,7 +246,7 @@ public class MapBuilder<K,V> {
 			if (nn(e))
 				return e;
 		}
-		throw ThrowableUtils.runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), c);
+		throw runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), c);
 	}
 
 	/**

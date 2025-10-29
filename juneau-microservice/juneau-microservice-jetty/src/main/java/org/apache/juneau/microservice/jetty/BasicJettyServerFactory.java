@@ -16,10 +16,12 @@
  */
 package org.apache.juneau.microservice.jetty;
 
+import static org.apache.juneau.common.utils.FileUtils.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
+
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.common.utils.*;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.resource.*;
 import org.eclipse.jetty.xml.*;
@@ -37,9 +39,9 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 	public Server create(String jettyXml) throws Exception {
 		Objects.requireNonNull(jettyXml,
 			"jetty.xml file location was not specified in the configuration file (Jetty/config) or manifest file (Jetty-Config) or found on the file system or classpath.");
-		File f = FileUtils.createTempFile("jetty.xml");
+		File f = createTempFile("jetty.xml");
 		try (Reader r = new StringReader(jettyXml); Writer w = new FileWriter(f)) {
-			IOUtils.pipe(r, w);
+			pipe(r, w);
 			w.flush();
 		}
 		XmlConfiguration xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f.toPath()));

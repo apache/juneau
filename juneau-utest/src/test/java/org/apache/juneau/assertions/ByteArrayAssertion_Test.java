@@ -18,10 +18,10 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
@@ -104,9 +104,9 @@ class ByteArrayAssertion_Test extends TestBase {
 
 	@Test void bc01_asString_wCharset() {
 		byte[] x = {'a','b'}, nil = null;
-		test(x).asString(IOUtils.UTF8).is("ab");
-		test(nil).asString(IOUtils.UTF8).isNull();
-		assertThrown(()->test(x).asString(IOUtils.UTF8).is("xx")).asMessage().asOneLine().is("String differed at position 0.  Expect='xx'.  Actual='ab'.");
+		test(x).asString(UTF8).is("ab");
+		test(nil).asString(UTF8).isNull();
+		assertThrown(()->test(x).asString(UTF8).is("xx")).asMessage().asOneLine().is("String differed at position 0.  Expect='xx'.  Actual='ab'.");
 	}
 
 	@Test void bc02_asBase64() {

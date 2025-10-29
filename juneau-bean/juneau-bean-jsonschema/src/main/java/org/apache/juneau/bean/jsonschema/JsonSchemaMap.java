@@ -119,7 +119,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 				return null;
 			return JsonParser.DEFAULT.parse(r, JsonSchema.class);
 		} catch (Exception e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

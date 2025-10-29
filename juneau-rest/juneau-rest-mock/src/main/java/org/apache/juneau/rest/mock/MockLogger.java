@@ -194,7 +194,7 @@ public class MockLogger extends Logger {
 		try {
 			baos.write(getFormatter().format(record).getBytes("UTF-8"));
 		} catch (Exception e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

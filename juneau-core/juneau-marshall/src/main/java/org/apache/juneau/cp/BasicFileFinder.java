@@ -213,7 +213,7 @@ public class BasicFileFinder implements FileFinder {
 
 		List<String> list = new ArrayList<>();
 		String baseName = getBaseName(fileName);
-		String ext = getExtension(fileName);
+		String ext = getFileExtension(fileName);
 
 		getCandidateLocales(locale).forEach(x -> {
 			String ls = x.toString();

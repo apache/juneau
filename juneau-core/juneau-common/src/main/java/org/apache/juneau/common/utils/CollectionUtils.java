@@ -2,6 +2,7 @@ package org.apache.juneau.common.utils;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -1671,7 +1672,7 @@ public class CollectionUtils {
 			return null;  // NOSONAR
 		}
 
-		assertArg(Utils.isArray(array), "Input must be an array but was {0}", array.getClass().getName());
+		assertArg(isArray(array), "Input must be an array but was {0}", array.getClass().getName());
 
 		var componentType = array.getClass().getComponentType();
 		var length = Array.getLength(array);
@@ -1872,9 +1873,9 @@ public class CollectionUtils {
 			return toList(o2.entrySet());
 		if (o instanceof Optional<?> o2)
 			return o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());
-		if (Utils.isArray(o))
+		if (isArray(o))
 			return arrayToList(o);
-		throw ThrowableUtils.runtimeException("Could not convert object of type {0} to a list", Utils.cn(o));
+		throw runtimeException("Could not convert object of type {0} to a list", cn(o));
 	}
 
 	/**
@@ -1883,7 +1884,7 @@ public class CollectionUtils {
 	 * @return A new stream.
 	 */
 	public static Stream<Object> toStream(Object array) {
-		assertArg(Utils.isArray(array), "Arg was not an array.  Type: {0}", array.getClass().getName());
+		assertArg(isArray(array), "Arg was not an array.  Type: {0}", array.getClass().getName());
 		var length = Array.getLength(array);
 		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}
@@ -1943,7 +1944,7 @@ public class CollectionUtils {
 			o2.forEach(x -> traverse(x, c));
 		else if (o instanceof Stream<?> o2)
 			o2.forEach(x -> traverse(x, c));
-		else if (Utils.isArray(o))
+		else if (isArray(o))
 			toStream(o).forEach(x -> traverse(x, c));
 		else
 			c.accept((T)o);

@@ -285,7 +285,7 @@ public class EncoderSet {
 		try {
 			return bs.createBean(Encoder.class).type((Class<?>)o).run();
 		} catch (ExecutableException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

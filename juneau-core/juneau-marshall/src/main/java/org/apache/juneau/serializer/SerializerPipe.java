@@ -17,7 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.cast;
+import static org.apache.juneau.common.utils.ThrowableUtils.castException;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -176,7 +176,7 @@ public class SerializerPipe implements Closeable {
 			else
 				throw new SerializeException("Cannot convert object of type " + cn(output) + " to a Writer.");
 		} catch (FileNotFoundException e) {
-			throw cast(SerializeException.class, e);
+			throw castException(SerializeException.class, e);
 		}
 
 		return new NoCloseWriter(writer);

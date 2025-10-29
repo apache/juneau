@@ -385,7 +385,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				try {
 					getPropertyMeta(k).setArray(b, v);
 				} catch (Exception e1) {
-					throw asRuntimeException(e1);
+					throw toRuntimeException(e1);
 				}
 			});
 			arrayPropertyCache = null;

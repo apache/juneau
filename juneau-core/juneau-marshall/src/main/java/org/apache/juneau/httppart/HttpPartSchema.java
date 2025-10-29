@@ -3539,7 +3539,7 @@ public class HttpPartSchema {
 		try {
 			return JsonMap.ofJson(s);
 		} catch (ParseException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 
@@ -3550,7 +3550,7 @@ public class HttpPartSchema {
 					return parseNumber(ss, Number.class);
 			return null;
 		} catch (ParseException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 
@@ -3561,7 +3561,7 @@ public class HttpPartSchema {
 		try {
 			JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
 		} catch (ParseException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 		return set;
 	}

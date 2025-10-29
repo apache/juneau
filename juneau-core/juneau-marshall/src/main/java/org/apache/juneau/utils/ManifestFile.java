@@ -17,6 +17,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -27,7 +28,6 @@ import java.util.jar.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Utility class for working with Jar manifest files.
@@ -64,7 +64,7 @@ public class ManifestFile extends JsonMap {
 			var mf = new Manifest(new URL(manifestPath).openStream());
 			load(mf);
 		} catch (MalformedURLException e) {
-			throw ThrowableUtils.cast(IOException.class, e);
+			throw castException(IOException.class, e);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

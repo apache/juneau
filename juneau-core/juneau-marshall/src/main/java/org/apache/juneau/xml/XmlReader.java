@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.common.utils.ThrowableUtils.cast;
+import static org.apache.juneau.common.utils.ThrowableUtils.castException;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -74,7 +74,7 @@ public class XmlReader implements XMLStreamReader, Positionable {
 			sr.nextTag();
 			pipe.setPositionable(this);
 		} catch (Error e) {
-			throw cast(IOException.class, e);
+			throw castException(IOException.class, e);
 		}
 	}
 

@@ -32,7 +32,6 @@ import java.util.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.cp.*;
@@ -557,7 +556,7 @@ public class JettyMicroservice extends Microservice {
 		boolean resolveVars = firstNonNull(builder.jettyXmlResolveVars, cf.get("Jetty/resolveVars").asBoolean().orElse(false));
 
 		if (jettyXml == null)
-			jettyXml = IOUtils.loadSystemResourceAsString("jetty.xml", ".", "files");
+			jettyXml = loadSystemResourceAsString("jetty.xml", ".", "files");
 		if (jettyXml == null)
 			throw new BasicRuntimeException("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
 
@@ -714,7 +713,7 @@ public class JettyMicroservice extends Microservice {
 		try {
 			return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);
 		} catch (URISyntaxException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

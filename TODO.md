@@ -21,15 +21,15 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [x] TODO-42 Use static imports for all method calls to ClassUtils.
 - [x] TODO-43 Use static imports for all method calls to CollectionUtils.
 - [x] TODO-44 Use static imports for all method calls to DateUtils.
-- [ ] TODO-45 Use static imports for all method calls to FileUtils.
-- [ ] TODO-46 Use static imports for all method calls to IOUtils.
-- [ ] TODO-47 Use static imports for all method calls to PredicateUtils.
-- [ ] TODO-48 Use static imports for all method calls to ResourceBundleUtils.
+- [x] TODO-45 Use static imports for all method calls to FileUtils.
+- [x] TODO-46 Use static imports for all method calls to IOUtils.
+- [x] TODO-47 Use static imports for all method calls to PredicateUtils.
+- [x] TODO-48 Use static imports for all method calls to ResourceBundleUtils.
 - [ ] TODO-49 Use static imports for all method calls to StringUtils.
-- [ ] TODO-50 Use static imports for all method calls to SystemUtils.
-- [ ] TODO-51 Use static imports for all method calls to ThrowableUtils.
+- [x] TODO-50 Use static imports for all method calls to SystemUtils.
+- [x] TODO-51 Use static imports for all method calls to ThrowableUtils.
 - [ ] TODO-52 Use static imports for all method calls to Utils.
-- [ ] TODO-53 Use static imports for all method calls to BctUtils.
+- [x] TODO-53 Use static imports for all method calls to BctUtils.
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
 - [ ] TODO-66 There are two ArrayUtilsTest classes whose tests should be merged into CollectionUtils_Test.
 - [ ] TODO-67 Add to ThrowableUtils: unsupportedOp, ioException.

@@ -154,7 +154,7 @@ public class DateUtils {
 			}
 			return DateTimeFormatter.ofPattern(pattern);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

@@ -37,7 +37,7 @@ public interface ThrowingFunction<T,R> extends Function<T,R> {
 		try {
 			return applyThrows(t);
 		} catch (Exception e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

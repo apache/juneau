@@ -46,7 +46,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 		FileNameMatcher(String pattern) {
 			super(pattern);
-			String base = getBaseName(pattern), ext = getExtension(pattern);
+			String base = getBaseName(pattern), ext = getFileExtension(pattern);
 			basePattern = base.equals("*") ? null : base;
 			extPattern = ext.equals("*") ? null : ext;
 			this.comparator = pattern.replaceAll("\\w+", "X").replace("*", "W");
@@ -59,7 +59,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 		public UrlPathMatch match(UrlPath pathInfo) {
 			Optional<String> fileName = pathInfo.getFileName();
 			if (fileName.isPresent()) {
-				String base = getBaseName(fileName.get()), ext = getExtension(fileName.get());
+				String base = getBaseName(fileName.get()), ext = getFileExtension(fileName.get());
 				if ((basePattern == null || basePattern.equals(base)) && (extPattern == null || extPattern.equals(ext)))
 					return new UrlPathMatch(pathInfo.getPath(), pathInfo.getParts().length, new String[0], new String[0]);
 			}

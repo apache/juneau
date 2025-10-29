@@ -116,7 +116,7 @@ public class SerializedEntity extends BasicHttpEntity {
 			writeTo(baos);
 			return new ByteArrayInputStream(baos.toByteArray());
 		} catch (IOException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

@@ -211,7 +211,7 @@ public class VarResolverSession {
 		try {
 			return resolveTo(s, new StringWriter()).toString();
 		} catch (IOException e) {
-			throw asRuntimeException(e); // Never happens.
+			throw toRuntimeException(e); // Never happens.
 		}
 	}
 

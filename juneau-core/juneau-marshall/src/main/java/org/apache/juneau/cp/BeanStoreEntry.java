@@ -18,6 +18,7 @@ package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.function.*;
 
@@ -122,7 +123,7 @@ public class BeanStoreEntry<T> {
 	protected JsonMap properties() {
 		// @formatter:off
 		return filteredMap()
-			.append("type", Utils.scn(getType()))
+			.append("type", scn(getType()))
 			.append("bean", Utils2.identity(get()))
 			.append("name", getName());
 		// @formatter:on

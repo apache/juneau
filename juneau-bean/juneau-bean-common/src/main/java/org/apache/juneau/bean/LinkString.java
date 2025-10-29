@@ -153,7 +153,7 @@ public class LinkString implements Comparable<LinkString> {
 			try {
 				args[i] = OpenApiSerializer.DEFAULT.getSession().serialize(HttpPartType.PATH, null, args[i]);
 			} catch (SchemaValidationException | SerializeException e) {
-				throw asRuntimeException(e);
+				throw toRuntimeException(e);
 			}
 		this.uri = java.net.URI.create(format(value, args));
 		return this;

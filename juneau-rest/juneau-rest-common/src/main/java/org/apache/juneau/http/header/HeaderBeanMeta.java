@@ -155,7 +155,7 @@ public class HeaderBeanMeta<T> {
 		try {
 			return constructor.newInstance(args);
 		} catch (Exception e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 

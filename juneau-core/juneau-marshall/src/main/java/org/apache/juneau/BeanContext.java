@@ -3513,7 +3513,7 @@ public class BeanContext extends Context {
 		try {
 			propertyNamerBean = propertyNamer.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 
 		LinkedList<ObjectSwap<?,?>> _swaps = new LinkedList<>();

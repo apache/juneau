@@ -428,7 +428,7 @@ public class ConfigMap implements ConfigStoreListener {
 				this.changes.forEach(y -> applyChange(false, y));
 			}
 		} catch (IOException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 		if (nn(changes2) && ! changes2.isEmpty())
 			signal(changes2);
@@ -508,7 +508,7 @@ public class ConfigMap implements ConfigStoreListener {
 				changes.clear();
 				load(contents);
 			} catch (IOException e) {
-				throw asRuntimeException(e);
+				throw toRuntimeException(e);
 			}
 		}
 		return this;
@@ -665,7 +665,7 @@ public class ConfigMap implements ConfigStoreListener {
 				cs.writeTo(sw);
 			return sw.toString();
 		} catch (IOException e) {
-			throw asRuntimeException(e);  // Not possible.
+			throw toRuntimeException(e);  // Not possible.
 		}
 	}
 

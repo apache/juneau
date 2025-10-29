@@ -260,7 +260,7 @@ public class MockServletRequest implements HttpServletRequest {
 			else if (nn(value))
 				this.content = value.toString().getBytes();
 		} catch (IOException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 		return this;
 	}

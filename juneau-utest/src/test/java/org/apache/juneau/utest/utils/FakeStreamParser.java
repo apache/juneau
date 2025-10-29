@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.utest.utils;
 
+import static org.apache.juneau.common.utils.IOUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -75,7 +76,7 @@ public class FakeStreamParser extends InputStreamParser {
 	@Override
 	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		if (function != null)
-			return type.cast(function.apply((InputStreamParserSession)session, IOUtils.readBytes(pipe.getInputStream()), type));
+			return type.cast(function.apply((InputStreamParserSession)session, readBytes(pipe.getInputStream()), type));
 		return null;
 	}
 }

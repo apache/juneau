@@ -155,7 +155,7 @@ public class StringUtils {
 		if (in == null)
 			return null;  // NOSONAR - Intentional.
 
-		var bIn = in.getBytes(IOUtils.UTF8);
+		var bIn = in.getBytes(UTF8);
 
 		assertArg(bIn.length % 4 == 0, "Invalid BASE64 string length.  Must be multiple of 4.");
 
@@ -199,7 +199,7 @@ public class StringUtils {
 		var b = base64Decode(in);
 		if (b == null)
 			return null;
-		return new String(b, IOUtils.UTF8);
+		return new String(b, UTF8);
 	}
 
 	/**
@@ -242,7 +242,7 @@ public class StringUtils {
 	public static String base64EncodeToString(String in) {
 		if (in == null)
 			return null;
-		return base64Encode(in.getBytes(IOUtils.UTF8));
+		return base64Encode(in.getBytes(UTF8));
 	}
 
 	/**
@@ -1347,7 +1347,7 @@ public class StringUtils {
 	 * @param str The string to check.
 	 * @return <jk>true</jk> if the string is not null, not empty, and contains non-whitespace characters.
 	 */
-	public static boolean isNotBlank(String str) {
+	public static boolean isNotBlank(CharSequence str) {
 		return ! isBlank(str);
 	}
 
@@ -2815,9 +2815,9 @@ public class StringUtils {
 	 */
 	public static List<String> splitNestedInner(String s) {
 		if (s == null)
-			throw ThrowableUtils.illegalArg("String was null.");
+			throw illegalArg("String was null.");
 		if (isEmpty(s))
-			throw ThrowableUtils.illegalArg("String was empty.");
+			throw illegalArg("String was empty.");
 
 		// S1: Looking for '{'
 		// S2: Found '{', looking for '}'
@@ -2857,9 +2857,9 @@ public class StringUtils {
 		}
 
 		if (start == -1)
-			throw ThrowableUtils.illegalArg("Start character '{' not found in string.", s);
+			throw illegalArg("Start character '{' not found in string:  {0}", s);
 		if (end == -1)
-			throw ThrowableUtils.illegalArg("End character '}' not found in string.", s);
+			throw illegalArg("End character '}' not found in string  {0}", s);
 		return splitNested(s.substring(start, end));
 	}
 
@@ -3348,7 +3348,7 @@ public class StringUtils {
 		try {
 			return new URI(o.toString());
 		} catch (URISyntaxException e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 
@@ -3359,7 +3359,7 @@ public class StringUtils {
 	 * @return The UTF-8 string representation, or <jk>null</jk> if the array is <jk>null</jk>.
 	 */
 	public static String toUtf8(byte[] b) {
-		return b == null ? null : new String(b, IOUtils.UTF8);
+		return b == null ? null : new String(b, UTF8);
 	}
 
 	/**
@@ -3369,7 +3369,7 @@ public class StringUtils {
 	 * @return The UTF-8 string representation of the input stream contents, or <jk>null</jk> if the stream is <jk>null</jk>.
 	 */
 	public static String toUtf8(InputStream is) {
-		return safe(() -> is == null ? null : new String(readBytes(is), IOUtils.UTF8));
+		return safe(() -> is == null ? null : new String(readBytes(is), UTF8));
 	}
 
 	/**
@@ -3677,7 +3677,7 @@ public class StringUtils {
 
 					caw.flush();
 					var s2 = new String(caw.toCharArray());
-					var ba = s2.getBytes(IOUtils.UTF8);
+					var ba = s2.getBytes(UTF8);
 					for (var element : ba) {
 						sb.append('%');
 						var ch = forDigit((element >> 4) & 0xF, 16);
@@ -3766,7 +3766,7 @@ public class StringUtils {
 			}
 			return -1;
 		} catch (Exception e) {
-			throw asRuntimeException(e);
+			throw toRuntimeException(e);
 		}
 	}
 
@@ -4075,9 +4075,9 @@ public class StringUtils {
 		if (o instanceof InputStream o2)
 			return toHex(o2);
 		if (o instanceof Reader o2)
-			return safe(() -> IOUtils.read(o2));
+			return safe(() -> read(o2));
 		if (o instanceof File o2)
-			return safe(() -> IOUtils.read(o2));
+			return safe(() -> read(o2));
 		if (o instanceof byte[] o2)
 			return toHex(o2);
 		if (o instanceof Enum o2)

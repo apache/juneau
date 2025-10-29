@@ -17,11 +17,10 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.
@@ -81,7 +80,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @return The exception, or <jk>null</jk> if not found.
 	 */
 	public <T extends Throwable> T getCause(Class<T> c) {
-		return ThrowableUtils.getCause(c, this);
+		return getThrowableCause(c, this);
 	}
 
 	@Override /* Overridden from Throwable */

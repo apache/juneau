@@ -26,7 +26,6 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -173,7 +172,7 @@ public class BasicHttpEntity implements HttpEntity {
 	public Charset getCharset() { return charset == null ? UTF8 : charset; }
 
 	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException, UnsupportedOperationException { return IOUtils.EMPTY_INPUT_STREAM; }
+	public InputStream getContent() throws IOException, UnsupportedOperationException { return EMPTY_INPUT_STREAM; }
 
 	@Override /* Overridden from HttpEntity */
 	public Header getContentEncoding() { return contentEncoding; }

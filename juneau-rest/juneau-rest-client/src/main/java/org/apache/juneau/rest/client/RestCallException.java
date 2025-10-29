@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
@@ -103,7 +104,7 @@ public class RestCallException extends HttpException {
 	 * @return The cause of the specified type, or <jk>null</jk> of not found.
 	 */
 	public <T extends Throwable> T getCause(Class<T> c) {
-		return ThrowableUtils.getCause(c, this);
+		return getThrowableCause(c, this);
 	}
 
 	/**

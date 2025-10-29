@@ -18,6 +18,7 @@ package org.apache.juneau.http.part;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -252,7 +253,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList forEach(Predicate<NameValuePair> filter, Consumer<NameValuePair> action) {
-		forEach(x -> PredicateUtils.consumeIf(filter, action, x));
+		forEach(x -> consumeIf(filter, action, x));
 		return this;
 	}
 
