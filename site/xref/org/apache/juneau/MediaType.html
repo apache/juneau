@@ -224,7 +224,7 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, (<a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a>)o, (x, y) -&gt; eq(x.string, y.string));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.string, y.string));
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<em class="jxr_javadoccomment">/**</em>

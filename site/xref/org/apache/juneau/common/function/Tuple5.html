@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">return</strong> o instanceof <a name="Tuple5" href="../../../../../org/apache/juneau/common/function/Tuple5.html#Tuple5">Tuple5</a> &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, (Tuple5&lt;?,?,?,?,?&gt;)o, (x, y) -&gt; eq(x.a, y.a) &amp;&amp; eq(x.b, y.b) &amp;&amp; eq(x.c, y.c) &amp;&amp; eq(x.d, y.d) &amp;&amp; eq(x.e, y.e));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">return</strong> o instanceof Tuple5&lt;?,?,?,?,?&gt; o2 &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.a, y.a) &amp;&amp; eq(x.b, y.b) &amp;&amp; eq(x.c, y.c) &amp;&amp; eq(x.d, y.d) &amp;&amp; eq(x.e, y.e));
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_javadoccomment">/**</em>

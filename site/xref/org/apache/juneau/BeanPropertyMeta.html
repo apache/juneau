@@ -626,7 +626,7 @@
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L620" href="#L620">620</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">return</strong> (o instanceof BeanPropertyMeta) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, (BeanPropertyMeta)o, (x, y) -&gt; eq(x.name, y.name) &amp;&amp; eq(x.beanMeta, y.beanMeta));
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">return</strong> (o instanceof BeanPropertyMeta o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.name, y.name) &amp;&amp; eq(x.beanMeta, y.beanMeta));
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 	}
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 	<em class="jxr_javadoccomment">/**</em>

@@ -858,7 +858,7 @@
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> 
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, (ClassMeta&lt;?&gt;)o, (x, y) -&gt; eq(x.innerClass, y.innerClass));
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		<strong class="jxr_keyword">return</strong> (o instanceof ClassMeta&lt;?&gt; o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.innerClass, y.innerClass));
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 	}
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 	<em class="jxr_javadoccomment">/**</em>

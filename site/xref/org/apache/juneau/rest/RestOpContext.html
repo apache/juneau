@@ -2294,7 +2294,7 @@
 <a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 
 <a class="jxr_linenumber" name="L2287" href="#L2287">2287</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L2288" href="#L2288">2288</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a>) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, (<a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a>)o, (x, y) -&gt; x.method.equals(y.method));
+<a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; x.method.equals(y.method));
 <a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> 	}
 <a class="jxr_linenumber" name="L2291" href="#L2291">2291</a> 
 <a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> 	<em class="jxr_javadoccomment">/**</em>

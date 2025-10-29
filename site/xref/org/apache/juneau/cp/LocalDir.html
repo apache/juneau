@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> o instanceof <a name="LocalDir" href="../../../../org/apache/juneau/cp/LocalDir.html#LocalDir">LocalDir</a> &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, (<a name="LocalDir" href="../../../../org/apache/juneau/cp/LocalDir.html#LocalDir">LocalDir</a>)o, (x, y) -&gt; eq(x.clazz, y.clazz) &amp;&amp; eq(x.clazzPath, y.clazzPath) &amp;&amp; eq(x.path, y.path));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> o instanceof <a name="LocalDir" href="../../../../org/apache/juneau/cp/LocalDir.html#LocalDir">LocalDir</a> o2 &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.clazz, y.clazz) &amp;&amp; eq(x.clazzPath, y.clazzPath) &amp;&amp; eq(x.path, y.path));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Override <em class="jxr_comment">/* Overridden from Object */</em>

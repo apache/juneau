@@ -105,7 +105,7 @@
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">return</strong> o instanceof <a name="BasicFileFinder" href="../../../../org/apache/juneau/cp/BasicFileFinder.html#BasicFileFinder">BasicFileFinder</a> &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, (<a name="BasicFileFinder" href="../../../../org/apache/juneau/cp/BasicFileFinder.html#BasicFileFinder">BasicFileFinder</a>)o, (x, y) -&gt; eq(x.hashCode, y.hashCode) &amp;&amp; eq(x.getClass(), y.getClass()) &amp;&amp; eq(x.roots, y.roots)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">return</strong> o instanceof <a name="BasicFileFinder" href="../../../../org/apache/juneau/cp/BasicFileFinder.html#BasicFileFinder">BasicFileFinder</a> o2 &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.hashCode, y.hashCode) &amp;&amp; eq(x.getClass(), y.getClass()) &amp;&amp; eq(x.roots, y.roots)
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			&amp;&amp; eq(x.cachingLimit, y.cachingLimit) &amp;&amp; eq(x.includePatterns, y.includePatterns) &amp;&amp; eq(x.excludePatterns, y.excludePatterns));
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
