@@ -2286,7 +2286,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof RestOpContext) && eq(this, (RestOpContext)o, (x, y) -> x.method.equals(y.method));
+		return (o instanceof RestOpContext o2) && eq(this, o2, (x, y) -> x.method.equals(y.method));
 	}
 
 	/**

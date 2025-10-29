@@ -206,24 +206,6 @@ public class Utils {
 		return Objects.equals(o1, o2);
 	}
 
-	// TODO: Update instanceof patterns throughout the code to use pattern matching (Java 16+).
-	// This simplifies equals() methods by eliminating explicit casts.
-	//
-	// Examples to find and update:
-	//   Old pattern:  return super.equals(o) && o instanceof Type && eq(this, (Type)o, (x, y) -> ...);
-	//   New pattern:  return super.equals(o) && o instanceof Type o2 && eq(this, o2, (x, y) -> ...);
-	//
-	//   Old pattern:  return (o instanceof Type) && eq(this, (Type)o, (x, y) -> ...);
-	//   New pattern:  return (o instanceof Type o2) && eq(this, o2, (x, y) -> ...);
-	//
-	// Search pattern: "instanceof.*&&.*eq\(this,.*\("
-	// Found ~15 instances in:
-	//   - BasicStaticFiles.java, ClassInfo.java, RestOpContext.java, ClassMeta.java, BeanMeta.java,
-	//     BasicFileFinder.java, BeanPropertyMeta.java, StringRange.java, MediaType.java, LocalDir.java,
-	//     Tuple2.java, Tuple3.java, Tuple4.java, Tuple5.java, ResourceDescription.java
-	// Already updated:
-	//   - LinkString.java, NestedTokenizer.java (Token inner class)
-
 	/**
 	 * Tests two objects for equality, gracefully handling nulls.
 	 *

@@ -116,7 +116,7 @@ public class StringRange {
 	 */
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof StringRange) && eq(this, (StringRange)o, (x, y) -> eq(x.string, y.string));
+		return (o instanceof StringRange o2) && eq(this, o2, (x, y) -> eq(x.string, y.string));
 	}
 
 	/**

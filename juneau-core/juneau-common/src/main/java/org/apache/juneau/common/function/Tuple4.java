@@ -74,7 +74,7 @@ public class Tuple4<A,B,C,D> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Tuple4 && eq(this, (Tuple4<?,?,?,?>)o, (x, y) -> eq(x.a, y.a) && eq(x.b, y.b) && eq(x.c, y.c) && eq(x.d, y.d));
+		return o instanceof Tuple4<?,?,?,?> o2 && eq(this, o2, (x, y) -> eq(x.a, y.a) && eq(x.b, y.b) && eq(x.c, y.c) && eq(x.d, y.d));
 	}
 
 	/**

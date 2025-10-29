@@ -850,7 +850,7 @@ public class ClassMeta<T> implements Type {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof ClassMeta) && eq(this, (ClassMeta<?>)o, (x, y) -> eq(x.innerClass, y.innerClass));
+		return (o instanceof ClassMeta<?> o2) && eq(this, o2, (x, y) -> eq(x.innerClass, y.innerClass));
 	}
 
 	/**

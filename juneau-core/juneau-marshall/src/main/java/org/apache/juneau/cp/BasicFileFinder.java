@@ -97,7 +97,7 @@ public class BasicFileFinder implements FileFinder {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof BasicFileFinder && eq(this, (BasicFileFinder)o, (x, y) -> eq(x.hashCode, y.hashCode) && eq(x.getClass(), y.getClass()) && eq(x.roots, y.roots)
+		return o instanceof BasicFileFinder o2 && eq(this, o2, (x, y) -> eq(x.hashCode, y.hashCode) && eq(x.getClass(), y.getClass()) && eq(x.roots, y.roots)
 			&& eq(x.cachingLimit, y.cachingLimit) && eq(x.includePatterns, y.includePatterns) && eq(x.excludePatterns, y.excludePatterns));
 	}
 

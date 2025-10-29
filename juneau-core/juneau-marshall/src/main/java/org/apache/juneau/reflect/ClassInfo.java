@@ -370,7 +370,7 @@ public class ClassInfo {
 
 	@Override
 	public boolean equals(Object o) {
-		return (o instanceof ClassInfo) && eq(this, (ClassInfo)o, (x, y) -> eq(x.t, y.t));
+		return (o instanceof ClassInfo o2) && eq(this, o2, (x, y) -> eq(x.t, y.t));
 	}
 
 	/**

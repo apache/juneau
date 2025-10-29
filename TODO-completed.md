@@ -167,6 +167,60 @@ This file contains TODO items that have been completed and moved from TODO.md.
     - Line 765: `new IllegalArgumentException(f("Object of type {0} could not be converted to a list."))` → `illegalArg("Object of type {0} could not be converted to a list.")`
     Added static import for `ThrowableUtils` methods. These utility methods provide cleaner syntax and consistent exception creation with formatted messages.
 
+## Static Import Refactoring
+
+- **TODO-39** ✅ Use static imports for all method calls to AnnotationUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for AnnotationUtils methods.
+
+- **TODO-40** ✅ Use static imports for all method calls to ArrayUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for ArrayUtils methods.
+
+- **TODO-41** ✅ Use static imports for all method calls to AssertionUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for AssertionUtils methods.
+
+- **TODO-42** ✅ Use static imports for all method calls to ClassUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for ClassUtils methods.
+
+- **TODO-43** ✅ Use static imports for all method calls to CollectionUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for CollectionUtils methods.
+
+- **TODO-44** ✅ Use static imports for all method calls to DateUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for DateUtils methods.
+
+- **TODO-45** ✅ Use static imports for all method calls to FileUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for FileUtils methods.
+
+- **TODO-46** ✅ Use static imports for all method calls to IOUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for IOUtils methods.
+
+- **TODO-47** ✅ Use static imports for all method calls to PredicateUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for PredicateUtils methods.
+
+- **TODO-48** ✅ Use static imports for all method calls to ResourceBundleUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for ResourceBundleUtils methods.
+
+- **TODO-50** ✅ Use static imports for all method calls to SystemUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for SystemUtils methods.
+
+- **TODO-51** ✅ Use static imports for all method calls to ThrowableUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for ThrowableUtils methods.
+
+- **TODO-53** ✅ Use static imports for all method calls to BctUtils.
+  - **Status**: COMPLETED
+  - **Details**: Refactored codebase to use static imports for BctUtils methods.
+
 ## Notes
 
 Items are marked as completed when:

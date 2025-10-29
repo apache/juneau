@@ -618,7 +618,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof BeanPropertyMeta) && eq(this, (BeanPropertyMeta)o, (x, y) -> eq(x.name, y.name) && eq(x.beanMeta, y.beanMeta));
+		return (o instanceof BeanPropertyMeta o2) && eq(this, o2, (x, y) -> eq(x.name, y.name) && eq(x.beanMeta, y.beanMeta));
 	}
 
 	/**
