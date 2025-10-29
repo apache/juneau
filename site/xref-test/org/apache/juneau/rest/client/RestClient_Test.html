@@ -26,25 +26,25 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpResponses.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.http.auth.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.http.client.config.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.http.client.methods.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.http.concurrent.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.http.impl.client.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.http.message.*;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.http.params.*;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.http.protocol.*;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.IOUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpHeaders.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.http.HttpResponses.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.http.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.http.auth.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.http.client.config.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.http.client.methods.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.http.concurrent.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.http.impl.client.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.http.message.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.http.params.*;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.http.protocol.*;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.*;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
@@ -226,7 +226,7 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> HttpGet(<span class="jxr_string">"http://localhost/bean"</span>);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		x.addHeader(<span class="jxr_string">"Accept"</span>,<span class="jxr_string">"text/json5"</span>);
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">var</strong> res = MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).build().execute(x);
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,IOUtils.read(res.getEntity().getContent()));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,read(res.getEntity().getContent()));
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	@Test <strong class="jxr_keyword">void</strong> c08_httpClient_executeHttpHostHttpRequest() <strong class="jxr_keyword">throws</strong> Exception {
@@ -234,7 +234,7 @@
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> target = <strong class="jxr_keyword">new</strong> HttpHost(<span class="jxr_string">"localhost"</span>);
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		x.addHeader(<span class="jxr_string">"Accept"</span>,<span class="jxr_string">"text/json5"</span>);
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">var</strong> res = MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).build().execute(target,x);
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,IOUtils.read(res.getEntity().getContent()));
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,read(res.getEntity().getContent()));
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 	@Test <strong class="jxr_keyword">void</strong> c09_httpClient_executeHttpHostHttpRequestHttpContext() <strong class="jxr_keyword">throws</strong> Exception {
@@ -243,7 +243,7 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> context = <strong class="jxr_keyword">new</strong> BasicHttpContext();
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		x.addHeader(<span class="jxr_string">"Accept"</span>,<span class="jxr_string">"text/json5"</span>);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> res = MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).build().execute(target,x,context);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,IOUtils.read(res.getEntity().getContent()));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,read(res.getEntity().getContent()));
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@Test <strong class="jxr_keyword">void</strong> c10_httpClient_executeResponseHandler() <strong class="jxr_keyword">throws</strong> Exception {

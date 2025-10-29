@@ -1193,7 +1193,7 @@
 <a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 			});
 <a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 		}
 <a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 	}
 <a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 
@@ -1206,7 +1206,7 @@
 <a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">inner</strong>.getProtocol();
 <a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 		<strong class="jxr_keyword">var</strong> i = x.indexOf('/');
 <a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 		<strong class="jxr_keyword">var</strong> j = x.indexOf('.', i);
-<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 		<strong class="jxr_keyword">var</strong> pv = <strong class="jxr_keyword">new</strong> ProtocolVersion(x.substring(0, i), Utils.parseInt(x.substring(i + 1, j)), Utils.parseInt(x.substring(j + 1)));
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 		<strong class="jxr_keyword">var</strong> pv = <strong class="jxr_keyword">new</strong> ProtocolVersion(x.substring(0, i), parseInt(x.substring(i + 1, j)), parseInt(x.substring(j + 1)));
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BasicRequestLine(<strong class="jxr_keyword">inner</strong>.getMethod(), <strong class="jxr_keyword">inner</strong>.getRequestURI(), pv);
 <a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 	}
 <a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 
@@ -1311,7 +1311,7 @@
 <a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URI(uri);
 <a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 		} <strong class="jxr_keyword">catch</strong> (URISyntaxException e) {
 <a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 			<em class="jxr_comment">// Shouldn't happen.</em>
-<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 		}
 <a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 	}
 <a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 

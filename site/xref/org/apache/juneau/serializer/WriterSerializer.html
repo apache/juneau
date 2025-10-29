@@ -25,19 +25,19 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.serializer;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.collections.JsonMap.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.IOUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.json.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.utils.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">protected</strong> Builder() {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			fileCharset = Charset.defaultCharset();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			streamCharset = IOUtils.UTF8;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			streamCharset = UTF8;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  			maxIndent = env(<span class="jxr_string">"WriterSerializer.maxIndent"</span>, 100);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			quoteChar = env(<span class="jxr_string">"WriterSerializer.quoteChar"</span>, (Character)<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			quoteCharOverride = env(<span class="jxr_string">"WriterSerializer.quoteCharOverride"</span>, (Character)<strong class="jxr_keyword">null</strong>);
@@ -1057,7 +1057,7 @@
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 			<strong class="jxr_keyword">return</strong> serialize(o);
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 		}
 <a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 	}
 <a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 

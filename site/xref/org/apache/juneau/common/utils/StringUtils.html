@@ -163,7 +163,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">if</strong> (in == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;  <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> bIn = in.getBytes(IOUtils.UTF8);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> bIn = in.getBytes(UTF8);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertArg(bIn.length % 4 == 0, <span class="jxr_string">"Invalid BASE64 string length.  Must be multiple of 4."</span>);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
@@ -207,7 +207,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> b = base64Decode(in);
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">if</strong> (b == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(b, IOUtils.UTF8);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String(b, UTF8);
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -250,7 +250,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String base64EncodeToString(String in) {
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">if</strong> (in == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">return</strong> base64Encode(in.getBytes(IOUtils.UTF8));
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">return</strong> base64Encode(in.getBytes(UTF8));
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -1355,7 +1355,7 @@
 <a class="jxr_linenumber" name="L1347" href="#L1347">1347</a> <em class="jxr_javadoccomment">	 * @param str The string to check.</em>
 <a class="jxr_linenumber" name="L1348" href="#L1348">1348</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the string is not null, not empty, and contains non-whitespace characters.</em>
 <a class="jxr_linenumber" name="L1349" href="#L1349">1349</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isNotBlank(String str) {
+<a class="jxr_linenumber" name="L1350" href="#L1350">1350</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isNotBlank(CharSequence str) {
 <a class="jxr_linenumber" name="L1351" href="#L1351">1351</a> 		<strong class="jxr_keyword">return</strong> ! isBlank(str);
 <a class="jxr_linenumber" name="L1352" href="#L1352">1352</a> 	}
 <a class="jxr_linenumber" name="L1353" href="#L1353">1353</a> 
@@ -2823,9 +2823,9 @@
 <a class="jxr_linenumber" name="L2815" href="#L2815">2815</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L2816" href="#L2816">2816</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; splitNestedInner(String s) {
 <a class="jxr_linenumber" name="L2817" href="#L2817">2817</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2818" href="#L2818">2818</a> 			<strong class="jxr_keyword">throw</strong> ThrowableUtils.illegalArg(<span class="jxr_string">"String was null."</span>);
+<a class="jxr_linenumber" name="L2818" href="#L2818">2818</a> 			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"String was null."</span>);
 <a class="jxr_linenumber" name="L2819" href="#L2819">2819</a> 		<strong class="jxr_keyword">if</strong> (isEmpty(s))
-<a class="jxr_linenumber" name="L2820" href="#L2820">2820</a> 			<strong class="jxr_keyword">throw</strong> ThrowableUtils.illegalArg(<span class="jxr_string">"String was empty."</span>);
+<a class="jxr_linenumber" name="L2820" href="#L2820">2820</a> 			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"String was empty."</span>);
 <a class="jxr_linenumber" name="L2821" href="#L2821">2821</a> 
 <a class="jxr_linenumber" name="L2822" href="#L2822">2822</a> 		<em class="jxr_comment">// S1: Looking for '{'</em>
 <a class="jxr_linenumber" name="L2823" href="#L2823">2823</a> 		<em class="jxr_comment">// S2: Found '{', looking for '}'</em>
@@ -2865,9 +2865,9 @@
 <a class="jxr_linenumber" name="L2857" href="#L2857">2857</a> 		}
 <a class="jxr_linenumber" name="L2858" href="#L2858">2858</a> 
 <a class="jxr_linenumber" name="L2859" href="#L2859">2859</a> 		<strong class="jxr_keyword">if</strong> (start == -1)
-<a class="jxr_linenumber" name="L2860" href="#L2860">2860</a> 			<strong class="jxr_keyword">throw</strong> ThrowableUtils.illegalArg(<span class="jxr_string">"Start character '{' not found in string."</span>, s);
+<a class="jxr_linenumber" name="L2860" href="#L2860">2860</a> 			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Start character '{' not found in string:  {0}"</span>, s);
 <a class="jxr_linenumber" name="L2861" href="#L2861">2861</a> 		<strong class="jxr_keyword">if</strong> (end == -1)
-<a class="jxr_linenumber" name="L2862" href="#L2862">2862</a> 			<strong class="jxr_keyword">throw</strong> ThrowableUtils.illegalArg(<span class="jxr_string">"End character '}' not found in string."</span>, s);
+<a class="jxr_linenumber" name="L2862" href="#L2862">2862</a> 			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"End character '}' not found in string  {0}"</span>, s);
 <a class="jxr_linenumber" name="L2863" href="#L2863">2863</a> 		<strong class="jxr_keyword">return</strong> splitNested(s.substring(start, end));
 <a class="jxr_linenumber" name="L2864" href="#L2864">2864</a> 	}
 <a class="jxr_linenumber" name="L2865" href="#L2865">2865</a> 
@@ -3356,7 +3356,7 @@
 <a class="jxr_linenumber" name="L3348" href="#L3348">3348</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3349" href="#L3349">3349</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> URI(o.toString());
 <a class="jxr_linenumber" name="L3350" href="#L3350">3350</a> 		} <strong class="jxr_keyword">catch</strong> (URISyntaxException e) {
-<a class="jxr_linenumber" name="L3351" href="#L3351">3351</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L3351" href="#L3351">3351</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L3352" href="#L3352">3352</a> 		}
 <a class="jxr_linenumber" name="L3353" href="#L3353">3353</a> 	}
 <a class="jxr_linenumber" name="L3354" href="#L3354">3354</a> 
@@ -3367,7 +3367,7 @@
 <a class="jxr_linenumber" name="L3359" href="#L3359">3359</a> <em class="jxr_javadoccomment">	 * @return The UTF-8 string representation, or &lt;jk&gt;null&lt;/jk&gt; if the array is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L3360" href="#L3360">3360</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L3361" href="#L3361">3361</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toUtf8(byte[] b) {
-<a class="jxr_linenumber" name="L3362" href="#L3362">3362</a> 		<strong class="jxr_keyword">return</strong> b == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> String(b, IOUtils.UTF8);
+<a class="jxr_linenumber" name="L3362" href="#L3362">3362</a> 		<strong class="jxr_keyword">return</strong> b == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> String(b, UTF8);
 <a class="jxr_linenumber" name="L3363" href="#L3363">3363</a> 	}
 <a class="jxr_linenumber" name="L3364" href="#L3364">3364</a> 
 <a class="jxr_linenumber" name="L3365" href="#L3365">3365</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -3377,7 +3377,7 @@
 <a class="jxr_linenumber" name="L3369" href="#L3369">3369</a> <em class="jxr_javadoccomment">	 * @return The UTF-8 string representation of the input stream contents, or &lt;jk&gt;null&lt;/jk&gt; if the stream is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L3370" href="#L3370">3370</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L3371" href="#L3371">3371</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toUtf8(InputStream is) {
-<a class="jxr_linenumber" name="L3372" href="#L3372">3372</a> 		<strong class="jxr_keyword">return</strong> safe(() -&gt; is == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> String(readBytes(is), IOUtils.UTF8));
+<a class="jxr_linenumber" name="L3372" href="#L3372">3372</a> 		<strong class="jxr_keyword">return</strong> safe(() -&gt; is == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> String(readBytes(is), UTF8));
 <a class="jxr_linenumber" name="L3373" href="#L3373">3373</a> 	}
 <a class="jxr_linenumber" name="L3374" href="#L3374">3374</a> 
 <a class="jxr_linenumber" name="L3375" href="#L3375">3375</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -3685,7 +3685,7 @@
 <a class="jxr_linenumber" name="L3677" href="#L3677">3677</a> 
 <a class="jxr_linenumber" name="L3678" href="#L3678">3678</a> 					caw.flush();
 <a class="jxr_linenumber" name="L3679" href="#L3679">3679</a> 					<strong class="jxr_keyword">var</strong> s2 = <strong class="jxr_keyword">new</strong> String(caw.toCharArray());
-<a class="jxr_linenumber" name="L3680" href="#L3680">3680</a> 					<strong class="jxr_keyword">var</strong> ba = s2.getBytes(IOUtils.UTF8);
+<a class="jxr_linenumber" name="L3680" href="#L3680">3680</a> 					<strong class="jxr_keyword">var</strong> ba = s2.getBytes(UTF8);
 <a class="jxr_linenumber" name="L3681" href="#L3681">3681</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> element : ba) {
 <a class="jxr_linenumber" name="L3682" href="#L3682">3682</a> 						sb.append('%');
 <a class="jxr_linenumber" name="L3683" href="#L3683">3683</a> 						<strong class="jxr_keyword">var</strong> ch = forDigit((element &gt;&gt; 4) &amp; 0xF, 16);
@@ -3774,7 +3774,7 @@
 <a class="jxr_linenumber" name="L3766" href="#L3766">3766</a> 			}
 <a class="jxr_linenumber" name="L3767" href="#L3767">3767</a> 			<strong class="jxr_keyword">return</strong> -1;
 <a class="jxr_linenumber" name="L3768" href="#L3768">3768</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L3769" href="#L3769">3769</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L3769" href="#L3769">3769</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L3770" href="#L3770">3770</a> 		}
 <a class="jxr_linenumber" name="L3771" href="#L3771">3771</a> 	}
 <a class="jxr_linenumber" name="L3772" href="#L3772">3772</a> 
@@ -4083,9 +4083,9 @@
 <a class="jxr_linenumber" name="L4075" href="#L4075">4075</a> 		<strong class="jxr_keyword">if</strong> (o instanceof InputStream o2)
 <a class="jxr_linenumber" name="L4076" href="#L4076">4076</a> 			<strong class="jxr_keyword">return</strong> toHex(o2);
 <a class="jxr_linenumber" name="L4077" href="#L4077">4077</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Reader o2)
-<a class="jxr_linenumber" name="L4078" href="#L4078">4078</a> 			<strong class="jxr_keyword">return</strong> safe(() -&gt; IOUtils.read(o2));
+<a class="jxr_linenumber" name="L4078" href="#L4078">4078</a> 			<strong class="jxr_keyword">return</strong> safe(() -&gt; read(o2));
 <a class="jxr_linenumber" name="L4079" href="#L4079">4079</a> 		<strong class="jxr_keyword">if</strong> (o instanceof File o2)
-<a class="jxr_linenumber" name="L4080" href="#L4080">4080</a> 			<strong class="jxr_keyword">return</strong> safe(() -&gt; IOUtils.read(o2));
+<a class="jxr_linenumber" name="L4080" href="#L4080">4080</a> 			<strong class="jxr_keyword">return</strong> safe(() -&gt; read(o2));
 <a class="jxr_linenumber" name="L4081" href="#L4081">4081</a> 		<strong class="jxr_keyword">if</strong> (o instanceof byte[] o2)
 <a class="jxr_linenumber" name="L4082" href="#L4082">4082</a> 			<strong class="jxr_keyword">return</strong> toHex(o2);
 <a class="jxr_linenumber" name="L4083" href="#L4083">4083</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Enum o2)

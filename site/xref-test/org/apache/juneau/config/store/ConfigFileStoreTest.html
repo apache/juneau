@@ -25,14 +25,14 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.config.store;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.IOUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.FileUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.IOUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">class</strong> <a name="ConfigFileStoreTest" href="../../../../../org/apache/juneau/config/store/ConfigFileStoreTest.html#ConfigFileStoreTest">ConfigFileStoreTest</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> File DIR = <strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"./target/config"</span>);
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	@AfterEach <strong class="jxr_keyword">void</strong> cleanUp() {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		FileUtils.delete(DIR);
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		deleteFile(DIR);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	}
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Test <strong class="jxr_keyword">void</strong> a01_noFile() <strong class="jxr_keyword">throws</strong> Exception {
@@ -126,14 +126,14 @@
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 	@Test <strong class="jxr_keyword">void</strong> a09_charset() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> fs = FileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> fs = FileStore.create().directory(DIR).charset(UTF8).build();
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertNull(fs.write(<span class="jxr_string">"X.cfg"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertEquals(<span class="jxr_string">"foo"</span>, fs.read(<span class="jxr_string">"X.cfg"</span>));
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(<span class="jxr_string">"foo"</span>, fs.read(<span class="jxr_string">"X"</span>));
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> a10_charsetNoExtension() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> fs = FileStore.create().directory(DIR).charset(IOUtils.UTF8).build();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> fs = FileStore.create().directory(DIR).charset(UTF8).build();
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertNull(fs.write(<span class="jxr_string">"X"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(<span class="jxr_string">"foo"</span>, fs.read(<span class="jxr_string">"X"</span>));
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(<span class="jxr_string">"foo"</span>, fs.read(<span class="jxr_string">"X.cfg"</span>));

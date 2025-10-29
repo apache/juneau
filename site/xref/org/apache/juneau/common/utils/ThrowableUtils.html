@@ -57,8 +57,8 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 * @param cause The caused-by exception.</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 * @return A new {@link RuntimeException}, or the same exception if it's already of that type.</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RuntimeException asRuntimeException(Throwable cause) {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">cast</strong>(RuntimeException.<strong class="jxr_keyword">class</strong>, cause);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RuntimeException toRuntimeException(Throwable cause) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">return</strong> castException(RuntimeException.<strong class="jxr_keyword">class</strong>, cause);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * @param t The throwable to cast.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * @return Either the same exception if it's already the specified type, or a wrapped exception.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T <strong class="jxr_keyword">cast</strong>(Class&lt;T&gt; type, Throwable t) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T castException(Class&lt;T&gt; type, Throwable t) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">return</strong> type.isInstance(t) ? type.<strong class="jxr_keyword">cast</strong>(t) : type.getConstructor(Throwable.<strong class="jxr_keyword">class</strong>).newInstance(t);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * @param t The throwable to search.</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * @return The exception, or &lt;jk&gt;null&lt;/jk&gt; if not found.</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Throwable&gt; T getCause(Class&lt;T&gt; c, Throwable t) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Throwable&gt; T getThrowableCause(Class&lt;T&gt; c, Throwable t) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">while</strong> (nn(t)) {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			t = t.getCause();
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">if</strong> (c.isInstance(t))

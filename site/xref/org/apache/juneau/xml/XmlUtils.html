@@ -217,7 +217,7 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 				w.append(s);
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 			}
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		}
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">return</strong> w;
@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 					<strong class="jxr_keyword">return</strong> encodeElementNameInner(w, s).toString();
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 				}
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e); <em class="jxr_comment">// Never happens</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e); <em class="jxr_comment">// Never happens</em>
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">return</strong> s;
@@ -264,7 +264,7 @@
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 				<strong class="jxr_keyword">return</strong> encodeElementNameInner(w, s);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			w.append(s);
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 		}
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">return</strong> w;
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 	}
@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 				w.append(s);
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 			}
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">return</strong> w;
@@ -352,7 +352,7 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			}
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">return</strong> sw.toString();
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e); <em class="jxr_comment">// Never happens</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e); <em class="jxr_comment">// Never happens</em>
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 		}
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 	}
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 

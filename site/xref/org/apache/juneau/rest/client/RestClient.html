@@ -6965,7 +6965,7 @@
 <a class="jxr_linenumber" name="L6957" href="#L6957">6957</a> 						} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L6958" href="#L6958">6958</a> 							<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L6959" href="#L6959">6959</a> 						} <strong class="jxr_keyword">catch</strong> (Throwable e) {
-<a class="jxr_linenumber" name="L6960" href="#L6960">6960</a> 							<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L6960" href="#L6960">6960</a> 							<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L6961" href="#L6961">6961</a> 						}
 <a class="jxr_linenumber" name="L6962" href="#L6962">6962</a> 					});
 <a class="jxr_linenumber" name="L6963" href="#L6963">6963</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ror.isCompletableFuture()) {
@@ -7115,7 +7115,7 @@
 <a class="jxr_linenumber" name="L7107" href="#L7107">7107</a> 					<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; t2 : method.getExceptionTypes())
 <a class="jxr_linenumber" name="L7108" href="#L7108">7108</a> 						<strong class="jxr_keyword">if</strong> (t2.isInstance(e))
 <a class="jxr_linenumber" name="L7109" href="#L7109">7109</a> 							<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L7110" href="#L7110">7110</a> 					<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L7110" href="#L7110">7110</a> 					<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L7111" href="#L7111">7111</a> 				}
 <a class="jxr_linenumber" name="L7112" href="#L7112">7112</a> 			}
 <a class="jxr_linenumber" name="L7113" href="#L7113">7113</a> 		});
@@ -7621,7 +7621,7 @@
 <a class="jxr_linenumber" name="L7613" href="#L7613">7613</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L7614" href="#L7614">7614</a> 				x = beanStore.createBean(c).run();
 <a class="jxr_linenumber" name="L7615" href="#L7615">7615</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
-<a class="jxr_linenumber" name="L7616" href="#L7616">7616</a> 				<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L7616" href="#L7616">7616</a> 				<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L7617" href="#L7617">7617</a> 			}
 <a class="jxr_linenumber" name="L7618" href="#L7618">7618</a> 			partParsers.put(c, x);
 <a class="jxr_linenumber" name="L7619" href="#L7619">7619</a> 		}
@@ -7647,7 +7647,7 @@
 <a class="jxr_linenumber" name="L7639" href="#L7639">7639</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L7640" href="#L7640">7640</a> 				x = beanStore.createBean(c).run();
 <a class="jxr_linenumber" name="L7641" href="#L7641">7641</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
-<a class="jxr_linenumber" name="L7642" href="#L7642">7642</a> 				<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L7642" href="#L7642">7642</a> 				<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L7643" href="#L7643">7643</a> 			}
 <a class="jxr_linenumber" name="L7644" href="#L7644">7644</a> 			partSerializers.put(c, x);
 <a class="jxr_linenumber" name="L7645" href="#L7645">7645</a> 		}
@@ -7917,7 +7917,7 @@
 <a class="jxr_linenumber" name="L7909" href="#L7909">7909</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; t2 : method.getExceptionTypes())
 <a class="jxr_linenumber" name="L7910" href="#L7910">7910</a> 				<strong class="jxr_keyword">if</strong> (t2.isInstance(t))
 <a class="jxr_linenumber" name="L7911" href="#L7911">7911</a> 					<strong class="jxr_keyword">throw</strong> t;
-<a class="jxr_linenumber" name="L7912" href="#L7912">7912</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L7912" href="#L7912">7912</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L7913" href="#L7913">7913</a> 		}
 <a class="jxr_linenumber" name="L7914" href="#L7914">7914</a> 	}
 <a class="jxr_linenumber" name="L7915" href="#L7915">7915</a> 

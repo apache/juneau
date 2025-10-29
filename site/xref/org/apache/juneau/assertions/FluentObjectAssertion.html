@@ -258,7 +258,7 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentStringAssertion&lt;&gt;(<strong class="jxr_keyword">this</strong>, ws.serialize(value), returns());
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		}
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	}
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 

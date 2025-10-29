@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		FileNameMatcher(String pattern) {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			<strong class="jxr_keyword">super</strong>(pattern);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			String base = getBaseName(pattern), ext = getExtension(pattern);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			String base = getBaseName(pattern), ext = getFileExtension(pattern);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			basePattern = base.equals(<span class="jxr_string">"*"</span>) ? <strong class="jxr_keyword">null</strong> : base;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			extPattern = ext.equals(<span class="jxr_string">"*"</span>) ? <strong class="jxr_keyword">null</strong> : ext;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<strong class="jxr_keyword">this</strong>.comparator = pattern.replaceAll(<span class="jxr_string">"&#92;&#92;w+"</span>, <span class="jxr_string">"X"</span>).replace(<span class="jxr_string">"*"</span>, <span class="jxr_string">"W"</span>);
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">public</strong> <a name="UrlPathMatch" href="../../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> match(<a name="UrlPath" href="../../../../../org/apache/juneau/rest/util/UrlPath.html#UrlPath">UrlPath</a> pathInfo) {
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			Optional&lt;String&gt; fileName = pathInfo.getFileName();
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">if</strong> (fileName.isPresent()) {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  				String base = getBaseName(fileName.get()), ext = getExtension(fileName.get());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  				String base = getBaseName(fileName.get()), ext = getFileExtension(fileName.get());
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  				<strong class="jxr_keyword">if</strong> ((basePattern == <strong class="jxr_keyword">null</strong> || basePattern.equals(base)) &amp;&amp; (extPattern == <strong class="jxr_keyword">null</strong> || extPattern.equals(ext)))
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="UrlPathMatch" href="../../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a>(pathInfo.getPath(), pathInfo.getParts().length, <strong class="jxr_keyword">new</strong> String[0], <strong class="jxr_keyword">new</strong> String[0]);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			}

@@ -25,17 +25,17 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.reflect;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.beans.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.PredicateUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.beans.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.collections.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.internal.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
@@ -230,7 +230,7 @@
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = m.length - 1; i &gt;= 0; i--)
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">for</strong> (Annotation a2 : m[i]._getDeclaredAnnotations())
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 				<strong class="jxr_keyword">if</strong> (type.isInstance(a2))
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					PredicateUtils.consumeIf(filter, action, type.<strong class="jxr_keyword">cast</strong>(a2));
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					consumeIf(filter, action, type.<strong class="jxr_keyword">cast</strong>(a2));
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).forEachAnnotation(annotationProvider, type, filter, action);
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
@@ -288,7 +288,7 @@
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> forEachMatching(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m : _getMatching())
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			PredicateUtils.consumeIf(filter, action, m);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			consumeIf(filter, action, m);
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 
@@ -305,7 +305,7 @@
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> forEachMatchingParentFirst(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		MethodInfo[] m = _getMatching();
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = m.length - 1; i &gt;= 0; i--)
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			PredicateUtils.consumeIf(filter, action, m[i]);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			consumeIf(filter, action, m[i]);
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 
@@ -692,7 +692,7 @@
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this object passes the specified predicate test.</em>
 <a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(Predicate&lt;MethodInfo&gt; test) {
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">return</strong> PredicateUtils.test(test, <strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">return</strong> test(test, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 	}
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<strong class="jxr_keyword">private</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> findMatchingOnClass(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> c) {

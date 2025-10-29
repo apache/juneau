@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.serializer;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.IOUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.<strong class="jxr_keyword">cast</strong>;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.castException;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.*;
@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<span class="jxr_string">"Cannot convert object of type "</span> + cn(output) + <span class="jxr_string">" to a Writer."</span>);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		} <strong class="jxr_keyword">catch</strong> (FileNotFoundException e) {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">cast</strong>(SerializeException.<strong class="jxr_keyword">class</strong>, e);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">throw</strong> castException(SerializeException.<strong class="jxr_keyword">class</strong>, e);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="NoCloseWriter" href="../../../../org/apache/juneau/common/io/NoCloseWriter.html#NoCloseWriter">NoCloseWriter</a>(writer);

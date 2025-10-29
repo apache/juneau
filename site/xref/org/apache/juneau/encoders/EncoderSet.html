@@ -293,7 +293,7 @@
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">return</strong> bs.createBean(Encoder.<strong class="jxr_keyword">class</strong>).type((Class&lt;?&gt;)o).run();
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		}
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 
