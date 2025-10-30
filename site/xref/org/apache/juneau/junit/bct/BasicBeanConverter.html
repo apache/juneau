@@ -278,11 +278,11 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * @see PropertyExtractor</em>
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; settings = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">private</strong> List&lt;StringifierEntry&lt;?&gt;&gt; stringifiers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">private</strong> List&lt;ListifierEntry&lt;?&gt;&gt; listifiers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">private</strong> List&lt;SwapperEntry&lt;?&gt;&gt; swappers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">private</strong> List&lt;PropertyExtractor&gt; propertyExtractors = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; settings = map();
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">private</strong> List&lt;StringifierEntry&lt;?&gt;&gt; stringifiers = list();
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">private</strong> List&lt;ListifierEntry&lt;?&gt;&gt; listifiers = list();
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">private</strong> List&lt;SwapperEntry&lt;?&gt;&gt; swappers = list();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">private</strong> List&lt;PropertyExtractor&gt; propertyExtractors = list();
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">		 * Registers a custom listifier for a specific type.</em>
@@ -698,11 +698,11 @@
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;Class,Optional&lt;Swapper&lt;?&gt;&gt;&gt; swapperMap = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 	<strong class="jxr_keyword">protected</strong> <a name="BasicBeanConverter" href="../../../../../org/apache/juneau/junit/bct/BasicBeanConverter.html#BasicBeanConverter">BasicBeanConverter</a>(Builder b) {
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		stringifiers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(b.stringifiers);
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		listifiers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(b.listifiers);
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		swappers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(b.swappers);
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		propertyExtractors = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(b.propertyExtractors);
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		settings = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(b.settings);
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		stringifiers = copyOf(b.stringifiers);
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		listifiers = copyOf(b.listifiers);
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		swappers = copyOf(b.swappers);
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		propertyExtractors = copyOf(b.propertyExtractors);
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		settings = copyOf(b.settings);
 <a class="jxr_linenumber" name="L698" href="#L698">698</a> 		Collections.reverse(stringifiers);
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 		Collections.reverse(listifiers);
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 		Collections.reverse(swappers);

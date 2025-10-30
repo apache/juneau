@@ -414,7 +414,7 @@
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertFalse(token.hasNested()); <em class="jxr_comment">// Should return false when nested is null</em>
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<em class="jxr_comment">// Case 2: empty nested list</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		token.setNested(<strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;());
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		token.setNested(list());
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertFalse(token.hasNested()); <em class="jxr_comment">// Should return false when nested is empty</em>
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<em class="jxr_comment">// Case 3: non-empty nested list</em>

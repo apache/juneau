@@ -1434,8 +1434,8 @@
 <a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> 	@Test <strong class="jxr_keyword">void</strong> a87_cdlToSet() {
 <a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)), cdlToSet(<span class="jxr_string">"a,b,c"</span>));
 <a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)), cdlToSet(<span class="jxr_string">" a , b , c "</span>));
-<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(), cdlToSet(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(), cdlToSet(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 		assertEquals(set(), cdlToSet(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 		assertEquals(set(), cdlToSet(<span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"a"</span>)), cdlToSet(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 	}
 <a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 

@@ -206,7 +206,7 @@
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDynaField {
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f1;
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		@Beanp(name=<span class="jxr_string">"*"</span>)
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; f2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; f2 = map();
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f3;
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">public</strong> BeanWithDynaField init() {
@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	@Bean(sort=<strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDynaMethods {
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; f2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; f2 = map();
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> setterCalled;
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> f1;
@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 	@Bean(sort=<strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDynaMethodsAndExtraKeys {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; f2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; f2 = map();
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> setterCalled;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> f1;
@@ -291,7 +291,7 @@
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 	@Bean(sort=<strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDynaGetterOnly {
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; f2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; f2 = map();
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> f1;
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getF1() { <strong class="jxr_keyword">return</strong> f1; }
@@ -318,7 +318,7 @@
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDynaFieldSwapped {
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		@Beanp(name=<span class="jxr_string">"*"</span>)
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Swap(TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,Calendar&gt; f1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,Calendar&gt; f1 = map();
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">public</strong> BeanWithDynaFieldSwapped init() {
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			f1.put(<span class="jxr_string">"f1a"</span>, SINGLE_DATE);
@@ -329,7 +329,7 @@
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 	@Bean(sort=<strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDynaFieldStringList {
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		@Beanp(name=<span class="jxr_string">"*"</span>)
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,List&lt;String&gt;&gt; f1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,List&lt;String&gt;&gt; f1 = map();
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">public</strong> BeanWithDynaFieldStringList init() {
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 			f1.put(<span class="jxr_string">"f1a"</span>, l(a(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>)));

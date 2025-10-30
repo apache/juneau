@@ -210,7 +210,7 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_comment">	 * Converts a Collection into an integer-indexed map.</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;Integer,Object&gt; getCollectionMap(Collection&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		Map&lt;Integer,Object&gt; m = <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> TreeMap&lt;Integer,Object&gt;();
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		IntegerValue i = IntegerValue.create();
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		c.forEach(o -&gt; m.put(i.getAndIncrement(), o));
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">return</strong> m;
@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_comment">	 * Converts an array into an integer-indexed map.</em>
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_comment">	 */</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;Integer,Object&gt; getCollectionMap(Object array) {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		Map&lt;Integer,Object&gt; m = <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> TreeMap&lt;Integer,Object&gt;();
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(array); i++)
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			m.put(i, Array.get(array, i));
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">return</strong> m;

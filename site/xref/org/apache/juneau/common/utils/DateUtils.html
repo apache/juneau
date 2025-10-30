@@ -62,7 +62,7 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ThreadLocal&lt;SoftReference&lt;Map&lt;String,SimpleDateFormat&gt;&gt;&gt; THREADLOCAL_FORMATS = <strong class="jxr_keyword">new</strong> ThreadLocal&lt;&gt;() {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  			@Override
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  			<strong class="jxr_keyword">protected</strong> SoftReference&lt;Map&lt;String,SimpleDateFormat&gt;&gt; initialValue() {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  				Map&lt;String,SimpleDateFormat&gt; m = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  				<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> HashMap&lt;String,SimpleDateFormat&gt;();
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SoftReference&lt;&gt;(m);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  			}
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		};

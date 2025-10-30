@@ -367,7 +367,7 @@
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">boolean</strong> hasChildren = false;
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		BeanMeta&lt;?&gt; bm = m.getMeta();
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		List&lt;BeanPropertyValue&gt; lp = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">var</strong> lp = <strong class="jxr_keyword">new</strong> ArrayList&lt;BeanPropertyValue&gt;();
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || nn(x);
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -&gt; {

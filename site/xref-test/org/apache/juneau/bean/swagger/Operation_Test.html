@@ -223,9 +223,9 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		@Test <strong class="jxr_keyword">void</strong> a16_addSecurityCollection() {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<em class="jxr_comment">// Test addSecurity with Collection</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			Map&lt;String,List&lt;String&gt;&gt; map1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			Map&lt;String,List&lt;String&gt;&gt; map1 = map();
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			map1.put(<span class="jxr_string">"scheme1"</span>, l(<span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			Map&lt;String,List&lt;String&gt;&gt; map2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			Map&lt;String,List&lt;String&gt;&gt; map2 = map();
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 			map2.put(<span class="jxr_string">"scheme2"</span>, l(<span class="jxr_string">"b"</span>));
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 			Collection&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; coll1 = l(map1);

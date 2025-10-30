@@ -207,7 +207,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,String&gt; getAttributes(<a name="XmlReader" href="../../../../org/apache/juneau/xml/XmlReader.html#XmlReader">XmlReader</a> r) {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		Map&lt;String,String&gt; m = <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> TreeMap&lt;String,String&gt;();
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; r.getAttributeCount(); i++)
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			m.put(r.getAttributeLocalName(i), r.getAttributeValue(i));
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">return</strong> m;

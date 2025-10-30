@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> ResolvingJsonMap(vr.createSession());
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<em class="jxr_comment">// Test inner() returns same instance for fluent chaining</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		Map&lt;String,Object&gt; innerMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> innerMap = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Object&gt;();
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		innerMap.put(<span class="jxr_string">"test"</span>, <span class="jxr_string">"$X{a}"</span>);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertSame(m, m.<strong class="jxr_keyword">inner</strong>(innerMap));
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(<span class="jxr_string">"1"</span>, m.get(<span class="jxr_string">"test"</span>));
@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(<span class="jxr_string">"2"</span>, m.get(<span class="jxr_string">"key1"</span>));
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<em class="jxr_comment">// Test append(Map) returns same instance</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		Map&lt;String,Object&gt; appendMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> appendMap = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Object&gt;();
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		appendMap.put(<span class="jxr_string">"key2"</span>, <span class="jxr_string">"$X{c}"</span>);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertSame(m, m.append(appendMap));
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertEquals(<span class="jxr_string">"3"</span>, m.get(<span class="jxr_string">"key2"</span>));

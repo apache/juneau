@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; addAll(List&lt;E&gt; value, List&lt;E&gt; entries) {
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">if</strong> (nn(entries)) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				value = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(entries);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				value = copyOf(entries);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				value.addAll(entries);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
@@ -418,7 +418,7 @@
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; ArrayList&lt;E&gt; toList(Collection&lt;E&gt; value, <strong class="jxr_keyword">boolean</strong> nullIfEmpty) {
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || (nullIfEmpty &amp;&amp; value.isEmpty()))
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		ArrayList&lt;E&gt; l = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;E&gt;();
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		value.forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 	}
@@ -444,7 +444,7 @@
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map() {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 
@@ -458,7 +458,7 @@
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1) {
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 	}
@@ -475,7 +475,7 @@
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1, K k2, V v2) {
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 		m.put(k2, v2);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">return</strong> m;
@@ -495,7 +495,7 @@
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1, K k2, V v2, K k3, V v3) {
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 		m.put(k2, v2);
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 		m.put(k3, v3);
@@ -518,7 +518,7 @@
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 		m.put(k2, v2);
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 		m.put(k3, v3);
@@ -544,7 +544,7 @@
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		m.put(k2, v2);
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 		m.put(k3, v3);
@@ -573,7 +573,7 @@
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 		m.put(k2, v2);
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 		m.put(k3, v3);
@@ -605,7 +605,7 @@
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> 		m.put(k2, v2);
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 		m.put(k3, v3);
@@ -640,7 +640,7 @@
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 		m.put(k2, v2);
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 		m.put(k3, v3);
@@ -678,7 +678,7 @@
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 		m.put(k2, v2);
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 		m.put(k3, v3);
@@ -719,7 +719,7 @@
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 * @return A new modifiable map.</em>
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; LinkedHashMap&lt;K,V&gt; map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		LinkedHashMap&lt;K,V&gt; m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;K,V&gt;();
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> 		m.put(k1, v1);
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 		m.put(k2, v2);
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 		m.put(k3, v3);
@@ -1094,7 +1094,7 @@
 <a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; TreeSet&lt;E&gt; sortedSet(E...values) {
-<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 		TreeSet&lt;E&gt; l = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;();
+<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;();
 <a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 		<strong class="jxr_keyword">for</strong> (E v : values)
 <a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 			l.add(v);
 <a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		<strong class="jxr_keyword">return</strong> l;
@@ -1110,7 +1110,7 @@
 <a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; TreeSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value) {
 <a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 		TreeSet&lt;E&gt; l = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;();
+<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;();
 <a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 		value.forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 	}
@@ -1126,7 +1126,7 @@
 <a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; TreeSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value, <strong class="jxr_keyword">boolean</strong> nullIfEmpty) {
 <a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || (nullIfEmpty &amp;&amp; value.isEmpty()))
 <a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		TreeSet&lt;E&gt; l = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;();
+<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;E&gt;();
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		value.forEach(x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 	}
@@ -1417,7 +1417,7 @@
 <a class="jxr_linenumber" name="L1409" href="#L1409">1409</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1410" href="#L1410">1410</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L1411" href="#L1411">1411</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; toList(Object array, Class&lt;E&gt; elementType) {
-<a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> 		List&lt;E&gt; l = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(Array.getLength(array));
+<a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;E&gt;(Array.getLength(array));
 <a class="jxr_linenumber" name="L1413" href="#L1413">1413</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(array); i++)
 <a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> 			l.add((E)Array.get(array, i));
 <a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> 		<strong class="jxr_keyword">return</strong> l;
@@ -1450,7 +1450,7 @@
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> <em class="jxr_javadoccomment">	 * @return A new {@link ArrayList}</em>
 <a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;Object&gt; toObjectList(Object array) {
-<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 		List&lt;Object&gt; l = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(Array.getLength(array));
+<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;Object&gt;(Array.getLength(array));
 <a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(array); i++) {
 <a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> 			Object o = Array.get(array, i);
 <a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> 			<strong class="jxr_keyword">if</strong> (isArray(o))

@@ -126,7 +126,7 @@
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertArgsNotNull(<span class="jxr_string">"pt"</span>, pt, <span class="jxr_string">"c"</span>, c);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<em class="jxr_comment">// We need to make up a mapping of type names.</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		Map&lt;Type,Type&gt; typeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> typeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;Type,Type&gt;();
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		Class&lt;?&gt; cc = c;
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">while</strong> (pt != cc.getSuperclass()) {
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			extractTypes(typeMap, cc);
@@ -159,7 +159,7 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				Class&lt;?&gt; outerClass = cc.getClass();
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 				nestedOuterTypes.add(outerClass);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				Map&lt;Type,Type&gt; outerTypeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<strong class="jxr_keyword">var</strong> outerTypeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;Type,Type&gt;();
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 				extractTypes(outerTypeMap, outerClass);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<strong class="jxr_keyword">for</strong> (Map.Entry&lt;Type,Type&gt; entry : outerTypeMap.entrySet()) {
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 					Type key = entry.getKey(), value = entry.getValue();

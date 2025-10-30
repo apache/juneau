@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Override <em class="jxr_comment">/* Overridden from MenuItemWidget */</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">public</strong> <a name="Div" href="../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> getContent(RestRequest req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		Div div = div();
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		Set&lt;MediaType&gt; l = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> TreeSet&lt;MediaType&gt;();
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">for</strong> (<a name="Serializer" href="../../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a> s : req.getOpContext().getSerializers().getSerializers())
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			l.add(s.getPrimaryMediaType());
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">for</strong> (<a name="MediaType" href="../../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> mt : l) {

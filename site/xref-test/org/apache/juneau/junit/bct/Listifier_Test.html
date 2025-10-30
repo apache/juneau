@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		@Test
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">void</strong> c02_emptyResultHandling() {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			Listifier&lt;String&gt; emptyReturner = (converter, str) -&gt; <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			Listifier&lt;String&gt; emptyReturner = (converter, str) -&gt; list();
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">var</strong> result = emptyReturner.apply(converter, <span class="jxr_string">"anything"</span>);
@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		@Test
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">void</strong> c04_largeListHandling() {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			Listifier&lt;Integer&gt; largeListGenerator = (converter, count) -&gt; {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				List&lt;Object&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				List&lt;Object&gt; result = list();
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; count; i++) {
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 					result.add(<span class="jxr_string">"item_"</span> + i);
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 				}
@@ -288,7 +288,7 @@
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 		@Test
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">void</strong> e01_performanceWithLargeLists() {
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			Listifier&lt;Integer&gt; rangeGenerator = (converter, count) -&gt; {
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				List&lt;Object&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				List&lt;Object&gt; result = list();
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; count; i++) {
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 					result.add(i);
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 				}
@@ -309,7 +309,7 @@
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">void</strong> e02_memoryEfficiency() {
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 			Listifier&lt;String&gt; memoryTest = (converter, str) -&gt; {
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 				<em class="jxr_comment">// Create a reasonably sized list</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				List&lt;Object&gt; result = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				List&lt;Object&gt; result = list();
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 1000; i++) {
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 					result.add(str + <span class="jxr_string">"_"</span> + i);
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 				}

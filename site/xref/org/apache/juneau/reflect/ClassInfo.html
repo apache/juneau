@@ -1054,7 +1054,7 @@
 <a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 		assertArgNotNull(<span class="jxr_string">"pt"</span>, pt);
 <a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 
 <a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		<em class="jxr_comment">// We need to make up a mapping of type names.</em>
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		Map&lt;Type,Type&gt; typeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		<strong class="jxr_keyword">var</strong> typeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;Type,Type&gt;();
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 		Class&lt;?&gt; cc = c;
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 		<strong class="jxr_keyword">while</strong> (pt != cc.getSuperclass()) {
 <a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 			extractTypes(typeMap, cc);
@@ -1087,7 +1087,7 @@
 <a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 <a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 				Class&lt;?&gt; outerClass = cc.getClass();
 <a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 				nestedOuterTypes.add(outerClass);
-<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 				Map&lt;Type,Type&gt; outerTypeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 				<strong class="jxr_keyword">var</strong> outerTypeMap = <strong class="jxr_keyword">new</strong> HashMap&lt;Type,Type&gt;();
 <a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 				extractTypes(outerTypeMap, outerClass);
 <a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 				<strong class="jxr_keyword">for</strong> (Map.Entry&lt;Type,Type&gt; entry : outerTypeMap.entrySet()) {
 <a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 					Type key = entry.getKey(), value = entry.getValue();
