@@ -402,14 +402,13 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					Namespace ns = (isEnableNamespaces() && bpXml.getNamespace() != elementNs ? bpXml.getNamespace() : null);
 
 					if (pMeta.isUri()) {
-						out.attrUri(ns, key, value);
-					} else if (n.equals(attrsProperty)) {
-						if (value instanceof BeanMap) {
-							BeanMap<?> bm2 = (BeanMap)value;
-							bm2.forEachValue(x -> true, (pMeta2, key2, value2, thrown2) -> {
-								if (nn(thrown2))
-									onBeanGetterException(pMeta, thrown2);
-								out.attr(ns, key2, value2);
+					out.attrUri(ns, key, value);
+				} else if (n.equals(attrsProperty)) {
+					if (value instanceof BeanMap<?> bm2) {
+						bm2.forEachValue(x -> true, (pMeta2, key2, value2, thrown2) -> {
+							if (nn(thrown2))
+								onBeanGetterException(pMeta, thrown2);
+							out.attr(ns, key2, value2);
 							});
 						} else /* Map */ {
 							Map m2 = (Map)value;

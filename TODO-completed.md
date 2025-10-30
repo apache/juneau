@@ -4,6 +4,26 @@ This file contains TODO items that have been completed and moved from TODO.md.
 
 ## Code Quality Improvements
 
+- **TODO-55** ✅ Convert `instanceof` followed by cast to use pattern matching for instanceof (Java 14+ feature).
+  - **Status**: COMPLETED
+  - **Completed**: October 30, 2025
+  - **Total instances converted**: 52
+  - **Pattern**: `if (obj instanceof Type) { Type t = (Type)obj; ... }` → `if (obj instanceof Type t) { ... }`
+  - **Files modified**: 25 files across juneau-core, juneau-rest, juneau-utest
+  - **Key changes**:
+    - **CharSequenceReader.java**: Converted 3 instances for `String`, `StringBuffer`, and `StringBuilder` type checks
+    - **ClassUtils.java**: Converted 7 instances for `ParameterizedType`, `Class<?>`, `GenericArrayType`, and `TypeVariable<?>` type checks (with careful variable renaming for `pt`, `pt2`, `pt3` to avoid conflicts)
+    - **Test files**: Converted instances in `PropertyExtractor_Test.java`, `ClassInfo_Test.java`, `BeanConfigAnnotation_Test.java`
+    - **REST files**: Converted instances in `HttpHeaders.java`, `HttpParts.java`, `BasicPart.java`, `MockServletRequest.java`, `MockRestClient.java`, `PartList.java`, `HeaderList.java`, `RestRequest.java`, `RestClient.java`, `RestContext.java`, `RestResponse.java`, `RestOpContext.java`
+    - **Marshall files**: Converted instances in `RdfSerializerSession.java`, `SerializerSet.java`, `ParserSet.java`, `ClassInfo.java`, `BeanMeta.java`, `Namespace.java`, `XmlSerializerSession.java`, `BeanContext.java`
+  - **Benefits**:
+    - Eliminated 52 redundant explicit casts
+    - Reduced code verbosity (removed ~46 separate declaration/cast lines)
+    - Improved type safety - pattern variables are only in scope where they are valid
+    - Leverages modern Java 14+ language features
+  - **Compilation**: All tests (25,828) pass successfully
+  - **Note**: Variable naming conflicts were resolved by using distinct names like `pt`, `pt2`, `pt3` for `ParameterizedType` pattern variables in the same scope
+
 - **TODO-13** ✅ Search for places in code that should be using new try-with-return syntax.
   - **Status**: COMPLETED
   - **Details**: Found and fixed 1 instance in `StringUtils.compress()`. Comprehensive search shows most code already uses this pattern correctly.

@@ -6610,14 +6610,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				return req.content(new UrlEncodedFormEntity(l((NameValuePair[])body)));
 			if (body instanceof PartList)
 				return req.content(new UrlEncodedFormEntity(((PartList)body)));
-			if (body instanceof HttpResource)
-				((HttpResource)body).getHeaders().forEach(x -> req.header(x));
-			if (body instanceof HttpEntity) {
-				HttpEntity e = (HttpEntity)body;
-				if (e.getContentType() == null)
-					req.header(ContentType.APPLICATION_FORM_URLENCODED);
-				return req.content(e);
-			}
+		if (body instanceof HttpResource)
+			((HttpResource)body).getHeaders().forEach(x -> req.header(x));
+		if (body instanceof HttpEntity e) {
+			if (e.getContentType() == null)
+				req.header(ContentType.APPLICATION_FORM_URLENCODED);
+			return req.content(e);
+		}
 			if (body instanceof Reader || body instanceof InputStream)
 				return req.header(ContentType.APPLICATION_FORM_URLENCODED).content(body);
 			return req.content(serializedEntity(body, urlEncodingSerializer, null));

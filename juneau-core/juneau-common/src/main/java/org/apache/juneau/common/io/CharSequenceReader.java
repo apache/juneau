@@ -46,12 +46,12 @@ public class CharSequenceReader extends BufferedReader {
 		if (cs == null)
 			cs = "";
 		this.cs = cs;
-		if (cs instanceof String)
-			s = (String)cs;
-		else if (cs instanceof StringBuffer)
-			sb = (StringBuffer)cs;
-		else if (cs instanceof StringBuilder)
-			sb2 = (StringBuilder)cs;
+		if (cs instanceof String s2)
+			s = s2;
+		else if (cs instanceof StringBuffer sb3)
+			sb = sb3;
+		else if (cs instanceof StringBuilder sb4)
+			sb2 = sb4;
 		this.length = cs.length();
 	}
 

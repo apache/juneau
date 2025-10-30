@@ -523,8 +523,7 @@ public class HttpHeaders {
 			return BasicHeader.of((NameValuePair)o);
 		if (o instanceof NameValuePairable)
 			return BasicHeader.of(((NameValuePairable)o).asNameValuePair());
-		if (o instanceof Map.Entry) {
-			Map.Entry e = (Map.Entry)o;
+		if (o instanceof Map.Entry e) {
 			return BasicHeader.of(s(e.getKey()), s(e.getValue()));
 		}
 		throw runtimeException("Object of type {0} could not be converted to a Header.", cn(o));

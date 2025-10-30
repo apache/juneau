@@ -888,8 +888,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	private NameValuePair createPart(String name, Object value) {
 		var isResolving = nn(varResolver);
 
-		if (value instanceof Supplier<?>) {
-			var value2 = (Supplier<?>)value;
+		if (value instanceof Supplier<?> value2) {
 			return isResolving ? new BasicPart(name, resolver(value2)) : new BasicPart(name, value2);
 		}
 		return isResolving ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);

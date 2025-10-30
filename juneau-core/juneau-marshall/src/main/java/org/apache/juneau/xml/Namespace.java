@@ -100,12 +100,11 @@ public class Namespace {
 			return n;
 		}
 
-		if (o instanceof Collection) {
-			Collection c = (Collection)o;
-			Namespace[] n = new Namespace[c.size()];
-			int i = 0;
-			for (Object o2 : c) {
-				if (o2 instanceof Namespace)
+	if (o instanceof Collection c) {
+		Namespace[] n = new Namespace[c.size()];
+		int i = 0;
+		for (Object o2 : c) {
+			if (o2 instanceof Namespace)
 					n[i++] = (Namespace)o2;
 				else if (o2 instanceof CharSequence)
 					n[i++] = create(o2.toString());

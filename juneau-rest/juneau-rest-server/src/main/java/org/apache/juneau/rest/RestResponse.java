@@ -204,11 +204,10 @@ public class RestResponse extends HttpServletResponseWrapper {
 	public RestResponse addHeader(Header header) {
 		if (header == null) {
 			// Do nothing.
-		} else if (header instanceof BasicUriHeader) {
-			var x = (BasicUriHeader)header;
+		} else if (header instanceof BasicUriHeader x) {
 			addHeader(x.getName(), resolveUris(x.getValue()));
-		} else if (header instanceof SerializedHeader) {
-			var x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
+		} else if (header instanceof SerializedHeader sh) {
+			var x = sh.copyWith(request.getPartSerializerSession(), null);
 				addHeader(x.getName(), resolveUris(x.getValue()));
 		} else {
 			addHeader(header.getName(), header.getValue());
@@ -664,11 +663,10 @@ public class RestResponse extends HttpServletResponseWrapper {
 	public RestResponse setHeader(Header header) {
 		if (header == null) {
 			// Do nothing.
-		} else if (header instanceof BasicUriHeader) {
-			var x = (BasicUriHeader)header;
+		} else if (header instanceof BasicUriHeader x) {
 			setHeader(x.getName(), resolveUris(x.getValue()));
-		} else if (header instanceof SerializedHeader) {
-			var x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
+		} else if (header instanceof SerializedHeader sh) {
+			var x = sh.copyWith(request.getPartSerializerSession(), null);
 			String v = x.getValue();
 			if (nn(v) && v.indexOf("://") != -1)
 				v = resolveUris(v);

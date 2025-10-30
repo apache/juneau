@@ -1978,41 +1978,37 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	protected void processParameterAnnotations() {
 		for (var aa : restMethod.getParameterAnnotations()) {
 
-			String def = null;
-			for (var a : aa) {
-				if (a instanceof Schema) {
-					var s = (Schema)a;
-					def = joinnlFirstNonEmptyArray(s._default(), s.df());
-				}
+		String def = null;
+		for (var a : aa) {
+			if (a instanceof Schema s) {
+				def = joinnlFirstNonEmptyArray(s._default(), s.df());
 			}
+		}
 
-			for (var a : aa) {
-				if (a instanceof Header) {
-					var h = (Header)a;
-						if (nn(def)) {
-							try {
-								defaultRequestHeaders().set(basicHeader(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
-							} catch (ParseException e) {
-								throw new ConfigException(e, "Malformed @Header annotation");
-							}
-				}
+		for (var a : aa) {
+			if (a instanceof Header h) {
+					if (nn(def)) {
+						try {
+							defaultRequestHeaders().set(basicHeader(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Header annotation");
+						}
 			}
-			if (a instanceof Query) {
-				var h = (Query)a;
-				if (nn(def)) {
-							try {
-								defaultRequestQueryData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
-							} catch (ParseException e) {
-								throw new ConfigException(e, "Malformed @Query annotation");
-							}
-				}
+		}
+		if (a instanceof Query h) {
+			if (nn(def)) {
+						try {
+							defaultRequestQueryData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+						} catch (ParseException e) {
+							throw new ConfigException(e, "Malformed @Query annotation");
+						}
 			}
-			if (a instanceof FormData) {
-				var h = (FormData)a;
-				if (nn(def)) {
-							try {
-								defaultRequestFormData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
-							} catch (ParseException e) {
+		}
+		if (a instanceof FormData h) {
+			if (nn(def)) {
+						try {
+							defaultRequestFormData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+						} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @FormData annotation");
 							}
 						}

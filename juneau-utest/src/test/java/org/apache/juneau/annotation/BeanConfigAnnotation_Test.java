@@ -63,8 +63,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 					.stream()
 					.map(TO_STRING)
 					.collect(Collectors.joining(","));
-			if (t instanceof Map.Entry) {
-				Map.Entry e = (Map.Entry)t;
+			if (t instanceof Map.Entry e) {
 				return apply(e.getKey()) + "=" + apply(e.getValue());
 			}
 			if (t instanceof BeanFilter)

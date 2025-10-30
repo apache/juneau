@@ -906,8 +906,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	private Header createPart(String name, Object value) {
 		var isResolving = nn(varResolver);
 
-		if (value instanceof Supplier<?>) {
-			var value2 = (Supplier<?>)value;
+		if (value instanceof Supplier<?> value2) {
 			return isResolving ? new BasicHeader(name, resolver(value2)) : new BasicHeader(name, value2);
 		}
 		return isResolving ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);

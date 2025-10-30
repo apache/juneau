@@ -125,8 +125,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 */
 	public MockServletRequest applyOverrides(HttpRequest req) {
 
-		if (req instanceof MockRestRequest) {
-			MockRestRequest mreq = (MockRestRequest)req;
+		if (req instanceof MockRestRequest mreq) {
 			mreq.getAttributeMap().forEach(this::attribute);
 			mreq.getRequestDispatcherMap().forEach(this::requestDispatcher);
 			if (nn(mreq.getCharacterEncoding()))

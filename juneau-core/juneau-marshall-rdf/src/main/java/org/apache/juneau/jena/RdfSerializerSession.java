@@ -376,13 +376,12 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			else
 				n = m.createTypedLiteral(o);
 
-		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
-			if (o instanceof BeanMap) {
-				BeanMap bm = (BeanMap)o;
-				Object uri = null;
-				RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
-				if (rbm.hasBeanUri())
-					uri = rbm.getBeanUriProperty().get(bm, null);
+	} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
+		if (o instanceof BeanMap bm) {
+			Object uri = null;
+			RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
+			if (rbm.hasBeanUri())
+				uri = rbm.getBeanUriProperty().get(bm, null);
 				String uri2 = getUri(uri, null);
 				n = m.createResource(uri2);
 				serializeBeanMap(bm, (Resource)n, typeName);

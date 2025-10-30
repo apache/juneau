@@ -1887,13 +1887,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					input2 = ((Supplier<?>)input2).get();
 
 				HttpEntity entity = null;
-				if (input2 instanceof PartList)
-					entity = new UrlEncodedFormEntity(((PartList)input2).stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
-				else if (input2 instanceof HttpResource) {
-					HttpResource r = (HttpResource)input2;
-					r.getHeaders().forEach(x -> request.addHeader(x));
-					entity = (HttpEntity)input2;
-				} else if (input2 instanceof HttpEntity) {
+			if (input2 instanceof PartList)
+				entity = new UrlEncodedFormEntity(((PartList)input2).stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
+			else if (input2 instanceof HttpResource r) {
+				r.getHeaders().forEach(x -> request.addHeader(x));
+				entity = (HttpEntity)input2;
+			} else if (input2 instanceof HttpEntity) {
 					if (input2 instanceof SerializedEntity) {
 						entity = ((SerializedEntity)input2).copyWith(serializer, contentSchema);
 					} else {

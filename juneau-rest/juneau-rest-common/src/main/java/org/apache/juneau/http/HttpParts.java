@@ -173,12 +173,11 @@ public class HttpParts {
 	public static NameValuePair cast(Object o) {
 		if (o instanceof NameValuePair)
 			return (NameValuePair)o;
-		if (o instanceof Headerable) {
-			Header x = ((Headerable)o).asHeader();
+		if (o instanceof Headerable h) {
+			Header x = h.asHeader();
 			return BasicPart.of(x.getName(), x.getValue());
 		}
-		if (o instanceof Map.Entry) {
-			Map.Entry e = (Map.Entry)o;
+		if (o instanceof Map.Entry e) {
 			return BasicPart.of(s(e.getKey()), e.getValue());
 		}
 		throw runtimeException("Object of type {0} could not be converted to a Part.", cn(o));

@@ -367,13 +367,12 @@ public class SerializerSet {
 			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
 		}
 
-		private Object copyBuilder(Object o) {
-			if (o instanceof Serializer.Builder) {
-				Serializer.Builder x = (Serializer.Builder)o;
-				Serializer.Builder x2 = x.copy();
-				if (ne(x.getClass(), x2.getClass()))
-					throw runtimeException("Copy method not implemented on class {0}", cn(x));
-				x = x2;
+	private Object copyBuilder(Object o) {
+		if (o instanceof Serializer.Builder x) {
+			Serializer.Builder x2 = x.copy();
+			if (ne(x.getClass(), x2.getClass()))
+				throw runtimeException("Copy method not implemented on class {0}", cn(x));
+			x = x2;
 				if (nn(bcBuilder))
 					x.beanContext(bcBuilder);
 				return x;

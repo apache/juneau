@@ -751,23 +751,20 @@ public class BeanMeta<T> {
 	 * @param m Where the results are loaded.
 	 */
 	static final void findTypeVarImpls(Type t, Map<Class<?>,Class<?>[]> m) {
-		if (t instanceof Class) {
-			Class<?> c = (Class<?>)t;
+		if (t instanceof Class<?> c) {
 			findTypeVarImpls(c.getGenericSuperclass(), m);
 			for (Type ci : c.getGenericInterfaces())
 				findTypeVarImpls(ci, m);
-		} else if (t instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
+		} else if (t instanceof ParameterizedType pt) {
 			Type rt = pt.getRawType();
 			if (rt instanceof Class) {
 				Type[] gImpls = pt.getActualTypeArguments();
 				Class<?>[] gTypes = new Class[gImpls.length];
 				for (int i = 0; i < gImpls.length; i++) {
 					Type gt = gImpls[i];
-					if (gt instanceof Class)
-						gTypes[i] = (Class<?>)gt;
-					else if (gt instanceof TypeVariable) {
-						TypeVariable<?> tv = (TypeVariable<?>)gt;
+					if (gt instanceof Class<?> c)
+						gTypes[i] = c;
+					else if (gt instanceof TypeVariable<?> tv) {
 						for (Type upperBound : tv.getBounds())
 							if (upperBound instanceof Class)
 								gTypes[i] = (Class<?>)upperBound;

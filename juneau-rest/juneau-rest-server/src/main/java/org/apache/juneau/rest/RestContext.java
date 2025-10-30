@@ -4465,21 +4465,19 @@ public class RestContext extends Context {
 			// Initialize our child resources.
 			for (Object o : children) {
 				String path = null;
-				Supplier<?> so;
+			Supplier<?> so;
 
-				if (o instanceof RestChild) {
-					RestChild rc = (RestChild)o;
-					path = rc.path;
-					Object o2 = rc.resource;
-					so = () -> o2;
-				}
+			if (o instanceof RestChild rc) {
+				path = rc.path;
+				Object o2 = rc.resource;
+				so = () -> o2;
+			}
 
-				Builder cb = null;
+			Builder cb = null;
 
-				if (o instanceof Class) {
-					Class<?> oc = (Class<?>)o;
-					// Don't allow specifying yourself as a child.  Causes an infinite loop.
-					if (oc == resourceClass)
+			if (o instanceof Class<?> oc) {
+				// Don't allow specifying yourself as a child.  Causes an infinite loop.
+				if (oc == resourceClass)
 						continue;
 					cb = RestContext.create(oc, restContext, inner);
 					if (beanStore.getBean(oc).isPresent()) {

@@ -2177,8 +2177,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	private static String findTarget(HttpRequest req) {
-		if (req instanceof HttpRequestWrapper) {
-			HttpHost httpHost = ((HttpRequestWrapper)req).getTarget();
+		if (req instanceof HttpRequestWrapper hrw) {
+			HttpHost httpHost = hrw.getTarget();
 			if (nn(httpHost))
 				return httpHost.toURI();
 		}

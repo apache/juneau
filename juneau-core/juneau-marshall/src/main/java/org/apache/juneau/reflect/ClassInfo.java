@@ -181,8 +181,7 @@ public class ClassInfo {
 
 	private static void extractTypes(Map<Type,Type> typeMap, Class<?> c) {
 		Type gs = c.getGenericSuperclass();
-		if (gs instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)gs;
+		if (gs instanceof ParameterizedType pt) {
 			Type[] typeParameters = ((Class<?>)pt.getRawType()).getTypeParameters();
 			Type[] actualTypeArguments = pt.getActualTypeArguments();
 			for (int i = 0; i < typeParameters.length; i++) {
@@ -210,9 +209,7 @@ public class ClassInfo {
 	}
 
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
-		if (od instanceof Class && id instanceof Class) {
-			Class<?> oc = (Class<?>)od;
-			Class<?> ic = (Class<?>)id;
+		if (od instanceof Class<?> oc && id instanceof Class<?> ic) {
 			while (nn(ic = ic.getEnclosingClass()))
 				if (ic == oc)
 					return true;
@@ -1070,30 +1067,28 @@ public class ClassInfo {
 			return (Class<?>)actualType;
 
 		} else if (actualType instanceof GenericArrayType) {
-			Type gct = ((GenericArrayType)actualType).getGenericComponentType();
-			if (gct instanceof ParameterizedType)
-				return Array.newInstance((Class<?>)((ParameterizedType)gct).getRawType(), 0).getClass();
-		} else if (actualType instanceof TypeVariable) {
-			TypeVariable<?> typeVariable = (TypeVariable<?>)actualType;
-			List<Class<?>> nestedOuterTypes = new LinkedList<>();
-			for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
-				Class<?> outerClass = cc.getClass();
-				nestedOuterTypes.add(outerClass);
-				var outerTypeMap = new HashMap<Type,Type>();
-				extractTypes(outerTypeMap, outerClass);
-				for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
-					Type key = entry.getKey(), value = entry.getValue();
-					if (key instanceof TypeVariable) {
-						TypeVariable<?> keyType = (TypeVariable<?>)key;
-						if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
-							if (value instanceof Class)
-								return (Class<?>)value;
-							typeVariable = (TypeVariable<?>)entry.getValue();
-						}
+		Type gct = ((GenericArrayType)actualType).getGenericComponentType();
+		if (gct instanceof ParameterizedType pt3)
+			return Array.newInstance((Class<?>)pt3.getRawType(), 0).getClass();
+	} else if (actualType instanceof TypeVariable<?> typeVariable) {
+		List<Class<?>> nestedOuterTypes = new LinkedList<>();
+		for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
+			Class<?> outerClass = cc.getClass();
+			nestedOuterTypes.add(outerClass);
+			var outerTypeMap = new HashMap<Type,Type>();
+			extractTypes(outerTypeMap, outerClass);
+			for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
+				Type key = entry.getKey(), value = entry.getValue();
+				if (key instanceof TypeVariable<?> keyType) {
+					if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
+						if (value instanceof Class<?> c)
+							return c;
+						typeVariable = (TypeVariable<?>)entry.getValue();
 					}
 				}
 			}
-		} else if (actualType instanceof ParameterizedType) {
+		}
+	} else if (actualType instanceof ParameterizedType) {
 			return (Class<?>)((ParameterizedType)actualType).getRawType();
 		}
 		throw illegalArg("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
@@ -2085,14 +2080,13 @@ public class ClassInfo {
 
 	private Type getFirstParameterType(Class<?> parameterizedType) {
 		if (t instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
-			Type[] ta = pt.getActualTypeArguments();
-			if (ta.length > 0)
-				return ta[0];
-		} else if (t instanceof Class) /* Class that extends Optional<T> */ {
-			Class<?> c = (Class<?>)t;
-			if (c != parameterizedType && parameterizedType.isAssignableFrom(c))
-				return ClassInfo.of(c).getParameterType(0, parameterizedType);
+		ParameterizedType pt = (ParameterizedType)t;
+		Type[] ta = pt.getActualTypeArguments();
+		if (ta.length > 0)
+			return ta[0];
+	} else if (t instanceof Class<?> c) /* Class that extends Optional<T> */ {
+		if (c != parameterizedType && parameterizedType.isAssignableFrom(c))
+			return ClassInfo.of(c).getParameterType(0, parameterizedType);
 		}
 		return null;
 	}

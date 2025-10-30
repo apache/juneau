@@ -88,15 +88,13 @@ public class ClassUtils {
 	 * @return The parameter type of the value, or <jk>null</jk> if the type is not a subclass of <c>Value</c>.
 	 */
 	public static Type getParameterType(Type t) {
-		if (t instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
+		if (t instanceof ParameterizedType pt) {
 			if (pt.getRawType() == Value.class) {
 				Type[] ta = pt.getActualTypeArguments();
 				if (ta.length > 0)
 					return ta[0];
 			}
-		} else if (t instanceof Class) {
-			Class<?> c = (Class<?>)t;
+		} else if (t instanceof Class<?> c) {
 			if (Value.class.isAssignableFrom(c)) {
 				return getParameterType(c, 0, Value.class);
 			}
@@ -141,12 +139,11 @@ public class ClassUtils {
 		if (actualType instanceof Class) {
 			return (Class<?>)actualType;
 
-		} else if (actualType instanceof GenericArrayType) {
-			Type gct = ((GenericArrayType)actualType).getGenericComponentType();
-			if (gct instanceof ParameterizedType)
-				return Array.newInstance((Class<?>)((ParameterizedType)gct).getRawType(), 0).getClass();
-		} else if (actualType instanceof TypeVariable) {
-			TypeVariable<?> typeVariable = (TypeVariable<?>)actualType;
+	} else if (actualType instanceof GenericArrayType gat) {
+		Type gct = gat.getGenericComponentType();
+		if (gct instanceof ParameterizedType pt3)
+			return Array.newInstance((Class<?>)pt3.getRawType(), 0).getClass();
+	} else if (actualType instanceof TypeVariable<?> typeVariable) {
 			List<Class<?>> nestedOuterTypes = new LinkedList<>();
 			for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 				Class<?> outerClass = cc.getClass();
@@ -155,26 +152,24 @@ public class ClassUtils {
 				extractTypes(outerTypeMap, outerClass);
 				for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
 					Type key = entry.getKey(), value = entry.getValue();
-					if (key instanceof TypeVariable) {
-						TypeVariable<?> keyType = (TypeVariable<?>)key;
+					if (key instanceof TypeVariable<?> keyType) {
 						if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
-							if (value instanceof Class)
-								return (Class<?>)value;
+							if (value instanceof Class<?> c2)
+								return c2;
 							typeVariable = (TypeVariable<?>)entry.getValue();
 						}
 					}
 				}
 			}
-		} else if (actualType instanceof ParameterizedType) {
-			return (Class<?>)((ParameterizedType)actualType).getRawType();
+		} else if (actualType instanceof ParameterizedType pt2) {
+			return (Class<?>)pt2.getRawType();
 		}
 		throw illegalArg("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
 	}
 
 	private static void extractTypes(Map<Type,Type> typeMap, Class<?> c) {
 		Type gs = c.getGenericSuperclass();
-		if (gs instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)gs;
+		if (gs instanceof ParameterizedType pt) {
 			Type[] typeParameters = ((Class<?>)pt.getRawType()).getTypeParameters();
 			Type[] actualTypeArguments = pt.getActualTypeArguments();
 			for (int i = 0; i < typeParameters.length; i++) {
@@ -186,9 +181,7 @@ public class ClassUtils {
 	}
 
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {
-		if (od instanceof Class && id instanceof Class) {
-			Class<?> oc = (Class<?>)od;
-			Class<?> ic = (Class<?>)id;
+		if (od instanceof Class<?> oc && id instanceof Class<?> ic) {
 			while (nn(ic = ic.getEnclosingClass()))
 				if (ic == oc)
 					return true;
@@ -207,10 +200,9 @@ public class ClassUtils {
 	 * @return The type converted to a <c>Class</c>, or <jk>null</jk> if it could not be converted.
 	 */
 	public static Class<?> toClass(Type t) {
-		if (t instanceof Class)
-			return (Class<?>)t;
-		if (t instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
+		if (t instanceof Class<?> c)
+			return c;
+		if (t instanceof ParameterizedType pt) {
 			// The raw type should always be a class (right?)
 			return (Class<?>)pt.getRawType();
 		}

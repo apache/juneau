@@ -76,8 +76,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	private static void check(String expected, Object o) {
-		if (o instanceof List) {
-			var l = (List<?>)o;
+		if (o instanceof List<?> l) {
 			String actual = l
 				.stream()
 				.map(TO_STRING)
@@ -116,8 +115,7 @@ public class ClassInfo_Test extends TestBase {
 			return "@AConfig(" + ((AConfig)t).value() + ")";
 		if (t instanceof AnnotationInfo)
 			return ClassInfo_Test.TO_STRING.apply(((AnnotationInfo<?>)t).inner());
-		if (t instanceof AnnotationList) {
-			AnnotationList al = (AnnotationList)t;
+		if (t instanceof AnnotationList al) {
 			return al.toString();
 		}
 		return t.toString();

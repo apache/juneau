@@ -4327,22 +4327,21 @@ public class BeanContext extends Context {
 			} while (nn(c));
 		}
 
-		if (o instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)o;
-			if (! pt.getRawType().equals(Enum.class)) {
-				List<ClassMeta<?>> l = new LinkedList<>();
-				for (Type pt2 : pt.getActualTypeArguments()) {
-					if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
-						return null;
-					l.add(resolveClassMeta(pt2, null));
-				}
-				if (l.isEmpty())
+	if (o instanceof ParameterizedType pt) {
+		if (! pt.getRawType().equals(Enum.class)) {
+			List<ClassMeta<?>> l = new LinkedList<>();
+			for (Type pt2 : pt.getActualTypeArguments()) {
+				if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
 					return null;
-				return l.toArray(new ClassMeta[l.size()]);
+				l.add(resolveClassMeta(pt2, null));
 			}
+			if (l.isEmpty())
+				return null;
+			return l.toArray(new ClassMeta[l.size()]);
 		}
+	}
 
-		return null;
+	return null;
 	}
 
 	/**
@@ -4390,33 +4389,32 @@ public class BeanContext extends Context {
 			// A parameter (e.g. <String>.
 			return (Class)((ParameterizedType)t).getRawType();
 
-		if (t instanceof GenericArrayType) {
-			// An array parameter (e.g. <byte[]>).
-			Type gatct = ((GenericArrayType)t).getGenericComponentType();
+	if (t instanceof GenericArrayType gat) {
+		// An array parameter (e.g. <byte[]>).
+		Type gatct = gat.getGenericComponentType();
 
-			if (gatct instanceof Class)
-				return Array.newInstance((Class)gatct, 0).getClass();
+		if (gatct instanceof Class<?> c)
+			return Array.newInstance(c, 0).getClass();
 
-			if (gatct instanceof ParameterizedType)
-				return Array.newInstance((Class)((ParameterizedType)gatct).getRawType(), 0).getClass();
+		if (gatct instanceof ParameterizedType pt)
+			return Array.newInstance((Class)pt.getRawType(), 0).getClass();
 
-			if (gatct instanceof GenericArrayType)
-				return Array.newInstance(resolve(gatct, typeVarImpls), 0).getClass();
+		if (gatct instanceof GenericArrayType)
+			return Array.newInstance(resolve(gatct, typeVarImpls), 0).getClass();
 
-			return null;
+		return null;
 
-		} else if (t instanceof TypeVariable) {
-			if (nn(typeVarImpls)) {
-				TypeVariable tv = (TypeVariable)t;
-				String varName = tv.getName();
-				int varIndex = -1;
-				Class gc = (Class)tv.getGenericDeclaration();
-				TypeVariable[] tvv = gc.getTypeParameters();
-				for (int i = 0; i < tvv.length; i++) {
-					if (tvv[i].getName().equals(varName)) {
-						varIndex = i;
-					}
+	} else if (t instanceof TypeVariable tv) {
+		if (nn(typeVarImpls)) {
+			String varName = tv.getName();
+			int varIndex = -1;
+			Class gc = (Class)tv.getGenericDeclaration();
+			TypeVariable[] tvv = gc.getTypeParameters();
+			for (int i = 0; i < tvv.length; i++) {
+				if (tvv[i].getName().equals(varName)) {
+					varIndex = i;
 				}
+			}
 				if (varIndex != -1) {
 
 					// If we couldn't find a type variable implementation, that means
@@ -4437,17 +4435,16 @@ public class BeanContext extends Context {
 		if (o == null)
 			return null;
 
-		if (o instanceof ClassMeta) {
-			ClassMeta<?> cm = (ClassMeta)o;
+	if (o instanceof ClassMeta<?> cm) {
 
-			// This classmeta could have been created by a different context.
-			// Need to re-resolve it to pick up ObjectSwaps and stuff on this context.
-			if (cm.getBeanContext() == this)
-				return cm;
-			if (cm.isMap())
-				return getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
-			if (cm.isCollection() || cm.isOptional())
-				return getClassMeta(cm.innerClass, cm.getElementType());
+		// This classmeta could have been created by a different context.
+		// Need to re-resolve it to pick up ObjectSwaps and stuff on this context.
+		if (cm.getBeanContext() == this)
+			return cm;
+		if (cm.isMap())
+			return getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
+		if (cm.isCollection() || cm.isOptional())
+			return getClassMeta(cm.innerClass, cm.getElementType());
 			return getClassMeta(cm.innerClass);
 		}
 
