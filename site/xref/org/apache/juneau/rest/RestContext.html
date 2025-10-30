@@ -3801,12 +3801,12 @@
 <a class="jxr_linenumber" name="L3793" href="#L3793">3793</a> 
 <a class="jxr_linenumber" name="L3794" href="#L3794">3794</a> 			<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m : map.values()) {
 <a class="jxr_linenumber" name="L3795" href="#L3795">3795</a> 				<strong class="jxr_keyword">if</strong> (! beanStore.hasAllParams(m))
-<a class="jxr_linenumber" name="L3796" href="#L3796">3796</a> 					<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, m.getDeclaringClass().getSimpleName(), m.getSignature(),
+<a class="jxr_linenumber" name="L3796" href="#L3796">3796</a> 					<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, scn(m.getDeclaringClass()), m.getSignature(),
 <a class="jxr_linenumber" name="L3797" href="#L3797">3797</a> 						beanStore.getMissingParams(m));
 <a class="jxr_linenumber" name="L3798" href="#L3798">3798</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L3799" href="#L3799">3799</a> 					m.invoke(r, beanStore.getParams(m));
 <a class="jxr_linenumber" name="L3800" href="#L3800">3800</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L3801" href="#L3801">3801</a> 					<strong class="jxr_keyword">throw</strong> servletException(e, <span class="jxr_string">"Exception thrown from @RestInit method {0}.{1}."</span>, m.getDeclaringClass().getSimpleName(), m.getSignature());
+<a class="jxr_linenumber" name="L3801" href="#L3801">3801</a> 					<strong class="jxr_keyword">throw</strong> servletException(e, <span class="jxr_string">"Exception thrown from @RestInit method {0}.{1}."</span>, scn(m.getDeclaringClass()), m.getSignature());
 <a class="jxr_linenumber" name="L3802" href="#L3802">3802</a> 				}
 <a class="jxr_linenumber" name="L3803" href="#L3803">3803</a> 			}
 <a class="jxr_linenumber" name="L3804" href="#L3804">3804</a> 		}
@@ -4160,7 +4160,7 @@
 <a class="jxr_linenumber" name="L4152" href="#L4152">4152</a> 		<strong class="jxr_keyword">protected</strong> Logger createLogger(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource, Class&lt;?&gt; resourceClass) {
 <a class="jxr_linenumber" name="L4153" href="#L4153">4153</a> 
 <a class="jxr_linenumber" name="L4154" href="#L4154">4154</a> 			<em class="jxr_comment">// Default value.</em>
-<a class="jxr_linenumber" name="L4155" href="#L4155">4155</a> 			Value&lt;Logger&gt; v = Value.of(Logger.getLogger(resourceClass.getClass().getName()));
+<a class="jxr_linenumber" name="L4155" href="#L4155">4155</a> 			Value&lt;Logger&gt; v = Value.of(Logger.getLogger(cn(resourceClass)));
 <a class="jxr_linenumber" name="L4156" href="#L4156">4156</a> 
 <a class="jxr_linenumber" name="L4157" href="#L4157">4157</a> 			<em class="jxr_comment">// Replace with bean from bean store.</em>
 <a class="jxr_linenumber" name="L4158" href="#L4158">4158</a> 			beanStore.getBean(Logger.<strong class="jxr_keyword">class</strong>).ifPresent(x -&gt; v.set(x));
@@ -4608,17 +4608,17 @@
 <a class="jxr_linenumber" name="L4600" href="#L4600">4600</a> 						RestOpContext.Builder rocb = RestOpContext.create(mi.<strong class="jxr_keyword">inner</strong>(), restContext).beanStore(beanStore).type(opContextClass);
 <a class="jxr_linenumber" name="L4601" href="#L4601">4601</a> 
 <a class="jxr_linenumber" name="L4602" href="#L4602">4602</a> 						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>, rocb);
-<a class="jxr_linenumber" name="L4603" href="#L4603">4603</a> 						<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m : initMap.values()) {
-<a class="jxr_linenumber" name="L4604" href="#L4604">4604</a> 							<strong class="jxr_keyword">if</strong> (! beanStore.hasAllParams(m)) {
-<a class="jxr_linenumber" name="L4605" href="#L4605">4605</a> 								<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, m.getDeclaringClass().getSimpleName(), m.getSignature(),
-<a class="jxr_linenumber" name="L4606" href="#L4606">4606</a> 									beanStore.getMissingParams(m));
-<a class="jxr_linenumber" name="L4607" href="#L4607">4607</a> 							}
-<a class="jxr_linenumber" name="L4608" href="#L4608">4608</a> 							<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L4609" href="#L4609">4609</a> 								m.invoke(resource.get(), beanStore.getParams(m));
-<a class="jxr_linenumber" name="L4610" href="#L4610">4610</a> 							} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L4611" href="#L4611">4611</a> 								<strong class="jxr_keyword">throw</strong> servletException(e, <span class="jxr_string">"Exception thrown from @RestInit method {0}.{1}."</span>, m.getDeclaringClass().getSimpleName(), m.getSignature());
-<a class="jxr_linenumber" name="L4612" href="#L4612">4612</a> 							}
-<a class="jxr_linenumber" name="L4613" href="#L4613">4613</a> 						}
+<a class="jxr_linenumber" name="L4603" href="#L4603">4603</a> 					<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m : initMap.values()) {
+<a class="jxr_linenumber" name="L4604" href="#L4604">4604</a> 						<strong class="jxr_keyword">if</strong> (! beanStore.hasAllParams(m)) {
+<a class="jxr_linenumber" name="L4605" href="#L4605">4605</a> 							<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, scn(m.getDeclaringClass()), m.getSignature(),
+<a class="jxr_linenumber" name="L4606" href="#L4606">4606</a> 								beanStore.getMissingParams(m));
+<a class="jxr_linenumber" name="L4607" href="#L4607">4607</a> 						}
+<a class="jxr_linenumber" name="L4608" href="#L4608">4608</a> 						<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L4609" href="#L4609">4609</a> 							m.invoke(resource.get(), beanStore.getParams(m));
+<a class="jxr_linenumber" name="L4610" href="#L4610">4610</a> 						} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L4611" href="#L4611">4611</a> 							<strong class="jxr_keyword">throw</strong> servletException(e, <span class="jxr_string">"Exception thrown from @RestInit method {0}.{1}."</span>, scn(m.getDeclaringClass()), m.getSignature());
+<a class="jxr_linenumber" name="L4612" href="#L4612">4612</a> 						}
+<a class="jxr_linenumber" name="L4613" href="#L4613">4613</a> 					}
 <a class="jxr_linenumber" name="L4614" href="#L4614">4614</a> 
 <a class="jxr_linenumber" name="L4615" href="#L4615">4615</a> 						RestOpContext roc = rocb.build();
 <a class="jxr_linenumber" name="L4616" href="#L4616">4616</a> 

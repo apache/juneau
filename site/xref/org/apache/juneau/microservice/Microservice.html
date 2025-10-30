@@ -590,7 +590,7 @@
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 				<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> fis = <strong class="jxr_keyword">new</strong> FileInputStream(f)) {
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 					m.read(fis);
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Problem detected in MANIFEST.MF.  Contents below:\n"</span> + read(f), e);
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 					<strong class="jxr_keyword">throw</strong> ioException(e, <span class="jxr_string">"Problem detected in MANIFEST.MF.  Contents below:\n{0}"</span>, read(f), e);
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 				}
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 				<em class="jxr_comment">// Otherwise, read from manifest file in the jar file containing the main class.</em>
@@ -599,7 +599,7 @@
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 						m.read(url.openStream());
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Problem detected in MANIFEST.MF.  Contents below:\n"</span> + read(url.openStream()), e);
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 						<strong class="jxr_keyword">throw</strong> ioException(e, <span class="jxr_string">"Problem detected in MANIFEST.MF.  Contents below:\n{0}"</span>, read(url.openStream()), e);
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 					}
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 				}
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 			}
@@ -657,7 +657,7 @@
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 					<strong class="jxr_keyword">var</strong> cc = (<a name="ConsoleCommand" href="../../../../org/apache/juneau/microservice/console/ConsoleCommand.html#ConsoleCommand">ConsoleCommand</a>)Class.forName(s).getDeclaredConstructor().newInstance();
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> 					consoleCommandMap.put(cc.getName(), cc);
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 					getConsoleWriter().println(<span class="jxr_string">"Could not create console command '"</span> + s + <span class="jxr_string">"', "</span> + e.getLocalizedMessage());
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 					getConsoleWriter().println(<span class="jxr_string">"Could not create console command '"</span> + s + <span class="jxr_string">"', "</span> + lm(e));
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 				}
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 			}
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 			consoleThread = <strong class="jxr_keyword">new</strong> Thread(<span class="jxr_string">"ConsoleThread"</span>) {

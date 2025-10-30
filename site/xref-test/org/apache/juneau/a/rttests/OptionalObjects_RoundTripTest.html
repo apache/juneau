@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		x.f1 = opt(l((Integer)<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertTrue(x.f1.isPresent());
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertEquals(1, x.f1.get().size());
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertSize(1, x.f1.get());
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertNull(x.f1.get().get(0));
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		x.f1 = opt(l());
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertTrue(x.f1.isPresent());
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertEquals(0, x.f1.get().size());
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertEmpty(x.f1.get());
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@ParameterizedTest
@@ -333,7 +333,7 @@
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B06();
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		x.f1 = l(opte());
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 		x = t.roundTrip(x);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertEquals(1, x.f1.size());
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertSize(1, x.f1);
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertFalse(x.f1.get(0).isPresent());
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 
@@ -345,7 +345,7 @@
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 		x = t.roundTrip(x);
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">if</strong> (t.isValidationOnly())
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		assertEquals(1, x.f1.size());
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		assertSize(1, x.f1);
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 		assertFalse(x.f1.get(0).isPresent());
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 	}
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 

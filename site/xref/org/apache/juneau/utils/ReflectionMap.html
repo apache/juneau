@@ -457,8 +457,8 @@
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 		<em class="jxr_comment">// c.getSimpleName() == "Builder"</em>
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<em class="jxr_comment">// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"</em>
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<em class="jxr_comment">// c.getPackage() == "org.apache.juneau.a.rttests"</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> cSimple = c.getSimpleName();
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">var</strong> cFull = c.getName();
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> cSimple = scn(c);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">var</strong> cFull = cn(c);
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">if</strong> (eq(simpleName, cSimple) || eq(fullName, cFull) || <span class="jxr_string">"*"</span>.equals(simpleName))
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">if</strong> (cFull.indexOf('$') != -1) {

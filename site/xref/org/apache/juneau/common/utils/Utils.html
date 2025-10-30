@@ -207,7 +207,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">if</strong> (l1 != l2)
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; l1; i++)
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				<strong class="jxr_keyword">if</strong> (! eq(Array.get(o1, i), Array.get(o2, i)))
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				<strong class="jxr_keyword">if</strong> (ne(Array.get(o1, i), Array.get(o2, i)))
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 					<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		}
@@ -786,7 +786,7 @@
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 			<strong class="jxr_keyword">throw</strong> runtimeException(e);
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 		}
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 	}
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 

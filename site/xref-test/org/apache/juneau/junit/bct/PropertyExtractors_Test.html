@@ -276,7 +276,7 @@
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		@Test
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		@DisplayName(<span class="jxr_string">"canExtract() - returns true only for Map objects"</span>)
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">void</strong> c01_canExtract_mapObjects() {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			assertTrue(extractor.canExtract(converter, Map.of(<span class="jxr_string">"key"</span>, <span class="jxr_string">"value"</span>), <span class="jxr_string">"key"</span>));
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			assertTrue(extractor.canExtract(converter, m(<span class="jxr_string">"key"</span>, <span class="jxr_string">"value"</span>), <span class="jxr_string">"key"</span>));
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 			assertTrue(extractor.canExtract(converter, <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(), <span class="jxr_string">"size"</span>));
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 			assertFalse(extractor.canExtract(converter, l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>), <span class="jxr_string">"0"</span>));
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			assertFalse(extractor.canExtract(converter, <span class="jxr_string">"not a map"</span>, <span class="jxr_string">"length"</span>));
@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		@Test
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		@DisplayName(<span class="jxr_string">"extract() - direct key access"</span>)
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">void</strong> c02_extract_directKeyAccess() {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">var</strong> map = Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"John"</span>, <span class="jxr_string">"age"</span>, 30, <span class="jxr_string">"active"</span>, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">var</strong> map = m(<span class="jxr_string">"name"</span>, <span class="jxr_string">"John"</span>, <span class="jxr_string">"age"</span>, 30, <span class="jxr_string">"active"</span>, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			assertEquals(<span class="jxr_string">"John"</span>, extractor.extract(converter, map, <span class="jxr_string">"name"</span>));
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 			assertEquals(30, extractor.extract(converter, map, <span class="jxr_string">"age"</span>));
@@ -295,7 +295,7 @@
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		@Test
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 		@DisplayName(<span class="jxr_string">"extract() - size property"</span>)
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">void</strong> c03_extract_sizeProperty() {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">var</strong> map = Map.of(<span class="jxr_string">"a"</span>, 1, <span class="jxr_string">"b"</span>, 2, <span class="jxr_string">"c"</span>, 3);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">var</strong> map = m(<span class="jxr_string">"a"</span>, 1, <span class="jxr_string">"b"</span>, 2, <span class="jxr_string">"c"</span>, 3);
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			assertEquals(3, extractor.extract(converter, map, <span class="jxr_string">"size"</span>));
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		}
@@ -427,7 +427,7 @@
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 	}
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestBeanWithMapGetter {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String, String&gt; data = Map.of(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"mapped value"</span>, <span class="jxr_string">"key2"</span>, <span class="jxr_string">"another value"</span>);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String, String&gt; data = m(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"mapped value"</span>, <span class="jxr_string">"key2"</span>, <span class="jxr_string">"another value"</span>);
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">public</strong> String get(String key) {
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">return</strong> data.get(key);

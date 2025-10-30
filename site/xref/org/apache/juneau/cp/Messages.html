@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">protected</strong> Builder(Class&lt;?&gt; forClass) {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">super</strong>(Messages.<strong class="jxr_keyword">class</strong>, BeanStore.INSTANCE);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">this</strong>.forClass = forClass;
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">this</strong>.name = forClass.getSimpleName();
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">this</strong>.name = scn(forClass);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			locations = list();
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			locale = Locale.getDefault();
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		}
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">public</strong> Builder name(String value) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">this</strong>.name = isEmpty(value) ? forClass.getSimpleName() : value;
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">this</strong>.name = isEmpty(value) ? scn(forClass) : value;
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 		}
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 
@@ -371,7 +371,7 @@
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		Map&lt;String,String&gt; keyMap = <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		String cn = c.getSimpleName() + '.';
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		String cn = scn(c) + '.';
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">if</strong> (nn(rb)) {
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 			rb.keySet().forEach(x -&gt; {
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 				keyMap.put(x, x);

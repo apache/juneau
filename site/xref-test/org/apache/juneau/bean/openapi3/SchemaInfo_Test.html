@@ -315,52 +315,52 @@
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		@Test <strong class="jxr_keyword">void</strong> d01_resolveRefs_basic() {
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 				.setComponents(components().setSchemas(Map.of(
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 				.setComponents(components().setSchemas(m(
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 					<span class="jxr_string">"Pet"</span>, schemaInfo().setType(<span class="jxr_string">"object"</span>).setTitle(<span class="jxr_string">"Pet"</span>)
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				)));
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			assertBean(
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 				schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/Pet"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 				<span class="jxr_string">"type,title"</span>,
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 				<span class="jxr_string">"object,Pet"</span>
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 			);
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		}
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 		@Test <strong class="jxr_keyword">void</strong> d02_resolveRefs_nested() {
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				.setComponents(components().setSchemas(Map.of(
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				.setComponents(components().setSchemas(m(
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 					<span class="jxr_string">"Pet"</span>, schemaInfo().setType(<span class="jxr_string">"object"</span>).setTitle(<span class="jxr_string">"Pet"</span>),
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 					<span class="jxr_string">"Pets"</span>, schemaInfo().setType(<span class="jxr_string">"array"</span>).setItems(items().setRef(<span class="jxr_string">"#/components/schemas/Pet"</span>))
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 				)));
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 			assertBean(
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 				schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/Pets"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 				<span class="jxr_string">"type,items{type,title}"</span>,
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 				<span class="jxr_string">"array,{object,Pet}"</span>
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 		@Test <strong class="jxr_keyword">void</strong> d03_resolveRefs_maxDepth() {
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 				.setComponents(components().setSchemas(Map.of(
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 				.setComponents(components().setSchemas(m(
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 					<span class="jxr_string">"Pet"</span>, schemaInfo().setType(<span class="jxr_string">"object"</span>).setTitle(<span class="jxr_string">"Pet"</span>),
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 					<span class="jxr_string">"Pets"</span>, schemaInfo().setType(<span class="jxr_string">"array"</span>).setItems(items().setRef(<span class="jxr_string">"#/components/schemas/Pet"</span>))
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 				)));
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 			assertBean(
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 				schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/Pets"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 1),
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 				<span class="jxr_string">"type,items{ref}"</span>,
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 				<span class="jxr_string">"array,{#/components/schemas/Pet}"</span>
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 			);
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		}
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 		@Test <strong class="jxr_keyword">void</strong> d04_resolveRefs_circular() {
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 				.setComponents(components().setSchemas(Map.of(
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 					<span class="jxr_string">"A"</span>, schemaInfo().setType(<span class="jxr_string">"object"</span>).setTitle(<span class="jxr_string">"A"</span>).setProperties(Map.of(<span class="jxr_string">"b"</span>, schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/B"</span>))),
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 					<span class="jxr_string">"B"</span>, schemaInfo().setType(<span class="jxr_string">"object"</span>).setTitle(<span class="jxr_string">"B"</span>).setProperties(Map.of(<span class="jxr_string">"a"</span>, schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/A"</span>)))
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 				.setComponents(components().setSchemas(m(
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 					<span class="jxr_string">"A"</span>, schemaInfo().setType(<span class="jxr_string">"object"</span>).setTitle(<span class="jxr_string">"A"</span>).setProperties(m(<span class="jxr_string">"b"</span>, schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/B"</span>))),
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 					<span class="jxr_string">"B"</span>, schemaInfo().setType(<span class="jxr_string">"object"</span>).setTitle(<span class="jxr_string">"B"</span>).setProperties(m(<span class="jxr_string">"a"</span>, schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/A"</span>)))
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 				)));
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 			assertBean(
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 				schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/A"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 				<span class="jxr_string">"type,title,properties{b{type,title,properties{a{ref}}}}"</span>,

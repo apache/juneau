@@ -1104,7 +1104,7 @@
 <a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (actualType instanceof ParameterizedType) {
 <a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 			<strong class="jxr_keyword">return</strong> (Class&lt;?&gt;)((ParameterizedType)actualType).getRawType();
 <a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		}
-<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Could not resolve variable '"</span> + actualType.getTypeName() + <span class="jxr_string">"' to a type."</span>);
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Could not resolve variable ''{0}'' to a type."</span>, actualType.getTypeName());
 <a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 	}
 <a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 
 <a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 	<em class="jxr_javadoccomment">/**</em>

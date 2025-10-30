@@ -259,10 +259,10 @@
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		@Test <strong class="jxr_keyword">void</strong> d01_resolveRefs_basic() {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">var</strong> openApi = openApi()
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 				.setComponents(components().setSchemas(Map.of(
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 				.setComponents(components().setSchemas(m(
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 					<span class="jxr_string">"MyHeader"</span>, schemaInfo().setType(<span class="jxr_string">"string"</span>).setDescription(<span class="jxr_string">"My Header"</span>)
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 				)));
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 			assertBean(
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 				headerInfo().setRef(<span class="jxr_string">"#/components/schemas/MyHeader"</span>).resolveRefs(openApi, <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;(), 10),
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 				<span class="jxr_string">"type,description"</span>,

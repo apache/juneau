@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">return</strong> type.isInstance(t) ? type.<strong class="jxr_keyword">cast</strong>(t) : type.getConstructor(Throwable.<strong class="jxr_keyword">class</strong>).newInstance(t);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(e);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">throw</strong> illegalArg(e);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
@@ -222,22 +222,90 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * Searches through the cause chain of an exception to find an exception of the specified type.</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * Creates an {@link java.io.IOException} wrapping the given throwable.</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The cause type.</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * @param e The exception to search.</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 * @param cause The cause type to search for.</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * @return An {@link Optional} containing the cause if found, or empty if not found.</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Throwable&gt; Optional&lt;T&gt; findCause(Throwable e, Class&lt;T&gt; cause) {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">while</strong> (nn(e)) {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">if</strong> (cause.isInstance(e))
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 				<strong class="jxr_keyword">return</strong> Optional.of(cause.<strong class="jxr_keyword">cast</strong>(e));
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			e = e.getCause();
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		}
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">return</strong> Optional.empty();
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	}
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> }
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * @param cause The cause of the exception.</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * @return A new IOException wrapping the given cause.</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> java.io.IOException ioException(Throwable cause) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> java.io.IOException(cause);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 * Creates an {@link IllegalArgumentException} wrapping the given throwable.</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 * @param cause The cause of the exception.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 * @return A new IllegalArgumentException wrapping the given cause.</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> IllegalArgumentException illegalArg(Throwable cause) {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(cause);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	}
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * Creates a {@link RuntimeException} wrapping the given throwable.</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 * @param cause The cause of the exception.</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * @return A new RuntimeException wrapping the given cause.</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RuntimeException runtimeException(Throwable cause) {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeException(cause);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	}
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * Creates an {@link UnsupportedOperationException} wrapping the given throwable.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 * @param cause The cause of the exception.</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * @return A new UnsupportedOperationException wrapping the given cause.</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> UnsupportedOperationException unsupportedOp(Throwable cause) {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(cause);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * Creates an {@link UnsupportedOperationException} with a default message.</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * @return A new UnsupportedOperationException with the message "Not supported."</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> UnsupportedOperationException unsupportedOp() {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported."</span>);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	}
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * Creates an {@link UnsupportedOperationException} for read-only objects.</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * @return A new UnsupportedOperationException with the message "Object is read only."</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> UnsupportedOperationException unsupportedOpReadOnly() {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Object is read only."</span>);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 * Searches through the cause chain of an exception to find an exception of the specified type.</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The cause type.</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @param e The exception to search.</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * @param cause The cause type to search for.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * @return An {@link Optional} containing the cause if found, or empty if not found.</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Throwable&gt; Optional&lt;T&gt; findCause(Throwable e, Class&lt;T&gt; cause) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">while</strong> (nn(e)) {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">if</strong> (cause.isInstance(e))
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				<strong class="jxr_keyword">return</strong> Optional.of(cause.<strong class="jxr_keyword">cast</strong>(e));
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			e = e.getCause();
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">return</strong> Optional.empty();
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * Convenience method for calling {@link Throwable#getLocalizedMessage()}.</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * @param t The throwable.</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * @return The localized message of the throwable.</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String lm(Throwable t) {
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">return</strong> t.getLocalizedMessage();
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	}
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

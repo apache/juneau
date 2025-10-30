@@ -205,7 +205,7 @@
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		@Test
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		@DisplayName(<span class="jxr_string">"b05_stringify() handles maps"</span>)
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">void</strong> b05_stringify_handlesMaps() {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">var</strong> map = Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"John"</span>, <span class="jxr_string">"age"</span>, 30);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">var</strong> map = m(<span class="jxr_string">"name"</span>, <span class="jxr_string">"John"</span>, <span class="jxr_string">"age"</span>, 30);
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">var</strong> result = converter.stringify(map);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 			assertTrue(result.contains(<span class="jxr_string">"name=John"</span>));
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			assertTrue(result.contains(<span class="jxr_string">"age=30"</span>));
@@ -363,7 +363,7 @@
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 				.addSetting(SETTING_mapSuffix, <span class="jxr_string">"&gt;"</span>)
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 				.build();
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<strong class="jxr_keyword">var</strong> map = Map.of(<span class="jxr_string">"a"</span>, 1);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<strong class="jxr_keyword">var</strong> map = m(<span class="jxr_string">"a"</span>, 1);
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">var</strong> result = converter.stringify(map);
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 			assertTrue(result.startsWith(<span class="jxr_string">"&lt;"</span>));
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertTrue(result.endsWith(<span class="jxr_string">"&gt;"</span>));
@@ -377,7 +377,7 @@
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 				.addSetting(SETTING_mapEntrySeparator, <span class="jxr_string">":"</span>)
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 				.build();
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">var</strong> map = Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"John"</span>);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">var</strong> map = m(<span class="jxr_string">"name"</span>, <span class="jxr_string">"John"</span>);
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">var</strong> result = converter.stringify(map);
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 			assertTrue(result.contains(<span class="jxr_string">"name:John"</span>));
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 		}
@@ -473,15 +473,15 @@
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 			<strong class="jxr_keyword">var</strong> booleanArray = booleans(<strong class="jxr_keyword">true</strong>, false, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">var</strong> stringList = converter.listify(stringArray);
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			assertEquals(3, stringList.size());
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			assertSize(3, stringList);
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 			assertEquals(<span class="jxr_string">"a"</span>, stringList.get(0));
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 			<strong class="jxr_keyword">var</strong> intList = converter.listify(intArray);
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			assertEquals(3, intList.size());
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			assertSize(3, intList);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 			assertEquals(1, intList.get(0));
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 			<strong class="jxr_keyword">var</strong> booleanList = converter.listify(booleanArray);
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			assertEquals(3, booleanList.size());
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			assertSize(3, booleanList);
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 			assertEquals(<strong class="jxr_keyword">true</strong>, booleanList.get(0));
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 		}
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 
@@ -552,8 +552,8 @@
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 			<em class="jxr_comment">// Test with list of objects</em>
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">var</strong> people = l(
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 				Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"John"</span>, <span class="jxr_string">"age"</span>, 30),
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 				Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Jane"</span>, <span class="jxr_string">"age"</span>, 25)
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 				m(<span class="jxr_string">"name"</span>, <span class="jxr_string">"John"</span>, <span class="jxr_string">"age"</span>, 30),
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 				m(<span class="jxr_string">"name"</span>, <span class="jxr_string">"Jane"</span>, <span class="jxr_string">"age"</span>, 25)
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 			);
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 			assertEquals(<span class="jxr_string">"[{John},{Jane}]"</span>,

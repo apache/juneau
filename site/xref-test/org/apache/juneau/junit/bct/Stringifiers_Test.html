@@ -91,10 +91,10 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		@Test
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">void</strong> a05_stringifyWithComplexValues() {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.mapEntryStringifier();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">var</strong> entry = Map.entry(<span class="jxr_string">"list"</span>, List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>));
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, entry);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.mapEntryStringifier();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> entry = Map.entry(<span class="jxr_string">"list"</span>, l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, entry);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			assertEquals(<span class="jxr_string">"list=[a,b]"</span>, result);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		}
@@ -463,20 +463,20 @@
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		@Test
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">void</strong> l01_stringifyList() {
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.listStringifier();
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			<strong class="jxr_keyword">var</strong> input = List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.listStringifier();
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">var</strong> input = l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 			assertEquals(<span class="jxr_string">"[a,b,c]"</span>, result);
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 		}
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 		@Test
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">void</strong> l02_stringifyEmptyList() {
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.listStringifier();
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			<strong class="jxr_keyword">var</strong> input = List.of();
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.listStringifier();
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">var</strong> input = l();
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 			assertEquals(<span class="jxr_string">"[]"</span>, result);
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 		}
@@ -488,10 +488,10 @@
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 				.addSetting(<span class="jxr_string">"fieldSeparator"</span>, <span class="jxr_string">"; "</span>)
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 				.addSetting(<span class="jxr_string">"collectionPrefix"</span>, <span class="jxr_string">"("</span>)
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 				.addSetting(<span class="jxr_string">"collectionSuffix"</span>, <span class="jxr_string">")"</span>)
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 				.build();
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.listStringifier();
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 			<strong class="jxr_keyword">var</strong> input = List.of(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"z"</span>);
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			.build();
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.listStringifier();
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">var</strong> input = l(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"z"</span>);
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 			assertEquals(<span class="jxr_string">"(x; y; z)"</span>, result);
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 		}
@@ -514,9 +514,9 @@
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">void</strong> m01_stringifyMap() {
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.mapStringifier();
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			<strong class="jxr_keyword">var</strong> input = Map.of(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>, <span class="jxr_string">"key2"</span>, <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 			<strong class="jxr_keyword">var</strong> input = m(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"value1"</span>, <span class="jxr_string">"key2"</span>, <span class="jxr_string">"value2"</span>);
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<em class="jxr_comment">// Order may vary, so check both possibilities</em>
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 			assertTrue(result.equals(<span class="jxr_string">"{key1=value1,key2=value2}"</span>) ||
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 				result.equals(<span class="jxr_string">"{key2=value2,key1=value1}"</span>));
@@ -526,9 +526,9 @@
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 		<strong class="jxr_keyword">void</strong> m02_stringifyEmptyMap() {
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 			<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.mapStringifier();
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 			<strong class="jxr_keyword">var</strong> input = Map.of();
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 			<strong class="jxr_keyword">var</strong> input = m();
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 			<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 			assertEquals(<span class="jxr_string">"{}"</span>, result);
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 		}
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 
@@ -541,7 +541,7 @@
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 				.addSetting(<span class="jxr_string">"mapSuffix"</span>, <span class="jxr_string">"&gt;"</span>)
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 				.build();
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 			<strong class="jxr_keyword">var</strong> stringifier = Stringifiers.mapStringifier();
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 			<strong class="jxr_keyword">var</strong> input = Map.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"1"</span>);
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 			<strong class="jxr_keyword">var</strong> input = m(<span class="jxr_string">"a"</span>, <span class="jxr_string">"1"</span>);
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 			<strong class="jxr_keyword">var</strong> result = stringifier.apply(converter, input);
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 			assertEquals(<span class="jxr_string">"&lt;a=1&gt;"</span>, result);
@@ -566,26 +566,26 @@
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		@Test
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">void</strong> n01_useInBasicBeanConverter() {
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			<em class="jxr_comment">// Test various stringifiable objects</em>
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			assertBean(Map.entry(<span class="jxr_string">"k"</span>, <span class="jxr_string">"v"</span>), <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"k=v"</span>);
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			assertBean(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>), <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"[a,b]"</span>);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			assertBean(Map.of(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>), <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"{x=y}"</span>);
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			assertBean(TestEnum.VALUE1, <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"VALUE1"</span>);
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			assertBean(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"String"</span>);
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		}
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<em class="jxr_comment">// Test various stringifiable objects</em>
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		assertBean(Map.entry(<span class="jxr_string">"k"</span>, <span class="jxr_string">"v"</span>), <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"k=v"</span>);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		assertBean(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>), <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"[a,b]"</span>);
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		assertBean(m(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>), <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"{x=y}"</span>);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		assertBean(TestEnum.VALUE1, <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"VALUE1"</span>);
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		assertBean(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"String"</span>);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	}
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		@Test
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">void</strong> n02_customStringifierRegistration() {
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<em class="jxr_comment">// Test that custom registration works</em>
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			assertBean(List.of(<span class="jxr_string">"custom"</span>), <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"[custom]"</span>);
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		}
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	@Test
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<strong class="jxr_keyword">void</strong> n02_customStringifierRegistration() {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<em class="jxr_comment">// Test that custom registration works</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		assertBean(l(<span class="jxr_string">"custom"</span>), <span class="jxr_string">"&lt;self&gt;"</span>, <span class="jxr_string">"[custom]"</span>);
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	}
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		@Test
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">void</strong> n03_stringifierChaining() {
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 			<em class="jxr_comment">// Map with list values</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 			<strong class="jxr_keyword">var</strong> complexMap = Map.of(<span class="jxr_string">"items"</span>, List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>));
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 			assertMatchesGlob(<span class="jxr_string">"*items=[a,b]*"</span>, BasicBeanConverter.DEFAULT.stringify(complexMap));
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		}
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	@Test
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	<strong class="jxr_keyword">void</strong> n03_stringifierChaining() {
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<em class="jxr_comment">// Map with list values</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		<strong class="jxr_keyword">var</strong> complexMap = m(<span class="jxr_string">"items"</span>, l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>));
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		assertMatchesGlob(<span class="jxr_string">"*items=[a,b]*"</span>, BasicBeanConverter.DEFAULT.stringify(complexMap));
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	}
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">private</strong> enum TestEnum { VALUE1, VALUE2 }
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 	}

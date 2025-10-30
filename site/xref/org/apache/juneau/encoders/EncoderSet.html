@@ -92,8 +92,8 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"null"</span>;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">if</strong> (o instanceof Class)
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"class:"</span> + ((Class&lt;?&gt;)o).getSimpleName();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"object:"</span> + o.getClass().getSimpleName();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"class:"</span> + scn(o);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"object:"</span> + scn(o);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		}
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		List&lt;Object&gt; entries;
@@ -133,13 +133,13 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">public</strong> Builder add(Class&lt;?&gt;...values) {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			List&lt;Object&gt; l = list();
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; v : values)
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 				<strong class="jxr_keyword">if</strong> (v.getSimpleName().equals(<span class="jxr_string">"NoInherit"</span>))
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 				<strong class="jxr_keyword">if</strong> (scn(v).equals(<span class="jxr_string">"NoInherit"</span>))
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 					clear();
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; v : values) {
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 				<strong class="jxr_keyword">if</strong> (Encoder.<strong class="jxr_keyword">class</strong>.isAssignableFrom(v)) {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 					l.add(v);
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! v.getSimpleName().equals(<span class="jxr_string">"NoInherit"</span>)) {
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid type passed to EncoderSet.Builder.add(): "</span> + v.getName());
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! scn(v).equals(<span class="jxr_string">"NoInherit"</span>)) {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 					<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid type passed to EncoderSet.Builder.add(): {0}"</span>, cn(v));
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 				}
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			}
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			entries.addAll(0, l);
@@ -225,12 +225,12 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">public</strong> Builder set(Class&lt;?&gt;...values) {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 			List&lt;Object&gt; l = list();
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; v : values) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 				<strong class="jxr_keyword">if</strong> (v.getSimpleName().equals(<span class="jxr_string">"Inherit"</span>)) {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 				<strong class="jxr_keyword">if</strong> (scn(v).equals(<span class="jxr_string">"Inherit"</span>)) {
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 					l.addAll(entries);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Encoder.<strong class="jxr_keyword">class</strong>.isAssignableFrom(v)) {
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 					l.add(v);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid type passed to EncoderSet.Builder.set(): "</span> + v.getName());
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid type passed to EncoderSet.Builder.set(): {0}"</span>, cn(v));
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 				}
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 			}
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 			entries = l;

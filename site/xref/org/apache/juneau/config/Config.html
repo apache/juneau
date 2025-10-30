@@ -1210,7 +1210,7 @@
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 
 <a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 	<strong class="jxr_keyword">void</strong> checkWrite() {
 <a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 		<strong class="jxr_keyword">if</strong> (readOnly)
-<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Cannot call this method on a read-only configuration."</span>);
+<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 			<strong class="jxr_keyword">throw</strong> unsupportedOp(<span class="jxr_string">"Cannot call this method on a read-only configuration."</span>);
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 	}
 <a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 
 <a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 	ConfigMap getConfigMap() { <strong class="jxr_keyword">return</strong> configMap; }

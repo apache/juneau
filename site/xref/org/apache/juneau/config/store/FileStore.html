@@ -531,7 +531,7 @@
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 							}
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 							currentContents = sb.toString();
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 						}
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 						<strong class="jxr_keyword">if</strong> (nn(expectedContents) &amp;&amp; ! eq(currentContents, expectedContents)) {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 						<strong class="jxr_keyword">if</strong> (nn(expectedContents) &amp;&amp; ne(currentContents, expectedContents)) {
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 							<strong class="jxr_keyword">if</strong> (currentContents == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 								cache.remove(name);
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 							<strong class="jxr_keyword">else</strong>
@@ -558,7 +558,7 @@
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 			<strong class="jxr_keyword">if</strong> (! Files.exists(p)) {
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 				Files.createDirectories(p.getParent());
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 				<strong class="jxr_keyword">if</strong> (! Files.exists(p) &amp;&amp; ! p.toFile().createNewFile()) {
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Could not create file: "</span> + p);
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 					<strong class="jxr_keyword">throw</strong> ioException(<span class="jxr_string">"Could not create file: {0}"</span>, p);
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 				}
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 			}
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException e) {
@@ -584,7 +584,7 @@
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 		cache.remove(fn);
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">var</strong> newContents = read(fn);
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">if</strong> (! eq(oldContents, newContents)) {
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">if</strong> (ne(oldContents, newContents)) {
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 			update(fn, newContents);
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 		}
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 	}

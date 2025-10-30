@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">void</strong> d02_tokenizeNested() {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> tokens = tokenize(<span class="jxr_string">"name,address{street,city,zip},age"</span>);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(3, tokens.size());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertSize(3, tokens);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertEquals(<span class="jxr_string">"name"</span>, tokens.get(0).getValue());
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEmpty(tokens.get(0).getNested());
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  

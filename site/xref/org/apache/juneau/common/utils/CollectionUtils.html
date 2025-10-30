@@ -1275,7 +1275,7 @@
 <a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 
 <a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
 <a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 					<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> remove() {
-<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not supported."</span>);
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 						<strong class="jxr_keyword">throw</strong> unsupportedOp();
 <a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 					}
 <a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 				};
 <a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 			}
@@ -1364,7 +1364,7 @@
 <a class="jxr_linenumber" name="L1356" href="#L1356">1356</a> 		<strong class="jxr_keyword">if</strong> (a1.length != a2.length)
 <a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L1358" href="#L1358">1358</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; a1.length; i++)
-<a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> 			<strong class="jxr_keyword">if</strong> (! eq(a1[i], a2[i]))
+<a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> 			<strong class="jxr_keyword">if</strong> (ne(a1[i], a2[i]))
 <a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> 	}
@@ -1680,7 +1680,7 @@
 <a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;  <em class="jxr_comment">// NOSONAR</em>
 <a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 		}
 <a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 
-<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 		assertArg(isArray(array), <span class="jxr_string">"Input must be an array but was {0}"</span>, array.getClass().getName());
+<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 		assertArg(isArray(array), <span class="jxr_string">"Input must be an array but was {0}"</span>, cn(array));
 <a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 
 <a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> 		<strong class="jxr_keyword">var</strong> componentType = array.getClass().getComponentType();
 <a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> 		<strong class="jxr_keyword">var</strong> length = Array.getLength(array);
@@ -1892,7 +1892,7 @@
 <a class="jxr_linenumber" name="L1884" href="#L1884">1884</a> <em class="jxr_javadoccomment">	 * @return A new stream.</em>
 <a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Stream&lt;Object&gt; toStream(Object array) {
-<a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 		assertArg(isArray(array), <span class="jxr_string">"Arg was not an array.  Type: {0}"</span>, array.getClass().getName());
+<a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 		assertArg(isArray(array), <span class="jxr_string">"Arg was not an array.  Type: {0}"</span>, cn(array));
 <a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 		<strong class="jxr_keyword">var</strong> length = Array.getLength(array);
 <a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> 		<strong class="jxr_keyword">return</strong> IntStream.range(0, length).mapToObj(i -&gt; Array.get(array, i));
 <a class="jxr_linenumber" name="L1890" href="#L1890">1890</a> 	}

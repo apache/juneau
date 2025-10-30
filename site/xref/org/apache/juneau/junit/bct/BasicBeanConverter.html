@@ -750,7 +750,7 @@
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> 	<strong class="jxr_keyword">public</strong> Object getProperty(Object object, String name) {
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 		<strong class="jxr_keyword">var</strong> o = swap(object);
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> 		<strong class="jxr_keyword">return</strong> propertyExtractors.stream().filter(x -&gt; x.canExtract(<strong class="jxr_keyword">this</strong>, o, name)).findFirst()
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 			.orElseThrow(() -&gt; runtimeException(<span class="jxr_string">"Could not find extractor for object of type {0}"</span>, o.getClass().getName())).extract(<strong class="jxr_keyword">this</strong>, o, name);
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 			.orElseThrow(() -&gt; runtimeException(<span class="jxr_string">"Could not find extractor for object of type {0}"</span>, cn(o))).extract(<strong class="jxr_keyword">this</strong>, o, name);
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> 	}
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> 
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> 	@Override

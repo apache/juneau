@@ -83,7 +83,7 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<em class="jxr_comment">// Verify the annotation is inherited</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		List&lt;Beanp&gt; beanpList = prop.getAllAnnotationsParentFirst(Beanp.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertFalse(beanpList.isEmpty(), <span class="jxr_string">"@Beanp annotation should be inherited"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertNotEmpty(beanpList);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test
@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<em class="jxr_comment">// Check that @Xml annotations are inherited</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		List&lt;Xml&gt; xmlAnnotations = prop.getAllAnnotationsParentFirst(Xml.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertFalse(xmlAnnotations.isEmpty(), <span class="jxr_string">"@Xml annotations should be inherited from parent"</span>);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertNotEmpty(xmlAnnotations);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> xml = xmlAnnotations.get(0);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertEquals(XmlFormat.COLLAPSED, xml.format(), <span class="jxr_string">"@Xml format should be inherited"</span>);
@@ -186,7 +186,7 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<em class="jxr_comment">// Verify all @Beanp attributes are inherited</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		List&lt;Beanp&gt; beanpAnnotations = prop.getAllAnnotationsParentFirst(Beanp.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertFalse(beanpAnnotations.isEmpty(), <span class="jxr_string">"@Beanp annotation should be inherited"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertNotEmpty(beanpAnnotations);
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> beanp = beanpAnnotations.get(0);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertEquals(<span class="jxr_string">"n"</span>, beanp.name(), <span class="jxr_string">"@Beanp name attribute should be inherited"</span>);
@@ -238,7 +238,7 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_comment">		// Verify annotation is inherited through multiple levels</em>
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_comment">		List&lt;Beanp&gt; beanpAnnotations = prop.getAllAnnotationsParentFirst(Beanp.class);</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_comment">		assertFalse(beanpAnnotations.isEmpty(), "@Beanp should be inherited through grandparent");</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_comment">		assertNotEmpty(beanpAnnotations);</em>
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_comment">		// Note: Both "c" and "count" properties exist due to getter/setter property resolution</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_comment">		var bean = new D1_Child().setCount(42);</em>

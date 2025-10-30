@@ -378,7 +378,7 @@
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * @return The simple name of the underlying method;</em>
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String getSimpleName() { <strong class="jxr_keyword">return</strong> isConstructor ? e.getDeclaringClass().getSimpleName() : e.getName(); }
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String getSimpleName() { <strong class="jxr_keyword">return</strong> isConstructor ? scn(e.getDeclaringClass()) : e.getName(); }
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this method has at most only this arguments in any order.</em>

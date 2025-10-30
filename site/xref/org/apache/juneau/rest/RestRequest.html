@@ -1510,7 +1510,7 @@
 <a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> 				sb.append(<span class="jxr_string">"---Content Hex---\n"</span>);
 <a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 				sb.append(content.asSpacedHex()).append(<span class="jxr_string">"\n"</span>);
 <a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e1) {
-<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 				sb.append(e1.getLocalizedMessage());
+<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 				sb.append(lm(e1));
 <a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 			}
 <a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 		}
 <a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 		<strong class="jxr_keyword">return</strong> sb.toString();

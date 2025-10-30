@@ -411,8 +411,8 @@
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"null"</span>;
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Serializer.Builder)
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"builder:"</span> + o.getClass().getName();
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"serializer:"</span> + o.getClass().getName();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"builder:"</span> + cn(o);
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"serializer:"</span> + cn(o);
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 		}
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		@Override <em class="jxr_comment">/* Overridden from BeanBuilder */</em>

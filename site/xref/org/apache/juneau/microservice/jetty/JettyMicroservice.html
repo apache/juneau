@@ -766,7 +766,7 @@
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 					out(mb2, <span class="jxr_string">"ServerStopped"</span>);
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 					listener.onPostStopServer(JettyMicroservice.<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 					logger.log(Level.WARNING, e.getLocalizedMessage(), e);
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 					logger.log(Level.WARNING, lm(e), e);
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 				}
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 			}
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> 		};

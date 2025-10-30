@@ -72,41 +72,41 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Test <strong class="jxr_keyword">void</strong> a02_nestedTokens() {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<em class="jxr_comment">// Simple nested structure</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> tokens = tokenize(<span class="jxr_string">"foo{a,b}"</span>);
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertEquals(1, tokens.size());
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertSize(1, tokens);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertToken(tokens.get(0), <span class="jxr_string">"foo"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// Multiple tokens with nesting</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		tokens = tokenize(<span class="jxr_string">"foo{a,b},bar{c,d}"</span>);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEquals(2, tokens.size());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertSize(2, tokens);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertToken(tokens.get(0), <span class="jxr_string">"foo"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertToken(tokens.get(1), <span class="jxr_string">"bar"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<em class="jxr_comment">// Empty nested content</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		tokens = tokenize(<span class="jxr_string">"foo{}"</span>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertEquals(1, tokens.size());
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertSize(1, tokens);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertToken(tokens.get(0), <span class="jxr_string">"foo"</span>);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> a03_deepNesting() {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<em class="jxr_comment">// Two levels deep</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> tokens = tokenize(<span class="jxr_string">"root{level1{a,b},level2}"</span>);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(1, tokens.size());
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertSize(1, tokens);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> root = tokens.get(0);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEquals(<span class="jxr_string">"root"</span>, root.getValue());
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertEquals(2, root.getNested().size());
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertToken(root.getNested().get(0), <span class="jxr_string">"level1"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	assertEquals(<span class="jxr_string">"root"</span>, root.getValue());
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	assertSize(2, root.getNested());
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	assertToken(root.getNested().get(0), <span class="jxr_string">"level1"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertToken(root.getNested().get(1), <span class="jxr_string">"level2"</span>);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<em class="jxr_comment">// Three levels deep</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		tokens = tokenize(<span class="jxr_string">"root{level1{level2{a,b}}}"</span>);
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(1, tokens.size());
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertSize(1, tokens);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		root = tokens.get(0);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertEquals(<span class="jxr_string">"root"</span>, root.getValue());
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(1, root.getNested().size());
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> level1 = root.getNested().get(0);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"level1"</span>, level1.getValue());
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(1, level1.getNested().size());
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertToken(level1.getNested().get(0), <span class="jxr_string">"level2"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	assertEquals(<span class="jxr_string">"root"</span>, root.getValue());
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	assertSize(1, root.getNested());
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">var</strong> level1 = root.getNested().get(0);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	assertEquals(<span class="jxr_string">"level1"</span>, level1.getValue());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	assertSize(1, level1.getNested());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	assertToken(level1.getNested().get(0), <span class="jxr_string">"level2"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> a04_escapeSequences() {
@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<em class="jxr_comment">// Escape in nested content</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		tokens = tokenize(<span class="jxr_string">"root{foo&#92;&#92;,bar,baz}"</span>);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertEquals(1, tokens.size());
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertSize(1, tokens);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertToken(tokens.get(0), <span class="jxr_string">"root"</span>, <span class="jxr_string">"foo,bar"</span>, <span class="jxr_string">"baz"</span>);
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
@@ -139,26 +139,26 @@
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> b01_complexNestedStructures() {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<em class="jxr_comment">// Real-world example: user configuration</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> tokens = tokenize(<span class="jxr_string">"user{name,email,address{street,city,zipcode{main,plus4}}},config{timeout,retries}"</span>);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(2, tokens.size());
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertSize(2, tokens);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<em class="jxr_comment">// Validate user token</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> user = tokens.get(0);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertEquals(<span class="jxr_string">"user"</span>, user.getValue());
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertEquals(3, user.getNested().size());
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertEquals(<span class="jxr_string">"name"</span>, user.getNested().get(0).getValue());
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(<span class="jxr_string">"email"</span>, user.getNested().get(1).getValue());
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<em class="jxr_comment">// Validate user token</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">var</strong> user = tokens.get(0);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	assertEquals(<span class="jxr_string">"user"</span>, user.getValue());
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	assertSize(3, user.getNested());
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	assertEquals(<span class="jxr_string">"name"</span>, user.getNested().get(0).getValue());
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	assertEquals(<span class="jxr_string">"email"</span>, user.getNested().get(1).getValue());
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> address = user.getNested().get(2);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(<span class="jxr_string">"address"</span>, address.getValue());
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(3, address.getNested().size());
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(<span class="jxr_string">"street"</span>, address.getNested().get(0).getValue());
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertEquals(<span class="jxr_string">"city"</span>, address.getNested().get(1).getValue());
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">var</strong> address = user.getNested().get(2);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	assertEquals(<span class="jxr_string">"address"</span>, address.getValue());
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	assertSize(3, address.getNested());
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	assertEquals(<span class="jxr_string">"street"</span>, address.getNested().get(0).getValue());
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	assertEquals(<span class="jxr_string">"city"</span>, address.getNested().get(1).getValue());
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> zipcode = address.getNested().get(2);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(<span class="jxr_string">"zipcode"</span>, zipcode.getValue());
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertEquals(2, zipcode.getNested().size());
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertEquals(<span class="jxr_string">"main"</span>, zipcode.getNested().get(0).getValue());
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(<span class="jxr_string">"plus4"</span>, zipcode.getNested().get(1).getValue());
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<strong class="jxr_keyword">var</strong> zipcode = address.getNested().get(2);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	assertEquals(<span class="jxr_string">"zipcode"</span>, zipcode.getValue());
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	assertSize(2, zipcode.getNested());
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	assertEquals(<span class="jxr_string">"main"</span>, zipcode.getNested().get(0).getValue());
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	assertEquals(<span class="jxr_string">"plus4"</span>, zipcode.getNested().get(1).getValue());
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<em class="jxr_comment">// Validate config token</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> config = tokens.get(1);
@@ -168,7 +168,7 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	@Test <strong class="jxr_keyword">void</strong> b02_mixedEscapingAndNesting() {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<em class="jxr_comment">// Escaped characters within nested structures</em>
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> tokens = tokenize(<span class="jxr_string">"data{key&#92;&#92;,name,value&#92;&#92;{test&#92;&#92;}},info{desc&#92;&#92;,important}"</span>);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertEquals(2, tokens.size());
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertSize(2, tokens);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertToken(tokens.get(0), <span class="jxr_string">"data"</span>, <span class="jxr_string">"key,name"</span>, <span class="jxr_string">"value{test}"</span>);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertToken(tokens.get(1), <span class="jxr_string">"info"</span>, <span class="jxr_string">"desc,important"</span>);
@@ -177,14 +177,14 @@
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@Test <strong class="jxr_keyword">void</strong> b03_extremeNesting() {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<em class="jxr_comment">// Very deep nesting</em>
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> tokens = tokenize(<span class="jxr_string">"l1{l2{l3{l4{l5{value}}}}}"</span>);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertEquals(1, tokens.size());
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertSize(1, tokens);
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> current = tokens.get(0);
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt;= 5; i++) {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			assertEquals(<span class="jxr_string">"l"</span> + i, current.getValue());
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			assertEquals(1, current.getNested().size());
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			current = current.getNested().get(0);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt;= 5; i++) {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertEquals(<span class="jxr_string">"l"</span> + i, current.getValue());
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertSize(1, current.getNested());
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		current = current.getNested().get(0);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertEquals(<span class="jxr_string">"value"</span>, current.getValue());
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertFalse(current.hasNested());
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 	}
@@ -200,27 +200,27 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<em class="jxr_comment">// Just comma</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		tokens = tokenize(<span class="jxr_string">","</span>);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertEquals(2, tokens.size());
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertSize(2, tokens);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertEquals(<span class="jxr_string">""</span>, tokens.get(0).getValue());
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertEquals(<span class="jxr_string">""</span>, tokens.get(1).getValue());
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<em class="jxr_comment">// Multiple commas</em>
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		tokens = tokenize(<span class="jxr_string">"a,,b"</span>);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertEquals(3, tokens.size());
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertSize(3, tokens);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertEquals(<span class="jxr_string">"a"</span>, tokens.get(0).getValue());
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertEquals(<span class="jxr_string">""</span>, tokens.get(1).getValue());
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(<span class="jxr_string">"b"</span>, tokens.get(2).getValue());
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<em class="jxr_comment">// Trailing comma</em>
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		tokens = tokenize(<span class="jxr_string">"a,b,"</span>);
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertEquals(3, tokens.size());
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertSize(3, tokens);
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertEquals(<span class="jxr_string">"a"</span>, tokens.get(0).getValue());
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertEquals(<span class="jxr_string">"b"</span>, tokens.get(1).getValue());
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		assertEquals(<span class="jxr_string">""</span>, tokens.get(2).getValue());
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<em class="jxr_comment">// Leading comma</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		tokens = tokenize(<span class="jxr_string">",a,b"</span>);
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertEquals(3, tokens.size());
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertSize(3, tokens);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertEquals(<span class="jxr_string">""</span>, tokens.get(0).getValue());
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertEquals(<span class="jxr_string">"a"</span>, tokens.get(1).getValue());
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertEquals(<span class="jxr_string">"b"</span>, tokens.get(2).getValue());
@@ -241,7 +241,7 @@
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<em class="jxr_comment">// Whitespace around braces</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		tokens = tokenize(<span class="jxr_string">"root  {  a,b  }  ,  other"</span>);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertEquals(2, tokens.size());
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertSize(2, tokens);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertToken(tokens.get(0), <span class="jxr_string">"root"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertToken(tokens.get(1), <span class="jxr_string">"other"</span>);
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
@@ -262,26 +262,26 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<em class="jxr_comment">// Case 1: Empty final value with trailing comma (lastWasComma = true)</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">var</strong> tokens = tokenize(<span class="jxr_string">"a,"</span>);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertEquals(2, tokens.size());
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertSize(2, tokens);
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertEquals(<span class="jxr_string">"a"</span>, tokens.get(0).getValue());
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 		assertEquals(<span class="jxr_string">""</span>, tokens.get(1).getValue()); <em class="jxr_comment">// Empty token added due to trailing comma</em>
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<em class="jxr_comment">// Case 2: No tokens yet and empty input should create one empty token</em>
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<em class="jxr_comment">// This is handled by error conditions, but let's test a whitespace-only case after comma</em>
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 		tokens = tokenize(<span class="jxr_string">",   "</span>);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertEquals(2, tokens.size());
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertSize(2, tokens);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertEquals(<span class="jxr_string">""</span>, tokens.get(0).getValue());
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertEquals(<span class="jxr_string">""</span>, tokens.get(1).getValue()); <em class="jxr_comment">// Empty final value but added because of lastWasComma</em>
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<em class="jxr_comment">// Case 3: Non-empty final value should always be added</em>
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		tokens = tokenize(<span class="jxr_string">"a,b"</span>);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		assertEquals(2, tokens.size());
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		assertSize(2, tokens);
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertEquals(<span class="jxr_string">"a"</span>, tokens.get(0).getValue());
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		assertEquals(<span class="jxr_string">"b"</span>, tokens.get(1).getValue());
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<em class="jxr_comment">// Case 4: Test with nested content and trailing comma</em>
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		tokens = tokenize(<span class="jxr_string">"root{a,},next"</span>);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertEquals(2, tokens.size());
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertSize(2, tokens);
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertToken(tokens.get(0), <span class="jxr_string">"root"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">""</span>); <em class="jxr_comment">// Empty token in nested due to trailing comma</em>
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertEquals(<span class="jxr_string">"next"</span>, tokens.get(1).getValue());
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
@@ -295,7 +295,7 @@
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">var</strong> token = <strong class="jxr_keyword">new</strong> Token(<span class="jxr_string">"test"</span>);
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 		assertEquals(<span class="jxr_string">"test"</span>, token.getValue());
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		assertFalse(token.hasNested());
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		assertTrue(token.getNested().isEmpty());
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		assertEmpty(token.getNested());
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<em class="jxr_comment">// Null value handling</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		token = <strong class="jxr_keyword">new</strong> Token(<strong class="jxr_keyword">null</strong>);
@@ -393,12 +393,12 @@
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<em class="jxr_comment">// Initially no nested content</em>
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertFalse(parent.hasNested());
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertTrue(parent.getNested().isEmpty());
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertEmpty(parent.getNested());
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<em class="jxr_comment">// Add nested content</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		parent.setNested(l(<strong class="jxr_keyword">new</strong> Token(<span class="jxr_string">"child1"</span>), <strong class="jxr_keyword">new</strong> Token(<span class="jxr_string">"child2"</span>)));
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		assertTrue(parent.hasNested());
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertEquals(2, parent.getNested().size());
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	<em class="jxr_comment">// Add nested content</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	parent.setNested(l(<strong class="jxr_keyword">new</strong> Token(<span class="jxr_string">"child1"</span>), <strong class="jxr_keyword">new</strong> Token(<span class="jxr_string">"child2"</span>)));
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	assertTrue(parent.hasNested());
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	assertSize(2, parent.getNested());
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<em class="jxr_comment">// Verify unmodifiable</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">var</strong> nested = parent.getNested();

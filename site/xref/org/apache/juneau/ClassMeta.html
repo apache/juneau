@@ -2063,7 +2063,7 @@
 <a class="jxr_linenumber" name="L2055" href="#L2055">2055</a> 		<strong class="jxr_keyword">if</strong> (cc == MAP)
 <a class="jxr_linenumber" name="L2056" href="#L2056">2056</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(keyType.isObject() &amp;&amp; valueType.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + keyType.toString(simple) + <span class="jxr_string">","</span> + valueType.toString(simple) + <span class="jxr_string">"&gt;"</span>);
 <a class="jxr_linenumber" name="L2057" href="#L2057">2057</a> 		<strong class="jxr_keyword">if</strong> (cc == BEANMAP)
-<a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 			<strong class="jxr_keyword">return</strong> sb.append(BeanMap.<strong class="jxr_keyword">class</strong>.getName()).append('&lt;').append(n).append('&gt;');
+<a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 			<strong class="jxr_keyword">return</strong> sb.append(cn(BeanMap.<strong class="jxr_keyword">class</strong>)).append('&lt;').append(n).append('&gt;');
 <a class="jxr_linenumber" name="L2059" href="#L2059">2059</a> 		<strong class="jxr_keyword">if</strong> (cc == COLLECTION || cc == OPTIONAL)
 <a class="jxr_linenumber" name="L2060" href="#L2060">2060</a> 			<strong class="jxr_keyword">return</strong> sb.append(n).append(elementType.isObject() ? <span class="jxr_string">""</span> : <span class="jxr_string">"&lt;"</span> + elementType.toString(simple) + <span class="jxr_string">"&gt;"</span>);
 <a class="jxr_linenumber" name="L2061" href="#L2061">2061</a> 		<strong class="jxr_keyword">return</strong> sb.append(n);

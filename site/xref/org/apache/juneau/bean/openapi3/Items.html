@@ -712,7 +712,7 @@
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> setType(String value) {
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 		<strong class="jxr_keyword">if</strong> (isStrict() &amp;&amp; ! contains(value, VALID_TYPES))
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid value passed in to setType(String).  Value='"</span> + value + <span class="jxr_string">"', valid values="</span> + Json5Serializer.DEFAULT.toString(VALID_TYPES));
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 			<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}"</span>, value, Json5Serializer.DEFAULT.toString(VALID_TYPES));
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 		type = value;
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 	}

@@ -1424,19 +1424,19 @@
 <a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> 	<em class="jxr_comment">// cdlToList / cdlToSet</em>
 <a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 	@Test <strong class="jxr_keyword">void</strong> a86_cdlToList() {
-<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 		assertEquals(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>), cdlToList(<span class="jxr_string">"a,b,c"</span>));
-<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 		assertEquals(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>), cdlToList(<span class="jxr_string">" a , b , c "</span>));
-<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 		assertEquals(List.of(), cdlToList(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 		assertEquals(List.of(), cdlToList(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 		assertEquals(List.of(<span class="jxr_string">"a"</span>), cdlToList(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 		assertEquals(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>), cdlToList(<span class="jxr_string">"a,b,c"</span>));
+<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 		assertEquals(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>), cdlToList(<span class="jxr_string">" a , b , c "</span>));
+<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 		assertEquals(l(), cdlToList(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 		assertEquals(l(), cdlToList(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 		assertEquals(l(<span class="jxr_string">"a"</span>), cdlToList(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 	}
 <a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> 
 <a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> 	@Test <strong class="jxr_keyword">void</strong> a87_cdlToSet() {
-<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)), cdlToSet(<span class="jxr_string">"a,b,c"</span>));
-<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)), cdlToSet(<span class="jxr_string">" a , b , c "</span>));
+<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)), cdlToSet(<span class="jxr_string">"a,b,c"</span>));
+<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)), cdlToSet(<span class="jxr_string">" a , b , c "</span>));
 <a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(), cdlToSet(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(), cdlToSet(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(List.of(<span class="jxr_string">"a"</span>)), cdlToSet(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 		assertEquals(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"a"</span>)), cdlToSet(<span class="jxr_string">"a"</span>));
 <a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 	}
 <a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 
 <a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 	<em class="jxr_comment">//====================================================================================================</em>
@@ -1449,10 +1449,10 @@
 <a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 	}
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 
 <a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 	@Test <strong class="jxr_keyword">void</strong> a89_join_collection() {
-<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 		assertEquals(<span class="jxr_string">"a,b,c"</span>, join(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)));
-<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 		assertEquals(<span class="jxr_string">"1,2,3"</span>, join(List.of(1, 2, 3)));
-<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 		assertEquals(<span class="jxr_string">"a"</span>, join(List.of(<span class="jxr_string">"a"</span>)));
-<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> 		assertEquals(<span class="jxr_string">""</span>, join(List.of()));
+<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 		assertEquals(<span class="jxr_string">"a,b,c"</span>, join(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)));
+<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 		assertEquals(<span class="jxr_string">"1,2,3"</span>, join(l(1, 2, 3)));
+<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 		assertEquals(<span class="jxr_string">"a"</span>, join(l(<span class="jxr_string">"a"</span>)));
+<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> 		assertEquals(<span class="jxr_string">""</span>, join(l()));
 <a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> 	}
 <a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> 
 <a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> 	<em class="jxr_comment">//====================================================================================================</em>
@@ -1496,7 +1496,7 @@
 <a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> 	@Test <strong class="jxr_keyword">void</strong> a94_stringSupplier() {
 <a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 		assertEquals(<span class="jxr_string">"test"</span>, stringSupplier(() -&gt; <span class="jxr_string">"test"</span>).get());
-<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 		assertEquals(<span class="jxr_string">"[1,2,3]"</span>, stringSupplier(() -&gt; List.of(1, 2, 3)).get());
+<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 		assertEquals(<span class="jxr_string">"[1,2,3]"</span>, stringSupplier(() -&gt; l(1, 2, 3)).get());
 <a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 		assertNull(stringSupplier(() -&gt; <strong class="jxr_keyword">null</strong>).get());
 <a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 	}
 <a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 
@@ -1505,8 +1505,8 @@
 <a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 	<em class="jxr_comment">//====================================================================================================</em>
 <a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 	@Test <strong class="jxr_keyword">void</strong> a95_readable() {
 <a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 		assertNull(readable(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 		assertEquals(<span class="jxr_string">"[a,b,c]"</span>, readable(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)));
-<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 		assertEquals(<span class="jxr_string">"{foo=bar}"</span>, readable(Map.of(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>)));
+<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 		assertEquals(<span class="jxr_string">"[a,b,c]"</span>, readable(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>)));
+<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 		assertEquals(<span class="jxr_string">"{foo=bar}"</span>, readable(m(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>)));
 <a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> 		assertEquals(<span class="jxr_string">"[1,2,3]"</span>, readable(ints(1, 2, 3)));
 <a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 		assertEquals(<span class="jxr_string">"test"</span>, readable(Optional.of(<span class="jxr_string">"test"</span>)));
 <a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 		assertNull(readable(Optional.empty()));

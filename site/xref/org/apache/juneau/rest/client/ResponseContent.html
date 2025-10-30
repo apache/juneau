@@ -596,7 +596,7 @@
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> 			<strong class="jxr_keyword">return</strong> is;
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 		} <strong class="jxr_keyword">catch</strong> (UnsupportedOperationException e) {
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(e);
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			<strong class="jxr_keyword">throw</strong> ioException(e);
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 		}
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 
@@ -1283,7 +1283,7 @@
 <a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 			<strong class="jxr_keyword">return</strong> asString();
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> e) {
-<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 			<strong class="jxr_keyword">return</strong> e.getLocalizedMessage();
+<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 			<strong class="jxr_keyword">return</strong> lm(e);
 <a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 		}
 <a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 	}
 <a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 

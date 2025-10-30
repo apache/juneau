@@ -42,11 +42,11 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	@Nested
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">class</strong> A_collectionListifier <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		@Test
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">void</strong> a01_listifyList() {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			<strong class="jxr_keyword">var</strong> listifier = Listifiers.collectionListifier();
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			<strong class="jxr_keyword">var</strong> input = List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	@Test
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">void</strong> a01_listifyList() {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">var</strong> listifier = Listifiers.collectionListifier();
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> input = l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  			assertNotSame(input, result); <em class="jxr_comment">// Should create new list</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  			assertList(result, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
@@ -82,30 +82,30 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			assertList(treeResult, <span class="jxr_string">"a"</span>, <span class="jxr_string">"m"</span>, <span class="jxr_string">"z"</span>); <em class="jxr_comment">// Natural order</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		}
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		@Test
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">void</strong> a03_listifyQueue() {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">var</strong> listifier = Listifiers.collectionListifier();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">var</strong> input = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;(List.of(<span class="jxr_string">"first"</span>, <span class="jxr_string">"second"</span>));
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	@Test
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">void</strong> a03_listifyQueue() {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> listifier = Listifiers.collectionListifier();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> input = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;(l(<span class="jxr_string">"first"</span>, <span class="jxr_string">"second"</span>));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			assertList(result, <span class="jxr_string">"first"</span>, <span class="jxr_string">"second"</span>);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		}
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		@Test
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">void</strong> a04_listifyEmptyCollection() {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">var</strong> listifier = Listifiers.collectionListifier();
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">var</strong> input = List.of();
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">void</strong> a04_listifyEmptyCollection() {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> listifier = Listifiers.collectionListifier();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> input = l();
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			assertTrue(result.isEmpty());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			assertEmpty(result);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		@Test
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">void</strong> a05_listifyWithConverter() {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">var</strong> listifier = Listifiers.collectionListifier();
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">var</strong> input = List.of(1, 2, 3);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(converter, input);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> listifier = Listifiers.collectionListifier();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">var</strong> input = l(1, 2, 3);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> result = listifier.apply(converter, input);
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 			assertList(result, 1, 2, 3);
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		}
@@ -114,11 +114,11 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Nested
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">class</strong> B_iterableListifier <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		@Test
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">void</strong> b01_listifyIterable() {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.iterableListifier();
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			Iterable&lt;String&gt; input = List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Test
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">void</strong> b01_listifyIterable() {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> listifier = Listifiers.iterableListifier();
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		Iterable&lt;String&gt; input = l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			assertList(result, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		}
@@ -133,13 +133,13 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			assertList(result, 1, 2, 3);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		}
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		@Test
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">void</strong> b03_listifyEmptyIterable() {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.iterableListifier();
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			Iterable&lt;String&gt; input = List.of();
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Test
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">void</strong> b03_listifyEmptyIterable() {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> listifier = Listifiers.iterableListifier();
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		Iterable&lt;String&gt; input = l();
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			assertTrue(result.isEmpty());
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			assertEmpty(result);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		}
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		@Test
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			Iterable&lt;String&gt; input = Set.of(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(converter, input);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			assertEquals(2, result.size());
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			assertSize(2, result);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			assertTrue(result.contains(<span class="jxr_string">"x"</span>));
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			assertTrue(result.contains(<span class="jxr_string">"y"</span>));
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		}
@@ -158,24 +158,24 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Nested
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">class</strong> C_iteratorListifier <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		@Test
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">void</strong> c01_listifyIterator() {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.iteratorListifier();
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">var</strong> input = List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>).iterator();
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">void</strong> c01_listifyIterator() {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> listifier = Listifiers.iteratorListifier();
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> input = l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>).iterator();
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			assertList(result, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<em class="jxr_comment">// Iterator should be exhausted</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			assertFalse(input.hasNext());
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		}
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		@Test
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">void</strong> c02_listifyEmptyIterator() {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.iteratorListifier();
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">var</strong> input = List.of().iterator();
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	@Test
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">void</strong> c02_listifyEmptyIterator() {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> listifier = Listifiers.iteratorListifier();
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> input = l().iterator();
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			assertTrue(result.isEmpty());
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			assertEmpty(result);
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		}
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		@Test
@@ -184,17 +184,17 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">var</strong> input = IntStream.range(0, 1000).iterator();
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			assertEquals(1000, result.size());
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			assertSize(1000, result);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			assertEquals(0, result.get(0));
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			assertEquals(999, result.get(999));
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		}
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		@Test
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">void</strong> c04_listifyWithConverter() {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.iteratorListifier();
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">var</strong> input = List.of(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"z"</span>).iterator();
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(converter, input);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> listifier = Listifiers.iteratorListifier();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> input = l(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"z"</span>).iterator();
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> result = listifier.apply(converter, input);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 			assertList(result, <span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"z"</span>);
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		}
@@ -203,12 +203,12 @@
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Nested
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">class</strong> D_enumerationListifier <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		@Test
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">void</strong> d01_listifyEnumeration() {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.enumerationListifier();
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">var</strong> vector = <strong class="jxr_keyword">new</strong> Vector&lt;&gt;(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">var</strong> input = vector.elements();
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	@Test
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">void</strong> d01_listifyEnumeration() {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> listifier = Listifiers.enumerationListifier();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> vector = <strong class="jxr_keyword">new</strong> Vector&lt;&gt;(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> input = vector.elements();
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			assertList(result, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<em class="jxr_comment">// Enumeration should be exhausted</em>
@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">var</strong> input = vector.elements();
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			assertTrue(result.isEmpty());
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			assertEmpty(result);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		}
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		@Test
@@ -234,18 +234,18 @@
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">var</strong> input = hashtable.keys();
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			assertEquals(2, result.size());
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			assertSize(2, result);
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 			assertTrue(result.contains(<span class="jxr_string">"key1"</span>));
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			assertTrue(result.contains(<span class="jxr_string">"key2"</span>));
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 		}
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 		@Test
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">void</strong> d04_listifyWithConverter() {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.enumerationListifier();
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">var</strong> vector = <strong class="jxr_keyword">new</strong> Vector&lt;&gt;(List.of(1, 2, 3));
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">var</strong> input = vector.elements();
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(converter, input);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> listifier = Listifiers.enumerationListifier();
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">var</strong> vector = <strong class="jxr_keyword">new</strong> Vector&lt;&gt;(l(1, 2, 3));
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">var</strong> input = vector.elements();
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">var</strong> result = listifier.apply(converter, input);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 			assertList(result, 1, 2, 3);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		}
@@ -269,7 +269,7 @@
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">var</strong> input = Stream.empty();
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			assertTrue(result.isEmpty());
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			assertEmpty(result);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		}
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		@Test
@@ -310,10 +310,10 @@
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 		@Test
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">void</strong> f01_listifyMap() {
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.mapListifier();
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">var</strong> input = Map.of(<span class="jxr_string">"z"</span>, <span class="jxr_string">"value1"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"value2"</span>); <em class="jxr_comment">// Unordered input</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">var</strong> input = m(<span class="jxr_string">"z"</span>, <span class="jxr_string">"value1"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"value2"</span>); <em class="jxr_comment">// Unordered input</em>
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			assertEquals(2, result.size());
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			assertSize(2, result);
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<em class="jxr_comment">// Result should contain Map.Entry objects</em>
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 			assertTrue(result.stream().allMatch(obj -&gt; obj instanceof Map.Entry));
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 
@@ -372,10 +372,10 @@
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 		@Test
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">void</strong> f02_listifyEmptyMap() {
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.mapListifier();
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">var</strong> input = Map.of();
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">var</strong> input = m();
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			assertTrue(result.isEmpty());
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			assertEmpty(result);
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 		}
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		@Test
@@ -386,7 +386,7 @@
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 			input.put(<span class="jxr_string">"key2"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(<strong class="jxr_keyword">null</strong>, input);
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			assertEquals(2, result.size());
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			assertSize(2, result);
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<em class="jxr_comment">// Check that we have the expected entries</em>
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">var</strong> hasKey1Entry = result.stream()
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 				.filter(obj -&gt; obj instanceof Map.Entry)
@@ -405,10 +405,10 @@
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">void</strong> f04_listifyWithConverter() {
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder().defaultSettings().build();
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">var</strong> listifier = Listifiers.mapListifier();
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">var</strong> input = Map.of(<span class="jxr_string">"a"</span>, 1, <span class="jxr_string">"b"</span>, 2);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">var</strong> input = m(<span class="jxr_string">"a"</span>, 1, <span class="jxr_string">"b"</span>, 2);
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">var</strong> result = listifier.apply(converter, input);
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			assertEquals(2, result.size());
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			assertSize(2, result);
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 			assertTrue(result.stream().allMatch(obj -&gt; obj instanceof Map.Entry));
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 		}
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
@@ -416,20 +416,20 @@
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 	@Nested
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<strong class="jxr_keyword">class</strong> G_integration <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		@Test
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">void</strong> g01_useInBasicBeanConverter() {
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<em class="jxr_comment">// Test various listifiable objects</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			assertList(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>), <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			assertList(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>)), <span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			assertSize(3, Stream.of(1, 2, 3));
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	@Test
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">void</strong> g01_useInBasicBeanConverter() {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<em class="jxr_comment">// Test various listifiable objects</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertList(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>), <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertList(<strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(l(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>)), <span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		assertSize(3, Stream.of(1, 2, 3));
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 			assertEmpty(Optional.empty());
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		}
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		@Test
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">void</strong> g02_customListifierRegistration() {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<em class="jxr_comment">// Test that custom registration works</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			assertList(List.of(<span class="jxr_string">"custom"</span>), <span class="jxr_string">"custom"</span>);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		}
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	@Test
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<strong class="jxr_keyword">void</strong> g02_customListifierRegistration() {
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<em class="jxr_comment">// Test that custom registration works</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertList(l(<span class="jxr_string">"custom"</span>), <span class="jxr_string">"custom"</span>);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	}
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		@Test
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">void</strong> g03_listifierChaining() {

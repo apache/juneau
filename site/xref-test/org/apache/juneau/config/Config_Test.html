@@ -779,7 +779,7 @@
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 		assertJson(<span class="jxr_string">"['a1','a2']"</span>, c.getKeys(<span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> 		assertJson(<span class="jxr_string">"['a1','a2']"</span>, c.getKeys(<span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 		assertJson(<span class="jxr_string">"['b1','b2']"</span>, c.getKeys(<span class="jxr_string">"S"</span>));
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		assertTrue(c.getKeys(<span class="jxr_string">"T"</span>).isEmpty());
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		assertEmpty(c.getKeys(<span class="jxr_string">"T"</span>));
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Argument 'section' cannot be null."</span>, ()-&gt;c.getKeys(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 	}

@@ -388,7 +388,7 @@
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 				apply((HasFormData)a);
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (a instanceof Schema)
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 				apply((Schema)a);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (a.annotationType().getName().startsWith(<span class="jxr_string">"jakarta.validation.constraints."</span>))
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cn(a.annotationType()).startsWith(<span class="jxr_string">"jakarta.validation.constraints."</span>))
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 				applyJakartaValidation(a);
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 				<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Builder.apply(@{0}) not defined"</span>, cn(a));
@@ -2847,7 +2847,7 @@
 <a class="jxr_linenumber" name="L2839" href="#L2839">2839</a> <em class="jxr_javadoccomment">		 * @since 9.2.0</em>
 <a class="jxr_linenumber" name="L2840" href="#L2840">2840</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2841" href="#L2841">2841</a> 		Builder applyJakartaValidation(Annotation a) {
-<a class="jxr_linenumber" name="L2842" href="#L2842">2842</a> 			String simpleName = a.annotationType().getSimpleName();
+<a class="jxr_linenumber" name="L2842" href="#L2842">2842</a> 			String simpleName = scn(a.annotationType());
 <a class="jxr_linenumber" name="L2843" href="#L2843">2843</a> 
 <a class="jxr_linenumber" name="L2844" href="#L2844">2844</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L2845" href="#L2845">2845</a> 				<strong class="jxr_keyword">switch</strong> (simpleName) {
