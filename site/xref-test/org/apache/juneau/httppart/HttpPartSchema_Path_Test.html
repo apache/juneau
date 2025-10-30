@@ -26,14 +26,14 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.TestUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.junit.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
@@ -749,8 +749,8 @@
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> 	@Test <strong class="jxr_keyword">void</strong> d01a_uniqueItems_arrays() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Path.<strong class="jxr_keyword">class</strong>, D01.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L743" href="#L743">743</a> 
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> 		<strong class="jxr_keyword">var</strong> good = StringUtils.split(<span class="jxr_string">"a,b"</span>);
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		<strong class="jxr_keyword">var</strong> bad = StringUtils.split(<span class="jxr_string">"a,a"</span>);
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 		<strong class="jxr_keyword">var</strong> good = split(<span class="jxr_string">"a,b"</span>);
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		<strong class="jxr_keyword">var</strong> bad = split(<span class="jxr_string">"a,a"</span>);
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> 
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
@@ -802,25 +802,25 @@
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 	@Test <strong class="jxr_keyword">void</strong> d02a_minMaxItems_arrays() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Path.<strong class="jxr_keyword">class</strong>, D02.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		s.getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1"</span>), BeanContext.DEFAULT);
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		s.getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2"</span>), BeanContext.DEFAULT);
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		s.getItems().getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3"</span>), BeanContext.DEFAULT);
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		s.getItems().getItems().getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3,4"</span>), BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		s.getItems().validateOutput(split(<span class="jxr_string">"1"</span>), BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		s.getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2"</span>), BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		s.getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3"</span>), BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		s.getItems().getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3,4"</span>), BeanContext.DEFAULT);
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 		s.getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2"</span>), BeanContext.DEFAULT);
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		s.getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3"</span>), BeanContext.DEFAULT);
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		s.getItems().getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3,4"</span>), BeanContext.DEFAULT);
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		s.getItems().getItems().getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3,4,5"</span>), BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 		s.getItems().validateOutput(split(<span class="jxr_string">"1,2"</span>), BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		s.getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3"</span>), BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		s.getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3,4"</span>), BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		s.getItems().getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3,4,5"</span>), BeanContext.DEFAULT);
 <a class="jxr_linenumber" name="L806" href="#L806">806</a> 
 <a class="jxr_linenumber" name="L807" href="#L807">807</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum number of items not met."</span>, ()-&gt;s.getItems().validateOutput(<strong class="jxr_keyword">new</strong> String[0], BeanContext.DEFAULT));
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum number of items not met."</span>, ()-&gt;s.getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1"</span>), BeanContext.DEFAULT));
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum number of items not met."</span>, ()-&gt;s.getItems().getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2"</span>), BeanContext.DEFAULT));
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum number of items not met."</span>, ()-&gt;s.getItems().getItems().getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3"</span>), BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum number of items not met."</span>, ()-&gt;s.getItems().getItems().validateOutput(split(<span class="jxr_string">"1"</span>), BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum number of items not met."</span>, ()-&gt;s.getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2"</span>), BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum number of items not met."</span>, ()-&gt;s.getItems().getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3"</span>), BeanContext.DEFAULT));
 <a class="jxr_linenumber" name="L811" href="#L811">811</a> 
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3"</span>), BeanContext.DEFAULT));
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3,4"</span>), BeanContext.DEFAULT));
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3,4,5"</span>), BeanContext.DEFAULT));
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().getItems().getItems().getItems().validateOutput(StringUtils.split(<span class="jxr_string">"1,2,3,4,5,6"</span>), BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().validateOutput(split(<span class="jxr_string">"1,2,3"</span>), BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3,4"</span>), BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3,4,5"</span>), BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3,4,5,6"</span>), BeanContext.DEFAULT));
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> 	}
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> }
 </pre>

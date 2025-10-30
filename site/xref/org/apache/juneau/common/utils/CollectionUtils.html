@@ -1450,7 +1450,7 @@
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> <em class="jxr_javadoccomment">	 * @return A new {@link ArrayList}</em>
 <a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;Object&gt; toObjectList(Object array) {
-<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;Object&gt;(Array.getLength(array));
+<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(Array.getLength(array));
 <a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(array); i++) {
 <a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> 			Object o = Array.get(array, i);
 <a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> 			<strong class="jxr_keyword">if</strong> (isArray(o))

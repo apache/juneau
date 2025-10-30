@@ -25,8 +25,8 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.swagger;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ThrowableUtils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.isEmpty;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.RestOpAnnotation.*;
@@ -987,13 +987,13 @@
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 			s = resolve(s);
 <a class="jxr_linenumber" name="L980" href="#L980">980</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"IGNORE"</span>.equalsIgnoreCase(s))
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> 				<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"ignore"</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 			<strong class="jxr_keyword">if</strong> (! isJsonObject(s, <strong class="jxr_keyword">true</strong>))
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 				s = <span class="jxr_string">"{"</span> + s + <span class="jxr_string">"}"</span>;
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 			<strong class="jxr_keyword">return</strong> JsonMap.ofJson(s);
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 		}
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 			<strong class="jxr_keyword">return</strong> (<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)o;
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SwaggerException" href="../../../../../org/apache/juneau/rest/swagger/SwaggerException.html#SwaggerException">SwaggerException</a>(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Unexpected data type ''{0}''.  Expected JsonMap or String."</span>, cn(o));
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 		<strong class="jxr_keyword">if</strong> (! isJsonObject(s, <strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 			s = <span class="jxr_string">"{"</span> + s + <span class="jxr_string">"}"</span>;
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 		<strong class="jxr_keyword">return</strong> JsonMap.ofJson(s);
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	}
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 	<strong class="jxr_keyword">if</strong> (o instanceof <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> jm)
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<strong class="jxr_keyword">return</strong> jm;
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SwaggerException" href="../../../../../org/apache/juneau/rest/swagger/SwaggerException.html#SwaggerException">SwaggerException</a>(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Unexpected data type ''{0}''.  Expected JsonMap or String."</span>, cn(o));
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> 	}
 <a class="jxr_linenumber" name="L990" href="#L990">990</a> 
 <a class="jxr_linenumber" name="L991" href="#L991">991</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> parseMap(String o, String location, Object...args) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {

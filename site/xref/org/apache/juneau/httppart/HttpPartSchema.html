@@ -3529,8 +3529,8 @@
 <a class="jxr_linenumber" name="L3521" href="#L3521">3521</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> build(Object in, <strong class="jxr_keyword">boolean</strong> noValidate) {
 <a class="jxr_linenumber" name="L3522" href="#L3522">3522</a> 		<strong class="jxr_keyword">if</strong> (in == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L3523" href="#L3523">3523</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L3524" href="#L3524">3524</a> 		<strong class="jxr_keyword">if</strong> (in instanceof <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a>)
-<a class="jxr_linenumber" name="L3525" href="#L3525">3525</a> 			<strong class="jxr_keyword">return</strong> (<a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a>)in;
+<a class="jxr_linenumber" name="L3524" href="#L3524">3524</a> 		<strong class="jxr_keyword">if</strong> (in instanceof <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> hps)
+<a class="jxr_linenumber" name="L3525" href="#L3525">3525</a> 			<strong class="jxr_keyword">return</strong> hps;
 <a class="jxr_linenumber" name="L3526" href="#L3526">3526</a> 		<strong class="jxr_keyword">return</strong> ((Builder)in).noValidate(noValidate).build();
 <a class="jxr_linenumber" name="L3527" href="#L3527">3527</a> 	}
 <a class="jxr_linenumber" name="L3528" href="#L3528">3528</a> 
@@ -4594,7 +4594,7 @@
 <a class="jxr_linenumber" name="L4586" href="#L4586">4586</a> 
 <a class="jxr_linenumber" name="L4587" href="#L4587">4587</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidUniqueItems(Collection&lt;?&gt; x) {
 <a class="jxr_linenumber" name="L4588" href="#L4588">4588</a> 		<strong class="jxr_keyword">if</strong> (uniqueItems &amp;&amp; ! (x instanceof Set)) {
-<a class="jxr_linenumber" name="L4589" href="#L4589">4589</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> HashSet&lt;Object&gt;();
+<a class="jxr_linenumber" name="L4589" href="#L4589">4589</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
 <a class="jxr_linenumber" name="L4590" href="#L4590">4590</a> 			<strong class="jxr_keyword">for</strong> (Object o : x)
 <a class="jxr_linenumber" name="L4591" href="#L4591">4591</a> 				<strong class="jxr_keyword">if</strong> (! s.add(o))
 <a class="jxr_linenumber" name="L4592" href="#L4592">4592</a> 					<strong class="jxr_keyword">return</strong> false;
@@ -4604,7 +4604,7 @@
 <a class="jxr_linenumber" name="L4596" href="#L4596">4596</a> 
 <a class="jxr_linenumber" name="L4597" href="#L4597">4597</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidUniqueItems(Object x) {
 <a class="jxr_linenumber" name="L4598" href="#L4598">4598</a> 		<strong class="jxr_keyword">if</strong> (uniqueItems) {
-<a class="jxr_linenumber" name="L4599" href="#L4599">4599</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> HashSet&lt;Object&gt;();
+<a class="jxr_linenumber" name="L4599" href="#L4599">4599</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
 <a class="jxr_linenumber" name="L4600" href="#L4600">4600</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(x); i++) {
 <a class="jxr_linenumber" name="L4601" href="#L4601">4601</a> 				Object o = Array.get(x, i);
 <a class="jxr_linenumber" name="L4602" href="#L4602">4602</a> 				<strong class="jxr_keyword">if</strong> (! s.add(o))

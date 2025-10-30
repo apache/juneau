@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertEquals(4, result.get(<span class="jxr_string">"d"</span>));
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<em class="jxr_comment">// Verify order (LinkedHashMap maintains insertion order)</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;(result.keySet());
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(result.keySet());
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>), keys);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 
@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertEquals(5, result.get(<span class="jxr_string">"e"</span>));
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<em class="jxr_comment">// Verify order (LinkedHashMap maintains insertion order)</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;(result.keySet());
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(result.keySet());
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertEquals(l(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"d"</span>, <span class="jxr_string">"e"</span>), keys);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
@@ -409,7 +409,7 @@
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertSize(4, result);
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<em class="jxr_comment">// Verify insertion order is preserved</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;(result.keySet());
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(result.keySet());
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertEquals(list(<span class="jxr_string">"z"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"m"</span>, <span class="jxr_string">"b"</span>), keys);
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 
@@ -421,7 +421,7 @@
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertSize(3, result);
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<em class="jxr_comment">// Verify insertion order is preserved, including null</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;(result.keySet());
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(result.keySet());
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertEquals(list(<span class="jxr_string">"first"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"last"</span>), keys);
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 
@@ -436,7 +436,7 @@
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertSize(10, result);
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<em class="jxr_comment">// Verify insertion order</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;Integer&gt;(result.keySet());
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(result.keySet());
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 		assertEquals(l(10, 9, 8, 7, 6, 5, 4, 3, 2, 1), keys);
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 
@@ -507,7 +507,7 @@
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 		assertEquals(<span class="jxr_string">"null-value"</span>, result.get(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<em class="jxr_comment">// Check insertion order</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;(result.keySet());
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(result.keySet());
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 		assertEquals(list(<span class="jxr_string">"first"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"last"</span>), keys);
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<em class="jxr_comment">// Check immutability</em>
@@ -534,7 +534,7 @@
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 		assertEquals(<span class="jxr_string">"boolean"</span>, result.get(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<em class="jxr_comment">// Verify order</em>
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;Object&gt;(result.keySet());
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(result.keySet());
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 		assertEquals(list(<span class="jxr_string">"string"</span>, <strong class="jxr_keyword">null</strong>, 42, <strong class="jxr_keyword">true</strong>), keys);
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<em class="jxr_comment">// Verify immutability</em>
