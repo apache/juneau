@@ -17,10 +17,9 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a validator value.
@@ -63,7 +62,7 @@ public class EntityTag {
 	public EntityTag(String value) {
 		assertArgNotNull("value", value);
 
-		value = StringUtils.trim(emptyIfNull(value));
+		value = trim(emptyIfNull(value));
 		isWeak = value.startsWith("W/");
 		isAny = "*".equals(value);
 

@@ -16,9 +16,10 @@
  */
 package org.apache.juneau.collections;
 
+import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.common.utils.PredicateUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -272,8 +273,8 @@ public class JsonList extends LinkedList<Object> {
 	public static JsonList ofJsonOrCdl(String s) throws ParseException {
 		if (StringUtils.isEmpty(s))
 			return null;
-		if (! StringUtils.isJsonArray(s, true))
-			return new JsonList((Object[])StringUtils.splita(s.trim(), ','));
+		if (! isJsonArray(s, true))
+			return new JsonList((Object[])splita(s.trim(), ','));
 		return new JsonList(s);
 	}
 

@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -181,7 +182,7 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	 * @return This object.
 	 */
 	public FluentListAssertion<Map<String,Object>,R> asPropertyMaps(String...names) {
-		String[] n = StringUtils.splita(names, ',');
+		String[] n = splita(names, ',');
 		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).getProperties(n)).toList(), returns());
 	}
 

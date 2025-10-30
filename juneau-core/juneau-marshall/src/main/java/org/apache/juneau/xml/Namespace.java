@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -23,7 +24,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a simple namespace mapping between a simple name and URI.
@@ -78,7 +78,6 @@ public class Namespace {
 	 * @param o The input.
 	 * @return The namespace objects, or <jk>null</jk> if the input was <jk>null</jk> or an empty JSON object.
 	 */
-	@SuppressWarnings("rawtypes")
 	public static Namespace[] createArray(Object o) {
 
 		if (o instanceof Namespace[])
@@ -93,7 +92,7 @@ public class Namespace {
 		}
 
 		if (o instanceof CharSequence) {
-			String[] ss = StringUtils.splita(o.toString());
+			String[] ss = splita(o.toString());
 			Namespace[] n = new Namespace[ss.length];
 			for (int i = 0; i < ss.length; i++)
 				n[i] = create(ss[i]);

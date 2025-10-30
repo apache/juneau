@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.assertions;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 
 /**
@@ -83,7 +83,7 @@ public class Verify {
 		if (expected == o)
 			return null;
 		if (expected == null || o == null || !expected.equals(o))
-			return nn(msg) ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
+			return nn(msg) ? msg.get() : format(MSG_unexpectedValue, expected, o);
 		return null;
 	}
 
@@ -112,7 +112,7 @@ public class Verify {
 		if ((type == null && o == null) || (nn(type) && type.isInstance(o)))
 			return null;
 		var c = o == null ? null : o.getClass();
-		return nn(msg) ? msg.get() : StringUtils.format(MSG_unexpectedType, type, c);
+		return nn(msg) ? msg.get() : format(MSG_unexpectedType, type, c);
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class Verify {
 	 * @return This object.
 	 */
 	public Verify msg(String msg, Object args) {
-		this.msg = () -> StringUtils.format(msg, args);
+		this.msg = () -> format(msg, args);
 		return this;
 	}
 }

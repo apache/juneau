@@ -18,6 +18,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicate.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
@@ -198,7 +199,7 @@ public class AssertionPredicates {
 	 */
 	public static final <T> AssertionPredicate<T> match(String value) {
 		assertArgNotNull("value", value);
-		var p = StringUtils.getMatchPattern(value);
+		var p = getMatchPattern(value);
 		return test(x -> x != null && p.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, value, VALUE);
 	}
 

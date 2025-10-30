@@ -17,6 +17,7 @@
 package org.apache.juneau.testutils.pojos;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;

@@ -17,12 +17,12 @@
 package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
@@ -126,7 +126,7 @@ public abstract class MenuItemWidget extends Widget {
 		// Need a unique number to define unique function names.
 		Integer id = null;
 
-		String pre = StringUtils.nullIfEmpty(getBeforeShowScript(req, res)), post = StringUtils.nullIfEmpty(getAfterShowScript(req, res));
+		String pre = nullIfEmpty(getBeforeShowScript(req, res)), post = nullIfEmpty(getAfterShowScript(req, res));
 
 		sb.append("\n<div class='menu-item'>");
 		if (nn(pre) || nn(post)) {

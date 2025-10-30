@@ -16,13 +16,12 @@
  */
 package org.apache.juneau.parser;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.io.*;
 
 import org.apache.juneau.common.io.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Similar to a {@link java.io.PushbackReader} with a pushback buffer of 1 character.
@@ -183,7 +182,7 @@ public class ParserReader extends Reader implements Positionable {
 			c = read();
 			if (c == -1)
 				break;
-			if (! StringUtils.isNumberChar((char)c)) {
+			if (! isNumberChar((char)c)) {
 				unread();
 				break;
 			}

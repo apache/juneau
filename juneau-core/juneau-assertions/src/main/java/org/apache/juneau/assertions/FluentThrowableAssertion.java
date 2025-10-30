@@ -19,8 +19,10 @@ package org.apache.juneau.assertions;
 import static java.util.Collections.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.list;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.eq;
 
 import java.io.*;
 import java.util.*;

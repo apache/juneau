@@ -18,6 +18,7 @@ package org.apache.juneau.rest.guard;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
@@ -63,7 +64,7 @@ public class RoleMatcher {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return "(& " + StringUtils.join(clauses, " ") + ')';
+			return "(& " + join(clauses, " ") + ')';
 		}
 
 		@Override /* Overridden from Exp */
@@ -120,7 +121,7 @@ public class RoleMatcher {
 
 		Match(String operand) {
 			this.operand = operand;
-			p = StringUtils.getMatchPattern(operand);
+			p = getMatchPattern(operand);
 		}
 
 		@Override /* Overridden from Object */
@@ -163,7 +164,7 @@ public class RoleMatcher {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return "(| " + StringUtils.join(clauses, " ") + ')';
+			return "(| " + join(clauses, " ") + ')';
 		}
 
 		@Override /* Overridden from Exp */
@@ -238,7 +239,7 @@ public class RoleMatcher {
 	}
 
 	private Exp parse(String expression) throws ParseException {
-		if (isBlank(expression))
+		if (StringUtils.isBlank(expression))
 			return new Never();
 
 		expression = expression.trim();

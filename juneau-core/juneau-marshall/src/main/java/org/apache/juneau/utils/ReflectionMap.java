@@ -19,6 +19,7 @@ package org.apache.juneau.utils;
 import static java.lang.Character.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -181,7 +182,7 @@ public class ReflectionMap<V> {
 		 * @return This object.
 		 */
 		public Builder<V> append(String key, V value) {
-			if (isEmpty(key))
+			if (StringUtils.isEmpty(key))
 				throw runtimeException("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {
@@ -265,7 +266,7 @@ public class ReflectionMap<V> {
 
 		ConstructorEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = StringUtils.splita(name.substring(i + 1, name.length() - 1));
+			this.args = splita(name.substring(i + 1, name.length() - 1));
 			name = name.substring(0, i).trim();
 			this.simpleClassName = simpleClassName(name);
 			this.fullClassName = name;
@@ -332,7 +333,7 @@ public class ReflectionMap<V> {
 
 		MethodEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = i == -1 ? null : StringUtils.splitMethodArgs(name.substring(i + 1, name.length() - 1));
+			this.args = i == -1 ? null : splitMethodArgs(name.substring(i + 1, name.length() - 1));
 			if (nn(args)) {
 				for (int j = 0; j < args.length; j++) {
 

@@ -17,8 +17,9 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -32,7 +33,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -1009,7 +1009,7 @@ public class Parser extends BeanContextable {
 		unbuffered = builder.unbuffered;
 		listener = builder.listener;
 
-		String[] _consumes = StringUtils.splita(nn(consumes) ? consumes : "");
+		String[] _consumes = splita(nn(consumes) ? consumes : "");
 		this.consumesArray = new MediaType[_consumes.length];
 		for (int i = 0; i < _consumes.length; i++) {
 			this.consumesArray[i] = MediaType.of(_consumes[i]);

@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.http;
 
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.net.*;
 import java.time.*;
@@ -169,10 +169,9 @@ public class HttpParts {
 	 * 	The object to cast or convert to a {@link NameValuePair}.
 	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
 	 */
-	@SuppressWarnings("rawtypes")
 	public static NameValuePair cast(Object o) {
-		if (o instanceof NameValuePair)
-			return (NameValuePair)o;
+		if (o instanceof NameValuePair nvp)
+			return nvp;
 		if (o instanceof Headerable h) {
 			Header x = h.asHeader();
 			return BasicPart.of(x.getName(), x.getValue());

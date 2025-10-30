@@ -18,6 +18,7 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.jena.Constants.*;
@@ -362,7 +363,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		} else if (sType.isUri() || isURI) {
 			// Note that RDF URIs must be absolute to be valid!
 			String uri = getUri(o, null);
-			if (StringUtils.isAbsoluteUri(uri))
+			if (isAbsoluteUri(uri))
 				n = m.createResource(uri);
 			else
 				n = m.createLiteral(encodeTextInvalidChars(uri));

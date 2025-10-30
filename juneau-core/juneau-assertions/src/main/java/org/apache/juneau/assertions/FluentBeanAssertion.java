@@ -17,12 +17,12 @@
 package org.apache.juneau.assertions;
 
 import static java.util.Arrays.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -160,7 +160,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return This object.
 	 */
 	public FluentMapAssertion<String,Object,R> asPropertyMap(String...names) {
-		return new FluentMapAssertion<>(this, toBeanMap().getProperties(StringUtils.splita(names, ',')), returns());
+		return new FluentMapAssertion<>(this, toBeanMap().getProperties(splita(names, ',')), returns());
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */

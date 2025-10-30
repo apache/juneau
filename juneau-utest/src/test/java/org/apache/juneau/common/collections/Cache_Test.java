@@ -17,7 +17,6 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.junit.bct.BctAssertions.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;

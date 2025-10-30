@@ -17,8 +17,10 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.contains;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -27,7 +29,6 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -432,7 +433,7 @@ public class Items extends OpenApiElement {
 	 */
 	public Items setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw runtimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values=[{1}]", value, StringUtils.toCdl(VALID_COLLECTION_FORMATS));
+			throw runtimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values=[{1}]", value, toCdl(VALID_COLLECTION_FORMATS));
 		collectionFormat = value;
 		return this;
 	}

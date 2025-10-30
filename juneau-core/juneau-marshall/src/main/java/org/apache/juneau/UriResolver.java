@@ -18,13 +18,12 @@ package org.apache.juneau;
 
 import static org.apache.juneau.UriRelativity.*;
 import static org.apache.juneau.UriResolution.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Class used to create absolute and root-relative URIs based on your current URI 'location' and rules about how to
@@ -136,21 +135,21 @@ public class UriResolver {
 
 		try {
 			String uri = s(o);
-			uri = StringUtils.nullIfEmpty(uri);
+			uri = nullIfEmpty(uri);
 			boolean needsNormalize = hasDotSegments(uri) && nn(resolution);
 
 			// Absolute paths are not changed.
-			if (StringUtils.isAbsoluteUri(uri))
+			if (isAbsoluteUri(uri))
 				return a.append(needsNormalize ? normalize(uri) : uri);
 			if (resolution == NONE && ! isSpecialUri(uri))
 				return a.append(emptyIfNull(uri));
-			if (resolution == ROOT_RELATIVE && StringUtils.startsWith(uri, '/'))
+			if (resolution == ROOT_RELATIVE && startsWith(uri, '/'))
 				return a.append(needsNormalize ? normalize(uri) : uri);
 
 			Appendable a2 = needsNormalize ? new StringBuilder() : a;
 
 			// Root-relative path
-			if (StringUtils.startsWith(uri, '/')) {
+			if (startsWith(uri, '/')) {
 				if (nn(authority))
 					a2.append(authority);
 				if (uri.length() != 1)
@@ -323,9 +322,9 @@ public class UriResolver {
 
 	private String resolve(Object uri, UriResolution res) {
 		String s = s(uri);
-		if (StringUtils.isAbsoluteUri(s))
+		if (isAbsoluteUri(s))
 			return hasDotSegments(s) && res != NONE ? normalize(s) : s;
-		if (res == ROOT_RELATIVE && StringUtils.startsWith(s, '/'))
+		if (res == ROOT_RELATIVE && startsWith(s, '/'))
 			return hasDotSegments(s) ? normalize(s) : s;
 		if (res == NONE && ! isSpecialUri(s))
 			return s;

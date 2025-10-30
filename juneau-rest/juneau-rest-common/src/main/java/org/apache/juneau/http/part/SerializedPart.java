@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.function.*;
 

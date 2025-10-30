@@ -16,16 +16,16 @@
  */
 package org.apache.juneau.bean.html5;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
@@ -92,7 +92,7 @@ public abstract class HtmlElement {
 			attrs.remove(key);
 		else {
 			if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
-				val = StringUtils.toURI(val);
+				val = toURI(val);
 			attrs.put(key, val);
 		}
 		return this;
@@ -119,7 +119,7 @@ public abstract class HtmlElement {
 	public HtmlElement attrUri(String key, Object val) {
 		if (attrs == null)
 			attrs = map();
-		attrs.put(key, StringUtils.toURI(val));
+		attrs.put(key, toURI(val));
 		return this;
 	}
 
@@ -1048,7 +1048,7 @@ public abstract class HtmlElement {
 			value.entrySet().forEach(x -> {
 				var key = x.getKey();
 				if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
-					x.setValue(StringUtils.toURI(x.getValue()));
+					x.setValue(toURI(x.getValue()));
 			});
 		}
 		this.attrs = value;

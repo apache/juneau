@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -106,7 +107,7 @@ public class MediaType implements Comparable<MediaType> {
 	public static MediaType of(String value, NameValuePair...parameters) {
 		if (parameters.length == 0)
 			return of(value);
-		return isEmpty(value) ? null : new MediaType(value, parameters);
+		return StringUtils.isEmpty(value) ? null : new MediaType(value, parameters);
 	}
 
 	/**
@@ -127,7 +128,7 @@ public class MediaType implements Comparable<MediaType> {
 	}
 
 	private static HeaderElement parse(String value) {
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));
 	}
 
@@ -178,10 +179,10 @@ public class MediaType implements Comparable<MediaType> {
 		type = (i == -1 ? x : x.substring(0, i));
 		subType = (i == -1 ? "*" : x.substring(i + 1));
 
-		subTypes = StringUtils.splita(subType, '+');
-		subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
-		Arrays.sort(this.subTypesSorted);
-		hasSubtypeMeta = contains("*", this.subTypes);
+	subTypes = splita(subType, '+');
+	subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
+	Arrays.sort(this.subTypesSorted);
+	hasSubtypeMeta = CollectionUtils.contains("*", this.subTypes);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(mediaType);
@@ -416,7 +417,7 @@ public class MediaType implements Comparable<MediaType> {
 		for (String st1 : subTypes) {
 			if ("*".equals(st1))
 				c += 0;
-			else if (contains(st1, o.subTypes))
+			else if (CollectionUtils.contains(st1, o.subTypes))
 				c += 100;
 			else if (o.hasSubtypeMeta)
 				c += 0;
@@ -426,7 +427,7 @@ public class MediaType implements Comparable<MediaType> {
 		for (String st2 : o.subTypes) {
 			if ("*".equals(st2))
 				c += 0;
-			else if (contains(st2, subTypes))
+			else if (CollectionUtils.contains(st2, subTypes))
 				c += 100;
 			else if (hasSubtypeMeta)
 				c += 0;

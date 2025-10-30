@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

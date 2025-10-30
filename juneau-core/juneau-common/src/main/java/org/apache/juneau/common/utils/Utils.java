@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
@@ -401,7 +402,7 @@ public class Utils {
 	 * @see StringUtils#format(String, Object...)
 	 */
 	public static Supplier<String> fs(String pattern, Object...args) {
-		return () -> StringUtils.format(pattern, args);
+		return () -> format(pattern, args);
 	}
 
 	/**
@@ -530,7 +531,7 @@ public class Utils {
 	 * @return <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
 	 */
 	public static boolean isBlank(CharSequence s) {
-		return StringUtils.isBlank(s);
+		return isBlank(s);
 	}
 
 	/**
@@ -735,7 +736,7 @@ public class Utils {
 	 * @see StringUtils#readable(Object)
 	 */
 	public static String r(Object o) {
-		return StringUtils.readable(o);
+		return readable(o);
 	}
 
 	/**
@@ -1006,7 +1007,7 @@ public class Utils {
 	private static String removeUnderscores(String value) {
 		if (value == null)
 			throw new NullPointerException("Trying to parse null string.");
-		return StringUtils.notContains(value, '_') ? value : value.replace("_", "");
+		return notContains(value, '_') ? value : value.replace("_", "");
 	}
 
 	/**
@@ -1016,6 +1017,6 @@ public class Utils {
 	 * @return A string supplier that calls {@link #r(Object)} on the supplied value.
 	 */
 	public static Supplier<String> ss(Supplier<?> s) {
-		return StringUtils.stringSupplier(s);
+		return stringSupplier(s);
 	}
 }

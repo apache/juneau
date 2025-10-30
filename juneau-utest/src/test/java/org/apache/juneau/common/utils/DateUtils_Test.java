@@ -19,8 +19,8 @@ package org.apache.juneau.common.utils;
 import static java.time.temporal.ChronoField.*;
 import static java.time.temporal.ChronoUnit.*;
 import static java.util.Calendar.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.common.utils.DateUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.time.temporal.*;

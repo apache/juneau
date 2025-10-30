@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
 

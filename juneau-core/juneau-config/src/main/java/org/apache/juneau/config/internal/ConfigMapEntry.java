@@ -17,6 +17,7 @@
 package org.apache.juneau.config.internal;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -47,7 +48,7 @@ public class ConfigMapEntry {
 		var m1 = key2.indexOf('<');
 		var m2 = key2.indexOf('>');
 
-		modifiers = StringUtils.nullIfEmpty((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
+		modifiers = nullIfEmpty((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
 
 		this.key = m1 == -1 ? key2 : key2.substring(0, m1);
 
@@ -55,7 +56,7 @@ public class ConfigMapEntry {
 
 		i = line.indexOf('#');
 		if (i != -1) {
-			var l2 = StringUtils.splita(line, '#', 2);
+			var l2 = splita(line, '#', 2);
 			line = l2[0];
 			if (l2.length == 2)
 				this.comment = l2[1].trim();
@@ -65,7 +66,7 @@ public class ConfigMapEntry {
 			this.comment = null;
 		}
 
-		this.value = StringUtils.replaceUnicodeSequences(line.trim());
+		this.value = replaceUnicodeSequences(line.trim());
 
 		this.preLines = preLines == null ? Collections.emptyList() : u(copyOf(preLines));
 	}
@@ -141,7 +142,7 @@ public class ConfigMapEntry {
 					w.append('\n').append('\t');
 				else if (c != '\r') {
 					if (REPLACE_CHARS.contains(c) || (Character.isISOControl(c) && ! (c == '\n' || c == '\r' || c == '\t'))) {
-						w.append(StringUtils.unicodeSequence(c));
+						w.append(unicodeSequence(c));
 					} else {
 						w.append(c);
 					}

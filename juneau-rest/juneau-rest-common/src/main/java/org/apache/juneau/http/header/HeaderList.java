@@ -19,6 +19,7 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -893,7 +894,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return "[" + StringUtils.join(this, ", ") + "]";
+		return "[" + join(this, ", ") + "]";
 	}
 
 	/**

@@ -17,8 +17,9 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -32,7 +33,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.utils.*;
 
@@ -1297,7 +1297,7 @@ public class Serializer extends BeanTraverseContext {
 
 		this.producesMediaType = MediaType.of(produces);
 		this.acceptRanges = nn(accept) ? MediaRanges.of(accept) : MediaRanges.of(produces);
-		this.acceptMediaTypes = nn(builder.accept) ? MediaType.ofAll(StringUtils.splita(builder.accept)) : a(this.producesMediaType);
+		this.acceptMediaTypes = nn(builder.accept) ? MediaType.ofAll(splita(builder.accept)) : a(this.producesMediaType);
 	}
 
 	@Override /* Overridden from Context */

@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.rest.client;
 
-import static java.lang.Character.*;
+import static java.lang.Character.isWhitespace;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;
@@ -4597,7 +4598,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			var s = s(value);
 			if (isNotEmpty(s))
 				s = s.replaceAll("\\/$", "");
-			if (isEmpty(s))
+			if (StringUtils.isEmpty(s))
 				rootUrl = null;
 			else if (s.indexOf("://") == -1)
 				throw runtimeException("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
@@ -6602,14 +6603,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	public RestRequest formPost(Object uri, Object body) throws RestCallException {
 		RestRequest req = request(op("POST", uri, NO_BODY));
 		try {
-			if (body instanceof Supplier)
-				body = ((Supplier<?>)body).get();
-			if (body instanceof NameValuePair)
-				return req.content(new UrlEncodedFormEntity(l((NameValuePair)body)));
-			if (body instanceof NameValuePair[])
-				return req.content(new UrlEncodedFormEntity(l((NameValuePair[])body)));
-			if (body instanceof PartList)
-				return req.content(new UrlEncodedFormEntity(((PartList)body)));
+		if (body instanceof Supplier)
+			body = ((Supplier<?>)body).get();
+		if (body instanceof NameValuePair nvp)
+			return req.content(new UrlEncodedFormEntity(l(nvp)));
+		if (body instanceof NameValuePair[])
+			return req.content(new UrlEncodedFormEntity(l((NameValuePair[])body)));
+		if (body instanceof PartList pl)
+			return req.content(new UrlEncodedFormEntity(pl));
 		if (body instanceof HttpResource)
 			((HttpResource)body).getHeaders().forEach(x -> req.header(x));
 		if (body instanceof HttpEntity e) {
@@ -6825,7 +6826,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		if (rootUrl == null)
 			rootUrl = this.rootUrl;
 
-		final String restUrl2 = StringUtils.trimSlashes(emptyIfNull(rootUrl));
+		final String restUrl2 = trimSlashes(emptyIfNull(rootUrl));
 
 		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), a(interfaceClass), new InvocationHandler() {
 
@@ -7059,9 +7060,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, "");
 			String path = rm.getPath();
 			if (path.indexOf("://") == -1) {
-				if (isEmpty(rootUrl))
+				if (StringUtils.isEmpty(rootUrl))
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote interface.");
-				path = StringUtils.trimSlashes(rootUrl) + '/' + path;
+				path = trimSlashes(rootUrl) + '/' + path;
 			}
 			uri = path;
 		}
@@ -7979,12 +7980,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	URI toURI(Object x, String rootUrl) throws RestCallException {
 		try {
-			if (x instanceof URI)
-				return (URI)x;
+			if (x instanceof URI uri)
+				return uri;
 			if (x instanceof URL)
 				((URL)x).toURI();
-			if (x instanceof URIBuilder)
-				return ((URIBuilder)x).build();
+			if (x instanceof URIBuilder urib)
+				return urib.build();
 			String s = x == null ? "" : x.toString();
 			if (nn(rootUrl) && ! absUrlPattern.matcher(s).matches()) {
 				if (s.isEmpty())
@@ -7997,7 +7998,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					s = sb.toString();
 				}
 			}
-			s = StringUtils.fixUrl(s);
+			s = fixUrl(s);
 			return new URI(s);
 		} catch (URISyntaxException e) {
 			throw new RestCallException(null, e, "Invalid URI encountered:  {0}", x);  // Shouldn't happen.

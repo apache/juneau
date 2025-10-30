@@ -1442,7 +1442,7 @@ public class CollectionUtils {
 	 * @return A new {@link ArrayList}
 	 */
 	public static List<Object> toObjectList(Object array) {
-		var l = new ArrayList<Object>(Array.getLength(array));
+		var l = new ArrayList<>(Array.getLength(array));
 		for (int i = 0; i < Array.getLength(array); i++) {
 			Object o = Array.get(array, i);
 			if (isArray(o))

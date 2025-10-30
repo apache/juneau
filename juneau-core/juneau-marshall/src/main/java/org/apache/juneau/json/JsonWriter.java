@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.json;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -159,7 +161,7 @@ public class JsonWriter extends SerializerWriter {
 	public JsonWriter attr(String s) {
 
 		if (trimStrings)
-			s = StringUtils.trim(s);
+			s = trim(s);
 
 		/*
 		 * Converts a Java string to an acceptable JSON attribute name. If

@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -32,7 +33,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.reflect.Visibility;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -253,7 +253,7 @@ public class BeanMeta<T> {
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
-					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.splita(z.properties()));
+					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = splita(z.properties()));
 					if (! x.hasNumParams(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -276,7 +276,7 @@ public class BeanMeta<T> {
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.splita(z.properties()));
+						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = splita(z.properties()));
 						if (! x.hasNumParams(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");

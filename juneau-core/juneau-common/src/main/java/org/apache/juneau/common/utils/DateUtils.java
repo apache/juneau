@@ -222,7 +222,7 @@ public class DateUtils {
 	 * @see #toIso8601(Calendar)
 	 */
 	public static Calendar fromIso8601Calendar(String s) {
-		if (isBlank(s))
+		if (StringUtils.isBlank(s))
 			return null;
 		return GregorianCalendar.from(fromIso8601(s));
 	}
@@ -290,7 +290,7 @@ public class DateUtils {
 	 * @see ZonedDateTime
 	 */
 	public static ZonedDateTime fromIso8601(String s) {
-		if (isBlank(s))
+		if (StringUtils.isBlank(s))
 			return null;
 		String validDate = toValidIso8601DT(s);
 		return ZonedDateTime.parse(validDate, DateTimeFormatter.ISO_DATE_TIME);

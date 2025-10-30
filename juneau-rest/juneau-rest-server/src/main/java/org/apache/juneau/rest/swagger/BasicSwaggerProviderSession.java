@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.swagger;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.isEmpty;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
@@ -979,13 +979,13 @@ public class BasicSwaggerProviderSession {
 			s = resolve(s);
 			if ("IGNORE".equalsIgnoreCase(s))
 				return JsonMap.of("ignore", true);
-			if (! isJsonObject(s, true))
-				s = "{" + s + "}";
-			return JsonMap.ofJson(s);
-		}
-		if (o instanceof JsonMap)
-			return (JsonMap)o;
-		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", cn(o));
+		if (! isJsonObject(s, true))
+			s = "{" + s + "}";
+		return JsonMap.ofJson(s);
+	}
+	if (o instanceof JsonMap jm)
+		return jm;
+	throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", cn(o));
 	}
 
 	private JsonMap parseMap(String o, String location, Object...args) throws ParseException {

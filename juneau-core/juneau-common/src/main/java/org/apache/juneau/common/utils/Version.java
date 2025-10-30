@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -71,7 +72,7 @@ public class Version implements Comparable<Version> {
 	public Version(String value) {
 		if (StringUtils.isEmpty(value))
 			value = "0";
-		String[] sParts = StringUtils.splita(value, '.');
+		String[] sParts = splita(value, '.');
 		parts = new int[sParts.length];
 		for (int i = 0; i < sParts.length; i++) {
 			try {
@@ -246,6 +247,6 @@ public class Version implements Comparable<Version> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return StringUtils.join(parts, '.');
+		return join(parts, '.');
 	}
 }

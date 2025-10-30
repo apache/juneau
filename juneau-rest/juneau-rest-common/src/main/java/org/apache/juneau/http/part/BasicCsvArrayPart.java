@@ -17,7 +17,9 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.eqic;
 
 import java.util.*;
 import java.util.function.*;
@@ -44,7 +46,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, String...value) {
-		if (isEmpty(name) || value == null)
+		if (StringUtils.isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
@@ -60,7 +62,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicCsvArrayPart of(String name, Supplier<String[]> value) {
-		if (isEmpty(name) || value == null)
+		if (StringUtils.isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
@@ -94,7 +96,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public BasicCsvArrayPart(String name, String value) {
 		super(name, value);
-		this.value = StringUtils.splita(value);
+		this.value = splita(value);
 		this.supplier = null;
 		this.stringValue = value;
 	}
@@ -177,9 +179,9 @@ public class BasicCsvArrayPart extends BasicPart {
 	@Override /* Overridden from Header */
 	public String getValue() {
 		if (nn(supplier))
-			return StringUtils.join(supplier.get(), ',');
+			return join(supplier.get(), ',');
 		if (nn(stringValue))
-			stringValue = StringUtils.join(value, ',');
+			stringValue = join(value, ',');
 		return stringValue;
 	}
 

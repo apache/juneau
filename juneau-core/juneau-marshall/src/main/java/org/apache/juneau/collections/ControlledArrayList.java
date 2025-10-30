@@ -19,7 +19,6 @@ package org.apache.juneau.collections;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
-
 import java.util.function.*;
 
 /**

@@ -43,7 +43,6 @@ class BeanConfigAnnotation_Test extends TestBase {
 	}
 
 	private static final Function<Object,String> TO_STRING = new Function<>() {
-		@SuppressWarnings({ "rawtypes" })
 		@Override
 		public String apply(Object t) {
 			if (t == null)

@@ -18,6 +18,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +28,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -44,7 +44,7 @@ class BasicMediaRangesHeader_Test extends TestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return reader(h == null ? "null" : StringUtils.join(h, '|'));
+			return reader(h == null ? "null" : join(h, '|'));
 		}
 	}
 

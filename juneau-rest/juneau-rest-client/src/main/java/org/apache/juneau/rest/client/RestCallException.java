@@ -22,7 +22,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.text.*;
 
 import org.apache.http.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 
 /**
@@ -62,7 +61,7 @@ public class RestCallException extends HttpException {
 	private static String format(String msg, Object...args) {
 		if (args.length == 0)
 			return clean(msg);
-		return clean(StringUtils.format(msg, args));
+		return clean(f(msg, args));
 	}
 
 	private final int statusCode;

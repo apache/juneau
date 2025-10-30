@@ -18,6 +18,7 @@ package org.apache.juneau.httppart;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +26,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.reflect.*;
 import org.junit.jupiter.api.*;
@@ -741,8 +741,8 @@ class HttpPartSchema_Path_Test extends TestBase {
 	@Test void d01a_uniqueItems_arrays() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Path.class, D01.class).build();
 
-		var good = StringUtils.split("a,b");
-		var bad = StringUtils.split("a,a");
+		var good = split("a,b");
+		var bad = split("a,a");
 
 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
@@ -794,24 +794,24 @@ class HttpPartSchema_Path_Test extends TestBase {
 	@Test void d02a_minMaxItems_arrays() throws Exception {
 		var s = HttpPartSchema.create().applyAll(Path.class, D02.class).build();
 
-		s.getItems().validateOutput(StringUtils.split("1"), BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(StringUtils.split("1,2"), BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(StringUtils.split("1,2,3"), BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(StringUtils.split("1,2,3,4"), BeanContext.DEFAULT);
+		s.getItems().validateOutput(split("1"), BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
 
-		s.getItems().validateOutput(StringUtils.split("1,2"), BeanContext.DEFAULT);
-		s.getItems().getItems().validateOutput(StringUtils.split("1,2,3"), BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().validateOutput(StringUtils.split("1,2,3,4"), BeanContext.DEFAULT);
-		s.getItems().getItems().getItems().getItems().validateOutput(StringUtils.split("1,2,3,4,5"), BeanContext.DEFAULT);
+		s.getItems().validateOutput(split("1,2"), BeanContext.DEFAULT);
+		s.getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
+		s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT);
 
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().validateOutput(new String[0], BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().validateOutput(StringUtils.split("1"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().getItems().validateOutput(StringUtils.split("1,2"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().getItems().getItems().validateOutput(StringUtils.split("1,2,3"), BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().validateOutput(split("1"), BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum number of items not met.", ()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT));
 
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().validateOutput(StringUtils.split("1,2,3"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().validateOutput(StringUtils.split("1,2,3,4"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().validateOutput(StringUtils.split("1,2,3,4,5"), BeanContext.DEFAULT));
-		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().getItems().validateOutput(StringUtils.split("1,2,3,4,5,6"), BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT));
 	}
 }

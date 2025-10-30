@@ -18,8 +18,11 @@ package org.apache.juneau.rest;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.compare;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.compare;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -955,7 +958,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder maxInput(String value) {
-			maxInput = StringUtils.parseLongWithSuffix(value);
+			maxInput = parseLongWithSuffix(value);
 			return this;
 		}
 
@@ -1299,7 +1302,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		private static String joinnlFirstNonEmptyArray(String[]...s) {
 			for (String[] ss : s)
 				if (ss.length > 0)
-					return StringUtils.joinnl(ss);
+					return joinnl(ss);
 			return null;
 		}
 
@@ -1989,7 +1992,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (a instanceof Header h) {
 					if (nn(def)) {
 						try {
-							defaultRequestHeaders().set(basicHeader(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+							defaultRequestHeaders().set(basicHeader(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Header annotation");
 						}
@@ -1998,7 +2001,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (a instanceof Query h) {
 			if (nn(def)) {
 						try {
-							defaultRequestQueryData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+							defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 							throw new ConfigException(e, "Malformed @Query annotation");
 						}
@@ -2007,7 +2010,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (a instanceof FormData h) {
 			if (nn(def)) {
 						try {
-							defaultRequestFormData().setDefault(basicPart(StringUtils.firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+							defaultRequestFormData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
 						} catch (ParseException e) {
 								throw new ConfigException(e, "Malformed @FormData annotation");
 							}

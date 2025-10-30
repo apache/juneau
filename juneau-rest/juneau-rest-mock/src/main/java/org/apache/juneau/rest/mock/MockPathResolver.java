@@ -20,6 +20,7 @@ import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
@@ -36,10 +37,10 @@ import org.apache.juneau.rest.util.*;
 class MockPathResolver {
 
 	private static String fixSegment(String s, Map<String,Object> pathVars) {
-		s = StringUtils.replaceVars(emptyIfNull(s), pathVars);
+		s = replaceVars(emptyIfNull(s), pathVars);
 		if (s.isEmpty() || s.equals("/"))
 			return "";
-		s = StringUtils.trimTrailingSlashes(s);
+		s = trimTrailingSlashes(s);
 		if (s.charAt(0) != '/')
 			s = '/' + s;
 		return s;
@@ -132,7 +133,7 @@ class MockPathResolver {
 
 	private void init(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
 
-		target = StringUtils.trimTrailingSlashes(emptyIfNull(target));
+		target = trimTrailingSlashes(emptyIfNull(target));
 		if (target.isEmpty())
 			target = "http://localhost";
 
@@ -160,8 +161,8 @@ class MockPathResolver {
 		// S7 - Resolved servletPath.
 		StateEnum state = S3;
 
-		int cpSegments = StringUtils.countChars(contextPath, '/');
-		int spSegments = StringUtils.countChars(servletPath, '/');
+		int cpSegments = countChars(contextPath, '/');
+		int spSegments = countChars(servletPath, '/');
 
 		this.contextPath = "";
 		this.servletPath = "";

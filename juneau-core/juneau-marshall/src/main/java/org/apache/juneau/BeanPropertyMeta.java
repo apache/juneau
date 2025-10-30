@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -230,7 +231,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (! x.properties().isEmpty())
-						properties = StringUtils.splita(x.properties());
+						properties = splita(x.properties());
 					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
@@ -251,7 +252,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (nn(properties) && ! x.properties().isEmpty())
-						properties = StringUtils.splita(x.properties());
+						properties = splita(x.properties());
 					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
@@ -271,7 +272,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (nn(properties) && ! x.properties().isEmpty())
-						properties = StringUtils.splita(x.properties());
+						properties = splita(x.properties());
 					addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());

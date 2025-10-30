@@ -68,12 +68,11 @@ public class BasicPart implements NameValuePair, Headerable {
 	 * 	The object to cast or convert to a {@link NameValuePair}.
 	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
 	 */
-	@SuppressWarnings("rawtypes")
 	public static NameValuePair cast(Object o) {
-		if (o instanceof NameValuePair)
-			return (NameValuePair)o;
-		if (o instanceof NameValuePairable)
-			return ((NameValuePairable)o).asNameValuePair();
+		if (o instanceof NameValuePair nvp)
+			return nvp;
+		if (o instanceof NameValuePairable nvpable)
+			return nvpable.asNameValuePair();
 		if (o instanceof NameValuePair p) {
 			return BasicPart.of(p.getName(), p.getValue());
 		}

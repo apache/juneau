@@ -18,6 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -26,7 +27,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Allows referencing an external resource for extended documentation.
@@ -146,7 +146,7 @@ public class ExternalDocumentation extends SwaggerElement {
 		assertArgNotNull("property", property);
 		return switch (property) {
 			case "description" -> setDescription(s(value));
-			case "url" -> setUrl(StringUtils.toURI(value));
+			case "url" -> setUrl(toURI(value));
 			default -> {
 				super.set(property, value);
 				yield this;

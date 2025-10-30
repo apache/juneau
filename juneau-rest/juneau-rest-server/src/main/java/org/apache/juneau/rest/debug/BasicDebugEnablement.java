@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.debug;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -108,7 +108,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 			x -> true,
 			x -> {
 				String x2 = varResolver.resolve(x.debugOn());
-				for (Map.Entry<String,String> e : StringUtils.splitMap(x2, true).entrySet()) {
+				for (Map.Entry<String,String> e : splitMap(x2, true).entrySet()) {
 					String k = e.getKey(), v = e.getValue();
 					if (v.isEmpty())
 						v = "ALWAYS";

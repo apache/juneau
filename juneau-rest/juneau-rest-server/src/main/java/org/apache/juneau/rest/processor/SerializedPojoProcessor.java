@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.rest.processor;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
@@ -90,7 +90,7 @@ public class SerializedPojoProcessor implements ResponseProcessor {
 						FinishablePrintWriter w = res.getNegotiatedWriter();
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						session.serialize(o, baos);
-						w.write(StringUtils.toSpacedHex(baos.toByteArray()));
+						w.write(toSpacedHex(baos.toByteArray()));
 						w.flush();
 						w.finish();
 					} else {

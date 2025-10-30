@@ -101,7 +101,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(4, result.get("d"));
 
 		// Verify order (LinkedHashMap maintains insertion order)
-		var keys = new ArrayList<String>(result.keySet());
+		var keys = new ArrayList<>(result.keySet());
 		assertEquals(l("a", "b", "c", "d"), keys);
 	}
 
@@ -121,7 +121,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(5, result.get("e"));
 
 		// Verify order (LinkedHashMap maintains insertion order)
-		var keys = new ArrayList<String>(result.keySet());
+		var keys = new ArrayList<>(result.keySet());
 		assertEquals(l("a", "b", "c", "d", "e"), keys);
 	}
 
@@ -401,7 +401,7 @@ class CollectionUtils_Test extends TestBase {
 		assertSize(4, result);
 
 		// Verify insertion order is preserved
-		var keys = new ArrayList<String>(result.keySet());
+		var keys = new ArrayList<>(result.keySet());
 		assertEquals(list("z", "a", "m", "b"), keys);
 	}
 
@@ -413,7 +413,7 @@ class CollectionUtils_Test extends TestBase {
 		assertSize(3, result);
 
 		// Verify insertion order is preserved, including null
-		var keys = new ArrayList<String>(result.keySet());
+		var keys = new ArrayList<>(result.keySet());
 		assertEquals(list("first", null, "last"), keys);
 	}
 
@@ -428,7 +428,7 @@ class CollectionUtils_Test extends TestBase {
 		assertSize(10, result);
 
 		// Verify insertion order
-		var keys = new ArrayList<Integer>(result.keySet());
+		var keys = new ArrayList<>(result.keySet());
 		assertEquals(l(10, 9, 8, 7, 6, 5, 4, 3, 2, 1), keys);
 	}
 
@@ -499,7 +499,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("null-value", result.get(null));
 
 		// Check insertion order
-		var keys = new ArrayList<String>(result.keySet());
+		var keys = new ArrayList<>(result.keySet());
 		assertEquals(list("first", null, "last"), keys);
 
 		// Check immutability
@@ -526,7 +526,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("boolean", result.get(true));
 
 		// Verify order
-		var keys = new ArrayList<Object>(result.keySet());
+		var keys = new ArrayList<>(result.keySet());
 		assertEquals(list("string", null, 42, true), keys);
 
 		// Verify immutability

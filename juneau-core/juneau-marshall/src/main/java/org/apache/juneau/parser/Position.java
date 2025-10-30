@@ -17,10 +17,9 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.util.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Identifies a position in a reader or input stream.
@@ -90,6 +89,6 @@ public class Position {
 			l.add("position " + position);
 		if (l.isEmpty())
 			l.add("unknown");
-		return StringUtils.join(l, ", ");
+		return join(l, ", ");
 	}
 }

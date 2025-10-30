@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.bean.html5;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
+
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-style-element">&lt;style&gt;</a>
@@ -101,7 +102,7 @@ public class Style extends HtmlElementRawText {
 	 * 	<br>Values will be concatenated with newlines.
 	 */
 	public Style(String...text) {
-		text(StringUtils.joinnl(text));
+		text(joinnl(text));
 	}
 
 	@Override /* Overridden from HtmlElement */

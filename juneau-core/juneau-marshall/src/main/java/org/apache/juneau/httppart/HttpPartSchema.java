@@ -3521,8 +3521,8 @@ public class HttpPartSchema {
 	private static HttpPartSchema build(Object in, boolean noValidate) {
 		if (in == null)
 			return null;
-		if (in instanceof HttpPartSchema)
-			return (HttpPartSchema)in;
+		if (in instanceof HttpPartSchema hps)
+			return hps;
 		return ((Builder)in).noValidate(noValidate).build();
 	}
 
@@ -4586,7 +4586,7 @@ public class HttpPartSchema {
 
 	private boolean isValidUniqueItems(Collection<?> x) {
 		if (uniqueItems && ! (x instanceof Set)) {
-			var s = new HashSet<Object>();
+			var s = new HashSet<>();
 			for (Object o : x)
 				if (! s.add(o))
 					return false;
@@ -4596,7 +4596,7 @@ public class HttpPartSchema {
 
 	private boolean isValidUniqueItems(Object x) {
 		if (uniqueItems) {
-			var s = new HashSet<Object>();
+			var s = new HashSet<>();
 			for (int i = 0; i < Array.getLength(x); i++) {
 				Object o = Array.get(x, i);
 				if (! s.add(o))

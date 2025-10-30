@@ -19,13 +19,13 @@ package org.apache.juneau.assertions;
 import static java.util.Arrays.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.serializer.*;
 
@@ -190,7 +190,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return A fluent string assertion.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> asCdl() {
-		return new FluentStringAssertion<>(this, valueIsNull() ? null : StringUtils.join(value(), ','), returns());
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : join(value(), ','), returns());
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public FluentStringAssertion<R> asCdl(Function<E,String> function) {
 		List<String> l = valueIsNull() ? null : stream(value()).map(function::apply).toList();
-		return new FluentStringAssertion<>(this, StringUtils.join(l, ','), returns());
+		return new FluentStringAssertion<>(this, join(l, ','), returns());
 	}
 
 	/**

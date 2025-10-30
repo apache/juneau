@@ -17,13 +17,13 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -58,7 +58,7 @@ public class RrpcInterfaceMeta {
 		Value<String> path = Value.of("");
 		ClassInfo ci = ClassInfo.of(c);
 
-		ci.forEachAnnotation(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(StringUtils.trimSlashes(x.path())));
+		ci.forEachAnnotation(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
 
 		Map<Method,RrpcInterfaceMethodMeta> methods = map();
 		ci.forEachPublicMethod(x -> true, x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));

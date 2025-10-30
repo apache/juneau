@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.bean.openapi3;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
+
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Various useful static methods for creating OpenAPI elements.
@@ -81,7 +82,7 @@ public class OpenApiBuilder {
 	 * @return The new element.
 	 */
 	public static final Contact contact(String name, Object url, String email) {
-		return contact().setName(name).setUrl(StringUtils.toURI(url)).setEmail(email);
+		return contact().setName(name).setUrl(toURI(url)).setEmail(email);
 	}
 
 	/**
@@ -152,7 +153,7 @@ public class OpenApiBuilder {
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url) {
-		return externalDocumentation().setUrl(StringUtils.toURI(url));
+		return externalDocumentation().setUrl(toURI(url));
 	}
 
 	/**
@@ -168,7 +169,7 @@ public class OpenApiBuilder {
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url, String description) {
-		return externalDocumentation().setUrl(StringUtils.toURI(url)).setDescription(description);
+		return externalDocumentation().setUrl(toURI(url)).setDescription(description);
 	}
 
 	/**

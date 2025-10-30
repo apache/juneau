@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.servlet;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
@@ -23,7 +24,6 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 
@@ -70,7 +70,7 @@ public abstract class RestObject {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, String msg, Object...args) {
-		doLog(level, null, () -> StringUtils.format(msg, args));
+		doLog(level, null, () -> format(msg, args));
 	}
 
 	/**
@@ -85,7 +85,7 @@ public abstract class RestObject {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public void log(Level level, Throwable cause, String msg, Object...args) {
-		doLog(level, cause, () -> StringUtils.format(msg, args));
+		doLog(level, cause, () -> format(msg, args));
 	}
 
 	/**

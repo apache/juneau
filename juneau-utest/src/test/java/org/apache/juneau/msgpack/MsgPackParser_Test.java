@@ -17,13 +17,13 @@
 package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -122,6 +122,6 @@ class MsgPackParser_Test extends TestBase {
 	}
 
 	private static InputStream is(String spacedHex) {
-		return new CloseableByteArrayInputStream(StringUtils.fromSpacedHex(spacedHex));
+		return new CloseableByteArrayInputStream(fromSpacedHex(spacedHex));
 	}
 }

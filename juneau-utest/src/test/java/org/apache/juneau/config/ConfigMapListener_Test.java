@@ -17,9 +17,9 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;

@@ -16,12 +16,11 @@
  */
 package org.apache.juneau.config.event;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.util.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a change to a config.
@@ -197,7 +196,7 @@ public class ConfigEvent {
 		return switch (type) {
 			case REMOVE_SECTION -> "REMOVE_SECTION(" + section + ")";
 			case REMOVE_ENTRY -> "REMOVE_ENTRY(" + section + (section.isEmpty() ? "" : "/") + key + ")";
-			case SET_SECTION -> "SET_SECTION(" + section + ", preLines=" + StringUtils.join(preLines, '|') + ")";
+			case SET_SECTION -> "SET_SECTION(" + section + ", preLines=" + join(preLines, '|') + ")";
 			case SET_ENTRY -> {
 				var out = new StringBuilder("SET(");
 				out.append(section + (section.isEmpty() ? "" : "/") + key);

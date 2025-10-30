@@ -17,15 +17,15 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.reflect.*;
@@ -70,7 +70,7 @@ public class RemoteMeta {
 
 		for (Remote r : remotes) {
 			if (isNotEmpty(r.path()))
-				path = StringUtils.trimSlashes(resolve(r.path()));
+				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
 				headers.append(stringHeader(resolve(h)));
 			if (isNotEmpty(r.version()))

@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -169,7 +169,7 @@ public class ComboSerialize_Tester<T> {
 				System.out.println(getClass().getName() + ": " + label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
 				System.out.println(r);
 				if (s instanceof MsgPackSerializer) {
-					System.out.println("decoded=["+new String(StringUtils.fromHex(r))+"]");
+					System.out.println("decoded=["+new String(fromHex(r))+"]");
 				}
 			}
 

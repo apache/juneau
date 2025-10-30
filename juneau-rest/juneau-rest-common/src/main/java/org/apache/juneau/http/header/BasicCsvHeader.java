@@ -17,13 +17,14 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.Utils.eqic;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of string values.
@@ -105,7 +106,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 */
 	public BasicCsvHeader(String name, String value) {
 		super(name, value);
-		this.value = StringUtils.splita(value);
+		this.value = splita(value);
 		this.supplier = null;
 	}
 
@@ -119,7 +120,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicCsvHeader(String name, String...value) {
-		super(name, StringUtils.join(value, ", "));
+		super(name, join(value, ", "));
 		this.value = copyOf(value);
 		this.supplier = null;
 	}
@@ -220,7 +221,7 @@ public class BasicCsvHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return StringUtils.join(value(), ", "); }
+	public String getValue() { return join(value(), ", "); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

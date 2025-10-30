@@ -20,11 +20,11 @@ import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
@@ -153,7 +153,7 @@ public class RoundTrip_Tester {
 		}
 
 		if (debug)
-			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? StringUtils.toReadableBytes((byte[])out) : out) + "\n---END---\n"); // NOT DEBUG
+			System.err.println("Serialized contents from ["+label+"]...\n---START---\n" + (out instanceof byte[] ? toReadableBytes((byte[])out) : out) + "\n---END---\n"); // NOT DEBUG
 
 		if (validateXmlWhitespace)
 			checkXmlWhitespace(out.toString());

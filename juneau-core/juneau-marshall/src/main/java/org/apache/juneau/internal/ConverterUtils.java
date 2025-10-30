@@ -17,13 +17,13 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;
@@ -198,7 +198,7 @@ public class ConverterUtils {
 		if (o instanceof Number)
 			return (Number)o;
 		try {
-			return StringUtils.parseNumber(o.toString(), null);
+			return parseNumber(o.toString(), null);
 		} catch (ParseException e) {
 			throw toRuntimeException(e);
 		}

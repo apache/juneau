@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
@@ -187,7 +187,7 @@ class UonParserReader_Test extends TestBase {
 		var sb = new StringBuilder();
 		byte[] b = s.getBytes("UTF-8");
 		for (byte element : b)
-			sb.append('%').append(StringUtils.toHex(element));
+			sb.append('%').append(toHex(element));
 		return sb.toString();
 	}
 

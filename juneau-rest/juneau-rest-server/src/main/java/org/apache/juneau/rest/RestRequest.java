@@ -19,6 +19,7 @@ package org.apache.juneau.rest;
 import static java.util.Optional.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -37,7 +38,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.bean.swagger.Swagger;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
@@ -1318,7 +1318,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public UriContext getUriContext() {
 		if (uriContext == null)
-			uriContext = UriContext.of(getAuthorityPath(), getContextPath(), getServletPath(), StringUtils.urlEncodePath(inner.getPathInfo()));
+			uriContext = UriContext.of(getAuthorityPath(), getContextPath(), getServletPath(), urlEncodePath(inner.getPathInfo()));
 		return uriContext;
 	}
 

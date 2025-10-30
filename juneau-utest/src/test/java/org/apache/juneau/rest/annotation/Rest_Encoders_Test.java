@@ -17,8 +17,9 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
@@ -55,7 +56,7 @@ class Rest_Encoders_Test extends TestBase {
 		a.put("/", "foo").run().assertContent("foo");
 		a.put("/", "foo").header(ContentEncoding.of("")).run().assertContent("foo");
 		a.put("/", "foo").header(ContentEncoding.of("identity")).run().assertContent("foo");
-		a.put("?noTrace=true", StringUtils.compress("foo")).header(ContentEncoding.of("mycoding")).run()
+		a.put("?noTrace=true", compress("foo")).header(ContentEncoding.of("mycoding")).run()
 			.assertStatus(415)
 			.assertContent().isContains(
 				"Unsupported encoding in request header 'Content-Encoding': 'mycoding'",

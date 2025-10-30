@@ -17,7 +17,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -170,7 +170,7 @@ class StringVarResolver_Test extends TestBase {
 	@Test void a07_test$E() {
 		var t = "$E{PATH}";
 
-		assertFalse(isEmpty(VarResolver.DEFAULT.resolve(t)));
+		assertFalse(StringUtils.isEmpty(VarResolver.DEFAULT.resolve(t)));
 	}
 
 	//====================================================================================================
@@ -193,7 +193,7 @@ class StringVarResolver_Test extends TestBase {
 		}
 		@Override /* MultipartVar */
 		public String resolve(VarResolverSession session, String[] args) {
-			return StringUtils.join(args, '+');
+			return join(args, '+');
 		}
 	}
 

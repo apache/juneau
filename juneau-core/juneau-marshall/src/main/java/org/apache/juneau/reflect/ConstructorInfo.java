@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;

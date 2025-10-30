@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -92,11 +93,11 @@ public class MediaRanges {
 	 * @return A parsed <c>Accept</c> header value.
 	 */
 	public static MediaRanges of(String value) {
-		return isEmpty(value) ? EMPTY : CACHE.get(value, () -> new MediaRanges(value));
+		return StringUtils.isEmpty(value) ? EMPTY : CACHE.get(value, () -> new MediaRanges(value));
 	}
 
 	private static HeaderElement[] parse(String value) {
-		return BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
+		return BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
 	}
 
 	private final MediaRange[] ranges;
@@ -115,7 +116,7 @@ public class MediaRanges {
 			ranges[i] = new MediaRange(e[i]);
 		Arrays.sort(ranges, RANGE_COMPARATOR);
 
-		this.string = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(ranges, ',');
+		this.string = ranges.length == 1 ? ranges[0].toString() : join(ranges, ',');
 	}
 
 	/**

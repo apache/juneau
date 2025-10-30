@@ -18,13 +18,13 @@ package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.beans.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 
@@ -213,7 +213,7 @@ public class BeanFilter {
 		public Builder excludeProperties(String...value) {
 			this.excludeProperties = set();
 			for (String v : value)
-				StringUtils.split(v, x -> excludeProperties.add(x));
+				split(v, x -> excludeProperties.add(x));
 			return this;
 		}
 
@@ -398,7 +398,7 @@ public class BeanFilter {
 		public Builder properties(String...value) {
 			this.properties = set();
 			for (String v : value)
-				StringUtils.split(v, x -> properties.add(x));
+				split(v, x -> properties.add(x));
 			return this;
 		}
 
@@ -487,7 +487,7 @@ public class BeanFilter {
 		public Builder readOnlyProperties(String...value) {
 			this.readOnlyProperties = set();
 			for (String v : value)
-				StringUtils.split(v, x -> readOnlyProperties.add(x));
+				split(v, x -> readOnlyProperties.add(x));
 			return this;
 		}
 
@@ -686,7 +686,7 @@ public class BeanFilter {
 		public Builder writeOnlyProperties(String...value) {
 			this.writeOnlyProperties = set();
 			for (String v : value)
-				StringUtils.split(v, x -> writeOnlyProperties.add(x));
+				split(v, x -> writeOnlyProperties.add(x));
 			return this;
 		}
 	}

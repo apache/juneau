@@ -17,11 +17,11 @@
 package org.apache.juneau.msgpack;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
 
 class MsgPackSerializerTest extends TestBase {
@@ -215,6 +215,6 @@ class MsgPackSerializerTest extends TestBase {
 
 	private static void test(Object input, String expected) throws Exception {
 		byte[] b = MsgPackSerializer.DEFAULT.serialize(input);
-		assertEquals(expected, StringUtils.toSpacedHex(b));
+		assertEquals(expected, toSpacedHex(b));
 	}
 }

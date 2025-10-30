@@ -18,6 +18,7 @@ package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -32,7 +33,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.utils.*;
 
@@ -855,7 +855,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		ignoreTypes = builder.ignoreTypes == null ? Collections.emptySet() : new TreeSet<>(builder.ignoreTypes);
 
 		Set<Pattern> ignoreTypePatterns = set();
-		ignoreTypes.forEach(y -> StringUtils.split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
+		ignoreTypes.forEach(y -> split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
 		this.ignoreTypePatterns = ignoreTypePatterns.toArray(new Pattern[ignoreTypePatterns.size()]);
 
 		try {

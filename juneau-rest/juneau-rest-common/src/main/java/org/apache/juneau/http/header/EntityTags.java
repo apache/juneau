@@ -17,7 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.util.*;
 
@@ -52,7 +52,7 @@ public class EntityTags {
 	 * @return A parsed header value.
 	 */
 	public static EntityTags of(String value) {
-		return isEmpty(value) ? EMPTY : CACHE.get(value, () -> new EntityTags(value));
+		return StringUtils.isEmpty(value) ? EMPTY : CACHE.get(value, () -> new EntityTags(value));
 	}
 
 	private final EntityTag[] value;
@@ -64,7 +64,7 @@ public class EntityTags {
 	 * @param value The header value.
 	 */
 	public EntityTags(EntityTag...value) {
-		this.string = StringUtils.join(value, ", ");
+		this.string = join(value, ", ");
 		this.value = copyOf(value);
 	}
 
@@ -110,7 +110,7 @@ public class EntityTags {
 	private static EntityTag[] parse(String value) {
 		if (value == null)
 			return null;
-		String[] s = StringUtils.splita(value);
+		String[] s = splita(value);
 		EntityTag[] v = new EntityTag[s.length];
 		for (int i = 0; i < s.length; i++)
 			v[i] = EntityTag.of(s[i]);

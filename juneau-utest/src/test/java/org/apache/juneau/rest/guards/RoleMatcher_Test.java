@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.guards;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +25,6 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.rest.guard.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
@@ -38,7 +38,7 @@ class RoleMatcher_Test extends TestBase {
 	private static void test(String expression, String toString, String expressionRoles, String[] shouldMatch, String[] shouldNotMatch) {
 		var m = safe(()->new RoleMatcher(expression));
 		assertEquals(toString, m.toString(), "m.toString() didn't match.");
-		assertEquals(expressionRoles, StringUtils.join(m.getRolesInExpression(), ","), "m.getRolesInExpression() didn't match.");
+		assertEquals(expressionRoles, join(m.getRolesInExpression(), ","), "m.getRolesInExpression() didn't match.");
 		for (String i : shouldMatch)
 			if (! m.matches(toSet(i)))
 				fail("Matcher "+m+" should have matched '"+i+"' but didn't.");
@@ -54,7 +54,7 @@ class RoleMatcher_Test extends TestBase {
 			return Collections.singleton(input);
 		if (input.isEmpty())
 			return Collections.emptySet();
-		return sortedSet(StringUtils.splita(input));
+		return sortedSet(splita(input));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

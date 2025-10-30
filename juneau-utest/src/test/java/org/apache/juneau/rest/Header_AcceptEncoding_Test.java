@@ -17,10 +17,10 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
@@ -112,13 +112,13 @@ class Header_AcceptEncoding_Test extends TestBase {
 		b.get("/").header(AcceptEncoding.of("identity")).run().assertContent("foo");
 		b.get("/").header(AcceptEncoding.of("identity;q=0.8,mycoding;q=0.6")).run().assertContent("foo");
 
-		assertEquals("foo", StringUtils.decompress(b.get("/").header(AcceptEncoding.of("*")).run().getContent().asBytes()));
-		assertEquals("foo", StringUtils.decompress(b.get("/").header(AcceptEncoding.of("mycoding")).run().getContent().asBytes()));
+		assertEquals("foo", decompress(b.get("/").header(AcceptEncoding.of("*")).run().getContent().asBytes()));
+		assertEquals("foo", decompress(b.get("/").header(AcceptEncoding.of("mycoding")).run().getContent().asBytes()));
 
-		assertEquals("foo", StringUtils.decompress(b.get("/").header(AcceptEncoding.of("mycoding,identity;q=0")).run().getContent().asBytes()));
-		assertEquals("foo", StringUtils.decompress(b.get("/").header(AcceptEncoding.of("mycoding,*;q=0")).run().getContent().asBytes()));
-		assertEquals("foo", StringUtils.decompress(b.get("/").header(AcceptEncoding.of("mycoding;q=0.8,identity;q=0.6")).run().getContent().asBytes()));
-		assertEquals("foo", StringUtils.decompress(b.get("/").header(AcceptEncoding.of("mycoding;q=0.8,*;q=0.6")).run().getContent().asBytes()));
+		assertEquals("foo", decompress(b.get("/").header(AcceptEncoding.of("mycoding,identity;q=0")).run().getContent().asBytes()));
+		assertEquals("foo", decompress(b.get("/").header(AcceptEncoding.of("mycoding,*;q=0")).run().getContent().asBytes()));
+		assertEquals("foo", decompress(b.get("/").header(AcceptEncoding.of("mycoding;q=0.8,identity;q=0.6")).run().getContent().asBytes()));
+		assertEquals("foo", decompress(b.get("/").header(AcceptEncoding.of("mycoding;q=0.8,*;q=0.6")).run().getContent().asBytes()));
 
 		b.get("?noTrace=true").header(AcceptEncoding.of("identity;q=0")).run()
 			.assertStatus(406)
@@ -219,13 +219,13 @@ class Header_AcceptEncoding_Test extends TestBase {
 			.run()
 			.assertHeader("Content-Encoding").is("mycoding")
 			.getContent().asBytes();
-		assertEquals("foo", StringUtils.decompress(body));
+		assertEquals("foo", decompress(body));
 		body = c.get("/c")
 			.header(AcceptEncoding.of("*"))
 			.run()
 			.assertHeader("Content-Encoding").is("mycoding")
 			.getContent().asBytes();
-		assertEquals("foo", StringUtils.decompress(body));
+		assertEquals("foo", decompress(body));
 
 		c.get("/d")
 			.header(AcceptEncoding.of("mycoding"))

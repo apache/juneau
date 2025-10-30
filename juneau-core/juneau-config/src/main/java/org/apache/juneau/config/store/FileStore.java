@@ -21,6 +21,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.FileUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -35,7 +36,6 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -420,7 +420,7 @@ public class FileStore extends ConfigStore {
 		try {
 			dir = new File(directory).getCanonicalFile();
 			dir.mkdirs();
-			exts = StringUtils.split(extensions).toArray(String[]::new);
+			exts = split(extensions).toArray(String[]::new);
 			watcher = enableWatcher ? new WatcherThread(dir, watcherSensitivity) : null;
 			if (nn(watcher))
 				watcher.start();

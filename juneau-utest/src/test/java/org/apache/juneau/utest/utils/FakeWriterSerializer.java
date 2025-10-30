@@ -18,6 +18,7 @@
 package org.apache.juneau.utest.utils;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -25,7 +26,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 
@@ -50,11 +50,11 @@ public class FakeWriterSerializer extends WriterSerializer implements HttpPartSe
 
 		private static String out(Object value) {
 			if (value instanceof List<?> x)
-				value = StringUtils.join(x, '|');
+				value = join(x, '|');
 			if (value instanceof Collection<?> x)
-				value = StringUtils.join(x, '|');
+				value = join(x, '|');
 			if (isArray(value))
-				value = StringUtils.join(toList(value, Object.class), "|");
+				value = join(toList(value, Object.class), "|");
 			return "x" + value + "x";
 		}
 	}

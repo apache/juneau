@@ -17,6 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
@@ -41,7 +42,7 @@ class ClientVersion_Test extends TestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return reader(h == null ? "null" : StringUtils.join(h, ','));
+			return reader(h == null ? "null" : join(h, ','));
 		}
 	}
 

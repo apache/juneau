@@ -20,6 +20,8 @@ import static java.util.Collections.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.a;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.list;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -251,7 +253,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 			if (nn(info.getTermsOfService())) {
 				var tos = info.getTermsOfService();
-				var child = StringUtils.isUri(tos) ? a(tos, tos) : tos;
+				var child = isUri(tos) ? a(tos, tos) : tos;
 				table.child(tr(th("Terms of Service:"), td(child)));
 			}
 		}

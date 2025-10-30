@@ -17,10 +17,10 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.indexOf;
 
 import java.util.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Arguments passed to {@link ObjectSearcher}.
@@ -63,7 +63,7 @@ public class SearchArgs {
 	 */
 	public SearchArgs(List<String> searchArgs) {
 		searchArgs.forEach(s -> {
-			int i = StringUtils.indexOf(s, '=', '>', '<');
+			int i = indexOf(s, '=', '>', '<');
 			if (i == -1)
 				throw new PatternException("Invalid search terms: ''{0}''", searchArgs);
 			char c = s.charAt(i);
@@ -77,7 +77,7 @@ public class SearchArgs {
 	 * @param searchArgs Search arguments.
 	 */
 	public SearchArgs(String searchArgs) {
-		this(l(StringUtils.splita(searchArgs)));
+		this(l(splita(searchArgs)));
 	}
 
 	/**

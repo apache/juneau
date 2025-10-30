@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -24,7 +25,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Represents the input to a ComboTest.
@@ -75,7 +75,7 @@ public class ComboInput<T> {
 	}
 
 	public ComboInput<T> verify(Predicate<T> verify, String msg, Object...args) {
-		this.verify.add(x -> verify.test(x) ? null : StringUtils.format(msg, args));
+		this.verify.add(x -> verify.test(x) ? null : format(msg, args));
 		return this;
 	}
 

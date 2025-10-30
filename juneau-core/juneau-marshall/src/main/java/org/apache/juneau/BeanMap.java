@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.ClassUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -27,7 +28,6 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -653,7 +653,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return A new string with variables replaced, or the same string if no variables were found.
 	 */
 	public String resolveVars(String s) {
-		return StringUtils.replaceVars(s, this);
+		return replaceVars(s, this);
 	}
 
 	/**

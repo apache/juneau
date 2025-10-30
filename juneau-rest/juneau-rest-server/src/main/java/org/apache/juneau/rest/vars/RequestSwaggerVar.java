@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.vars;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
 
 import org.apache.juneau.bean.swagger.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
@@ -95,7 +95,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 			Optional<Swagger> swagger = req.getSwagger();
 			WriterSerializer s = Json5Serializer.DEFAULT;
 			Optional<Operation> methodSwagger = req.getOperationSwagger();
-			char c = StringUtils.charAt(key, 0);
+			char c = charAt(key, 0);
 			if (c == 'c') {
 				if ("contact".equals(key))
 					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getContact()).map(o -> s(o)).orElse(null);

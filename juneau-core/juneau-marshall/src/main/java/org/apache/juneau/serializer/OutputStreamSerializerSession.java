@@ -16,13 +16,14 @@
  */
 package org.apache.juneau.serializer;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.svl.*;
 
@@ -213,9 +214,9 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	public final String serializeToString(Object o) throws SerializeException {
 		byte[] b = serialize(o);
 		return switch (getBinaryFormat()) {
-			case SPACED_HEX -> StringUtils.toSpacedHex(b);
-			case HEX -> StringUtils.toHex(b);
-			case BASE64 -> StringUtils.base64Encode(b);
+			case SPACED_HEX -> toSpacedHex(b);
+			case HEX -> toHex(b);
+			case BASE64 -> base64Encode(b);
 			default -> null;
 		};
 	}

@@ -20,6 +20,7 @@ import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.FileUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -146,7 +147,7 @@ public class BasicFileFinder implements FileFinder {
 	 */
 	@SuppressWarnings("null")
 	protected Optional<InputStream> find(String name, Locale locale) throws IOException {
-		name = StringUtils.trimSlashesAndSpaces(name);
+		name = trimSlashesAndSpaces(name);
 
 		if (isInvalidPath(name))
 			return opte();
@@ -277,6 +278,6 @@ public class BasicFileFinder implements FileFinder {
 	 * @return <jk>true</jk> if the path is invalid.
 	 */
 	protected boolean isInvalidPath(String path) {
-		return isEmpty(path) || path.contains("..") || path.contains("%");
+		return StringUtils.isEmpty(path) || path.contains("..") || path.contains("%");
 	}
 }

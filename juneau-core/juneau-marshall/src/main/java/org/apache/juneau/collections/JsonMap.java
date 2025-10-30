@@ -18,10 +18,10 @@ package org.apache.juneau.collections;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

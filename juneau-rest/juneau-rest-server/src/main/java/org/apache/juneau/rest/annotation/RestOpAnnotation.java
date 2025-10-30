@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.annotation;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -25,7 +26,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.reflect.*;
@@ -419,7 +419,7 @@ public class RestOpAnnotation {
 			string(a.method()).ifPresent(x -> b.httpMethod(x));
 			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
 
-			String v = StringUtils.trim(string(a.value()).orElse(null));
+			String v = trim(string(a.value()).orElse(null));
 			if (nn(v)) {
 				int i = v.indexOf(' ');
 				if (i == -1) {

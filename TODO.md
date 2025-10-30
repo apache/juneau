@@ -8,7 +8,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 
 ## Code Quality Improvements
 
-- [ ] TODO-55 Convert `instanceof` followed by cast to use pattern matching for instanceof (Java 14+ feature).
+- [x] TODO-55 Convert `instanceof` followed by cast to use pattern matching for instanceof (Java 14+ feature).
   - **Pattern**: `if (obj instanceof Type) { Type t = (Type)obj; ... }` → `if (obj instanceof Type t) { ... }`
   - **Estimated instances**: ~52 occurrences across the codebase
   - **Examples found**:
@@ -24,7 +24,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-15 It appears StringUtils is going to become a commonly-used external class. Let's see if we can enhance it with commonly used string utility methods.
 - [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
 - [ ] TODO-29 Finish setting up SonarQube analysis in git workflow.
-- [ ] TODO-49 Use static imports for all method calls to StringUtils.
+- [x] TODO-49 Use static imports for all method calls to StringUtils.
 - [x] TODO-52 Use static imports for all method calls to Utils.
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
 

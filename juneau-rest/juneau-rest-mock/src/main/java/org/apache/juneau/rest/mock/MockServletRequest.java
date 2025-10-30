@@ -22,6 +22,7 @@ import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.io.*;
 import java.security.*;
@@ -76,7 +77,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return A new request.
 	 */
 	public static MockServletRequest create(String method, String uri, Object...pathArgs) {
-		return create().method(method).uri(StringUtils.format(uri, pathArgs));
+		return create().method(method).uri(format(uri, pathArgs));
 	}
 
 	private String method = "GET";
@@ -425,7 +426,7 @@ public class MockServletRequest implements HttpServletRequest {
 			if (isNotEmpty(servletPath))
 				pathInfo = pathInfo.substring(servletPath.length());
 		}
-		return StringUtils.nullIfEmpty(StringUtils.urlDecode(pathInfo));
+		return nullIfEmpty(urlDecode(pathInfo));
 	}
 
 	@Override /* Overridden from HttpServletRequest */
@@ -450,15 +451,15 @@ public class MockServletRequest implements HttpServletRequest {
 				StringBuilder sb = new StringBuilder();
 				queryDataMap.forEach((k, v) -> {
 					if (v == null)
-						sb.append(sb.length() == 0 ? "" : "&").append(StringUtils.urlEncode(k));
+						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k));
 					else
 						for (String v2 : v)
-							sb.append(sb.length() == 0 ? "" : "&").append(StringUtils.urlEncode(k)).append('=').append(StringUtils.urlEncode(v2));
+							sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k)).append('=').append(urlEncode(v2));
 				});
 				queryString = sb.toString();
 			}
 		}
-		return isEmpty(queryString) ? null : queryString;
+		return StringUtils.isEmpty(queryString) ? null : queryString;
 	}
 
 	@Override /* Overridden from HttpServletRequest */

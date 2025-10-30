@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.beans;
 
 import static org.apache.juneau.junit.bct.BctAssertions.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

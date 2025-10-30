@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -94,7 +95,7 @@ public class StringRanges {
 	 * @return A parsed header value.
 	 */
 	public static StringRanges of(String value) {
-		return isEmpty(value) ? EMPTY : CACHE.get(value, () -> new StringRanges(value));
+		return StringUtils.isEmpty(value) ? EMPTY : CACHE.get(value, () -> new StringRanges(value));
 	}
 
 	/**
@@ -108,7 +109,7 @@ public class StringRanges {
 	}
 
 	private static HeaderElement[] parse(String value) {
-		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
+		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
 	}
 
 	private final StringRange[] value;
@@ -127,7 +128,7 @@ public class StringRanges {
 			value[i] = new StringRange(e[i]);
 		Arrays.sort(value, RANGE_COMPARATOR);
 
-		this.string = value.length == 1 ? value[0].toString() : StringUtils.join(value, ", ");
+		this.string = value.length == 1 ? value[0].toString() : join(value, ", ");
 	}
 
 	/**
@@ -145,7 +146,7 @@ public class StringRanges {
 	 * @param value The string range header value.
 	 */
 	public StringRanges(StringRange...value) {
-		this.string = StringUtils.join(value, ", ");
+		this.string = join(value, ", ");
 		this.value = copyOf(value);
 	}
 

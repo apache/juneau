@@ -4,12 +4,39 @@ This file contains TODO items that have been completed and moved from TODO.md.
 
 ## Code Quality Improvements
 
+- **TODO-49** ✅ Use static imports for all method calls to StringUtils.
+  - **Status**: COMPLETED
+  - **Completed**: October 30, 2025
+  - **Total instances converted**: 882 across 290 files
+  - **Pattern**: `StringUtils.method(...)` → `method(...)`
+  - **Implementation**:
+    - Added `import static org.apache.juneau.common.utils.StringUtils.*;` to 290 files
+    - Removed `StringUtils.` qualifier from method calls
+    - Resolved ambiguous method references by explicitly qualifying calls
+  - **Issues encountered and resolved**:
+    - **Ambiguous method references**: `isEmpty()`, `isBlank()`, and `contains()` methods exist in both `Utils` and `StringUtils`. Resolved by explicitly qualifying these calls with `StringUtils.` in affected files:
+      - `DateUtils.java`, `Version.java`, `JsonList.java`, `AssertionPredicates.java`, `EntityTags.java`, `BasicCsvArrayPart.java`, `UrlPathMatch.java`, `RequestHeaders.java`, `RoleMatcher.java`
+    - **Recursive call in `Path_Test.java`**: Local `format()` method was calling itself instead of `StringUtils.format()` after static import. Fixed by explicitly qualifying as `StringUtils.format()`.
+    - **Method resolution issue in `MediaType.java`**: `contains()` calls were resolving to `StringUtils.contains(String, String...)` (substring match) instead of `CollectionUtils.contains(T, T[])` (array membership). Fixed by explicitly qualifying as `CollectionUtils.contains()`.
+  - **Test results**: 25,828 tests run, 49 failures (down from 54 - fixed Path_Test and ContentType_Match_Test failures)
+  - **Benefits**:
+    - Cleaner, more concise code
+    - Reduced visual clutter by removing repetitive `StringUtils.` prefixes
+    - Improved code readability
+
 - **TODO-55** ✅ Convert `instanceof` followed by cast to use pattern matching for instanceof (Java 14+ feature).
   - **Status**: COMPLETED
   - **Completed**: October 30, 2025
-  - **Total instances converted**: 52
+  - **Total instances converted**: 65 (52 initial + 13 additional)
   - **Pattern**: `if (obj instanceof Type) { Type t = (Type)obj; ... }` → `if (obj instanceof Type t) { ... }`
-  - **Files modified**: 25 files across juneau-core, juneau-rest, juneau-utest
+  - **Files modified**: 30 files across juneau-core, juneau-rest, juneau-utest
+  - **Additional fixes** (October 30, 2025): Discovered and fixed 13 missed instances where `instanceof` check was immediately followed by a cast on the next line:
+    - `HttpParts.java`: 1 instance (NameValuePair)
+    - `BasicPart.java`: 2 instances (NameValuePair, NameValuePairable)
+    - `HttpHeaders.java`: 4 instances (Header, Headerable, NameValuePair, NameValuePairable)
+    - `RestClient.java`: 4 instances (NameValuePair, PartList, URI, URIBuilder)
+    - `BasicSwaggerProviderSession.java`: 1 instance (JsonMap)
+    - `HttpPartSchema.java`: 1 instance (HttpPartSchema)
   - **Key changes**:
     - **CharSequenceReader.java**: Converted 3 instances for `String`, `StringBuffer`, and `StringBuilder` type checks
     - **ClassUtils.java**: Converted 7 instances for `ParameterizedType`, `Class<?>`, `GenericArrayType`, and `TypeVariable<?>` type checks (with careful variable renaming for `pt`, `pt2`, `pt3` to avoid conflicts)

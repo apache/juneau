@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
@@ -25,7 +26,6 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
@@ -48,7 +48,7 @@ import org.apache.juneau.common.utils.*;
 public class StringRange {
 
 	private static HeaderElement parse(String value) {
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("*", ""));
 	}
 

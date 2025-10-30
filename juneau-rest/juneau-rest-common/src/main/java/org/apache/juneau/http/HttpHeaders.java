@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.http;
 
-import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.net.*;
 import java.time.*;
@@ -513,16 +513,15 @@ public class HttpHeaders {
 	 * 	The object to cast or convert to a {@link Header}.
 	 * @return Either the same object cast as a {@link Header} or converted to a {@link Header}.
 	 */
-	@SuppressWarnings("rawtypes")
 	public static Header cast(Object o) {
-		if (o instanceof Header)
-			return (Header)o;
-		if (o instanceof Headerable)
-			return ((Headerable)o).asHeader();
-		if (o instanceof NameValuePair)
-			return BasicHeader.of((NameValuePair)o);
-		if (o instanceof NameValuePairable)
-			return BasicHeader.of(((NameValuePairable)o).asNameValuePair());
+		if (o instanceof Header h)
+			return h;
+		if (o instanceof Headerable hable)
+			return hable.asHeader();
+		if (o instanceof NameValuePair nvp)
+			return BasicHeader.of(nvp);
+		if (o instanceof NameValuePairable nvpable)
+			return BasicHeader.of(nvpable.asNameValuePair());
 		if (o instanceof Map.Entry e) {
 			return BasicHeader.of(s(e.getKey()), s(e.getValue()));
 		}

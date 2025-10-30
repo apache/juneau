@@ -16,11 +16,12 @@
  */
 package org.apache.juneau.bean.html5;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
+
 import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-script-element">&lt;script&gt;</a>
@@ -93,7 +94,7 @@ public class Script extends HtmlElementRawText {
 	 * @param text The child text node.
 	 */
 	public Script(String type, String...text) {
-		type(type).text(StringUtils.joinnl(text));
+		type(type).text(joinnl(text));
 	}
 
 	@Override /* Overridden from HtmlElement */
