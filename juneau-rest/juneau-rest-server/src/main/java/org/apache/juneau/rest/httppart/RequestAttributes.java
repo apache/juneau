@@ -120,7 +120,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes addDefault(List<NamedAttribute> pairs) {
-		for (NamedAttribute p : pairs)
+		for (var p : pairs)
 			if (sreq.getAttribute(p.getName()) == null) {
 				Object o = p.getValue();
 				sreq.setAttribute(p.getName(), o instanceof String ? vs.resolve(o) : o);
@@ -149,7 +149,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes addDefault(NamedAttributeMap pairs) {
-		for (NamedAttribute p : pairs.values())
+		for (var p : pairs.values())
 			if (sreq.getAttribute(p.getName()) == null) {
 				Object o = p.getValue();
 				sreq.setAttribute(p.getName(), o instanceof String ? vs.resolve(o) : o);
@@ -191,7 +191,7 @@ public class RequestAttributes {
 	 */
 	public boolean contains(String...names) {
 		assertArgNotNull("names", names);
-		for (String n : names)
+		for (var n : names)
 			if (sreq.getAttribute(n) == null)
 				return false;
 		return true;
@@ -205,7 +205,7 @@ public class RequestAttributes {
 	 */
 	public boolean containsAny(String...names) {
 		assertArgNotNull("names", names);
-		for (String n : names)
+		for (var n : names)
 			if (nn(sreq.getAttribute(n)))
 				return true;
 		return false;
@@ -243,7 +243,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes remove(NamedAttribute...attributes) {
-		for (NamedAttribute p : attributes)
+		for (var p : attributes)
 			remove(p.getName());
 		return this;
 	}
@@ -256,7 +256,7 @@ public class RequestAttributes {
 	 */
 	public RequestAttributes remove(String...name) {
 		assertArgNotNull("name", name);
-		for (String n : name) {
+		for (var n : name) {
 			sreq.removeAttribute(n);
 		}
 		return this;
@@ -270,7 +270,7 @@ public class RequestAttributes {
 	 */
 	public RequestAttributes set(NamedAttribute...attributes) {
 		assertArgNotNull("attributes", attributes);
-		for (NamedAttribute p : attributes)
+		for (var p : attributes)
 			set(p);
 		return this;
 	}

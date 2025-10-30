@@ -65,9 +65,9 @@ public class ContentTypeMenuItem extends MenuItemWidget {
 	public Div getContent(RestRequest req, RestResponse res) {
 		Div div = div();
 		var l = new TreeSet<MediaType>();
-		for (Serializer s : req.getOpContext().getSerializers().getSerializers())
+		for (var s : req.getOpContext().getSerializers().getSerializers())
 			l.add(s.getPrimaryMediaType());
-		for (MediaType mt : l) {
+		for (var mt : l) {
 			URI uri = req.getUri(true, CollectionUtils.map("plainText", "true", "Accept", mt.toString()));
 			div.children(a(uri, mt), br());
 		}

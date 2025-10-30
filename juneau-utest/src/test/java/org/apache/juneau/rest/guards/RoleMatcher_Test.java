@@ -39,10 +39,10 @@ class RoleMatcher_Test extends TestBase {
 		var m = safe(()->new RoleMatcher(expression));
 		assertEquals(toString, m.toString(), "m.toString() didn't match.");
 		assertEquals(expressionRoles, join(m.getRolesInExpression(), ","), "m.getRolesInExpression() didn't match.");
-		for (String i : shouldMatch)
+		for (var i : shouldMatch)
 			if (! m.matches(toSet(i)))
 				fail("Matcher "+m+" should have matched '"+i+"' but didn't.");
-		for (String i : shouldNotMatch)
+		for (var i : shouldNotMatch)
 			if (m.matches(toSet(i)))
 				fail("Matcher "+m+" should not have matched '"+i+"' but did.");
 	}

@@ -1320,7 +1320,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @return This object.
 	 */
 	public final Serializer forEachAcceptMediaType(Consumer<MediaType> action) {
-		for (MediaType m : acceptMediaTypes)
+		for (var m : acceptMediaTypes)
 			action.accept(m);
 		return this;
 	}

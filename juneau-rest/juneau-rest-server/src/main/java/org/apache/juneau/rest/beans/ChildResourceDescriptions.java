@@ -75,7 +75,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 * 	Default is to maintain the order as specified in the annotation.
 	 */
 	public ChildResourceDescriptions(RestContext context, RestRequest req, boolean sort) {
-		for (Map.Entry<String,RestContext> e : context.getRestChildren().asMap().entrySet()) {
+		for (var e : context.getRestChildren().asMap().entrySet()) {
 			String title = null;
 			try {
 				title = e.getValue().getSwagger(req.getLocale()).map(x -> x == null ? null : x.getInfo()).map(x -> x == null ? null : x.getTitle()).orElse(null);

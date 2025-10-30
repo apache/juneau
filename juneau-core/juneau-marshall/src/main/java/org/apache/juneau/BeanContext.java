@@ -2472,7 +2472,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder interfaces(Class<?>...value) {
-			for (Class<?> v : value)
+			for (var v : value)
 				annotations(BeanAnnotation.create(v).interfaceClass(v).build());
 			return this;
 		}
@@ -2884,7 +2884,7 @@ public class BeanContext extends Context {
 		 * @return This object.
 		 */
 		public Builder sortProperties(Class<?>...on) {
-			for (Class<?> c : on)
+			for (var c : on)
 				annotations(BeanAnnotation.create(c).sort(true).build());
 			return this;
 		}
@@ -4049,7 +4049,7 @@ public class BeanContext extends Context {
 		if (c == null || swapArray.length == 0)
 			return null;
 		List<ObjectSwap> l = null;
-		for (ObjectSwap f : swapArray) {
+		for (var f : swapArray) {
 			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
 					l = list();
@@ -4071,7 +4071,7 @@ public class BeanContext extends Context {
 		// Note:  On first
 		if (nn(c)) {
 			List<ObjectSwap> l = list();
-			for (ObjectSwap f : swapArray)
+			for (var f : swapArray)
 				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
 			return l.isEmpty() ? null : l.toArray(new ObjectSwap[l.size()]);
@@ -4096,7 +4096,7 @@ public class BeanContext extends Context {
 	}
 
 	private ClassMeta<?> resolveType(Type...t) {
-		for (Type tt : t) {
+		for (var tt : t) {
 			if (nn(tt)) {
 				ClassMeta<?> cm = getClassMeta(tt);
 				if (tt != cmObject)
@@ -4183,15 +4183,15 @@ public class BeanContext extends Context {
 			return true;
 		Package p = c.getPackage();
 		if (nn(p)) {
-			for (String p2 : notBeanPackageNames)
+			for (var p2 : notBeanPackageNames)
 				if (p.getName().equals(p2))
 					return true;
-			for (String p2 : notBeanPackagePrefixes)
+			for (var p2 : notBeanPackagePrefixes)
 				if (p.getName().startsWith(p2))
 					return true;
 		}
 		ClassInfo ci = ClassInfo.of(c);
-		for (Class exclude : notBeanClassesArray)
+		for (var exclude : notBeanClassesArray)
 			if (ci.isChildOf(exclude))
 				return true;
 		return false;
@@ -4318,7 +4318,7 @@ public class BeanContext extends Context {
 				o = c.getGenericSuperclass();
 				if (o instanceof ParameterizedType)
 					break loop;
-				for (Type t : c.getGenericInterfaces()) {
+				for (var t : c.getGenericInterfaces()) {
 					o = t;
 					if (o instanceof ParameterizedType)
 						break loop;
@@ -4330,7 +4330,7 @@ public class BeanContext extends Context {
 	if (o instanceof ParameterizedType pt) {
 		if (! pt.getRawType().equals(Enum.class)) {
 			List<ClassMeta<?>> l = new LinkedList<>();
-			for (Type pt2 : pt.getActualTypeArguments()) {
+			for (var pt2 : pt.getActualTypeArguments()) {
 				if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
 					return null;
 				l.add(resolveClassMeta(pt2, null));

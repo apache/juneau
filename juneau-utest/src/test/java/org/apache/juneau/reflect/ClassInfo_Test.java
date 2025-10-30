@@ -1105,9 +1105,9 @@ public class ClassInfo_Test extends TestBase {
 	static List<Object> primitiveDefaults = l(false,(byte)0,(short)0,(char)0,0,0L,0f,0d);
 
 	@Test void hasPrimitiveWrapper() {
-		for (Class<?> c : primitives)
+		for (var c : primitives)
 			assertTrue(of(c).hasPrimitiveWrapper());
-		for (Class<?> c : primitiveWrappers)
+		for (var c : primitiveWrappers)
 			assertFalse(of(c).hasPrimitiveWrapper());
 	}
 

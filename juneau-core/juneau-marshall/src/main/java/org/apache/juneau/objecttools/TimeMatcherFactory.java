@@ -313,7 +313,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 				var date = (Date)o;
 				zdt = date.toInstant().atZone(ZoneId.systemDefault());
 			}
-			for (TimestampRange range : ranges)
+			for (var range : ranges)
 				if (range.matches(zdt))
 					return true;
 			return false;

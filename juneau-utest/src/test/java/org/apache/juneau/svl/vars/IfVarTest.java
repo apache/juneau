@@ -31,7 +31,7 @@ class IfVarTest extends TestBase {
 	@Test void a01_test() {
 		var vr = VarResolver.create().vars(IfVar.class, SystemPropertiesVar.class).build();
 
-		for (String test : a("","0","false","FALSE","f","F","foobar")) {
+		for (var test : a("","0","false","FALSE","f","F","foobar")) {
 			System.setProperty("IfVarTest.test", test);
 			assertEquals("NO", vr.resolve("$IF{$S{IfVarTest.test},YES,NO}"));
 			assertEquals("x NO x", vr.resolve("x $IF{ $S{ IfVarTest.test } , YES , NO } x"));
@@ -39,7 +39,7 @@ class IfVarTest extends TestBase {
 			assertEquals("x  x", vr.resolve("x $IF{ $S{ IfVarTest.test } , YES } x"));
 		}
 
-		for (String test : a("1","true","TRUE","t","T")) {
+		for (var test : a("1","true","TRUE","t","T")) {
 			System.setProperty("IfVarTest.test", test);
 			assertEquals("YES", vr.resolve("$IF{$S{IfVarTest.test},YES,NO}"));
 			assertEquals("YES", vr.resolve("$IF{$S{IfVarTest.test},YES}"));

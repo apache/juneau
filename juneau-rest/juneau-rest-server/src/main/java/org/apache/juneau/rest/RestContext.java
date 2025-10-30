@@ -3791,7 +3791,7 @@ public class RestContext extends Context {
 			);
 			// @formatter:on
 
-			for (MethodInfo m : map.values()) {
+			for (var m : map.values()) {
 				if (! beanStore.hasAllParams(m))
 					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(),
 						beanStore.getMissingParams(m));
@@ -4463,7 +4463,7 @@ public class RestContext extends Context {
 			Value<RestChildren.Builder> v = Value.of(RestChildren.create(beanStore).type(childrenClass));
 
 			// Initialize our child resources.
-			for (Object o : children) {
+			for (var o : children) {
 				String path = null;
 			Supplier<?> so;
 
@@ -4581,7 +4581,7 @@ public class RestContext extends Context {
 			);
 			// @formatter:on
 
-			for (MethodInfo mi : rci.getPublicMethods()) {
+			for (var mi : rci.getPublicMethods()) {
 				AnnotationList al = mi.getAnnotationList(REST_OP_GROUP);
 
 				// Also include methods on @Rest-annotated interfaces.
@@ -4598,7 +4598,7 @@ public class RestContext extends Context {
 						RestOpContext.Builder rocb = RestOpContext.create(mi.inner(), restContext).beanStore(beanStore).type(opContextClass);
 
 						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
-					for (MethodInfo m : initMap.values()) {
+					for (var m : initMap.values()) {
 						if (! beanStore.hasAllParams(m)) {
 							throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(),
 								beanStore.getMissingParams(m));
@@ -5093,7 +5093,7 @@ public class RestContext extends Context {
 	 * Called during servlet destruction to invoke all {@link RestDestroy} methods.
 	 */
 	public void destroy() {
-		for (MethodInvoker x : destroyMethods) {
+		for (var x : destroyMethods) {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
@@ -5774,7 +5774,7 @@ public class RestContext extends Context {
 				throw new ServletException(e.unwrap());
 			}
 		}
-		for (MethodInvoker x : postInitMethods) {
+		for (var x : postInitMethods) {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
@@ -5795,7 +5795,7 @@ public class RestContext extends Context {
 		if (initialized.get())
 			return this;
 		restChildren.postInitChildFirst();
-		for (MethodInvoker x : postInitChildFirstMethods) {
+		for (var x : postInitChildFirstMethods) {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
@@ -5887,7 +5887,7 @@ public class RestContext extends Context {
 	 * @param session The current request.
 	 */
 	protected void endCall(RestSession session) {
-		for (MethodInvoker x : endCallMethods) {
+		for (var x : endCallMethods) {
 			try {
 				x.invoke(session.getBeanStore(), session.getResource());
 			} catch (Exception e) {
@@ -5916,7 +5916,7 @@ public class RestContext extends Context {
 		for (int i = 0; i < pt.size(); i++) {
 			ParamInfo pi = mi.getParam(i);
 			beanStore.addBean(ParamInfo.class, pi);
-			for (Class<? extends RestOpArg> c : restOpArgs) {
+			for (var c : restOpArgs) {
 				try {
 					ra[i] = beanStore.createBean(RestOpArg.class).type(c).run();
 					if (nn(ra[i]))
@@ -6052,7 +6052,7 @@ public class RestContext extends Context {
 		 * @throws Throwable If thrown from call methods.
 		 */
 	protected void postCall(RestOpSession session) throws Throwable {
-		for (RestOpInvoker m : session.getContext().getPostCallMethods())
+		for (var m : session.getContext().getPostCallMethods())
 			m.invoke(session);
 	}
 
@@ -6063,7 +6063,7 @@ public class RestContext extends Context {
 	 * @throws Throwable If thrown from call methods.
 	 */
 	protected void preCall(RestOpSession session) throws Throwable {
-		for (RestOpInvoker m : session.getContext().getPreCallMethods())
+		for (var m : session.getContext().getPreCallMethods())
 			m.invoke(session);
 	}
 
@@ -6139,7 +6139,7 @@ public class RestContext extends Context {
 	 * @throws BasicHttpException If thrown from call methods.
 	 */
 	protected void startCall(RestSession session) throws BasicHttpException {
-		for (MethodInvoker x : startCallMethods) {
+		for (var x : startCallMethods) {
 			try {
 				x.invoke(session.getBeanStore(), session.getContext().getResource());
 			} catch (IllegalAccessException | IllegalArgumentException e) {

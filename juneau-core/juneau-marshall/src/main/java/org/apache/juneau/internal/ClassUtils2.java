@@ -54,7 +54,7 @@ public class ClassUtils2 {
 		Object[] params = new Object[paramTypes.length];
 		for (int i = 0; i < paramTypes.length; i++) {
 			ClassInfo pt = ClassInfo.of(paramTypes[i]).getWrapperInfoIfPrimitive();
-			for (Object arg : args) {
+			for (var arg : args) {
 				if (nn(arg) && pt.isParentOf(arg.getClass())) {
 					params[i] = arg;
 					break;

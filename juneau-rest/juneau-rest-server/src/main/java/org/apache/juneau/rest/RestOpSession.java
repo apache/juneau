@@ -194,14 +194,14 @@ public class RestOpSession extends ContextSession {
 	 */
 	public void run() throws Throwable {
 
-		for (RestGuard guard : ctx.getGuards())
+		for (var guard : ctx.getGuards())
 			if (! guard.guard(req, res))
 				return;
 
 		ctx.getMethodInvoker().invoke(this);
 
 		if (res.hasContent())
-			for (RestConverter converter : ctx.getConverters())
+			for (var converter : ctx.getConverters())
 				res.setContent(converter.convert(req, res.getContent().orElse(null)));
 	}
 

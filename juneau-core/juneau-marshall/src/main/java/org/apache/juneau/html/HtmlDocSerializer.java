@@ -1578,7 +1578,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		private static List<String> merge(List<String> old, String[] newValues) {
 			List<String> x = listOfSize(newValues.length);
-			for (String s : newValues) {
+			for (var s : newValues) {
 				if ("NONE".equals(s)) {
 					if (nn(old))
 						old.clear();
@@ -1594,7 +1594,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		private static List<String> mergeNavLinks(List<String> old, String[] newValues) {
 			List<String> x = listOfSize(newValues.length);
-			for (String s : newValues) {
+			for (var s : newValues) {
 				if ("NONE".equals(s)) {
 					if (nn(old))
 						old.clear();
@@ -1711,7 +1711,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 * @return This object.
 	 */
 	protected final HtmlDocSerializer forEachWidget(Consumer<HtmlWidget> action) {
-		for (HtmlWidget w : widgetArray)
+		for (var w : widgetArray)
 			action.accept(w);
 		return this;
 	}

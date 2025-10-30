@@ -48,7 +48,7 @@ public class TargetedAnnotationBuilder<B extends TargetedAnnotationBuilder<B>> e
 	 * @return This object.
 	 */
 	public B on(String...values) {
-		for (String v : values)
+		for (var v : values)
 			on = addAll(on, v);
 		return asThis();
 	}

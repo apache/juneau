@@ -69,13 +69,13 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 			res.setStatus(rm.getCode());
 		}
 
-		for (ResponseBeanPropertyMeta hm : rm.getHeaderMethods()) {
+		for (var hm : rm.getHeaderMethods()) {
 			String n = hm.getPartName().orElse(null);
 			try {
 				Object o = hm.getGetter().invoke(output);
 				HttpPartSchema ps = hm.getSchema();
 				if ("*".equals(n)) {
-					for (Object o2 : iterate(o)) {
+					for (var o2 : iterate(o)) {
 						Header h = null;
 						if (o2 instanceof Map.Entry) {
 							@SuppressWarnings("rawtypes")

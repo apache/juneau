@@ -149,7 +149,7 @@ public class RemoteOperationMeta {
 				}
 			});
 			mi.getAnnotationList().forEach(ContentAnnotation.Array.class, null, x -> {
-				for (Content c : x.inner().value()) {
+				for (var c : x.inner().value()) {
 					String def = c.def();
 					if (isNotEmpty(def)) {
 						contentDefault = def;
@@ -168,7 +168,7 @@ public class RemoteOperationMeta {
 				}
 			});
 			mi.getAnnotationList().forEach(FormDataAnnotation.Array.class, null, x -> {
-				for (FormData fd : x.inner().value()) {
+				for (var fd : x.inner().value()) {
 					String name = firstNonEmpty(fd.name(), fd.value());
 					String def = fd.def();
 					if (isNotEmpty(name) && isNotEmpty(def)) {
@@ -190,7 +190,7 @@ public class RemoteOperationMeta {
 			});
 			// Check for @Header.Array (repeated annotations)
 			mi.getAnnotationList().forEach(HeaderAnnotation.Array.class, null, x -> {
-				for (Header h : x.inner().value()) {
+				for (var h : x.inner().value()) {
 					String name = firstNonEmpty(h.name(), h.value());
 					String def = h.def();
 					if (isNotEmpty(name) && isNotEmpty(def)) {
@@ -210,7 +210,7 @@ public class RemoteOperationMeta {
 				}
 			});
 			mi.getAnnotationList().forEach(PathAnnotation.Array.class, null, x -> {
-				for (Path p : x.inner().value()) {
+				for (var p : x.inner().value()) {
 					String name = firstNonEmpty(p.name(), p.value());
 					String def = p.def();
 					if (isNotEmpty(name) && isNotEmpty(def)) {
@@ -230,7 +230,7 @@ public class RemoteOperationMeta {
 				}
 			});
 			mi.getAnnotationList().forEach(QueryAnnotation.Array.class, null, x -> {
-				for (Query q : x.inner().value()) {
+				for (var q : x.inner().value()) {
 					String name = firstNonEmpty(q.name(), q.value());
 					String def = q.def();
 					if (isNotEmpty(name) && isNotEmpty(def)) {
@@ -287,7 +287,7 @@ public class RemoteOperationMeta {
 	 * @return This object.
 	 */
 	public RemoteOperationMeta forEachException(Consumer<Class<?>> action) {
-		for (Class<?> e : exceptions)
+		for (var e : exceptions)
 			action.accept(e);
 		return this;
 	}
@@ -299,7 +299,7 @@ public class RemoteOperationMeta {
 	 * @return This object.
 	 */
 	public RemoteOperationMeta forEachFormDataArg(Consumer<RemoteOperationArg> action) {
-		for (RemoteOperationArg a : formDataArgs)
+		for (var a : formDataArgs)
 			action.accept(a);
 		return this;
 	}
@@ -311,7 +311,7 @@ public class RemoteOperationMeta {
 	 * @return This object.
 	 */
 	public RemoteOperationMeta forEachHeaderArg(Consumer<RemoteOperationArg> action) {
-		for (RemoteOperationArg a : headerArgs)
+		for (var a : headerArgs)
 			action.accept(a);
 		return this;
 	}
@@ -323,7 +323,7 @@ public class RemoteOperationMeta {
 	 * @return This object.
 	 */
 	public RemoteOperationMeta forEachPathArg(Consumer<RemoteOperationArg> action) {
-		for (RemoteOperationArg a : pathArgs)
+		for (var a : pathArgs)
 			action.accept(a);
 		return this;
 	}
@@ -335,7 +335,7 @@ public class RemoteOperationMeta {
 	 * @return This object.
 	 */
 	public RemoteOperationMeta forEachQueryArg(Consumer<RemoteOperationArg> action) {
-		for (RemoteOperationArg a : queryArgs)
+		for (var a : queryArgs)
 			action.accept(a);
 		return this;
 	}
@@ -347,7 +347,7 @@ public class RemoteOperationMeta {
 	 * @return This object.
 	 */
 	public RemoteOperationMeta forEachRequestArg(Consumer<RemoteOperationBeanArg> action) {
-		for (RemoteOperationBeanArg a : requestArgs)
+		for (var a : requestArgs)
 			action.accept(a);
 		return this;
 	}

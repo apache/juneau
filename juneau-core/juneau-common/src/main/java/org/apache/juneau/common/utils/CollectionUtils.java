@@ -1087,7 +1087,7 @@ public class CollectionUtils {
 	@SafeVarargs
 	public static <E> TreeSet<E> sortedSet(E...values) {
 		var l = new TreeSet<E>();
-		for (E v : values)
+		for (var v : values)
 			l.add(v);
 		return l;
 	}
@@ -1291,7 +1291,7 @@ public class CollectionUtils {
 		assertArgNotNull("arrays", arrays);
 		int l = 0;
 		E[] a1 = null;
-		for (E[] a : arrays) {
+		for (var a : arrays) {
 			if (a1 == null && nn(a))
 				a1 = a;
 			l += (a == null ? 0 : a.length);
@@ -1300,9 +1300,9 @@ public class CollectionUtils {
 			return null;
 		E[] a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
 		int i = 0;
-		for (E[] aa : arrays)
+		for (var aa : arrays)
 			if (nn(aa))
-				for (E t : aa)
+				for (var t : aa)
 					a[i++] = t;
 		return a;
 	}
@@ -1465,7 +1465,7 @@ public class CollectionUtils {
 	public static String[] toStringArray(Collection<?> c) {
 		String[] r = new String[c.size()];
 		int i = 0;
-		for (Object o : c)
+		for (var o : c)
 			r[i++] = s(o);
 		return r;
 	}

@@ -229,7 +229,7 @@ public enum HttpPartFormat {
 	 * @return <jk>true</jk> if this format is in the provided list.
 	 */
 	public boolean isOneOf(HttpPartFormat...list) {
-		for (HttpPartFormat ff : list)
+		for (var ff : list)
 			if (this == ff)
 				return true;
 		return false;

@@ -77,7 +77,7 @@ class BeanStore_Test extends TestBase {
 		var b2p = BeanStore.create().readOnly().threadSafe().build();
 		var b2c = BeanStore.create().parent(b1p).threadSafe().build();
 
-		for (BeanStore b : array(b1p, b2p)) {
+		for (var b : array(b1p, b2p)) {
 			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.add(A1.class, a1a));
 			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.add(A1.class, a1a, "foo"));
 			assertThrowsWithMessage(IllegalStateException.class, "Method cannot be used because BeanStore is read-only.", ()->b.addBean(A1.class, a1a));

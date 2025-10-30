@@ -47,7 +47,7 @@ public class TargetedAnnotationCBuilder<B extends TargetedAnnotationCBuilder<B>>
 	 * @return This object.
 	 */
 	public B on(Constructor<?>...value) {
-		for (Constructor<?> v : value)
+		for (var v : value)
 			on(ConstructorInfo.of(v).getFullName());
 		return asThis();
 	}

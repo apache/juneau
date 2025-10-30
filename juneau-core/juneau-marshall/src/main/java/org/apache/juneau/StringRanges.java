@@ -157,7 +157,7 @@ public class StringRanges {
 	 * @return This object.
 	 */
 	public StringRanges forEachRange(Consumer<StringRange> action) {
-		for (StringRange r : value)
+		for (var r : value)
 			action.accept(r);
 		return this;
 	}
@@ -201,7 +201,7 @@ public class StringRanges {
 
 		// Media ranges are ordered by 'q'.
 		// So we only need to search until we've found a match.
-		for (StringRange mr : value) {
+		for (var mr : value) {
 			float q2 = mr.getQValue();
 
 			if (q2 < q || q2 == 0)

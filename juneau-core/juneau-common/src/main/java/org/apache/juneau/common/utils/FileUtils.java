@@ -110,7 +110,7 @@ public class FileUtils {
 		if (f.isDirectory()) {
 			File[] cf = f.listFiles();
 			if (nn(cf))
-				for (File c : cf)
+				for (var c : cf)
 					deleteFile(c);
 		}
 		return f.delete();

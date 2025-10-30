@@ -58,7 +58,7 @@ public enum CallLoggingDetail {
 	}
 
 	boolean isOneOf(CallLoggingDetail...values) {
-		for (CallLoggingDetail v : values)
+		for (var v : values)
 			if (v == this)
 				return true;
 		return false;

@@ -47,7 +47,7 @@ public class TargetedAnnotationMBuilder<B extends TargetedAnnotationMBuilder<B>>
 	 * @return This object.
 	 */
 	public B on(Method...value) {
-		for (Method v : value)
+		for (var v : value)
 			on(MethodInfo.of(v).getFullName());
 		return asThis();
 	}

@@ -47,7 +47,7 @@ public class HashCode {
 	 */
 	public static final int of(Object...objects) {
 		HashCode x = create();
-		for (Object oo : objects)
+		for (var oo : objects)
 			x.add(oo);
 		return x.get();
 	}

@@ -119,7 +119,7 @@ public class LogsResource extends BasicRestServlet {
 			if (f.isFile() || ! includeChildren)
 				return null;
 			Set<FileResource> s = new TreeSet<>(FILE_COMPARATOR);
-			for (File fc : f.listFiles(FILE_FILTER))
+			for (var fc : f.listFiles(FILE_FILTER))
 				s.add(new FileResource(fc, (nn(path) ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false));
 			return s;
 		}
@@ -248,7 +248,7 @@ public class LogsResource extends BasicRestServlet {
 				if (! lp.hasNext())
 					w.append("<span style='color:gray'>[EMPTY]</span>");
 				else
-					for (LogParser.Entry le : lp) {
+					for (var le : lp) {
 						char s = le.severity.charAt(0);
 						String color = "black";
 						//SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST
@@ -306,7 +306,7 @@ public class LogsResource extends BasicRestServlet {
 		if (f.isDirectory()) {
 			File[] files = f.listFiles();
 			if (nn(files)) {
-				for (File fc : files)
+				for (var fc : files)
 					deleteFile(fc);
 			}
 		}

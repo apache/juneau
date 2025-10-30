@@ -37,7 +37,7 @@ class MethodInfoUtils {
 		if (ptt.size() != 1)
 			throw new InvalidAnnotationException("Only one parameter can be passed to method with @{0} annotation.  Method=''{0}''", scn(a), m);
 		Class<?> rt = ptt.get(0);
-		for (Class<?> cc : c)
+		for (var cc : c)
 			if (rt == cc)
 				return;
 		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", scn(a), m);
@@ -56,7 +56,7 @@ class MethodInfoUtils {
 
 	static void assertReturnType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
 		ClassInfo rt = m.getReturnType();
-		for (Class<?> cc : c)
+		for (var cc : c)
 			if (rt.is(cc))
 				return;
 		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", scn(a), m);

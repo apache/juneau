@@ -204,7 +204,7 @@ class StringVarResolver_Test extends TestBase {
 		var vrb = VarResolver.create().defaultVars();
 
 		// Should reject names with characters outside A-Za-z
-		for (Class<? extends Var> c : a(InvalidVar1.class, InvalidVar2.class, InvalidVar3.class, InvalidVar4.class, InvalidVar5.class)) {
+		for (var c : a(InvalidVar1.class, InvalidVar2.class, InvalidVar3.class, InvalidVar4.class, InvalidVar5.class)) {
 			assertThrows(Exception.class, ()->VarResolver.create().vars(c).build());
 		}
 

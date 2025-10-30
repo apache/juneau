@@ -280,7 +280,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		int i = 0;
 		Throwable t = this;
 		while (nn(t)) {
-			for (StackTraceElement e : t.getStackTrace())
+			for (var e : t.getStackTrace())
 				i ^= e.hashCode();
 			t = t.getCause();
 		}

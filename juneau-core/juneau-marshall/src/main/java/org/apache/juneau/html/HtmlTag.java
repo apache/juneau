@@ -141,7 +141,7 @@ enum HtmlTag {
 	}
 
 	public boolean isOneOf(HtmlTag...tags) {
-		for (HtmlTag tag : tags)
+		for (var tag : tags)
 			if (tag == this)
 				return true;
 		return false;

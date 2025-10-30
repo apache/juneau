@@ -127,7 +127,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			return null;
 
 		// Find swap() method if present.
-		for (MethodInfo m : ci.getMethods()) {
+		for (var m : ci.getMethods()) {
 
 			if (isSwapMethod(bc, m)) {
 
@@ -210,11 +210,11 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 
 		Class<?> unswapType = null;
 		if (nn(unswapMethod)) {
-			for (ParamInfo pi : unswapMethod.getParams())
+			for (var pi : unswapMethod.getParams())
 				if (! pi.getParameterType().is(BeanSession.class))
 					unswapType = pi.getParameterType().getWrapperIfPrimitive();
 		} else if (nn(unswapConstructor)) {
-			for (ParamInfo pi : unswapConstructor.getParams())
+			for (var pi : unswapConstructor.getParams())
 				if (! pi.getParameterType().is(BeanSession.class))
 					unswapType = pi.getParameterType().getWrapperIfPrimitive();
 		}

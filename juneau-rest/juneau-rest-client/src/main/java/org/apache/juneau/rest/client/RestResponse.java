@@ -423,7 +423,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 					}
 					sb.append("\n=== RESPONSE ===\n").append(getStatusLine());
 					sb.append("\n---response headers---");
-					for (Header h : getAllHeaders())
+					for (var h : getAllHeaders())
 						sb.append("\n\t").append(h);
 					sb.append("\n---response content---\n").append(output);
 					sb.append("\n=== END =======================================================================");
@@ -431,7 +431,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 				}
 			}
 
-			for (RestCallInterceptor r : request.interceptors) {
+			for (var r : request.interceptors) {
 				try {
 					r.onClose(request, this);
 				} catch (RuntimeException | Error e) {

@@ -169,7 +169,7 @@ class ConfigImportsTest extends TestBase {
 		public String getNewValue(String section, String key) {
 			if (events.isEmpty())
 				return null;
-			for (ConfigEvent ce : events)
+			for (var ce : events)
 				if (eq(section, ce.getSection()) && eq(key, ce.getKey()))
 					return ce.getValue();
 			return null;

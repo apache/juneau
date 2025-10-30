@@ -89,7 +89,7 @@ public class PathArg implements RestOpArg {
 
 		// Find matching @Path from class-level pathParams array
 		Path classLevelPath = null;
-		for (Path p : restAnnotation.pathParams()) {
+		for (var p : restAnnotation.pathParams()) {
 			String pName = firstNonEmpty(p.name(), p.value());
 			if (paramName.equals(pName)) {
 				classLevelPath = p;
@@ -210,7 +210,7 @@ public class PathArg implements RestOpArg {
 
 			// Check for {#} variables.
 			String idxs = String.valueOf(idx);
-			for (String var : vars)
+			for (var var : vars)
 				if (StringUtils.isNumeric(var) && var.equals(idxs))
 					return var;
 

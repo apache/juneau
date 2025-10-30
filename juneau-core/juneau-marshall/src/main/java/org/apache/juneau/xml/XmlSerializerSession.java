@@ -214,7 +214,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		}
 
 		boolean isOneOf(JsonType...types) {
-			for (JsonType type : types)
+			for (var type : types)
 				if (type == this)
 					return true;
 			return false;
@@ -306,7 +306,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		if (ns == defaultNamespace)
 			return;
 
-		for (Namespace n : namespaces)
+		for (var n : namespaces)
 			if (n == ns)
 				return;
 
@@ -322,12 +322,12 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		if (nn(n.name) && nn(n.uri))
 			return n;
 		if (n.uri == null) {
-			for (Namespace n2 : getNamespaces())
+			for (var n2 : getNamespaces())
 				if (n2.name.equals(n.name))
 					return n2;
 		}
 		if (n.name == null) {
-			for (Namespace n2 : getNamespaces())
+			for (var n2 : getNamespaces())
 				if (n2.uri.equals(n.uri))
 					return n2;
 		}
@@ -382,7 +382,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		Object content = null;
 		ClassMeta<?> contentType = null;
-		for (BeanPropertyValue p : lp) {
+		for (var p : lp) {
 			String n = p.getName();
 			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
 				BeanPropertyMeta pMeta = p.getMeta();
@@ -424,7 +424,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		boolean hasContent = false, preserveWhitespace = false, isVoidElement = xbm.getContentFormat() == VOID;
 
-		for (BeanPropertyValue p : lp) {
+		for (var p : lp) {
 			BeanPropertyMeta pMeta = p.getMeta();
 			if (pMeta.canRead()) {
 				ClassMeta<?> cMeta = p.getClassMeta();
@@ -472,7 +472,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (contentType == null) {} else if (contentType.isCollection()) {
 				Collection c = (Collection)content;
 				boolean previousWasTextNode = false;
-				for (Object value : c) {
+				for (var value : c) {
 					boolean currentIsTextNode = isTextNode(value);
 					// Insert delimiter between consecutive text nodes
 					if (previousWasTextNode && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
@@ -484,7 +484,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			} else if (contentType.isArray()) {
 				Collection c = toList(Object[].class, content);
 				boolean previousWasTextNode = false;
-				for (Object value : c) {
+				for (var value : c) {
 					boolean currentIsTextNode = isTextNode(value);
 					// Insert delimiter between consecutive text nodes
 					if (previousWasTextNode && currentIsTextNode && nn(textNodeDelimiter) && ! textNodeDelimiter.isEmpty()) {
@@ -633,7 +633,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			} else if (aType.isCollection()) {
 				((Collection<?>)o).forEach(this::findNsfMappings);
 			} else if (aType.isArray() && ! aType.getElementType().isPrimitive()) {
-				for (Object o2 : ((Object[])o))
+				for (var o2 : ((Object[])o))
 					findNsfMappings(o2);
 			}
 			if (nn(bm)) {
@@ -908,7 +908,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				if (addNamespaceUris) {
 					out.attr((String)null, "xmlns", defaultNamespace.getUri());
 
-					for (Namespace n : namespaces)
+					for (var n : namespaces)
 						out.attr("xmlns", n.getName(), n.getUri());
 				}
 				if (! isExpectedType) {

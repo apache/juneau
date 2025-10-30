@@ -47,7 +47,7 @@ public class TargetedAnnotationTMFCBuilder<B extends TargetedAnnotationTMFCBuild
 	 * @return This object.
 	 */
 	public B on(Constructor<?>...value) {
-		for (Constructor<?> v : value)
+		for (var v : value)
 			on(ConstructorInfo.of(v).getFullName());
 		return asThis();
 	}

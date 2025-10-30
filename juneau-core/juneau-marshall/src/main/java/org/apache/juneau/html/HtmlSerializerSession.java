@@ -345,7 +345,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		c = sort(c);
 
 		Object o1 = null;
-		for (Object o : c)
+		for (var o : c)
 			if (nn(o)) {
 				o1 = o;
 				break;
@@ -375,7 +375,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (cm1.isMap() && ! cm1.isBeanMap()) {
 
 			Set<Object> set = set();
-			for (Object o : c) {
+			for (var o : c) {
 				o = swap(swap, o);
 				if (! canIgnoreValue(cm1, null, o)) {
 					if (! cm1.isInstance(o))
@@ -387,7 +387,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		}
 
 		// Must be a bean or BeanMap.
-		for (Object o : c) {
+		for (var o : c) {
 			o = swap(swap, o);
 			if (! canIgnoreValue(cm1, null, o)) {
 				if (! cm1.isInstance(o))
@@ -507,7 +507,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.oTag(i, "table").attr(btpn, type2).w('>').nl(i + 1);
 			if (th.length > 0) {
 				out.sTag(i + 1, "tr").nl(i + 2);
-				for (Object key : th) {
+				for (var key : th) {
 					out.sTag(i + 2, "th");
 					out.text(convertToType(key, String.class));
 					out.eTag("th").nl(i + 2);
@@ -517,7 +517,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				th = null;
 			}
 
-			for (Object o : c) {
+			for (var o : c) {
 				ClassMeta<?> cm = getClassMetaForObject(o);
 
 				if (nn(cm) && nn(cm.getSwap(this))) {
@@ -545,7 +545,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					if (th == null)
 						th = m2.keySet().toArray(new Object[m2.size()]);
 
-					for (Object k : th) {
+					for (var k : th) {
 						out.sTag(i + 2, "td");
 						ContentResult cr = serializeAnything(out, m2.get(k), eType.getElementType(), toString(k), null, 2, false, true);
 						if (cr == CR_ELEMENTS)
@@ -558,7 +558,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					if (th == null)
 						th = m2.keySet().toArray(new Object[m2.size()]);
 
-					for (Object k : th) {
+					for (var k : th) {
 						BeanMapEntry p = m2.getProperty(toString(k));
 						BeanPropertyMeta pMeta = p.getMeta();
 						if (pMeta.canRead()) {
@@ -599,7 +599,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				out.attr(btpn, type2);
 			out.w('>').nl(i + 1);
 			boolean isFirst = true;
-			for (Object o : c) {
+			for (var o : c) {
 				if (isDc && ! isFirst)
 					out.append(isCdc ? ", " : " ");
 				if (! isDc)

@@ -146,7 +146,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
-		for (Method m : _getMethods())
+		for (var m : _getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type))
 				safe(() -> consumeIf(test, action, (V)m.invoke(a)));
 		return this;
@@ -173,7 +173,7 @@ public class AnnotationInfo<T extends Annotation> {
 						applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>)cpa.value()[i].getConstructor(VarResolverSession.class);
 				}
 			}
-			for (Constructor<? extends AnnotationApplier<?,?>> applyConstructor : applyConstructors)
+			for (var applyConstructor : applyConstructors)
 				consumer.accept((AnnotationApplier<Annotation,Object>)applyConstructor.newInstance(vrs));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ExecutableException(e);
@@ -233,7 +233,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <V> Optional<V> getValue(Class<V> type, String name, Predicate<V> test) {
-		for (Method m : _getMethods())
+		for (var m : _getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
 					V v = (V)m.invoke(a);

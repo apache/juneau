@@ -183,11 +183,11 @@ public class MimeTypeDetector {
 		 * @return This builder.
 		 */
 		public Builder addTypes(String...mimeTypesLines) {
-			for (String input : mimeTypesLines) {
+			for (var input : mimeTypesLines) {
 				if (isNotEmpty(input)) {
 					// Split on newlines to handle both individual lines and file contents
 					var lines = input.split("\\r?\\n");
-					for (String line : lines) {
+					for (var line : lines) {
 						if (isNotEmpty(line) && ! line.trim().startsWith("#")) {
 							var parts = line.trim().split("\\s+");
 							if (parts.length >= 2) {

@@ -110,7 +110,7 @@ public class BasicResource implements HttpResource {
 	 * @return This object.
 	 */
 	public BasicResource addHeaders(Header...values) {
-		for (Header h : values) {
+		for (var h : values) {
 			if (nn(h)) {
 				String n = h.getName();
 				String v = h.getValue();
@@ -394,7 +394,7 @@ public class BasicResource implements HttpResource {
 	 * @return This object.
 	 */
 	public BasicResource setHeaders(Header...values) {
-		for (Header h : values) {
+		for (var h : values) {
 			if (nn(h)) {
 				String n = h.getName();
 				String v = h.getValue();

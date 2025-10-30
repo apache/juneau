@@ -80,7 +80,7 @@ public class TestUtils {
 	 */
 	public static void checkXmlWhitespace(String out) throws SerializeException {
 		if (out.indexOf('\u0000') != -1) {
-			for (String s : out.split("\u0000"))
+			for (var s : out.split("\u0000"))
 				checkXmlWhitespace(s);
 			return;
 		}
@@ -242,7 +242,7 @@ public class TestUtils {
 	}
 
 	public static final void assertContains(Object value, String...substrings) {
-		for (String substring : substrings)
+		for (var substring : substrings)
 			if (! contains(toString(value), substring)) {
 				System.err.println("Text did not contain expected substring: '" + toString(substring) + "'");  // NOT DEBUG
 				System.err.println("=== TEXT ===");  // NOT DEBUG

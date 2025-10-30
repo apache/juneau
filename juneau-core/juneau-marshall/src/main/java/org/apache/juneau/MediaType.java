@@ -186,7 +186,7 @@ public class MediaType implements Comparable<MediaType> {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(mediaType);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			sb.append(';').append(p.getName()).append('=').append(p.getValue());
 		this.string = sb.toString();
 	}
@@ -227,7 +227,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * @return This object.
 	 */
 	public MediaType forEachParameter(Consumer<NameValuePair> action) {
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			action.accept(p);
 		return this;
 	}
@@ -239,7 +239,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * @return This object.
 	 */
 	public final MediaType forEachSubType(Consumer<String> action) {
-		for (String s : subTypes)
+		for (var s : subTypes)
 			action.accept(s);
 		return this;
 	}
@@ -251,7 +251,7 @@ public class MediaType implements Comparable<MediaType> {
 	 * @return The parameter value, or <jk>null</jk> if not found.
 	 */
 	public String getParameter(String name) {
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			if (eq(name, p.getName()))
 				return p.getValue();
 		return null;
@@ -308,7 +308,7 @@ public class MediaType implements Comparable<MediaType> {
 	 */
 	public final boolean hasSubType(String st) {
 		if (nn(st))
-			for (String s : subTypes)
+			for (var s : subTypes)
 				if (st.equalsIgnoreCase(s))
 					return true;
 		return false;
@@ -414,7 +414,7 @@ public class MediaType implements Comparable<MediaType> {
 		if (eq(subTypesSorted, o.subTypesSorted))
 			return c + 7500;
 
-		for (String st1 : subTypes) {
+		for (var st1 : subTypes) {
 			if ("*".equals(st1))
 				c += 0;
 			else if (CollectionUtils.contains(st1, o.subTypes))
@@ -424,7 +424,7 @@ public class MediaType implements Comparable<MediaType> {
 			else
 				return 0;
 		}
-		for (String st2 : o.subTypes) {
+		for (var st2 : o.subTypes) {
 			if ("*".equals(st2))
 				c += 0;
 			else if (CollectionUtils.contains(st2, subTypes))

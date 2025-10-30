@@ -42,7 +42,7 @@ public final class PredicateUtils {
 	public static <T> Predicate<T> and(Predicate<T>...predicates) {
 		Predicate<T> result = t -> true;
 		if (nn(predicates)) {
-			for (Predicate<T> p : predicates) {
+			for (var p : predicates) {
 				if (nn(p))
 					result = result.and(p);
 			}
@@ -65,7 +65,7 @@ public final class PredicateUtils {
 	public static <T> Predicate<T> or(Predicate<T>...predicates) {
 		Predicate<T> result = t -> false;
 		if (nn(predicates)) {
-			for (Predicate<T> p : predicates) {
+			for (var p : predicates) {
 				if (nn(p))
 					result = result.or(p);
 			}

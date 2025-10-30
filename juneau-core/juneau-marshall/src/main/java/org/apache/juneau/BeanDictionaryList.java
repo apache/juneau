@@ -82,7 +82,7 @@ public class BeanDictionaryList extends ArrayList<Class<?>> {
 	 * @return This object.
 	 */
 	protected BeanDictionaryList append(Class<?>...c) {
-		for (Class<?> cc : c)
+		for (var cc : c)
 			add(cc);
 		return this;
 	}

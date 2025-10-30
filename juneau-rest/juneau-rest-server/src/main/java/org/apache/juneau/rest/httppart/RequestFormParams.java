@@ -150,7 +150,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		}
 
 		if (nn(m)) {
-			for (Map.Entry<String,String[]> e : m.entrySet()) {
+			for (var e : m.entrySet()) {
 				String name = e.getKey();
 
 				String[] values = e.getValue();
@@ -166,7 +166,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 				if (values.length == 0)
 					values = a((String)null);
 
-				for (String value : values)
+				for (var value : values)
 					add(new RequestFormParam(req, name, value));
 			}
 		} else if (nn(c)) {
@@ -193,7 +193,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
 		vs = copyFrom.vs;
-		for (String n : names)
+		for (var n : names)
 			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(this::add);
 	}
 
@@ -209,7 +209,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public RequestFormParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			if (nn(p))
 				add(p.getName(), p.getValue());
 		return this;
@@ -260,7 +260,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return This object.
 	 */
 	public RequestFormParams addDefault(List<? extends NameValuePair> pairs) {
-		for (NameValuePair p : pairs) {
+		for (var p : pairs) {
 			String name = p.getName();
 			Stream<RequestFormParam> l = stream(name);
 			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
@@ -308,7 +308,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public String asQueryString() {
 		StringBuilder sb = new StringBuilder();
-		for (RequestFormParam e : this) {
+		for (var e : this) {
 			if (sb.length() > 0)
 				sb.append("&");
 			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
@@ -345,7 +345,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public boolean containsAny(String...names) {
 		assertArgNotNull("names", names);
-		for (String n : names)
+		for (var n : names)
 			if (stream(n).findAny().isPresent())
 				return true;
 		return false;
@@ -499,9 +499,9 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public RequestFormParams set(NameValuePair...parameters) {
 		assertArgNotNull("headers", parameters);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			remove(p);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			add(p);
 		return this;
 	}
@@ -549,7 +549,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	@Override /* Overridden from Object */
 	public String toString() {
 		JsonMap m = new JsonMap();
-		for (String n : getNames())
+		for (var n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();
 	}

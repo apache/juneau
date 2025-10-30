@@ -2080,7 +2080,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 			HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
 			res.getHeaders().forEach((k, v) -> {
-				for (String hv : v)
+				for (var hv : v)
 					response.addHeader(k, hv);
 			});
 
@@ -2148,7 +2148,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			MockServletRequest r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
 				.debug(isDebug());
 
-			for (Header h : request.getAllHeaders())
+			for (var h : request.getAllHeaders())
 				r.header(h.getName(), h.getValue());
 
 			sreq.set(r);

@@ -242,7 +242,7 @@ public class HtmlParserSession extends XmlParserSession {
 		HtmlTag tag = HtmlTag.forEvent(this, r);
 		if (expected.length == 0)
 			return tag;
-		for (HtmlTag t : expected)
+		for (var t : expected)
 			if (t == tag)
 				return tag;
 
@@ -601,7 +601,7 @@ public class HtmlParserSession extends XmlParserSession {
 					: newBeanMap(l, elementType.getInnerClass())
 				;
 				// @formatter:on
-				for (String key : keys) {
+				for (var key : keys) {
 					tag = nextTag(r, xTD, TD, NULL);
 					if (tag == xTD)
 						tag = nextTag(r, TD, NULL);
@@ -633,7 +633,7 @@ public class HtmlParserSession extends XmlParserSession {
 			} else {
 				String c = getAttributes(r).get(getBeanTypePropertyName(type.getElementType()));
 				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l) : newGenericMap(elementType));
-				for (String key : keys) {
+				for (var key : keys) {
 					tag = nextTag(r, TD, NULL);
 					if (tag == NULL) {
 						m = null;

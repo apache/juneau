@@ -45,7 +45,7 @@ public class TargetedAnnotationMFCBuilder extends TargetedAnnotationMFBuilder<Ta
 	 * @return This object.
 	 */
 	public TargetedAnnotationMFCBuilder on(Constructor<?>...value) {
-		for (Constructor<?> v : value)
+		for (var v : value)
 			on(ConstructorInfo.of(v).getFullName());
 		return this;
 	}

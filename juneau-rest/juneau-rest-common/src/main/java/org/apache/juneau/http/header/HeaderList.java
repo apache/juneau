@@ -169,7 +169,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList append(Header...values) {
 		if (nn(values))
-			for (Header value : values)
+			for (var value : values)
 				if (nn(value))
 					append(value);
 		return this;
@@ -347,7 +347,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 
 		Header first = null;
 		List<Header> rest = null;
-		for (Header x : this) {
+		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -367,7 +367,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 
 		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
-		for (Header element : rest) {
+		for (var element : rest) {
 			sb.append(", ");
 			sb.append(element.getValue());
 		}
@@ -405,7 +405,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 
 		Header first = null;
 		List<Header> rest = null;
-		for (Header x : this) {
+		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -425,7 +425,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 
 		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
-		for (Header element : rest) {
+		for (var element : rest) {
 			sb.append(", ");
 			sb.append(element.getValue());
 		}
@@ -621,7 +621,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList remove(Header...values) {
-		for (Header value : values)
+		for (var value : values)
 			remove(value);
 		return this;
 	}
@@ -657,7 +657,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList remove(String...names) {
 		if (nn(names))
-			for (String name : names)
+			for (var name : names)
 				remove(name);
 		return this;
 	}
@@ -777,7 +777,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	public HeaderList set(List<Header> values) {
 
 		if (nn(values)) {
-			for (Header h : values) {
+			for (var h : values) {
 				if (nn(h)) {
 					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
 						var x = get(i2);
@@ -789,7 +789,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 				}
 			}
 
-			for (Header x : values) {
+			for (var x : values) {
 				if (nn(x)) {
 					add(x);
 				}

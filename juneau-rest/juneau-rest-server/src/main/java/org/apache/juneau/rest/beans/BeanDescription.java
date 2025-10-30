@@ -90,7 +90,7 @@ public class BeanDescription {
 			throw runtimeException("Class ''{0}'' is not a valid bean.", cn(c));
 		properties = new BeanPropertyDescription[bm.getPropertyMetas().size()];
 		int i = 0;
-		for (BeanPropertyMeta pm : bm.getPropertyMetas())
+		for (var pm : bm.getPropertyMetas())
 			properties[i++] = new BeanPropertyDescription(pm.getName(), pm.getClassMeta());
 	}
 }

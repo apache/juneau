@@ -284,7 +284,7 @@ public class Messages extends ResourceBundle {
 		ResourceBundle getBundle() {
 			ClassLoader cl = forClass.getClassLoader();
 			JsonMap m = JsonMap.of("name", name, "package", forClass.getPackage().getName());
-			for (String bn : baseNames) {
+			for (var bn : baseNames) {
 				bn = StringUtils.replaceVars(bn, m);
 				ResourceBundle rb = findBundle(bn, locale, cl);
 				if (nn(rb))
@@ -399,7 +399,7 @@ public class Messages extends ResourceBundle {
 	 * @return The resolved value, or <jk>null</jk> if no value is found or the resource bundle is missing.
 	 */
 	public String findFirstString(String...keys) {
-		for (String k : keys) {
+		for (var k : keys) {
 			if (containsKey(k))
 				return getString(k);
 		}
@@ -472,7 +472,7 @@ public class Messages extends ResourceBundle {
 	@Override /* Overridden from Object */
 	public String toString() {
 		JsonMap m = new JsonMap();
-		for (String k : new TreeSet<>(keySet()))
+		for (var k : new TreeSet<>(keySet()))
 			m.put(k, getString(k));
 		return Json5.of(m);
 	}

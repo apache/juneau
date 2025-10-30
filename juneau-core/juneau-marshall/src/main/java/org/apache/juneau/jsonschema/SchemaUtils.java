@@ -42,7 +42,7 @@ public class SchemaUtils {
 	 * @return A new joined string.
 	 */
 	public static String joinnl(String[]...s) {
-		for (String[] ss : s) {
+		for (var ss : s) {
 			if (ss.length != 0)
 				return StringUtils.joinnl(ss).trim();
 		}

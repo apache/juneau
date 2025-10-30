@@ -442,7 +442,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	@SafeVarargs
 	public final <T> JsonMap appendFirst(Predicate<T> test, String key, T...values) {
-		for (T v : values)
+		for (var v : values)
 			if (test(test, v))
 				return append(key, v);
 		return this;
@@ -711,7 +711,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		JsonMap m2 = new JsonMap();
 		this.forEach((k, v) -> {
 			boolean exclude = false;
-			for (String kk : keys)
+			for (var kk : keys)
 				if (kk.equals(k))
 					exclude = true;
 			if (! exclude)
@@ -775,7 +775,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.
 	 */
 	public <T> T find(Class<T> type, String...keys) {
-		for (String key : keys)
+		for (var key : keys)
 			if (containsKey(key))
 				return get(key, type);
 		return null;
@@ -788,7 +788,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.
 	 */
 	public Object find(String...keys) {
-		for (String key : keys)
+		for (var key : keys)
 			if (containsKey(key))
 				return get(key);
 		return null;
@@ -835,7 +835,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return The key, or <jk>null</jk> if map does not contain this key.
 	 */
 	public String findKeyIgnoreCase(String key) {
-		for (String k : keySet())
+		for (var k : keySet())
 			if (key.equalsIgnoreCase(k))
 				return k;
 		return null;
@@ -1432,7 +1432,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public JsonMap include(String...keys) {
 		JsonMap m2 = new JsonMap();
 		this.forEach((k, v) -> {
-			for (String kk : keys)
+			for (var kk : keys)
 				if (kk.equals(k))
 					m2.put(kk, v);
 		});
@@ -1487,7 +1487,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		for (Iterator<String> i = keySet().iterator(); i.hasNext();) {
 			boolean remove = true;
 			String key = i.next();
-			for (String k : keys) {
+			for (var k : keys) {
 				if (k.equals(key)) {
 					remove = false;
 					break;
@@ -1613,7 +1613,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @param keys The list of keys to remove.
 	 */
 	public void removeAll(String...keys) {
-		for (String k : keys)
+		for (var k : keys)
 			remove(k);
 	}
 

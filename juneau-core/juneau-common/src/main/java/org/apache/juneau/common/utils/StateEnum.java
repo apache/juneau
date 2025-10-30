@@ -148,7 +148,7 @@ public enum StateEnum {
 	 * @return <jk>true</jk> if the state is any one of the specified states.
 	 */
 	public boolean isAny(StateEnum...states) {
-		for (StateEnum s : states)
+		for (var s : states)
 			if (this == s)
 				return true;
 		return false;

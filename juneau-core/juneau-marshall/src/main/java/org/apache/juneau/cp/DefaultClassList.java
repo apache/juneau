@@ -100,7 +100,7 @@ public class DefaultClassList {
 	@SuppressWarnings("unchecked")
 	public <T> Optional<Class<? extends T>> get(Class<T> type) {
 		assertArgNotNull("type", type);
-		for (Class<?> e : entries)
+		for (var e : entries)
 			if (nn(e) && type.isAssignableFrom(e))
 				return opt((Class<? extends T>)e);
 		return opte();

@@ -126,7 +126,7 @@ public class RestOperations {
 	 */
 	public RestOperations(Builder builder) {
 		Map<String,List<RestOpContext>> m = map();
-		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
+		for (var e : builder.map.entrySet())
 			m.put(e.getKey(), toList(e.getValue()));
 		this.map = m;
 		this.list = array(builder.set, RestOpContext.class);
@@ -146,7 +146,7 @@ public class RestOperations {
 
 		int rc = 0;
 		if (map.containsKey(m)) {
-			for (RestOpContext oc : map.get(m)) {
+			for (var oc : map.get(m)) {
 				int mrc = oc.match(session);
 				if (mrc == 2)
 					return oc;
@@ -155,7 +155,7 @@ public class RestOperations {
 		}
 
 		if (map.containsKey("*")) {
-			for (RestOpContext oc : map.get("*")) {
+			for (var oc : map.get("*")) {
 				int mrc = oc.match(session);
 				if (mrc == 2)
 					return oc;
@@ -166,7 +166,7 @@ public class RestOperations {
 		// If no paths matched, see if the path matches any other methods.
 		// Note that we don't want to match against "/*" patterns such as getOptions().
 		if (rc == 0) {
-			for (RestOpContext oc : list) {
+			for (var oc : list) {
 				if (! oc.getPathPattern().endsWith("/*")) {
 					int orc = oc.match(session);
 					if (orc == 2)

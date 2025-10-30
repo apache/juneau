@@ -495,7 +495,7 @@ public class RestUtils {
 			return parentContent;
 
 		List<String> list = list();
-		for (String l : content) {
+		for (var l : content) {
 			if ("INHERIT".equals(l)) {
 				addAll(list, parentContent);
 			} else if ("NONE".equals(l)) {
@@ -512,7 +512,7 @@ public class RestUtils {
 			return parentLinks;
 
 		List<String> list = list();
-		for (String l : links) {
+		for (var l : links) {
 			if ("INHERIT".equals(l))
 				addAll(list, parentLinks);
 			else if (l.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(l).matches()) {
@@ -534,7 +534,7 @@ public class RestUtils {
 			return fromParent;
 
 		List<String> l = list();
-		for (String v : value) {
+		for (var v : value) {
 			if (! "INHERIT".equals(v))
 				l.add(v);
 			else if (nn(fromParent))

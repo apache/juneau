@@ -154,7 +154,7 @@ public class SerializerSet {
 		 */
 		public Builder add(Class<?>...values) {
 			List<Object> l = list();
-			for (Class<?> e : values) {
+			for (var e : values) {
 				if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
 				} else {
@@ -221,7 +221,7 @@ public class SerializerSet {
 		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one serializer builder in this group.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			for (Object o : entries)
+			for (var o : entries)
 				if (o instanceof Serializer.Builder)
 					if (((Serializer.Builder)o).canApply(work))
 						return true;
@@ -339,7 +339,7 @@ public class SerializerSet {
 		 */
 		public Builder set(Class<?>...values) {
 			List<Object> l = list();
-			for (Class<?> e : values) {
+			for (var e : values) {
 				if (e.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
 				} else if (Serializer.class.isAssignableFrom(e)) {
@@ -480,7 +480,7 @@ public class SerializerSet {
 		List<MediaRange> lmtr = list();
 		Set<MediaType> lmt = set();
 		List<Serializer> l = list();
-		for (Serializer e : entries) {
+		for (var e : entries) {
 			e.getMediaTypeRanges().forEachRange(x -> {
 				lmtr.add(x);
 				l.add(e);

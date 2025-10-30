@@ -467,7 +467,7 @@ public class TestUtils extends Utils2 {
 			// Check if attributes match
 			boolean matches = true;
 			if (withAttributes != null && !withAttributes.isEmpty()) {
-				for (Map.Entry<String, String> entry : withAttributes.entrySet()) {
+				for (var entry : withAttributes.entrySet()) {
 					String attrName = entry.getKey();
 					String attrValue = entry.getValue();
 

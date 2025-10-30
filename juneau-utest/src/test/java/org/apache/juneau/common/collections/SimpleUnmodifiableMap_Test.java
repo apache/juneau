@@ -261,7 +261,7 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		}
 		
 		// Wait for all threads to complete
-		for (Thread thread : threads) {
+		for (var thread : threads) {
 			thread.join();
 		}
 		

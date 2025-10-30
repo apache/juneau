@@ -33,7 +33,7 @@ class UrlPathMatcher_Test extends TestBase {
 	}
 
 	private static void shouldNotMatch(UrlPathMatcher p, String...paths) {
-		for (String path : paths)
+		for (var path : paths)
 			assertNull(p.match(UrlPath.of(path)));
 	}
 

@@ -963,7 +963,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		// Also check interfaces
-		for (Class<?> iface : declaringClass.getInterfaces()) {
+		for (var iface : declaringClass.getInterfaces()) {
 			try {
 				Method ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
 				parentMethods.add(ifaceMethod);
@@ -1318,7 +1318,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					Object[] a = (Object[])o;
 					List l = new DelegateList(rawTypeMeta);
 					ClassMeta childType = rawTypeMeta.getElementType();
-					for (Object c : a)
+					for (var c : a)
 						l.add(applyChildPropertiesFilter(session, childType, c));
 					return l;
 				} else if (rawTypeMeta.isCollection()) {

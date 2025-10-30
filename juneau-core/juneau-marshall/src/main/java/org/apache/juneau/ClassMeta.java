@@ -868,7 +868,7 @@ public class ClassMeta<T> implements Type {
 				return Optional.ofNullable(info.firstAnnotation(BeanContext.DEFAULT, type, filter));
 			return Optional.empty();
 		}
-		for (A a : array)
+		for (var a : array)
 			if (test(filter, a))
 				return Optional.of(a);
 		return Optional.empty();
@@ -890,7 +890,7 @@ public class ClassMeta<T> implements Type {
 				info.forEachAnnotation(BeanContext.DEFAULT, type, filter, action);
 			return this;
 		}
-		for (A a : array)
+		for (var a : array)
 			PredicateUtils.consumeIf(filter, action, a);
 		return this;
 	}
@@ -1981,7 +1981,7 @@ public class ClassMeta<T> implements Type {
 		if (nn(childSwapMap)) {
 			ObjectSwap<?,?> s = childSwapMap.get(normalClass);
 			if (s == null) {
-				for (ObjectSwap<?,?> f : childSwaps)
+				for (var f : childSwaps)
 					if (s == null && f.getNormalClass().isParentOf(normalClass))
 						s = f;
 				if (s == null)
@@ -2008,7 +2008,7 @@ public class ClassMeta<T> implements Type {
 		if (nn(childUnswapMap)) {
 			ObjectSwap<?,?> s = childUnswapMap.get(swapClass);
 			if (s == null) {
-				for (ObjectSwap<?,?> f : childSwaps)
+				for (var f : childSwaps)
 					if (s == null && f.getSwapClass().isParentOf(swapClass))
 						s = f;
 				if (s == null)

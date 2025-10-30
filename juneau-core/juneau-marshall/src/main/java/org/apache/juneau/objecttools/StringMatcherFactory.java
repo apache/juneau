@@ -69,7 +69,7 @@ public class StringMatcherFactory extends MatcherFactory {
 			List<Pattern> ands = new LinkedList<>();
 			List<Pattern> nots = new LinkedList<>();
 
-			for (String s : StringUtils.splitQuoted(pattern, true)) {
+			for (var s : StringUtils.splitQuoted(pattern, true)) {
 				char c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);
 
 				if (c0 == '/' && c9 == '/' && s.length() > 1) {
@@ -139,13 +139,13 @@ public class StringMatcherFactory extends MatcherFactory {
 		@Override
 		public boolean matches(ClassMeta<?> cm, Object o) {
 			String s = (String)o;
-			for (Pattern andPattern : andPatterns)
+			for (var andPattern : andPatterns)
 				if (! andPattern.matcher(s).matches())
 					return false;
-			for (Pattern notPattern : notPatterns)
+			for (var notPattern : notPatterns)
 				if (notPattern.matcher(s).matches())
 					return false;
-			for (Pattern orPattern : orPatterns)
+			for (var orPattern : orPatterns)
 				if (orPattern.matcher(s).matches())
 					return true;
 			return orPatterns.length == 0;

@@ -169,7 +169,7 @@ public class ListBuilder<E> {
 	 */
 	@SuppressWarnings("unchecked")
 	public ListBuilder<E> add(E...values) {
-		for (E v : values)
+		for (var v : values)
 			add(v);
 		return this;
 	}

@@ -110,7 +110,7 @@ public class RestChildren {
 	 * @param builder The builder containing the settings for this object.
 	 */
 	public RestChildren(Builder builder) {
-		for (RestContext rc : builder.list)
+		for (var rc : builder.list)
 			children.put(rc.getPath(), rc);
 	}
 
@@ -130,7 +130,7 @@ public class RestChildren {
 	 * Called during servlet destruction on all children to invoke all {@link RestDestroy} and {@link Servlet#destroy()} methods.
 	 */
 	public void destroy() {
-		for (RestContext r : children.values()) {
+		for (var r : children.values()) {
 			r.destroy();
 			if (r.getResource() instanceof Servlet)
 				((Servlet)r.getResource()).destroy();
@@ -146,7 +146,7 @@ public class RestChildren {
 	public Optional<RestChildMatch> findMatch(RestSession.Builder builder) {
 		var pi = builder.getPathInfoUndecoded();
 		if ((! children.isEmpty()) && nn(pi) && ! pi.equals("/")) {
-			for (RestContext rc : children.values()) {
+			for (var rc : children.values()) {
 				UrlPathMatcher upp = rc.getPathMatcher();
 				UrlPathMatch uppm = upp.match(builder.getUrlPath());
 				if (nn(uppm)) {
@@ -163,7 +163,7 @@ public class RestChildren {
 	 * @throws ServletException Error occurred.
 	 */
 	public void postInit() throws ServletException {
-		for (RestContext childContext : children.values())
+		for (var childContext : children.values())
 			childContext.postInit();
 	}
 
@@ -173,7 +173,7 @@ public class RestChildren {
 	 * @throws ServletException Error occurred.
 	 */
 	public void postInitChildFirst() throws ServletException {
-		for (RestContext childContext : children.values())
+		for (var childContext : children.values())
 			childContext.postInitChildFirst();
 	}
 }

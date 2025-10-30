@@ -38,7 +38,7 @@ public class HtmlWidgetMap extends LinkedHashMap<String,HtmlWidget> {
 	 * @return This object.
 	 */
 	public HtmlWidgetMap append(HtmlWidget...w) {
-		for (HtmlWidget ww : w)
+		for (var ww : w)
 			put(ww.getName(), ww);
 		return this;
 	}

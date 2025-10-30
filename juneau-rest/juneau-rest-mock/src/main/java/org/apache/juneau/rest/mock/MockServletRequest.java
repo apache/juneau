@@ -453,7 +453,7 @@ public class MockServletRequest implements HttpServletRequest {
 					if (v == null)
 						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k));
 					else
-						for (String v2 : v)
+						for (var v2 : v)
 							sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k)).append('=').append(urlEncode(v2));
 				});
 				queryString = sb.toString();

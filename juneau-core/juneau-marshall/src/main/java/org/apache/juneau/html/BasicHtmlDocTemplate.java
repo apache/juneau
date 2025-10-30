@@ -303,7 +303,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		String[] links = session.getNavLinks();
 		if (links.length > 0 && ! contains("NONE", links)) {
 			w.sTag(3, "ol").nl(3);
-			for (String l : links) {
+			for (var l : links) {
 				w.sTag(4, "li");
 				l = session.resolve(l);
 				if (l.matches("(?s)\\S+\\:.*")) {
@@ -339,7 +339,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 */
 	protected void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		Flag addSpace = Flag.create();
-		for (String s : session.getScript())
+		for (var s : session.getScript())
 			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
 		session.forEachWidget(x -> {
 			w.sIf(addSpace.getAndSet()).append(3, session.resolve(x.getScript(session.getVarResolver()))).w('\n'); // Must always append a newline even if whitespace disabled!
@@ -356,11 +356,11 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 */
 	protected void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		Flag addSpace = Flag.create();
-		for (String s : session.getStylesheet())
+		for (var s : session.getStylesheet())
 			w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");
 		if (session.isNowrap())
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
-		for (String s : session.getStyle())
+		for (var s : session.getStyle())
 			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(s));
 		session.forEachWidget(x -> {
 			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(x.getStyle(session.getVarResolver())));

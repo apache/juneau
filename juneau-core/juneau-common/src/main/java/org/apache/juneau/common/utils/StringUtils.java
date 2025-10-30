@@ -3917,7 +3917,7 @@ public class StringUtils {
 	 * @return The first non-blank string, or <jk>null</jk> if all values were blank or <jk>null</jk>.
 	 */
 	public static String firstNonBlank(String...vals) {
-		for (String v : vals) {
+		for (var v : vals) {
 			if (isNotBlank(v))
 				return v;
 		}

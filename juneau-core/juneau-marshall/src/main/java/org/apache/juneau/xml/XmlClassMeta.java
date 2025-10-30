@@ -56,7 +56,7 @@ public class XmlClassMeta extends ExtendedClassMeta {
 
 		String _childName = null;
 		XmlFormat _format = XmlFormat.DEFAULT;
-		for (Xml a : xmls) {
+		for (var a : xmls) {
 			if (a.format() != XmlFormat.DEFAULT)
 				_format = a.format();
 			if (! a.childName().isEmpty())

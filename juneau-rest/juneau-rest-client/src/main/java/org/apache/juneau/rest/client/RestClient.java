@@ -2890,7 +2890,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @throws Exception If one or more interceptors could not be created.
 		 */
 		public Builder interceptors(Class<?>...values) throws Exception {
-			for (Class<?> c : values) {
+			for (var c : values) {
 				ClassInfo ci = ClassInfo.of(c);
 				if (nn(ci)) {
 					if (ci.isChildOfAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
@@ -2953,7 +2953,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		public Builder interceptors(Object...value) {
 			List<RestCallInterceptor> l = list();
-			for (Object o : value) {
+			for (var o : value) {
 				ClassInfo ci = ClassInfo.of(o);
 				if (nn(ci)) {
 					if (! ci.isChildOfAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))
@@ -3320,7 +3320,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		public Builder marshallers(Marshaller...value) {
-			for (Marshaller m : value)
+			for (var m : value)
 				if (nn(m))
 					serializer(m.getSerializer()).parser(m.getParser());
 			return this;
@@ -6928,7 +6928,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					RequestBeanMeta rbm = rmba.getMeta();
 					var bean = args[rmba.getIndex()];
 					if (nn(bean)) {
-						for (RequestBeanPropertyMeta p : rbm.getProperties()) {
+						for (var p : rbm.getProperties()) {
 							var val = safeSupplier(() -> p.getGetter().invoke(bean));
 							var pt = p.getPartType();
 							var pn = p.getPartName();
@@ -7104,7 +7104,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					}
 					if (e instanceof RuntimeException)
 						throw e;
-					for (Class<?> t2 : method.getExceptionTypes())
+					for (var t2 : method.getExceptionTypes())
 						if (t2.isInstance(e))
 							throw e;
 					throw toRuntimeException(e);
@@ -7587,7 +7587,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			StringBuilder sb = new StringBuilder("WARNING:  RestClient garbage collected before it was finalized.");  // NOT DEBUG
 			if (nn(creationStack)) {
 				sb.append("\nCreation Stack:");  // NOT DEBUG
-				for (StackTraceElement e : creationStack)
+				for (var e : creationStack)
 					sb.append("\n\t" + e);  // NOT DEBUG
 			}
 			log(WARNING, sb.toString());
@@ -7728,7 +7728,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	protected void onCallClose(RestRequest req, RestResponse res) throws RestCallException {
 		try {
-			for (RestCallInterceptor rci : interceptors)
+			for (var rci : interceptors)
 				rci.onClose(req, res);
 		} catch (RuntimeException | RestCallException e) {
 			throw e;
@@ -7753,7 +7753,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	protected void onCallConnect(RestRequest req, RestResponse res) throws RestCallException {
 		try {
-			for (RestCallInterceptor rci : interceptors)
+			for (var rci : interceptors)
 				rci.onConnect(req, res);
 		} catch (RuntimeException | RestCallException e) {
 			throw e;
@@ -7777,7 +7777,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	protected void onCallInit(RestRequest req) throws RestCallException {
 		try {
-			for (RestCallInterceptor rci : interceptors)
+			for (var rci : interceptors)
 				rci.onInit(req);
 		} catch (RuntimeException | RestCallException e) {
 			throw e;
@@ -7906,7 +7906,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			Throwable t = e.getCause();
 			if (t instanceof RuntimeException)
 				throw t;
-			for (Class<?> t2 : method.getExceptionTypes())
+			for (var t2 : method.getExceptionTypes())
 				if (t2.isInstance(t))
 					throw t;
 			throw toRuntimeException(e);

@@ -46,13 +46,13 @@ public class RdfUtils {
 	 */
 	public static Namespace findNamespace(List<Rdf> rdfs, List<RdfSchema> schemas) {
 
-		for (Rdf rdf : rdfs) {
+		for (var rdf : rdfs) {
 			var ns = findNamespace(rdf.prefix(), rdf.namespace(), rdfs, schemas);
 			if (nn(ns))
 				return ns;
 		}
 
-		for (RdfSchema schema : schemas) {
+		for (var schema : schemas) {
 			var ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);
 			if (nn(ns))
 				return ns;
@@ -70,13 +70,13 @@ public class RdfUtils {
 		// If only prefix specified, need to search for namespaceURI.
 		if (! prefix.isEmpty()) {
 			if (nn(rdfs))
-				for (Rdf rdf2 : rdfs)
+				for (var rdf2 : rdfs)
 					if (rdf2.prefix().equals(prefix) && ! rdf2.namespace().isEmpty())
 						return Namespace.of(prefix, rdf2.namespace());
-			for (RdfSchema schema : schemas) {
+			for (var schema : schemas) {
 				if (schema.prefix().equals(prefix) && ! schema.namespace().isEmpty())
 					return Namespace.of(prefix, schema.namespace());
-				for (RdfNs rdfNs : schema.rdfNs())
+				for (var rdfNs : schema.rdfNs())
 					if (rdfNs.prefix().equals(prefix))
 						return Namespace.of(prefix, rdfNs.namespaceURI());
 			}
@@ -86,13 +86,13 @@ public class RdfUtils {
 		// If only namespaceURI specified, need to search for prefix.
 		if (! ns.isEmpty()) {
 			if (nn(rdfs))
-				for (Rdf rdf2 : rdfs)
+				for (var rdf2 : rdfs)
 					if (rdf2.namespace().equals(ns) && ! rdf2.prefix().isEmpty())
 						return Namespace.of(rdf2.prefix(), ns);
-			for (RdfSchema schema : schemas) {
+			for (var schema : schemas) {
 				if (schema.namespace().equals(ns) && ! schema.prefix().isEmpty())
 					return Namespace.of(schema.prefix(), ns);
-				for (RdfNs rdfNs : schema.rdfNs())
+				for (var rdfNs : schema.rdfNs())
 					if (rdfNs.namespaceURI().equals(ns))
 						return Namespace.of(rdfNs.prefix(), ns);
 			}

@@ -102,7 +102,7 @@ public class Namespace {
 	if (o instanceof Collection c) {
 		Namespace[] n = new Namespace[c.size()];
 		int i = 0;
-		for (Object o2 : c) {
+		for (var o2 : c) {
 			if (o2 instanceof Namespace)
 					n[i++] = (Namespace)o2;
 				else if (o2 instanceof CharSequence)

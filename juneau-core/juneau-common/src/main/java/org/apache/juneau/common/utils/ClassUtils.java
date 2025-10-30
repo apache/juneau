@@ -150,7 +150,7 @@ public class ClassUtils {
 				nestedOuterTypes.add(outerClass);
 				var outerTypeMap = new HashMap<Type,Type>();
 				extractTypes(outerTypeMap, outerClass);
-				for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
+				for (var entry : outerTypeMap.entrySet()) {
 					Type key = entry.getKey(), value = entry.getValue();
 					if (key instanceof TypeVariable<?> keyType) {
 						if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {

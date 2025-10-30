@@ -45,11 +45,11 @@ public class HttpUtils {
 		if (detectMethod) {
 			if (n.startsWith("do") && n.length() > 2) {
 				String n2 = n.substring(2).toUpperCase();
-				for (String t : UC_METHODS)
+				for (var t : UC_METHODS)
 					if (n2.equals(t))
 						return n2;
 			}
-			for (String t : LC_METHODS)
+			for (var t : LC_METHODS)
 				if (n.startsWith(t) && (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length()))))
 					return t.toUpperCase();
 		}
@@ -68,11 +68,11 @@ public class HttpUtils {
 		if (method == null) {
 			if (n.startsWith("do") && n.length() > 2) {
 				String n2 = n.substring(2).toUpperCase();
-				for (String t : UC_METHODS)
+				for (var t : UC_METHODS)
 					if (n2.equals(t))
 						return "/";
 			}
-			for (String t : LC_METHODS) {
+			for (var t : LC_METHODS) {
 				if (n.startsWith(t) && (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length())))) {
 					return '/' + java.beans.Introspector.decapitalize(n.substring(t.length()));
 				}

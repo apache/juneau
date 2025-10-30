@@ -1024,7 +1024,7 @@ public class Parser extends BeanContextable {
 	 */
 	public boolean canHandle(String contentType) {
 		if (nn(contentType))
-			for (MediaType mt : getMediaTypes())
+			for (var mt : getMediaTypes())
 				if (contentType.equals(mt.toString()))
 					return true;
 		return false;

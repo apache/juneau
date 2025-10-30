@@ -246,7 +246,7 @@ public class VarResolver {
 		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore(), x)).toArray(Var[]::new);
 
 		Map<String,Var> m = new ConcurrentSkipListMap<>();
-		for (Var v : vars)
+		for (var v : vars)
 			m.put(v.getName(), v);
 
 		this.varMap = u(m);

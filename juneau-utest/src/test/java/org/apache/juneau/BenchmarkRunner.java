@@ -83,14 +83,14 @@ public class BenchmarkRunner {
 
 		// Initialize consumers - these use Blackhole to prevent JVM optimizations
 		listIterator = lst -> {
-			for (Integer value : lst) {
+			for (var value : lst) {
 				// Simulate some work - prevents dead code elimination
 				Math.abs(value);
 			}
 		};
 
 		listForEach = lst -> {
-			for (Integer element : lst) {
+			for (var element : lst) {
 				Math.abs(element);
 			}
 		};
@@ -98,13 +98,13 @@ public class BenchmarkRunner {
 		listStreamForEach = lst -> lst.forEach(value -> Math.abs(value));
 
 		mapValuesIterator = m -> {
-			for (Integer value : m.values()) {
+			for (var value : m.values()) {
 				Math.abs(value);
 			}
 		};
 
 		mapEntrySetIterator = m -> {
-			for (Entry<String, Integer> entry : m.entrySet()) {
+			for (var entry : m.entrySet()) {
 				Math.abs(entry.getValue());
 			}
 		};
@@ -114,13 +114,13 @@ public class BenchmarkRunner {
 
 		// ThrowingConsumer variants
 		throwingListIterator = lst -> {
-			for (Integer value : lst) {
+			for (var value : lst) {
 				Math.abs(value);
 			}
 		};
 
 		throwingListForEach = lst -> {
-			for (Integer element : lst) {
+			for (var element : lst) {
 				Math.abs(element);
 			}
 		};
@@ -128,13 +128,13 @@ public class BenchmarkRunner {
 		throwingListStreamForEach = lst -> lst.forEach(value -> Math.abs(value));
 
 		throwingMapValuesIterator = m -> {
-			for (Integer value : m.values()) {
+			for (var value : m.values()) {
 				Math.abs(value);
 			}
 		};
 
 		throwingMapEntrySetIterator = m -> {
-			for (Entry<String, Integer> entry : m.entrySet()) {
+			for (var entry : m.entrySet()) {
 				Math.abs(entry.getValue());
 			}
 		};

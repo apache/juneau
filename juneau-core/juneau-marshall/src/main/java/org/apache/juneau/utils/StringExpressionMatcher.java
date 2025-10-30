@@ -68,13 +68,13 @@ public class StringExpressionMatcher {
 
 		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
-			for (Exp clause : clauses)
+			for (var clause : clauses)
 				clause.appendTokens(set);
 		}
 
 		@Override /* Overridden from Exp */
 		boolean matches(String input) {
-			for (Exp e : clauses)
+			for (var e : clauses)
 				if (! e.matches(input))
 					return false;
 			return true;
@@ -161,13 +161,13 @@ public class StringExpressionMatcher {
 
 		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
-			for (Exp clause : clauses)
+			for (var clause : clauses)
 				clause.appendTokens(set);
 		}
 
 		@Override
 		boolean matches(String input) {
-			for (Exp e : clauses)
+			for (var e : clauses)
 				if (e.matches(input))
 					return true;
 			return false;

@@ -67,7 +67,7 @@ public enum RestPartType {
 	 * @return <jk>true</jk> if this type is any in the specified list.
 	 */
 	public boolean isAny(RestPartType...t) {
-		for (RestPartType tt : t)
+		for (var tt : t)
 			if (this == tt)
 				return true;
 		return false;

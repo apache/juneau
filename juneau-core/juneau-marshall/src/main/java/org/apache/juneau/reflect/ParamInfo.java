@@ -108,7 +108,7 @@ public class ParamInfo {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ParamInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		for (Annotation a : eInfo._getParameterAnnotations(index))
+		for (var a : eInfo._getParameterAnnotations(index))
 			if (type.isInstance(a))
 				consumeIf(filter, action, type.cast(a));
 		return this;
@@ -161,7 +161,7 @@ public class ParamInfo {
 			A o = ci.getAnnotation(type, filter);
 			if (nn(o))
 				return o;
-			for (Annotation a2 : eInfo._getParameterAnnotations(index))
+			for (var a2 : eInfo._getParameterAnnotations(index))
 				if (type.isInstance(a2) && test(filter, type.cast(a2)))
 					return (A)a2;
 		} else {
@@ -193,7 +193,7 @@ public class ParamInfo {
 	 */
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type) {
 		if (nn(type))
-			for (Annotation a : eInfo._getParameterAnnotations(index))
+			for (var a : eInfo._getParameterAnnotations(index))
 				if (type.isInstance(a))
 					return type.cast(a);
 		return null;
@@ -308,7 +308,7 @@ public class ParamInfo {
 
 	private <A extends Annotation> A findAnnotation(Class<A> type) {
 		if (eInfo.isConstructor()) {
-			for (Annotation a2 : eInfo._getParameterAnnotations(index))
+			for (var a2 : eInfo._getParameterAnnotations(index))
 				if (type.isInstance(a2))
 					return type.cast(a2);
 			return eInfo.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type);
@@ -324,7 +324,7 @@ public class ParamInfo {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			Annotation[] annotations = eInfo._getParameterAnnotations(index);
 			ci.forEachAnnotation(ap, a, filter, action);
-			for (Annotation a2 : annotations)
+			for (var a2 : annotations)
 				if (a.isInstance(a2))
 					consumeIf(filter, action, a.cast(a2));
 		} else {

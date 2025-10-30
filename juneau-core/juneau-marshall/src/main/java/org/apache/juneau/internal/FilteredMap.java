@@ -75,7 +75,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 		this.classMeta = classMeta;
 		this.innerMap = innerMap;
 		List<Map.Entry<K,V>> l = new ArrayList<>(keys.length);
-		for (K k : keys)
+		for (var k : keys)
 			if (innerMap.containsKey(k))
 				l.add(createEntry(k));
 		entries = new ListSet<>(l);

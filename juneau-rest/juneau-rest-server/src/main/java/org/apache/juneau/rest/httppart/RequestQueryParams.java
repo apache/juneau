@@ -143,7 +143,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		this.caseSensitive = caseSensitive;
 		this.vs = req.getVarResolverSession();
 
-		for (Map.Entry<String,String[]> e : query.entrySet()) {
+		for (var e : query.entrySet()) {
 			String name = e.getKey();
 
 			String[] values = e.getValue();
@@ -159,7 +159,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 			if (values.length == 0)
 				values = a((String)null);
 
-			for (String value : values)
+			for (var value : values)
 				add(new RequestQueryParam(req, name, value));
 		}
 	}
@@ -183,7 +183,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
 		vs = copyFrom.vs;
-		for (String n : names)
+		for (var n : names)
 			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(this::add);
 	}
 
@@ -199,7 +199,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public RequestQueryParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			if (nn(p))
 				add(p.getName(), p.getValue());
 		return this;
@@ -234,7 +234,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 * @return This object.
 	 */
 	public RequestQueryParams addDefault(List<? extends NameValuePair> pairs) {
-		for (NameValuePair p : pairs) {
+		for (var p : pairs) {
 			String name = p.getName();
 			Stream<RequestQueryParam> l = stream(name);
 			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
@@ -282,7 +282,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public String asQueryString() {
 		StringBuilder sb = new StringBuilder();
-		for (RequestQueryParam e : this) {
+		for (var e : this) {
 			if (sb.length() > 0)
 				sb.append("&");
 			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
@@ -319,7 +319,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public boolean containsAny(String...names) {
 		assertArgNotNull("names", names);
-		for (String n : names)
+		for (var n : names)
 			if (stream(n).findAny().isPresent())
 				return true;
 		return false;
@@ -505,9 +505,9 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public RequestQueryParams set(NameValuePair...parameters) {
 		assertArgNotNull("headers", parameters);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			remove(p);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			add(p);
 		return this;
 	}
@@ -555,7 +555,7 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	@Override /* Overridden from Object */
 	public String toString() {
 		JsonMap m = new JsonMap();
-		for (String n : getNames())
+		for (var n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();
 	}

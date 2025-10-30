@@ -299,7 +299,7 @@ public class ClassInfo {
 			ParameterizedType pt = (ParameterizedType)t;
 			sb.append('<');
 			boolean first = true;
-			for (Type t2 : pt.getActualTypeArguments()) {
+			for (var t2 : pt.getActualTypeArguments()) {
 				if (! first)
 					sb.append(',');
 				first = false;
@@ -335,7 +335,7 @@ public class ClassInfo {
 			ParameterizedType pt = (ParameterizedType)t;
 			sb.append('<');
 			boolean first = true;
-			for (Type t2 : pt.getActualTypeArguments()) {
+			for (var t2 : pt.getActualTypeArguments()) {
 				if (! first)
 					sb.append(',');
 				first = false;
@@ -442,7 +442,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachAllField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
-		for (FieldInfo fi : _getAllFields())
+		for (var fi : _getAllFields())
 			consumeIf(filter, action, fi);
 		return this;
 	}
@@ -455,7 +455,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachAllMethodParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (MethodInfo mi : _getAllMethodsParentFirst())
+		for (var mi : _getAllMethodsParentFirst())
 			consumeIf(filter, action, mi);
 		return this;
 	}
@@ -526,18 +526,18 @@ public class ClassInfo {
 	public ClassInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		Package p = c.getPackage();
 		if (nn(p))
-			for (Annotation a : p.getDeclaredAnnotations())
-				for (Annotation a2 : splitRepeated(a))
+			for (var a : p.getDeclaredAnnotations())
+				for (var a2 : splitRepeated(a))
 					AnnotationInfo.of(p, a2).accept(filter, action);
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length - 1; i >= 0; i--)
-			for (Annotation a : interfaces[i].c.getDeclaredAnnotations())
-				for (Annotation a2 : splitRepeated(a))
+			for (var a : interfaces[i].c.getDeclaredAnnotations())
+				for (var a2 : splitRepeated(a))
 					AnnotationInfo.of(interfaces[i], a2).accept(filter, action);
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length - 1; i >= 0; i--)
-			for (Annotation a : parents[i].c.getDeclaredAnnotations())
-				for (Annotation a2 : splitRepeated(a))
+			for (var a : parents[i].c.getDeclaredAnnotations())
+				for (var a2 : splitRepeated(a))
 					AnnotationInfo.of(parents[i], a2).accept(filter, action);
 		return this;
 	}
@@ -550,7 +550,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachDeclaredConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
-		for (ConstructorInfo mi : _getDeclaredConstructors())
+		for (var mi : _getDeclaredConstructors())
 			consumeIf(filter, action, mi);
 		return this;
 	}
@@ -563,7 +563,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachDeclaredField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
-		for (FieldInfo fi : _getDeclaredFields())
+		for (var fi : _getDeclaredFields())
 			consumeIf(filter, action, fi);
 		return this;
 	}
@@ -576,7 +576,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachDeclaredMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (MethodInfo mi : _getDeclaredMethods())
+		for (var mi : _getDeclaredMethods())
 			consumeIf(filter, action, mi);
 		return this;
 	}
@@ -589,7 +589,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (MethodInfo mi : _getAllMethods())
+		for (var mi : _getAllMethods())
 			consumeIf(filter, action, mi);
 		return this;
 	}
@@ -602,7 +602,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachPublicConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
-		for (ConstructorInfo mi : _getPublicConstructors())
+		for (var mi : _getPublicConstructors())
 			consumeIf(filter, action, mi);
 		return this;
 	}
@@ -615,7 +615,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachPublicField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
-		for (FieldInfo mi : _getPublicFields())
+		for (var mi : _getPublicFields())
 			consumeIf(filter, action, mi);
 		return this;
 	}
@@ -628,7 +628,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachPublicMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (MethodInfo mi : _getPublicMethods())
+		for (var mi : _getPublicMethods())
 			consumeIf(filter, action, mi);
 		return this;
 	}
@@ -785,7 +785,7 @@ public class ClassInfo {
 	 * @return The parent class or interface that matches the specified predicate.
 	 */
 	public ClassInfo getAnyParent(Predicate<ClassInfo> filter) {
-		for (ClassInfo ci : _getAllParents())
+		for (var ci : _getAllParents())
 			if (test(filter, ci))
 				return ci;
 		return null;
@@ -813,7 +813,7 @@ public class ClassInfo {
 	 * @return The declared constructor that matches the specified predicate.
 	 */
 	public ConstructorInfo getDeclaredConstructor(Predicate<ConstructorInfo> filter) {
-		for (ConstructorInfo ci : _getDeclaredConstructors())
+		for (var ci : _getDeclaredConstructors())
 			if (test(filter, ci))
 				return ci;
 		return null;
@@ -835,7 +835,7 @@ public class ClassInfo {
 	 * @return The declared field, or <jk>null</jk> if not found.
 	 */
 	public FieldInfo getDeclaredField(Predicate<FieldInfo> filter) {
-		for (FieldInfo f : _getDeclaredFields())
+		for (var f : _getDeclaredFields())
 			if (test(filter, f))
 				return f;
 		return null;
@@ -873,7 +873,7 @@ public class ClassInfo {
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
 	public MethodInfo getDeclaredMethod(Predicate<MethodInfo> filter) {
-		for (MethodInfo mi : _getDeclaredMethods())
+		for (var mi : _getDeclaredMethods())
 			if (test(filter, mi))
 				return mi;
 		return null;
@@ -955,7 +955,7 @@ public class ClassInfo {
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
 	public MethodInfo getMethod(Predicate<MethodInfo> filter) {
-		for (MethodInfo mi : _getAllMethods())
+		for (var mi : _getAllMethods())
 			if (test(filter, mi))
 				return mi;
 		return null;
@@ -1007,7 +1007,7 @@ public class ClassInfo {
 		if (isAbstract())
 			return null;
 		boolean isMemberClass = isNonStaticMemberClass();
-		for (ConstructorInfo cc : _getDeclaredConstructors())
+		for (var cc : _getDeclaredConstructors())
 			if (cc.hasNumParams(isMemberClass ? 1 : 0) && cc.isVisible(v))
 				return cc.accessible(v);
 		return null;
@@ -1077,7 +1077,7 @@ public class ClassInfo {
 			nestedOuterTypes.add(outerClass);
 			var outerTypeMap = new HashMap<Type,Type>();
 			extractTypes(outerTypeMap, outerClass);
-			for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
+			for (var entry : outerTypeMap.entrySet()) {
 				Type key = entry.getKey(), value = entry.getValue();
 				if (key instanceof TypeVariable<?> keyType) {
 					if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
@@ -1138,7 +1138,7 @@ public class ClassInfo {
 	 * @return The public constructor that matches the specified predicate.
 	 */
 	public ConstructorInfo getPublicConstructor(Predicate<ConstructorInfo> filter) {
-		for (ConstructorInfo ci : _getPublicConstructors())
+		for (var ci : _getPublicConstructors())
 			if (test(filter, ci))
 				return ci;
 		return null;
@@ -1158,7 +1158,7 @@ public class ClassInfo {
 	 * @return The public field, or <jk>null</jk> if not found.
 	 */
 	public FieldInfo getPublicField(Predicate<FieldInfo> filter) {
-		for (FieldInfo f : _getPublicFields())
+		for (var f : _getPublicFields())
 			if (test(filter, f))
 				return f;
 		return null;
@@ -1184,7 +1184,7 @@ public class ClassInfo {
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
 	public MethodInfo getPublicMethod(Predicate<MethodInfo> filter) {
-		for (MethodInfo mi : _getPublicMethods())
+		for (var mi : _getPublicMethods())
 			if (test(filter, mi))
 				return mi;
 		return null;
@@ -1431,7 +1431,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if all specified flags are applicable to this class.
 	 */
 	public boolean isAll(ReflectFlags...flags) {
-		for (ReflectFlags f : flags) {
+		for (var f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isNotDeprecated())
@@ -1503,7 +1503,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this class is any of the specified types.
 	 */
 	public boolean isAny(Class<?>...types) {
-		for (Class<?> cc : types)
+		for (var cc : types)
 			if (is(cc))
 				return true;
 		return false;
@@ -1516,7 +1516,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if all specified flags are applicable to this class.
 	 */
 	public boolean isAny(ReflectFlags...flags) {
-		for (ReflectFlags f : flags) {
+		for (var f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isDeprecated())
@@ -1619,7 +1619,7 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this class is a child or the same as any of the <c>parents</c>.
 	 */
 	public boolean isChildOfAny(Class<?>...parents) {
-		for (Class<?> p : parents)
+		for (var p : parents)
 			if (isChildOf(p))
 				return true;
 		return false;
@@ -1943,13 +1943,13 @@ public class ClassInfo {
 			annotationProvider = AnnotationProvider.DEFAULT;
 		A x = null;
 		ClassInfo[] parents = _getParents();
-		for (ClassInfo parent : parents) {
+		for (var parent : parents) {
 			x = annotationProvider.lastAnnotation(type, parent.inner(), filter);
 			if (nn(x))
 				return x;
 		}
 		ClassInfo[] interfaces = _getInterfaces();
-		for (ClassInfo element : interfaces) {
+		for (var element : interfaces) {
 			x = annotationProvider.lastAnnotation(type, element.inner(), filter);
 			if (nn(x))
 				return x;
@@ -2019,7 +2019,7 @@ public class ClassInfo {
 	 * @return The class info on the unwrapped type, or just this type if this isn't one of the specified types.
 	 */
 	public ClassInfo unwrap(Class<?>...wrapperTypes) {
-		for (Class<?> wt : wrapperTypes) {
+		for (var wt : wrapperTypes) {
 			if (isParameterizedTypeOf(wt)) {
 				Type t = getFirstParameterType(wt);
 				if (nn(t))
@@ -2030,7 +2030,7 @@ public class ClassInfo {
 	}
 
 	private synchronized List<MethodInfo> _appendDeclaredMethods(List<MethodInfo> l) {
-		for (MethodInfo mi : _getDeclaredMethods())
+		for (var mi : _getDeclaredMethods())
 			l.add(mi);
 		return l;
 	}
@@ -2049,7 +2049,7 @@ public class ClassInfo {
 			if (nn(t))
 				return t;
 		}
-		for (ClassInfo c2 : _getInterfaces()) {
+		for (var c2 : _getInterfaces()) {
 			t = c2.getAnnotation(ap, a);
 			if (nn(t))
 				return t;
@@ -2101,7 +2101,7 @@ public class ClassInfo {
 				List<FieldInfo> l = list();
 				ClassInfo[] parents = _getAllParents();
 				for (int i = parents.length - 1; i >= 0; i--)
-					for (FieldInfo f : parents[i]._getDeclaredFields())
+					for (var f : parents[i]._getDeclaredFields())
 						l.add(f);
 				allFields = l.toArray(new FieldInfo[l.size()]);
 			}
@@ -2113,7 +2113,7 @@ public class ClassInfo {
 		if (allMethods == null) {
 			synchronized (this) {
 				List<MethodInfo> l = list();
-				for (ClassInfo c : _getAllParents())
+				for (var c : _getAllParents())
 					c._appendDeclaredMethods(l);
 				allMethods = l.toArray(new MethodInfo[l.size()]);
 			}
@@ -2164,7 +2164,7 @@ public class ClassInfo {
 			synchronized (this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
 				List<ConstructorInfo> l = listOfSize(cc.length);
-				for (Constructor<?> ccc : cc)
+				for (var ccc : cc)
 					l.add(getConstructorInfo(ccc));
 				l.sort(null);
 				declaredConstructors = l.toArray(new ConstructorInfo[l.size()]);
@@ -2178,7 +2178,7 @@ public class ClassInfo {
 			synchronized (this) {
 				Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
 				List<FieldInfo> l = listOfSize(ff.length);
-				for (Field f : ff)
+				for (var f : ff)
 					if (! "$jacocoData".equals(f.getName()))
 						l.add(getFieldInfo(f));
 				l.sort(null);
@@ -2207,7 +2207,7 @@ public class ClassInfo {
 			synchronized (this) {
 				Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
 				List<MethodInfo> l = listOfSize(mm.length);
-				for (Method m : mm)
+				for (var m : mm)
 					if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
 						l.add(getMethodInfo(m));
 				l.sort(null);
@@ -2222,10 +2222,10 @@ public class ClassInfo {
 		if (interfaces == null) {
 			synchronized (this) {
 				Set<ClassInfo> s = set();
-				for (ClassInfo ci : _getParents())
-					for (ClassInfo ci2 : ci._getDeclaredInterfaces()) {
+				for (var ci : _getParents())
+					for (var ci2 : ci._getDeclaredInterfaces()) {
 						s.add(ci2);
-						for (ClassInfo ci3 : ci2._getInterfaces())
+						for (var ci3 : ci2._getInterfaces())
 							s.add(ci3);
 					}
 				interfaces = s.toArray(new ClassInfo[s.size()]);
@@ -2255,7 +2255,7 @@ public class ClassInfo {
 			synchronized (this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
 				List<ConstructorInfo> l = listOfSize(cc.length);
-				for (Constructor<?> ccc : cc)
+				for (var ccc : cc)
 					l.add(getConstructorInfo(ccc));
 				l.sort(null);
 				publicConstructors = l.toArray(new ConstructorInfo[l.size()]);
@@ -2268,8 +2268,8 @@ public class ClassInfo {
 		if (publicFields == null) {
 			synchronized (this) {
 				Map<String,FieldInfo> m = map();
-				for (ClassInfo c : _getParents()) {
-					for (FieldInfo f : c._getDeclaredFields()) {
+				for (var c : _getParents()) {
+					for (var f : c._getDeclaredFields()) {
 						String fn = f.getName();
 						if (f.isPublic() && ! (m.containsKey(fn) || "$jacocoData".equals(fn)))
 							m.put(f.getName(), f);
@@ -2288,7 +2288,7 @@ public class ClassInfo {
 			synchronized (this) {
 				Method[] mm = c == null ? new Method[0] : c.getMethods();
 				List<MethodInfo> l = listOfSize(mm.length);
-				for (Method m : mm)
+				for (var m : mm)
 					if (m.getDeclaringClass() != Object.class)
 						l.add(getMethodInfo(m));
 				l.sort(null);

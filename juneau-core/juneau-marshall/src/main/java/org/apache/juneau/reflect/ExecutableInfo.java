@@ -96,7 +96,7 @@ public abstract class ExecutableInfo {
 	 * @return This object.
 	 */
 	public ExecutableInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
-		for (ParamInfo pi : _getParams())
+		for (var pi : _getParams())
 			if (test(filter, pi))
 				action.accept(pi);
 		return this;
@@ -113,7 +113,7 @@ public abstract class ExecutableInfo {
 	 * @return This object.
 	 */
 	public final <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		for (Annotation a : _getParameterAnnotations(index))
+		for (var a : _getParameterAnnotations(index))
 			if (type.isInstance(a))
 				consumeIf(predicate, consumer, type.cast(a));
 		return this;
@@ -132,7 +132,7 @@ public abstract class ExecutableInfo {
 	public final int fuzzyArgsMatch(Class<?>...argTypes) {
 		int matches = 0;
 		outer: for (ClassInfo pi : getParamTypes()) {
-			for (Class<?> a : argTypes) {
+			for (var a : argTypes) {
 				if (pi.isParentOfFuzzyPrimitives(a)) {
 					matches++;
 					continue outer;
@@ -156,7 +156,7 @@ public abstract class ExecutableInfo {
 	public final int fuzzyArgsMatch(ClassInfo...argTypes) {
 		int matches = 0;
 		outer: for (ClassInfo pi : getParamTypes()) {
-			for (ClassInfo a : argTypes) {
+			for (var a : argTypes) {
 				if (pi.isParentOfFuzzyPrimitives(a)) {
 					matches++;
 					continue outer;
@@ -180,7 +180,7 @@ public abstract class ExecutableInfo {
 	public final int fuzzyArgsMatch(Object...argTypes) {
 		int matches = 0;
 		outer: for (ClassInfo pi : getParamTypes()) {
-			for (Object a : argTypes) {
+			for (var a : argTypes) {
 				if (pi.canAcceptArg(a)) {
 					matches++;
 					continue outer;
@@ -402,9 +402,9 @@ public abstract class ExecutableInfo {
 		ClassInfo[] pt = _getParameterTypes();
 		if (pt.length != args.length)
 			return false;
-		for (ClassInfo element : pt) {
+		for (var element : pt) {
 			boolean matched = false;
-			for (Class<?> arg : args)
+			for (var arg : args)
 				if (element.isParentOfFuzzyPrimitives(arg))
 					matched = true;
 			if (! matched)
@@ -423,9 +423,9 @@ public abstract class ExecutableInfo {
 		ClassInfo[] pt = _getParameterTypes();
 		if (pt.length != args.length)
 			return false;
-		for (ClassInfo element : pt) {
+		for (var element : pt) {
 			boolean matched = false;
-			for (ClassInfo arg : args)
+			for (var arg : args)
 				if (element.isParentOfFuzzyPrimitives(arg.inner()))
 					matched = true;
 			if (! matched)
@@ -461,7 +461,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has one of the names.
 	 */
 	public final boolean hasName(String...names) {
-		for (String n : names)
+		for (var n : names)
 			if (getSimpleName().equals(n))
 				return true;
 		return false;
@@ -562,7 +562,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if all specified flags are applicable to this method.
 	 */
 	public final boolean isAll(ReflectFlags...flags) {
-		for (ReflectFlags f : flags) {
+		for (var f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isNotDeprecated())
@@ -626,7 +626,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if all specified flags are applicable to this method.
 	 */
 	public final boolean isAny(ReflectFlags...flags) {
-		for (ReflectFlags f : flags) {
+		for (var f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isDeprecated())

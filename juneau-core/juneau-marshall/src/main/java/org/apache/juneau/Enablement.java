@@ -84,7 +84,7 @@ public enum Enablement {
 	 * @return <jk>true</jk> if this enum is one of the specified values.
 	 */
 	public boolean isOneOf(Enablement...values) {
-		for (Enablement v : values)
+		for (var v : values)
 			if (this == v)
 				return true;
 		return false;

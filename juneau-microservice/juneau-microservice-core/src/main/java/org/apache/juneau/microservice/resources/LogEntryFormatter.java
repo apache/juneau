@@ -52,7 +52,7 @@ public class LogEntryFormatter extends Formatter {
 	private static String hashCode(Throwable t) {
 		int i = 0;
 		while (nn(t)) {
-			for (StackTraceElement e : t.getStackTrace())
+			for (var e : t.getStackTrace())
 				i ^= e.hashCode();
 			t = t.getCause();
 		}

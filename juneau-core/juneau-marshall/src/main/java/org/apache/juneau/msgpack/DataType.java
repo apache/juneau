@@ -73,7 +73,7 @@ enum DataType {
 	// @formatter:on
 
 	boolean isOneOf(DataType...dataTypes) {
-		for (DataType dt : dataTypes)
+		for (var dt : dataTypes)
 			if (this == dt)
 				return true;
 		return false;

@@ -175,7 +175,7 @@ public enum XmlFormat {
 	 * @return <jk>true</jk> if this format is one of those specified.
 	 */
 	public boolean isOneOf(XmlFormat...formats) {
-		for (XmlFormat format : formats)
+		for (var format : formats)
 			if (format == this)
 				return true;
 		return false;

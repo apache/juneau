@@ -682,7 +682,7 @@ public class SerializerSession extends BeanTraverseSession {
 	private static boolean isSortable(Collection<?> c) {
 		if (c == null)
 			return false;
-		for (Object o : c)
+		for (var o : c)
 			if (! (o instanceof Comparable))
 				return false;
 		return true;

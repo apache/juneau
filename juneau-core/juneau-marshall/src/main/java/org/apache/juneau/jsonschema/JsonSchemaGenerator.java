@@ -921,7 +921,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return <jk>true</jk> if the specified type is ignored.
 	 */
 	public boolean isIgnoredType(ClassMeta<?> cm) {
-		for (Pattern p : ignoreTypePatterns)
+		for (var p : ignoreTypePatterns)
 			if (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
 				return true;
 		return false;

@@ -2480,7 +2480,7 @@ public class HttpPartSchema {
 		}
 
 		private static Long firstNmo(Long...l) {
-			for (Long ll : l)
+			for (var ll : l)
 				if (nn(ll) && ll != -1)
 					return ll;
 			return null;
@@ -2509,7 +2509,7 @@ public class HttpPartSchema {
 		}
 
 		private static String joinnlOrNull(String[]...s) {
-			for (String[] ss : s)
+			for (var ss : s)
 				if (ss.length > 0)
 					return StringUtils.joinnl(ss);
 			return null;
@@ -3545,7 +3545,7 @@ public class HttpPartSchema {
 
 	final static Number toNumber(String...s) {
 		try {
-			for (String ss : s)
+			for (var ss : s)
 				if (isNotEmpty(ss))
 					return parseNumber(ss, Number.class);
 			return null;
@@ -3568,14 +3568,14 @@ public class HttpPartSchema {
 
 	final static Set<String> toSet(String[]...s) {
 		boolean isNotEmpty = false;
-		for (String[] ss : s)
+		for (var ss : s)
 			isNotEmpty |= ss.length > 0;
 		if (! isNotEmpty)
 			return null;
 		Set<String> set = set();
-		for (String[] ss : s)
+		for (var ss : s)
 			if (nn(ss))
-				for (String ss2 : ss)
+				for (var ss2 : ss)
 					StringUtils.split(ss2, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}
@@ -4422,7 +4422,7 @@ public class HttpPartSchema {
 		String[] parts = x.split("\\.");
 		if (parts.length != 4)
 			return false;
-		for (String part : parts) {
+		for (var part : parts) {
 			try {
 				int val = Integer.parseInt(part);
 				if (val < 0 || val > 255)
@@ -4587,7 +4587,7 @@ public class HttpPartSchema {
 	private boolean isValidUniqueItems(Collection<?> x) {
 		if (uniqueItems && ! (x instanceof Set)) {
 			var s = new HashSet<>();
-			for (Object o : x)
+			for (var o : x)
 				if (! s.add(o))
 					return false;
 		}

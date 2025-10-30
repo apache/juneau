@@ -147,7 +147,7 @@ public class DateUtils {
 		if (StringUtils.isEmpty(pattern))
 			return DateTimeFormatter.ISO_INSTANT;
 		try {
-			for (Field f : DateTimeFormatter.class.getFields()) {
+			for (var f : DateTimeFormatter.class.getFields()) {
 				if (f.getName().equals(pattern)) {
 					return (DateTimeFormatter)f.get(null);
 				}

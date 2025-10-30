@@ -169,7 +169,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
 		vs = copyFrom.vs;
-		for (String n : names)
+		for (var n : names)
 			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(this::add);
 	}
 
@@ -185,7 +185,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders add(Header...headers) {
 		assertArgNotNull("headers", headers);
-		for (Header h : headers)
+		for (var h : headers)
 			if (nn(h))
 				add(h.getName(), h.getValue());
 		return this;
@@ -232,7 +232,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders addDefault(List<Header> pairs) {
 		assertArgNotNull("pairs", pairs);
-		for (Header p : pairs) {
+		for (var p : pairs) {
 			String name = p.getName();
 			Stream<RequestHeader> l = stream(name);
 			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
@@ -284,7 +284,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public boolean containsAny(String...names) {
 		assertArgNotNull("names", names);
-		for (String n : names)
+		for (var n : names)
 			if (stream(n).findAny().isPresent())
 				return true;
 		return false;
@@ -438,9 +438,9 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders set(Header...headers) {
 		assertArgNotNull("headers", headers);
-		for (Header h : headers)
+		for (var h : headers)
 			remove(h);
-		for (Header h : headers)
+		for (var h : headers)
 			add(h);
 		return this;
 	}
@@ -488,7 +488,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	@Override /* Overridden from Object */
 	public String toString() {
 		JsonMap m = new JsonMap();
-		for (String n : getNames())
+		for (var n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();
 	}

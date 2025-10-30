@@ -1300,7 +1300,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		private static String joinnlFirstNonEmptyArray(String[]...s) {
-			for (String[] ss : s)
+			for (var ss : s)
 				if (ss.length > 0)
 					return joinnl(ss);
 			return null;

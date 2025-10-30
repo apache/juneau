@@ -168,7 +168,7 @@ public class BeanMeta<T> {
 				if (nn(s))
 					return s;
 			}
-			for (Class<?> icm : cm.innerClass.getInterfaces()) {
+			for (var icm : cm.innerClass.getInterfaces()) {
 				String s = findDictionaryName(ctx.getClassMeta(icm));
 				if (nn(s))
 					return s;
@@ -348,7 +348,7 @@ public class BeanMeta<T> {
 					else
 						bi = Introspector.getBeanInfo(c2, null);
 					if (nn(bi)) {
-						for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
+						for (var pd : bi.getPropertyDescriptors()) {
 							String name = pd.getName();
 							if (! normalProps.containsKey(name))
 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
@@ -444,7 +444,7 @@ public class BeanMeta<T> {
 				});
 
 				// Mark constructor arg properties.
-				for (String fp : constructorArgs) {
+				for (var fp : constructorArgs) {
 					BeanPropertyMeta.Builder m = normalProps.get(fp);
 					if (m == null)
 						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Beanc(properties=X) annotation but was not found on the class definition.", fp);
@@ -508,7 +508,7 @@ public class BeanMeta<T> {
 
 				if (nn(pNames)) {
 					Map<String,BeanPropertyMeta> properties2 = map();
-					for (String k : pNames) {
+					for (var k : pNames) {
 						if (properties.containsKey(k))
 							properties2.put(k, properties.get(k));
 						else
@@ -592,7 +592,7 @@ public class BeanMeta<T> {
 		List<BeanMethod> l = new LinkedList<>();
 
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
-			for (MethodInfo m : c2.getDeclaredMethods()) {
+			for (var m : c2.getDeclaredMethods()) {
 				if (m.isStatic() || m.isBridge() || m.getParamCount() > 2 || m.hasAnnotation(ctx, BeanIgnore.class))
 					continue;
 				Transient t = m.getAnnotation(ctx, Transient.class);
@@ -753,7 +753,7 @@ public class BeanMeta<T> {
 	static final void findTypeVarImpls(Type t, Map<Class<?>,Class<?>[]> m) {
 		if (t instanceof Class<?> c) {
 			findTypeVarImpls(c.getGenericSuperclass(), m);
-			for (Type ci : c.getGenericInterfaces())
+			for (var ci : c.getGenericInterfaces())
 				findTypeVarImpls(ci, m);
 		} else if (t instanceof ParameterizedType pt) {
 			Type rt = pt.getRawType();
@@ -765,7 +765,7 @@ public class BeanMeta<T> {
 					if (gt instanceof Class<?> c)
 						gTypes[i] = c;
 					else if (gt instanceof TypeVariable<?> tv) {
-						for (Type upperBound : tv.getBounds())
+						for (var upperBound : tv.getBounds())
 							if (upperBound instanceof Class)
 								gTypes[i] = (Class<?>)upperBound;
 					}
@@ -802,7 +802,7 @@ public class BeanMeta<T> {
 
 		while (nn(sc) && ! sc.is(stopClass) && ! sc.is(Object.class)) {
 			// Look for a method with the same signature in the parent class
-			for (MethodInfo parentMethod : sc.getDeclaredMethods()) {
+			for (var parentMethod : sc.getDeclaredMethods()) {
 				if (parentMethod.getSimpleName().equals(methodName) && paramTypes.size() == parentMethod.getParamTypes().size()) {
 
 					// Check if parameter types match
@@ -931,7 +931,7 @@ public class BeanMeta<T> {
 	 * @return The result of the function.  Never <jk>null</jk>.
 	 */
 	public <T2> Optional<T2> firstProperty(Predicate<BeanPropertyMeta> filter, Function<BeanPropertyMeta,T2> function) {
-		for (BeanPropertyMeta x : propertyArray)
+		for (var x : propertyArray)
 			if (test(filter, x))
 				return Optional.ofNullable(function.apply(x));
 		return Optional.empty();
@@ -944,7 +944,7 @@ public class BeanMeta<T> {
 	 * @param action The action to apply.
 	 */
 	public void forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
-		for (BeanPropertyMeta x : propertyArray)
+		for (var x : propertyArray)
 			if (test(filter, x))
 				action.accept(x);
 	}
@@ -1032,7 +1032,7 @@ public class BeanMeta<T> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder(c.getName());
 		sb.append(" {\n");
-		for (BeanPropertyMeta pm : propertyArray)
+		for (var pm : propertyArray)
 			sb.append('\t').append(pm.toString()).append(",\n");
 		sb.append('}');
 		return sb.toString();

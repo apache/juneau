@@ -101,7 +101,7 @@ public class ObjectMerger {
 		public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {
 			Object r = null;
 			boolean isGetter = args == null && method.getReturnType() != Void.class;
-			for (Object pojo : pojos) {
+			for (var pojo : pojos) {
 				if (nn(pojo)) {
 					try {
 						r = method.invoke(pojo, args);

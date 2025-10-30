@@ -155,10 +155,10 @@ public class ParserSet {
 		 */
 		public Builder add(Class<?>...values) {
 			List<Object> l = list();
-			for (Class<?> v : values)
+			for (var v : values)
 				if (v.getSimpleName().equals("NoInherit"))
 					clear();
-			for (Class<?> v : values) {
+			for (var v : values) {
 				if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else if (! v.getSimpleName().equals("NoInherit")) {
@@ -225,7 +225,7 @@ public class ParserSet {
 		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one parser builder in this group.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			for (Object o : entries)
+			for (var o : entries)
 				if (o instanceof Parser.Builder)
 					if (((Parser.Builder)o).canApply(work))
 						return true;
@@ -343,7 +343,7 @@ public class ParserSet {
 		 */
 		public Builder set(Class<?>...values) {
 			List<Object> l = list();
-			for (Class<?> v : values) {
+			for (var v : values) {
 				if (v.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
 				} else if (Parser.class.isAssignableFrom(v)) {
@@ -476,7 +476,7 @@ public class ParserSet {
 
 		List<MediaType> lmt = list();
 		List<Parser> l = list();
-		for (Parser e : entries) {
+		for (var e : entries) {
 			e.getMediaTypes().forEach(x -> {
 				lmt.add(x);
 				l.add(e);

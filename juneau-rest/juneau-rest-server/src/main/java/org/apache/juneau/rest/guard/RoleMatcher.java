@@ -69,13 +69,13 @@ public class RoleMatcher {
 
 		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
-			for (Exp clause : clauses)
+			for (var clause : clauses)
 				clause.appendTokens(set);
 		}
 
 		@Override /* Overridden from Exp */
 		boolean matches(Set<String> roles) {
-			for (Exp e : clauses)
+			for (var e : clauses)
 				if (! e.matches(roles))
 					return false;
 			return true;
@@ -101,7 +101,7 @@ public class RoleMatcher {
 
 		@Override /* Overridden from Exp */
 		boolean matches(Set<String> roles) {
-			for (String role : roles)
+			for (var role : roles)
 				if (operand.equals(role))
 					return true;
 			return false;
@@ -136,7 +136,7 @@ public class RoleMatcher {
 
 		@Override /* Overridden from Exp */
 		boolean matches(Set<String> roles) {
-			for (String role : roles)
+			for (var role : roles)
 				if (p.matcher(role).matches())
 					return true;
 			return false;
@@ -169,13 +169,13 @@ public class RoleMatcher {
 
 		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
-			for (Exp clause : clauses)
+			for (var clause : clauses)
 				clause.appendTokens(set);
 		}
 
 		@Override
 		boolean matches(Set<String> roles) {
-			for (Exp e : clauses)
+			for (var e : clauses)
 				if (e.matches(roles))
 					return true;
 			return false;

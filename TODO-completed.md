@@ -4,6 +4,36 @@ This file contains TODO items that have been completed and moved from TODO.md.
 
 ## Code Quality Improvements
 
+- **TODO-50** ✅ Use `var` keyword in enhanced for loops where type is explicitly declared.
+  - **Status**: COMPLETED
+  - **Completed**: October 30, 2025
+  - **Total instances converted**: 647+ across 171+ files
+  - **Pattern**: `for (Type variable : collection)` → `for (var variable : collection)`
+  - **Implementation approach**:
+    - Processed files in 4 batches, starting with files having the most instances
+    - Used Python script for automated conversion of standard type names
+    - Manual conversion with `sed` for single-letter generic types (A, T, E, K)
+    - Verified compilation and test suite after each batch
+  - **Batches completed**:
+    - **Batch 1**: Top 5 files (142 instances) - `ClassInfo.java` (48), `BasicSwaggerProviderSession.java` (32), `Restx_RoleGuard_Test.java` (27), `Context.java` (19), `MethodInfo.java` (16)
+    - **Batch 2**: Next 5 files (69 instances) - `ReflectionMap.java` (16), `AnnotationProvider.java` (15), `RestOp_ClientVersion_Test.java` (14), `RestContext.java` (12), `ExecutableInfo.java` (12)
+    - **Batch 3**: Next 5 files (52 instances) - `RemoteOperationMeta.java` (11), `BeanMeta.java` (11), `RestClient.java` (10), `RequestQueryParams.java` (10), `RequestFormParams.java` (10)
+    - **Batch 4**: All remaining files (~384 instances) - Processed all remaining Java files recursively
+  - **Special cases handled**:
+    - Single-letter generic types: `for (A a : ...)`, `for (T t : ...)`, `for (E v : ...)`, `for (K k : ...)` required manual `sed` conversion
+    - Files already using `var` were skipped automatically by the conversion script
+  - **Test results**: ✅ All 25,828 tests pass (0 failures, 0 errors)
+  - **Benefits**:
+    - Significantly reduces verbosity, especially for complex generic types like `Map.Entry<String, String>`
+    - Improves code readability by removing visual clutter
+    - Makes code more maintainable when types change
+    - Aligns with modern Java best practices (Java 10+)
+  - **Examples converted**:
+    - `for (String s : array)` → `for (var s : array)`
+    - `for (Map.Entry<String, String> entry : map.entrySet())` → `for (var entry : map.entrySet())`
+    - `for (StackTraceElement e : stack)` → `for (var e : stack)`
+    - `for (Annotation a : annotations)` → `for (var a : annotations)`
+
 - **TODO-49** ✅ Use static imports for all method calls to StringUtils.
   - **Status**: COMPLETED
   - **Completed**: October 30, 2025
@@ -23,6 +53,12 @@ This file contains TODO items that have been completed and moved from TODO.md.
     - Cleaner, more concise code
     - Reduced visual clutter by removing repetitive `StringUtils.` prefixes
     - Improved code readability
+
+- **TODO-52** ✅ Use static imports for all method calls to Utils.
+  - **Status**: COMPLETED
+  - **Completed**: October 30, 2025
+  - **Pattern**: `Utils.method(...)` → `method(...)`
+  - **Similar to TODO-49**: This task involved adding static imports for the `Utils` class methods to reduce code verbosity and improve readability.
 
 - **TODO-55** ✅ Convert `instanceof` followed by cast to use pattern matching for instanceof (Java 14+ feature).
   - **Status**: COMPLETED

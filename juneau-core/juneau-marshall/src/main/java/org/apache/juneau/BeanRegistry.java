@@ -62,7 +62,7 @@ public class BeanRegistry {
 		beanContext.getBeanDictionary().forEach(this::addClass);
 		if (nn(parent))
 			parent.map.forEach(this::addToMap);
-		for (Class<?> c : classes)
+		for (var c : classes)
 			addClass(c);
 		isEmpty = map.isEmpty();
 	}

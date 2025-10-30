@@ -62,7 +62,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void a01a_onClass_simple() throws Exception {
 		var a1 = MockRestClient.buildLax(A1.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			a1.request(op).roles("foo").run().assertStatus(200);
 			a1.request(op).roles("foo","bar").run().assertStatus(200);
 			a1.request(op).roles("bar","foo").run().assertStatus(200);
@@ -103,7 +103,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void a02a_onMethod_simple() throws Exception {
 		var a2 = MockRestClient.buildLax(A2.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			a2.request(op).roles("foo").run().assertStatus(200);
 			a2.request(op).roles("foo","bar").run().assertStatus(200);
 			a2.request(op).roles("bar","foo").run().assertStatus(200);
@@ -144,7 +144,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void a03a_onBoth_simple() throws Exception {
 		var a3 = MockRestClient.buildLax(A3.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			a3.request(op).roles("foo","bar").run().assertStatus(200);
 			a3.request(op).roles("bar","foo").run().assertStatus(200);
 			a3.request(op).roles("bar","foo","baz").run().assertStatus(200);
@@ -216,7 +216,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void a04a_inheritence_simple() throws Exception {
 		var a4 = MockRestClient.buildLax(A4b.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			a4.request(op).roles("foo","bar","baz","qux").run().assertStatus(200);
 			a4.request(op).roles("foo","bar","baz","qux","quux").run().assertStatus(200);
 			a4.request(op).roles("foo","bar","baz").run().assertStatus(403);
@@ -260,7 +260,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b01a_orsWithComma_pass() throws Exception {
 		var b1a = MockRestClient.buildLax(B1a.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b1a.request(op).roles("foo").run().assertStatus(200);
 			b1a.request(op).roles("bar").run().assertStatus(200);
 			b1a.request(op).roles("foo","bar").run().assertStatus(200);
@@ -276,7 +276,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b01b_orsWithSinglePipe_pass() throws Exception {
 		var b1b = MockRestClient.buildLax(B1b.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b1b.request(op).roles("foo").run().assertStatus(200);
 			b1b.request(op).roles("bar").run().assertStatus(200);
 			b1b.request(op).roles("foo","bar").run().assertStatus(200);
@@ -292,7 +292,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b01c_orsWithDoublePipe_pass() throws Exception {
 		var b1c = MockRestClient.buildLax(B1c.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b1c.request(op).roles("foo").run().assertStatus(200);
 			b1c.request(op).roles("bar").run().assertStatus(200);
 			b1c.request(op).roles("foo","bar").run().assertStatus(200);
@@ -308,7 +308,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b01d_andsWithSingleAmp_pass() throws Exception {
 		var b1d = MockRestClient.buildLax(B1d.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b1d.request(op).roles("foo","bar").run().assertStatus(200);
 			b1d.request(op).roles("foo","bar","baz").run().assertStatus(200);
 			b1d.request(op).roles().run().assertStatus(403);
@@ -324,7 +324,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b01e_andsWithDoubleAmp_pass() throws Exception {
 		var b1e = MockRestClient.buildLax(B1e.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b1e.request(op).roles("foo","bar").run().assertStatus(200);
 			b1e.request(op).roles("foo","bar","baz").run().assertStatus(200);
 			b1e.request(op).roles().run().assertStatus(403);
@@ -340,7 +340,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b01f_andsWithDoubleAmpAndParens_pass() throws Exception {
 		var b1f = MockRestClient.buildLax(B1f.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b1f.request(op).roles("foo","bar").run().assertStatus(200);
 			b1f.request(op).roles("foo","bar","baz").run().assertStatus(200);
 			b1f.request(op).roles().run().assertStatus(403);
@@ -356,7 +356,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b01g_complex_pass() throws Exception {
 		var b1g = MockRestClient.buildLax(B1g.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b1g.request(op).roles("foo","bar").run().assertStatus(200);
 			b1g.request(op).roles("foo","baz").run().assertStatus(200);
 			b1g.request(op).roles("foo","bar","baz").run().assertStatus(200);
@@ -373,7 +373,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b01h_complex_pass() throws Exception {
 		var b1h = MockRestClient.buildLax(B1h.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b1h.request(op).roles("foo").run().assertStatus(200);
 			b1h.request(op).roles("bar","baz").run().assertStatus(200);
 			b1h.request(op).roles("foo","bar","baz").run().assertStatus(200);
@@ -414,7 +414,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b02a_orsWithComma_pass() throws Exception {
 		var b2a = MockRestClient.buildLax(B2a.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b2a.request(op).roles("foo").run().assertStatus(200);
 			b2a.request(op).roles("bar").run().assertStatus(200);
 			b2a.request(op).roles("foo","bar").run().assertStatus(200);
@@ -451,7 +451,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b02b_orsWithSinglePipe_pass() throws Exception {
 		var b2b = MockRestClient.buildLax(B2b.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b2b.request(op).roles("foo").run().assertStatus(200);
 			b2b.request(op).roles("bar").run().assertStatus(200);
 			b2b.request(op).roles("foo","bar").run().assertStatus(200);
@@ -488,7 +488,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b02c_orsWithDoublePipe_pass() throws Exception {
 		var b2c = MockRestClient.buildLax(B2c.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b2c.request(op).roles("foo").run().assertStatus(200);
 			b2c.request(op).roles("bar").run().assertStatus(200);
 			b2c.request(op).roles("foo","bar").run().assertStatus(200);
@@ -525,7 +525,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b02d_andsWithSingleAmp_pass() throws Exception {
 		var b2d = MockRestClient.buildLax(B2d.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b2d.request(op).roles("foo","bar").run().assertStatus(200);
 			b2d.request(op).roles("foo","bar","baz").run().assertStatus(200);
 			b2d.request(op).roles().run().assertStatus(403);
@@ -562,7 +562,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void b02e_andsWithDoubleAmp_pass() throws Exception {
 		var b2e = MockRestClient.buildLax(B2e.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			b2e.request(op).roles("foo","bar").run().assertStatus(200);
 			b2e.request(op).roles("foo","bar","baz").run().assertStatus(200);
 			b2e.request(op).roles().run().assertStatus(403);
@@ -661,7 +661,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void c01a_orPatternsWithComma_pass() throws Exception {
 		var c1a = MockRestClient.buildLax(C1a.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			c1a.request(op).roles("foo").run().assertStatus(200);
 			c1a.request(op).roles("bar").run().assertStatus(200);
 			c1a.request(op).roles("foo","bar").run().assertStatus(200);
@@ -677,7 +677,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void c01b_orPatternsWithSinglePipe_pass() throws Exception {
 		var c1b = MockRestClient.buildLax(C1b.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			c1b.request(op).roles("foo").run().assertStatus(200);
 			c1b.request(op).roles("bar").run().assertStatus(200);
 			c1b.request(op).roles("foo","bar").run().assertStatus(200);
@@ -693,7 +693,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void c01c_orPatternsWithDoublePipe_pass() throws Exception {
 		var c1c = MockRestClient.buildLax(C1c.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			c1c.request(op).roles("foo").run().assertStatus(200);
 			c1c.request(op).roles("bar").run().assertStatus(200);
 			c1c.request(op).roles("foo","bar").run().assertStatus(200);
@@ -709,7 +709,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void c01d_andPatternsWithSingleAmp_pass() throws Exception {
 		var c1d = MockRestClient.buildLax(C1d.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			c1d.request(op).roles("foo","bar").run().assertStatus(200);
 			c1d.request(op).roles("foo","bar","baz").run().assertStatus(200);
 			c1d.request(op).roles().run().assertStatus(403);
@@ -725,7 +725,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void c01e_andPatternsWithDoubleAmp_pass() throws Exception {
 		var c1e = MockRestClient.buildLax(C1e.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			c1e.request(op).roles("foo","bar").run().assertStatus(200);
 			c1e.request(op).roles("foo","bar","baz").run().assertStatus(200);
 			c1e.request(op).roles().run().assertStatus(403);
@@ -741,7 +741,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void c01f_andPatternsWithDoubleAmpAndParens_pass() throws Exception {
 		var c1f = MockRestClient.buildLax(C1f.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			c1f.request(op).roles("foo","bar").run().assertStatus(200);
 			c1f.request(op).roles("foo","bar","baz").run().assertStatus(200);
 			c1f.request(op).roles().run().assertStatus(403);
@@ -757,7 +757,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void c01g_complexPatterns_pass() throws Exception {
 		var c1g = MockRestClient.buildLax(C1g.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			c1g.request(op).roles("foo","bar").run().assertStatus(200);
 			c1g.request(op).roles("foo","baz").run().assertStatus(200);
 			c1g.request(op).roles("foo","bar","baz").run().assertStatus(200);
@@ -774,7 +774,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void c01h_complexPatterns_pass() throws Exception {
 		var c1h = MockRestClient.buildLax(C1h.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			c1h.request(op).roles("foo").run().assertStatus(200);
 			c1h.request(op).roles("bar","baz").run().assertStatus(200);
 			c1h.request(op).roles("foo","bar","baz").run().assertStatus(200);
@@ -815,7 +815,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void c02a_orPatternsWithComma_pass() throws Exception {
 		var c2a = MockRestClient.buildLax(C2a.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			c2a.request(op).roles("foo").run().assertStatus(200);
 			c2a.request(op).roles("bar").run().assertStatus(200);
 			c2a.request(op).roles("foo","bar").run().assertStatus(200);
@@ -983,7 +983,7 @@ class Restx_RoleGuard_Test extends TestBase {
 	@Test void d01_patternsWithoutRoles() throws Exception {
 		var d = MockRestClient.buildLax(D.class);
 
-		for (RestOperation op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
+		for (var op : ops(op("get","/a"),op("get","/b"),op("put","/c"),op("post","/d"),op("delete","/e"))) {
 			d.request(op).roles().run().assertStatus(403);
 			d.request(op).roles("foo").run().assertStatus(403);
 			d.request(op).roles("bar").run().assertStatus(403);

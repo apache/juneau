@@ -57,7 +57,7 @@ public class RestMatcherList {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestMatcher>...values) {
-			for (Class<? extends RestMatcher> v : values)
+			for (var v : values)
 				entries.add(beanStore().createBean(RestMatcher.class).type(v));
 			return this;
 		}
@@ -69,7 +69,7 @@ public class RestMatcherList {
 		 * @return This object.
 		 */
 		public Builder append(RestMatcher...values) {
-			for (RestMatcher v : values)
+			for (var v : values)
 				entries.add(beanStore().createBean(RestMatcher.class).impl(v));
 			return this;
 		}

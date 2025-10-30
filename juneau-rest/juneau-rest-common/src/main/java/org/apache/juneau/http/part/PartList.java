@@ -167,7 +167,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList append(NameValuePair...values) {
 		if (nn(values))
-			for (NameValuePair value : values)
+			for (var value : values)
 				append(value);
 		return this;
 	}
@@ -331,7 +331,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 
 		NameValuePair first = null;
 		List<NameValuePair> rest = null;
-		for (NameValuePair x : this) {
+		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -351,7 +351,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 
 		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
-		for (NameValuePair element : rest) {
+		for (var element : rest) {
 			sb.append(',');
 			sb.append(element.getValue());
 		}
@@ -389,7 +389,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 
 		NameValuePair first = null;
 		List<NameValuePair> rest = null;
-		for (NameValuePair x : this) {
+		for (var x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -409,7 +409,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 
 		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
-		for (NameValuePair element : rest) {
+		for (var element : rest) {
 			sb.append(',');
 			sb.append(element.getValue());
 		}
@@ -617,7 +617,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList remove(NameValuePair...values) {
-		for (NameValuePair value : values)
+		for (var value : values)
 			remove(value);
 		return this;
 	}
@@ -641,7 +641,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList remove(String...names) {
 		if (nn(names))
-			for (String name : names)
+			for (var name : names)
 				remove(name);
 		return this;
 	}
@@ -704,7 +704,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	public PartList set(List<NameValuePair> values) {
 
 		if (nn(values)) {
-			for (NameValuePair h : values) {
+			for (var h : values) {
 				if (nn(h)) {
 					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
 						var x = get(i2);
@@ -716,7 +716,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 				}
 			}
 
-			for (NameValuePair x : values) {
+			for (var x : values) {
 				if (nn(x)) {
 					add(x);
 				}

@@ -39,7 +39,7 @@ class RestClient_Body_Test extends TestBase {
 	public static class A extends BasicRestObject {
 		@RestPost
 		public Reader post(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) throws IOException {
-			for (RequestHeader e : req.getHeaders())
+			for (var e : req.getHeaders())
 				res.addHeader("X-" + e.getName(), e.getValue());
 			return req.getReader();
 		}

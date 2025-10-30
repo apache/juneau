@@ -124,7 +124,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 			if (cm == null)
 				return false;
 			if (cm.isCollection()) {
-				for (Object o2 : (Collection)o)
+				for (var o2 : (Collection)o)
 					if (matches(o2))
 						return true;
 				return false;
@@ -166,7 +166,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 			ClassMeta<?> cm = bs.getClassMetaForObject(o);
 			if (cm.isMapOrBean()) {
 				Map m = cm.isMap() ? (Map)o : bs.toBeanMap(o);
-				for (Map.Entry<String,ColumnMatcher> e : entryMatchers.entrySet()) {
+				for (var e : entryMatchers.entrySet()) {
 					String key = e.getKey();
 					Object val = null;
 					if (m instanceof BeanMap) {
@@ -180,7 +180,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 				return true;
 			}
 			if (cm.isCollection()) {
-				for (Object o2 : (Collection)o)
+				for (var o2 : (Collection)o)
 					if (! matches(o2))
 						return false;
 				return true;

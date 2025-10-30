@@ -135,7 +135,7 @@ public class MediaRanges {
 	 * @return This object.
 	 */
 	public MediaRanges forEachRange(Consumer<MediaRange> action) {
-		for (MediaRange r : ranges)
+		for (var r : ranges)
 			action.accept(r);
 		return this;
 	}
@@ -165,7 +165,7 @@ public class MediaRanges {
 	 */
 	public boolean hasSubtypePart(String part) {
 
-		for (MediaRange mr : ranges)
+		for (var mr : ranges)
 			if (mr.getQValue() > 0 && mr.getSubTypes().indexOf(part) >= 0)
 				return true;
 
@@ -199,7 +199,7 @@ public class MediaRanges {
 
 		// Media ranges are ordered by 'q'.
 		// So we only need to search until we've found a match.
-		for (MediaRange mr : ranges) {
+		for (var mr : ranges) {
 			float q2 = mr.getQValue();
 
 			if (q2 < q || q2 == 0)

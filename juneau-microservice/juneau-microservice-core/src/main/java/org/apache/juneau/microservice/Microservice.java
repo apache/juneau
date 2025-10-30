@@ -281,7 +281,7 @@ public class Microservice implements ConfigEventListener {
 		@SuppressWarnings("unchecked")
 		public Builder consoleCommands(Class<? extends ConsoleCommand>...consoleCommands) throws ExecutableException {
 			try {
-				for (Class<? extends ConsoleCommand> cc : consoleCommands)
+				for (var cc : consoleCommands)
 					this.consoleCommands.add(cc.getDeclaredConstructor().newInstance());
 			} catch (Exception e) {
 				throw new ExecutableException(e);
@@ -608,7 +608,7 @@ public class Microservice implements ConfigEventListener {
 		if (config == null) {
 			var store = builder.configStore;
 			var cfs = workingDir == null ? FileStore.DEFAULT : FileStore.create().directory(workingDir).build();
-			for (String name : getCandidateConfigNames()) {
+			for (var name : getCandidateConfigNames()) {
 				if (nn(store)) {
 					if (store.exists(name)) {
 						configBuilder.store(store).name(name);
@@ -641,10 +641,10 @@ public class Microservice implements ConfigEventListener {
 			this.consoleReader = firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
 			this.consoleWriter = firstNonNull(builder.consoleWriter, c == null ? new PrintWriter(System.out, true) : c.writer());
 
-			for (ConsoleCommand cc : builder.consoleCommands) {
+			for (var cc : builder.consoleCommands) {
 				consoleCommandMap.put(cc.getName(), cc);
 			}
-			for (String s : config.get("Console/commands").asStringArray().orElse(new String[0])) {
+			for (var s : config.get("Console/commands").asStringArray().orElse(new String[0])) {
 				try {
 					var cc = (ConsoleCommand)Class.forName(s).getDeclaredConstructor().newInstance();
 					consoleCommandMap.put(cc.getName(), cc);
@@ -659,7 +659,7 @@ public class Microservice implements ConfigEventListener {
 					var out = getConsoleWriter();
 
 					out.println(messages.getString("ListOfAvailableCommands"));
-					for (ConsoleCommand cc : new TreeMap<>(getConsoleCommands()).values())
+					for (var cc : new TreeMap<>(getConsoleCommands()).values())
 						out.append("\t").append(cc.getName()).append(" -- ").append(cc.getInfo()).println();
 					out.println();
 
@@ -739,7 +739,7 @@ public class Microservice implements ConfigEventListener {
 		var sw = new StringWriter();
 		var l = list();
 		l.add(command);
-		for (Object a : args)
+		for (var a : args)
 			l.add(s(a));
 		var args2 = new Args(l.toArray(new String[l.size()]));
 		try (var in = new Scanner(input); var out = new PrintWriter(sw)) {
@@ -944,7 +944,7 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		var spKeys = config.getKeys("SystemProperties");
 		if (nn(spKeys))
-			for (String key : spKeys)
+			for (var key : spKeys)
 				System.setProperty(key, config.get("SystemProperties/" + key).orElse(null));
 
 		// --------------------------------------------------------------------------------
@@ -989,9 +989,9 @@ public class Microservice implements ConfigEventListener {
 		}
 
 		var loggerLevels = config.get("Logging/levels").as(JsonMap.class).orElseGet(JsonMap::new);
-		for (String l : loggerLevels.keySet())
+		for (var l : loggerLevels.keySet())
 			Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
-		for (String l : logConfig.levels.keySet())
+		for (var l : logConfig.levels.keySet())
 			Logger.getLogger(l).setLevel(logConfig.levels.get(l));
 
 		return this;

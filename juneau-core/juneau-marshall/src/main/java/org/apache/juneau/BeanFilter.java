@@ -156,7 +156,7 @@ public class BeanFilter {
 			if (dictionary == null)
 				dictionary = list(values);
 			else
-				for (Class<?> cc : values)
+				for (var cc : values)
 					dictionary.add(cc);
 			return this;
 		}
@@ -212,7 +212,7 @@ public class BeanFilter {
 		 */
 		public Builder excludeProperties(String...value) {
 			this.excludeProperties = set();
-			for (String v : value)
+			for (var v : value)
 				split(v, x -> excludeProperties.add(x));
 			return this;
 		}
@@ -397,7 +397,7 @@ public class BeanFilter {
 		 */
 		public Builder properties(String...value) {
 			this.properties = set();
-			for (String v : value)
+			for (var v : value)
 				split(v, x -> properties.add(x));
 			return this;
 		}
@@ -486,7 +486,7 @@ public class BeanFilter {
 		 */
 		public Builder readOnlyProperties(String...value) {
 			this.readOnlyProperties = set();
-			for (String v : value)
+			for (var v : value)
 				split(v, x -> readOnlyProperties.add(x));
 			return this;
 		}
@@ -685,7 +685,7 @@ public class BeanFilter {
 		 */
 		public Builder writeOnlyProperties(String...value) {
 			this.writeOnlyProperties = set();
-			for (String v : value)
+			for (var v : value)
 				split(v, x -> writeOnlyProperties.add(x));
 			return this;
 		}

@@ -570,7 +570,7 @@ public class JettyMicroservice extends Microservice {
 			throw new ExecutableException(e2);
 		}
 
-		for (String s : cf.get("Jetty/servlets").asStringArray().orElse(new String[0])) {
+		for (var s : cf.get("Jetty/servlets").asStringArray().orElse(new String[0])) {
 			try {
 				ClassInfo c = ClassInfo.of(Class.forName(s));
 				if (c.isChildOf(RestServlet.class)) {
@@ -657,7 +657,7 @@ public class JettyMicroservice extends Microservice {
 	 * @return The port that this microservice started up on.
 	 */
 	public int getPort() {
-		for (Connector c : getServer().getConnectors())
+		for (var c : getServer().getConnectors())
 			if (c instanceof ServerConnector)
 				return ((ServerConnector)c).getPort();
 		throw new IllegalStateException("Could not locate ServerConnector in Jetty server.");
@@ -673,9 +673,9 @@ public class JettyMicroservice extends Microservice {
 	 * @return Whether this microservice is using <js>"http"</js> or <js>"https"</js>.
 	 */
 	public String getProtocol() {
-		for (Connector c : getServer().getConnectors())
+		for (var c : getServer().getConnectors())
 			if (c instanceof ServerConnector)
-				for (ConnectionFactory cf : ((ServerConnector)c).getConnectionFactories())
+				for (var cf : ((ServerConnector)c).getConnectionFactories())
 					if (cf instanceof SslConnectionFactory)
 						return "https";
 		return "http";

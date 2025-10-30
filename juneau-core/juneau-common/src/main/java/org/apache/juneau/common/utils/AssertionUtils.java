@@ -257,7 +257,7 @@ public class AssertionUtils {
 	 */
 	@SafeVarargs
 	public static final <T> T assertOneOf(T actual, T...expected) {
-		for (T e : expected) {
+		for (var e : expected) {
 			if (eq(actual, e))
 				return actual;
 		}

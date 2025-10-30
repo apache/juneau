@@ -438,7 +438,7 @@ class CollectionUtils_Test extends TestBase {
 
 		// Verify order in entrySet
 		List<String> orderedKeys = list();
-		for (Map.Entry<String, String> entry : result.entrySet()) {
+		for (var entry : result.entrySet()) {
 			orderedKeys.add(entry.getKey());
 		}
 

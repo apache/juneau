@@ -121,7 +121,7 @@ public class UrlPathMatch {
 	 * @return <jk>true</jk> if any of the variable values are blank.
 	 */
 	public boolean hasEmptyVars() {
-		for (String v : vars.values())
+		for (var v : vars.values())
 			if (StringUtils.isEmpty(v))
 				return true;
 		return false;

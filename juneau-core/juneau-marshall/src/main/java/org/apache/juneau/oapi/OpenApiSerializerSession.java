@@ -413,7 +413,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 						((Collection<?>)value).forEach(x -> sb.append(serialize(partType, items, x)));
 					} else if (vt.hasMutaterTo(String[].class)) {
 						String[] ss = toType(value, CM_StringArray);
-						for (String element : ss)
+						for (var element : ss)
 							sb.append(serialize(partType, items, element));
 					} else {
 						throw new SerializeException("Input is not a valid array type: " + type);

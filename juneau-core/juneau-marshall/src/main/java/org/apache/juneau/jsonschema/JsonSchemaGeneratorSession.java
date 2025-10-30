@@ -283,7 +283,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	@SuppressWarnings("unchecked")
 	private static List<String> getEnums(ClassMeta<?> cm) {
 		List<String> l = list();
-		for (Enum<?> e : ((Class<Enum<?>>)cm.getInnerClass()).getEnumConstants())
+		for (var e : ((Class<Enum<?>>)cm.getInnerClass()).getEnumConstants())
 			l.add(cm.toString(e));
 		return l;
 	}

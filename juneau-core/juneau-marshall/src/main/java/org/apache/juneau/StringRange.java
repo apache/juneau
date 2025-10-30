@@ -69,7 +69,7 @@ public class StringRange {
 		// The media type consists of everything up to the q parameter.
 		// The q parameter and stuff after is part of the range.
 		List<NameValuePair> extensions = list();
-		for (NameValuePair p : e.getParameters()) {
+		for (var p : e.getParameters()) {
 			if (p.getName().equals("q")) {
 				qValue = Float.parseFloat(p.getValue());
 			} else {
@@ -126,7 +126,7 @@ public class StringRange {
 	 * @return This object.
 	 */
 	public StringRange forEachExtension(Consumer<NameValuePair> action) {
-		for (NameValuePair p : extensions)
+		for (var p : extensions)
 			action.accept(p);
 		return this;
 	}

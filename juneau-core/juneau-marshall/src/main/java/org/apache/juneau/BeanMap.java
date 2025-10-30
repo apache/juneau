@@ -229,7 +229,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return This object.
 	 */
 	public BeanMap<T> forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
-		for (BeanPropertyMeta bpm : meta.propertyArray)
+		for (var bpm : meta.propertyArray)
 			if (filter.test(bpm))
 				action.accept(bpm);
 		return this;
@@ -392,7 +392,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		}
 
 		// Initialize any null Optional<X> fields.
-		for (BeanPropertyMeta pMeta : this.meta.propertyArray) {
+		for (var pMeta : this.meta.propertyArray) {
 			ClassMeta<?> cm = pMeta.getClassMeta();
 			if (cm.isOptional() && pMeta.get(this, pMeta.getName()) == null)
 				pMeta.set(this, pMeta.getName(), cm.getOptionalDefault());

@@ -439,7 +439,7 @@ public class OpenApiParserSession extends UonParserSession {
 
 				if (type.isBean()) {
 					BeanMap<T> m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
-					for (String s : ss) {
+					for (var s : ss) {
 						String[] kv = StringUtils.splita(s, '=', 2);
 						if (kv.length != 2)
 							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
@@ -463,7 +463,7 @@ public class OpenApiParserSession extends UonParserSession {
 					if (m == null)
 						m = JsonMap.create();
 
-					for (String s : ss) {
+					for (var s : ss) {
 						String[] kv = StringUtils.splita(s, '=', 2);
 						if (kv.length != 2)
 							throw new ParseException("Invalid input {0} for part type OBJECT.", in);

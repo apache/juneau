@@ -124,10 +124,10 @@ public class EncoderSet {
 		 */
 		public Builder add(Class<?>...values) {
 			List<Object> l = list();
-			for (Class<?> v : values)
+			for (var v : values)
 				if (scn(v).equals("NoInherit"))
 					clear();
-			for (Class<?> v : values) {
+			for (var v : values) {
 				if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else if (! scn(v).equals("NoInherit")) {
@@ -216,7 +216,7 @@ public class EncoderSet {
 		 */
 		public Builder set(Class<?>...values) {
 			List<Object> l = list();
-			for (Class<?> v : values) {
+			for (var v : values) {
 				if (scn(v).equals("Inherit")) {
 					l.addAll(entries);
 				} else if (Encoder.class.isAssignableFrom(v)) {
@@ -306,8 +306,8 @@ public class EncoderSet {
 
 		List<String> lc = list();
 		List<Encoder> l = list();
-		for (Encoder e : entries) {
-			for (String c : e.getCodings()) {
+		for (var e : entries) {
+			for (var c : e.getCodings()) {
 				lc.add(c);
 				l.add(e);
 			}

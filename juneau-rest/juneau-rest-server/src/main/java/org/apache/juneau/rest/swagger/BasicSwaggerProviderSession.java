@@ -68,7 +68,7 @@ public class BasicSwaggerProviderSession {
 
 	private static Set<Integer> getCodes(List<StatusCode> la, Integer def) {
 		var codes = new TreeSet<Integer>();
-		for (StatusCode a : la) {
+		for (var a : la) {
 			for (int i : a.value())
 				codes.add(i);
 		}
@@ -92,7 +92,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	static String joinnl(String[]...s) {
-		for (String[] ss : s) {
+		for (var ss : s) {
 			if (ss.length != 0)
 				return StringUtils.joinnl(ss).trim();
 		}
@@ -155,7 +155,7 @@ public class BasicSwaggerProviderSession {
 			omSwagger = new JsonMap();
 
 		// Combine it with @Rest(swagger)
-		for (Rest rr : rci.getAnnotations(context, Rest.class)) {
+		for (var rr : rci.getAnnotations(context, Rest.class)) {
 
 			JsonMap sInfo = omSwagger.getMap("info", true);
 
@@ -239,7 +239,7 @@ public class BasicSwaggerProviderSession {
 
 		Map<String,JsonMap> tagMap = map();
 		if (omSwagger.containsKey("tags")) {
-			for (JsonMap om : omSwagger.getList("tags").elements(JsonMap.class)) {
+			for (var om : omSwagger.getList("tags").elements(JsonMap.class)) {
 				String name = om.getString("name");
 				if (name == null)
 					throw new SwaggerException(null, "Tag definition found without name in swagger JSON.");
@@ -249,7 +249,7 @@ public class BasicSwaggerProviderSession {
 
 		String s = mb.findFirstString("tags");
 		if (nn(s)) {
-			for (JsonMap m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(JsonMap.class)) {
+			for (var m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(JsonMap.class)) {
 				String name = m.getString("name");
 				if (name == null)
 					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class {0}", c);
@@ -262,11 +262,11 @@ public class BasicSwaggerProviderSession {
 
 		// Load our existing bean definitions into our session.
 		JsonMap definitions = omSwagger.getMap("definitions", true);
-		for (String defId : definitions.keySet())
+		for (var defId : definitions.keySet())
 			js.addBeanDef(defId, new JsonMap(definitions.getMap(defId)));
 
 		// Iterate through all the @RestOp methods.
-		for (RestOpContext sm : context.getRestOperations().getOpContexts()) {
+		for (var sm : context.getRestOperations().getOpContexts()) {
 
 			BeanSession bs = sm.getBeanContext().getSession();
 
@@ -364,17 +364,17 @@ public class BasicSwaggerProviderSession {
 			);
 
 			if (op.containsKey("tags"))
-				for (String tag : op.getList("tags").elements(String.class))
+				for (var tag : op.getList("tags").elements(String.class))
 					if (! tagMap.containsKey(tag))
 						tagMap.put(tag, JsonMap.of("name", tag));
 
 			JsonMap paramMap = new JsonMap();
 			if (op.containsKey("parameters"))
-				for (JsonMap param : op.getList("parameters").elements(JsonMap.class))
+				for (var param : op.getList("parameters").elements(JsonMap.class))
 					paramMap.put(param.getString("in") + '.' + ("body".equals(param.getString("in")) ? "body" : param.getString("name")), param);
 
 			// Finally, look for parameters defined on method.
-			for (ParamInfo mpi : mi.getParams()) {
+			for (var mpi : mi.getParams()) {
 
 				ClassInfo pt = mpi.getParameterType();
 				Type type = pt.innerType();
@@ -429,13 +429,13 @@ public class BasicSwaggerProviderSession {
 
 			JsonMap responses = op.getMap("responses", true);
 
-			for (ClassInfo eci : mi.getExceptionTypes()) {
+			for (var eci : mi.getExceptionTypes()) {
 				if (eci.hasAnnotation(Response.class)) {
 					List<Response> la = eci.getAnnotations(context, Response.class);
 					List<StatusCode> la2 = eci.getAnnotations(context, StatusCode.class);
 					Set<Integer> codes = getCodes(la2, 500);
-					for (Response a : la) {
-						for (Integer code : codes) {
+					for (var a : la) {
+						for (var code : codes) {
 							JsonMap om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
 							JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
@@ -452,7 +452,7 @@ public class BasicSwaggerProviderSession {
 							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotation(Header.class);
 						if (nn(a) && ! isMulti(a)) {
 							String ha = a.name();
-							for (Integer code : codes) {
+							for (var code : codes) {
 								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
 								ecmi.forEachAnnotation(context, Schema.class, x -> true, x -> merge(header, x));
 								ecmi.getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(Schema.class, x -> true, x -> merge(header, x));
@@ -469,8 +469,8 @@ public class BasicSwaggerProviderSession {
 				List<StatusCode> la2 = list();
 				mi.forEachAnnotation(context, StatusCode.class, x -> true, x -> la2.add(x));
 				Set<Integer> codes = getCodes(la2, 200);
-				for (Response a : la) {
-					for (Integer code : codes) {
+				for (var a : la) {
+					for (var code : codes) {
 						JsonMap om = responses.getMap(String.valueOf(code), true);
 						merge(om, a);
 						JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
@@ -488,7 +488,7 @@ public class BasicSwaggerProviderSession {
 							Header a = ecmi.getAnnotation(Header.class);
 							String ha = a.name();
 							if (! isMulti(a)) {
-								for (Integer code : codes) {
+								for (var code : codes) {
 									JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
 									ecmi.forEachAnnotation(context, Schema.class, x -> true, x -> merge(header, x));
 									ecmi.getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(Schema.class, x -> true, x -> merge(header, x));
@@ -510,7 +510,7 @@ public class BasicSwaggerProviderSession {
 			}
 
 			// Finally, look for Value @Header parameters defined on method.
-			for (ParamInfo mpi : mi.getParams()) {
+			for (var mpi : mi.getParams()) {
 
 				ClassInfo pt = mpi.getParameterType();
 
@@ -524,9 +524,9 @@ public class BasicSwaggerProviderSession {
 					Set<Integer> codes = getCodes(la2, 200);
 					String name = HeaderAnnotation.findName(mpi).orElse(null);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
-					for (Header a : la) {
+					for (var a : la) {
 						if (! isMulti(a)) {
-							for (Integer code : codes) {
+							for (var code : codes) {
 								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
 								mpi.forEachAnnotation(Schema.class, x -> true, x -> merge(header, x));
 								merge(header, a.schema());
@@ -544,8 +544,8 @@ public class BasicSwaggerProviderSession {
 					pt.forEachAnnotation(StatusCode.class, x -> true, x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 200);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
-					for (Response a : la) {
-						for (Integer code : codes) {
+					for (var a : la) {
+						for (var code : codes) {
 							JsonMap om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
 							JsonMap schema = getSchema(om.getMap("schema"), type, bs);
@@ -559,7 +559,7 @@ public class BasicSwaggerProviderSession {
 			}
 
 			// Add default response descriptions.
-			for (Map.Entry<String,Object> e : responses.entrySet()) {
+			for (var e : responses.entrySet()) {
 				String key = e.getKey();
 				JsonMap val = responses.getMap(key);
 				if (StringUtils.isDecimal(key))
@@ -585,7 +585,7 @@ public class BasicSwaggerProviderSession {
 		}
 
 		if (nn(js.getBeanDefs()))
-			for (Map.Entry<String,JsonMap> e : js.getBeanDefs().entrySet())
+			for (var e : js.getBeanDefs().entrySet())
 				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
 		if (definitions.isEmpty())
 			omSwagger.remove("definitions");
@@ -638,7 +638,7 @@ public class BasicSwaggerProviderSession {
 
 		List<MediaType> mediaTypes = response ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
 
-		for (MediaType mt : mediaTypes) {
+		for (var mt : mediaTypes) {
 			if (mt != MediaType.HTML) {
 				Serializer s2 = sm.getSerializers().getSerializer(mt);
 				if (nn(s2)) {
@@ -694,7 +694,7 @@ public class BasicSwaggerProviderSession {
 
 	@SafeVarargs
 	private final static <T> T firstNonEmpty(T...t) {
-		for (T oo : t)
+		for (var oo : t)
 			if (isNotEmpty(oo))
 				return oo;
 		return null;
@@ -795,7 +795,7 @@ public class BasicSwaggerProviderSession {
 		if (a.length == 0)
 			return om;
 		om = newMap(om);
-		for (Header aa : a) {
+		for (var aa : a) {
 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
 				throw illegalArg("@Header used without name or value.");
@@ -1047,7 +1047,7 @@ public class BasicSwaggerProviderSession {
 
 	private JsonList resolve(JsonList om) throws ParseException {
 		JsonList ol2 = new JsonList();
-		for (Object val : om) {
+		for (var val : om) {
 			if (val instanceof JsonMap) {
 				val = resolve((JsonMap)val);
 			} else if (val instanceof JsonList) {
@@ -1068,7 +1068,7 @@ public class BasicSwaggerProviderSession {
 		} else {
 			om2 = new JsonMap();
 		}
-		for (Map.Entry<String,Object> e : om.entrySet()) {
+		for (var e : om.entrySet()) {
 			Object val = e.getValue();
 			if (val instanceof JsonMap) {
 				val = resolve((JsonMap)val);
@@ -1089,7 +1089,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private String resolve(String[]...s) {
-		for (String[] ss : s) {
+		for (var ss : s) {
 			if (ss.length != 0)
 				return resolve(joinnl(ss));
 		}
@@ -1123,7 +1123,7 @@ public class BasicSwaggerProviderSession {
 		if (aa.length == 0)
 			return null;
 		JsonList ol = new JsonList();
-		for (Tag a : aa)
+		for (var a : aa)
 			ol.add(toMap(a, location, locationArgs));
 		return nullIfEmpty(ol);
 	}
@@ -1182,7 +1182,7 @@ public class BasicSwaggerProviderSession {
 		if (ss.length == 0)
 			return null;
 		Set<String> set = set();
-		for (String s : ss)
+		for (var s : ss)
 			StringUtils.split(s, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}

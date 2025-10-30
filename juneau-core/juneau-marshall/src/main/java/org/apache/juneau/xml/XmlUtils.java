@@ -470,13 +470,13 @@ public class XmlUtils {
 		// If only prefix specified, need to search for namespaceURI.
 		if (! prefix.isEmpty()) {
 			if (nn(xmls))
-				for (Xml xml2 : xmls)
+				for (var xml2 : xmls)
 					if (xml2.prefix().equals(prefix) && ! xml2.namespace().isEmpty())
 						return Namespace.of(prefix, xml2.namespace());
-			for (XmlSchema schema : schemas) {
+			for (var schema : schemas) {
 				if (schema.prefix().equals(prefix) && ! schema.namespace().isEmpty())
 					return Namespace.of(prefix, schema.namespace());
-				for (XmlNs xmlNs : schema.xmlNs())
+				for (var xmlNs : schema.xmlNs())
 					if (xmlNs.prefix().equals(prefix))
 						return Namespace.of(prefix, xmlNs.namespaceURI());
 			}
@@ -486,13 +486,13 @@ public class XmlUtils {
 		// If only namespaceURI specified, need to search for prefix.
 		if (! ns.isEmpty()) {
 			if (nn(xmls))
-				for (Xml xml2 : xmls)
+				for (var xml2 : xmls)
 					if (xml2.namespace().equals(ns) && ! xml2.prefix().isEmpty())
 						return Namespace.of(xml2.prefix(), ns);
-			for (XmlSchema schema : schemas) {
+			for (var schema : schemas) {
 				if (schema.namespace().equals(ns) && ! schema.prefix().isEmpty())
 					return Namespace.of(schema.prefix(), ns);
-				for (XmlNs xmlNs : schema.xmlNs())
+				for (var xmlNs : schema.xmlNs())
 					if (xmlNs.namespaceURI().equals(ns))
 						return Namespace.of(xmlNs.prefix(), ns);
 			}

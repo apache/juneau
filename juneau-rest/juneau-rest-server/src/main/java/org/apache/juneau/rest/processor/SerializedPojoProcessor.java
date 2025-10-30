@@ -82,7 +82,7 @@ public class SerializedPojoProcessor implements ResponseProcessor {
 					.build();
 				// @formatter:on
 
-				for (Map.Entry<String,String> h : session.getResponseHeaders().entrySet())
+				for (var h : session.getResponseHeaders().entrySet())
 					res.addHeader(h.getKey(), h.getValue());
 
 				if (! session.isWriterSerializer()) {

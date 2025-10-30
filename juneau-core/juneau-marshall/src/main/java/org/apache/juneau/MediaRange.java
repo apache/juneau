@@ -53,7 +53,7 @@ public class MediaRange extends MediaType {
 		// The q parameter and stuff after is part of the range.
 		List<NameValuePair> extensions = list();
 		boolean foundQ = false;
-		for (NameValuePair p : e.getParameters()) {
+		for (var p : e.getParameters()) {
 			if (p.getName().equals("q")) {
 				qValue = Float.parseFloat(p.getValue());
 				foundQ = true;
@@ -90,7 +90,7 @@ public class MediaRange extends MediaType {
 	 * @return This object.
 	 */
 	public MediaRange forEachExtension(Consumer<NameValuePair> action) {
-		for (NameValuePair r : extensions)
+		for (var r : extensions)
 			action.accept(r);
 		return this;
 	}

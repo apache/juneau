@@ -272,7 +272,7 @@ public abstract class ObjectSwap<T,S> {
 		if (mt == null)
 			return 0;
 		if (nn(forMediaTypes))
-			for (MediaType mt2 : forMediaTypes)
+			for (var mt2 : forMediaTypes)
 				i = Math.max(i, mt2.match(mt, false));
 		return i;
 	}

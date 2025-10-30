@@ -48,7 +48,7 @@ public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>>
 	 * @return This object.
 	 */
 	public B on(Class<?>...value) {
-		for (Class<?> v : value)
+		for (var v : value)
 			on = addAll(on, v.getName());
 		return asThis();
 	}
@@ -61,7 +61,7 @@ public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>>
 	 */
 	@SuppressWarnings("unchecked")
 	public B onClass(Class<?>...value) {
-		for (Class<?> v : value)
+		for (var v : value)
 			onClass = addAll(onClass, v);
 		return asThis();
 	}

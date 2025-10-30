@@ -121,7 +121,7 @@ class Rest_Messages_Test extends TestBase {
 
 	private static JsonMap asMap(ResourceBundle rb) {
 		var m = new JsonMap();
-		for (String k : new TreeSet<>(rb.keySet()))
+		for (var k : new TreeSet<>(rb.keySet()))
 			m.put(k, rb.getString(k));
 		return m;
 	}

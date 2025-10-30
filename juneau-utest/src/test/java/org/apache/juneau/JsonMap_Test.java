@@ -285,7 +285,7 @@ class JsonMap_Test extends TestBase {
 		assertBean(m, "a", "[{b=x}]");
 
 		m = JsonMap.ofJson("{a:[{b:'c'}]}");
-		for (JsonMap m3 : m.getList("a").elements(JsonMap.class))
+		for (var m3 : m.getList("a").elements(JsonMap.class))
 			m3.put("b", "y");
 
 		assertBean(m, "a", "[{b=y}]");

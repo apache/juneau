@@ -130,12 +130,12 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		// Add parameters from parent context if any.
 		@SuppressWarnings("unchecked")
 		Map<String,String> parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(Collections.emptyMap());
-		for (Map.Entry<String,String> e : parentVars.entrySet())
+		for (var e : parentVars.entrySet())
 			add(e.getKey(), e.getValue());
 
 		UrlPathMatch pm = session.getUrlPathMatch();
 		if (nn(pm)) {
-			for (Map.Entry<String,String> e : pm.getVars().entrySet())
+			for (var e : pm.getVars().entrySet())
 				add(e.getKey(), e.getValue());
 			String r = pm.getRemainder();
 			if (nn(r)) {
@@ -164,7 +164,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
 		vs = copyFrom.vs;
-		for (String n : names)
+		for (var n : names)
 			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(this::add);
 	}
 
@@ -180,7 +180,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public RequestPathParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			if (nn(p))
 				add(p.getName(), p.getValue());
 		return this;
@@ -215,7 +215,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @return This object.
 	 */
 	public RequestPathParams addDefault(List<NameValuePair> pairs) {
-		for (NameValuePair p : pairs) {
+		for (var p : pairs) {
 			String name = p.getName();
 			Stream<RequestPathParam> l = stream(name);
 			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
@@ -283,7 +283,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public boolean containsAny(String...names) {
 		assertArgNotNull("names", names);
-		for (String n : names)
+		for (var n : names)
 			if (stream(n).findAny().isPresent())
 				return true;
 		return false;
@@ -507,9 +507,9 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	public RequestPathParams set(NameValuePair...parameters) {
 		assertArgNotNull("headers", parameters);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			remove(p);
-		for (NameValuePair p : parameters)
+		for (var p : parameters)
 			add(p);
 		return this;
 	}
@@ -557,7 +557,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	@Override /* Overridden from Object */
 	public String toString() {
 		JsonMap m = new JsonMap();
-		for (String n : getNames())
+		for (var n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();
 	}

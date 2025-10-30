@@ -156,7 +156,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public boolean contains(String val) {
 		if (nn(val))
-			for (String v : value())
+			for (var v : value())
 				if (eq(v, val))
 					return true;
 		return false;
@@ -170,7 +170,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public boolean containsIgnoreCase(String val) {
 		if (nn(val))
-			for (String v : value())
+			for (var v : value())
 				if (eqic(v, val))
 					return true;
 		return false;

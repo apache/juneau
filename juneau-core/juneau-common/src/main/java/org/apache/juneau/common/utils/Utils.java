@@ -310,7 +310,7 @@ public class Utils {
 	@SafeVarargs
 	public static <T> T firstNonNull(T...t) {
 		if (nn(t))
-			for (T tt : t)
+			for (var tt : t)
 				if (nn(tt))
 					return tt;
 		return null;

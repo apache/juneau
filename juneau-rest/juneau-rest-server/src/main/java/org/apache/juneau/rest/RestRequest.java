@@ -852,7 +852,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		if (nn(h)) {
 			StringRanges sr = StringRanges.of(h);
 			float qValue = 0;
-			for (StringRange r : sr.toList()) {
+			for (var r : sr.toList()) {
 				if (r.getQValue() > qValue) {
 					best = toLocale(r.getName());
 					qValue = r.getQValue();
@@ -1293,7 +1293,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			StringBuilder sb = new StringBuilder(uri);
 			RequestQueryParams rq = this.queryParams.copy();
 			if (nn(addQueryParams))
-				for (Map.Entry<String,?> e : addQueryParams.entrySet())
+				for (var e : addQueryParams.entrySet())
 					rq.set(e.getKey(), e.getValue());
 			if (! rq.isEmpty())
 				sb.append('?').append(rq.asQueryString());

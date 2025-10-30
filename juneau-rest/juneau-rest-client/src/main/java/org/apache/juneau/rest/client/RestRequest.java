@@ -1200,7 +1200,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest interceptors(RestCallInterceptor...interceptors) throws RestCallException {
 		try {
-			for (RestCallInterceptor i : interceptors) {
+			for (var i : interceptors) {
 				this.interceptors.add(i);
 				i.onInit(this);
 			}
@@ -1794,7 +1794,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest rethrow(Class<?>...values) {
 		if (rethrow == null)
 			rethrow = list();
-		for (Class<?> v : values) {
+		for (var v : values) {
 			if (nn(v) && Throwable.class.isAssignableFrom(v))
 				rethrow.add((Class<? extends Throwable>)v);
 		}
@@ -1926,7 +1926,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			if (isDebug() || client.logRequests == DetailLevel.FULL)
 				response.cacheContent();
 
-			for (RestCallInterceptor rci : interceptors)
+			for (var rci : interceptors)
 				rci.onConnect(this, response);
 			client.onCallConnect(this, response);
 
@@ -1938,7 +1938,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				Thrown.Part thrownPart = thrown.asParts().get().get(0);
 				String className = thrownPart.getClassName();
 				String message = thrownPart.getMessage();
-				for (Class<? extends Throwable> t : rethrow) {
+				for (var t : rethrow) {
 					if (t.getName().equals(className)) {
 						ConstructorInfo c = null;
 						ClassInfo ci = ClassInfo.of(t);

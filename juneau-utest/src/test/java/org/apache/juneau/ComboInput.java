@@ -252,7 +252,7 @@ public class ComboInput<T> {
 	 * @param o The object returned by the parser.
 	 */
 	public void verify(T o, String testName) {
-		for (Function<T,String> f : verify) {
+		for (var f : verify) {
 			var s = f.apply(o);
 			if (isNotEmpty(s)) {
 				throw new BasicAssertionError("Verification failed on test {0}/{1}: {2}", label, testName, s);

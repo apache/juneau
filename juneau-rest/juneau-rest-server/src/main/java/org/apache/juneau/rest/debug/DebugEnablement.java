@@ -130,7 +130,7 @@ public abstract class DebugEnablement {
 		 * @return This object.
 		 */
 		public Builder enable(Enablement enablement, Class<?>...classes) {
-			for (Class<?> c : classes)
+			for (var c : classes)
 				mapBuilder.append(c.getName(), enablement);
 			return this;
 		}
@@ -163,7 +163,7 @@ public abstract class DebugEnablement {
 		 * @return This object.
 		 */
 		public Builder enable(Enablement enablement, String...keys) {
-			for (String k : keys)
+			for (var k : keys)
 				mapBuilder.append(k, enablement);
 			return this;
 		}

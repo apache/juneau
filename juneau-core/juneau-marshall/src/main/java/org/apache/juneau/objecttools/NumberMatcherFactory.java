@@ -246,7 +246,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 			Number n = (Number)o;
 			if (numberRanges.length == 0)
 				return true;
-			for (NumberRange numberRange : numberRanges)
+			for (var numberRange : numberRanges)
 				if (numberRange.matches(n))
 					return true;
 			return false;

@@ -141,7 +141,7 @@ public class CallLogger {
 		 * @return This object.
 		 */
 		public Builder debugRules(CallLoggerRule...values) {
-			for (CallLoggerRule rule : values)
+			for (var rule : values)
 				debugRules.add(rule);
 			return this;
 		}
@@ -300,7 +300,7 @@ public class CallLogger {
 		 * @return This object.
 		 */
 		public Builder normalRules(CallLoggerRule...values) {
-			for (CallLoggerRule rule : values)
+			for (var rule : values)
 				normalRules.add(rule);
 			return this;
 		}
@@ -712,7 +712,7 @@ public class CallLogger {
 	 * @return The applicable logging rule, or the default rule if not found.  Never <jk>null</jk>.
 	 */
 	protected CallLoggerRule getRule(HttpServletRequest req, HttpServletResponse res) {
-		for (CallLoggerRule r : isDebug(req) ? debugRules : normalRules)
+		for (var r : isDebug(req) ? debugRules : normalRules)
 			if (r.matches(req, res))
 				return r;
 		return DEFAULT_RULE;

@@ -76,13 +76,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	private static List<MethodInfo> findMatching(List<MethodInfo> l, MethodInfo m, ClassInfo c) {
-		for (MethodInfo m2 : c._getDeclaredMethods())
+		for (var m2 : c._getDeclaredMethods())
 			if (m.hasName(m2.getName()) && Arrays.equals(m._getParameterTypes(), m2._getParameterTypes()))
 				l.add(m2);
 		ClassInfo pc = c.getSuperclass();
 		if (nn(pc))
 			findMatching(l, m, pc);
-		for (ClassInfo ic : c._getDeclaredInterfaces())
+		for (var ic : c._getDeclaredInterfaces())
 			findMatching(l, m, ic);
 		return l;
 	}
@@ -140,9 +140,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if the method parameters only consist of the types specified in the list.
 	 */
 	public boolean argsOnlyOfType(Class<?>...args) {
-		for (Class<?> c1 : _getRawParamTypes()) {
+		for (var c1 : _getRawParamTypes()) {
 			boolean foundMatch = false;
-			for (Class<?> c2 : args)
+			for (var c2 : args)
 				if (c1 == c2)
 					foundMatch = true;
 			if (! foundMatch)
@@ -176,7 +176,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public int canAcceptFuzzy(Object...args) {
 		int matches = 0;
 		outer: for (ClassInfo pi : _getParameterTypes()) {
-			for (Object a : args) {
+			for (var a : args) {
 				if (pi.canAcceptArg(a)) {
 					matches++;
 					continue outer;
@@ -220,7 +220,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
 		MethodInfo[] m = _getMatching();
 		for (int i = m.length - 1; i >= 0; i--)
-			for (Annotation a2 : m[i]._getDeclaredAnnotations())
+			for (var a2 : m[i]._getDeclaredAnnotations())
 				if (type.isInstance(a2))
 					consumeIf(filter, action, type.cast(a2));
 		getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
@@ -279,7 +279,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return This object.
 	 */
 	public MethodInfo forEachMatching(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (MethodInfo m : _getMatching())
+		for (var m : _getMatching())
 			consumeIf(filter, action, m);
 		return this;
 	}
@@ -323,7 +323,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		if (type == null)
 			return null;
 		Value<A> t = Value.empty();
-		for (MethodInfo m2 : _getMatching()) {
+		for (var m2 : _getMatching()) {
 			annotationProvider.forEachAnnotation(type, m2.inner(), x -> true, x -> t.set(x));
 			if (t.isPresent())
 				return t.get();
@@ -406,7 +406,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@SafeVarargs
 	public final Annotation getAnyAnnotation(Class<? extends Annotation>...types) {
-		for (Class<? extends Annotation> cc : types) {
+		for (var cc : types) {
 			Annotation a = getAnnotation(cc);
 			if (nn(a))
 				return a;
@@ -488,7 +488,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public boolean hasAllArgs(Class<?>...requiredParams) {
 		List<Class<?>> rawParamTypes = getRawParamTypes();
 
-		for (Class<?> c : requiredParams)
+		for (var c : requiredParams)
 			if (! rawParamTypes.contains(c))
 				return false;
 
@@ -504,7 +504,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		for (MethodInfo m2 : _getMatching())
+		for (var m2 : _getMatching())
 			if (nn(annotationProvider.firstAnnotation(type, m2.inner(), x -> true)))
 				return true;
 		return false;
@@ -529,7 +529,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@SafeVarargs
 	public final boolean hasAnyAnnotations(Class<? extends Annotation>...types) {
-		for (Class<? extends Annotation> a : types)
+		for (var a : types)
 			if (hasAnnotation(a))
 				return true;
 		return false;
@@ -688,7 +688,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	private MethodInfo findMatchingOnClass(ClassInfo c) {
-		for (MethodInfo m2 : c._getDeclaredMethods())
+		for (var m2 : c._getDeclaredMethods())
 			if (hasName(m2.getName()) && Arrays.equals(_getParameterTypes(), m2._getParameterTypes()))
 				return m2;
 		return null;
@@ -706,20 +706,20 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (nn(ci))
-			for (Annotation a : ci._getDeclaredAnnotations())
+			for (var a : ci._getDeclaredAnnotations())
 				AnnotationInfo.of(ci, a).accept(filter, action);
 	}
 
 	private static void forEachDeclaredAnnotationInfo(Package p, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (nn(p))
-			for (Annotation a : p.getDeclaredAnnotations())
+			for (var a : p.getDeclaredAnnotations())
 				AnnotationInfo.of(p, a).accept(filter, action);
 	}
 
 	private void forEachDeclaredMethodAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		MethodInfo m = findMatchingOnClass(ci);
 		if (nn(m))
-			for (Annotation a : m._getDeclaredAnnotations())
+			for (var a : m._getDeclaredAnnotations())
 				AnnotationInfo.of(m, a).accept(filter, action);
 	}
 

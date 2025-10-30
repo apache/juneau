@@ -67,7 +67,7 @@ public enum AsideFloat {
 	 * @return <jk>true</jk> if value matches this enum.
 	 */
 	public boolean isAny(AsideFloat...values) {
-		for (AsideFloat v : values)
+		for (var v : values)
 			if (is(v))
 				return true;
 		return false;

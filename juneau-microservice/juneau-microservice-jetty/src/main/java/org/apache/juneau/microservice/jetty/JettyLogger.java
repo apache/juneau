@@ -62,7 +62,7 @@ public class JettyLogger implements LocationAwareLogger {
 			return msg;
 		StringBuilder sb = new StringBuilder();
 		int start = 0;
-		for (Object arg : args) {
+		for (var arg : args) {
 			int bi = msg.indexOf("{}", start);
 			if (bi < 0) {
 				sb.append(msg.substring(start)).append(" ").append(arg);
@@ -553,7 +553,7 @@ public class JettyLogger implements LocationAwareLogger {
 		r.setLoggerName(logger.getName());
 		if (SHOW_SOURCE) {
 			StackTraceElement[] stack = new Throwable().getStackTrace();
-			for (StackTraceElement e : stack) {
+			for (var e : stack) {
 				if (! e.getClassName().equals(getClass().getName())) {
 					r.setSourceClassName(e.getClassName());
 					r.setSourceMethodName(e.getMethodName());

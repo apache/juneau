@@ -47,7 +47,7 @@ public class TargetedAnnotationMFBuilder<B extends TargetedAnnotationMFBuilder<B
 	 * @return This object.
 	 */
 	public B on(Field...value) {
-		for (Field v : value)
+		for (var v : value)
 			on(FieldInfo.of(v).getFullName());
 		return asThis();
 	}
@@ -59,7 +59,7 @@ public class TargetedAnnotationMFBuilder<B extends TargetedAnnotationMFBuilder<B
 	 * @return This object.
 	 */
 	public B on(Method...value) {
-		for (Method v : value)
+		for (var v : value)
 			on(MethodInfo.of(v).getFullName());
 		return asThis();
 	}

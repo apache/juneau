@@ -272,7 +272,7 @@ public class ThrownStore {
 	 */
 	protected long hash(Throwable t) {
 		long h = 1125899906842597L; // prime
-		for (String s : createStackTrace(t)) {
+		for (var s : createStackTrace(t)) {
 			int len = s.length();
 			for (int i = 0; i < len; i++)
 				h = 31 * h + s.charAt(i);

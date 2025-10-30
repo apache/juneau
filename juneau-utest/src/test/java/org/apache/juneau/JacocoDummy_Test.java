@@ -34,7 +34,7 @@ class JacocoDummy_Test extends TestBase {
 
 		Class<?>[] classes = a(StringUtils.class, ClassUtils2.class, CollectionUtils.class);
 
-		for (Class<?> c : classes) {
+		for (var c : classes) {
 			var c1 = c.getDeclaredConstructor();
 			c1.setAccessible(true);
 			c1.newInstance();

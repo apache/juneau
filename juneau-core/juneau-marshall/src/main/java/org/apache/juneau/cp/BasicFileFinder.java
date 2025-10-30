@@ -162,7 +162,7 @@ public class BasicFileFinder implements FileFinder {
 		if (lf == null) {
 			List<String> candidateFileNames = getCandidateFileNames(name, locale);
 			paths: for (LocalDir root : roots) {
-				for (String cfn : candidateFileNames) {
+				for (var cfn : candidateFileNames) {
 					lf = root.resolve(cfn);
 					if (nn(lf))
 						break paths;
@@ -254,10 +254,10 @@ public class BasicFileFinder implements FileFinder {
 	 * @return <jk>true</jk> if the file should be ignored.
 	 */
 	protected boolean isIgnoredFile(String name) {
-		for (Pattern p : exclude)
+		for (var p : exclude)
 			if (p.matcher(name).matches())
 				return true;
-		for (Pattern p : include)
+		for (var p : include)
 			if (p.matcher(name).matches())
 				return false;
 		return true;

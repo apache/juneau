@@ -239,7 +239,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		model = ModelFactory.createDefaultModel();
 		addModelPrefix(ctx.getJuneauNs());
 		addModelPrefix(ctx.getJuneauBpNs());
-		for (Namespace ns : this.namespaces)
+		for (var ns : this.namespaces)
 			addModelPrefix(ns);
 		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
 		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);

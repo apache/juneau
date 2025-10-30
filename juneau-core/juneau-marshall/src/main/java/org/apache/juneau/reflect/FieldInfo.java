@@ -290,7 +290,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 * @return <jk>true</jk> if all specified flags are applicable to this field.
 	 */
 	public boolean isAll(ReflectFlags...flags) {
-		for (ReflectFlags f : flags) {
+		for (var f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isNotDeprecated())
@@ -338,7 +338,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 * @return <jk>true</jk> if all specified flags are applicable to this field.
 	 */
 	public boolean isAny(ReflectFlags...flags) {
-		for (ReflectFlags f : flags) {
+		for (var f : flags) {
 			switch (f) {
 				case DEPRECATED:
 					if (isDeprecated())

@@ -68,7 +68,7 @@ public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
 	 * @return This object.
 	 */
 	public NamedAttributeMap add(NamedAttribute...values) {
-		for (NamedAttribute v : values)
+		for (var v : values)
 			put(v.getName(), v);
 		return this;
 	}
