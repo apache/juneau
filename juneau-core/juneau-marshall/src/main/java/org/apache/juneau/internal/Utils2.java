@@ -58,7 +58,7 @@ public class Utils2 extends Utils {
 		Map<String,MethodInfo> methods = PROPERTIES_METHODS.get(o.getClass());
 		if (methods == null) {
 			ClassInfo ci = ClassInfo.of(o);
-			Map<String,MethodInfo> methods2 = new LinkedHashMap<>();
+			var methods2 = new LinkedHashMap<String,MethodInfo>();
 			do {
 				String cname = ci.getShortName();
 				MethodInfo mi = ci.getDeclaredMethod(x -> x.hasName("properties"));

@@ -693,12 +693,12 @@ class Config_Test extends TestBase {
 		var a1b = (Map<String,Integer>) c.get("a1b").as(Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{}", a1b);
 
-		var a2a = (List<Map<String,Integer>>) c.get("a2").as(List.class, Map.class, String.class, Integer.class).orElse(new ArrayList<>());
+		var a2a = (List<Map<String,Integer>>) c.get("a2").as(List.class, Map.class, String.class, Integer.class).orElse(list());
 		assertJson("[{foo:123}]", a2a);
 		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
 		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
-		var a2b = (List<ABean>) c.get("a2b").as(List.class, ABean.class).orElse(new ArrayList<>());
+		var a2b = (List<ABean>) c.get("a2b").as(List.class, ABean.class).orElse(list());
 		assertJson("[]", a2b);
 
 		var a3 = (Map<String,Object>) c.get("a3").as(Map.class, String.class, Object.class).orElse(new JsonMap());
@@ -738,12 +738,12 @@ class Config_Test extends TestBase {
 		var a1b = (Map<String,Integer>) c.get("a1b").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<>());
 		assertJson("{}", a1b);
 
-		var a2a = (List<Map<String,Integer>>) c.get("a2").as(UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class).orElse(new ArrayList<>());
+		var a2a = (List<Map<String,Integer>>) c.get("a2").as(UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class).orElse(list());
 		assertJson("[{foo:123}]", a2a);
 		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
 		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());
 
-		var a2b = (List<ABean>) c.get("a2b").as(UonParser.DEFAULT, List.class, ABean.class).orElse(new ArrayList<>());
+		var a2b = (List<ABean>) c.get("a2b").as(UonParser.DEFAULT, List.class, ABean.class).orElse(list());
 		assertJson("[]", a2b);
 
 		var a3 = (Map<String,Object>) c.get("a3").as(UonParser.DEFAULT,Map.class, String.class, Object.class).orElse( new JsonMap());

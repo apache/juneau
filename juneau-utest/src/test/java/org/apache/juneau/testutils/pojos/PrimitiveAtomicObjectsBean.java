@@ -65,10 +65,10 @@ public class PrimitiveAtomicObjectsBean {
 		poalAtomicLong = l(a(new AtomicLong(1)),null);
 
 		// Regular list of primitives
-		polAtomicInteger = new ArrayList<>();
+		polAtomicInteger = list();
 		polAtomicInteger.add(a(new AtomicInteger(1)));
 		polAtomicInteger.add(null);
-		polAtomicLong = new ArrayList<>();
+		polAtomicLong = list();
 		polAtomicLong.add(a(new AtomicLong(1)));
 		polAtomicLong.add(null);
 

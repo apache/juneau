@@ -142,37 +142,37 @@ public class PrimitiveObjectsBean {
 		poalBigDecimal = l(a(new BigDecimal("1")),null);
 
 		// Regular list of primitives
-		polBoolean = new ArrayList<>();
+		polBoolean = list();
 		polBoolean.add(a(Boolean.TRUE));
 		polBoolean.add(null);
-		polByte = new ArrayList<>();
+		polByte = list();
 		polByte.add(a((byte)1));
 		polByte.add(null);
-		polChar = new ArrayList<>();
+		polChar = list();
 		polChar.add(a('a'));
 		polChar.add(null);
-		polShort = new ArrayList<>();
+		polShort = list();
 		polShort.add(a((short)1));
 		polShort.add(null);
-		polInt = new ArrayList<>();
+		polInt = list();
 		polInt.add(a(1));
 		polInt.add(null);
-		polLong = new ArrayList<>();
+		polLong = list();
 		polLong.add(a(1L));
 		polLong.add(null);
-		polFloat = new ArrayList<>();
+		polFloat = list();
 		polFloat.add(a(1f));
 		polFloat.add(null);
-		polDouble = new ArrayList<>();
+		polDouble = list();
 		polDouble.add(a(1d));
 		polDouble.add(null);
-		polNumber = new ArrayList<>();
+		polNumber = list();
 		polNumber.add(a((Number)1));
 		polNumber.add(null);
-		polBigInteger = new ArrayList<>();
+		polBigInteger = list();
 		polBigInteger.add(a(BigInteger.valueOf(1L)));
 		polBigInteger.add(null);
-		polBigDecimal = new ArrayList<>();
+		polBigDecimal = list();
 		polBigDecimal.add(a(new BigDecimal("1")));
 		polBigDecimal.add(null);
 

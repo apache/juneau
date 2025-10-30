@@ -302,7 +302,7 @@ public class SerializerSession extends BeanTraverseSession {
 		Class<?> componentType = type.getComponentType();
 		if (componentType.isPrimitive()) {
 			int l = Array.getLength(array);
-			List<Object> list = new ArrayList<>(l);
+			var list = new ArrayList<>(l);
 			for (int i = 0; i < l; i++)
 				list.add(Array.get(array, i));
 			return list;

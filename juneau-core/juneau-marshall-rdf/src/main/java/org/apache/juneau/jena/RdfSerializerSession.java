@@ -443,7 +443,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws SerializeException {
-		List<BeanPropertyValue> l = new ArrayList<>();
+		var l = new ArrayList<BeanPropertyValue>();
 
 		if (nn(typeName)) {
 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();

@@ -1426,8 +1426,8 @@ class StringUtils_Test extends TestBase {
 	@Test void a87_cdlToSet() {
 		assertEquals(new LinkedHashSet<>(l("a", "b", "c")), cdlToSet("a,b,c"));
 		assertEquals(new LinkedHashSet<>(l("a", "b", "c")), cdlToSet(" a , b , c "));
-		assertEquals(new LinkedHashSet<>(), cdlToSet(null));
-		assertEquals(new LinkedHashSet<>(), cdlToSet(""));
+		assertEquals(set(), cdlToSet(null));
+		assertEquals(set(), cdlToSet(""));
 		assertEquals(new LinkedHashSet<>(l("a")), cdlToSet("a"));
 	}
 

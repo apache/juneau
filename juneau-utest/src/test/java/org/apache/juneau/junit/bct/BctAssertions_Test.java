@@ -535,7 +535,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h12_linkedHashMapOrdering() {
 			// Test that LinkedHashMap preserves insertion order
-			var linkedMap = new LinkedHashMap<String, String>();
+			var linkedMap = map();
 			linkedMap.put("first", "1");
 			linkedMap.put("second", "2");
 			linkedMap.put("third", "3");

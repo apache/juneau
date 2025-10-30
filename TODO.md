@@ -8,6 +8,15 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 
 ## Code Quality Improvements
 
+- [ ] TODO-55 Convert `instanceof` followed by cast to use pattern matching for instanceof (Java 14+ feature).
+  - **Pattern**: `if (obj instanceof Type) { Type t = (Type)obj; ... }` → `if (obj instanceof Type t) { ... }`
+  - **Estimated instances**: ~52 occurrences across the codebase
+  - **Examples found**:
+    - `CharSequenceReader.java`: `if (cs instanceof String) s = (String)cs;` → `if (cs instanceof String s2) s = s2;`
+    - `ClassUtils.java`: `if (t instanceof ParameterizedType) { ParameterizedType pt = (ParameterizedType)t; ...` → `if (t instanceof ParameterizedType pt) { ...`
+    - `PropertyExtractor_Test.java`: `if (o instanceof String) { String str = (String)o; ...` → `if (o instanceof String str) { ...`
+  - **Benefits**: Eliminates redundant casts, makes code more concise and type-safe, reduces verbosity
+  - **Files with multiple opportunities**: ClassUtils.java, CharSequenceReader.java, HttpHeaders.java, HttpParts.java, RestContext.java, and various test files
 - [ ] TODO-5 Fields should be alphabetized.
 - [ ] TODO-6 Investigate if there are any other W3 or RFC specifications that would make good candidates for new bean modules.
 - [ ] TODO-12 Tests for Spring Boot testing.
@@ -16,7 +25,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
 - [ ] TODO-29 Finish setting up SonarQube analysis in git workflow.
 - [ ] TODO-49 Use static imports for all method calls to StringUtils.
-- [ ] TODO-52 Use static imports for all method calls to Utils.
+- [x] TODO-52 Use static imports for all method calls to Utils.
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
 
 ## Framework Improvements

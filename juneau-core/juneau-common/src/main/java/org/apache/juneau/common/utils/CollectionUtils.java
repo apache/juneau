@@ -157,7 +157,7 @@ public class CollectionUtils {
 	public static <E> List<E> addAll(List<E> value, List<E> entries) {
 		if (nn(entries)) {
 			if (value == null)
-				value = new ArrayList<>(entries);
+				value = copyOf(entries);
 			else
 				value.addAll(entries);
 		}
@@ -410,7 +410,7 @@ public class CollectionUtils {
 	public static <E> ArrayList<E> toList(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null || (nullIfEmpty && value.isEmpty()))
 			return null;
-		ArrayList<E> l = new ArrayList<>();
+		var l = new ArrayList<E>();
 		value.forEach(x -> l.add(x));
 		return l;
 	}
@@ -436,7 +436,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map() {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		return m;
 	}
 
@@ -450,7 +450,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		return m;
 	}
@@ -467,7 +467,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
 		return m;
@@ -487,7 +487,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
 		m.put(k3, v3);
@@ -510,7 +510,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
 		m.put(k3, v3);
@@ -536,7 +536,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
 		m.put(k3, v3);
@@ -565,7 +565,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
 		m.put(k3, v3);
@@ -597,7 +597,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
 		m.put(k3, v3);
@@ -632,7 +632,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
 		m.put(k3, v3);
@@ -670,7 +670,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
 		m.put(k3, v3);
@@ -711,7 +711,7 @@ public class CollectionUtils {
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
-		LinkedHashMap<K,V> m = new LinkedHashMap<>();
+		var m = new LinkedHashMap<K,V>();
 		m.put(k1, v1);
 		m.put(k2, v2);
 		m.put(k3, v3);
@@ -1086,7 +1086,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> TreeSet<E> sortedSet(E...values) {
-		TreeSet<E> l = new TreeSet<>();
+		var l = new TreeSet<E>();
 		for (E v : values)
 			l.add(v);
 		return l;
@@ -1102,7 +1102,7 @@ public class CollectionUtils {
 	public static <E> TreeSet<E> toSortedSet(Collection<E> value) {
 		if (value == null)
 			return null;
-		TreeSet<E> l = new TreeSet<>();
+		var l = new TreeSet<E>();
 		value.forEach(x -> l.add(x));
 		return l;
 	}
@@ -1118,7 +1118,7 @@ public class CollectionUtils {
 	public static <E> TreeSet<E> toSortedSet(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null || (nullIfEmpty && value.isEmpty()))
 			return null;
-		TreeSet<E> l = new TreeSet<>();
+		var l = new TreeSet<E>();
 		value.forEach(x -> l.add(x));
 		return l;
 	}
@@ -1409,7 +1409,7 @@ public class CollectionUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E> List<E> toList(Object array, Class<E> elementType) {
-		List<E> l = new ArrayList<>(Array.getLength(array));
+		var l = new ArrayList<E>(Array.getLength(array));
 		for (int i = 0; i < Array.getLength(array); i++)
 			l.add((E)Array.get(array, i));
 		return l;
@@ -1442,7 +1442,7 @@ public class CollectionUtils {
 	 * @return A new {@link ArrayList}
 	 */
 	public static List<Object> toObjectList(Object array) {
-		List<Object> l = new ArrayList<>(Array.getLength(array));
+		var l = new ArrayList<Object>(Array.getLength(array));
 		for (int i = 0; i < Array.getLength(array); i++) {
 			Object o = Array.get(array, i);
 			if (isArray(o))

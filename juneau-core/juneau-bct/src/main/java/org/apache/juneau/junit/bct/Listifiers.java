@@ -19,6 +19,7 @@ package org.apache.juneau.junit.bct;
 import static java.util.Collections.*;
 import static java.util.Spliterators.*;
 import static java.util.stream.StreamSupport.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -191,7 +192,7 @@ public class Listifiers {
 				collection2.addAll(collection);
 				collection = collection2;
 			}
-			return new ArrayList<>(collection);
+			return toList(collection);
 		};
 	}
 
@@ -370,7 +371,7 @@ public class Listifiers {
 				map2.putAll(map);
 				map = map2;
 			}
-			return new ArrayList<>(map.entrySet());
+			return toList(map.entrySet());
 		};
 	}
 

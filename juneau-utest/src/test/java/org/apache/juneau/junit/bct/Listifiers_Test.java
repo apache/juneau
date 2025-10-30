@@ -335,7 +335,7 @@ class Listifiers_Test extends TestBase {
 			assertEquals("z", hashEntries.get(2).getKey());
 
 			// LinkedHashMap preserves insertion order
-			var linkedMap = new LinkedHashMap<String, String>();
+			var linkedMap = map();
 			linkedMap.put("z", "value1");
 			linkedMap.put("a", "value2");
 			linkedMap.put("m", "value3");

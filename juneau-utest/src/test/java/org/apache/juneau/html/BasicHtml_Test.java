@@ -2867,7 +2867,7 @@ class BasicHtml_Test extends TestBase {
 		BeanWithLinkBeanProperties init() {
 			a = new LinkBean().init();
 			b = new ListWithLinkBeans().append(new LinkBean().init());
-			c = new LinkedHashMap<>();
+			c = map();
 			c.put("c1", new LinkBean().init());
 			return this;
 		}
@@ -2904,7 +2904,7 @@ class BasicHtml_Test extends TestBase {
 		BeanWithLinkBeanPropertiesC init() {
 			a = new LinkBeanC().init();
 			b = new ListWithLinkBeansC().append(new LinkBeanC().init());
-			c = new LinkedHashMap<>();
+			c = map();
 			c.put("c1", new LinkBeanC().init());
 			return this;
 		}

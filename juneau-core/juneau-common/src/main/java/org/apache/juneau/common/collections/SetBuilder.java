@@ -251,7 +251,7 @@ public class SetBuilder<E> {
 		if (values.length == 0)
 			return this;
 		if (converters == null)
-			converters = new ArrayList<>();
+			converters = list();
 		converters.addAll(l(values));
 		return this;
 	}

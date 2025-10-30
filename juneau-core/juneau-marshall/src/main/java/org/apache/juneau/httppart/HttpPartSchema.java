@@ -4586,7 +4586,7 @@ public class HttpPartSchema {
 
 	private boolean isValidUniqueItems(Collection<?> x) {
 		if (uniqueItems && ! (x instanceof Set)) {
-			Set<Object> s = new HashSet<>();
+			var s = new HashSet<Object>();
 			for (Object o : x)
 				if (! s.add(o))
 					return false;
@@ -4596,7 +4596,7 @@ public class HttpPartSchema {
 
 	private boolean isValidUniqueItems(Object x) {
 		if (uniqueItems) {
-			Set<Object> s = new HashSet<>();
+			var s = new HashSet<Object>();
 			for (int i = 0; i < Array.getLength(x); i++) {
 				Object o = Array.get(x, i);
 				if (! s.add(o))

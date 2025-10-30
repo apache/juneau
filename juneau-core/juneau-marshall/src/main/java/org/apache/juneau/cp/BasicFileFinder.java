@@ -211,9 +211,9 @@ public class BasicFileFinder implements FileFinder {
 		if (locale == null)
 			return Collections.singletonList(fileName);
 
-		List<String> list = new ArrayList<>();
-		String baseName = getBaseName(fileName);
-		String ext = getFileExtension(fileName);
+		var list = new ArrayList<String>();
+		var baseName = getBaseName(fileName);
+		var ext = getFileExtension(fileName);
 
 		getCandidateLocales(locale).forEach(x -> {
 			String ls = x.toString();

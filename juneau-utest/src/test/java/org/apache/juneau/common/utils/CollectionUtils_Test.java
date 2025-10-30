@@ -101,7 +101,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(4, result.get("d"));
 
 		// Verify order (LinkedHashMap maintains insertion order)
-		List<String> keys = new ArrayList<>(result.keySet());
+		var keys = new ArrayList<String>(result.keySet());
 		assertEquals(l("a", "b", "c", "d"), keys);
 	}
 
@@ -121,7 +121,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(5, result.get("e"));
 
 		// Verify order (LinkedHashMap maintains insertion order)
-		List<String> keys = new ArrayList<>(result.keySet());
+		var keys = new ArrayList<String>(result.keySet());
 		assertEquals(l("a", "b", "c", "d", "e"), keys);
 	}
 
@@ -401,7 +401,7 @@ class CollectionUtils_Test extends TestBase {
 		assertSize(4, result);
 
 		// Verify insertion order is preserved
-		List<String> keys = new ArrayList<>(result.keySet());
+		var keys = new ArrayList<String>(result.keySet());
 		assertEquals(list("z", "a", "m", "b"), keys);
 	}
 
@@ -413,7 +413,7 @@ class CollectionUtils_Test extends TestBase {
 		assertSize(3, result);
 
 		// Verify insertion order is preserved, including null
-		List<String> keys = new ArrayList<>(result.keySet());
+		var keys = new ArrayList<String>(result.keySet());
 		assertEquals(list("first", null, "last"), keys);
 	}
 
@@ -428,7 +428,7 @@ class CollectionUtils_Test extends TestBase {
 		assertSize(10, result);
 
 		// Verify insertion order
-		List<Integer> keys = new ArrayList<>(result.keySet());
+		var keys = new ArrayList<Integer>(result.keySet());
 		assertEquals(l(10, 9, 8, 7, 6, 5, 4, 3, 2, 1), keys);
 	}
 
@@ -437,7 +437,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, String> result = m("key1", "val1", "key2", "val2", "key3", "val3");
 
 		// Verify order in entrySet
-		List<String> orderedKeys = new ArrayList<>();
+		List<String> orderedKeys = list();
 		for (Map.Entry<String, String> entry : result.entrySet()) {
 			orderedKeys.add(entry.getKey());
 		}
@@ -499,7 +499,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("null-value", result.get(null));
 
 		// Check insertion order
-		List<String> keys = new ArrayList<>(result.keySet());
+		var keys = new ArrayList<String>(result.keySet());
 		assertEquals(list("first", null, "last"), keys);
 
 		// Check immutability
@@ -526,7 +526,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("boolean", result.get(true));
 
 		// Verify order
-		List<Object> keys = new ArrayList<>(result.keySet());
+		var keys = new ArrayList<Object>(result.keySet());
 		assertEquals(list("string", null, 42, true), keys);
 
 		// Verify immutability

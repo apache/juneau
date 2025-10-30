@@ -359,7 +359,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		boolean hasChildren = false;
 		BeanMeta<?> bm = m.getMeta();
 
-		List<BeanPropertyValue> lp = new ArrayList<>();
+		var lp = new ArrayList<BeanPropertyValue>();
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {

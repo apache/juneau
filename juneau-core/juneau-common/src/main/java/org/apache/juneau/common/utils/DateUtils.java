@@ -54,7 +54,7 @@ public class DateUtils {
 		private static final ThreadLocal<SoftReference<Map<String,SimpleDateFormat>>> THREADLOCAL_FORMATS = new ThreadLocal<>() {
 			@Override
 			protected SoftReference<Map<String,SimpleDateFormat>> initialValue() {
-				Map<String,SimpleDateFormat> m = new HashMap<>();
+				var m = new HashMap<String,SimpleDateFormat>();
 				return new SoftReference<>(m);
 			}
 		};

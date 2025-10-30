@@ -67,7 +67,7 @@ import jakarta.servlet.*;
 public class BasicSwaggerProviderSession {
 
 	private static Set<Integer> getCodes(List<StatusCode> la, Integer def) {
-		Set<Integer> codes = new TreeSet<>();
+		var codes = new TreeSet<Integer>();
 		for (StatusCode a : la) {
 			for (int i : a.value())
 				codes.add(i);

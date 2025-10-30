@@ -131,7 +131,7 @@ class JsonSchemaProperty_Test extends TestBase {
 		result = p.setMinProperties(1);
 		assertSame(p, result);
 
-		Map<String, JsonSchema> props = new HashMap<>();
+		var props = new HashMap<String, JsonSchema>();
 		result = p.setProperties(props);
 		assertSame(p, result);
 

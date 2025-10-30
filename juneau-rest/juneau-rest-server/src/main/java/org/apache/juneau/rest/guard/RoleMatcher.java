@@ -215,7 +215,7 @@ public class RoleMatcher {
 	 * @return All the tokens used in this expression.
 	 */
 	public Set<String> getRolesInExpression() {
-		Set<String> set = new TreeSet<>();
+		var set = new TreeSet<String>();
 		exp.appendTokens(set);
 		return set;
 	}

@@ -1159,10 +1159,10 @@ class XmlIgnoreComments_Test extends TestBase {
 		public Map<String,Object[]> o;
 
 		BeanWithAbstractMapArrayFields init() {
-			a = new LinkedHashMap<>();
-			ia = new LinkedHashMap<>();
-			aa = new LinkedHashMap<>();
-			o = new LinkedHashMap<>();
+			a = map();
+			ia = map();
+			aa = map();
+			o = map();
 			a.put("a1", a(new A().init()));
 			ia.put("ia1", a(new A().init()));
 			ia.put("ia2", a((IA)new A().init()));

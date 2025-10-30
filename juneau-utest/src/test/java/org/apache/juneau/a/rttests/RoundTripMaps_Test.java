@@ -183,7 +183,7 @@ class RoundTripMaps_Test extends TestBase {
 		String e;
 		Object r;
 
-		var x = new LinkedHashMap<byte[],String>();
+		var x = map();
 		x.put(bytes(1,2,3), "a");
 		x.put(bytes(4,5,6), null);
 		x.put(null, "b");

@@ -159,7 +159,7 @@ class Listifier_Test extends TestBase {
 
 		@Test
 		void c02_emptyResultHandling() {
-			Listifier<String> emptyReturner = (converter, str) -> new ArrayList<>();
+			Listifier<String> emptyReturner = (converter, str) -> list();
 
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = emptyReturner.apply(converter, "anything");
@@ -191,7 +191,7 @@ class Listifier_Test extends TestBase {
 		@Test
 		void c04_largeListHandling() {
 			Listifier<Integer> largeListGenerator = (converter, count) -> {
-				List<Object> result = new ArrayList<>();
+				List<Object> result = list();
 				for (int i = 0; i < count; i++) {
 					result.add("item_" + i);
 				}
@@ -280,7 +280,7 @@ class Listifier_Test extends TestBase {
 		@Test
 		void e01_performanceWithLargeLists() {
 			Listifier<Integer> rangeGenerator = (converter, count) -> {
-				List<Object> result = new ArrayList<>();
+				List<Object> result = list();
 				for (int i = 0; i < count; i++) {
 					result.add(i);
 				}
@@ -301,7 +301,7 @@ class Listifier_Test extends TestBase {
 		void e02_memoryEfficiency() {
 			Listifier<String> memoryTest = (converter, str) -> {
 				// Create a reasonably sized list
-				List<Object> result = new ArrayList<>();
+				List<Object> result = list();
 				for (int i = 0; i < 1000; i++) {
 					result.add(str + "_" + i);
 				}

@@ -135,8 +135,8 @@ class BeanConverter_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 
 			// Empty collections
-			assertEquals("[]", converter.stringify(new ArrayList<>()));
-			assertEmpty(converter.listify(new ArrayList<>()));
+			assertEquals("[]", converter.stringify(list()));
+			assertEmpty(converter.listify(list()));
 
 			// Empty strings
 			assertEquals("", converter.stringify(""));
@@ -152,7 +152,7 @@ class BeanConverter_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 
 			// Large collection
-			var largeList = new ArrayList<Integer>();
+			var largeList = list();
 			for (int i = 0; i < 1000; i++) {
 				largeList.add(i);
 			}

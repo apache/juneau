@@ -446,7 +446,7 @@ class BeanMap_Test extends TestBase {
 	public static class D1 {
 		public D2 b;
 		public List<D2> lb1;
-		public List<D2> lb2 = new ArrayList<>();
+		public List<D2> lb2 = list();
 		public D2[] ab1;
 		public D2[] ab2 = {};
 	}
@@ -494,7 +494,7 @@ class BeanMap_Test extends TestBase {
 	public static class D1c {
 		public D2c b;
 		public List<D2c> lb1;
-		public List<D2c> lb2 = new ArrayList<>();
+		public List<D2c> lb2 = list();
 		public D2c[] ab1;
 		public D2c[] ab2 = {};
 	}
@@ -1781,7 +1781,7 @@ class BeanMap_Test extends TestBase {
 	}
 
 	public static class AA {
-		private List<String> a = new ArrayList<>();
+		private List<String> a = list();
 		public List<String> getA() { return Collections.emptyList(); }
 		public void setA(List<String> v) { a = v; }
 	}

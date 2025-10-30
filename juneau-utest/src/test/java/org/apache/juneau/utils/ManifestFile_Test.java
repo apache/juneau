@@ -52,7 +52,7 @@ class ManifestFile_Test extends TestBase {
 		ManifestFile mf = new ManifestFile(manifest);
 
 		// Test inner() returns same instance for fluent chaining
-		Map<String,Object> innerMap = new HashMap<>();
+		var innerMap = new HashMap<String,Object>();
 		innerMap.put("test", "value");
 		assertSame(mf, mf.inner(innerMap));
 
@@ -65,7 +65,7 @@ class ManifestFile_Test extends TestBase {
 		assertEquals("custom-value", mf.get("Custom-Key"));
 
 		// Test append(Map) returns same instance
-		Map<String,Object> appendMap = new HashMap<>();
+		var appendMap = new HashMap<String,Object>();
 		appendMap.put("Another-Key", "another-value");
 		assertSame(mf, mf.append(appendMap));
 		assertEquals("another-value", mf.get("Another-Key"));

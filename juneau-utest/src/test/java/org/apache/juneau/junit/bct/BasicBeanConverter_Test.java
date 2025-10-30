@@ -509,7 +509,7 @@ class BasicBeanConverter_Test extends TestBase {
 			var converter = builder().defaultSettings().build();
 
 			// Test performance with larger objects
-			var largeList = new ArrayList<>();
+			var largeList = list();
 			for (int i = 0; i < 1000; i++) {
 				largeList.add("item_" + i);
 			}

@@ -361,7 +361,7 @@ public class Messages extends ResourceBundle {
 			setParent(parent);
 		this.locale = locale == null ? Locale.getDefault() : locale;
 
-		Map<String,String> keyMap = new TreeMap<>();
+		var keyMap = new TreeMap<String,String>();
 
 		String cn = scn(c) + '.';
 		if (nn(rb)) {

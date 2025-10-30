@@ -125,6 +125,35 @@ InputStream stream = resource.getStream();
 boolean isEmpty = list.isEmpty();
 ```
 
+#### Git Operations and Reverts
+When working with git operations, especially reverting changes:
+
+1. **Always revert one file at a time** - Never use broad wildcards or multiple file paths in a single revert command:
+   - ✅ CORRECT: `git checkout -- path/to/specific/File.java`
+   - ❌ WRONG: `git checkout -- .` (reverts everything)
+   - ❌ WRONG: `git checkout -- module1/ module2/` (reverts multiple locations)
+
+2. **Why this matters:**
+   - Prevents accidentally reverting good changes along with problematic ones
+   - Makes it easier to track which specific file had the issue
+   - Allows surgical fixes without losing other work
+   - Easier to recover if you revert the wrong file
+
+3. **Proper workflow when compilation fails:**
+   - Identify the specific file(s) causing the error
+   - Revert only that file: `git checkout -- path/to/ProblematicFile.java`
+   - Verify the revert fixed the issue
+   - Then address that specific file's conversion separately
+
+**Example:**
+```bash
+# WRONG - Reverts all changes
+git checkout -- .
+
+# CORRECT - Revert specific problematic file
+git checkout -- juneau-core/juneau-marshall/src/main/java/org/apache/juneau/objecttools/ObjectSearcher.java
+```
+
 ### 2. Testing Standards
 - Ensure comprehensive test coverage for all changes
 - Follow the established unit testing patterns

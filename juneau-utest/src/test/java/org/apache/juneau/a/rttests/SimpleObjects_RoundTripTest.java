@@ -501,7 +501,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a54_linkedHashMap(RoundTrip_Tester t) throws Exception {
-		var x = new LinkedHashMap<String,Object>();
+		var x = map();
 		x.put("a", true);
 		x.put("b", false);
 		x.put("c", null);

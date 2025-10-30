@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -446,7 +447,7 @@ public class TestUtils extends Utils2 {
 	 * @return List of HTML content strings (inner content of matching elements)
 	 */
 	public static List<String> extractXml(String html, String elementName, Map<String,String> withAttributes) {
-		List<String> results = new ArrayList<>();
+		List<String> results = list();
 
 		if (html == null || elementName == null) {
 			return results;

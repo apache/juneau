@@ -270,11 +270,11 @@ public class BasicBeanConverter implements BeanConverter {
 	 * @see PropertyExtractor
 	 */
 	public static class Builder {
-		private Map<String,Object> settings = new HashMap<>();
-		private List<StringifierEntry<?>> stringifiers = new ArrayList<>();
-		private List<ListifierEntry<?>> listifiers = new ArrayList<>();
-		private List<SwapperEntry<?>> swappers = new ArrayList<>();
-		private List<PropertyExtractor> propertyExtractors = new ArrayList<>();
+		private Map<String,Object> settings = map();
+		private List<StringifierEntry<?>> stringifiers = list();
+		private List<ListifierEntry<?>> listifiers = list();
+		private List<SwapperEntry<?>> swappers = list();
+		private List<PropertyExtractor> propertyExtractors = list();
 
 		/**
 		 * Registers a custom listifier for a specific type.
@@ -690,11 +690,11 @@ public class BasicBeanConverter implements BeanConverter {
 	private final ConcurrentHashMap<Class,Optional<Swapper<?>>> swapperMap = new ConcurrentHashMap<>();
 
 	protected BasicBeanConverter(Builder b) {
-		stringifiers = new ArrayList<>(b.stringifiers);
-		listifiers = new ArrayList<>(b.listifiers);
-		swappers = new ArrayList<>(b.swappers);
-		propertyExtractors = new ArrayList<>(b.propertyExtractors);
-		settings = new HashMap<>(b.settings);
+		stringifiers = copyOf(b.stringifiers);
+		listifiers = copyOf(b.listifiers);
+		swappers = copyOf(b.swappers);
+		propertyExtractors = copyOf(b.propertyExtractors);
+		settings = copyOf(b.settings);
 		Collections.reverse(stringifiers);
 		Collections.reverse(listifiers);
 		Collections.reverse(swappers);

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -290,7 +291,7 @@ public class VarResolverSession {
 				if (ci != null) {
 					c2 = (List)ci.inner().newInstance();
 				} else {
-					c2 = new ArrayList<>();
+					c2 = list();
 				}
 				List c3 = c2;
 				c.forEach(x -> c3.add(resolve(x)));

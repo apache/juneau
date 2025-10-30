@@ -118,7 +118,7 @@ public class ClassUtils {
 		assertArgsNotNull("pt", pt, "c", c);
 
 		// We need to make up a mapping of type names.
-		Map<Type,Type> typeMap = new HashMap<>();
+		var typeMap = new HashMap<Type,Type>();
 		Class<?> cc = c;
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
@@ -151,7 +151,7 @@ public class ClassUtils {
 			for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 				Class<?> outerClass = cc.getClass();
 				nestedOuterTypes.add(outerClass);
-				Map<Type,Type> outerTypeMap = new HashMap<>();
+				var outerTypeMap = new HashMap<Type,Type>();
 				extractTypes(outerTypeMap, outerClass);
 				for (Map.Entry<Type,Type> entry : outerTypeMap.entrySet()) {
 					Type key = entry.getKey(), value = entry.getValue();

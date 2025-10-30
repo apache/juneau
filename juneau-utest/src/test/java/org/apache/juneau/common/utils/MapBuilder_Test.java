@@ -32,7 +32,7 @@ public class MapBuilder_Test {
             .add("b",2)
             .addAll(map("c",3))
             .build();
-        LinkedHashMap<String,Integer> expected = new LinkedHashMap<>();
+        LinkedHashMap<String,Integer> expected = map();
         expected.put("a",1);
         expected.put("b",2);
         expected.put("c",3);

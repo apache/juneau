@@ -82,7 +82,7 @@ class Args_Test extends TestBase {
 		Args a = new Args(a("main1"));
 
 		// Test inner() returns same instance for fluent chaining
-		Map<String,Object> innerMap = new HashMap<>();
+		var innerMap = new HashMap<String,Object>();
 		innerMap.put("test", "value");
 		assertSame(a, a.inner(innerMap));
 
@@ -95,7 +95,7 @@ class Args_Test extends TestBase {
 		assertEquals("value1", a.get("key1"));
 
 		// Test append(Map) returns same instance
-		Map<String,Object> appendMap = new HashMap<>();
+		var appendMap = new HashMap<String,Object>();
 		appendMap.put("key2", "value2");
 		assertSame(a, a.append(appendMap));
 		assertEquals("value2", a.get("key2"));

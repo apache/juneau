@@ -155,7 +155,7 @@ public class ListBuilder<E> {
 	 */
 	public ListBuilder<E> add(E value) {
 		if (list == null)
-			list = new ArrayList<>();
+			list = list();
 		list.add(value);
 		return this;
 	}
@@ -202,7 +202,7 @@ public class ListBuilder<E> {
 		if (values.length == 0)
 			return this;
 		if (converters == null)
-			converters = new ArrayList<>();
+			converters = list();
 		converters.addAll(l(values));
 		return this;
 	}
@@ -299,7 +299,7 @@ public class ListBuilder<E> {
 				list = null;
 		} else {
 			if (list == null)
-				list = new ArrayList<>(0);
+				list = list();
 		}
 		if (nn(list)) {
 			if (nn(comparator))
@@ -317,7 +317,7 @@ public class ListBuilder<E> {
 	 */
 	public ListBuilder<E> copy() {
 		if (nn(list))
-			list = new ArrayList<>(list);
+			list = copyOf(list);
 		return this;
 	}
 

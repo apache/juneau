@@ -55,17 +55,17 @@ class BeanConfig_Test extends TestBase {
 		p2.setAddress(a);
 
 		// setup the reference results
-		var m1 = new LinkedHashMap<String,Object>();
+		var m1 = map();
 		m1.put("name", p1.getName());
 		m1.put("age", Integer.valueOf(p1.getAge()));
 
-		var m2 = new LinkedHashMap<String,Object>();
+		var m2 = map();
 		m2.put("street", a.getStreet());
 		m2.put("city", a.getCity());
 		m2.put("state", a.getState());
 		m2.put("zip", a.getZip());
 
-		var m3 = new LinkedHashMap<String,Object>();
+		var m3 = map();
 		m3.put("name", p2.getName());
 		m3.put("age", Integer.valueOf(p2.getAge()));
 		m3.put("address", p2.getAddress());

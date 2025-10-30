@@ -189,7 +189,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 		public Set<AEnum> getF8() { return f8; }
 		public void setF8(Set<AEnum> v) { f8 = v; }
 
-		public Map<AEnum,AEnum> f9 = new LinkedHashMap<>();
+		public Map<AEnum,AEnum> f9 = map();
 
 		public A init() {
 			f1 = AEnum.FOO;
@@ -231,7 +231,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 		public Set<BEnum> getF8() { return f8; }
 		public void setF8(Set<BEnum> v) { f8 = v; }
 
-		public Map<BEnum,BEnum> f9 = new LinkedHashMap<>();
+		public Map<BEnum,BEnum> f9 = map();
 
 		public B init() {
 			f1 = BEnum.FOO;

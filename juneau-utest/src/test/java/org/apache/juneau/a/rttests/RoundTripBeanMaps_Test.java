@@ -934,7 +934,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var x = L.create();
 		assertDoesNotThrow(()->t.roundTrip(x, L.class));
 
-		var x2 = new LinkedHashMap<String,L>();
+		var x2 = map();
 		x2.put("bar", L.create());
 		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, L.class));
 	}
@@ -956,7 +956,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var x = L2.create();
 		assertDoesNotThrow(()->t.roundTrip(x, L2.class));
 
-		var x2 = new LinkedHashMap<String,L2>();
+		var x2 = map();
 		x2.put("bar", L2.create());
 		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, L2.class));
 	}
@@ -984,7 +984,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var x = M.create();
 		assertDoesNotThrow(()->t.roundTrip(x, M.class));
 
-		var x2 = new LinkedHashMap<String,M>();
+		var x2 = map();
 		x2.put("bar", M.create());
 		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, M.class));
 	}
@@ -1017,7 +1017,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 		var x = M2.create();
 		assertDoesNotThrow(()->t.roundTrip(x, M2.class));
 
-		var x2 = new LinkedHashMap<String,M2>();
+		var x2 = map();
 		x2.put("bar", M2.create());
 		assertDoesNotThrow(()->t.roundTrip(x2, LinkedHashMap.class, String.class, M2.class));
 	}

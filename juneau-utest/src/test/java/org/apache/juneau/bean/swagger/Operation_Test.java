@@ -215,9 +215,9 @@ class Operation_Test extends TestBase {
 
 		@Test void a16_addSecurityCollection() {
 			// Test addSecurity with Collection
-			Map<String,List<String>> map1 = new LinkedHashMap<>();
+			Map<String,List<String>> map1 = map();
 			map1.put("scheme1", l("a"));
-			Map<String,List<String>> map2 = new LinkedHashMap<>();
+			Map<String,List<String>> map2 = map();
 			map2.put("scheme2", l("b"));
 
 			Collection<Map<String,List<String>>> coll1 = l(map1);

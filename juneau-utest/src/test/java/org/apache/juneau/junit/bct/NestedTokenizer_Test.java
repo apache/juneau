@@ -406,7 +406,7 @@ class NestedTokenizer_Test extends TestBase {
 		assertFalse(token.hasNested()); // Should return false when nested is null
 
 		// Case 2: empty nested list
-		token.setNested(new ArrayList<>());
+		token.setNested(list());
 		assertFalse(token.hasNested()); // Should return false when nested is empty
 
 		// Case 3: non-empty nested list

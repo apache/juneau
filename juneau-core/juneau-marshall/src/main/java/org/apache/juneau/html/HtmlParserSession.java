@@ -199,7 +199,7 @@ public class HtmlParserSession extends XmlParserSession {
 	}
 
 	private static Map<String,String> getAttributes(XmlReader r) {
-		Map<String,String> m = new TreeMap<>();
+		var m = new TreeMap<String,String>();
 		for (int i = 0; i < r.getAttributeCount(); i++)
 			m.put(r.getAttributeLocalName(i), r.getAttributeValue(i));
 		return m;

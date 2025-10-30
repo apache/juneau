@@ -129,7 +129,7 @@ class ResolvingJsonMapTest extends TestBase {
 		var m = new ResolvingJsonMap(vr.createSession());
 
 		// Test inner() returns same instance for fluent chaining
-		Map<String,Object> innerMap = new HashMap<>();
+		var innerMap = new HashMap<String,Object>();
 		innerMap.put("test", "$X{a}");
 		assertSame(m, m.inner(innerMap));
 		assertEquals("1", m.get("test"));
@@ -143,7 +143,7 @@ class ResolvingJsonMapTest extends TestBase {
 		assertEquals("2", m.get("key1"));
 
 		// Test append(Map) returns same instance
-		Map<String,Object> appendMap = new HashMap<>();
+		var appendMap = new HashMap<String,Object>();
 		appendMap.put("key2", "$X{c}");
 		assertSame(m, m.append(appendMap));
 		assertEquals("3", m.get("key2"));

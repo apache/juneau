@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -47,7 +48,7 @@ class MediaRange_Test extends TestBase {
 		MediaRange x = new MediaRange(element);
 
 		// Test fluent chaining
-		List<String> names = new ArrayList<>();
+		List<String> names = list();
 		MediaRange result = x.forEachParameter(p -> names.add(p.getName()));
 
 		// Verify it returns MediaRange (not MediaType)
@@ -66,7 +67,7 @@ class MediaRange_Test extends TestBase {
 		MediaRange x = new MediaRange(element);
 
 		// Collect all parameter values
-		Map<String, String> params = new HashMap<>();
+		var params = new HashMap<String, String>();
 		x.forEachParameter(p -> params.put(p.getName(), p.getValue()));
 
 		assertEquals("UTF-8", params.get("charset"));
@@ -94,8 +95,8 @@ class MediaRange_Test extends TestBase {
 		MediaRange x = new MediaRange(element);
 
 		// Chain multiple calls
-		List<String> names1 = new ArrayList<>();
-		List<String> names2 = new ArrayList<>();
+		List<String> names1 = list();
+		List<String> names2 = list();
 
 		x.forEachParameter(p -> names1.add(p.getName()))
 		 .forEachParameter(p -> names2.add(p.getName()));

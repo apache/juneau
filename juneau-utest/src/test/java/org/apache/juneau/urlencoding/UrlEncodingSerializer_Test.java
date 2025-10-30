@@ -531,7 +531,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 	}
 
 	@Test void a07_multiPartParametersOnMapOfStringArrays() throws Exception {
-		var t = new LinkedHashMap<>();
+		var t = map();
 		t.put("f1", a("bar"));
 		t.put("f2", a("bar","baz"));
 		t.put("f3", a());

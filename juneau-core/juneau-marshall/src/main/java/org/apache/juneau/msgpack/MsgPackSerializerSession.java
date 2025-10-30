@@ -291,7 +291,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
-		List<BeanPropertyValue> values = new ArrayList<>();
+		var values = new ArrayList<BeanPropertyValue>();
 
 		if (nn(typeName)) {
 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();

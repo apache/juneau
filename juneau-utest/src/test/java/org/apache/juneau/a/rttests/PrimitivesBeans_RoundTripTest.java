@@ -219,28 +219,28 @@ class PrimitivesBeans_RoundTripTest extends RoundTripTest_Base {
 			plDouble = l(doubles(1), null);
 
 			// Anonymous list of primitives
-			palBoolean = new ArrayList<>();
+			palBoolean = list();
 			palBoolean.add(booleans(true));
 			palBoolean.add(null);
-			palByte = new ArrayList<>();
+			palByte = list();
 			palByte.add(bytes(1));
 			palByte.add(null);
-			palChar = new ArrayList<>();
+			palChar = list();
 			palChar.add(chars('a'));
 			palChar.add(null);
-			palShort = new ArrayList<>();
+			palShort = list();
 			palShort.add(shorts(1));
 			palShort.add(null);
-			palInt = new ArrayList<>();
+			palInt = list();
 			palInt.add(ints(1));
 			palInt.add(null);
-			palLong = new ArrayList<>();
+			palLong = list();
 			palLong.add(longs(1));
 			palLong.add(null);
-			palFloat = new ArrayList<>();
+			palFloat = list();
 			palFloat.add(floats(1));
 			palFloat.add(null);
-			palDouble = new ArrayList<>();
+			palDouble = list();
 			palDouble.add(doubles(1));
 			palDouble.add(null);
 			return this;

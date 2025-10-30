@@ -198,7 +198,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	public static class BeanWithDynaField {
 		public int f1;
 		@Beanp(name="*")
-		public Map<String,Object> f2 = new LinkedHashMap<>();
+		public Map<String,Object> f2 = map();
 		public int f3;
 
 		public BeanWithDynaField init() {
@@ -212,7 +212,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	@Bean(sort=true)
 	public static class BeanWithDynaMethods {
 
-		private Map<String,Object> f2 = new LinkedHashMap<>();
+		private Map<String,Object> f2 = map();
 		private boolean setterCalled;
 
 		private int f1;
@@ -245,7 +245,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	@Bean(sort=true)
 	public static class BeanWithDynaMethodsAndExtraKeys {
 
-		private Map<String,Object> f2 = new LinkedHashMap<>();
+		private Map<String,Object> f2 = map();
 		private boolean setterCalled;
 
 		private int f1;
@@ -283,7 +283,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	@Bean(sort=true)
 	public static class BeanWithDynaGetterOnly {
 
-		private Map<String,Object> f2 = new LinkedHashMap<>();
+		private Map<String,Object> f2 = map();
 
 		private int f1;
 		public int getF1() { return f1; }
@@ -310,7 +310,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	public static class BeanWithDynaFieldSwapped {
 		@Beanp(name="*")
 		@Swap(TemporalCalendarSwap.IsoInstant.class)
-		public Map<String,Calendar> f1 = new LinkedHashMap<>();
+		public Map<String,Calendar> f1 = map();
 
 		public BeanWithDynaFieldSwapped init() {
 			f1.put("f1a", SINGLE_DATE);
@@ -321,7 +321,7 @@ class DynaBean_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	@Bean(sort=true)
 	public static class BeanWithDynaFieldStringList {
 		@Beanp(name="*")
-		public Map<String,List<String>> f1 = new LinkedHashMap<>();
+		public Map<String,List<String>> f1 = map();
 
 		public BeanWithDynaFieldStringList init() {
 			f1.put("f1a", l(a("foo","bar")));

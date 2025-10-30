@@ -364,7 +364,7 @@ class AssertionArgs_Test extends TestBase {
 		// Each thread should create its own instance
 
 		var sharedArgs = new AssertionArgs();
-		var results = Collections.synchronizedList(new ArrayList<String>());
+		var results = Collections.synchronizedList(list());
 
 		// Simulate multiple threads modifying the same instance
 		var threads = new Thread[5];

@@ -103,7 +103,7 @@ public class LogsResource extends BasicRestServlet {
 
 		@Html(format = HtmlFormat.HTML_CDC)
 		public List<Action> getActions() throws Exception {
-			List<Action> l = new ArrayList<>();
+			var l = new ArrayList<Action>();
 			if (f.canRead() && ! f.isDirectory()) {
 				l.add(new Action("view", uri + "?method=VIEW"));
 				l.add(new Action("highlighted", uri + "?method=VIEW&highlight=true"));
