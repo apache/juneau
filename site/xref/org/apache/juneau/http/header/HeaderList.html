@@ -914,27 +914,26 @@
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<strong class="jxr_keyword">private</strong> Header createPart(String name, Object value) {
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">var</strong> isResolving = nn(varResolver);
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Supplier&lt;?&gt;) {
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 			<strong class="jxr_keyword">var</strong> value2 = (Supplier&lt;?&gt;)value;
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 			<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicHeader" href="../../../../../org/apache/juneau/http/header/BasicHeader.html#BasicHeader">BasicHeader</a>(name, resolver(value2)) : <strong class="jxr_keyword">new</strong> <a name="BasicHeader" href="../../../../../org/apache/juneau/http/header/BasicHeader.html#BasicHeader">BasicHeader</a>(name, value2);
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		}
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicHeader" href="../../../../../org/apache/juneau/http/header/BasicHeader.html#BasicHeader">BasicHeader</a>(name, resolver(value)) : <strong class="jxr_keyword">new</strong> <a name="BasicHeader" href="../../../../../org/apache/juneau/http/header/BasicHeader.html#BasicHeader">BasicHeader</a>(name, value);
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	}
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> eq(String s1, String s2) {
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 		<strong class="jxr_keyword">return</strong> Utils.eq(! caseSensitive, s1, s2);
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 	}
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 	<strong class="jxr_keyword">private</strong> Supplier&lt;Object&gt; resolver(Object input) {
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		<strong class="jxr_keyword">return</strong> () -&gt; varResolver.resolve(s(unwrap(input)));
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 	}
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object unwrap(Object o) {
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<strong class="jxr_keyword">while</strong> (o instanceof Supplier)
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 			o = ((Supplier&lt;?&gt;)o).get();
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 		<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	}
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> }
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Supplier&lt;?&gt; value2) {
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 			<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicHeader" href="../../../../../org/apache/juneau/http/header/BasicHeader.html#BasicHeader">BasicHeader</a>(name, resolver(value2)) : <strong class="jxr_keyword">new</strong> <a name="BasicHeader" href="../../../../../org/apache/juneau/http/header/BasicHeader.html#BasicHeader">BasicHeader</a>(name, value2);
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		}
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicHeader" href="../../../../../org/apache/juneau/http/header/BasicHeader.html#BasicHeader">BasicHeader</a>(name, resolver(value)) : <strong class="jxr_keyword">new</strong> <a name="BasicHeader" href="../../../../../org/apache/juneau/http/header/BasicHeader.html#BasicHeader">BasicHeader</a>(name, value);
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 	}
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> eq(String s1, String s2) {
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		<strong class="jxr_keyword">return</strong> Utils.eq(! caseSensitive, s1, s2);
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 	}
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 	<strong class="jxr_keyword">private</strong> Supplier&lt;Object&gt; resolver(Object input) {
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		<strong class="jxr_keyword">return</strong> () -&gt; varResolver.resolve(s(unwrap(input)));
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 	}
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object unwrap(Object o) {
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<strong class="jxr_keyword">while</strong> (o instanceof Supplier)
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 			o = ((Supplier&lt;?&gt;)o).get();
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 	}
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

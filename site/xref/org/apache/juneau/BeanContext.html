@@ -4335,169 +4335,166 @@
 <a class="jxr_linenumber" name="L4327" href="#L4327">4327</a> 			} <strong class="jxr_keyword">while</strong> (nn(c));
 <a class="jxr_linenumber" name="L4328" href="#L4328">4328</a> 		}
 <a class="jxr_linenumber" name="L4329" href="#L4329">4329</a> 
-<a class="jxr_linenumber" name="L4330" href="#L4330">4330</a> 		<strong class="jxr_keyword">if</strong> (o instanceof ParameterizedType) {
-<a class="jxr_linenumber" name="L4331" href="#L4331">4331</a> 			ParameterizedType pt = (ParameterizedType)o;
-<a class="jxr_linenumber" name="L4332" href="#L4332">4332</a> 			<strong class="jxr_keyword">if</strong> (! pt.getRawType().equals(Enum.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L4333" href="#L4333">4333</a> 				List&lt;ClassMeta&lt;?&gt;&gt; l = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L4334" href="#L4334">4334</a> 				<strong class="jxr_keyword">for</strong> (Type pt2 : pt.getActualTypeArguments()) {
-<a class="jxr_linenumber" name="L4335" href="#L4335">4335</a> 					<strong class="jxr_keyword">if</strong> (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
-<a class="jxr_linenumber" name="L4336" href="#L4336">4336</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L4337" href="#L4337">4337</a> 					l.add(resolveClassMeta(pt2, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L4338" href="#L4338">4338</a> 				}
-<a class="jxr_linenumber" name="L4339" href="#L4339">4339</a> 				<strong class="jxr_keyword">if</strong> (l.isEmpty())
-<a class="jxr_linenumber" name="L4340" href="#L4340">4340</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L4341" href="#L4341">4341</a> 				<strong class="jxr_keyword">return</strong> l.toArray(<strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>[l.size()]);
-<a class="jxr_linenumber" name="L4342" href="#L4342">4342</a> 			}
-<a class="jxr_linenumber" name="L4343" href="#L4343">4343</a> 		}
-<a class="jxr_linenumber" name="L4344" href="#L4344">4344</a> 
-<a class="jxr_linenumber" name="L4345" href="#L4345">4345</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L4346" href="#L4346">4346</a> 	}
-<a class="jxr_linenumber" name="L4347" href="#L4347">4347</a> 
-<a class="jxr_linenumber" name="L4348" href="#L4348">4348</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L4349" href="#L4349">4349</a> <em class="jxr_javadoccomment">	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.</em>
-<a class="jxr_linenumber" name="L4350" href="#L4350">4350</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L4351" href="#L4351">4351</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The class type being wrapped.</em>
-<a class="jxr_linenumber" name="L4352" href="#L4352">4352</a> <em class="jxr_javadoccomment">	 * @param type The class to resolve.</em>
-<a class="jxr_linenumber" name="L4353" href="#L4353">4353</a> <em class="jxr_javadoccomment">	 * @param waitForInit</em>
-<a class="jxr_linenumber" name="L4354" href="#L4354">4354</a> <em class="jxr_javadoccomment">	 * 	When enabled, wait for the ClassMeta constructor to finish before returning.</em>
-<a class="jxr_linenumber" name="L4355" href="#L4355">4355</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L4356" href="#L4356">4356</a> <em class="jxr_javadoccomment">	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.</em>
-<a class="jxr_linenumber" name="L4357" href="#L4357">4357</a> <em class="jxr_javadoccomment">	 * 	Otherwise, returns a new {@link ClassMeta} object every time.</em>
-<a class="jxr_linenumber" name="L4358" href="#L4358">4358</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L4359" href="#L4359">4359</a> 	<strong class="jxr_keyword">final</strong> &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Class&lt;T&gt; type, <strong class="jxr_keyword">boolean</strong> waitForInit) {
-<a class="jxr_linenumber" name="L4360" href="#L4360">4360</a> 
-<a class="jxr_linenumber" name="L4361" href="#L4361">4361</a> 		<em class="jxr_comment">// This can happen if we have transforms defined against String or Object.</em>
-<a class="jxr_linenumber" name="L4362" href="#L4362">4362</a> 		<strong class="jxr_keyword">if</strong> (cmCache == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L4363" href="#L4363">4363</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L4364" href="#L4364">4364</a> 
-<a class="jxr_linenumber" name="L4365" href="#L4365">4365</a> 		ClassMeta&lt;T&gt; cm = cmCache.get(type);
-<a class="jxr_linenumber" name="L4366" href="#L4366">4366</a> 		<strong class="jxr_keyword">if</strong> (cm == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L4367" href="#L4367">4367</a> 
-<a class="jxr_linenumber" name="L4368" href="#L4368">4368</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a class="jxr_linenumber" name="L4369" href="#L4369">4369</a> 				<em class="jxr_comment">// Make sure someone didn't already set it while this thread was blocked.</em>
-<a class="jxr_linenumber" name="L4370" href="#L4370">4370</a> 				cm = cmCache.get(type);
-<a class="jxr_linenumber" name="L4371" href="#L4371">4371</a> 				<strong class="jxr_keyword">if</strong> (cm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L4372" href="#L4372">4372</a> 					cm = <strong class="jxr_keyword">new</strong> ClassMeta&lt;&gt;(type, <strong class="jxr_keyword">this</strong>, findObjectSwaps(type), findChildObjectSwaps(type));
-<a class="jxr_linenumber" name="L4373" href="#L4373">4373</a> 			}
-<a class="jxr_linenumber" name="L4374" href="#L4374">4374</a> 		}
-<a class="jxr_linenumber" name="L4375" href="#L4375">4375</a> 		<strong class="jxr_keyword">if</strong> (waitForInit)
-<a class="jxr_linenumber" name="L4376" href="#L4376">4376</a> 			cm.waitForInit();
-<a class="jxr_linenumber" name="L4377" href="#L4377">4377</a> 		<strong class="jxr_keyword">return</strong> cm;
-<a class="jxr_linenumber" name="L4378" href="#L4378">4378</a> 	}
-<a class="jxr_linenumber" name="L4379" href="#L4379">4379</a> 
-<a class="jxr_linenumber" name="L4380" href="#L4380">4380</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L4381" href="#L4381">4381</a> <em class="jxr_javadoccomment">	 * Convert a Type to a Class if possible.</em>
-<a class="jxr_linenumber" name="L4382" href="#L4382">4382</a> <em class="jxr_javadoccomment">	 * Return null if not possible.</em>
-<a class="jxr_linenumber" name="L4383" href="#L4383">4383</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L4384" href="#L4384">4384</a> 	<strong class="jxr_keyword">final</strong> Class resolve(Type t, Map&lt;Class&lt;?&gt;,Class&lt;?&gt;[]&gt; typeVarImpls) {
-<a class="jxr_linenumber" name="L4385" href="#L4385">4385</a> 
-<a class="jxr_linenumber" name="L4386" href="#L4386">4386</a> 		<strong class="jxr_keyword">if</strong> (t instanceof Class)
-<a class="jxr_linenumber" name="L4387" href="#L4387">4387</a> 			<strong class="jxr_keyword">return</strong> (Class)t;
-<a class="jxr_linenumber" name="L4388" href="#L4388">4388</a> 
-<a class="jxr_linenumber" name="L4389" href="#L4389">4389</a> 		<strong class="jxr_keyword">if</strong> (t instanceof ParameterizedType)
-<a class="jxr_linenumber" name="L4390" href="#L4390">4390</a> 			<em class="jxr_comment">// A parameter (e.g. &lt;String&gt;.</em>
-<a class="jxr_linenumber" name="L4391" href="#L4391">4391</a> 			<strong class="jxr_keyword">return</strong> (Class)((ParameterizedType)t).getRawType();
-<a class="jxr_linenumber" name="L4392" href="#L4392">4392</a> 
-<a class="jxr_linenumber" name="L4393" href="#L4393">4393</a> 		<strong class="jxr_keyword">if</strong> (t instanceof GenericArrayType) {
-<a class="jxr_linenumber" name="L4394" href="#L4394">4394</a> 			<em class="jxr_comment">// An array parameter (e.g. &lt;byte[]&gt;).</em>
-<a class="jxr_linenumber" name="L4395" href="#L4395">4395</a> 			Type gatct = ((GenericArrayType)t).getGenericComponentType();
-<a class="jxr_linenumber" name="L4396" href="#L4396">4396</a> 
-<a class="jxr_linenumber" name="L4397" href="#L4397">4397</a> 			<strong class="jxr_keyword">if</strong> (gatct instanceof Class)
-<a class="jxr_linenumber" name="L4398" href="#L4398">4398</a> 				<strong class="jxr_keyword">return</strong> Array.newInstance((Class)gatct, 0).getClass();
-<a class="jxr_linenumber" name="L4399" href="#L4399">4399</a> 
-<a class="jxr_linenumber" name="L4400" href="#L4400">4400</a> 			<strong class="jxr_keyword">if</strong> (gatct instanceof ParameterizedType)
-<a class="jxr_linenumber" name="L4401" href="#L4401">4401</a> 				<strong class="jxr_keyword">return</strong> Array.newInstance((Class)((ParameterizedType)gatct).getRawType(), 0).getClass();
-<a class="jxr_linenumber" name="L4402" href="#L4402">4402</a> 
-<a class="jxr_linenumber" name="L4403" href="#L4403">4403</a> 			<strong class="jxr_keyword">if</strong> (gatct instanceof GenericArrayType)
-<a class="jxr_linenumber" name="L4404" href="#L4404">4404</a> 				<strong class="jxr_keyword">return</strong> Array.newInstance(resolve(gatct, typeVarImpls), 0).getClass();
-<a class="jxr_linenumber" name="L4405" href="#L4405">4405</a> 
-<a class="jxr_linenumber" name="L4406" href="#L4406">4406</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L4407" href="#L4407">4407</a> 
-<a class="jxr_linenumber" name="L4408" href="#L4408">4408</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t instanceof TypeVariable) {
-<a class="jxr_linenumber" name="L4409" href="#L4409">4409</a> 			<strong class="jxr_keyword">if</strong> (nn(typeVarImpls)) {
-<a class="jxr_linenumber" name="L4410" href="#L4410">4410</a> 				TypeVariable tv = (TypeVariable)t;
-<a class="jxr_linenumber" name="L4411" href="#L4411">4411</a> 				String varName = tv.getName();
-<a class="jxr_linenumber" name="L4412" href="#L4412">4412</a> 				<strong class="jxr_keyword">int</strong> varIndex = -1;
-<a class="jxr_linenumber" name="L4413" href="#L4413">4413</a> 				Class gc = (Class)tv.getGenericDeclaration();
-<a class="jxr_linenumber" name="L4414" href="#L4414">4414</a> 				TypeVariable[] tvv = gc.getTypeParameters();
-<a class="jxr_linenumber" name="L4415" href="#L4415">4415</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tvv.length; i++) {
-<a class="jxr_linenumber" name="L4416" href="#L4416">4416</a> 					<strong class="jxr_keyword">if</strong> (tvv[i].getName().equals(varName)) {
-<a class="jxr_linenumber" name="L4417" href="#L4417">4417</a> 						varIndex = i;
-<a class="jxr_linenumber" name="L4418" href="#L4418">4418</a> 					}
-<a class="jxr_linenumber" name="L4419" href="#L4419">4419</a> 				}
-<a class="jxr_linenumber" name="L4420" href="#L4420">4420</a> 				<strong class="jxr_keyword">if</strong> (varIndex != -1) {
-<a class="jxr_linenumber" name="L4421" href="#L4421">4421</a> 
-<a class="jxr_linenumber" name="L4422" href="#L4422">4422</a> 					<em class="jxr_comment">// If we couldn't find a type variable implementation, that means</em>
-<a class="jxr_linenumber" name="L4423" href="#L4423">4423</a> 					<em class="jxr_comment">// the type was defined at runtime (e.g. Bean b = new Bean&lt;Foo&gt;();)</em>
-<a class="jxr_linenumber" name="L4424" href="#L4424">4424</a> 					<em class="jxr_comment">// in which case the type is lost through erasure.</em>
-<a class="jxr_linenumber" name="L4425" href="#L4425">4425</a> 					<em class="jxr_comment">// Assume java.lang.Object as the type.</em>
-<a class="jxr_linenumber" name="L4426" href="#L4426">4426</a> 					<strong class="jxr_keyword">if</strong> (! typeVarImpls.containsKey(gc))
-<a class="jxr_linenumber" name="L4427" href="#L4427">4427</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L4428" href="#L4428">4428</a> 
-<a class="jxr_linenumber" name="L4429" href="#L4429">4429</a> 					<strong class="jxr_keyword">return</strong> typeVarImpls.get(gc)[varIndex];
-<a class="jxr_linenumber" name="L4430" href="#L4430">4430</a> 				}
-<a class="jxr_linenumber" name="L4431" href="#L4431">4431</a> 			}
-<a class="jxr_linenumber" name="L4432" href="#L4432">4432</a> 		}
-<a class="jxr_linenumber" name="L4433" href="#L4433">4433</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L4434" href="#L4434">4434</a> 	}
-<a class="jxr_linenumber" name="L4435" href="#L4435">4435</a> 
-<a class="jxr_linenumber" name="L4436" href="#L4436">4436</a> 	<strong class="jxr_keyword">final</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> resolveClassMeta(Type o, Map&lt;Class&lt;?&gt;,Class&lt;?&gt;[]&gt; typeVarImpls) {
-<a class="jxr_linenumber" name="L4437" href="#L4437">4437</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L4438" href="#L4438">4438</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4330" href="#L4330">4330</a> 	<strong class="jxr_keyword">if</strong> (o instanceof ParameterizedType pt) {
+<a class="jxr_linenumber" name="L4331" href="#L4331">4331</a> 		<strong class="jxr_keyword">if</strong> (! pt.getRawType().equals(Enum.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L4332" href="#L4332">4332</a> 			List&lt;ClassMeta&lt;?&gt;&gt; l = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L4333" href="#L4333">4333</a> 			<strong class="jxr_keyword">for</strong> (Type pt2 : pt.getActualTypeArguments()) {
+<a class="jxr_linenumber" name="L4334" href="#L4334">4334</a> 				<strong class="jxr_keyword">if</strong> (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
+<a class="jxr_linenumber" name="L4335" href="#L4335">4335</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4336" href="#L4336">4336</a> 				l.add(resolveClassMeta(pt2, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L4337" href="#L4337">4337</a> 			}
+<a class="jxr_linenumber" name="L4338" href="#L4338">4338</a> 			<strong class="jxr_keyword">if</strong> (l.isEmpty())
+<a class="jxr_linenumber" name="L4339" href="#L4339">4339</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4340" href="#L4340">4340</a> 			<strong class="jxr_keyword">return</strong> l.toArray(<strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>[l.size()]);
+<a class="jxr_linenumber" name="L4341" href="#L4341">4341</a> 		}
+<a class="jxr_linenumber" name="L4342" href="#L4342">4342</a> 	}
+<a class="jxr_linenumber" name="L4343" href="#L4343">4343</a> 
+<a class="jxr_linenumber" name="L4344" href="#L4344">4344</a> 	<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4345" href="#L4345">4345</a> 	}
+<a class="jxr_linenumber" name="L4346" href="#L4346">4346</a> 
+<a class="jxr_linenumber" name="L4347" href="#L4347">4347</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L4348" href="#L4348">4348</a> <em class="jxr_javadoccomment">	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.</em>
+<a class="jxr_linenumber" name="L4349" href="#L4349">4349</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L4350" href="#L4350">4350</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The class type being wrapped.</em>
+<a class="jxr_linenumber" name="L4351" href="#L4351">4351</a> <em class="jxr_javadoccomment">	 * @param type The class to resolve.</em>
+<a class="jxr_linenumber" name="L4352" href="#L4352">4352</a> <em class="jxr_javadoccomment">	 * @param waitForInit</em>
+<a class="jxr_linenumber" name="L4353" href="#L4353">4353</a> <em class="jxr_javadoccomment">	 * 	When enabled, wait for the ClassMeta constructor to finish before returning.</em>
+<a class="jxr_linenumber" name="L4354" href="#L4354">4354</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L4355" href="#L4355">4355</a> <em class="jxr_javadoccomment">	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.</em>
+<a class="jxr_linenumber" name="L4356" href="#L4356">4356</a> <em class="jxr_javadoccomment">	 * 	Otherwise, returns a new {@link ClassMeta} object every time.</em>
+<a class="jxr_linenumber" name="L4357" href="#L4357">4357</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L4358" href="#L4358">4358</a> 	<strong class="jxr_keyword">final</strong> &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Class&lt;T&gt; type, <strong class="jxr_keyword">boolean</strong> waitForInit) {
+<a class="jxr_linenumber" name="L4359" href="#L4359">4359</a> 
+<a class="jxr_linenumber" name="L4360" href="#L4360">4360</a> 		<em class="jxr_comment">// This can happen if we have transforms defined against String or Object.</em>
+<a class="jxr_linenumber" name="L4361" href="#L4361">4361</a> 		<strong class="jxr_keyword">if</strong> (cmCache == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L4362" href="#L4362">4362</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4363" href="#L4363">4363</a> 
+<a class="jxr_linenumber" name="L4364" href="#L4364">4364</a> 		ClassMeta&lt;T&gt; cm = cmCache.get(type);
+<a class="jxr_linenumber" name="L4365" href="#L4365">4365</a> 		<strong class="jxr_keyword">if</strong> (cm == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L4366" href="#L4366">4366</a> 
+<a class="jxr_linenumber" name="L4367" href="#L4367">4367</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L4368" href="#L4368">4368</a> 				<em class="jxr_comment">// Make sure someone didn't already set it while this thread was blocked.</em>
+<a class="jxr_linenumber" name="L4369" href="#L4369">4369</a> 				cm = cmCache.get(type);
+<a class="jxr_linenumber" name="L4370" href="#L4370">4370</a> 				<strong class="jxr_keyword">if</strong> (cm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L4371" href="#L4371">4371</a> 					cm = <strong class="jxr_keyword">new</strong> ClassMeta&lt;&gt;(type, <strong class="jxr_keyword">this</strong>, findObjectSwaps(type), findChildObjectSwaps(type));
+<a class="jxr_linenumber" name="L4372" href="#L4372">4372</a> 			}
+<a class="jxr_linenumber" name="L4373" href="#L4373">4373</a> 		}
+<a class="jxr_linenumber" name="L4374" href="#L4374">4374</a> 		<strong class="jxr_keyword">if</strong> (waitForInit)
+<a class="jxr_linenumber" name="L4375" href="#L4375">4375</a> 			cm.waitForInit();
+<a class="jxr_linenumber" name="L4376" href="#L4376">4376</a> 		<strong class="jxr_keyword">return</strong> cm;
+<a class="jxr_linenumber" name="L4377" href="#L4377">4377</a> 	}
+<a class="jxr_linenumber" name="L4378" href="#L4378">4378</a> 
+<a class="jxr_linenumber" name="L4379" href="#L4379">4379</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L4380" href="#L4380">4380</a> <em class="jxr_javadoccomment">	 * Convert a Type to a Class if possible.</em>
+<a class="jxr_linenumber" name="L4381" href="#L4381">4381</a> <em class="jxr_javadoccomment">	 * Return null if not possible.</em>
+<a class="jxr_linenumber" name="L4382" href="#L4382">4382</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L4383" href="#L4383">4383</a> 	<strong class="jxr_keyword">final</strong> Class resolve(Type t, Map&lt;Class&lt;?&gt;,Class&lt;?&gt;[]&gt; typeVarImpls) {
+<a class="jxr_linenumber" name="L4384" href="#L4384">4384</a> 
+<a class="jxr_linenumber" name="L4385" href="#L4385">4385</a> 		<strong class="jxr_keyword">if</strong> (t instanceof Class)
+<a class="jxr_linenumber" name="L4386" href="#L4386">4386</a> 			<strong class="jxr_keyword">return</strong> (Class)t;
+<a class="jxr_linenumber" name="L4387" href="#L4387">4387</a> 
+<a class="jxr_linenumber" name="L4388" href="#L4388">4388</a> 		<strong class="jxr_keyword">if</strong> (t instanceof ParameterizedType)
+<a class="jxr_linenumber" name="L4389" href="#L4389">4389</a> 			<em class="jxr_comment">// A parameter (e.g. &lt;String&gt;.</em>
+<a class="jxr_linenumber" name="L4390" href="#L4390">4390</a> 			<strong class="jxr_keyword">return</strong> (Class)((ParameterizedType)t).getRawType();
+<a class="jxr_linenumber" name="L4391" href="#L4391">4391</a> 
+<a class="jxr_linenumber" name="L4392" href="#L4392">4392</a> 	<strong class="jxr_keyword">if</strong> (t instanceof GenericArrayType gat) {
+<a class="jxr_linenumber" name="L4393" href="#L4393">4393</a> 		<em class="jxr_comment">// An array parameter (e.g. &lt;byte[]&gt;).</em>
+<a class="jxr_linenumber" name="L4394" href="#L4394">4394</a> 		Type gatct = gat.getGenericComponentType();
+<a class="jxr_linenumber" name="L4395" href="#L4395">4395</a> 
+<a class="jxr_linenumber" name="L4396" href="#L4396">4396</a> 		<strong class="jxr_keyword">if</strong> (gatct instanceof Class&lt;?&gt; c)
+<a class="jxr_linenumber" name="L4397" href="#L4397">4397</a> 			<strong class="jxr_keyword">return</strong> Array.newInstance(c, 0).getClass();
+<a class="jxr_linenumber" name="L4398" href="#L4398">4398</a> 
+<a class="jxr_linenumber" name="L4399" href="#L4399">4399</a> 		<strong class="jxr_keyword">if</strong> (gatct instanceof ParameterizedType pt)
+<a class="jxr_linenumber" name="L4400" href="#L4400">4400</a> 			<strong class="jxr_keyword">return</strong> Array.newInstance((Class)pt.getRawType(), 0).getClass();
+<a class="jxr_linenumber" name="L4401" href="#L4401">4401</a> 
+<a class="jxr_linenumber" name="L4402" href="#L4402">4402</a> 		<strong class="jxr_keyword">if</strong> (gatct instanceof GenericArrayType)
+<a class="jxr_linenumber" name="L4403" href="#L4403">4403</a> 			<strong class="jxr_keyword">return</strong> Array.newInstance(resolve(gatct, typeVarImpls), 0).getClass();
+<a class="jxr_linenumber" name="L4404" href="#L4404">4404</a> 
+<a class="jxr_linenumber" name="L4405" href="#L4405">4405</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4406" href="#L4406">4406</a> 
+<a class="jxr_linenumber" name="L4407" href="#L4407">4407</a> 	} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t instanceof TypeVariable tv) {
+<a class="jxr_linenumber" name="L4408" href="#L4408">4408</a> 		<strong class="jxr_keyword">if</strong> (nn(typeVarImpls)) {
+<a class="jxr_linenumber" name="L4409" href="#L4409">4409</a> 			String varName = tv.getName();
+<a class="jxr_linenumber" name="L4410" href="#L4410">4410</a> 			<strong class="jxr_keyword">int</strong> varIndex = -1;
+<a class="jxr_linenumber" name="L4411" href="#L4411">4411</a> 			Class gc = (Class)tv.getGenericDeclaration();
+<a class="jxr_linenumber" name="L4412" href="#L4412">4412</a> 			TypeVariable[] tvv = gc.getTypeParameters();
+<a class="jxr_linenumber" name="L4413" href="#L4413">4413</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; tvv.length; i++) {
+<a class="jxr_linenumber" name="L4414" href="#L4414">4414</a> 				<strong class="jxr_keyword">if</strong> (tvv[i].getName().equals(varName)) {
+<a class="jxr_linenumber" name="L4415" href="#L4415">4415</a> 					varIndex = i;
+<a class="jxr_linenumber" name="L4416" href="#L4416">4416</a> 				}
+<a class="jxr_linenumber" name="L4417" href="#L4417">4417</a> 			}
+<a class="jxr_linenumber" name="L4418" href="#L4418">4418</a> 				<strong class="jxr_keyword">if</strong> (varIndex != -1) {
+<a class="jxr_linenumber" name="L4419" href="#L4419">4419</a> 
+<a class="jxr_linenumber" name="L4420" href="#L4420">4420</a> 					<em class="jxr_comment">// If we couldn't find a type variable implementation, that means</em>
+<a class="jxr_linenumber" name="L4421" href="#L4421">4421</a> 					<em class="jxr_comment">// the type was defined at runtime (e.g. Bean b = new Bean&lt;Foo&gt;();)</em>
+<a class="jxr_linenumber" name="L4422" href="#L4422">4422</a> 					<em class="jxr_comment">// in which case the type is lost through erasure.</em>
+<a class="jxr_linenumber" name="L4423" href="#L4423">4423</a> 					<em class="jxr_comment">// Assume java.lang.Object as the type.</em>
+<a class="jxr_linenumber" name="L4424" href="#L4424">4424</a> 					<strong class="jxr_keyword">if</strong> (! typeVarImpls.containsKey(gc))
+<a class="jxr_linenumber" name="L4425" href="#L4425">4425</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4426" href="#L4426">4426</a> 
+<a class="jxr_linenumber" name="L4427" href="#L4427">4427</a> 					<strong class="jxr_keyword">return</strong> typeVarImpls.get(gc)[varIndex];
+<a class="jxr_linenumber" name="L4428" href="#L4428">4428</a> 				}
+<a class="jxr_linenumber" name="L4429" href="#L4429">4429</a> 			}
+<a class="jxr_linenumber" name="L4430" href="#L4430">4430</a> 		}
+<a class="jxr_linenumber" name="L4431" href="#L4431">4431</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4432" href="#L4432">4432</a> 	}
+<a class="jxr_linenumber" name="L4433" href="#L4433">4433</a> 
+<a class="jxr_linenumber" name="L4434" href="#L4434">4434</a> 	<strong class="jxr_keyword">final</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> resolveClassMeta(Type o, Map&lt;Class&lt;?&gt;,Class&lt;?&gt;[]&gt; typeVarImpls) {
+<a class="jxr_linenumber" name="L4435" href="#L4435">4435</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L4436" href="#L4436">4436</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L4437" href="#L4437">4437</a> 
+<a class="jxr_linenumber" name="L4438" href="#L4438">4438</a> 	<strong class="jxr_keyword">if</strong> (o instanceof ClassMeta&lt;?&gt; cm) {
 <a class="jxr_linenumber" name="L4439" href="#L4439">4439</a> 
-<a class="jxr_linenumber" name="L4440" href="#L4440">4440</a> 		<strong class="jxr_keyword">if</strong> (o instanceof <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>) {
-<a class="jxr_linenumber" name="L4441" href="#L4441">4441</a> 			ClassMeta&lt;?&gt; cm = (<a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>)o;
-<a class="jxr_linenumber" name="L4442" href="#L4442">4442</a> 
-<a class="jxr_linenumber" name="L4443" href="#L4443">4443</a> 			<em class="jxr_comment">// This classmeta could have been created by a different context.</em>
-<a class="jxr_linenumber" name="L4444" href="#L4444">4444</a> 			<em class="jxr_comment">// Need to re-resolve it to pick up ObjectSwaps and stuff on this context.</em>
-<a class="jxr_linenumber" name="L4445" href="#L4445">4445</a> 			<strong class="jxr_keyword">if</strong> (cm.getBeanContext() == <strong class="jxr_keyword">this</strong>)
-<a class="jxr_linenumber" name="L4446" href="#L4446">4446</a> 				<strong class="jxr_keyword">return</strong> cm;
-<a class="jxr_linenumber" name="L4447" href="#L4447">4447</a> 			<strong class="jxr_keyword">if</strong> (cm.isMap())
-<a class="jxr_linenumber" name="L4448" href="#L4448">4448</a> 				<strong class="jxr_keyword">return</strong> getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
-<a class="jxr_linenumber" name="L4449" href="#L4449">4449</a> 			<strong class="jxr_keyword">if</strong> (cm.isCollection() || cm.isOptional())
-<a class="jxr_linenumber" name="L4450" href="#L4450">4450</a> 				<strong class="jxr_keyword">return</strong> getClassMeta(cm.innerClass, cm.getElementType());
-<a class="jxr_linenumber" name="L4451" href="#L4451">4451</a> 			<strong class="jxr_keyword">return</strong> getClassMeta(cm.innerClass);
-<a class="jxr_linenumber" name="L4452" href="#L4452">4452</a> 		}
-<a class="jxr_linenumber" name="L4453" href="#L4453">4453</a> 
-<a class="jxr_linenumber" name="L4454" href="#L4454">4454</a> 		Class c = resolve(o, typeVarImpls);
-<a class="jxr_linenumber" name="L4455" href="#L4455">4455</a> 
-<a class="jxr_linenumber" name="L4456" href="#L4456">4456</a> 		<em class="jxr_comment">// This can happen when trying to resolve the "E getFirst()" method on LinkedList, whose type is a TypeVariable</em>
-<a class="jxr_linenumber" name="L4457" href="#L4457">4457</a> 		<em class="jxr_comment">// These should just resolve to Object.</em>
-<a class="jxr_linenumber" name="L4458" href="#L4458">4458</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L4459" href="#L4459">4459</a> 			<strong class="jxr_keyword">return</strong> object();
-<a class="jxr_linenumber" name="L4460" href="#L4460">4460</a> 
-<a class="jxr_linenumber" name="L4461" href="#L4461">4461</a> 		ClassMeta rawType = getClassMeta(c);
-<a class="jxr_linenumber" name="L4462" href="#L4462">4462</a> 
-<a class="jxr_linenumber" name="L4463" href="#L4463">4463</a> 		<em class="jxr_comment">// If this is a Map or Collection, and the parameter types aren't part</em>
-<a class="jxr_linenumber" name="L4464" href="#L4464">4464</a> 		<em class="jxr_comment">// of the class definition itself (e.g. class AddressBook extends List&lt;Person&gt;),</em>
-<a class="jxr_linenumber" name="L4465" href="#L4465">4465</a> 		<em class="jxr_comment">// then we need to figure out the parameters.</em>
-<a class="jxr_linenumber" name="L4466" href="#L4466">4466</a> 		<strong class="jxr_keyword">if</strong> (rawType.isMap() || rawType.isCollection() || rawType.isOptional()) {
-<a class="jxr_linenumber" name="L4467" href="#L4467">4467</a> 			ClassMeta[] params = findParameters(o, c);
-<a class="jxr_linenumber" name="L4468" href="#L4468">4468</a> 			<strong class="jxr_keyword">if</strong> (params == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L4469" href="#L4469">4469</a> 				<strong class="jxr_keyword">return</strong> rawType;
-<a class="jxr_linenumber" name="L4470" href="#L4470">4470</a> 			<strong class="jxr_keyword">if</strong> (rawType.isMap()) {
-<a class="jxr_linenumber" name="L4471" href="#L4471">4471</a> 				<strong class="jxr_keyword">if</strong> (params.length != 2 || (params[0].isObject() &amp;&amp; params[1].isObject()))
-<a class="jxr_linenumber" name="L4472" href="#L4472">4472</a> 					<strong class="jxr_keyword">return</strong> rawType;
-<a class="jxr_linenumber" name="L4473" href="#L4473">4473</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(rawType, params[0], params[1], <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L4474" href="#L4474">4474</a> 			}
-<a class="jxr_linenumber" name="L4475" href="#L4475">4475</a> 			<strong class="jxr_keyword">if</strong> (rawType.isCollection() || rawType.isOptional()) {
-<a class="jxr_linenumber" name="L4476" href="#L4476">4476</a> 				<strong class="jxr_keyword">if</strong> (params.length != 1 || params[0].isObject())
-<a class="jxr_linenumber" name="L4477" href="#L4477">4477</a> 					<strong class="jxr_keyword">return</strong> rawType;
-<a class="jxr_linenumber" name="L4478" href="#L4478">4478</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(rawType, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, params[0]);
-<a class="jxr_linenumber" name="L4479" href="#L4479">4479</a> 			}
-<a class="jxr_linenumber" name="L4480" href="#L4480">4480</a> 		}
-<a class="jxr_linenumber" name="L4481" href="#L4481">4481</a> 
-<a class="jxr_linenumber" name="L4482" href="#L4482">4482</a> 		<strong class="jxr_keyword">if</strong> (rawType.isArray()) {
-<a class="jxr_linenumber" name="L4483" href="#L4483">4483</a> 			<strong class="jxr_keyword">if</strong> (o instanceof GenericArrayType) {
-<a class="jxr_linenumber" name="L4484" href="#L4484">4484</a> 				GenericArrayType gat = (GenericArrayType)o;
-<a class="jxr_linenumber" name="L4485" href="#L4485">4485</a> 				ClassMeta elementType = resolveClassMeta(gat.getGenericComponentType(), typeVarImpls);
-<a class="jxr_linenumber" name="L4486" href="#L4486">4486</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(rawType, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, elementType);
-<a class="jxr_linenumber" name="L4487" href="#L4487">4487</a> 			}
-<a class="jxr_linenumber" name="L4488" href="#L4488">4488</a> 		}
-<a class="jxr_linenumber" name="L4489" href="#L4489">4489</a> 
-<a class="jxr_linenumber" name="L4490" href="#L4490">4490</a> 		<strong class="jxr_keyword">return</strong> rawType;
-<a class="jxr_linenumber" name="L4491" href="#L4491">4491</a> 	}
-<a class="jxr_linenumber" name="L4492" href="#L4492">4492</a> }
+<a class="jxr_linenumber" name="L4440" href="#L4440">4440</a> 		<em class="jxr_comment">// This classmeta could have been created by a different context.</em>
+<a class="jxr_linenumber" name="L4441" href="#L4441">4441</a> 		<em class="jxr_comment">// Need to re-resolve it to pick up ObjectSwaps and stuff on this context.</em>
+<a class="jxr_linenumber" name="L4442" href="#L4442">4442</a> 		<strong class="jxr_keyword">if</strong> (cm.getBeanContext() == <strong class="jxr_keyword">this</strong>)
+<a class="jxr_linenumber" name="L4443" href="#L4443">4443</a> 			<strong class="jxr_keyword">return</strong> cm;
+<a class="jxr_linenumber" name="L4444" href="#L4444">4444</a> 		<strong class="jxr_keyword">if</strong> (cm.isMap())
+<a class="jxr_linenumber" name="L4445" href="#L4445">4445</a> 			<strong class="jxr_keyword">return</strong> getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
+<a class="jxr_linenumber" name="L4446" href="#L4446">4446</a> 		<strong class="jxr_keyword">if</strong> (cm.isCollection() || cm.isOptional())
+<a class="jxr_linenumber" name="L4447" href="#L4447">4447</a> 			<strong class="jxr_keyword">return</strong> getClassMeta(cm.innerClass, cm.getElementType());
+<a class="jxr_linenumber" name="L4448" href="#L4448">4448</a> 			<strong class="jxr_keyword">return</strong> getClassMeta(cm.innerClass);
+<a class="jxr_linenumber" name="L4449" href="#L4449">4449</a> 		}
+<a class="jxr_linenumber" name="L4450" href="#L4450">4450</a> 
+<a class="jxr_linenumber" name="L4451" href="#L4451">4451</a> 		Class c = resolve(o, typeVarImpls);
+<a class="jxr_linenumber" name="L4452" href="#L4452">4452</a> 
+<a class="jxr_linenumber" name="L4453" href="#L4453">4453</a> 		<em class="jxr_comment">// This can happen when trying to resolve the "E getFirst()" method on LinkedList, whose type is a TypeVariable</em>
+<a class="jxr_linenumber" name="L4454" href="#L4454">4454</a> 		<em class="jxr_comment">// These should just resolve to Object.</em>
+<a class="jxr_linenumber" name="L4455" href="#L4455">4455</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L4456" href="#L4456">4456</a> 			<strong class="jxr_keyword">return</strong> object();
+<a class="jxr_linenumber" name="L4457" href="#L4457">4457</a> 
+<a class="jxr_linenumber" name="L4458" href="#L4458">4458</a> 		ClassMeta rawType = getClassMeta(c);
+<a class="jxr_linenumber" name="L4459" href="#L4459">4459</a> 
+<a class="jxr_linenumber" name="L4460" href="#L4460">4460</a> 		<em class="jxr_comment">// If this is a Map or Collection, and the parameter types aren't part</em>
+<a class="jxr_linenumber" name="L4461" href="#L4461">4461</a> 		<em class="jxr_comment">// of the class definition itself (e.g. class AddressBook extends List&lt;Person&gt;),</em>
+<a class="jxr_linenumber" name="L4462" href="#L4462">4462</a> 		<em class="jxr_comment">// then we need to figure out the parameters.</em>
+<a class="jxr_linenumber" name="L4463" href="#L4463">4463</a> 		<strong class="jxr_keyword">if</strong> (rawType.isMap() || rawType.isCollection() || rawType.isOptional()) {
+<a class="jxr_linenumber" name="L4464" href="#L4464">4464</a> 			ClassMeta[] params = findParameters(o, c);
+<a class="jxr_linenumber" name="L4465" href="#L4465">4465</a> 			<strong class="jxr_keyword">if</strong> (params == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L4466" href="#L4466">4466</a> 				<strong class="jxr_keyword">return</strong> rawType;
+<a class="jxr_linenumber" name="L4467" href="#L4467">4467</a> 			<strong class="jxr_keyword">if</strong> (rawType.isMap()) {
+<a class="jxr_linenumber" name="L4468" href="#L4468">4468</a> 				<strong class="jxr_keyword">if</strong> (params.length != 2 || (params[0].isObject() &amp;&amp; params[1].isObject()))
+<a class="jxr_linenumber" name="L4469" href="#L4469">4469</a> 					<strong class="jxr_keyword">return</strong> rawType;
+<a class="jxr_linenumber" name="L4470" href="#L4470">4470</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(rawType, params[0], params[1], <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L4471" href="#L4471">4471</a> 			}
+<a class="jxr_linenumber" name="L4472" href="#L4472">4472</a> 			<strong class="jxr_keyword">if</strong> (rawType.isCollection() || rawType.isOptional()) {
+<a class="jxr_linenumber" name="L4473" href="#L4473">4473</a> 				<strong class="jxr_keyword">if</strong> (params.length != 1 || params[0].isObject())
+<a class="jxr_linenumber" name="L4474" href="#L4474">4474</a> 					<strong class="jxr_keyword">return</strong> rawType;
+<a class="jxr_linenumber" name="L4475" href="#L4475">4475</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(rawType, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, params[0]);
+<a class="jxr_linenumber" name="L4476" href="#L4476">4476</a> 			}
+<a class="jxr_linenumber" name="L4477" href="#L4477">4477</a> 		}
+<a class="jxr_linenumber" name="L4478" href="#L4478">4478</a> 
+<a class="jxr_linenumber" name="L4479" href="#L4479">4479</a> 		<strong class="jxr_keyword">if</strong> (rawType.isArray()) {
+<a class="jxr_linenumber" name="L4480" href="#L4480">4480</a> 			<strong class="jxr_keyword">if</strong> (o instanceof GenericArrayType) {
+<a class="jxr_linenumber" name="L4481" href="#L4481">4481</a> 				GenericArrayType gat = (GenericArrayType)o;
+<a class="jxr_linenumber" name="L4482" href="#L4482">4482</a> 				ClassMeta elementType = resolveClassMeta(gat.getGenericComponentType(), typeVarImpls);
+<a class="jxr_linenumber" name="L4483" href="#L4483">4483</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>(rawType, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, elementType);
+<a class="jxr_linenumber" name="L4484" href="#L4484">4484</a> 			}
+<a class="jxr_linenumber" name="L4485" href="#L4485">4485</a> 		}
+<a class="jxr_linenumber" name="L4486" href="#L4486">4486</a> 
+<a class="jxr_linenumber" name="L4487" href="#L4487">4487</a> 		<strong class="jxr_keyword">return</strong> rawType;
+<a class="jxr_linenumber" name="L4488" href="#L4488">4488</a> 	}
+<a class="jxr_linenumber" name="L4489" href="#L4489">4489</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

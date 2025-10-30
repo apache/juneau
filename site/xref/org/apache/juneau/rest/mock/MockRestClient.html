@@ -2185,8 +2185,8 @@
 <a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> 	}
 <a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> 
 <a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findTarget(HttpRequest req) {
-<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 		<strong class="jxr_keyword">if</strong> (req instanceof HttpRequestWrapper) {
-<a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 			HttpHost httpHost = ((HttpRequestWrapper)req).getTarget();
+<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 		<strong class="jxr_keyword">if</strong> (req instanceof HttpRequestWrapper hrw) {
+<a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 			HttpHost httpHost = hrw.getTarget();
 <a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> 			<strong class="jxr_keyword">if</strong> (nn(httpHost))
 <a class="jxr_linenumber" name="L2183" href="#L2183">2183</a> 				<strong class="jxr_keyword">return</strong> httpHost.toURI();
 <a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> 		}

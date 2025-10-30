@@ -896,27 +896,26 @@
 <a class="jxr_linenumber" name="L888" href="#L888">888</a> 	<strong class="jxr_keyword">private</strong> NameValuePair createPart(String name, Object value) {
 <a class="jxr_linenumber" name="L889" href="#L889">889</a> 		<strong class="jxr_keyword">var</strong> isResolving = nn(varResolver);
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> 
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Supplier&lt;?&gt;) {
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 			<strong class="jxr_keyword">var</strong> value2 = (Supplier&lt;?&gt;)value;
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> 			<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, resolver(value2)) : <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, value2);
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> 		}
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 		<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, resolver(value)) : <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, value);
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> 	}
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> 
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> eq(String s1, String s2) {
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> 		<strong class="jxr_keyword">return</strong> Utils.eq(caseInsensitive, s1, s2);
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 	}
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 	<strong class="jxr_keyword">private</strong> Supplier&lt;Object&gt; resolver(Object input) {
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		<strong class="jxr_keyword">return</strong> () -&gt; varResolver.resolve(s(unwrap(input)));
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	}
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object unwrap(Object o) {
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">while</strong> (o instanceof Supplier)
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 			o = ((Supplier&lt;?&gt;)o).get();
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 	}
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> }
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		<strong class="jxr_keyword">if</strong> (value instanceof Supplier&lt;?&gt; value2) {
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 			<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, resolver(value2)) : <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, value2);
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		}
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 		<strong class="jxr_keyword">return</strong> isResolving ? <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, resolver(value)) : <strong class="jxr_keyword">new</strong> <a name="BasicPart" href="../../../../../org/apache/juneau/http/part/BasicPart.html#BasicPart">BasicPart</a>(name, value);
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 	}
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> eq(String s1, String s2) {
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		<strong class="jxr_keyword">return</strong> Utils.eq(caseInsensitive, s1, s2);
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 	}
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	<strong class="jxr_keyword">private</strong> Supplier&lt;Object&gt; resolver(Object input) {
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		<strong class="jxr_keyword">return</strong> () -&gt; varResolver.resolve(s(unwrap(input)));
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 	}
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object unwrap(Object o) {
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<strong class="jxr_keyword">while</strong> (o instanceof Supplier)
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 			o = ((Supplier&lt;?&gt;)o).get();
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 	}
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
