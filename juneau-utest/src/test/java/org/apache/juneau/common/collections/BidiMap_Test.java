@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -67,7 +68,7 @@ class BidiMap_Test extends TestBase {
 			.add(null, null)
 			.build();
 
-		assertEquals(1, map.size());
+		assertSize(1, map);
 		assertEquals(1, map.get("one"));
 		assertNull(map.get(null));
 		assertNull(map.getKey(null));
@@ -89,8 +90,8 @@ class BidiMap_Test extends TestBase {
 	@Test void a05_emptyMap() {
 		var map = BidiMap.<String,Integer>create().build();
 
-		assertTrue(map.isEmpty());
-		assertEquals(0, map.size());
+		assertEmpty(map);
+		assertEmpty(map);
 		assertNull(map.get("anything"));
 		assertNull(map.getKey(123));
 	}
@@ -102,7 +103,7 @@ class BidiMap_Test extends TestBase {
 			.add("c", 3)
 			.build();
 
-		assertEquals(3, map.size());
+		assertSize(3, map);
 		assertEquals(1, map.get("a"));
 		assertEquals("b", map.getKey(2));
 	}
@@ -162,7 +163,7 @@ class BidiMap_Test extends TestBase {
 
 		map.putAll(toAdd);
 
-		assertEquals(3, map.size());
+		assertSize(3, map);
 		assertEquals(2, map.get("two"));
 		assertEquals("three", map.getKey(3));
 	}
@@ -189,8 +190,8 @@ class BidiMap_Test extends TestBase {
 
 		map.clear();
 
-		assertTrue(map.isEmpty());
-		assertEquals(0, map.size());
+		assertEmpty(map);
+		assertEmpty(map);
 		assertNull(map.get("one"));
 		assertNull(map.getKey(1));
 	}
@@ -208,7 +209,7 @@ class BidiMap_Test extends TestBase {
 
 		var keys = map.keySet();
 
-		assertEquals(3, keys.size());
+		assertSize(3, keys);
 		assertTrue(keys.contains("one"));
 		assertTrue(keys.contains("two"));
 		assertTrue(keys.contains("three"));
@@ -223,7 +224,7 @@ class BidiMap_Test extends TestBase {
 
 		var values = map.values();
 
-		assertEquals(3, values.size());
+		assertSize(3, values);
 		assertTrue(values.contains(1));
 		assertTrue(values.contains(2));
 		assertTrue(values.contains(3));
@@ -237,7 +238,7 @@ class BidiMap_Test extends TestBase {
 
 		var entries = map.entrySet();
 
-		assertEquals(2, entries.size());
+		assertSize(2, entries);
 
 		boolean foundOne = false;
 		boolean foundTwo = false;
@@ -307,7 +308,7 @@ class BidiMap_Test extends TestBase {
 
 		assertEquals(1, map.get("one"));
 		assertEquals("two", map.getKey(2));
-		assertEquals(2, map.size());
+		assertSize(2, map);
 		assertTrue(map.containsKey("one"));
 		assertTrue(map.containsValue(2));
 	}
@@ -339,7 +340,7 @@ class BidiMap_Test extends TestBase {
 			.add("one", 10)
 			.build();
 
-		assertEquals(1, map.size());
+		assertSize(1, map);
 		assertEquals(10, map.get("one"));
 		assertEquals("one", map.getKey(10));
 		assertNull(map.getKey(1));
@@ -358,19 +359,19 @@ class BidiMap_Test extends TestBase {
 	@Test void a24_sizeAfterOperations() {
 		var map = BidiMap.<String,Integer>create().build();
 
-		assertEquals(0, map.size());
+		assertEmpty(map);
 
 		map.put("one", 1);
-		assertEquals(1, map.size());
+		assertSize(1, map);
 
 		map.put("two", 2);
-		assertEquals(2, map.size());
+		assertSize(2, map);
 
 		map.remove("one");
-		assertEquals(1, map.size());
+		assertSize(1, map);
 
 		map.clear();
-		assertEquals(0, map.size());
+		assertEmpty(map);
 	}
 
 	@Test void a25_differentKeyValueTypes() {

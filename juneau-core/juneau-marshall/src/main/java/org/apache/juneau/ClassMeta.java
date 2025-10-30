@@ -2055,7 +2055,7 @@ public class ClassMeta<T> implements Type {
 		if (cc == MAP)
 			return sb.append(n).append(keyType.isObject() && valueType.isObject() ? "" : "<" + keyType.toString(simple) + "," + valueType.toString(simple) + ">");
 		if (cc == BEANMAP)
-			return sb.append(BeanMap.class.getName()).append('<').append(n).append('>');
+			return sb.append(cn(BeanMap.class)).append('<').append(n).append('>');
 		if (cc == COLLECTION || cc == OPTIONAL)
 			return sb.append(n).append(elementType.isObject() ? "" : "<" + elementType.toString(simple) + ">");
 		return sb.append(n);

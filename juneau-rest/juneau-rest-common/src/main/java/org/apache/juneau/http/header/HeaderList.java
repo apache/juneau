@@ -122,8 +122,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		var x = new HeaderList();
 		if (pairs == null)
 			pairs = new String[0];
-		if (pairs.length % 2 != 0)
-			throw new IllegalArgumentException("Odd number of parameters passed into HeaderList.ofPairs()");
+		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into HeaderList.ofPairs()");
 		for (int i = 0; i < pairs.length; i += 2)
 			x.add(BasicHeader.of(pairs[i], pairs[i + 1]));
 		return x;
@@ -328,7 +327,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		assertArgNotNull("type", type);
 
 		String name = HeaderBeanMeta.of(type).getSchema().getName();
-		assertArg(name != null, "Header name could not be found on bean type ''{0}''", type.getName());
+		assertArg(isNotNull(name), "Header name could not be found on bean type ''{0}''", cn(type));
 
 		return get(name, type);
 	}

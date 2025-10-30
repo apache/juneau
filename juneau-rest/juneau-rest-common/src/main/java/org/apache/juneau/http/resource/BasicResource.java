@@ -17,6 +17,7 @@
 package org.apache.juneau.http.resource;
 
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -447,6 +448,6 @@ public class BasicResource implements HttpResource {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
+			throw unsupportedOp("Bean is read-only");
 	}
 }

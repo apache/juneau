@@ -142,7 +142,7 @@ public class Messages extends ResourceBundle {
 		protected Builder(Class<?> forClass) {
 			super(Messages.class, BeanStore.INSTANCE);
 			this.forClass = forClass;
-			this.name = forClass.getSimpleName();
+			this.name = scn(forClass);
 			locations = list();
 			locale = Locale.getDefault();
 		}
@@ -229,7 +229,7 @@ public class Messages extends ResourceBundle {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			this.name = isEmpty(value) ? forClass.getSimpleName() : value;
+			this.name = isEmpty(value) ? scn(forClass) : value;
 			return this;
 		}
 
@@ -363,7 +363,7 @@ public class Messages extends ResourceBundle {
 
 		Map<String,String> keyMap = new TreeMap<>();
 
-		String cn = c.getSimpleName() + '.';
+		String cn = scn(c) + '.';
 		if (nn(rb)) {
 			rb.keySet().forEach(x -> {
 				keyMap.put(x, x);

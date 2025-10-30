@@ -22,6 +22,7 @@ import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
@@ -632,7 +633,7 @@ public class CallLogger {
 					sb.append("\n---Request Content Hex---");
 					sb.append("\n").append(toSpacedHex(reqContent));
 				} catch (Exception e1) {
-					sb.append("\n").append(e1.getLocalizedMessage());
+					sb.append("\n").append(lm(e1));
 				}
 			}
 
@@ -643,7 +644,7 @@ public class CallLogger {
 					sb.append("\n---Response Content Hex---");
 					sb.append("\n").append(toSpacedHex(resContent));
 				} catch (Exception e1) {
-					sb.append(e1.getLocalizedMessage());
+					sb.append(lm(e1));
 				}
 			}
 			sb.append("\n=== END ======================================================================");

@@ -17,6 +17,7 @@
 package org.apache.juneau.bean;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.sql.*;
 import java.util.*;
@@ -112,7 +113,7 @@ public class ResultSetList extends LinkedList<Map<String,Object>> {
 				default -> rs.getObject(col);
 			};
 		} catch (Exception e) {
-			return e.getLocalizedMessage();
+			return lm(e);
 		}
 	}
 }

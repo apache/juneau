@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.httppart;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -80,44 +82,44 @@ class UonPartParser_Test extends TestBase {
 		// Top level
 		t = "@()";
 		var l = (List)parse(t, bs.object());
-		assertTrue(l.isEmpty());
+		assertEmpty(l);
 		t = " @( ) ";
 		l = parse(t, bs.getClassMeta(List.class));
-		assertTrue(l.isEmpty());
+		assertEmpty(l);
 
 		// Empty 2 dimensional array
 		t = "@(@())";
 		l = (List)parse(t, bs.object());
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		l = (List)l.get(0);
-		assertTrue(l.isEmpty());
+		assertEmpty(l);
 		t = "@(@())";
 		l = (List)parse(t, bs.getClassMeta(LinkedList.class, List.class));
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		l = (List)l.get(0);
-		assertTrue(l.isEmpty());
+		assertEmpty(l);
 
 		// Array containing empty string
 		// Top level
 		t = "@('')";
 		l = (List)parse(t, bs.object());
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals("", l.get(0));
 		t = "@('')";
 		l = (List)parse(t, bs.getClassMeta(List.class, String.class));
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals("", l.get(0));
 
 		// Array containing 3 empty strings
 		t = "@('','','')";
 		l = (List)parse(t, bs.object());
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "@('','','')";
 		l = (List)parse(t, bs.getClassMeta(List.class, Object.class));
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));

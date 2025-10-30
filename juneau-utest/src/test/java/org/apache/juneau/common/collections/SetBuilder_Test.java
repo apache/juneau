@@ -198,7 +198,7 @@ class SetBuilder_Test extends TestBase {
 			.build();
 
 		assertNotNull(set);
-		assertSize(0, set);
+		assertEmpty(set);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -336,7 +336,7 @@ class SetBuilder_Test extends TestBase {
 			.build();
 
 		assertNotNull(set);
-		assertSize(0, set);
+		assertEmpty(set);
 	}
 
 	@Test

@@ -17,6 +17,7 @@
 package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.DateUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.time.*;
@@ -143,6 +144,6 @@ public class GranularZonedDateTime {
 			return new GranularZonedDateTime(zdt, precision);
 		}
 
-		throw new RuntimeException("Invalid date encountered: '" + seg + "'");
+		throw runtimeException("Invalid date encountered: ''{0}''", seg);
 	}
 }

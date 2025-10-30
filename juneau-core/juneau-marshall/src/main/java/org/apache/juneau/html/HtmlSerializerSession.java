@@ -19,6 +19,7 @@ package org.apache.juneau.html;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 
@@ -662,7 +663,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		} catch (StackOverflowError t) {
 			throw t;
 		} catch (Throwable t) {
-			onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), t.getLocalizedMessage());
+			onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), lm(t));
 		}
 
 		String link = getLink(ppMeta);

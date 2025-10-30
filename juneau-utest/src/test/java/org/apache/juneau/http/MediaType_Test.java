@@ -35,7 +35,7 @@ class MediaType_Test extends TestBase {
 		assertList(x, "text/bar", "text/foo");
 
 		MediaType x2 = new MediaType((String)null);  // Interpreted as "/*"
-		assertTrue(x2.getType().isEmpty());
+		assertEmpty(x2.getType());
 		assertEquals("*", x2.getSubType());
 		assertList(x2.getSubTypes(), "*");
 		assertTrue(x2.isMetaSubtype());

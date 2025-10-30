@@ -19,7 +19,6 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
@@ -74,7 +73,7 @@ class BasicUriHeader_Test extends TestBase {
 
 	@Test void a02_asUri() {
 		assertString("http://foo", uriHeader(HEADER,"http://foo").asUri().get());
-		assertTrue(new BasicUriHeader(HEADER, (URI)null).asUri().isEmpty());
+		assertEmpty(new BasicUriHeader(HEADER, (URI)null).asUri());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

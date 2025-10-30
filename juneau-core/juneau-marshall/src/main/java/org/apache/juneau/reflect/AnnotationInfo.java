@@ -18,6 +18,7 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
@@ -212,7 +213,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * @return The simple class name of the annotation.
 	 */
-	public String getName() { return a.annotationType().getSimpleName(); }
+	public String getName() { return scn(a.annotationType()); }
 
 	/**
 	 * Returns the package where the annotation was found.
@@ -323,7 +324,7 @@ public class AnnotationInfo<T extends Annotation> {
 						ja.put(m.getName(), v);
 				}
 			} catch (Exception e) {
-				ja.put(m.getName(), e.getLocalizedMessage());
+				ja.put(m.getName(), lm(e));
 			}
 		});
 		jm.put("@" + ca.getSimpleName(), ja);

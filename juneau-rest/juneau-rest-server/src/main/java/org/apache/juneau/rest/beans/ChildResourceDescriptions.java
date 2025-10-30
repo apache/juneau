@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.beans;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.rest.*;
@@ -78,7 +80,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 			try {
 				title = e.getValue().getSwagger(req.getLocale()).map(x -> x == null ? null : x.getInfo()).map(x -> x == null ? null : x.getTitle()).orElse(null);
 			} catch (Exception e1) {
-				title = e1.getLocalizedMessage();
+				title = lm(e1);
 			}
 			add(new ResourceDescription(e.getKey(), title));
 		}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,7 +61,7 @@ class Listifier_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = lambda.apply(converter, "Test");
 
-			assertEquals(2, result.size());
+			assertSize(2, result);
 			assertEquals("test", result.get(0));
 			assertEquals("TEST", result.get(1));
 		}
@@ -72,7 +74,7 @@ class Listifier_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = methodRef.apply(converter, "abc");
 
-			assertEquals(3, result.size());
+			assertSize(3, result);
 			assertEquals("a", result.get(0));
 			assertEquals("b", result.get(1));
 			assertEquals("c", result.get(2));
@@ -86,7 +88,7 @@ class Listifier_Test extends TestBase {
 			// Test BiFunction.apply method
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = listifier.apply(converter, "xy");
-			assertEquals(2, result.size());
+			assertSize(2, result);
 		}
 	}
 
@@ -111,7 +113,7 @@ class Listifier_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = composed.apply(converter, "TEST");
 
-			assertEquals(2, result.size());
+			assertSize(2, result);
 			assertEquals("test", result.get(0));
 			assertEquals("ADDED", result.get(1));
 		}
@@ -125,10 +127,10 @@ class Listifier_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 
 			var splitResult = splitter.apply(converter, "a,b,c");
-			assertEquals(3, splitResult.size());
+			assertSize(3, splitResult);
 
 			var trimResult = trimmer.apply(converter, "  hello   world  ");
-			assertEquals(2, trimResult.size());
+			assertSize(2, trimResult);
 			assertEquals("hello", trimResult.get(0));
 			assertEquals("world", trimResult.get(1));
 		}
@@ -151,7 +153,7 @@ class Listifier_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = nullSafe.apply(converter, null);
 
-			assertEquals(1, result.size());
+			assertSize(1, result);
 			assertEquals("NULL_INPUT", result.get(0));
 		}
 
@@ -163,7 +165,7 @@ class Listifier_Test extends TestBase {
 			var result = emptyReturner.apply(converter, "anything");
 
 			assertNotNull(result);
-			assertEquals(0, result.size());
+			assertEmpty(result);
 		}
 
 		@Test
@@ -179,7 +181,7 @@ class Listifier_Test extends TestBase {
 
 			// Normal case should work
 			var normalResult = throwing.apply(converter, "normal");
-			assertEquals(1, normalResult.size());
+			assertSize(1, normalResult);
 			assertEquals("normal", normalResult.get(0));
 
 			// Exception case should throw
@@ -199,7 +201,7 @@ class Listifier_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = largeListGenerator.apply(converter, 1000);
 
-			assertEquals(1000, result.size());
+			assertSize(1000, result);
 			assertEquals("item_0", result.get(0));
 			assertEquals("item_999", result.get(999));
 		}
@@ -224,7 +226,7 @@ class Listifier_Test extends TestBase {
 			var test = new TestObject("test", 42);
 			var result = customConverter.listify(test);
 
-			assertEquals(3, result.size());
+			assertSize(3, result);
 			assertEquals("test", result.get(0));
 			assertEquals(42, result.get(1));
 			assertEquals("LISTIFIED", result.get(2));
@@ -240,12 +242,12 @@ class Listifier_Test extends TestBase {
 
 			// Test string listifier
 			var stringResult = customConverter.listify("TEST");
-			assertEquals(1, stringResult.size());
+			assertSize(1, stringResult);
 			assertEquals("test", stringResult.get(0));
 
 			// Test integer listifier
 			var intResult = customConverter.listify(5);
-			assertEquals(2, intResult.size());
+			assertSize(2, intResult);
 			assertEquals(5, intResult.get(0));
 			assertEquals(10, intResult.get(1));
 		}
@@ -262,7 +264,7 @@ class Listifier_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = converterUser.apply(converter, "test");
 
-			assertEquals(2, result.size());
+			assertSize(2, result);
 			assertEquals("test", result.get(0));
 			assertTrue(result.get(1).toString().contains("nested"));
 		}
@@ -291,7 +293,7 @@ class Listifier_Test extends TestBase {
 			var result = rangeGenerator.apply(converter, 10000);
 			var end = System.currentTimeMillis();
 
-			assertEquals(10000, result.size());
+			assertSize(10000, result);
 			assertTrue(end - start < 1000, "Should complete within 1 second");
 		}
 
@@ -309,7 +311,7 @@ class Listifier_Test extends TestBase {
 			var converter = BasicBeanConverter.DEFAULT;
 			var result = memoryTest.apply(converter, "test");
 
-			assertEquals(1000, result.size());
+			assertSize(1000, result);
 			assertEquals("test_0", result.get(0));
 			assertEquals("test_999", result.get(999));
 		}

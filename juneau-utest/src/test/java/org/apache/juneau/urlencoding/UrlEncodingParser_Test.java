@@ -99,36 +99,36 @@ class UrlEncodingParser_Test extends TestBase {
 		t = "?x=@()";
 		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertTrue(m.containsKey("x"));
-		assertTrue(((List)m.get("x")).isEmpty());
+		assertEmpty(m.get("x"));
 		m = (Map)p.parse(t, Object.class);
 		assertTrue(m.containsKey("x"));
-		assertTrue(((List)m.get("x")).isEmpty());
+		assertEmpty(m.get("x"));
 		t = "?x=@()";
 		m = p.parse(t, HashMap.class, String.class, List.class);
 		assertTrue(m.containsKey("x"));
-		assertTrue(((List)m.get("x")).isEmpty());
+		assertEmpty(m.get("x"));
 
 		// Empty 2 dimensional array
 		t = "_value=@(@())";
 		var l = (List)p.parse(t, Object.class);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		l = (List)l.get(0);
-		assertTrue(l.isEmpty());
+		assertEmpty(l);
 		t = "0=@()";
 		l = p.parse(t, LinkedList.class, List.class);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		l = (List)l.get(0);
-		assertTrue(l.isEmpty());
+		assertEmpty(l);
 
 		// Array containing empty string
 		// Top level
 		t = "_value=@('')";
 		l = (List)p.parse(t, Object.class);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals("", l.get(0));
 		t = "0=''";
 		l = p.parse(t, List.class, String.class);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals("", l.get(0));
 
 		// 2nd level
@@ -142,13 +142,13 @@ class UrlEncodingParser_Test extends TestBase {
 		// Array containing 3 empty strings
 		t = "_value=@('','','')";
 		l = (List)p.parse(t, Object.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
 		t = "0=''&1=''&2=''";
 		l = p.parse(t, List.class, Object.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("", l.get(0));
 		assertEquals("", l.get(1));
 		assertEquals("", l.get(2));
@@ -164,10 +164,10 @@ class UrlEncodingParser_Test extends TestBase {
 		// 2nd level
 		t = "?'\u0000'='\u0000'";
 		m = (Map)p.parse(t, Object.class);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 		assertEquals("\u0000", m.get("\u0000"));
 		m = p.parse(t, HashMap.class, String.class, Object.class);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 		assertEquals("\u0000", m.get("\u0000"));
 
 		// Boolean

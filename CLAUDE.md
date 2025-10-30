@@ -4,6 +4,13 @@ This document outlines the rules, guidelines, and best practices that Claude AI 
 
 **Note**: This file is referred to as "my rules" and serves as the definitive reference for all guidelines and conventions I follow when working on the Apache Juneau project.
 
+## User Commands
+
+### Shorthand Commands
+- **"c"** means **"continue"** - When the user sends just "c", continue with the current task or work
+- **"s"** means **"status"** - When the user sends just "s", give a status update on what you're currently working on
+- **"TODO-x"** means **"work on this TODO"** - When the user sends just "TODO-3", "TODO-67", etc., start working on that specific TODO item from the TODO.md file
+
 ## Core Working Principles
 
 ### 1. Code Quality and Consistency

@@ -17,6 +17,7 @@
 package org.apache.juneau.annotation;
 
 import static java.util.Arrays.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.copyOf;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -88,7 +89,7 @@ public class AnnotationImpl implements Annotation {
 	@Override /* Overridden from Object */
 	public int hashCode() {
 		if (hashCode == -1)
-			throw new IllegalArgumentException("Programming error. postConstruct() was never called on annotation.");
+			throw illegalArg("Programming error. postConstruct() was never called on annotation.");
 		return hashCode;
 	}
 

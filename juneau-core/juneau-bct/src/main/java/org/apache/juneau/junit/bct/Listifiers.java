@@ -19,7 +19,6 @@ package org.apache.juneau.junit.bct;
 import static java.util.Collections.*;
 import static java.util.Spliterators.*;
 import static java.util.stream.StreamSupport.*;
-import static java.util.Comparator.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -81,6 +80,59 @@ import java.util.stream.*;
 public class Listifiers {
 
 	/**
+	 * Creates a comparator that can handle any object type, including non-Comparable objects.
+	 *
+	 * <p>This comparator provides a flexible comparison strategy that handles various scenarios:</p>
+	 * <ul>
+	 *    <li><b>Null values:</b> Sorted to the beginning (nulls first)</li>
+	 *    <li><b>Comparable objects:</b> Uses natural ordering via {@link Comparable#compareTo(Object)}</li>
+	 *    <li><b>Non-Comparable objects:</b> Falls back to string-based comparison using the converter's stringify method</li>
+	 *    <li><b>Mixed types:</b> Handles comparison between different types gracefully</li>
+	 * </ul>
+	 *
+	 * <p>This comparator is used internally by {@link #collectionListifier()} and {@link #mapListifier()}
+	 * to ensure predictable ordering in test assertions, even when dealing with objects that don't
+	 * implement {@link Comparable}.</p>
+	 *
+	 * <h5 class='section'>Comparison Strategy:</h5>
+	 * <ol>
+	 *    <li>If both objects are null, they are equal</li>
+	 *    <li>If one object is null, it comes first</li>
+	 *    <li>If both objects are Comparable of compatible types, use natural ordering</li>
+	 *    <li>Otherwise, stringify both objects and compare the string representations</li>
+	 * </ol>
+	 *
+	 * @param converter The bean converter to use for stringification
+	 * @return A comparator that can handle any object type
+	 */
+	@SuppressWarnings("unchecked")
+	private static Comparator<Object> flexibleComparator(BeanConverter converter) {
+		return (o1, o2) -> {
+			// Handle nulls
+			if (o1 == null && o2 == null) return 0;
+			if (o1 == null) return -1;
+			if (o2 == null) return 1;
+
+			// Try natural ordering if both are Comparable
+			if (o1 instanceof Comparable o1c && o2 instanceof Comparable o2c) {
+				try {
+					return o1c.compareTo(o2c);
+				} catch (ClassCastException e) {
+					// Comparing different types.  Fall back to string comparison below.
+				}
+			}
+
+			// Fall back to string comparison
+			var s1 = converter.stringify(o1);
+			var s2 = converter.stringify(o2);
+			if (s1 == null && s2 == null) return 0;
+			if (s1 == null) return -1;
+			if (s2 == null) return 1;
+			return s1.compareTo(s2);
+		};
+	}
+
+	/**
 	 * Returns a listifier for {@link Collection} objects that converts them to {@link ArrayList}.
 	 *
 	 * <p>This listifier creates a new ArrayList containing all elements from the source collection.
@@ -135,7 +187,7 @@ public class Listifiers {
 	public static Listifier<Collection> collectionListifier() {
 		return (bc, collection) -> {
 			if (collection instanceof Set && !(collection instanceof SortedSet) && !(collection instanceof LinkedHashSet)) {
-				var collection2 = new TreeSet<>(nullsFirst(naturalOrder()));
+				var collection2 = new TreeSet<>(flexibleComparator(bc));
 				collection2.addAll(collection);
 				collection = collection2;
 			}
@@ -314,7 +366,7 @@ public class Listifiers {
 	public static Listifier<Map> mapListifier() {
 		return (bc, map) -> {
 			if (!(map instanceof SortedMap) && !(map instanceof LinkedHashMap)) {
-				var map2 = new TreeMap<>(nullsFirst(naturalOrder()));
+				var map2 = new TreeMap<>(flexibleComparator(bc));
 				map2.putAll(map);
 				map = map2;
 			}

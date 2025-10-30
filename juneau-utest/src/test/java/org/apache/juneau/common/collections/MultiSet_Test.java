@@ -90,7 +90,7 @@ class MultiSet_Test extends TestBase {
 		ms = new MultiSet<>(l1, l2);
 		assertList(ms, "1", "2", "3", "4");
 		assertList(ms.enumerator(), "1", "2", "3", "4");
-		assertEquals(4, ms.size());
+		assertSize(4, ms);
 
 		var t = ms.iterator();
 		t.next();
@@ -111,11 +111,11 @@ class MultiSet_Test extends TestBase {
 		t.next();
 		t.remove();
 		assertEmpty(ms.enumerator());
-		assertEquals(0, ms.size());
+		assertEmpty(ms);
 
 		ms = new MultiSet<>();
 		assertEmpty(ms);
-		assertEquals(0, ms.size());
+		assertEmpty(ms);
 
 		assertThrows(IllegalArgumentException.class, ()->new MultiSet<>((Collection<String>)null));
 		assertThrows(NoSuchElementException.class, ()->new MultiSet<String>().iterator().next());

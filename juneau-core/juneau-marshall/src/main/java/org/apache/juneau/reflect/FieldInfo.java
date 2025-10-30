@@ -501,6 +501,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
 
 	@Override
 	public String toString() {
-		return f.getDeclaringClass().getName() + "." + f.getName();
+		return cn(f.getDeclaringClass()) + "." + f.getName();
 	}
 }

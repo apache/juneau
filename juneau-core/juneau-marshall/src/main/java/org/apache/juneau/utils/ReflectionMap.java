@@ -449,8 +449,8 @@ public class ReflectionMap<V> {
 		// c.getSimpleName() == "Builder"
 		// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"
 		// c.getPackage() == "org.apache.juneau.a.rttests"
-		var cSimple = c.getSimpleName();
-		var cFull = c.getName();
+		var cSimple = scn(c);
+		var cFull = cn(c);
 		if (eq(simpleName, cSimple) || eq(fullName, cFull) || "*".equals(simpleName))
 			return true;
 		if (cFull.indexOf('$') != -1) {

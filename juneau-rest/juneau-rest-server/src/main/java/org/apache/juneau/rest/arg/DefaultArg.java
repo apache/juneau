@@ -74,11 +74,11 @@ public class DefaultArg implements RestOpArg {
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getBeanStore().getBean(type, name).orElseThrow(() -> new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
+		return opSession.getBeanStore().getBean(type, name).orElseThrow(() -> new ArgException(paramInfo, "Could not resolve bean type {0}", cn(type)));
 	}
 
 	private static String findBeanName(ParamInfo pi) {
-		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
+		Annotation n = pi.getAnnotation(Annotation.class, x -> scn(x.annotationType()).equals("Named"));
 		if (nn(n))
 			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
 		return null;

@@ -370,7 +370,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return The simple name of the underlying method;
 	 */
-	public final String getSimpleName() { return isConstructor ? e.getDeclaringClass().getSimpleName() : e.getName(); }
+	public final String getSimpleName() { return isConstructor ? scn(e.getDeclaringClass()) : e.getName(); }
 
 	/**
 	 * Returns <jk>true</jk> if this method has at most only this arguments in any order.

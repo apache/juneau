@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;
@@ -43,7 +45,7 @@ class Cache2_Test extends TestBase {
 
 		assertEquals("user:123", result);
 		assertEquals(1, callCount.get());
-		assertEquals(1, x.size());
+		assertSize(1, x);
 		assertEquals(0, x.getCacheHits());
 	}
 
@@ -67,7 +69,7 @@ class Cache2_Test extends TestBase {
 		assertEquals("user:123", result2);
 		assertSame(result1, result2);
 		assertEquals(1, callCount.get()); // Supplier only called once
-		assertEquals(1, x.size());
+		assertSize(1, x);
 		assertEquals(1, x.getCacheHits());
 	}
 
@@ -89,7 +91,7 @@ class Cache2_Test extends TestBase {
 		assertEquals("admin:456", v2);
 		assertEquals("guest:789", v3);
 		assertEquals(3, callCount.get());
-		assertEquals(3, x.size());
+		assertSize(3, x);
 		assertEquals(0, x.getCacheHits());
 	}
 
@@ -107,7 +109,7 @@ class Cache2_Test extends TestBase {
 		var result = x.get("user", 123, () -> "OVERRIDE");
 
 		assertEquals("OVERRIDE", result);
-		assertEquals(1, x.size());
+		assertSize(1, x);
 	}
 
 	@Test
@@ -200,7 +202,7 @@ class Cache2_Test extends TestBase {
 		assertEquals("user:456", x.get("user", 456));
 		assertEquals(2, defaultCallCount.get()); // Called again
 
-		assertEquals(0, x.size()); // Nothing cached
+		assertEmpty(x); // Nothing cached
 	}
 
 	//====================================================================================================
@@ -216,15 +218,15 @@ class Cache2_Test extends TestBase {
 
 		x.get("k1", 1);
 		x.get("k2", 2);
-		assertEquals(2, x.size());
+		assertSize(2, x);
 
 		// Adding a third entry doesn't exceed maxSize (2 > 2 is false)
 		x.get("k3", 3);
-		assertEquals(3, x.size());
+		assertSize(3, x);
 
 		// Fourth entry triggers clear (3 > 2 is true)
 		x.get("k4", 4);
-		assertEquals(1, x.size()); // Only the new entry
+		assertSize(1, x); // Only the new entry
 	}
 
 	//====================================================================================================
@@ -265,11 +267,11 @@ class Cache2_Test extends TestBase {
 
 		x.get("user", 123);
 		x.get("admin", 456);
-		assertEquals(2, x.size());
+		assertSize(2, x);
 
 		x.clear();
 
-		assertEquals(0, x.size());
+		assertEmpty(x);
 	}
 
 	//====================================================================================================
@@ -290,7 +292,7 @@ class Cache2_Test extends TestBase {
 		var result = x.get("user", 123, () -> "CUSTOM");
 
 		assertEquals("CUSTOM", result);
-		assertEquals(1, x.size());
+		assertSize(1, x);
 	}
 }
 

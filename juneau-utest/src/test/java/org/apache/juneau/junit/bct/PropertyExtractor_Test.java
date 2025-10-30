@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -283,10 +286,10 @@ class PropertyExtractor_Test extends TestBase {
 			};
 
 			var converter = BasicBeanConverter.DEFAULT;
-			var testMap = Map.of("a", "valueA", "b", "valueB");
+			var testMap = m("a", "valueA", "b", "valueB");
 
 			var keys = (List<String>) complex.extract(converter, testMap, "keys");
-			assertEquals(2, keys.size());
+			assertSize(2, keys);
 			assertTrue(keys.contains("a"));
 			assertTrue(keys.contains("b"));
 

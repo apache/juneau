@@ -523,7 +523,7 @@ public class FileStore extends ConfigStore {
 							}
 							currentContents = sb.toString();
 						}
-						if (nn(expectedContents) && ! eq(currentContents, expectedContents)) {
+						if (nn(expectedContents) && ne(currentContents, expectedContents)) {
 							if (currentContents == null)
 								cache.remove(name);
 							else
@@ -550,7 +550,7 @@ public class FileStore extends ConfigStore {
 			if (! Files.exists(p)) {
 				Files.createDirectories(p.getParent());
 				if (! Files.exists(p) && ! p.toFile().createNewFile()) {
-					throw new IOException("Could not create file: " + p);
+					throw ioException("Could not create file: {0}", p);
 				}
 			}
 		} catch (@SuppressWarnings("unused") IOException e) {
@@ -576,7 +576,7 @@ public class FileStore extends ConfigStore {
 		cache.remove(fn);
 		var newContents = read(fn);
 
-		if (! eq(oldContents, newContents)) {
+		if (ne(oldContents, newContents)) {
 			update(fn, newContents);
 		}
 	}

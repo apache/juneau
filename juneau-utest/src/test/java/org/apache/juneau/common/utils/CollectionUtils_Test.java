@@ -17,6 +17,7 @@
 package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -31,11 +32,11 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a01_treeSet_fromSet() {
-		LinkedHashSet<String> input = new LinkedHashSet<>(List.of("c", "a", "b"));
+		LinkedHashSet<String> input = new LinkedHashSet<>(l("c", "a", "b"));
 		TreeSet<String> result = toSortedSet(input);
 
 		assertNotNull(result);
-		assertEquals(List.of("a", "b", "c"), new ArrayList<>(result));
+		assertEquals(l("a", "b", "c"), new ArrayList<>(result));
 
 		// Null input
 		assertNull(toSortedSet((Set<String>)null));
@@ -43,11 +44,11 @@ class CollectionUtils_Test extends TestBase {
 
 	@Test
 	void a02_treeSet_fromSet_numbers() {
-		LinkedHashSet<Integer> input = new LinkedHashSet<>(List.of(3, 1, 2));
+		LinkedHashSet<Integer> input = new LinkedHashSet<>(l(3, 1, 2));
 		TreeSet<Integer> result = toSortedSet(input);
 
 		assertNotNull(result);
-		assertEquals(List.of(1, 2, 3), new ArrayList<>(result));
+		assertEquals(l(1, 2, 3), new ArrayList<>(result));
 	}
 
 	//====================================================================================================
@@ -58,7 +59,7 @@ class CollectionUtils_Test extends TestBase {
 		TreeSet<String> result = sortedSet("c", "a", "b");
 
 		assertNotNull(result);
-		assertEquals(List.of("a", "b", "c"), new ArrayList<>(result));
+		assertEquals(l("a", "b", "c"), new ArrayList<>(result));
 	}
 
 	@Test
@@ -66,7 +67,7 @@ class CollectionUtils_Test extends TestBase {
 		TreeSet<String> result = sortedSet();
 
 		assertNotNull(result);
-		assertTrue(result.isEmpty());
+		assertEmpty(result);
 	}
 
 	@Test
@@ -74,7 +75,7 @@ class CollectionUtils_Test extends TestBase {
 		TreeSet<String> result = sortedSet("a");
 
 		assertNotNull(result);
-		assertEquals(List.of("a"), new ArrayList<>(result));
+		assertEquals(l("a"), new ArrayList<>(result));
 	}
 
 	@Test
@@ -82,7 +83,7 @@ class CollectionUtils_Test extends TestBase {
 		TreeSet<Integer> result = sortedSet(3, 1, 2, 5, 4);
 
 		assertNotNull(result);
-		assertEquals(List.of(1, 2, 3, 4, 5), new ArrayList<>(result));
+		assertEquals(l(1, 2, 3, 4, 5), new ArrayList<>(result));
 	}
 
 	//====================================================================================================
@@ -93,7 +94,7 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, Integer> result = map("a", 1, "b", 2, "c", 3, "d", 4);
 
 		assertNotNull(result);
-		assertEquals(4, result.size());
+		assertSize(4, result);
 		assertEquals(1, result.get("a"));
 		assertEquals(2, result.get("b"));
 		assertEquals(3, result.get("c"));
@@ -101,7 +102,7 @@ class CollectionUtils_Test extends TestBase {
 
 		// Verify order (LinkedHashMap maintains insertion order)
 		List<String> keys = new ArrayList<>(result.keySet());
-		assertEquals(List.of("a", "b", "c", "d"), keys);
+		assertEquals(l("a", "b", "c", "d"), keys);
 	}
 
 	//====================================================================================================
@@ -112,7 +113,7 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, Integer> result = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
 
 		assertNotNull(result);
-		assertEquals(5, result.size());
+		assertSize(5, result);
 		assertEquals(1, result.get("a"));
 		assertEquals(2, result.get("b"));
 		assertEquals(3, result.get("c"));
@@ -121,7 +122,7 @@ class CollectionUtils_Test extends TestBase {
 
 		// Verify order (LinkedHashMap maintains insertion order)
 		List<String> keys = new ArrayList<>(result.keySet());
-		assertEquals(List.of("a", "b", "c", "d", "e"), keys);
+		assertEquals(l("a", "b", "c", "d", "e"), keys);
 	}
 
 	@Test
@@ -129,7 +130,7 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, String> result = map("a", "val1", "b", null, "c", "val3", "d", null);
 
 		assertNotNull(result);
-		assertEquals(4, result.size());
+		assertSize(4, result);
 		assertEquals("val1", result.get("a"));
 		assertNull(result.get("b"));
 		assertEquals("val3", result.get("c"));
@@ -141,7 +142,7 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, String> result = map("a", "val1", "b", null, "c", "val3", "d", null, "e", "val5");
 
 		assertNotNull(result);
-		assertEquals(5, result.size());
+		assertSize(5, result);
 		assertEquals("val1", result.get("a"));
 		assertNull(result.get("b"));
 		assertEquals("val3", result.get("c"));
@@ -157,7 +158,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m();
 
 		assertNotNull(result);
-		assertTrue(result.isEmpty());
+		assertEmpty(result);
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 1));
 	}
 
@@ -166,7 +167,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1);
 
 		assertNotNull(result);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals(1, result.get("a"));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 2));
 	}
@@ -176,7 +177,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1, "b", 2);
 
 		assertNotNull(result);
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertEquals(1, result.get("a"));
 		assertEquals(2, result.get("b"));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 3));
@@ -187,7 +188,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1, "b", 2, "c", 3);
 
 		assertNotNull(result);
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertEquals(1, result.get("a"));
 		assertEquals(2, result.get("b"));
 		assertEquals(3, result.get("c"));
@@ -199,7 +200,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1, "b", 2, "c", 3, "d", 4);
 
 		assertNotNull(result);
-		assertEquals(4, result.size());
+		assertSize(4, result);
 		assertEquals(1, result.get("a"));
 		assertEquals(2, result.get("b"));
 		assertEquals(3, result.get("c"));
@@ -212,7 +213,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
 
 		assertNotNull(result);
-		assertEquals(5, result.size());
+		assertSize(5, result);
 		assertEquals(1, result.get("a"));
 		assertEquals(2, result.get("b"));
 		assertEquals(3, result.get("c"));
@@ -226,7 +227,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Object> result = m("name", "Alice", "age", 30, "active", true);
 
 		assertNotNull(result);
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertEquals("Alice", result.get("name"));
 		assertEquals(30, result.get("age"));
 		assertEquals(true, result.get("active"));
@@ -241,9 +242,9 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, Integer> result = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
 
 		assertNotNull(result);
-		assertEquals(6, result.size());
+		assertSize(6, result);
 		assertEquals(6, result.get("f"));
-		assertEquals(List.of("a", "b", "c", "d", "e", "f"), new ArrayList<>(result.keySet()));
+		assertEquals(l("a", "b", "c", "d", "e", "f"), new ArrayList<>(result.keySet()));
 	}
 
 	@Test
@@ -251,7 +252,7 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, Integer> result = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
 
 		assertNotNull(result);
-		assertEquals(7, result.size());
+		assertSize(7, result);
 		assertEquals(7, result.get("g"));
 	}
 
@@ -260,7 +261,7 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, Integer> result = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
 
 		assertNotNull(result);
-		assertEquals(8, result.size());
+		assertSize(8, result);
 		assertEquals(8, result.get("h"));
 	}
 
@@ -269,7 +270,7 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, Integer> result = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
 
 		assertNotNull(result);
-		assertEquals(9, result.size());
+		assertSize(9, result);
 		assertEquals(9, result.get("i"));
 	}
 
@@ -278,9 +279,9 @@ class CollectionUtils_Test extends TestBase {
 		LinkedHashMap<String, Integer> result = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
 
 		assertNotNull(result);
-		assertEquals(10, result.size());
+		assertSize(10, result);
 		assertEquals(10, result.get("j"));
-		assertEquals(List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"), new ArrayList<>(result.keySet()));
+		assertEquals(l("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"), new ArrayList<>(result.keySet()));
 	}
 
 	@Test
@@ -288,7 +289,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
 
 		assertNotNull(result);
-		assertEquals(6, result.size());
+		assertSize(6, result);
 		assertEquals(6, result.get("f"));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 7));
 	}
@@ -298,7 +299,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
 
 		assertNotNull(result);
-		assertEquals(7, result.size());
+		assertSize(7, result);
 		assertEquals(7, result.get("g"));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 8));
 	}
@@ -308,7 +309,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
 
 		assertNotNull(result);
-		assertEquals(8, result.size());
+		assertSize(8, result);
 		assertEquals(8, result.get("h"));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 9));
 	}
@@ -318,7 +319,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
 
 		assertNotNull(result);
-		assertEquals(9, result.size());
+		assertSize(9, result);
 		assertEquals(9, result.get("i"));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 10));
 	}
@@ -328,7 +329,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
 
 		assertNotNull(result);
-		assertEquals(10, result.size());
+		assertSize(10, result);
 		assertEquals(10, result.get("j"));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 11));
 	}
@@ -341,7 +342,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m(null, 1);
 
 		assertNotNull(result);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals(1, result.get(null));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 2));
 	}
@@ -351,7 +352,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("a", null);
 
 		assertNotNull(result);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertNull(result.get("a"));
 		assertTrue(result.containsKey("a"));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", 2));
@@ -362,7 +363,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, String> result = m("a", "val1", "b", null, "c", "val3", null, "val4");
 
 		assertNotNull(result);
-		assertEquals(4, result.size());
+		assertSize(4, result);
 		assertEquals("val1", result.get("a"));
 		assertNull(result.get("b"));
 		assertEquals("val3", result.get("c"));
@@ -383,7 +384,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, String> result = m(null, null);
 
 		assertNotNull(result);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertNull(result.get(null));
 		assertTrue(result.containsKey(null));
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", "y"));
@@ -397,7 +398,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("z", 1, "a", 2, "m", 3, "b", 4);
 
 		assertNotNull(result);
-		assertEquals(4, result.size());
+		assertSize(4, result);
 
 		// Verify insertion order is preserved
 		List<String> keys = new ArrayList<>(result.keySet());
@@ -409,7 +410,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> result = m("first", 1, null, 2, "last", 3);
 
 		assertNotNull(result);
-		assertEquals(3, result.size());
+		assertSize(3, result);
 
 		// Verify insertion order is preserved, including null
 		List<String> keys = new ArrayList<>(result.keySet());
@@ -424,11 +425,11 @@ class CollectionUtils_Test extends TestBase {
 		                                 2, "two", 1, "one");
 
 		assertNotNull(result);
-		assertEquals(10, result.size());
+		assertSize(10, result);
 
 		// Verify insertion order
 		List<Integer> keys = new ArrayList<>(result.keySet());
-		assertEquals(List.of(10, 9, 8, 7, 6, 5, 4, 3, 2, 1), keys);
+		assertEquals(l(10, 9, 8, 7, 6, 5, 4, 3, 2, 1), keys);
 	}
 
 	@Test
@@ -441,7 +442,7 @@ class CollectionUtils_Test extends TestBase {
 			orderedKeys.add(entry.getKey());
 		}
 
-		assertEquals(List.of("key1", "key2", "key3"), orderedKeys);
+		assertEquals(l("key1", "key2", "key3"), orderedKeys);
 	}
 
 	//====================================================================================================
@@ -480,7 +481,7 @@ class CollectionUtils_Test extends TestBase {
 			m("key1", 1, null, 2, "key3", 3, "key4", 4)
 		);
 
-		assertEquals(4, result.size());
+		assertSize(4, result);
 		assertEquals(1, result.get("key1"));
 		assertEquals(2, result.get(null));
 		assertEquals(3, result.get("key3"));
@@ -518,7 +519,7 @@ class CollectionUtils_Test extends TestBase {
 		);
 
 		// Verify all entries
-		assertEquals(4, result.size());
+		assertSize(4, result);
 		assertEquals("value", result.get("string"));
 		assertEquals("null-key", result.get(null));
 		assertEquals("number", result.get(42));
@@ -530,6 +531,61 @@ class CollectionUtils_Test extends TestBase {
 
 		// Verify immutability
 		assertThrows(UnsupportedOperationException.class, () -> result.put("x", "y"));
+	}
+
+	//====================================================================================================
+	// addAll(T[], T...) - Array utilities from deprecated ArrayUtils
+	//====================================================================================================
+	@Test
+	void a43_addAll_arrayToArray() {
+		String[] s = {};
+
+		s = addAll(s, "a", "b");
+		assertList(s, "a", "b");
+
+		s = addAll(s, "c");
+		assertList(s, "a", "b", "c");
+
+		s = addAll(s);
+		assertList(s, "a", "b", "c");
+
+		var o = addAll((Object[])null);
+		assertEmpty(o);
+
+		s = addAll((String[])null, "a", "b");
+		assertList(s, "a", "b");
+	}
+
+	//====================================================================================================
+	// toSet(T[]) - Array utilities from deprecated ArrayUtils
+	//====================================================================================================
+	@Test
+	void a44_toSet_fromArray() {
+		assertThrows(IllegalArgumentException.class, ()->toSet((String[])null));
+
+		var s = a("a");
+		var i = toSet(s).iterator();
+		assertEquals("a", i.next());
+
+		assertThrows(UnsupportedOperationException.class, i::remove);
+		assertThrows(NoSuchElementException.class, i::next);
+	}
+
+	//====================================================================================================
+	// combine(T[]...) - Array utilities from deprecated ArrayUtils
+	//====================================================================================================
+	@Test
+	void a45_combine_arrays() {
+		var s1 = a("a");
+		var s2 = a("b");
+
+		assertList(combine(s1, s2), "a", "b");
+		assertList(combine(s1), "a");
+		assertList(combine(s2), "b");
+		assertList(combine(s1,null), "a");
+		assertList(combine(null,s2), "b");
+		assertNull(combine(null,null));
+		assertNull(combine());
 	}
 }
 

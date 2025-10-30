@@ -214,7 +214,7 @@ public class ClasspathStore extends ConfigStore {
 
 		var currentContents = read(name);
 
-		if (nn(expectedContents) && ! eq(currentContents, expectedContents))
+		if (nn(expectedContents) && ne(currentContents, expectedContents))
 			return currentContents;
 
 		update(name, newContents);

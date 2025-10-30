@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 /**
  * A simple mutable double value.
  *
@@ -117,9 +119,7 @@ public class DoubleValue extends Value<Double> {
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
 	public boolean is(double other, double precision) {
-		if (precision < 0) {
-			throw new IllegalArgumentException("Precision must be non-negative");
-		}
+		assertArg(precision >= 0, "Precision must be non-negative");
 		var v = get();
 		if (v == null) {
 			return false;
@@ -150,9 +150,7 @@ public class DoubleValue extends Value<Double> {
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
 	public boolean isAny(double precision, double... values) {
-		if (precision < 0) {
-			throw new IllegalArgumentException("Precision must be non-negative");
-		}
+		assertArg(precision >= 0, "Precision must be non-negative");
 		var v = get();
 		if (v == null)
 			return false;

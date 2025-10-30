@@ -17,6 +17,7 @@
 package org.apache.juneau.svl;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.io.*;
 
@@ -74,7 +75,7 @@ public abstract class Var {
 			// Need to make sure only ASCII characters are used.
 			char c = name.charAt(i);
 			if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a'))
-				throw new IllegalArgumentException("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");
+				throw illegalArg("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");
 		}
 	}
 

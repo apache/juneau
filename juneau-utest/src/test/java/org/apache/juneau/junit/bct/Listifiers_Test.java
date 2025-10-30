@@ -34,11 +34,11 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class A_collectionListifier extends TestBase {
 
-		@Test
-		void a01_listifyList() {
-			var listifier = Listifiers.collectionListifier();
-			var input = List.of("a", "b", "c");
-			var result = listifier.apply(null, input);
+	@Test
+	void a01_listifyList() {
+		var listifier = Listifiers.collectionListifier();
+		var input = l("a", "b", "c");
+		var result = listifier.apply(null, input);
 
 			assertNotSame(input, result); // Should create new list
 			assertList(result, "a", "b", "c");
@@ -74,30 +74,30 @@ class Listifiers_Test extends TestBase {
 			assertList(treeResult, "a", "m", "z"); // Natural order
 		}
 
-		@Test
-		void a03_listifyQueue() {
-			var listifier = Listifiers.collectionListifier();
-			var input = new LinkedList<>(List.of("first", "second"));
-			var result = listifier.apply(null, input);
+	@Test
+	void a03_listifyQueue() {
+		var listifier = Listifiers.collectionListifier();
+		var input = new LinkedList<>(l("first", "second"));
+		var result = listifier.apply(null, input);
 
 			assertList(result, "first", "second");
 		}
 
-		@Test
-		void a04_listifyEmptyCollection() {
-			var listifier = Listifiers.collectionListifier();
-			var input = List.of();
-			var result = listifier.apply(null, input);
+	@Test
+	void a04_listifyEmptyCollection() {
+		var listifier = Listifiers.collectionListifier();
+		var input = l();
+		var result = listifier.apply(null, input);
 
-			assertTrue(result.isEmpty());
+			assertEmpty(result);
 		}
 
 		@Test
 		void a05_listifyWithConverter() {
-			var converter = BasicBeanConverter.builder().defaultSettings().build();
-			var listifier = Listifiers.collectionListifier();
-			var input = List.of(1, 2, 3);
-			var result = listifier.apply(converter, input);
+		var converter = BasicBeanConverter.builder().defaultSettings().build();
+		var listifier = Listifiers.collectionListifier();
+		var input = l(1, 2, 3);
+		var result = listifier.apply(converter, input);
 
 			assertList(result, 1, 2, 3);
 		}
@@ -106,11 +106,11 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class B_iterableListifier extends TestBase {
 
-		@Test
-		void b01_listifyIterable() {
-			var listifier = Listifiers.iterableListifier();
-			Iterable<String> input = List.of("a", "b", "c");
-			var result = listifier.apply(null, input);
+	@Test
+	void b01_listifyIterable() {
+		var listifier = Listifiers.iterableListifier();
+		Iterable<String> input = l("a", "b", "c");
+		var result = listifier.apply(null, input);
 
 			assertList(result, "a", "b", "c");
 		}
@@ -125,13 +125,13 @@ class Listifiers_Test extends TestBase {
 			assertList(result, 1, 2, 3);
 		}
 
-		@Test
-		void b03_listifyEmptyIterable() {
-			var listifier = Listifiers.iterableListifier();
-			Iterable<String> input = List.of();
-			var result = listifier.apply(null, input);
+	@Test
+	void b03_listifyEmptyIterable() {
+		var listifier = Listifiers.iterableListifier();
+		Iterable<String> input = l();
+		var result = listifier.apply(null, input);
 
-			assertTrue(result.isEmpty());
+			assertEmpty(result);
 		}
 
 		@Test
@@ -141,7 +141,7 @@ class Listifiers_Test extends TestBase {
 			Iterable<String> input = Set.of("x", "y");
 			var result = listifier.apply(converter, input);
 
-			assertEquals(2, result.size());
+			assertSize(2, result);
 			assertTrue(result.contains("x"));
 			assertTrue(result.contains("y"));
 		}
@@ -150,24 +150,24 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class C_iteratorListifier extends TestBase {
 
-		@Test
-		void c01_listifyIterator() {
-			var listifier = Listifiers.iteratorListifier();
-			var input = List.of("a", "b", "c").iterator();
-			var result = listifier.apply(null, input);
+	@Test
+	void c01_listifyIterator() {
+		var listifier = Listifiers.iteratorListifier();
+		var input = l("a", "b", "c").iterator();
+		var result = listifier.apply(null, input);
 
 			assertList(result, "a", "b", "c");
 			// Iterator should be exhausted
 			assertFalse(input.hasNext());
 		}
 
-		@Test
-		void c02_listifyEmptyIterator() {
-			var listifier = Listifiers.iteratorListifier();
-			var input = List.of().iterator();
-			var result = listifier.apply(null, input);
+	@Test
+	void c02_listifyEmptyIterator() {
+		var listifier = Listifiers.iteratorListifier();
+		var input = l().iterator();
+		var result = listifier.apply(null, input);
 
-			assertTrue(result.isEmpty());
+			assertEmpty(result);
 		}
 
 		@Test
@@ -176,17 +176,17 @@ class Listifiers_Test extends TestBase {
 			var input = IntStream.range(0, 1000).iterator();
 			var result = listifier.apply(null, input);
 
-			assertEquals(1000, result.size());
+			assertSize(1000, result);
 			assertEquals(0, result.get(0));
 			assertEquals(999, result.get(999));
 		}
 
 		@Test
 		void c04_listifyWithConverter() {
-			var converter = BasicBeanConverter.builder().defaultSettings().build();
-			var listifier = Listifiers.iteratorListifier();
-			var input = List.of("x", "y", "z").iterator();
-			var result = listifier.apply(converter, input);
+		var converter = BasicBeanConverter.builder().defaultSettings().build();
+		var listifier = Listifiers.iteratorListifier();
+		var input = l("x", "y", "z").iterator();
+		var result = listifier.apply(converter, input);
 
 			assertList(result, "x", "y", "z");
 		}
@@ -195,12 +195,12 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class D_enumerationListifier extends TestBase {
 
-		@Test
-		void d01_listifyEnumeration() {
-			var listifier = Listifiers.enumerationListifier();
-			var vector = new Vector<>(List.of("a", "b", "c"));
-			var input = vector.elements();
-			var result = listifier.apply(null, input);
+	@Test
+	void d01_listifyEnumeration() {
+		var listifier = Listifiers.enumerationListifier();
+		var vector = new Vector<>(l("a", "b", "c"));
+		var input = vector.elements();
+		var result = listifier.apply(null, input);
 
 			assertList(result, "a", "b", "c");
 			// Enumeration should be exhausted
@@ -214,7 +214,7 @@ class Listifiers_Test extends TestBase {
 			var input = vector.elements();
 			var result = listifier.apply(null, input);
 
-			assertTrue(result.isEmpty());
+			assertEmpty(result);
 		}
 
 		@Test
@@ -226,18 +226,18 @@ class Listifiers_Test extends TestBase {
 			var input = hashtable.keys();
 			var result = listifier.apply(null, input);
 
-			assertEquals(2, result.size());
+			assertSize(2, result);
 			assertTrue(result.contains("key1"));
 			assertTrue(result.contains("key2"));
 		}
 
 		@Test
 		void d04_listifyWithConverter() {
-			var converter = BasicBeanConverter.builder().defaultSettings().build();
-			var listifier = Listifiers.enumerationListifier();
-			var vector = new Vector<>(List.of(1, 2, 3));
-			var input = vector.elements();
-			var result = listifier.apply(converter, input);
+		var converter = BasicBeanConverter.builder().defaultSettings().build();
+		var listifier = Listifiers.enumerationListifier();
+		var vector = new Vector<>(l(1, 2, 3));
+		var input = vector.elements();
+		var result = listifier.apply(converter, input);
 
 			assertList(result, 1, 2, 3);
 		}
@@ -261,7 +261,7 @@ class Listifiers_Test extends TestBase {
 			var input = Stream.empty();
 			var result = listifier.apply(null, input);
 
-			assertTrue(result.isEmpty());
+			assertEmpty(result);
 		}
 
 		@Test
@@ -302,10 +302,10 @@ class Listifiers_Test extends TestBase {
 		@Test
 		void f01_listifyMap() {
 			var listifier = Listifiers.mapListifier();
-			var input = Map.of("z", "value1", "a", "value2"); // Unordered input
+			var input = m("z", "value1", "a", "value2"); // Unordered input
 			var result = listifier.apply(null, input);
 
-			assertEquals(2, result.size());
+			assertSize(2, result);
 			// Result should contain Map.Entry objects
 			assertTrue(result.stream().allMatch(obj -> obj instanceof Map.Entry));
 
@@ -364,10 +364,10 @@ class Listifiers_Test extends TestBase {
 		@Test
 		void f02_listifyEmptyMap() {
 			var listifier = Listifiers.mapListifier();
-			var input = Map.of();
+			var input = m();
 			var result = listifier.apply(null, input);
 
-			assertTrue(result.isEmpty());
+			assertEmpty(result);
 		}
 
 		@Test
@@ -378,7 +378,7 @@ class Listifiers_Test extends TestBase {
 			input.put("key2", null);
 			var result = listifier.apply(null, input);
 
-			assertEquals(2, result.size());
+			assertSize(2, result);
 			// Check that we have the expected entries
 			var hasKey1Entry = result.stream()
 				.filter(obj -> obj instanceof Map.Entry)
@@ -397,10 +397,10 @@ class Listifiers_Test extends TestBase {
 		void f04_listifyWithConverter() {
 			var converter = BasicBeanConverter.builder().defaultSettings().build();
 			var listifier = Listifiers.mapListifier();
-			var input = Map.of("a", 1, "b", 2);
+			var input = m("a", 1, "b", 2);
 			var result = listifier.apply(converter, input);
 
-			assertEquals(2, result.size());
+			assertSize(2, result);
 			assertTrue(result.stream().allMatch(obj -> obj instanceof Map.Entry));
 		}
 	}
@@ -408,20 +408,20 @@ class Listifiers_Test extends TestBase {
 	@Nested
 	class G_integration extends TestBase {
 
-		@Test
-		void g01_useInBasicBeanConverter() {
-			// Test various listifiable objects
-			assertList(List.of("a", "b"), "a", "b");
-			assertList(new LinkedHashSet<>(l("x", "y")), "x", "y");
-			assertSize(3, Stream.of(1, 2, 3));
+	@Test
+	void g01_useInBasicBeanConverter() {
+		// Test various listifiable objects
+		assertList(l("a", "b"), "a", "b");
+		assertList(new LinkedHashSet<>(l("x", "y")), "x", "y");
+		assertSize(3, Stream.of(1, 2, 3));
 			assertEmpty(Optional.empty());
 		}
 
-		@Test
-		void g02_customListifierRegistration() {
-			// Test that custom registration works
-			assertList(List.of("custom"), "custom");
-		}
+	@Test
+	void g02_customListifierRegistration() {
+		// Test that custom registration works
+		assertList(l("custom"), "custom");
+	}
 
 		@Test
 		void g03_listifierChaining() {

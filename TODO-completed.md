@@ -257,6 +257,152 @@ This file contains TODO items that have been completed and moved from TODO.md.
     - **Compilation verified:** Full clean compile successful (`mvn clean compile -DskipTests`)
     - This change provides consistency across the codebase and leverages the new utility methods from TODO-67
 
+- [x] **Replace exception constructors with utility methods** (2025-01-29)
+    - Systematically replaced all instances of `new IllegalArgumentException(`, `new RuntimeException(`, `new UnsupportedOperationException(`, and `new IOException(` with their corresponding utility methods
+    - **Files modified:** 61 files across juneau-core, juneau-rest, and juneau-microservice
+    - **Changes made:**
+      - Replaced `throw new IllegalArgumentException(...)` with `throw illegalArg(...)`
+      - Replaced `throw new RuntimeException(...)` with `throw runtimeException(...)`
+      - Replaced `throw new UnsupportedOperationException(...)` with `throw unsupportedOp(...)`
+      - Replaced `throw new IOException(...)` with `throw ioException(...)`
+      - Added static imports for `ThrowableUtils` to all modified files
+      - Fixed method calls with empty arguments to use proper overloads
+      - Added single-argument overloads: `illegalArg(Throwable)`, `runtimeException(Throwable)`, `unsupportedOp(Throwable)`, `ioException(Throwable)`
+    - **Notable file groups:**
+      - Common utilities: `AssertionUtils`, `StringUtils`, `ClassUtils`, `IOUtils`, `AsciiSet`, `GranularZonedDateTime`
+      - Collection classes: `SimpleMap`, `SimpleUnmodifiableMap`, `FloatValue`, `DoubleValue`, `MapBuilder`, `ControlledArrayList`, `JsonMap`, `JsonList`
+      - Parser/Serializer: `Parser`, `Serializer`, `SerializerSession`, `SerializerPipe`, `CsvSerializerSession`, `UonReader`
+      - REST components: `ResponseContent`, `RestRequest`, `RestOpContext`, `BasicSwaggerProviderSession`, various header/part classes
+      - Reflection: `ExecutableInfo`, `FieldInfo`, `ClassInfo`
+      - Other: `Context`, `BeanPropertyMeta`, `BeanContext`, `SerializerSet`, `ParserSet`, `Microservice`, `LogParser`
+    - **Compilation verified:** Full clean compile successful (`mvn compile -DskipTests`)
+    - This change provides consistency across the codebase, improves code readability, and leverages the utility methods from TODO-67
+
+- **TODO-70** ✅ Convert instances of `Map.of(...)` to `m(...)`.
+  - **Status**: COMPLETED
+  - **Details**: Converted 43 instances of `Map.of()` to `m()` across 11 test files. The `m()` method provides advantages over `Map.of()`: supports null keys/values, preserves insertion order, no limit on entries (Map.of() is limited to 10), and is consistent with Juneau's other collection utilities like `l()` and `a()`.
+    - **Files modified**: `Items_Test.java` (4), `SchemaInfo_Test.java` (6), `HeaderInfo_Test.java` (1), `BasicBeanConverter_Test.java` (5), `PropertyExtractor_Test.java` (1), `RoundTripBeanMaps_Test.java` (1), `PropertyExtractors_Test.java` (4), `BctAssertions_Test.java` (12), `Listifiers_Test.java` (3), `Stringifiers_Test.java` (5), `StringUtils_Test.java` (1)
+    - **Compilation verified:** Full clean compile and test-compile successful
+
+- **TODO-72** ✅ Convert instances of `List.of(...)` to `l(...)`.
+  - **Status**: COMPLETED
+  - **Details**: Converted 76 instances of `java.util.List.of()` to `l()` across 9 test files. The `l()` method provides advantages over `List.of()`: supports null elements, returns a modifiable list, and is consistent with Juneau's other collection utilities like `m()` and `a()`. Note: Only converted actual `java.util.List.of()` calls; class-specific factory methods like `PartList.of()`, `JsonList.of()`, `HeaderList.of()`, and `AnnotationWorkList.of()` were intentionally left unchanged as they are part of their respective class APIs.
+    - **Files modified**: 
+      - `BctAssertions_Test.java` (18 instances)
+      - `StringUtils_Test.java` (14 instances)
+      - `CollectionUtils_Test.java` (13 instances)
+      - `Listifiers_Test.java` (13 instances)
+      - `Stringifiers_Test.java` (7 instances)
+      - `Swappers_Test.java` (3 instances, added CollectionUtils import)
+      - `AssertionArgs_Test.java` (5 instances, added CollectionUtils import)
+      - `ByteValue_Test.java` (1 instance, added CollectionUtils import)
+      - `StringValue_Test.java` (2 instances, added CollectionUtils import)
+    - **Compilation verified:** Full clean compile and test-compile successful
+    - **Tests verified:** All tests passing
+
+- **TODO-69** ✅ Look for places in code where `a(...)` can be used.
+  - **Status**: COMPLETED
+  - **Details**: Searched codebase for non-primitive array creation patterns that could be converted to use the `a()` utility method from `CollectionUtils`. Found only 2 instances that were appropriate for conversion (plus 1 javadoc example):
+    - **Converted:**
+      - `Hyperlink_Test.java`: Changed `new Hyperlink[]{a(),a()}` to `CollectionUtils.a(a(),a())` (required fully-qualified call due to method name conflict)
+      - `StringUtils.java` (javadoc): Updated example from `new String[]{"a", "b"}` to `a("a", "b")` for consistency
+    - **Not converted:**
+      - 4 instances of `new String[]{}` in Remote annotation tests were changed to `new String[0]` for clarity (empty arrays with explicit size are clearer than `a()` with no type inference)
+      - No other instances of `Arrays.asList()` needed conversion - only used in utility method implementations and documentation
+    - **Key findings:**
+      - The codebase already extensively uses `a()` where appropriate
+      - Empty arrays (`new Type[0]`) are sometimes clearer than `a()` when type inference is ambiguous
+      - Most array creation in the codebase is for primitive arrays or already using `a()`
+    - **Compilation verified:** Full clean compile successful
+    - **Tests verified:** All 25,831 tests passing
+
+- **TODO-66** ✅ There are two ArrayUtilsTest classes whose tests should be merged into CollectionUtils_Test.
+  - **Status**: COMPLETED
+  - **Details**: Found and merged two identical `ArrayUtilsTest` classes into `CollectionUtils_Test`. Since `ArrayUtils` was deprecated in favor of `CollectionUtils` (per TODO-60), the test classes needed to be consolidated.
+    - **Files removed:**
+      - `juneau-utest/src/test/java/org/apache/juneau/utils/ArrayUtilsTest.java` (deleted)
+      - `juneau-utest/src/test/java/org/apache/juneau/common/utils/ArrayUtilsTest.java` (deleted)
+    - **Files modified:**
+      - `CollectionUtils_Test.java`: Added 3 new test methods (a43_addAll_arrayToArray, a44_toSet_fromArray, a45_combine_arrays) covering array utility methods
+    - **Tests merged:**
+      - `addAll(T[], T...)` - Tests appending varargs to arrays
+      - `toSet(T[])` - Tests converting arrays to unmodifiable sets
+      - `combine(T[]...)` - Tests combining multiple arrays
+    - **Additional changes:**
+      - Added `import static org.apache.juneau.junit.bct.BctAssertions.*;` for `assertList` and `assertEmpty` methods
+    - **Compilation verified:** Full clean compile successful
+    - **Tests verified:** All CollectionUtils_Test tests passing
+
+- **TODO-71** ✅ Convert `assertEquals(X, Y.size())` to `assertSize(X, Y)`.
+  - **Status**: COMPLETED
+  - **Details**: Converted 228 instances of `assertEquals(X, Y.size())` to `assertSize(X, Y)` across 20 test files. The conversion initially revealed ClassCastException errors with non-Comparable objects (Class, Tuple, Map.Entry) when the listifiers tried to sort collections. Fixed by implementing a flexible comparator that handles any object type.
+    - **Key Solution:** Created `flexibleComparator()` in `Listifiers.java` that:
+      - Handles null values (nulls first)
+      - Uses natural ordering for Comparable objects
+      - Falls back to string-based comparison for non-Comparable objects
+      - Enables predictable test ordering without requiring Comparable implementation
+    - **Files modified (conversions):**
+      - `ConfigImportsTest.java` (37 instances)
+      - `Cache_Test.java` (31 instances)
+      - `NestedTokenizer_Test.java` (26 instances)
+      - `Listifier_Test.java` (16 instances)
+      - `BidiMap_Test.java` (15 instances)
+      - `Cache2_Test.java` (11 instances)
+      - `UonParser_Test.java` (9 instances)
+      - `ConcurrentHashMap2Key_Test.java` (9 instances)
+      - `UrlEncodingParser_Test.java` (8 instances)
+      - `ChildResourceDescriptions_Test.java` (7 instances)
+      - `SimpleUnmodifiableMap_Test.java` (7 instances)
+      - `SimpleMap_Test.java` (7 instances)
+      - `Listifiers_Test.java` (6 instances)
+      - `UonPartParser_Test.java` (6 instances)
+      - `BeanConverter_Test.java` (5 instances)
+      - `ConcurrentHashMap5Key_Test.java` (5 instances)
+      - `ConcurrentHashMap4Key_Test.java` (5 instances)
+      - `ConcurrentHashMap3Key_Test.java` (5 instances)
+      - `Args_Test.java` (5 instances)
+      - Plus additional instances in `Cache3_Test`, `Cache4_Test`, `Cache5_Test`
+    - **Framework changes:**
+      - `Listifiers.java`: Added `flexibleComparator(BeanConverter)` method
+      - Updated `collectionListifier()` and `mapListifier()` to use flexible comparator
+    - **Compilation verified:** Full clean compile successful
+    - **Tests verified:** All 25,828 tests passing
+    - **Additional conversions (64 more instances):**
+      - `ConfigImportsTest.java`: All remaining listener/event size checks (done earlier)
+      - `NestedTokenizer_Test.java`: All remaining nested token size checks (done earlier)
+      - `Args_Test.java`: 5 instances (`.getArgs().size()`)
+      - `DataConversion_Test.java`: 2 instances (`.getList().size()`)
+      - `BeanConverter_Test.java`: 2 instances (`.listify().size()`)
+      - `OptionalObjects_RoundTripTest.java`: 2 instances (`.f1.get().size()`)
+      - `CommonParser_UrlEncodingTest.java`: 1 instance (`.getInts().size()`)
+      - `CommonParser_UonTest.java`: 1 instance (`.getInts().size()`)
+      - `CommonParser_Test.java` (html): 1 instance (`.getInts().size()`)
+      - `CommonParser_Test.java` (xml): 1 instance (`.getInts().size()`)
+      - `CommonParser_Test.java` (json): 1 instance (`.getInts().size()`)
+      - `SimpleMap_Test.java`: 1 instance (`.keySet().size()`)
+      - `SimpleUnmodifiableMap_Test.java`: 1 instance (`.keySet().size()`)
+      - `BasicHttpResource_Test.java`: 1 instance (`.getHeaders().size()`)
+    - **Total instances converted:** 292 (228 from first batch + 64 from second batch)
+    - **Final verification:** All 25,828 tests passing
+    - **Follow-up refinement:** Converted 60 instances of `assertSize(0, x)` to `assertEmpty(x)` for better semantic clarity
+      - Files affected: ConfigImportsTest, BeanConverter_Test, Listifier_Test, OperationMap_Test, OptionalObjects_RoundTripTest, ListBuilder_Test, SimpleMap_Test, BidiMap_Test, Cache_Test, ConcurrentHashMap tests, SetBuilder_Test, MultiSet_Test, MapBuilder_Test, BasicHttpResource_Test, Args_Test, ChildResourceDescriptions_Test
+      - Kept 1 instance in BctAssertions_Test.java (tests error handling for null input)
+      - All 25,828 tests still passing
+    - **Final refinement:** Converted 68 instances of `assertTrue(x.isEmpty())` and `assertFalse(x.isEmpty())` to `assertEmpty(x)` and `assertNotEmpty(x)`
+      - 53 instances of `assertTrue(x.isEmpty())` → `assertEmpty(x)`
+      - 15 instances of `assertFalse(x.isEmpty())` → `assertNotEmpty(x)`
+      - Files affected: UrlEncodingParser_Test, Config_Test, NestedTokenizer_Test, Listifiers_Test, AssertionArgs_Test, BctAssertions_Test, OperationMap_Test, AnnotationInheritance_Test, and Value tests (BooleanValue_Test, CharValue_Test, DoubleValue_Test, FloatValue_Test, IntegerValue_Test, LongValue_Test, ShortValue_Test)
+      - Enhanced `assertEmpty()` and `assertNotEmpty()` in BctAssertions with comprehensive type support:
+        - String: length-based emptiness checks
+        - Optional: isEmpty() check
+        - Value: isEmpty() check (supports BooleanValue, IntegerValue, etc.)
+        - Map: isEmpty() check
+        - Collection: isEmpty() check (explicitly handles List, Set, Queue, etc.)
+        - Array: length-based check using reflection (supports both object and primitive arrays)
+        - Other objects: fallback to listify() for convertible types
+      - Refactored both methods to use if/else chains instead of early returns for clearer code flow
+      - All 25,828 tests passing
+
 ## Notes
 
 Items are marked as completed when:

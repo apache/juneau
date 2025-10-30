@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -376,7 +378,7 @@ class Swapper_Test extends TestBase {
 			var container = new TestContainer("test");
 			var list = converter.listify(container);
 
-			assertEquals(2, list.size());
+			assertSize(2, list);
 			assertEquals("test", list.get(0));
 			assertEquals("extra", list.get(1));
 		}

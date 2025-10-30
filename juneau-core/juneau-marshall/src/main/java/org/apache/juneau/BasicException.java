@@ -50,7 +50,7 @@ public abstract class BasicException extends Exception {
 	 * @param causedBy The cause of this exception.
 	 */
 	public BasicException(Throwable causedBy) {
-		this(causedBy, causedBy.getLocalizedMessage());
+		this(causedBy, lm(causedBy));
 	}
 
 	/**

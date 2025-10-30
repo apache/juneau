@@ -17,6 +17,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -173,7 +174,7 @@ public class ContextBeanCreator<T> {
 	public ContextBeanCreator<T> type(Class<? extends T> value) {
 		builder = Context.createBuilder((Class<? extends Context>)value);
 		if (builder == null)
-			throw new IllegalArgumentException("Creator for class {0} not found." + value.getName());
+			throw illegalArg("Creator for class {0} not found.", cn(value));
 		return this;
 	}
 }

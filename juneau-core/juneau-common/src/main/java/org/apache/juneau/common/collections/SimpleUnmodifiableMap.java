@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -144,7 +145,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 
 		@Override /* Map.Entry */
 		public V setValue(V val) {
-			throw new UnsupportedOperationException("Map is unmodifiable");
+			throw unsupportedOp("Map is unmodifiable");
 		}
 	}
 
@@ -194,7 +195,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 		for (var i = 0; i < keys.length; i++) {
 			for (var j = i + 1; j < keys.length; j++) {
 				if (eq(keys[i], keys[j])) {
-					throw new IllegalArgumentException("Duplicate key found: " + keys[i]);
+					throw illegalArg("Duplicate key found: {0}", keys[i]);
 				}
 			}
 		}
@@ -296,7 +297,7 @@ public class SimpleUnmodifiableMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override /* Map */
 	public V put(K key, V value) {
-		throw new UnsupportedOperationException("Map is unmodifiable");
+		throw unsupportedOp("Map is unmodifiable");
 	}
 }
 

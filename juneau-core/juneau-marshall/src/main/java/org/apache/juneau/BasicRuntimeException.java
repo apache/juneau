@@ -140,7 +140,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
+			throw unsupportedOp("Bean is read-only");
 	}
 
 	/**

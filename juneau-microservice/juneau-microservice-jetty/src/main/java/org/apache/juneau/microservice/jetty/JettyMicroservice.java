@@ -758,7 +758,7 @@ public class JettyMicroservice extends Microservice {
 					out(mb2, "ServerStopped");
 					listener.onPostStopServer(JettyMicroservice.this);
 				} catch (Exception e) {
-					logger.log(Level.WARNING, e.getLocalizedMessage(), e);
+					logger.log(Level.WARNING, lm(e), e);
 				}
 			}
 		};

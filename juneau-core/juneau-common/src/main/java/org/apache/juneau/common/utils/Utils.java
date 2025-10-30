@@ -199,7 +199,7 @@ public class Utils {
 			if (l1 != l2)
 				return false;
 			for (int i = 0; i < l1; i++)
-				if (! eq(Array.get(o1, i), Array.get(o2, i)))
+				if (ne(Array.get(o1, i), Array.get(o2, i)))
 					return false;
 			return true;
 		}
@@ -778,7 +778,7 @@ public class Utils {
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

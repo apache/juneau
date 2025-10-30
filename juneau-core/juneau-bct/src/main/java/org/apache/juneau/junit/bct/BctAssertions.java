@@ -23,10 +23,12 @@ import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.opentest4j.*;
 
@@ -602,30 +604,37 @@ public class BctAssertions {
 		assertArgNotNull("args", args);
 		assertNotNull(value, "Value was null.");
 
-		if (value instanceof Optional<?> v2) {
-			assertTrue(v2.isEmpty(), "Optional was not empty");
-			return;
+		if (value instanceof String s) {
+			assertTrue(s.isEmpty(), args.getMessage("String was not empty.  value: <{0}>", s));
+		} else if (value instanceof Optional<?> v2) {
+			assertTrue(v2.isEmpty(), args.getMessage("Optional was not empty"));
+		} else if (value instanceof Value<?> v2) {
+			assertTrue(v2.isEmpty(), args.getMessage("Value was not empty"));
+		} else if (value instanceof Map<?,?> v2) {
+			assertTrue(v2.isEmpty(), args.getMessage("Map was not empty"));
+		} else if (value instanceof Collection<?> v2) {
+			assertTrue(v2.isEmpty(), args.getMessage("Collection was not empty"));
+		} else if (value.getClass().isArray()) {
+			assertEquals(0, Array.getLength(value), args.getMessage("Array was not empty."));
+		} else {
+			var converter = args.getBeanConverter().orElse(DEFAULT_CONVERTER);
+			assertTrue(converter.canListify(value), args.getMessage("Value cannot be converted to a list.  Class=<{0}>", scn(value)));
+			assertTrue(converter.listify(value).isEmpty(), args.getMessage("Value was not empty."));
 		}
-
-		if (value instanceof Map<?,?> v2) {
-			assertTrue(v2.isEmpty(), "Map was not empty");
-			return;
-		}
-
-		var converter = args.getBeanConverter().orElse(DEFAULT_CONVERTER);
-
-		assertTrue(converter.canListify(value), args.getMessage("Value cannot be converted to a list.  Class=<{0}>", value.getClass().getSimpleName()));
-		assertTrue(converter.listify(value).isEmpty(), args.getMessage("Value was not empty."));
 	}
 
 	/**
-	 * Asserts that a collection-like object or Optional is not null and empty.
+	 * Asserts that a collection-like object, Optional, Value, String, or array is not null and empty.
 	 *
 	 * <p>This method validates that the provided object is empty according to its type:</p>
 	 * <ul>
+	 *    <li><b>String:</b> Must have length 0</li>
 	 *    <li><b>Optional:</b> Must be empty (not present)</li>
+	 *    <li><b>Value:</b> Must be empty (value is null)</li>
 	 *    <li><b>Map:</b> Must have no entries</li>
-	 *    <li><b>Collection-like objects:</b> Must be convertible to an empty List via {@link BeanConverter#listify(Object)}</li>
+	 *    <li><b>Collection:</b> Must have no elements</li>
+	 *    <li><b>Array:</b> Must have length 0</li>
+	 *    <li><b>Other objects:</b> Must be convertible to an empty List via {@link BeanConverter#listify(Object)}</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Supported Types:</h5>
@@ -974,27 +983,35 @@ public class BctAssertions {
 		assertArgNotNull("args", args);
 		assertNotNull(value, "Value was null.");
 
-		if (value instanceof Optional<?> v2) {
-			assertFalse(v2.isEmpty(), "Optional was empty");
-			return;
+		if (value instanceof String s) {
+			assertFalse(s.isEmpty(), args.getMessage("String was empty."));
+		} else if (value instanceof Optional<?> v2) {
+			assertFalse(v2.isEmpty(), args.getMessage("Optional was empty"));
+		} else if (value instanceof Value<?> v2) {
+			assertFalse(v2.isEmpty(), args.getMessage("Value was empty"));
+		} else if (value instanceof Map<?,?> v2) {
+			assertFalse(v2.isEmpty(), args.getMessage("Map was empty"));
+		} else if (value instanceof Collection<?> v2) {
+			assertFalse(v2.isEmpty(), args.getMessage("Collection was empty"));
+		} else if (value.getClass().isArray()) {
+			assertTrue(Array.getLength(value) > 0, args.getMessage("Array was empty."));
+		} else {
+			assertFalse(args.getBeanConverter().orElse(DEFAULT_CONVERTER).listify(value).isEmpty(), args.getMessage("Value was empty."));
 		}
-
-		if (value instanceof Map<?,?> v2) {
-			assertFalse(v2.isEmpty(), "Map was empty");
-			return;
-		}
-
-		assertFalse(args.getBeanConverter().orElse(DEFAULT_CONVERTER).listify(value).isEmpty(), args.getMessage("Value was empty."));
 	}
 
 	/**
-	 * Asserts that a collection-like object or Optional is not null and not empty.
+	 * Asserts that a collection-like object, Optional, Value, String, or array is not null and not empty.
 	 *
 	 * <p>This method validates that the provided object is not empty according to its type:</p>
 	 * <ul>
+	 *    <li><b>String:</b> Must have length > 0</li>
 	 *    <li><b>Optional:</b> Must be present (not empty)</li>
+	 *    <li><b>Value:</b> Must not be empty (value is not null)</li>
 	 *    <li><b>Map:</b> Must have at least one entry</li>
-	 *    <li><b>Collection-like objects:</b> Must convert to a non-empty List via {@link BeanConverter#listify(Object)}</li>
+	 *    <li><b>Collection:</b> Must have at least one element</li>
+	 *    <li><b>Array:</b> Must have length > 0</li>
+	 *    <li><b>Other objects:</b> Must convert to a non-empty List via {@link BeanConverter#listify(Object)}</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Supported Types:</h5>

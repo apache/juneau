@@ -17,6 +17,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -1059,7 +1060,7 @@ public class Parser extends BeanContextable {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
-		throw new UnsupportedOperationException();
+		throw unsupportedOp();
 	}
 
 	/**

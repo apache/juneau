@@ -88,8 +88,8 @@ class OperationMap_Test extends TestBase {
 	 */
 	@Test void a05_emptyMap() {
 		var map = operationMap();
-		assertTrue(map.isEmpty());
-		assertEquals(0, map.size());
+		assertEmpty(map);
+		assertEmpty(map);
 	}
 
 	/**

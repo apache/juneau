@@ -215,7 +215,7 @@ public class LogEntryFormatter extends Formatter {
 			if (c == 1) {
 				msg = '[' + hash + '.' + c + "] " + msg;
 			} else {
-				msg = '[' + hash + '.' + c + "] " + msg + ", " + t.getLocalizedMessage();
+				msg = '[' + hash + '.' + c + "] " + msg + ", " + lm(t);
 				t = null;
 			}
 		}

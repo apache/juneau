@@ -168,7 +168,7 @@ class ListBuilder_Test extends TestBase {
 			.build();
 
 		assertNotNull(list);
-		assertSize(0, list);
+		assertEmpty(list);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -306,7 +306,7 @@ class ListBuilder_Test extends TestBase {
 			.build();
 
 		assertNotNull(list);
-		assertSize(0, list);
+		assertEmpty(list);
 	}
 
 	@Test

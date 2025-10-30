@@ -17,6 +17,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -62,7 +63,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 						logger = logger.substring(logger.lastIndexOf('.') + 1);
 				}
 			} catch (ParseException e) {
-				throw new IOException(e);
+				throw ioException(e);
 			}
 		}
 

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -110,22 +112,22 @@ class ConcurrentHashMap4Key_Test extends TestBase {
 	void d01_sizeTracking() {
 		var x = new ConcurrentHashMap4Key<String,String,String,Integer,String>();
 
-		assertEquals(0, x.size());
-		assertTrue(x.isEmpty());
+		assertEmpty(x);
+		assertEmpty(x);
 
 		x.put("en", "US", "formal", 1, "Hello");
-		assertEquals(1, x.size());
-		assertFalse(x.isEmpty());
+		assertSize(1, x);
+		assertNotEmpty(x);
 
 		x.put("en", "US", "informal", 1, "Hi");
-		assertEquals(2, x.size());
+		assertSize(2, x);
 
 		x.put("en", "US", "formal", 1, "Greetings"); // Update
-		assertEquals(2, x.size());
+		assertSize(2, x);
 
 		x.clear();
-		assertEquals(0, x.size());
-		assertTrue(x.isEmpty());
+		assertEmpty(x);
+		assertEmpty(x);
 	}
 }
 

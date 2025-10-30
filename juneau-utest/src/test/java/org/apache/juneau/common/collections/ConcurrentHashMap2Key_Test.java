@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
@@ -137,33 +139,33 @@ class ConcurrentHashMap2Key_Test extends TestBase {
 	void d01_sizeTracking() {
 		var x = new ConcurrentHashMap2Key<String,Integer,String>();
 
-		assertEquals(0, x.size());
+		assertEmpty(x);
 
 		x.put("user", 123, "Alice");
-		assertEquals(1, x.size());
+		assertSize(1, x);
 
 		x.put("user", 456, "Bob");
-		assertEquals(2, x.size());
+		assertSize(2, x);
 
 		x.put("admin", 123, "Charlie");
-		assertEquals(3, x.size());
+		assertSize(3, x);
 
 		// Updating existing key doesn't change size
 		x.put("user", 123, "AliceUpdated");
-		assertEquals(3, x.size());
+		assertSize(3, x);
 	}
 
 	@Test
 	void d02_isEmpty() {
 		var x = new ConcurrentHashMap2Key<String,Integer,String>();
 
-		assertTrue(x.isEmpty());
+		assertEmpty(x);
 
 		x.put("user", 123, "Alice");
-		assertFalse(x.isEmpty());
+		assertNotEmpty(x);
 
 		x.clear();
-		assertTrue(x.isEmpty());
+		assertEmpty(x);
 	}
 
 	//====================================================================================================
@@ -208,11 +210,11 @@ class ConcurrentHashMap2Key_Test extends TestBase {
 		x.put("user", 456, "Bob");
 		x.put("admin", 123, "Charlie");
 
-		assertEquals(3, x.size());
+		assertSize(3, x);
 
 		x.clear();
 
-		assertEquals(0, x.size());
+		assertEmpty(x);
 		assertNull(x.get("user", 123));
 		assertNull(x.get("user", 456));
 		assertNull(x.get("admin", 123));
@@ -253,8 +255,8 @@ class ConcurrentHashMap2Key_Test extends TestBase {
 	void h01_emptyMap() {
 		var x = new ConcurrentHashMap2Key<String,Integer,String>();
 
-		assertTrue(x.isEmpty());
-		assertEquals(0, x.size());
+		assertEmpty(x);
+		assertEmpty(x);
 	}
 
 	@Test
@@ -263,7 +265,7 @@ class ConcurrentHashMap2Key_Test extends TestBase {
 
 		x.put("only", 1, "single");
 
-		assertEquals(1, x.size());
+		assertSize(1, x);
 		assertEquals("single", x.get("only", 1));
 		assertNull(x.get("only", 2));
 	}

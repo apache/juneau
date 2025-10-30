@@ -64,41 +64,41 @@ class NestedTokenizer_Test extends TestBase {
 	@Test void a02_nestedTokens() {
 		// Simple nested structure
 		var tokens = tokenize("foo{a,b}");
-		assertEquals(1, tokens.size());
+		assertSize(1, tokens);
 		assertToken(tokens.get(0), "foo", "a", "b");
 
 		// Multiple tokens with nesting
 		tokens = tokenize("foo{a,b},bar{c,d}");
-		assertEquals(2, tokens.size());
+		assertSize(2, tokens);
 		assertToken(tokens.get(0), "foo", "a", "b");
 		assertToken(tokens.get(1), "bar", "c", "d");
 
 		// Empty nested content
 		tokens = tokenize("foo{}");
-		assertEquals(1, tokens.size());
+		assertSize(1, tokens);
 		assertToken(tokens.get(0), "foo");
 	}
 
 	@Test void a03_deepNesting() {
 		// Two levels deep
 		var tokens = tokenize("root{level1{a,b},level2}");
-		assertEquals(1, tokens.size());
+		assertSize(1, tokens);
 		var root = tokens.get(0);
-		assertEquals("root", root.getValue());
-		assertEquals(2, root.getNested().size());
-		assertToken(root.getNested().get(0), "level1", "a", "b");
+	assertEquals("root", root.getValue());
+	assertSize(2, root.getNested());
+	assertToken(root.getNested().get(0), "level1", "a", "b");
 		assertToken(root.getNested().get(1), "level2");
 
 		// Three levels deep
 		tokens = tokenize("root{level1{level2{a,b}}}");
-		assertEquals(1, tokens.size());
+		assertSize(1, tokens);
 		root = tokens.get(0);
-		assertEquals("root", root.getValue());
-		assertEquals(1, root.getNested().size());
-		var level1 = root.getNested().get(0);
-		assertEquals("level1", level1.getValue());
-		assertEquals(1, level1.getNested().size());
-		assertToken(level1.getNested().get(0), "level2", "a", "b");
+	assertEquals("root", root.getValue());
+	assertSize(1, root.getNested());
+	var level1 = root.getNested().get(0);
+	assertEquals("level1", level1.getValue());
+	assertSize(1, level1.getNested());
+	assertToken(level1.getNested().get(0), "level2", "a", "b");
 	}
 
 	@Test void a04_escapeSequences() {
@@ -120,7 +120,7 @@ class NestedTokenizer_Test extends TestBase {
 
 		// Escape in nested content
 		tokens = tokenize("root{foo\\,bar,baz}");
-		assertEquals(1, tokens.size());
+		assertSize(1, tokens);
 		assertToken(tokens.get(0), "root", "foo,bar", "baz");
 	}
 
@@ -131,26 +131,26 @@ class NestedTokenizer_Test extends TestBase {
 	@Test void b01_complexNestedStructures() {
 		// Real-world example: user configuration
 		var tokens = tokenize("user{name,email,address{street,city,zipcode{main,plus4}}},config{timeout,retries}");
-		assertEquals(2, tokens.size());
+		assertSize(2, tokens);
 
-		// Validate user token
-		var user = tokens.get(0);
-		assertEquals("user", user.getValue());
-		assertEquals(3, user.getNested().size());
-		assertEquals("name", user.getNested().get(0).getValue());
-		assertEquals("email", user.getNested().get(1).getValue());
+	// Validate user token
+	var user = tokens.get(0);
+	assertEquals("user", user.getValue());
+	assertSize(3, user.getNested());
+	assertEquals("name", user.getNested().get(0).getValue());
+	assertEquals("email", user.getNested().get(1).getValue());
 
-		var address = user.getNested().get(2);
-		assertEquals("address", address.getValue());
-		assertEquals(3, address.getNested().size());
-		assertEquals("street", address.getNested().get(0).getValue());
-		assertEquals("city", address.getNested().get(1).getValue());
+	var address = user.getNested().get(2);
+	assertEquals("address", address.getValue());
+	assertSize(3, address.getNested());
+	assertEquals("street", address.getNested().get(0).getValue());
+	assertEquals("city", address.getNested().get(1).getValue());
 
-		var zipcode = address.getNested().get(2);
-		assertEquals("zipcode", zipcode.getValue());
-		assertEquals(2, zipcode.getNested().size());
-		assertEquals("main", zipcode.getNested().get(0).getValue());
-		assertEquals("plus4", zipcode.getNested().get(1).getValue());
+	var zipcode = address.getNested().get(2);
+	assertEquals("zipcode", zipcode.getValue());
+	assertSize(2, zipcode.getNested());
+	assertEquals("main", zipcode.getNested().get(0).getValue());
+	assertEquals("plus4", zipcode.getNested().get(1).getValue());
 
 		// Validate config token
 		var config = tokens.get(1);
@@ -160,7 +160,7 @@ class NestedTokenizer_Test extends TestBase {
 	@Test void b02_mixedEscapingAndNesting() {
 		// Escaped characters within nested structures
 		var tokens = tokenize("data{key\\,name,value\\{test\\}},info{desc\\,important}");
-		assertEquals(2, tokens.size());
+		assertSize(2, tokens);
 
 		assertToken(tokens.get(0), "data", "key,name", "value{test}");
 		assertToken(tokens.get(1), "info", "desc,important");
@@ -169,14 +169,14 @@ class NestedTokenizer_Test extends TestBase {
 	@Test void b03_extremeNesting() {
 		// Very deep nesting
 		var tokens = tokenize("l1{l2{l3{l4{l5{value}}}}}");
-		assertEquals(1, tokens.size());
+		assertSize(1, tokens);
 
 		var current = tokens.get(0);
-		for (int i = 1; i <= 5; i++) {
-			assertEquals("l" + i, current.getValue());
-			assertEquals(1, current.getNested().size());
-			current = current.getNested().get(0);
-		}
+	for (int i = 1; i <= 5; i++) {
+		assertEquals("l" + i, current.getValue());
+		assertSize(1, current.getNested());
+		current = current.getNested().get(0);
+	}
 		assertEquals("value", current.getValue());
 		assertFalse(current.hasNested());
 	}
@@ -192,27 +192,27 @@ class NestedTokenizer_Test extends TestBase {
 
 		// Just comma
 		tokens = tokenize(",");
-		assertEquals(2, tokens.size());
+		assertSize(2, tokens);
 		assertEquals("", tokens.get(0).getValue());
 		assertEquals("", tokens.get(1).getValue());
 
 		// Multiple commas
 		tokens = tokenize("a,,b");
-		assertEquals(3, tokens.size());
+		assertSize(3, tokens);
 		assertEquals("a", tokens.get(0).getValue());
 		assertEquals("", tokens.get(1).getValue());
 		assertEquals("b", tokens.get(2).getValue());
 
 		// Trailing comma
 		tokens = tokenize("a,b,");
-		assertEquals(3, tokens.size());
+		assertSize(3, tokens);
 		assertEquals("a", tokens.get(0).getValue());
 		assertEquals("b", tokens.get(1).getValue());
 		assertEquals("", tokens.get(2).getValue());
 
 		// Leading comma
 		tokens = tokenize(",a,b");
-		assertEquals(3, tokens.size());
+		assertSize(3, tokens);
 		assertEquals("", tokens.get(0).getValue());
 		assertEquals("a", tokens.get(1).getValue());
 		assertEquals("b", tokens.get(2).getValue());
@@ -233,7 +233,7 @@ class NestedTokenizer_Test extends TestBase {
 
 		// Whitespace around braces
 		tokens = tokenize("root  {  a,b  }  ,  other");
-		assertEquals(2, tokens.size());
+		assertSize(2, tokens);
 		assertToken(tokens.get(0), "root", "a", "b");
 		assertToken(tokens.get(1), "other");
 	}
@@ -254,26 +254,26 @@ class NestedTokenizer_Test extends TestBase {
 
 		// Case 1: Empty final value with trailing comma (lastWasComma = true)
 		var tokens = tokenize("a,");
-		assertEquals(2, tokens.size());
+		assertSize(2, tokens);
 		assertEquals("a", tokens.get(0).getValue());
 		assertEquals("", tokens.get(1).getValue()); // Empty token added due to trailing comma
 
 		// Case 2: No tokens yet and empty input should create one empty token
 		// This is handled by error conditions, but let's test a whitespace-only case after comma
 		tokens = tokenize(",   ");
-		assertEquals(2, tokens.size());
+		assertSize(2, tokens);
 		assertEquals("", tokens.get(0).getValue());
 		assertEquals("", tokens.get(1).getValue()); // Empty final value but added because of lastWasComma
 
 		// Case 3: Non-empty final value should always be added
 		tokens = tokenize("a,b");
-		assertEquals(2, tokens.size());
+		assertSize(2, tokens);
 		assertEquals("a", tokens.get(0).getValue());
 		assertEquals("b", tokens.get(1).getValue());
 
 		// Case 4: Test with nested content and trailing comma
 		tokens = tokenize("root{a,},next");
-		assertEquals(2, tokens.size());
+		assertSize(2, tokens);
 		assertToken(tokens.get(0), "root", "a", ""); // Empty token in nested due to trailing comma
 		assertEquals("next", tokens.get(1).getValue());
 	}
@@ -287,7 +287,7 @@ class NestedTokenizer_Test extends TestBase {
 		var token = new Token("test");
 		assertEquals("test", token.getValue());
 		assertFalse(token.hasNested());
-		assertTrue(token.getNested().isEmpty());
+		assertEmpty(token.getNested());
 
 		// Null value handling
 		token = new Token(null);
@@ -385,12 +385,12 @@ class NestedTokenizer_Test extends TestBase {
 
 		// Initially no nested content
 		assertFalse(parent.hasNested());
-		assertTrue(parent.getNested().isEmpty());
+		assertEmpty(parent.getNested());
 
-		// Add nested content
-		parent.setNested(l(new Token("child1"), new Token("child2")));
-		assertTrue(parent.hasNested());
-		assertEquals(2, parent.getNested().size());
+	// Add nested content
+	parent.setNested(l(new Token("child1"), new Token("child2")));
+	assertTrue(parent.hasNested());
+	assertSize(2, parent.getNested());
 
 		// Verify unmodifiable
 		var nested = parent.getNested();

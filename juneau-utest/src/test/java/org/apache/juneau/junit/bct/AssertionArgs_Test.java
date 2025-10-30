@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,7 +73,7 @@ class AssertionArgs_Test extends TestBase {
 		var args = new AssertionArgs();
 
 		// Should have no custom converter
-		assertTrue(args.getBeanConverter().isEmpty());
+		assertEmpty(args.getBeanConverter());
 
 		// Should have no custom message
 		assertNull(args.getMessage());
@@ -95,7 +96,7 @@ class AssertionArgs_Test extends TestBase {
 		var mockConverter = createMockConverter();
 
 		// Initially empty
-		assertTrue(args.getBeanConverter().isEmpty());
+		assertEmpty(args.getBeanConverter());
 
 		// Set converter
 		args.setBeanConverter(mockConverter);
@@ -104,7 +105,7 @@ class AssertionArgs_Test extends TestBase {
 
 		// Set to null should clear
 		args.setBeanConverter(null);
-		assertTrue(args.getBeanConverter().isEmpty());
+		assertEmpty(args.getBeanConverter());
 	}
 
 	@Test
@@ -277,7 +278,7 @@ class AssertionArgs_Test extends TestBase {
 
 	@Test
 	void f02_integrationWithAssertBeans() {
-		var beans = List.of(
+		var beans = l(
 			new TestBean("Alice", 25, true),
 			new TestBean("Bob", 35, false)
 		);
@@ -297,7 +298,7 @@ class AssertionArgs_Test extends TestBase {
 
 	@Test
 	void f03_integrationWithAssertList() {
-		var list = List.of("apple", "banana", "cherry");
+		var list = l("apple", "banana", "cherry");
 		var args = args().setMessage("List validation failed");
 
 		// Should work with custom message
@@ -318,7 +319,7 @@ class AssertionArgs_Test extends TestBase {
 
 		// Null converter should work
 		args.setBeanConverter(null);
-		assertTrue(args.getBeanConverter().isEmpty());
+		assertEmpty(args.getBeanConverter());
 
 		// Null message supplier should work
 		args.setMessage((Supplier<String>) null);
@@ -389,7 +390,7 @@ class AssertionArgs_Test extends TestBase {
 
 		// Due to race conditions, we may not get the expected messages
 		// This demonstrates why each test should create its own instance
-		assertEquals(5, results.size());
+		assertSize(5, results);
 		// Note: We don't assert specific values due to race conditions
 	}
 
@@ -404,7 +405,7 @@ class AssertionArgs_Test extends TestBase {
 
 		// Test 2: Product validation (separate instance)
 		var productArgs = args().setMessage("Product validation test");
-		var products = List.of("Laptop", "Phone", "Tablet");
+		var products = l("Laptop", "Phone", "Tablet");
 		assertList(productArgs, products, "Laptop", "Phone", "Tablet");
 
 		// Each test has its own configuration without interference
@@ -420,11 +421,11 @@ class AssertionArgs_Test extends TestBase {
 				return String.valueOf(o);
 			}
 
-			@Override
-			public List<Object> listify(Object o) {
-				if (o instanceof List) return (List<Object>) o;
-				return List.of(o);
-			}
+		@Override
+		public List<Object> listify(Object o) {
+			if (o instanceof List) return (List<Object>) o;
+			return l(o);
+		}
 
 			@Override
 			public boolean canListify(Object o) {
@@ -472,11 +473,11 @@ class AssertionArgs_Test extends TestBase {
 				return String.valueOf(o);
 			}
 
-			@Override
-			public List<Object> listify(Object o) {
-				if (o instanceof List) return (List<Object>) o;
-				return List.of(o);
-			}
+		@Override
+		public List<Object> listify(Object o) {
+			if (o instanceof List) return (List<Object>) o;
+			return l(o);
+		}
 
 			@Override
 			public boolean canListify(Object o) {

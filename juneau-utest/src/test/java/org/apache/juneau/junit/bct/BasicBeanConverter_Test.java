@@ -197,7 +197,7 @@ class BasicBeanConverter_Test extends TestBase {
 		@Test
 		@DisplayName("b05_stringify() handles maps")
 		void b05_stringify_handlesMaps() {
-			var map = Map.of("name", "John", "age", 30);
+			var map = m("name", "John", "age", 30);
 			var result = converter.stringify(map);
 			assertTrue(result.contains("name=John"));
 			assertTrue(result.contains("age=30"));
@@ -355,7 +355,7 @@ class BasicBeanConverter_Test extends TestBase {
 				.addSetting(SETTING_mapSuffix, ">")
 				.build();
 
-			var map = Map.of("a", 1);
+			var map = m("a", 1);
 			var result = converter.stringify(map);
 			assertTrue(result.startsWith("<"));
 			assertTrue(result.endsWith(">"));
@@ -369,7 +369,7 @@ class BasicBeanConverter_Test extends TestBase {
 				.addSetting(SETTING_mapEntrySeparator, ":")
 				.build();
 
-			var map = Map.of("name", "John");
+			var map = m("name", "John");
 			var result = converter.stringify(map);
 			assertTrue(result.contains("name:John"));
 		}
@@ -465,15 +465,15 @@ class BasicBeanConverter_Test extends TestBase {
 			var booleanArray = booleans(true, false, true);
 
 			var stringList = converter.listify(stringArray);
-			assertEquals(3, stringList.size());
+			assertSize(3, stringList);
 			assertEquals("a", stringList.get(0));
 
 			var intList = converter.listify(intArray);
-			assertEquals(3, intList.size());
+			assertSize(3, intList);
 			assertEquals(1, intList.get(0));
 
 			var booleanList = converter.listify(booleanArray);
-			assertEquals(3, booleanList.size());
+			assertSize(3, booleanList);
 			assertEquals(true, booleanList.get(0));
 		}
 
@@ -544,8 +544,8 @@ class BasicBeanConverter_Test extends TestBase {
 
 			// Test with list of objects
 			var people = l(
-				Map.of("name", "John", "age", 30),
-				Map.of("name", "Jane", "age", 25)
+				m("name", "John", "age", 30),
+				m("name", "Jane", "age", 25)
 			);
 
 			assertEquals("[{John},{Jane}]",

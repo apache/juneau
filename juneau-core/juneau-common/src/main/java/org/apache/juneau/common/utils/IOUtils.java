@@ -17,6 +17,7 @@
 package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.SystemUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -772,7 +773,7 @@ public class IOUtils {
 			return read(in2);
 		if (in instanceof byte[] in2)
 			return read(in2);
-		throw new IllegalArgumentException("Invalid type passed to read:  " + in.getClass().getName());
+		throw illegalArg("Invalid type passed to read:  {0}", cn(in));
 	}
 
 	/**

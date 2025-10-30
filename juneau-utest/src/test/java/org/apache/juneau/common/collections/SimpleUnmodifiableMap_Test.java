@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -33,7 +35,7 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		
 		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
-		assertEquals(1, map.size());
+		assertSize(1, map);
 		assertEquals("value1", map.get(null));
 		assertTrue(map.containsKey(null));
 	}
@@ -45,7 +47,7 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		
 		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
-		assertEquals(3, map.size());
+		assertSize(3, map);
 		assertEquals("value1", map.get("key1"));
 		assertEquals("value2", map.get(null));
 		assertEquals("value3", map.get("key3"));
@@ -74,7 +76,7 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		
 		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
-		assertEquals(1, map.size());
+		assertSize(1, map);
 		assertNull(map.get(null));
 		assertTrue(map.containsKey(null));
 	}
@@ -109,7 +111,7 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
 		assertTrue(map.keySet().contains(null), "Null key not found in keySet");
-		assertEquals(3, map.keySet().size());
+		assertSize(3, map.keySet());
 	}
 
 	//====================================================================================================
@@ -160,7 +162,7 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 			new SimpleUnmodifiableMap<>(keys, values)
 		);
 		
-		assertEquals(4, map.size());
+		assertSize(4, map);
 		assertEquals("value1", map.get("key1"));
 		assertEquals("value2", map.get(null));
 		assertEquals("value3", map.get("key2"));
@@ -208,7 +210,7 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		
 		SimpleUnmodifiableMap<String, String> map = new SimpleUnmodifiableMap<>(keys, values);
 		
-		assertEquals(0, map.size());
+		assertEmpty(map);
 		assertNull(map.get(null));
 		assertFalse(map.containsKey(null));
 	}
@@ -265,7 +267,7 @@ class SimpleUnmodifiableMap_Test extends TestBase {
 		}
 		
 		// Verify map is still intact
-		assertEquals(3, map.size());
+		assertSize(3, map);
 		assertEquals("value1", map.get("key1"));
 		assertEquals("value2", map.get(null));
 		assertEquals("value3", map.get("key3"));

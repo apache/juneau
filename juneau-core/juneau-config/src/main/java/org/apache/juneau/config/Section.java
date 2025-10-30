@@ -17,6 +17,7 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -188,7 +189,7 @@ public class Section {
 		assertArgNotNull("c", c);
 
 		if (! c.isInterface())
-			throw new IllegalArgumentException("Class '" + c.getName() + "' passed to toInterface() is not an interface.");
+			throw illegalArg("Class ''{0}'' passed to toInterface() is not an interface.", cn(c));
 
 		return opt((T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler) (proxy, method, args) -> {
 			var bi = Introspector.getBeanInfo(c, null);
@@ -200,7 +201,7 @@ public class Section {
 				if (method.equals(wm))
 					return config.set(name + '/' + pd.getName(), args[0]);
 			}
-			throw new UnsupportedOperationException("Unsupported interface method.  method='" + method + "'");
+			throw unsupportedOp("Unsupported interface method.  method=''{0}''", method);
 		}));
 	}
 
@@ -242,7 +243,7 @@ public class Section {
 	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
 		assertArgNotNull("bean", bean);
 		if (! isPresent())
-			throw new IllegalArgumentException("Section '" + name + "' not found in configuration.");
+			throw illegalArg("Section ''{0}'' not found in configuration.", name);
 
 		var keys = configMap.getKeys(name);
 

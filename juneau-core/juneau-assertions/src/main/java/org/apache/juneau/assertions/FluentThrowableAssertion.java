@@ -260,7 +260,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 			else {
 				l = list();
 				while (nn(t)) {
-					l.add(t.getLocalizedMessage());
+					l.add(lm(t));
 					t = t.getCause();
 				}
 			}

@@ -771,7 +771,7 @@ class Config_Test extends TestBase {
 		assertJson("['a1','a2']", c.getKeys(""));
 		assertJson("['a1','a2']", c.getKeys(""));
 		assertJson("['b1','b2']", c.getKeys("S"));
-		assertTrue(c.getKeys("T").isEmpty());
+		assertEmpty(c.getKeys("T"));
 
 		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'section' cannot be null.", ()->c.getKeys(null));
 	}

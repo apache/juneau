@@ -17,7 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.castException;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -121,14 +121,14 @@ public class SerializerPipe implements Closeable {
 	 */
 	public OutputStream getOutputStream() throws IOException {
 		if (output == null)
-			throw new IOException("Output cannot be null.");
+			throw ioException("Output cannot be null.");
 
 		if (output instanceof OutputStream)
 			outputStream = (OutputStream)output;
 		else if (output instanceof File)
 			outputStream = new BufferedOutputStream(new FileOutputStream((File)output));
 		else
-			throw new IOException("Cannot convert object of type " + cn(output) + " to an OutputStream.");
+			throw ioException("Cannot convert object of type {0} to an OutputStream.", cn(output));
 
 		return new NoCloseOutputStream(outputStream);
 	}

@@ -301,7 +301,7 @@ class Items_Test extends TestBase {
 
 		@Test void d01_resolveRefs_basic() {
 			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
+				.setComponents(components().setSchemas(m(
 					"MyItem", schemaInfo().setType("string")
 				)));
 			assertBean(
@@ -313,7 +313,7 @@ class Items_Test extends TestBase {
 
 		@Test void d02_resolveRefs_nestedItems() {
 			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
+				.setComponents(components().setSchemas(m(
 					"MyItem", schemaInfo().setType("string"),
 					"MyArray", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/MyItem"))
 				)));
@@ -327,7 +327,7 @@ class Items_Test extends TestBase {
 
 		@Test void d03_resolveRefs_maxDepth() {
 			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
+				.setComponents(components().setSchemas(m(
 					"MyItem", schemaInfo().setType("string"),
 					"MyArray", schemaInfo().setType("array").setItems(items().setRef("#/components/schemas/MyItem"))
 				)));
@@ -340,7 +340,7 @@ class Items_Test extends TestBase {
 
 		@Test void d04_resolveRefsWithRef() {
 			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
+				.setComponents(components().setSchemas(m(
 					"MyItem", schemaInfo().setType("string")
 				)));
 

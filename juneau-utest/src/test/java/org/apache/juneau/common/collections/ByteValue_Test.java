@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -248,7 +249,7 @@ class ByteValue_Test extends TestBase {
 	@Test
 	void g02_accumulator() {
 		var a = ByteValue.create();
-		var list = java.util.List.of((byte)1, (byte)2, (byte)3, (byte)4, (byte)5);
+		var list = l((byte)1, (byte)2, (byte)3, (byte)4, (byte)5);
 		list.forEach(a::add);
 		assertEquals((byte)15, a.get());
 	}

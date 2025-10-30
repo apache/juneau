@@ -1416,19 +1416,19 @@ class StringUtils_Test extends TestBase {
 	// cdlToList / cdlToSet
 	//====================================================================================================
 	@Test void a86_cdlToList() {
-		assertEquals(List.of("a", "b", "c"), cdlToList("a,b,c"));
-		assertEquals(List.of("a", "b", "c"), cdlToList(" a , b , c "));
-		assertEquals(List.of(), cdlToList(null));
-		assertEquals(List.of(), cdlToList(""));
-		assertEquals(List.of("a"), cdlToList("a"));
+		assertEquals(l("a", "b", "c"), cdlToList("a,b,c"));
+		assertEquals(l("a", "b", "c"), cdlToList(" a , b , c "));
+		assertEquals(l(), cdlToList(null));
+		assertEquals(l(), cdlToList(""));
+		assertEquals(l("a"), cdlToList("a"));
 	}
 
 	@Test void a87_cdlToSet() {
-		assertEquals(new LinkedHashSet<>(List.of("a", "b", "c")), cdlToSet("a,b,c"));
-		assertEquals(new LinkedHashSet<>(List.of("a", "b", "c")), cdlToSet(" a , b , c "));
+		assertEquals(new LinkedHashSet<>(l("a", "b", "c")), cdlToSet("a,b,c"));
+		assertEquals(new LinkedHashSet<>(l("a", "b", "c")), cdlToSet(" a , b , c "));
 		assertEquals(new LinkedHashSet<>(), cdlToSet(null));
 		assertEquals(new LinkedHashSet<>(), cdlToSet(""));
-		assertEquals(new LinkedHashSet<>(List.of("a")), cdlToSet("a"));
+		assertEquals(new LinkedHashSet<>(l("a")), cdlToSet("a"));
 	}
 
 	//====================================================================================================
@@ -1441,10 +1441,10 @@ class StringUtils_Test extends TestBase {
 	}
 
 	@Test void a89_join_collection() {
-		assertEquals("a,b,c", join(List.of("a", "b", "c")));
-		assertEquals("1,2,3", join(List.of(1, 2, 3)));
-		assertEquals("a", join(List.of("a")));
-		assertEquals("", join(List.of()));
+		assertEquals("a,b,c", join(l("a", "b", "c")));
+		assertEquals("1,2,3", join(l(1, 2, 3)));
+		assertEquals("a", join(l("a")));
+		assertEquals("", join(l()));
 	}
 
 	//====================================================================================================
@@ -1488,7 +1488,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test void a94_stringSupplier() {
 		assertEquals("test", stringSupplier(() -> "test").get());
-		assertEquals("[1,2,3]", stringSupplier(() -> List.of(1, 2, 3)).get());
+		assertEquals("[1,2,3]", stringSupplier(() -> l(1, 2, 3)).get());
 		assertNull(stringSupplier(() -> null).get());
 	}
 
@@ -1497,8 +1497,8 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test void a95_readable() {
 		assertNull(readable(null));
-		assertEquals("[a,b,c]", readable(List.of("a", "b", "c")));
-		assertEquals("{foo=bar}", readable(Map.of("foo", "bar")));
+		assertEquals("[a,b,c]", readable(l("a", "b", "c")));
+		assertEquals("{foo=bar}", readable(m("foo", "bar")));
 		assertEquals("[1,2,3]", readable(ints(1, 2, 3)));
 		assertEquals("test", readable(Optional.of("test")));
 		assertNull(readable(Optional.empty()));

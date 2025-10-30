@@ -17,6 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -549,7 +550,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public Object serialize(Object o) throws SerializeException {
-		throw new UnsupportedOperationException();
+		throw unsupportedOp();
 	}
 
 	/**
@@ -586,7 +587,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public String serializeToString(Object o) throws SerializeException {
-		throw new UnsupportedOperationException();
+		throw unsupportedOp();
 	}
 
 	/**
@@ -962,10 +963,9 @@ public class SerializerSession extends BeanTraverseSession {
 		if (nn(listener))
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
-		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t));
 		if (! isIgnoreInvocationExceptionsOnGetters())
-			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(),
-				t.getLocalizedMessage()).initCause(t);
+			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t)).initCause(t);
 	}
 
 	/**

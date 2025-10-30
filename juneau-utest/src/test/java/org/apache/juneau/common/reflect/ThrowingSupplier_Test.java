@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -384,7 +386,7 @@ class ThrowingSupplier_Test extends TestBase {
 		void g03_listTypeSupplier() throws Exception {
 			ThrowingSupplier<List<String>> listSupplier = () -> l("a", "b", "c");
 			var result = listSupplier.get();
-			assertEquals(3, result.size());
+			assertSize(3, result);
 			assertEquals("a", result.get(0));
 		}
 
@@ -398,7 +400,7 @@ class ThrowingSupplier_Test extends TestBase {
 			};
 
 			var result = mapSupplier.get();
-			assertEquals(2, result.size());
+			assertSize(2, result);
 			assertEquals(1, result.get("key1"));
 		}
 

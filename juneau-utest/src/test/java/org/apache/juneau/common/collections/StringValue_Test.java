@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -247,7 +248,7 @@ class StringValue_Test extends TestBase {
 	void g01_trackLastValue() {
 		var a = StringValue.create();
 
-		var list = java.util.List.of("a", "b", "c", "d", "e");
+		var list = l("a", "b", "c", "d", "e");
 		list.forEach(a::set);
 
 		assertEquals("e", a.get());
@@ -257,7 +258,7 @@ class StringValue_Test extends TestBase {
 	void g02_conditionalUpdate() {
 		var a = StringValue.create();
 
-		var list = java.util.List.of("apple", "banana", "apricot", "avocado");
+		var list = l("apple", "banana", "apricot", "avocado");
 		list.forEach(x -> a.setIf(x.startsWith("a"), x));
 
 		assertEquals("avocado", a.get());  // Last "a" word

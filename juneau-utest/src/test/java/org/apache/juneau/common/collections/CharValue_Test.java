@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -108,10 +109,10 @@ class CharValue_Test extends TestBase {
 	@Test
 	void b07_isEmpty() {
 		CharValue v = new CharValue(null);
-		assertTrue(v.isEmpty());
+		assertEmpty(v);
 		
 		v.set('E');
-		assertFalse(v.isEmpty());
+		assertNotEmpty(v);
 	}
 
 	@Test

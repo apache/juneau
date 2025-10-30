@@ -188,7 +188,7 @@ public class Cache5<K1,K2,K3,K4,K5,V> extends ConcurrentHashMap5Key<K1,K2,K3,K4,
 		this.disableCaching = builder.disableCaching;
 		this.supplier = builder.supplier;
 		if (builder.logOnExit) {
-			shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
+			shutdownMessage(() -> scn(builder.type) + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
 

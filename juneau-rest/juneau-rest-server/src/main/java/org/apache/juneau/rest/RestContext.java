@@ -3793,12 +3793,12 @@ public class RestContext extends Context {
 
 			for (MethodInfo m : map.values()) {
 				if (! beanStore.hasAllParams(m))
-					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(),
+					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(),
 						beanStore.getMissingParams(m));
 				try {
 					m.invoke(r, beanStore.getParams(m));
 				} catch (Exception e) {
-					throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
+					throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", scn(m.getDeclaringClass()), m.getSignature());
 				}
 			}
 		}
@@ -4152,7 +4152,7 @@ public class RestContext extends Context {
 		protected Logger createLogger(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
-			Value<Logger> v = Value.of(Logger.getLogger(resourceClass.getClass().getName()));
+			Value<Logger> v = Value.of(Logger.getLogger(cn(resourceClass)));
 
 			// Replace with bean from bean store.
 			beanStore.getBean(Logger.class).ifPresent(x -> v.set(x));
@@ -4600,17 +4600,17 @@ public class RestContext extends Context {
 						RestOpContext.Builder rocb = RestOpContext.create(mi.inner(), restContext).beanStore(beanStore).type(opContextClass);
 
 						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
-						for (MethodInfo m : initMap.values()) {
-							if (! beanStore.hasAllParams(m)) {
-								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(),
-									beanStore.getMissingParams(m));
-							}
-							try {
-								m.invoke(resource.get(), beanStore.getParams(m));
-							} catch (Exception e) {
-								throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
-							}
+					for (MethodInfo m : initMap.values()) {
+						if (! beanStore.hasAllParams(m)) {
+							throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", scn(m.getDeclaringClass()), m.getSignature(),
+								beanStore.getMissingParams(m));
 						}
+						try {
+							m.invoke(resource.get(), beanStore.getParams(m));
+						} catch (Exception e) {
+							throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", scn(m.getDeclaringClass()), m.getSignature());
+						}
+					}
 
 						RestOpContext roc = rocb.build();
 

@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -190,9 +191,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 		// Check for duplicate keys
 		for (var i = 0; i < keys.length; i++) {
 			for (var j = i + 1; j < keys.length; j++) {
-				if (eq(keys[i], keys[j])) {
-					throw new IllegalArgumentException("Duplicate key found: " + keys[i]);
-				}
+				assertArg(ne(keys[i], keys[j]), "Duplicate key found: {0}", keys[i]);
 			}
 		}
 
@@ -320,6 +319,6 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 				return v;
 			}
 		}
-		throw new IllegalArgumentException("No key '" + key + "' defined in map");
+		throw illegalArg("No key ''{0}'' defined in map", key);
 	}
 }

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.beans;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -26,13 +28,13 @@ class ChildResourceDescriptions_Test extends TestBase {
 	@Test void a01_basic() {
 		ChildResourceDescriptions x = new ChildResourceDescriptions();
 		assertNotNull(x);
-		assertEquals(0, x.size());
+		assertEmpty(x);
 	}
 
 	@Test void a02_appendWithDescription() {
 		ChildResourceDescriptions x = new ChildResourceDescriptions();
 		x.append("child1", "Description 1");
-		assertEquals(1, x.size());
+		assertSize(1, x);
 		assertEquals("child1", x.get(0).getName());
 		assertEquals("Description 1", x.get(0).getDescription());
 	}
@@ -40,7 +42,7 @@ class ChildResourceDescriptions_Test extends TestBase {
 	@Test void a03_appendWithUri() {
 		ChildResourceDescriptions x = new ChildResourceDescriptions();
 		x.append("child1", "/api/child1", "Child 1 API");
-		assertEquals(1, x.size());
+		assertSize(1, x);
 		assertEquals("child1", x.get(0).getName());
 		assertEquals("/api/child1", x.get(0).getUri());
 		assertEquals("Child 1 API", x.get(0).getDescription());
@@ -51,11 +53,11 @@ class ChildResourceDescriptions_Test extends TestBase {
 
 		// Test append(String, String) returns same instance for fluent chaining
 		assertSame(x, x.append("resource1", "Resource 1"));
-		assertEquals(1, x.size());
+		assertSize(1, x);
 
 		// Test append(String, String, String) returns same instance
 		assertSame(x, x.append("resource2", "/api/resource2", "Resource 2 API"));
-		assertEquals(2, x.size());
+		assertSize(2, x);
 	}
 
 	@Test void a05_fluentChaining() {
@@ -65,7 +67,7 @@ class ChildResourceDescriptions_Test extends TestBase {
 			.append("products", "/api/products", "Product catalog")
 			.append("orders", "Order processing");
 
-		assertEquals(3, x.size());
+		assertSize(3, x);
 		assertEquals("users", x.get(0).getName());
 		assertEquals("User management", x.get(0).getDescription());
 		assertEquals("products", x.get(1).getName());
@@ -82,7 +84,7 @@ class ChildResourceDescriptions_Test extends TestBase {
 			.append("child2", "/child2", "Second child resource")
 			.append("child3", "Third child resource");
 
-		assertEquals(3, x.size());
+		assertSize(3, x);
 		assertNotNull(x.get(0));
 		assertNotNull(x.get(1));
 		assertNotNull(x.get(2));

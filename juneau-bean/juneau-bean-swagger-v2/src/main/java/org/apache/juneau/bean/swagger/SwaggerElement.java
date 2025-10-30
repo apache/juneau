@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
@@ -128,7 +129,7 @@ public abstract class SwaggerElement {
 	public SwaggerElement set(String property, Object value) {
 		assertArgNotNull("property", property);
 		if (strict)
-			throw new RuntimeException("Cannot set property '" + property + "' in strict mode.");
+			throw runtimeException("Cannot set property ''{0}'' in strict mode.", property);
 		if (extra == null)
 			extra = map();
 		extra.put(property, value);

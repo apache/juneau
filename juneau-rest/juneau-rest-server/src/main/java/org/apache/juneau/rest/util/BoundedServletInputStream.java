@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.io.*;
 
@@ -138,12 +139,12 @@ public class BoundedServletInputStream extends ServletInputStream {
 	private void decrement() throws IOException {
 		remain--;
 		if (remain < 0)
-			throw new IOException("Input limit exceeded.  See @Rest(maxInput).");
+			throw ioException("Input limit exceeded.  See @Rest(maxInput).");
 	}
 
 	private void decrement(long count) throws IOException {
 		remain -= count;
 		if (remain < 0)
-			throw new IOException("Input limit exceeded.  See @Rest(maxInput).");
+			throw ioException("Input limit exceeded.  See @Rest(maxInput).");
 	}
 }

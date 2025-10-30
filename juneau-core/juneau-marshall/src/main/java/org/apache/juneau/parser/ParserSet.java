@@ -407,8 +407,8 @@ public class ParserSet {
 			if (o == null)
 				return "null";
 			if (o instanceof Parser.Builder)
-				return "builder:" + o.getClass().getName();
-			return "parser:" + o.getClass().getName();
+				return "builder:" + cn(o);
+			return "parser:" + cn(o);
 		}
 
 		@Override /* Overridden from BeanBuilder */

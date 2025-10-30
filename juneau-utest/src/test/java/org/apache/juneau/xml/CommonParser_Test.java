@@ -120,7 +120,7 @@ class CommonParser_Test extends TestBase {
 		var p = XmlParser.DEFAULT;
 		var in = "<object><ints _type='array'><number>1</number><number>2</number><number>3</number></ints><beans _type='array'><object><a _type='number'>1</a><b _type='number'>2</b></object></beans></object>";
 		var t = p.parse(in, C.class);
-		assertEquals(3, t.getInts().size());
+		assertSize(3, t.getInts());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
 
@@ -139,7 +139,7 @@ class CommonParser_Test extends TestBase {
 		var p = XmlParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 		var in = "<object><a _type='number'>1</a><unknownProperty _type='string'>foo</unknownProperty><b _type='number'>2</b></object>";
 		p.parse(in, B.class);
-		assertEquals(1, MyParserListener.events.size());
+		assertSize(1, MyParserListener.events);
 		// XML parser may or may not support line numbers.
 		assertTrue(MyParserListener.events.get(0).startsWith("unknownProperty,"));
 	}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.uon;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -121,7 +123,7 @@ class CommonParser_UonTest extends TestBase {
 		var p2 = UonParser.DEFAULT;
 		var json = "(ints=@(1,2,3),beans=@((a=1,b=2)))";
 		var t = p2.parse(json, C.class);
-		assertEquals(3, t.getInts().size());
+		assertSize(3, t.getInts());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
 
@@ -140,7 +142,7 @@ class CommonParser_UonTest extends TestBase {
 		var p2 = UonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 		var in = "(a=1,unknownProperty=foo,b=2)";
 		p2.parse(in, B.class);
-		assertEquals(1, MyParserListener.events.size());
+		assertSize(1, MyParserListener.events);
 		assertEquals("unknownProperty, line 1, column 5", MyParserListener.events.get(0));
 	}
 

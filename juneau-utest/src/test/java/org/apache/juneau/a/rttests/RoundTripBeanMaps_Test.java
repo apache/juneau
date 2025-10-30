@@ -124,7 +124,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	}
 
 	protected static RoundTrip_Tester.Builder tester(int index, String label) {
-		return RoundTrip_Tester.create(index, label).annotatedClasses(L2Config.class, M2Config.class).implClasses(Map.of(IBean.class, CBean.class));
+		return RoundTrip_Tester.create(index, label).annotatedClasses(L2Config.class, M2Config.class).implClasses(m(IBean.class, CBean.class));
 	}
 
 	//====================================================================================================

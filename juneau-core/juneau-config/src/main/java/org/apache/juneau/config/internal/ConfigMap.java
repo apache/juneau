@@ -477,7 +477,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return This object.
 	 */
 	public ConfigMap removeImport(String section, String importName) {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw unsupportedOp();
 	}
 
 	/**
@@ -560,7 +560,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return This object.
 	 */
 	public ConfigMap setImport(String section, String importName, List<String> preLines) {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw unsupportedOp();
 	}
 
 	/**
@@ -671,12 +671,12 @@ public class ConfigMap implements ConfigStoreListener {
 
 	private static void checkKeyName(String s) {
 		if (! isValidKeyName(s))
-			throw new IllegalArgumentException("Invalid key name: '" + s + "'");
+			throw illegalArg("Invalid key name: ''{0}''", s);
 	}
 
 	private static void checkSectionName(String s) {
 		if (! ("".equals(s) || isValidNewSectionName(s)))
-			throw new IllegalArgumentException("Invalid section name: '" + s + "'");
+			throw illegalArg("Invalid section name: ''{0}''", s);
 	}
 
 	private ConfigEvents findDiffs(String updatedContents) throws IOException {
@@ -826,7 +826,7 @@ public class ConfigMap implements ConfigStoreListener {
 							if (! imports2.containsKey(importName))
 								imports2.put(importName, store.getMap(importName));
 						} catch (@SuppressWarnings("unused") StackOverflowError e) {
-							throw new IOException("Import loop detected in configuration '" + name + "'->'" + importName + "'");
+							throw ioException("Import loop detected in configuration ''{0}''->''{1}''", name, importName);
 						}
 					}
 				}

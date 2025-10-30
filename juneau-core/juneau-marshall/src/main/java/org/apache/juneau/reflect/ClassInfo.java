@@ -1096,7 +1096,7 @@ public class ClassInfo {
 		} else if (actualType instanceof ParameterizedType) {
 			return (Class<?>)((ParameterizedType)actualType).getRawType();
 		}
-		throw new IllegalArgumentException("Could not resolve variable '" + actualType.getTypeName() + "' to a type.");
+		throw illegalArg("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
 	}
 
 	/**

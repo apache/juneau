@@ -2246,7 +2246,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	@Override /* Overridden from Context */
 	public Context.Builder copy() {
-		throw new UnsupportedOperationException("Method not implemented.");
+		throw unsupportedOp();
 	}
 
 	/**

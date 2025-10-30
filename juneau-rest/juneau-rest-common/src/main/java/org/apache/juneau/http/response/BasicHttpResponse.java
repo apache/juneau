@@ -17,6 +17,7 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpEntities.*;
@@ -445,7 +446,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
+			throw unsupportedOp("Bean is read-only");
 	}
 
 	/**

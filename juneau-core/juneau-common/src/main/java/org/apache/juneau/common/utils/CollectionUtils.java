@@ -1267,7 +1267,7 @@ public class CollectionUtils {
 
 					@Override /* Overridden from Iterator */
 					public void remove() {
-						throw new UnsupportedOperationException("Not supported.");
+						throw unsupportedOp();
 					}
 				};
 			}
@@ -1356,7 +1356,7 @@ public class CollectionUtils {
 		if (a1.length != a2.length)
 			return false;
 		for (int i = 0; i < a1.length; i++)
-			if (! eq(a1[i], a2[i]))
+			if (ne(a1[i], a2[i]))
 				return false;
 		return true;
 	}
@@ -1672,7 +1672,7 @@ public class CollectionUtils {
 			return null;  // NOSONAR
 		}
 
-		assertArg(isArray(array), "Input must be an array but was {0}", array.getClass().getName());
+		assertArg(isArray(array), "Input must be an array but was {0}", cn(array));
 
 		var componentType = array.getClass().getComponentType();
 		var length = Array.getLength(array);
@@ -1884,7 +1884,7 @@ public class CollectionUtils {
 	 * @return A new stream.
 	 */
 	public static Stream<Object> toStream(Object array) {
-		assertArg(isArray(array), "Arg was not an array.  Type: {0}", array.getClass().getName());
+		assertArg(isArray(array), "Arg was not an array.  Type: {0}", cn(array));
 		var length = Array.getLength(array);
 		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}

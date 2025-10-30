@@ -380,7 +380,7 @@ public class HttpPartSchema {
 				apply((HasFormData)a);
 			else if (a instanceof Schema)
 				apply((Schema)a);
-			else if (a.annotationType().getName().startsWith("jakarta.validation.constraints."))
+			else if (cn(a.annotationType()).startsWith("jakarta.validation.constraints."))
 				applyJakartaValidation(a);
 			else
 				throw runtimeException("Builder.apply(@{0}) not defined", cn(a));
@@ -2839,7 +2839,7 @@ public class HttpPartSchema {
 		 * @since 9.2.0
 		 */
 		Builder applyJakartaValidation(Annotation a) {
-			String simpleName = a.annotationType().getSimpleName();
+			String simpleName = scn(a.annotationType());
 
 			try {
 				switch (simpleName) {

@@ -17,6 +17,7 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -184,28 +185,28 @@ class ConfigImportsTest extends TestBase {
 		var ca = Config.create("A").store(ms).build();
 		var cb = Config.create("B").store(ms).build();
 
-		assertEquals(2, ca.getConfigMap().getListeners().size());
-		assertEquals(1, cb.getConfigMap().getListeners().size());
+	assertSize(2, ca.getConfigMap().getListeners());
+	assertSize(1, cb.getConfigMap().getListeners());
 
-		var l = new TestListener();
-		cb.addListener(l);
+	var l = new TestListener();
+	cb.addListener(l);
 
-		assertEquals(0, ca.getListeners().size());
-		assertEquals(1, cb.getListeners().size());
+	assertEmpty(ca.getListeners());
+	assertSize(1, cb.getListeners());
 
-		ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=2");
+	ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=2");
 
-		assertTrue(l.isTriggered());
-		assertEquals(1, l.getEvents().size());
-		assertEquals("2", l.getNewValue("A", "a1"));
+	assertTrue(l.isTriggered());
+	assertSize(1, l.getEvents());
+	assertEquals("2", l.getNewValue("A", "a1"));
 
-		assertEquals("2", cb.get("A/a1").get());
-		assertEquals("2", cb.get("B/b1").get());
+	assertEquals("2", cb.get("A/a1").get());
+	assertEquals("2", cb.get("B/b1").get());
 
-		l.reset();
-		cb.removeListener(l);
-		assertEquals(0, ca.getListeners().size());
-		assertEquals(0, cb.getListeners().size());
+	l.reset();
+	cb.removeListener(l);
+	assertEmpty(ca.getListeners());
+	assertEmpty(cb.getListeners());
 
 		ms.write("A", "x=1\n[A]\na1=2", "x=1\n[A]\na1=3");
 
@@ -226,32 +227,32 @@ class ConfigImportsTest extends TestBase {
 		var cb = Config.create("B").store(ms).build();
 		var cc = Config.create("C").store(ms).build();
 
-		assertEquals(3, ca.getConfigMap().getListeners().size());
-		assertEquals(2, cb.getConfigMap().getListeners().size());
-		assertEquals(1, cc.getConfigMap().getListeners().size());
+	assertSize(3, ca.getConfigMap().getListeners());
+	assertSize(2, cb.getConfigMap().getListeners());
+	assertSize(1, cc.getConfigMap().getListeners());
 
-		var l = new TestListener();
-		cc.addListener(l);
+	var l = new TestListener();
+	cc.addListener(l);
 
-		assertEquals(0, ca.getListeners().size());
-		assertEquals(0, cb.getListeners().size());
-		assertEquals(1, cc.getListeners().size());
+	assertEmpty(ca.getListeners());
+	assertEmpty(cb.getListeners());
+	assertSize(1, cc.getListeners());
 
 		ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=2");
 
-		assertTrue(l.isTriggered());
-		assertEquals(1, l.getEvents().size());
-		assertEquals("2", l.getNewValue("A", "a1"));
+	assertTrue(l.isTriggered());
+	assertSize(1, l.getEvents());
+	assertEquals("2", l.getNewValue("A", "a1"));
 
-		assertEquals("2", cc.get("A/a1").get());
-		assertEquals("2", cc.get("B/b1").get());
-		assertEquals("3", cc.get("C/c1").get());
+	assertEquals("2", cc.get("A/a1").get());
+	assertEquals("2", cc.get("B/b1").get());
+	assertEquals("3", cc.get("C/c1").get());
 
-		l.reset();
-		cc.removeListener(l);
-		assertEquals(0, ca.getListeners().size());
-		assertEquals(0, cb.getListeners().size());
-		assertEquals(0, cc.getListeners().size());
+	l.reset();
+	cc.removeListener(l);
+	assertEmpty(ca.getListeners());
+	assertEmpty(cb.getListeners());
+	assertEmpty(cc.getListeners());
 
 		ms.write("A", "x=1\n[A]\na1=2", "x=1\n[A]\na1=3");
 
@@ -268,28 +269,28 @@ class ConfigImportsTest extends TestBase {
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\nb1=2");
 
-		var ca = Config.create("A").store(ms).build();
-		var cb = Config.create("B").store(ms).build();
+	var ca = Config.create("A").store(ms).build();
+	var cb = Config.create("B").store(ms).build();
 
-		assertEquals(2, ca.getConfigMap().getListeners().size());
-		assertEquals(1, cb.getConfigMap().getListeners().size());
+	assertSize(2, ca.getConfigMap().getListeners());
+	assertSize(1, cb.getConfigMap().getListeners());
 
-		var l = new TestListener();
-		cb.addListener(l);
+	var l = new TestListener();
+	cb.addListener(l);
 
-		ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=2");
+	ms.write("A", "x=1\n[A]\na1=1", "x=1\n[A]\na1=2");
 
-		assertTrue(l.isTriggered());
-		assertEquals(1, l.getEvents().size());
-		assertEquals("2", l.getNewValue("A", "a1"));
+	assertTrue(l.isTriggered());
+	assertSize(1, l.getEvents());
+	assertEquals("2", l.getNewValue("A", "a1"));
 
-		assertEquals("2", cb.get("A/a1").get());
-		assertEquals("2", cb.get("A/b1").get());
+	assertEquals("2", cb.get("A/a1").get());
+	assertEquals("2", cb.get("A/b1").get());
 
-		l.reset();
-		cb.removeListener(l);
-		assertEquals(0, ca.getListeners().size());
-		assertEquals(0, cb.getListeners().size());
+	l.reset();
+	cb.removeListener(l);
+	assertEmpty(ca.getListeners());
+	assertEmpty(cb.getListeners());
 
 		ms.write("A", "x=1\n[A]\na1=2", "x=1\n[A]\na1=3");
 
@@ -305,11 +306,11 @@ class ConfigImportsTest extends TestBase {
 		ms.write("A", "", "x=1\n[A]\na1=1");
 		ms.write("B", "", "<A>\n[A]\na1=2");
 
-		var ca = Config.create("A").store(ms).build();
-		var cb = Config.create("B").store(ms).build();
+	var ca = Config.create("A").store(ms).build();
+	var cb = Config.create("B").store(ms).build();
 
-		assertEquals(2, ca.getConfigMap().getListeners().size());
-		assertEquals(1, cb.getConfigMap().getListeners().size());
+	assertSize(2, ca.getConfigMap().getListeners());
+	assertSize(1, cb.getConfigMap().getListeners());
 
 		var l = new TestListener();
 		cb.addListener(l);
@@ -327,13 +328,13 @@ class ConfigImportsTest extends TestBase {
 		ms.write("B", "", "<A>\n[A]\na1=2");
 		ms.write("C", "", "<B>\n[A]\na1=3");
 
-		var ca = Config.create("A").store(ms).build();
-		var cb = Config.create("B").store(ms).build();
-		var cc = Config.create("C").store(ms).build();
+	var ca = Config.create("A").store(ms).build();
+	var cb = Config.create("B").store(ms).build();
+	var cc = Config.create("C").store(ms).build();
 
-		assertEquals(3, ca.getConfigMap().getListeners().size());
-		assertEquals(2, cb.getConfigMap().getListeners().size());
-		assertEquals(1, cc.getConfigMap().getListeners().size());
+	assertSize(3, ca.getConfigMap().getListeners());
+	assertSize(2, cb.getConfigMap().getListeners());
+	assertSize(1, cc.getConfigMap().getListeners());
 
 		var l = new TestListener();
 		cc.addListener(l);
@@ -354,45 +355,45 @@ class ConfigImportsTest extends TestBase {
 		ms.write("A", "", "x=1\ny=1\n[A]\na1=1");
 		ms.write("B", "", "x=2\n[B]\nb1=2");
 
-		var ca = Config.create("A").store(ms).build();
-		var cb = Config.create("B").store(ms).build();
+	var ca = Config.create("A").store(ms).build();
+	var cb = Config.create("B").store(ms).build();
 
-		assertEquals(1, ca.getConfigMap().getListeners().size());
-		assertEquals(1, cb.getConfigMap().getListeners().size());
+	assertSize(1, ca.getConfigMap().getListeners());
+	assertSize(1, cb.getConfigMap().getListeners());
 
-		var l = new TestListener();
-		cb.addListener(l);
+	var l = new TestListener();
+	cb.addListener(l);
 
-		assertEquals(0, ca.getListeners().size());
-		assertEquals(1, cb.getListeners().size());
+	assertEmpty(ca.getListeners());
+	assertSize(1, cb.getListeners());
 
-		ms.write("B", "x=2\n[B]\nb1=2", "x=2\n<A>\n[B]\nb1=2");
+	ms.write("B", "x=2\n[B]\nb1=2", "x=2\n<A>\n[B]\nb1=2");
 
-		assertTrue(l.isTriggered());
-		assertEquals(2, l.getEvents().size());  // Should contain [SET(y = 1), SET(A/a1 = 1)]
-		assertEquals("1", l.getNewValue("A", "a1"));
+	assertTrue(l.isTriggered());
+	assertSize(2, l.getEvents());  // Should contain [SET(y = 1), SET(A/a1 = 1)]
+	assertEquals("1", l.getNewValue("A", "a1"));
 
-		assertEquals("1", cb.get("A/a1").get());
-		assertEquals("2", cb.get("B/b1").get());
+	assertEquals("1", cb.get("A/a1").get());
+	assertEquals("2", cb.get("B/b1").get());
 
-		assertEquals(2, ca.getConfigMap().getListeners().size());
-		assertEquals(1, cb.getConfigMap().getListeners().size());
+	assertSize(2, ca.getConfigMap().getListeners());
+	assertSize(1, cb.getConfigMap().getListeners());
 
-		l.reset();
+	l.reset();
 
-		ms.write("B", "x=2\n<A>\n[B]\nb1=2", "x=2\n[B]\nb1=2");
+	ms.write("B", "x=2\n<A>\n[B]\nb1=2", "x=2\n[B]\nb1=2");
 
-		assertTrue(l.isTriggered());
-		assertEquals(2, l.getEvents().size());  // Should contain [REMOVE_ENTRY(y), REMOVE_ENTRY(A/a1)]
- 		assertEquals(null, l.getNewValue("A", "a1"));
+	assertTrue(l.isTriggered());
+	assertSize(2, l.getEvents());  // Should contain [REMOVE_ENTRY(y), REMOVE_ENTRY(A/a1)]
+ 	assertEquals(null, l.getNewValue("A", "a1"));
 
-		assertNull(cb.get("A/a1").orElse(null));
-		assertEquals("2", cb.get("B/b1").get());
+	assertNull(cb.get("A/a1").orElse(null));
+	assertEquals("2", cb.get("B/b1").get());
 
-		l.reset();
-		cb.removeListener(l);
-		assertEquals(0, ca.getListeners().size());
-		assertEquals(0, cb.getListeners().size());
+	l.reset();
+	cb.removeListener(l);
+	assertEmpty(ca.getListeners());
+	assertEmpty(cb.getListeners());
 
 		ms.write("B", "x=2\n[B]\nb1=2", "x=2\n<A>\n[B]\nb1=2");
 

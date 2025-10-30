@@ -588,7 +588,7 @@ public class ResponseContent implements HttpEntity {
 
 			return is;
 		} catch (UnsupportedOperationException e) {
-			throw new IOException(e);
+			throw ioException(e);
 		}
 	}
 
@@ -1275,7 +1275,7 @@ public class ResponseContent implements HttpEntity {
 		try {
 			return asString();
 		} catch (RestCallException e) {
-			return e.getLocalizedMessage();
+			return lm(e);
 		}
 	}
 

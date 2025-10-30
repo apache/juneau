@@ -582,7 +582,7 @@ public class Microservice implements ConfigEventListener {
 				try (var fis = new FileInputStream(f)) {
 					m.read(fis);
 				} catch (IOException e) {
-					throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f), e);
+					throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(f), e);
 				}
 			} else {
 				// Otherwise, read from manifest file in the jar file containing the main class.
@@ -591,7 +591,7 @@ public class Microservice implements ConfigEventListener {
 					try {
 						m.read(url.openStream());
 					} catch (IOException e) {
-						throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(url.openStream()), e);
+						throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(url.openStream()), e);
 					}
 				}
 			}
@@ -649,7 +649,7 @@ public class Microservice implements ConfigEventListener {
 					var cc = (ConsoleCommand)Class.forName(s).getDeclaredConstructor().newInstance();
 					consoleCommandMap.put(cc.getName(), cc);
 				} catch (Exception e) {
-					getConsoleWriter().println("Could not create console command '" + s + "', " + e.getLocalizedMessage());
+					getConsoleWriter().println("Could not create console command '" + s + "', " + lm(e));
 				}
 			}
 			consoleThread = new Thread("ConsoleThread") {

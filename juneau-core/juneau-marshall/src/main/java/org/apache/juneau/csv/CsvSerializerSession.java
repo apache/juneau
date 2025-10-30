@@ -17,6 +17,7 @@
 package org.apache.juneau.csv;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -223,7 +224,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			}
 			return value;
 		} catch (SerializeException e) {
-			throw new RuntimeException(e);
+			throw runtimeException(e);
 		}
 	}
 

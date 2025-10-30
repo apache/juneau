@@ -268,7 +268,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("canExtract() - returns true only for Map objects")
 		void c01_canExtract_mapObjects() {
-			assertTrue(extractor.canExtract(converter, Map.of("key", "value"), "key"));
+			assertTrue(extractor.canExtract(converter, m("key", "value"), "key"));
 			assertTrue(extractor.canExtract(converter, new HashMap<>(), "size"));
 			assertFalse(extractor.canExtract(converter, l("a", "b"), "0"));
 			assertFalse(extractor.canExtract(converter, "not a map", "length"));
@@ -277,7 +277,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - direct key access")
 		void c02_extract_directKeyAccess() {
-			var map = Map.of("name", "John", "age", 30, "active", true);
+			var map = m("name", "John", "age", 30, "active", true);
 
 			assertEquals("John", extractor.extract(converter, map, "name"));
 			assertEquals(30, extractor.extract(converter, map, "age"));
@@ -287,7 +287,7 @@ class PropertyExtractors_Test extends TestBase {
 		@Test
 		@DisplayName("extract() - size property")
 		void c03_extract_sizeProperty() {
-			var map = Map.of("a", 1, "b", 2, "c", 3);
+			var map = m("a", 1, "b", 2, "c", 3);
 
 			assertEquals(3, extractor.extract(converter, map, "size"));
 		}
@@ -419,7 +419,7 @@ class PropertyExtractors_Test extends TestBase {
 	}
 
 	public static class TestBeanWithMapGetter {
-		private Map<String, String> data = Map.of("key1", "mapped value", "key2", "another value");
+		private Map<String, String> data = m("key1", "mapped value", "key2", "another value");
 
 		public String get(String key) {
 			return data.get(key);

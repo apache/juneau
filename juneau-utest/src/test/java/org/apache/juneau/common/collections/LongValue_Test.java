@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -151,10 +152,10 @@ class LongValue_Test extends TestBase {
 	@Test
 	void c07_isEmpty() {
 		var v = new LongValue(null);
-		assertTrue(v.isEmpty());
+		assertEmpty(v);
 
 		v.set(1L);
-		assertFalse(v.isEmpty());
+		assertNotEmpty(v);
 	}
 
 	@Test

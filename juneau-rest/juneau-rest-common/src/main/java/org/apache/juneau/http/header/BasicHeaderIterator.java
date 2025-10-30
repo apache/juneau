@@ -17,6 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -85,7 +86,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 	 */
 	@Override /* Overridden from HeaderIterator */
 	public void remove() {
-		throw new UnsupportedOperationException("Not supported.");
+		throw unsupportedOp();
 	}
 
 	private boolean eq(String s1, String s2) {

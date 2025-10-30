@@ -207,7 +207,7 @@ public class MapBuilder<K,V> {
 					if (nn(m))
 						addAny(m);
 					else
-						throw runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), "Map");
+						throw runtimeException("Object of type {0} could not be converted to type {1}", cn(o), "Map");
 				}
 			}
 		}
@@ -223,7 +223,7 @@ public class MapBuilder<K,V> {
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> addPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw new IllegalArgumentException("Odd number of parameters passed into AMap.ofPairs()");
+			throw illegalArg("Odd number of parameters passed into AMap.ofPairs()");
 		for (int i = 0; i < pairs.length; i += 2)
 			add((K)pairs[i], (V)pairs[i + 1]);
 		return this;
@@ -246,7 +246,7 @@ public class MapBuilder<K,V> {
 			if (nn(e))
 				return e;
 		}
-		throw runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), c);
+		throw runtimeException("Object of type {0} could not be converted to type {1}", cn(o), cn(c));
 	}
 
 	/**

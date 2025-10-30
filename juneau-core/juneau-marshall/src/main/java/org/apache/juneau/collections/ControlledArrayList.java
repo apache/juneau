@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.collections;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+
 import java.util.*;
+
 import java.util.function.*;
 
 /**
@@ -117,7 +120,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 			@Override
 			public void remove() {
-				throw new UnsupportedOperationException();
+				throw unsupportedOp();
 			}
 		};
 	}
@@ -137,7 +140,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 			@Override
 			public void add(E e) {
-				throw new UnsupportedOperationException();
+				throw unsupportedOp();
 			}
 
 			@Override
@@ -177,12 +180,12 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 			@Override
 			public void remove() {
-				throw new UnsupportedOperationException();
+				throw unsupportedOp();
 			}
 
 			@Override
 			public void set(E e) {
-				throw new UnsupportedOperationException();
+				throw unsupportedOp();
 			}
 		};
 	}
@@ -403,6 +406,6 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw new UnsupportedOperationException("List is read-only");
+			throw unsupportedOp("List is read-only");
 	}
 }

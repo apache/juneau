@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
+
 /**
  * A simple mutable float value.
  *
@@ -118,9 +120,7 @@ public class FloatValue extends Value<Float> {
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
 	public boolean is(float other, float precision) {
-		if (precision < 0) {
-			throw new IllegalArgumentException("Precision must be non-negative");
-		}
+		assertArg(precision >= 0, "Precision must be non-negative");
 		var v = get();
 		if (v == null) {
 			return false;
@@ -151,9 +151,7 @@ public class FloatValue extends Value<Float> {
 	 * @throws IllegalArgumentException if precision is negative.
 	 */
 	public boolean isAny(float precision, float... values) {
-		if (precision < 0) {
-			throw new IllegalArgumentException("Precision must be non-negative");
-		}
+		assertArg(precision >= 0, "Precision must be non-negative");
 		var v = get();
 		if (v == null)
 			return false;

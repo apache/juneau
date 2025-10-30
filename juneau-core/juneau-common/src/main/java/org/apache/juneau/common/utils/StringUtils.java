@@ -1917,7 +1917,7 @@ public class StringUtils {
 			return null;
 		if (s.length() == 1)
 			return s.charAt(0);
-		throw new IllegalArgumentException("Invalid character: '" + s + "'");
+		throw illegalArg("Invalid character: ''{0}''", s);
 	}
 
 	/**
@@ -2814,10 +2814,8 @@ public class StringUtils {
 	 * 	<br>An empty string results in an empty array.
 	 */
 	public static List<String> splitNestedInner(String s) {
-		if (s == null)
-			throw illegalArg("String was null.");
-		if (isEmpty(s))
-			throw illegalArg("String was empty.");
+		assertArg(isNotNull(s), "String was null.");
+		assertArg(isNotEmpty(s), "String was empty.");
 
 		// S1: Looking for '{'
 		// S2: Found '{', looking for '}'
@@ -2960,7 +2958,7 @@ public class StringUtils {
 		if (state == S4)
 			l.add(s.substring(mark));
 		else if (state == S2 || state == S3)
-			throw new IllegalArgumentException("Unmatched string quotes: " + s);
+			throw illegalArg("Unmatched string quotes: {0}", s);
 		return l.toArray(new String[l.size()]);
 	}
 
@@ -4083,15 +4081,15 @@ public class StringUtils {
 		if (o instanceof Enum o2)
 			return o2.name();
 		if (o instanceof Class o2)
-			return o2.getSimpleName();
+			return scn(o2);
 		if (o instanceof Executable o2) {
 			var sb = new StringBuilder(64);
-			sb.append(o2 instanceof Constructor ? o2.getDeclaringClass().getSimpleName() : o2.getName()).append('(');
+			sb.append(o2 instanceof Constructor ? scn(o2.getDeclaringClass()) : o2.getName()).append('(');
 			Class<?>[] pt = o2.getParameterTypes();
 			for (int i = 0; i < pt.length; i++) {
 				if (i > 0)
 					sb.append(',');
-				sb.append(pt[i].getSimpleName());
+				sb.append(scn(pt[i]));
 			}
 			sb.append(')');
 			return sb.toString();

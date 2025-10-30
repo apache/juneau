@@ -683,7 +683,7 @@ public abstract class Context implements AnnotationProvider {
 				else if (x instanceof MethodInfo x2)
 					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
 				else
-					illegalArg("Invalid type passed to applyAnnotations:  {0}", x.getClass().getName());
+					illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
 			});
 			return work;
 		}
@@ -786,8 +786,7 @@ public abstract class Context implements AnnotationProvider {
 				MethodInfo mi = ci.getPublicMethod(x -> x.hasName("onClass"));
 				if (nn(mi)) {
 					if (! mi.getReturnType().is(Class[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.",
-							a.getClass().getSimpleName());
+						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.", scn(a));
 					for (Class<?> c : (Class<?>[])mi.accessible().invoke(a))
 						rmb.append(c.getName(), a);
 				}
@@ -795,8 +794,7 @@ public abstract class Context implements AnnotationProvider {
 				mi = ci.getPublicMethod(x -> x.hasName("on"));
 				if (nn(mi)) {
 					if (! mi.getReturnType().is(String[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.",
-							a.getClass().getSimpleName());
+						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.", scn(a));
 					for (String s : (String[])mi.accessible().invoke(a))
 						rmb.append(s, a);
 				}
@@ -839,7 +837,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @return A new Builder object.
 	 */
 	public Builder copy() {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw unsupportedOp();
 	}
 
 	/**
@@ -852,7 +850,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @return A new session builder.
 	 */
 	public ContextSession.Builder createSession() {
-		throw new UnsupportedOperationException("Not implemented.");
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */

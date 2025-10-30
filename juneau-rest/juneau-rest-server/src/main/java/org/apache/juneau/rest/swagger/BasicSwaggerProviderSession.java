@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.swagger;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.isEmpty;
@@ -653,7 +654,7 @@ public class BasicSwaggerProviderSession {
 						// @formatter:on
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);
 					} catch (Exception e) {
-						System.err.println("Could not serialize to media type [" + mt + "]: " + e.getLocalizedMessage());  // NOT DEBUG
+						System.err.println("Could not serialize to media type [" + mt + "]: " + lm(e));  // NOT DEBUG
 					}
 				}
 			}
@@ -694,7 +695,7 @@ public class BasicSwaggerProviderSession {
 	@SafeVarargs
 	private final static <T> T firstNonEmpty(T...t) {
 		for (T oo : t)
-			if (! isEmpty(oo))
+			if (isNotEmpty(oo))
 				return oo;
 		return null;
 	}
@@ -797,7 +798,7 @@ public class BasicSwaggerProviderSession {
 		for (Header aa : a) {
 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
-				throw new IllegalArgumentException("@Header used without name or value.");
+				throw illegalArg("@Header used without name or value.");
 			merge(om.getMap(name, true), aa.schema());
 		}
 		return om;
@@ -899,7 +900,7 @@ public class BasicSwaggerProviderSession {
 			;
 			// @formatter:on
 		} catch (ParseException e) {
-			throw new IllegalArgumentException(e);
+			throw illegalArg(e);
 		}
 	}
 

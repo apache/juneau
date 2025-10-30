@@ -82,7 +82,7 @@ public class ManifestFile extends JsonMap {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
-			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(f), e);
+			throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(f));
 		}
 	}
 
@@ -120,7 +120,7 @@ public class ManifestFile extends JsonMap {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
-			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n" + read(path), e);
+			throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(path), e);
 		}
 	}
 

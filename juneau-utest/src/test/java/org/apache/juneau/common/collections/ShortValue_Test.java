@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -143,10 +144,10 @@ class ShortValue_Test extends TestBase {
 	@Test
 	void c07_isEmpty() {
 		ShortValue v = new ShortValue(null);
-		assertTrue(v.isEmpty());
+		assertEmpty(v);
 
 		v.set((short)1);
-		assertFalse(v.isEmpty());
+		assertNotEmpty(v);
 	}
 
 	@Test

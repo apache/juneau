@@ -65,7 +65,7 @@ public class ThrowableUtils {
 		try {
 			return type.isInstance(t) ? type.cast(t) : type.getConstructor(Throwable.class).newInstance(t);
 		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
+			throw illegalArg(e);
 		}
 	}
 
@@ -214,6 +214,64 @@ public class ThrowableUtils {
 	}
 
 	/**
+	 * Creates an {@link java.io.IOException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new IOException wrapping the given cause.
+	 */
+	public static java.io.IOException ioException(Throwable cause) {
+		return new java.io.IOException(cause);
+	}
+
+	/**
+	 * Creates an {@link IllegalArgumentException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new IllegalArgumentException wrapping the given cause.
+	 */
+	public static IllegalArgumentException illegalArg(Throwable cause) {
+		return new IllegalArgumentException(cause);
+	}
+
+	/**
+	 * Creates a {@link RuntimeException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new RuntimeException wrapping the given cause.
+	 */
+	public static RuntimeException runtimeException(Throwable cause) {
+		return new RuntimeException(cause);
+	}
+
+	/**
+	 * Creates an {@link UnsupportedOperationException} wrapping the given throwable.
+	 *
+	 * @param cause The cause of the exception.
+	 * @return A new UnsupportedOperationException wrapping the given cause.
+	 */
+	public static UnsupportedOperationException unsupportedOp(Throwable cause) {
+		return new UnsupportedOperationException(cause);
+	}
+
+	/**
+	 * Creates an {@link UnsupportedOperationException} with a default message.
+	 *
+	 * @return A new UnsupportedOperationException with the message "Not supported."
+	 */
+	public static UnsupportedOperationException unsupportedOp() {
+		return new UnsupportedOperationException("Not supported.");
+	}
+
+	/**
+	 * Creates an {@link UnsupportedOperationException} for read-only objects.
+	 *
+	 * @return A new UnsupportedOperationException with the message "Object is read only."
+	 */
+	public static UnsupportedOperationException unsupportedOpReadOnly() {
+		return new UnsupportedOperationException("Object is read only.");
+	}
+
+	/**
 	 * Searches through the cause chain of an exception to find an exception of the specified type.
 	 *
 	 * @param <T> The cause type.
@@ -228,5 +286,15 @@ public class ThrowableUtils {
 			e = e.getCause();
 		}
 		return Optional.empty();
+	}
+
+	/**
+	 * Convenience method for calling {@link Throwable#getLocalizedMessage()}.
+	 *
+	 * @param t The throwable.
+	 * @return The localized message of the throwable.
+	 */
+	public static String lm(Throwable t) {
+		return t.getLocalizedMessage();
 	}
 }

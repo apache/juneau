@@ -149,13 +149,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			if (ci.isChildOf(ObjectSwap.class)) {
 				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
 				if (nn(ps.forMediaTypes()))
-					throw new UnsupportedOperationException("TODO - Media types on swaps not yet supported on bean properties.");
+					throw unsupportedOp("TODO - Media types on swaps not yet supported on bean properties.");
 				if (nn(ps.withTemplate()))
-					throw new UnsupportedOperationException("TODO - Templates on swaps not yet supported on bean properties.");
+					throw unsupportedOp("TODO - Templates on swaps not yet supported on bean properties.");
 				return ps;
 			}
 			if (ci.isChildOf(Surrogate.class))
-				throw new UnsupportedOperationException("TODO - Surrogate swaps not yet supported on bean properties.");
+				throw unsupportedOp("TODO - Surrogate swaps not yet supported on bean properties.");
 			throw runtimeException("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
 		}
 
@@ -367,7 +367,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return null;
 		if (o instanceof Class)
 			return ((Class<?>)o).getName();
-		return o.getClass().getName();
+		return cn(o);
 	}
 
 	final BeanMeta<?> beanMeta;                               // The bean that this property belongs to.

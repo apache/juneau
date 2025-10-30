@@ -84,8 +84,8 @@ public class EncoderSet {
 			if (o == null)
 				return "null";
 			if (o instanceof Class)
-				return "class:" + ((Class<?>)o).getSimpleName();
-			return "object:" + o.getClass().getSimpleName();
+				return "class:" + scn(o);
+			return "object:" + scn(o);
 		}
 
 		List<Object> entries;
@@ -125,13 +125,13 @@ public class EncoderSet {
 		public Builder add(Class<?>...values) {
 			List<Object> l = list();
 			for (Class<?> v : values)
-				if (v.getSimpleName().equals("NoInherit"))
+				if (scn(v).equals("NoInherit"))
 					clear();
 			for (Class<?> v : values) {
 				if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
-				} else if (! v.getSimpleName().equals("NoInherit")) {
-					throw new IllegalArgumentException("Invalid type passed to EncoderSet.Builder.add(): " + v.getName());
+				} else if (! scn(v).equals("NoInherit")) {
+					throw illegalArg("Invalid type passed to EncoderSet.Builder.add(): {0}", cn(v));
 				}
 			}
 			entries.addAll(0, l);
@@ -217,12 +217,12 @@ public class EncoderSet {
 		public Builder set(Class<?>...values) {
 			List<Object> l = list();
 			for (Class<?> v : values) {
-				if (v.getSimpleName().equals("Inherit")) {
+				if (scn(v).equals("Inherit")) {
 					l.addAll(entries);
 				} else if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else {
-					throw new IllegalArgumentException("Invalid type passed to EncoderSet.Builder.set(): " + v.getName());
+					throw illegalArg("Invalid type passed to EncoderSet.Builder.set(): {0}", cn(v));
 				}
 			}
 			entries = l;

@@ -124,7 +124,7 @@ class CommonParser_Test extends TestBase {
 		var p = JsonParser.DEFAULT;
 		var json = "{ints:[1,2,3],beans:[{a:1,b:2}]}";
 		var t = p.parse(json, C.class);
-		assertEquals(3, t.getInts().size());
+		assertSize(3, t.getInts());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
 
@@ -143,7 +143,7 @@ class CommonParser_Test extends TestBase {
 		var p = JsonParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 		var json = "{a:1,unknownProperty:\"/foo\",b:2}";
 		p.parse(json, B.class);
-		assertEquals(1, MyParserListener.events.size());
+		assertSize(1, MyParserListener.events);
 		assertEquals("unknownProperty, line 1, column 5", MyParserListener.events.get(0));
 	}
 

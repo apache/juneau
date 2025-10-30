@@ -1502,7 +1502,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 				sb.append("---Content Hex---\n");
 				sb.append(content.asSpacedHex()).append("\n");
 			} catch (Exception e1) {
-				sb.append(e1.getLocalizedMessage());
+				sb.append(lm(e1));
 			}
 		}
 		return sb.toString();

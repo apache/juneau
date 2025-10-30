@@ -17,6 +17,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -1460,7 +1461,7 @@ public class Serializer extends BeanTraverseContext {
 	 * @throws SerializeException Problem occurred trying to serialize object.
 	 */
 	protected void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
-		throw new UnsupportedOperationException();
+		throw unsupportedOp();
 	}
 
 	/**

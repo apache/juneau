@@ -39,7 +39,7 @@ class BasicHttpResource_Test extends TestBase {
 		assertNull(x.getContentType());
 		assertEquals("", toUtf8(x.getContent()));
 		assertNull(x.getContentEncoding());
-		assertEquals(0, x.getHeaders().size());
+		assertEmpty(x.getHeaders());
 
 		var x2 = stringResource("foo");
 		assertEquals("foo", toUtf8(x2.getContent()));

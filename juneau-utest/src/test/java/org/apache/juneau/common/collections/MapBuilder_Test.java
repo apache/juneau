@@ -161,7 +161,7 @@ class MapBuilder_Test extends TestBase {
 			.build();
 
 		assertNotNull(map);
-		assertSize(0, map);
+		assertEmpty(map);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ class MapBuilder_Test extends TestBase {
 			.build();
 
 		assertNotNull(map);
-		assertSize(0, map);
+		assertEmpty(map);
 	}
 
 	@Test

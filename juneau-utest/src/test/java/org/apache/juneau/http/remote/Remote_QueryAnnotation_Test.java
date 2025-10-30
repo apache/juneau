@@ -484,7 +484,7 @@ class Remote_QueryAnnotation_Test extends TestBase {
 		assertEquals("{x:null}",x.getX1((String)null));
 		assertEquals("{x:'1'}",x.getX2(a("1")));
 		assertEquals("{x:'1|2'}",x.getX2(a("1","2")));
-		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", ()->x.getX2(new String[]{}));
+		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", ()->x.getX2(new String[0]));
 		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.getX2(a("1","2","3")));
 		assertEquals("{x:null}",x.getX2(a((String)null)));
 		assertEquals("{x:'1|1'}",x.getX3("1","1"));

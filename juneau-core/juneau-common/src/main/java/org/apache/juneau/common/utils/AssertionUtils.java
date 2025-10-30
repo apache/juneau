@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-
-import java.text.*;
 
 /**
  * Utility methods for argument validation and assertion.
@@ -76,7 +75,7 @@ public class AssertionUtils {
 	 */
 	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
 		if (! expression)
-			throw new IllegalArgumentException(MessageFormat.format(msg, args));
+			throw illegalArg(msg, args);
 	}
 
 	/**
@@ -226,7 +225,7 @@ public class AssertionUtils {
 	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
 		for (var i = 0; i < value.length; i++)
 			if (! type.isAssignableFrom(value[i]))
-				throw new IllegalArgumentException("Arg " + name + " did not have arg of type " + type.getName() + " at index " + i + ": " + value[i].getName());
+				throw illegalArg("Arg {0} did not have arg of type {1} at index {2}: {3}", name, cn(type), i, cn(value[i]));
 		return (Class<E>[])value;
 	}
 

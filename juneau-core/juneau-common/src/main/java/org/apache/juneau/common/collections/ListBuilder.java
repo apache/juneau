@@ -257,7 +257,7 @@ public class ListBuilder<E> {
 								if (nn(l))
 									addAny(l);
 								else
-									throw runtimeException("Object of type {0} could not be converted to type {1}", o.getClass().getName(), elementType);
+									throw runtimeException("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
 							}
 						}
 					}

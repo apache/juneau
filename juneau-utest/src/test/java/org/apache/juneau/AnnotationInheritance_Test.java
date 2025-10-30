@@ -75,7 +75,7 @@ class AnnotationInheritance_Test extends TestBase {
 
 		// Verify the annotation is inherited
 		List<Beanp> beanpList = prop.getAllAnnotationsParentFirst(Beanp.class);
-		assertFalse(beanpList.isEmpty(), "@Beanp annotation should be inherited");
+		assertNotEmpty(beanpList);
 	}
 
 	@Test
@@ -123,7 +123,7 @@ class AnnotationInheritance_Test extends TestBase {
 
 		// Check that @Xml annotations are inherited
 		List<Xml> xmlAnnotations = prop.getAllAnnotationsParentFirst(Xml.class);
-		assertFalse(xmlAnnotations.isEmpty(), "@Xml annotations should be inherited from parent");
+		assertNotEmpty(xmlAnnotations);
 
 		var xml = xmlAnnotations.get(0);
 		assertEquals(XmlFormat.COLLAPSED, xml.format(), "@Xml format should be inherited");
@@ -178,7 +178,7 @@ class AnnotationInheritance_Test extends TestBase {
 
 		// Verify all @Beanp attributes are inherited
 		List<Beanp> beanpAnnotations = prop.getAllAnnotationsParentFirst(Beanp.class);
-		assertFalse(beanpAnnotations.isEmpty(), "@Beanp annotation should be inherited");
+		assertNotEmpty(beanpAnnotations);
 
 		var beanp = beanpAnnotations.get(0);
 		assertEquals("n", beanp.name(), "@Beanp name attribute should be inherited");
@@ -230,7 +230,7 @@ class AnnotationInheritance_Test extends TestBase {
 
 		// Verify annotation is inherited through multiple levels
 		List<Beanp> beanpAnnotations = prop.getAllAnnotationsParentFirst(Beanp.class);
-		assertFalse(beanpAnnotations.isEmpty(), "@Beanp should be inherited through grandparent");
+		assertNotEmpty(beanpAnnotations);
 
 		// Note: Both "c" and "count" properties exist due to getter/setter property resolution
 		var bean = new D1_Child().setCount(42);

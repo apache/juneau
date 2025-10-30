@@ -18,6 +18,7 @@ package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.isEmpty;
 
@@ -503,7 +504,7 @@ public class RequestContent {
 		} catch (UnsupportedMediaType e) {
 			throw e;
 		} catch (SchemaValidationException e) {
-			throw new BadRequest("Validation failed on request content. " + e.getLocalizedMessage());
+			throw new BadRequest("Validation failed on request content. " + lm(e));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not convert request content content to class type ''{0}''.", cm);
 		} catch (IOException e) {

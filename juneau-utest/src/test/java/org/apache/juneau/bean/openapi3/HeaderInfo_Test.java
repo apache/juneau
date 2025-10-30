@@ -251,10 +251,10 @@ class HeaderInfo_Test extends TestBase {
 
 		@Test void d01_resolveRefs_basic() {
 			var openApi = openApi()
-				.setComponents(components().setSchemas(Map.of(
+				.setComponents(components().setSchemas(m(
 					"MyHeader", schemaInfo().setType("string").setDescription("My Header")
 				)));
-
+	
 			assertBean(
 				headerInfo().setRef("#/components/schemas/MyHeader").resolveRefs(openApi, new ArrayDeque<>(), 10),
 				"type,description",

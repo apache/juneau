@@ -48,7 +48,7 @@ class BctAssertions_Test extends TestBase {
 		void a01_args() {
 			var args = args();
 			assertNotNull(args);
-			assertTrue(args.getBeanConverter().isEmpty());
+			assertEmpty(args.getBeanConverter());
 			assertNull(args.getMessage());
 		}
 	}
@@ -110,14 +110,14 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void c01_basicBeansAssertion() {
-			var people = List.of(new TestPerson("Alice", 25), new TestPerson("Bob", 30));
+			var people = l(new TestPerson("Alice", 25), new TestPerson("Bob", 30));
 
 			assertDoesNotThrow(() -> assertBeans(people, "name", "Alice", "Bob"));
 		}
 
 		@Test
 		void c02_withCustomArgs() {
-			var people = List.of(new TestPerson("Charlie", 35));
+			var people = l(new TestPerson("Charlie", 35));
 			var args = args().setMessage("Custom beans message");
 
 			assertDoesNotThrow(() -> assertBeans(args, people, "name", "Charlie"));
@@ -125,12 +125,12 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void c03_emptyCollection() {
-			assertDoesNotThrow(() -> assertBeans(List.of(), "name"));
+			assertDoesNotThrow(() -> assertBeans(l(), "name"));
 		}
 
 		@Test
 		void c04_sizeMismatch() {
-			var people = List.of(new TestPerson("Dave", 40));
+			var people = l(new TestPerson("Dave", 40));
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertBeans(people, "name", "Dave", "Extra"));
 			assertContains("Wrong number of beans", e.getMessage());
@@ -138,7 +138,7 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void c05_contentMismatch() {
-			var people = List.of(new TestPerson("Eve", 28));
+			var people = l(new TestPerson("Eve", 28));
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertBeans(people, "name", "Wrong"));
 			assertContains("Bean at row", e.getMessage());
@@ -296,7 +296,7 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void g01_basicEmpty() {
-			assertDoesNotThrow(() -> assertEmpty(List.of()));
+			assertDoesNotThrow(() -> assertEmpty(l()));
 			assertDoesNotThrow(() -> assertEmpty(new String[0]));
 		}
 
@@ -304,13 +304,13 @@ class BctAssertions_Test extends TestBase {
 		void g02_withCustomArgs() {
 			var args = args().setMessage("Custom empty message");
 
-			assertDoesNotThrow(() -> assertEmpty(args, List.of()));
+			assertDoesNotThrow(() -> assertEmpty(args, l()));
 		}
 
 		@Test
 		void g03_notEmpty() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertEmpty(List.of("item")));
-			assertContains("Value was not empty", e.getMessage());
+			var e = assertThrows(AssertionFailedError.class, () -> assertEmpty(l("item")));
+			assertContains("Collection was not empty", e.getMessage());
 		}
 
 		@Test
@@ -329,25 +329,25 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void h01_basicList() {
-			assertDoesNotThrow(() -> assertList(List.of("a", "b", "c"), "a", "b", "c"));
+			assertDoesNotThrow(() -> assertList(l("a", "b", "c"), "a", "b", "c"));
 		}
 
 		@Test
 		void h02_withCustomArgs() {
 			var args = args().setMessage("Custom list message");
 
-			assertDoesNotThrow(() -> assertList(args, List.of(1, 2), 1, 2));
+			assertDoesNotThrow(() -> assertList(args, l(1, 2), 1, 2));
 		}
 
 		@Test
 		void h03_sizeMismatch() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertList(List.of("a", "b"), "a", "b", "c"));
+			var e = assertThrows(AssertionFailedError.class, () -> assertList(l("a", "b"), "a", "b", "c"));
 			assertContains("Wrong list length", e.getMessage());
 		}
 
 		@Test
 		void h04_elementMismatch() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertList(List.of("a", "b"), "a", "wrong"));
+			var e = assertThrows(AssertionFailedError.class, () -> assertList(l("a", "b"), "a", "wrong"));
 			assertContains("Element at index 1 did not match", e.getMessage());
 		}
 
@@ -425,24 +425,24 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void h01_basicMap() {
-			assertDoesNotThrow(() -> assertMap(Map.of("a", "1", "b", "2"), "a=1", "b=2"));
+			assertDoesNotThrow(() -> assertMap(m("a", "1", "b", "2"), "a=1", "b=2"));
 		}
 
 		@Test
 		void h02_withCustomArgs() {
 			var args = args().setMessage("Custom map message");
-			assertDoesNotThrow(() -> assertMap(args, Map.of("key", "value"), "key=value"));
+			assertDoesNotThrow(() -> assertMap(args, m("key", "value"), "key=value"));
 		}
 
 		@Test
 		void h03_sizeMismatch() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertMap(Map.of("a", "1"), "a=1", "b=2"));
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(m("a", "1"), "a=1", "b=2"));
 			assertContains("Wrong list length", e.getMessage());
 		}
 
 		@Test
 		void h04_elementMismatch() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertMap(Map.of("a", "1", "b", "2"), "a=1", "b=wrong"));
+			var e = assertThrows(AssertionFailedError.class, () -> assertMap(m("a", "1", "b", "2"), "a=1", "b=wrong"));
 			assertContains("Element at index 1 did not match", e.getMessage());
 		}
 
@@ -456,7 +456,7 @@ class BctAssertions_Test extends TestBase {
 		void h06_predicateValidation() {
 			// Test predicate-based map entry validation
 			var args = args().setMessage("Custom predicate message");
-			var map = Map.of("count", 42, "enabled", true);
+			var map = m("count", 42, "enabled", true);
 
 			// Test successful predicate validation
 			assertDoesNotThrow(() -> assertMap(args, map,
@@ -465,7 +465,7 @@ class BctAssertions_Test extends TestBase {
 			));
 
 			// Test failed predicate validation
-			var singleEntryMap = Map.of("count", 1);
+			var singleEntryMap = m("count", 1);
 			var e = assertThrows(AssertionFailedError.class, () ->
 				assertMap(args, singleEntryMap, (Predicate<Map.Entry<String, Object>>) entry -> entry.getValue().equals(99))); // Should fail
 			assertContains("Element at index 0 did not pass predicate", e.getMessage());
@@ -475,7 +475,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h07_multipleErrors() {
 			// Test that multiple assertion errors are collected and reported together
-			var map = Map.of("a", "1", "b", "wrong1", "c", "3", "d", "wrong2");
+			var map = m("a", "1", "b", "wrong1", "c", "3", "d", "wrong2");
 			var expected = ao("a=1", "b=2", "c=3", "d=4");
 
 			var e = assertThrows(AssertionFailedError.class, () -> assertMap(map, expected));
@@ -496,7 +496,7 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h08_singleError() {
 			// Test that single errors are still reported as single assertion failures
-			var map = Map.of("a", "1", "b", "wrong");
+			var map = m("a", "1", "b", "wrong");
 			var e = assertThrows(AssertionFailedError.class, () -> assertMap(map, "a=1", "b=2"));
 
 			// Should be a single assertion failure, not multiple
@@ -509,14 +509,14 @@ class BctAssertions_Test extends TestBase {
 		@Test
 		void h09_nestedMaps() {
 			// Test nested map structures
-			var nestedMap = Map.of("a", Map.of("b", 1));
+			var nestedMap = m("a", m("b", 1));
 			assertDoesNotThrow(() -> assertMap(nestedMap, "a={b=1}"));
 		}
 
 		@Test
 		void h10_mapsWithArrays() {
 			// Test maps with array values
-			var mapWithArrays = Map.of("a", Map.of("b", a(1, 2)));
+			var mapWithArrays = m("a", m("b", a(1, 2)));
 			assertDoesNotThrow(() -> assertMap(mapWithArrays, "a={b=[1,2]}"));
 		}
 
@@ -565,7 +565,7 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void i01_basicNotEmpty() {
-			assertDoesNotThrow(() -> assertNotEmpty(List.of("item")));
+			assertDoesNotThrow(() -> assertNotEmpty(l("item")));
 			assertDoesNotThrow(() -> assertNotEmpty(a("item")));
 		}
 
@@ -573,13 +573,13 @@ class BctAssertions_Test extends TestBase {
 		void i02_withCustomArgs() {
 			var args = args().setMessage("Custom not empty message");
 
-			assertDoesNotThrow(() -> assertNotEmpty(args, List.of("content")));
+			assertDoesNotThrow(() -> assertNotEmpty(args, l("content")));
 		}
 
 		@Test
 		void i03_actuallyEmpty() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertNotEmpty(List.of()));
-			assertContains("Value was empty", e.getMessage());
+			var e = assertThrows(AssertionFailedError.class, () -> assertNotEmpty(l()));
+			assertContains("Collection was empty", e.getMessage());
 		}
 
 		@Test
@@ -598,7 +598,7 @@ class BctAssertions_Test extends TestBase {
 
 		@Test
 		void j01_basicSizes() {
-			assertDoesNotThrow(() -> assertSize(3, List.of("a", "b", "c")));
+			assertDoesNotThrow(() -> assertSize(3, l("a", "b", "c")));
 			assertDoesNotThrow(() -> assertSize(5, "hello"));
 		}
 
@@ -606,12 +606,12 @@ class BctAssertions_Test extends TestBase {
 		void j02_withCustomArgs() {
 			var args = args().setMessage("Custom size message");
 
-			assertDoesNotThrow(() -> assertSize(args, 2, List.of("a", "b")));
+			assertDoesNotThrow(() -> assertSize(args, 2, l("a", "b")));
 		}
 
 		@Test
 		void j03_wrongSize() {
-			var e = assertThrows(AssertionFailedError.class, () -> assertSize(5, List.of("a", "b", "c")));
+			var e = assertThrows(AssertionFailedError.class, () -> assertSize(5, l("a", "b", "c")));
 			assertContains("Value not expected size", e.getMessage());
 		}
 
@@ -791,7 +791,7 @@ class BctAssertions_Test extends TestBase {
 		void h04_assertNotEmptyWithVariousNonEmptyTypes() {
 			// Test non-empty assertions
 			assertNotEmpty(l("item"));
-			assertNotEmpty(Map.of("key", "value"));
+			assertNotEmpty(m("key", "value"));
 			assertNotEmpty(Set.of("element"));
 			assertNotEmpty(Optional.of("value"));
 		}
@@ -805,7 +805,7 @@ class BctAssertions_Test extends TestBase {
 			assertContainsAll(text, "The", "dog");
 
 			// Test with object that stringifies to contain multiple values
-			var complexObj = Map.of(
+			var complexObj = m(
 				"description", "This is a test with multiple keywords: alpha, beta, gamma"
 			);
 			assertContainsAll(complexObj, "alpha", "beta", "gamma", "keywords");

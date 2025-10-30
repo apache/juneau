@@ -17,6 +17,7 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -79,7 +80,7 @@ public class BasicPartIterator implements PartIterator {
 	 */
 	@Override /* Overridden from Iterator */
 	public void remove() throws UnsupportedOperationException {
-		throw new UnsupportedOperationException("Not supported.");
+		throw unsupportedOp();
 	}
 
 	private boolean eq(String s1, String s2) {

@@ -17,6 +17,7 @@
 package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -401,7 +402,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
+			throw unsupportedOp("Bean is read-only");
 	}
 
 	/**

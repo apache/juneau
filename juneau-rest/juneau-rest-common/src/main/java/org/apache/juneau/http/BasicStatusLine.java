@@ -17,6 +17,7 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.common.utils.Utils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -207,6 +208,6 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
+			throw unsupportedOp("Bean is read-only");
 	}
 }

@@ -19,6 +19,7 @@ package org.apache.juneau.rest.servlet;
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
@@ -198,7 +199,7 @@ public abstract class RestServlet extends HttpServlet {
 			getContext().execute(this, r1, r2);
 
 		} catch (Throwable e) {
-			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
+			r2.sendError(SC_INTERNAL_SERVER_ERROR, lm(e));
 		}
 	}
 

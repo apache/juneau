@@ -70,7 +70,7 @@ class MockPathResolver {
 		try {
 			init(target, contextPath, servletPath, pathToResolve, pathVars);
 		} catch (Exception e) {
-			error = e.getLocalizedMessage();
+			error = lm(e);
 		}
 	}
 

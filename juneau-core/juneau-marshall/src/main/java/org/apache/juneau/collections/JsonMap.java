@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.collections;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -117,12 +119,12 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 		@Override
 		public Object put(String key, Object val) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 
 		@Override
 		public Object remove(Object key) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 	}
 
@@ -149,12 +151,12 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 		@Override /* Overridden from Map */
 		public Object put(String key, Object value) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 
 		@Override /* Overridden from Map */
 		public Object remove(Object key) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 
 		@Override /* Overridden from Map */
@@ -372,8 +374,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @param keyValuePairs A list of key/value pairs to add to this map.
 	 */
 	public JsonMap(Object...keyValuePairs) {
-		if (keyValuePairs.length % 2 != 0)
-			throw new IllegalArgumentException("Odd number of parameters passed into JsonMap(Object...)");
+		assertArg(keyValuePairs.length % 2 == 0, "Odd number of parameters passed into JsonMap(Object...)");
 		for (int i = 0; i < keyValuePairs.length; i += 2)
 			put(s(keyValuePairs[i]), keyValuePairs[i + 1]);
 	}
@@ -688,7 +689,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 					@Override /* Overridden from Iterator */
 					public void remove() {
-						throw new UnsupportedOperationException("Not supported on read-only object.");
+						throw unsupportedOpReadOnly();
 					}
 				};
 			}

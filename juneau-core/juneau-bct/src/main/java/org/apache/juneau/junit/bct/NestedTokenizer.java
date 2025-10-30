@@ -17,6 +17,7 @@
 package org.apache.juneau.junit.bct;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.eq;
@@ -157,9 +158,9 @@ class NestedTokenizer {
 
 	public static List<Token> tokenize(String in) {
 		if (in == null)
-			throw new IllegalArgumentException("Input was null.");
+			throw illegalArg("Input was null.");
 		if (in.isBlank())
-			throw new IllegalArgumentException("Input was empty.");
+			throw illegalArg("Input was empty.");
 
 		var length = in.length();
 		var pos = 0;

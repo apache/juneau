@@ -311,7 +311,7 @@ class PartList_Test extends TestBase {
 
 	@Test void a19_size() {
 		var x = PartList.of(FOO_1);
-		assertEquals(1, x.size());
+		assertSize(1, x);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

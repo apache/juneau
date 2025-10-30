@@ -346,7 +346,7 @@ public class Cache2<K1,K2,V> extends ConcurrentHashMap2Key<K1,K2,V> {
 		this.disableCaching = builder.disableCaching;
 		this.supplier = builder.supplier;
 		if (builder.logOnExit) {
-			shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
+			shutdownMessage(() -> scn(builder.type) + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
 

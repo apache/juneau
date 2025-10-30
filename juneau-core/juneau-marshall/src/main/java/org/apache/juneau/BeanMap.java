@@ -207,7 +207,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 					@Override /* Overridden from Iterator */
 					public void remove() {
-						throw new UnsupportedOperationException("Cannot remove item from iterator.");
+						throw unsupportedOp("Cannot remove item from iterator.");
 					}
 				};
 			}

@@ -109,8 +109,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		var x = new PartList();
 		if (pairs == null)
 			pairs = new String[0];
-		if (pairs.length % 2 != 0)
-			throw new IllegalArgumentException("Odd number of parameters passed into PartList.ofPairs()");
+		assertArg(pairs.length % 2 == 0, "Odd number of parameters passed into PartList.ofPairs()");
 		for (int i = 0; i < pairs.length; i += 2)
 			x.add(BasicPart.of(pairs[i], pairs[i + 1]));
 		return x;
@@ -313,7 +312,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		assertArgNotNull("type", type);
 
 		String name = PartBeanMeta.of(type).getSchema().getName();
-		assertArg(name != null, "Part name could not be found on bean type ''{0}''", type.getName());
+		assertArg(isNotNull(name), "Part name could not be found on bean type ''{0}''", cn(type));
 
 		return get(name, type);
 	}

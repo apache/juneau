@@ -503,7 +503,7 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		assertEquals("{x:null}",x.postX1((String)null));
 		assertEquals("{x:'1'}",x.postX2(a("1")));
 		assertEquals("{x:'1|2'}",x.postX2(a("1","2")));
-		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", ()->x.postX2(new String[]{}));
+		assertThrowsWithMessage(Exception.class, "Minimum number of items not met.", ()->x.postX2(new String[0]));
 		assertThrowsWithMessage(Exception.class, "Maximum number of items exceeded.", ()->x.postX2(a("1","2","3")));
 		assertEquals("{x:null}",x.postX2(a((String)null)));
 		assertEquals("{x:'1|1'}",x.postX3("1","1"));

@@ -21,6 +21,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.mock.*;
@@ -36,10 +37,10 @@ class Hyperlink_Test extends TestBase {
 		public Hyperlink a() {
 			return new Hyperlink("foo", "bar");
 		}
-		@RestGet
-		public Hyperlink[] b() {
-			return new Hyperlink[]{a(),a()};
-		}
+	@RestGet
+	public Hyperlink[] b() {
+		return CollectionUtils.a(a(),a());
+	}
 		@RestGet
 		public Collection<Hyperlink> c() {
 			return l(b());

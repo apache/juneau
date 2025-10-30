@@ -742,7 +742,7 @@ public class BasicBeanConverter implements BeanConverter {
 	public Object getProperty(Object object, String name) {
 		var o = swap(object);
 		return propertyExtractors.stream().filter(x -> x.canExtract(this, o, name)).findFirst()
-			.orElseThrow(() -> runtimeException("Could not find extractor for object of type {0}", o.getClass().getName())).extract(this, o, name);
+			.orElseThrow(() -> runtimeException("Could not find extractor for object of type {0}", cn(o))).extract(this, o, name);
 	}
 
 	@Override

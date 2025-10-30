@@ -194,7 +194,7 @@ public class Cache3<K1,K2,K3,V> extends ConcurrentHashMap3Key<K1,K2,K3,V> {
 		this.disableCaching = builder.disableCaching;
 		this.supplier = builder.supplier;
 		if (builder.logOnExit) {
-			shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
+			shutdownMessage(() -> scn(builder.type) + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
 

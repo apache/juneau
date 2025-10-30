@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -109,10 +110,10 @@ class FloatValue_Test extends TestBase {
 	@Test
 	void b07_isEmpty() {
 		var v = new FloatValue(null);
-		assertTrue(v.isEmpty());
+		assertEmpty(v);
 
 		v.set(1.0f);
-		assertFalse(v.isEmpty());
+		assertNotEmpty(v);
 	}
 
 	@Test

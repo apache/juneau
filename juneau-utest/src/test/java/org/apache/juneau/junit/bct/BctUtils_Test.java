@@ -89,7 +89,7 @@ class BctUtils_Test extends TestBase {
 	void d02_tokenizeNested() {
 		var tokens = tokenize("name,address{street,city,zip},age");
 
-		assertEquals(3, tokens.size());
+		assertSize(3, tokens);
 		assertEquals("name", tokens.get(0).getValue());
 		assertEmpty(tokens.get(0).getNested());
 

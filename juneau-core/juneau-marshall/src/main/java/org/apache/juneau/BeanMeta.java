@@ -432,7 +432,7 @@ public class BeanMeta<T> {
 							i.remove();
 						}
 					} catch (ClassNotFoundException e) {
-						throw new BeanRuntimeException(c, e.getLocalizedMessage());
+						throw new BeanRuntimeException(c, lm(e));
 					}
 				}
 

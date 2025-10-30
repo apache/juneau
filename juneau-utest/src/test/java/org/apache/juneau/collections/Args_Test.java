@@ -17,6 +17,7 @@
 package org.apache.juneau.collections;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -32,44 +33,44 @@ class Args_Test extends TestBase {
 	@Test void basic() {
 		var a = new Args(a());
 
-		// Empty args
-		assertNull(a.getArg(0));
-		assertNull(a.getArg(1));
-		assertNull(a.getArg(-1));
-		assertNull(a.getArg("foo"));
-		assertEquals(0, a.getArgs("foo").size());
-		assertFalse(a.containsKey("foo"));
+	// Empty args
+	assertNull(a.getArg(0));
+	assertNull(a.getArg(1));
+	assertNull(a.getArg(-1));
+	assertNull(a.getArg("foo"));
+	assertEmpty(a.getArgs("foo"));
+	assertFalse(a.containsKey("foo"));
 
-		a = new Args(a("foo"));
-		assertEquals("foo", a.getArg(0));
-		assertNull(a.getArg(1));
-		assertNull(a.getArg(-1));
-		assertNull(a.getArg("foo"));
-		assertEquals(0, a.getArgs("foo").size());
-		assertFalse(a.containsKey("foo"));
+	a = new Args(a("foo"));
+	assertEquals("foo", a.getArg(0));
+	assertNull(a.getArg(1));
+	assertNull(a.getArg(-1));
+	assertNull(a.getArg("foo"));
+	assertEmpty(a.getArgs("foo"));
+	assertFalse(a.containsKey("foo"));
 
-		a = new Args(a("foo", "bar bar"));
-		assertEquals("foo", a.getArg(0));
-		assertEquals("bar bar", a.getArg(1));
-		assertNull(a.getArg(-1));
-		assertNull(a.getArg("foo"));
-		assertEquals(0, a.getArgs("foo").size());
-		assertFalse(a.containsKey("foo"));
+	a = new Args(a("foo", "bar bar"));
+	assertEquals("foo", a.getArg(0));
+	assertEquals("bar bar", a.getArg(1));
+	assertNull(a.getArg(-1));
+	assertNull(a.getArg("foo"));
+	assertEmpty(a.getArgs("foo"));
+	assertFalse(a.containsKey("foo"));
 
-		a = new Args(a("foo", "bar bar", "-foo"));
-		assertEquals("foo", a.getArg(0));
-		assertEquals("bar bar", a.getArg(1));
-		assertNull(a.getArg(-1));
-		assertNull(a.getArg("foo"));
-		assertEquals(0, a.getArgs("foo").size());
-		assertTrue(a.containsKey("foo"));
+	a = new Args(a("foo", "bar bar", "-foo"));
+	assertEquals("foo", a.getArg(0));
+	assertEquals("bar bar", a.getArg(1));
+	assertNull(a.getArg(-1));
+	assertNull(a.getArg("foo"));
+	assertEmpty(a.getArgs("foo"));
+	assertTrue(a.containsKey("foo"));
 
-		a = new Args(a("foo", "bar bar", "-foo", "bar bar"));
-		assertEquals("foo", a.getArg(0));
-		assertEquals("bar bar", a.getArg(1));
-		assertNull(a.getArg(-1));
-		assertEquals("bar bar", a.getArg("foo"));
-		assertEquals(1, a.getArgs("foo").size());
+	a = new Args(a("foo", "bar bar", "-foo", "bar bar"));
+	assertEquals("foo", a.getArg(0));
+	assertEquals("bar bar", a.getArg(1));
+	assertNull(a.getArg(-1));
+	assertEquals("bar bar", a.getArg("foo"));
+	assertSize(1, a.getArgs("foo"));
 		assertEquals("bar bar", a.getArgs("foo").get(0));
 		assertTrue(a.containsKey("foo"));
 	}

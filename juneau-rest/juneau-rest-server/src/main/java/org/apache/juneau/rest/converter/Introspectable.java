@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.converter;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import org.apache.juneau.*;
@@ -77,7 +78,7 @@ public class Introspectable implements RestConverter {
 				o = swap.swap(bs, o);
 			return ObjectIntrospector.create(o, JsonParser.DEFAULT).invokeMethod(method, args);
 		} catch (Exception e) {
-			return new InternalServerError(e, "Error occurred trying to invoke method: {0}", e.getLocalizedMessage());
+			return new InternalServerError(e, "Error occurred trying to invoke method: {0}", lm(e));
 		}
 	}
 }

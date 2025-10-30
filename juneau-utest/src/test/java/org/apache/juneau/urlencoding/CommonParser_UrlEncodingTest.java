@@ -116,7 +116,7 @@ class CommonParser_UrlEncodingTest extends TestBase {
 		var p2 = UrlEncodingParser.DEFAULT;
 		var json = "ints=@(1,2,3)&beans=@((a=1,b=2))";
 		var t = p2.parse(json, C.class);
-		assertEquals(3, t.getInts().size());
+		assertSize(3, t.getInts());
 		assertEquals(2, t.getBeans().get(0).b);
 	}
 
@@ -135,7 +135,7 @@ class CommonParser_UrlEncodingTest extends TestBase {
 		var p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 		var in = "a=1&unknownProperty=foo&b=2";
 		p2.parse(in, B.class);
-		assertEquals(1, MyParserListener.events.size());
+		assertSize(1, MyParserListener.events);
 		assertEquals("unknownProperty, line 1, column 4", MyParserListener.events.get(0));
 	}
 

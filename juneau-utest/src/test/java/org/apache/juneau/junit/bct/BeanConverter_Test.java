@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.junit.bct.BctAssertions.*;
+
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,7 +80,7 @@ class BeanConverter_Test extends TestBase {
 			// Test collection listify
 			var input = l("a", "b", "c");
 			var result = converter.listify(input);
-			assertEquals(3, result.size());
+			assertSize(3, result);
 			assertEquals("a", result.get(0));
 			assertEquals("b", result.get(1));
 			assertEquals("c", result.get(2));
@@ -86,7 +88,7 @@ class BeanConverter_Test extends TestBase {
 			// Test array listify
 			String[] array = {"x", "y", "z"};
 			var arrayResult = converter.listify(array);
-			assertEquals(3, arrayResult.size());
+			assertSize(3, arrayResult);
 			assertEquals("x", arrayResult.get(0));
 		}
 
@@ -134,7 +136,7 @@ class BeanConverter_Test extends TestBase {
 
 			// Empty collections
 			assertEquals("[]", converter.stringify(new ArrayList<>()));
-			assertEquals(0, converter.listify(new ArrayList<>()).size());
+			assertEmpty(converter.listify(new ArrayList<>()));
 
 			// Empty strings
 			assertEquals("", converter.stringify(""));
@@ -142,7 +144,7 @@ class BeanConverter_Test extends TestBase {
 
 			// Empty arrays
 			assertEquals("[]", converter.stringify(new Object[0]));
-			assertEquals(0, converter.listify(new Object[0]).size());
+			assertEmpty(converter.listify(new Object[0]));
 		}
 
 		@Test
@@ -160,7 +162,7 @@ class BeanConverter_Test extends TestBase {
 			assertTrue(stringResult.length() > 100);
 
 			var listResult = converter.listify(largeList);
-			assertEquals(1000, listResult.size());
+			assertSize(1000, listResult);
 		}
 
 		@Test

@@ -403,8 +403,8 @@ public class SerializerSet {
 			if (o == null)
 				return "null";
 			if (o instanceof Serializer.Builder)
-				return "builder:" + o.getClass().getName();
-			return "serializer:" + o.getClass().getName();
+				return "builder:" + cn(o);
+			return "serializer:" + cn(o);
 		}
 
 		@Override /* Overridden from BeanBuilder */

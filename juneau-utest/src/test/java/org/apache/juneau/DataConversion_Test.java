@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -79,12 +80,12 @@ class DataConversion_Test extends TestBase {
 		// *** JsonList ***
 		m.put("x", JsonList.ofJson("[123]"));
 		assertEquals("[123]", m.getString("x"));
-		assertEquals(1, m.getList("x").size());
+		assertSize(1, m.getList("x"));
 
 		// *** Array ***
 		m.put("x", a(123));
 		assertEquals("[123]", m.getString("x"));
-		assertEquals(1, m.getList("x").size());
+		assertSize(1, m.getList("x"));
 
 		// *** Enum ***
 		m.put("x", TestEnum.ENUM2);

@@ -309,7 +309,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 		this.disableCaching = builder.disableCaching;
 		this.supplier = builder.supplier != null ? builder.supplier : (K)->null;
 		if (builder.logOnExit) {
-			shutdownMessage(() -> builder.type.getSimpleName() + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
+			shutdownMessage(() -> scn(builder.type) + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
 

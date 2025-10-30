@@ -1202,7 +1202,7 @@ public class Config extends Context implements ConfigEventListener {
 
 	void checkWrite() {
 		if (readOnly)
-			throw new UnsupportedOperationException("Cannot call this method on a read-only configuration.");
+			throw unsupportedOp("Cannot call this method on a read-only configuration.");
 	}
 
 	ConfigMap getConfigMap() { return configMap; }

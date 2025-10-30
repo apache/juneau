@@ -17,6 +17,7 @@
 package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.AssertionUtils.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.reflect.*;
@@ -122,12 +123,12 @@ public class ClassUtils {
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", c.getSimpleName(), pt.getSimpleName());
+			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", scn(c), scn(pt));
 		}
 
 		Type gsc = cc.getGenericSuperclass();
 
-		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
+		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", scn(pt));
 
 		ParameterizedType cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
@@ -167,7 +168,7 @@ public class ClassUtils {
 		} else if (actualType instanceof ParameterizedType) {
 			return (Class<?>)((ParameterizedType)actualType).getRawType();
 		}
-		throw new IllegalArgumentException("Could not resolve variable '" + actualType.getTypeName() + "' to a type.");
+		throw illegalArg("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
 	}
 
 	private static void extractTypes(Map<Type,Type> typeMap, Class<?> c) {
@@ -273,7 +274,7 @@ public class ClassUtils {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static boolean isVoid(Class c) {
-		return (c == null || c == void.class || c == Void.class || c.getSimpleName().equalsIgnoreCase("void"));
+		return (c == null || c == void.class || c == Void.class || scn(c).equalsIgnoreCase("void"));
 	}
 
 	@SuppressWarnings("rawtypes")

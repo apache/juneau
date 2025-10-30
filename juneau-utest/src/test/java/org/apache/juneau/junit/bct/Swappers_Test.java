@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,12 +56,12 @@ class Swappers_Test extends TestBase {
 			assertNull(result);
 		}
 
-		@Test
-		void a04_swapOptionalWithComplexObject() {
-			var swapper = Swappers.optionalSwapper();
-			var list = List.of("a", "b", "c");
-			var result = swapper.apply(null, Optional.of(list));
-			assertSame(list, result);
+	@Test
+	void a04_swapOptionalWithComplexObject() {
+		var swapper = Swappers.optionalSwapper();
+		var list = l("a", "b", "c");
+		var result = swapper.apply(null, Optional.of(list));
+		assertSame(list, result);
 		}
 
 		@Test
@@ -91,12 +92,12 @@ class Swappers_Test extends TestBase {
 			assertNull(result);
 		}
 
-		@Test
-		void b03_swapSupplierWithComplexObject() {
-			var swapper = Swappers.supplierSwapper();
-			var list = List.of("x", "y", "z");
-			Supplier<List<String>> supplier = () -> list;
-			var result = swapper.apply(null, supplier);
+	@Test
+	void b03_swapSupplierWithComplexObject() {
+		var swapper = Swappers.supplierSwapper();
+		var list = l("x", "y", "z");
+		Supplier<List<String>> supplier = () -> list;
+		var result = swapper.apply(null, supplier);
 			assertSame(list, result);
 		}
 
@@ -164,12 +165,12 @@ class Swappers_Test extends TestBase {
 			assertNull(result);
 		}
 
-		@Test
-		void c06_swapFutureWithComplexObject() {
-			var swapper = Swappers.futureSwapper();
-			var list = List.of("a", "b", "c");
-			var future = CompletableFuture.completedFuture(list);
-			var result = swapper.apply(null, future);
+	@Test
+	void c06_swapFutureWithComplexObject() {
+		var swapper = Swappers.futureSwapper();
+		var list = l("a", "b", "c");
+		var future = CompletableFuture.completedFuture(list);
+		var result = swapper.apply(null, future);
 			assertSame(list, result);
 		}
 

@@ -17,6 +17,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -626,9 +627,9 @@ public class ParserSession extends BeanSession {
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", scn(e), lm(e));
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", scn(e), lm(e));
 		} finally {
 			checkForWarnings();
 		}
@@ -661,9 +662,9 @@ public class ParserSession extends BeanSession {
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", scn(e), lm(e));
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", scn(e), lm(e));
 		} finally {
 			checkForWarnings();
 		}
@@ -729,7 +730,7 @@ public class ParserSession extends BeanSession {
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", e.getClass().getSimpleName(), e.getLocalizedMessage());
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", scn(e), lm(e));
 		} finally {
 			checkForWarnings();
 		}
@@ -888,7 +889,7 @@ public class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		throw new UnsupportedOperationException("Parser '" + cn(getClass()) + "' does not support this method.");
+		throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));
 	}
 
 	/**
@@ -907,7 +908,7 @@ public class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		throw new UnsupportedOperationException("Parser '" + cn(getClass()) + "' does not support this method.");
+		throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));
 	}
 
 	/**
@@ -1053,7 +1054,7 @@ public class ParserSession extends BeanSession {
 		if (nn(listener))
 			listener.onBeanSetterException(this, t, p);
 		String prefix = "";
-		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), t.getLocalizedMessage());
+		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getClassMeta(), lm(t));
 	}
 
 	/**

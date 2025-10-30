@@ -107,7 +107,7 @@ public class LocalDir {
 	public String toString() {
 		if (clazz == null)
 			return path.toString();
-		return clazz.getName() + ":" + clazzPath;
+		return cn(clazz) + ":" + clazzPath;
 	}
 
 	/**

@@ -92,7 +92,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	public JsonSchemaMap add(JsonSchema...schemas) {
 		for (var schema : schemas) {
 			if (schema.getId() == null)
-				throw new IllegalArgumentException("Schema with no ID passed to JsonSchemaMap.add(Schema...)");
+				throw illegalArg("Schema with no ID passed to JsonSchemaMap.add(Schema...)");
 			put(schema.getId(), schema);
 			schema.setSchemaMap(this);
 		}

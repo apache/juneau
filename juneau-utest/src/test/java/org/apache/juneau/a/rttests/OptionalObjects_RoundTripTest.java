@@ -157,7 +157,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 		x.f1 = opt(l((Integer)null));
 		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
-		assertEquals(1, x.f1.get().size());
+		assertSize(1, x.f1.get());
 		assertNull(x.f1.get().get(0));
 	}
 
@@ -168,7 +168,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 		x.f1 = opt(l());
 		x = t.roundTrip(x);
 		assertTrue(x.f1.isPresent());
-		assertEquals(0, x.f1.get().size());
+		assertEmpty(x.f1.get());
 	}
 
 	@ParameterizedTest
@@ -325,7 +325,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 		var x = new B06();
 		x.f1 = l(opte());
 		x = t.roundTrip(x);
-		assertEquals(1, x.f1.size());
+		assertSize(1, x.f1);
 		assertFalse(x.f1.get(0).isPresent());
 	}
 
@@ -337,7 +337,7 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 		x = t.roundTrip(x);
 		if (t.isValidationOnly())
 			return;
-		assertEquals(1, x.f1.size());
+		assertSize(1, x.f1);
 		assertFalse(x.f1.get(0).isPresent());
 	}
 

@@ -124,7 +124,7 @@ public class JsonList extends LinkedList<Object> {
 
 		@Override /* Overridden from List */
 		public void add(int location, Object object) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 
 		@Override
@@ -132,12 +132,12 @@ public class JsonList extends LinkedList<Object> {
 
 		@Override /* Overridden from List */
 		public Object remove(int location) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 
 		@Override /* Overridden from List */
 		public Object set(int location, Object object) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 	}
 
@@ -152,7 +152,7 @@ public class JsonList extends LinkedList<Object> {
 
 		@Override /* Overridden from List */
 		public void add(int location, Object object) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 
 		@Override /* Overridden from List */
@@ -162,12 +162,12 @@ public class JsonList extends LinkedList<Object> {
 
 		@Override /* Overridden from List */
 		public Object remove(int location) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 
 		@Override /* Overridden from List */
 		public Object set(int location, Object object) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
+			throw unsupportedOpReadOnly();
 		}
 
 		@Override /* Overridden from List */

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.common.utils.ThrowableUtils.*;
+
 /**
  * Abstract superclass of all Simple Var Language variables that write their values directly to a writer.
  *
@@ -48,6 +50,6 @@ public abstract class StreamedVar extends Var {
 
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String arg) throws Exception {
-		throw new UnsupportedOperationException("Cannot call resolve() on StreamedVar class");
+		throw unsupportedOp("Cannot call resolve() on StreamedVar class");
 	}
 }

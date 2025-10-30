@@ -17,6 +17,7 @@
 package org.apache.juneau.common.collections;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -191,11 +192,11 @@ class IntegerValue_Test extends TestBase {
 	void c04_isPresent_isEmpty() {
 		var a = IntegerValue.of(5);
 		assertTrue(a.isPresent());
-		assertFalse(a.isEmpty());
+		assertNotEmpty(a);
 
 		a.set(null);
 		assertFalse(a.isPresent());
-		assertTrue(a.isEmpty());
+		assertEmpty(a);
 	}
 
 	@Test

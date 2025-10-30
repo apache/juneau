@@ -4595,7 +4595,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		public Builder rootUrl(Object value) {
 			var s = s(value);
-			if (! isEmpty(s))
+			if (isNotEmpty(s))
 				s = s.replaceAll("\\/$", "");
 			if (isEmpty(s))
 				rootUrl = null;
@@ -6124,7 +6124,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		ignoreErrors = builder.ignoreErrors;
 		keepHttpClientOpen = builder.keepHttpClientOpen;
 		detectLeaks = builder.detectLeaks;
-		logger = nn(builder.logger) ? builder.logger : Logger.getLogger(RestClient.class.getName());
+		logger = nn(builder.logger) ? builder.logger : Logger.getLogger(cn(RestClient.class));
 		logToConsole = builder.logToConsole || isDebug();
 		logRequests = nn(builder.logRequests) ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
 		logRequestsLevel = nn(builder.logRequestsLevel) ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
