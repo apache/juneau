@@ -132,10 +132,10 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">public</strong> Builder add(Class&lt;?&gt;...values) {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			List&lt;Object&gt; l = list();
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; v : values)
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 				<strong class="jxr_keyword">if</strong> (scn(v).equals(<span class="jxr_string">"NoInherit"</span>))
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 					clear();
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; v : values) {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values) {
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 				<strong class="jxr_keyword">if</strong> (Encoder.<strong class="jxr_keyword">class</strong>.isAssignableFrom(v)) {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 					l.add(v);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! scn(v).equals(<span class="jxr_string">"NoInherit"</span>)) {
@@ -224,7 +224,7 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">public</strong> Builder set(Class&lt;?&gt;...values) {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 			List&lt;Object&gt; l = list();
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; v : values) {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values) {
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 				<strong class="jxr_keyword">if</strong> (scn(v).equals(<span class="jxr_string">"Inherit"</span>)) {
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 					l.addAll(entries);
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Encoder.<strong class="jxr_keyword">class</strong>.isAssignableFrom(v)) {
@@ -314,8 +314,8 @@
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		List&lt;String&gt; lc = list();
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		List&lt;Encoder&gt; l = list();
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">for</strong> (<a name="Encoder" href="../../../../org/apache/juneau/encoders/Encoder.html#Encoder">Encoder</a> e : entries) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">for</strong> (String c : e.getCodings()) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : entries) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : e.getCodings()) {
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 				lc.add(c);
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				l.add(e);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			}

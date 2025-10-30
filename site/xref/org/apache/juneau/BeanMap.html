@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<strong class="jxr_keyword">public</strong> BeanMap&lt;T&gt; forEachProperty(Predicate&lt;BeanPropertyMeta&gt; filter, Consumer&lt;BeanPropertyMeta&gt; action) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">for</strong> (BeanPropertyMeta bpm : meta.propertyArray)
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bpm : meta.propertyArray)
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">if</strong> (filter.test(bpm))
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 				action.accept(bpm);
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -400,7 +400,7 @@
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 		}
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<em class="jxr_comment">// Initialize any null Optional&lt;X&gt; fields.</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">for</strong> (BeanPropertyMeta pMeta : <strong class="jxr_keyword">this</strong>.meta.propertyArray) {
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pMeta : <strong class="jxr_keyword">this</strong>.meta.propertyArray) {
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 			ClassMeta&lt;?&gt; cm = pMeta.getClassMeta();
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">if</strong> (cm.isOptional() &amp;&amp; pMeta.get(<strong class="jxr_keyword">this</strong>, pMeta.getName()) == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 				pMeta.set(<strong class="jxr_keyword">this</strong>, pMeta.getName(), cm.getOptionalDefault());

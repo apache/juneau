@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap transform(RequestAttributes attrs) {
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> JsonMap();
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,Object&gt; e : attrs.asMap().entrySet()) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : attrs.asMap().entrySet()) {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 				<strong class="jxr_keyword">if</strong> (e.getKey().startsWith(<span class="jxr_string">"p"</span>))
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 					m.put(e.getKey(), e.getValue());
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			}

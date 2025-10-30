@@ -293,7 +293,7 @@
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 		assertBean(m, <span class="jxr_string">"a"</span>, <span class="jxr_string">"[{b=x}]"</span>);
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		m = JsonMap.ofJson(<span class="jxr_string">"{a:[{b:'c'}]}"</span>);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">for</strong> (JsonMap m3 : m.getList(<span class="jxr_string">"a"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m3 : m.getList(<span class="jxr_string">"a"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 			m3.put(<span class="jxr_string">"b"</span>, <span class="jxr_string">"y"</span>);
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertBean(m, <span class="jxr_string">"a"</span>, <span class="jxr_string">"[{b=y}]"</span>);

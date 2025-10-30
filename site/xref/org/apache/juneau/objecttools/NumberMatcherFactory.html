@@ -254,7 +254,7 @@
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			Number n = (Number)o;
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">if</strong> (numberRanges.length == 0)
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">for</strong> (NumberRange numberRange : numberRanges)
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> numberRange : numberRanges)
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				<strong class="jxr_keyword">if</strong> (numberRange.matches(n))
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">return</strong> false;

@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">protected</strong> RestClient getClient(String label, Serializer serializer, Parser parser, Consumer&lt;RestClient.Builder&gt;...postApply) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (! clients.containsKey(label)) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			RestClient.Builder b = SamplesMicroservice.client(serializer, parser);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">for</strong> (Consumer&lt;RestClient.Builder&gt; c : postApply)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : postApply)
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  				c.accept(b);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			clients.put(label, b.build());
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		}

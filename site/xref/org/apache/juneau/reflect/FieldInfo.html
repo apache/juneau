@@ -298,7 +298,7 @@
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if all specified flags are applicable to this field.</em>
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAll(ReflectFlags...flags) {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">for</strong> (<a name="ReflectFlags" href="../../../../org/apache/juneau/common/reflect/ReflectFlags.html#ReflectFlags">ReflectFlags</a> f : flags) {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : flags) {
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">switch</strong> (f) {
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 				<strong class="jxr_keyword">case</strong> DEPRECATED:
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 					<strong class="jxr_keyword">if</strong> (isNotDeprecated())
@@ -346,7 +346,7 @@
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if all specified flags are applicable to this field.</em>
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAny(ReflectFlags...flags) {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">for</strong> (<a name="ReflectFlags" href="../../../../org/apache/juneau/common/reflect/ReflectFlags.html#ReflectFlags">ReflectFlags</a> f : flags) {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : flags) {
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">switch</strong> (f) {
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 				<strong class="jxr_keyword">case</strong> DEPRECATED:
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 					<strong class="jxr_keyword">if</strong> (isDeprecated())

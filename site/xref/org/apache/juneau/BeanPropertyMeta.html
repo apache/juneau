@@ -971,7 +971,7 @@
 <a class="jxr_linenumber" name="L963" href="#L963">963</a> 		}
 <a class="jxr_linenumber" name="L964" href="#L964">964</a> 
 <a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<em class="jxr_comment">// Also check interfaces</em>
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; iface : declaringClass.getInterfaces()) {
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> iface : declaringClass.getInterfaces()) {
 <a class="jxr_linenumber" name="L967" href="#L967">967</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L968" href="#L968">968</a> 				Method ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
 <a class="jxr_linenumber" name="L969" href="#L969">969</a> 				parentMethods.add(ifaceMethod);
@@ -1326,7 +1326,7 @@
 <a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 					Object[] a = (Object[])o;
 <a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 					List l = <strong class="jxr_keyword">new</strong> <a name="DelegateList" href="../../../org/apache/juneau/internal/DelegateList.html#DelegateList">DelegateList</a>(rawTypeMeta);
 <a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 					ClassMeta childType = rawTypeMeta.getElementType();
-<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 					<strong class="jxr_keyword">for</strong> (Object c : a)
+<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : a)
 <a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 						l.add(applyChildPropertiesFilter(session, childType, c));
 <a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> 					<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rawTypeMeta.isCollection()) {

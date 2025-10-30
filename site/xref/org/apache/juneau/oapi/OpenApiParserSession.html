@@ -447,7 +447,7 @@
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 				<strong class="jxr_keyword">if</strong> (type.isBean()) {
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 					BeanMap&lt;T&gt; m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 					<strong class="jxr_keyword">for</strong> (String s : ss) {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : ss) {
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 						String[] kv = StringUtils.splita(s, '=', 2);
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 						<strong class="jxr_keyword">if</strong> (kv.length != 2)
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid input {0} for part type OBJECT."</span>, in);
@@ -471,7 +471,7 @@
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 					<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 						m = JsonMap.create();
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 					<strong class="jxr_keyword">for</strong> (String s : ss) {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : ss) {
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 						String[] kv = StringUtils.splita(s, '=', 2);
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 						<strong class="jxr_keyword">if</strong> (kv.length != 2)
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<span class="jxr_string">"Invalid input {0} for part type OBJECT."</span>, in);

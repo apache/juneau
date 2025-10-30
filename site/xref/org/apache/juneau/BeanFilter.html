@@ -164,7 +164,7 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">if</strong> (dictionary == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 				dictionary = list(values);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; cc : values)
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> cc : values)
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 					dictionary.add(cc);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		}
@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> excludeProperties(String...value) {
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">this</strong>.excludeProperties = set();
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">for</strong> (String v : value)
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : value)
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 				split(v, x -&gt; excludeProperties.add(x));
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		}
@@ -405,7 +405,7 @@
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> properties(String...value) {
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">this</strong>.properties = set();
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">for</strong> (String v : value)
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : value)
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 				split(v, x -&gt; properties.add(x));
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 		}
@@ -494,7 +494,7 @@
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> readOnlyProperties(String...value) {
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">this</strong>.readOnlyProperties = set();
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">for</strong> (String v : value)
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : value)
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 				split(v, x -&gt; readOnlyProperties.add(x));
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 		}
@@ -693,7 +693,7 @@
 <a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../org/apache/juneau/swap/Builder.html#Builder">Builder</a> writeOnlyProperties(String...value) {
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 			<strong class="jxr_keyword">this</strong>.writeOnlyProperties = set();
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 			<strong class="jxr_keyword">for</strong> (String v : value)
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : value)
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 				split(v, x -&gt; writeOnlyProperties.add(x));
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 		}

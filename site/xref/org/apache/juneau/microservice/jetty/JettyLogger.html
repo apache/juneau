@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">return</strong> msg;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">int</strong> start = 0;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">for</strong> (Object arg : args) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> arg : args) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">int</strong> bi = msg.indexOf(<span class="jxr_string">"{}"</span>, start);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">if</strong> (bi &lt; 0) {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  				sb.append(msg.substring(start)).append(<span class="jxr_string">" "</span>).append(arg);
@@ -561,7 +561,7 @@
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 		r.setLoggerName(logger.getName());
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">if</strong> (SHOW_SOURCE) {
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 			StackTraceElement[] stack = <strong class="jxr_keyword">new</strong> Throwable().getStackTrace();
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">for</strong> (StackTraceElement e : stack) {
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : stack) {
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 				<strong class="jxr_keyword">if</strong> (! e.getClassName().equals(getClass().getName())) {
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 					r.setSourceClassName(e.getClassName());
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 					r.setSourceMethodName(e.getMethodName());

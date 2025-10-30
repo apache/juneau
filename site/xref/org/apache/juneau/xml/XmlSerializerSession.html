@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		}
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">boolean</strong> isOneOf(JsonType...types) {
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">for</strong> (JsonType type : types)
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> type : types)
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 				<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">this</strong>)
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">return</strong> false;
@@ -314,7 +314,7 @@
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">if</strong> (ns == defaultNamespace)
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">for</strong> (<a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> n : namespaces)
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : namespaces)
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">if</strong> (n == ns)
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 
@@ -330,12 +330,12 @@
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">if</strong> (nn(n.name) &amp;&amp; nn(n.uri))
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">return</strong> n;
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">if</strong> (n.uri == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">for</strong> (<a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> n2 : getNamespaces())
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n2 : getNamespaces())
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 				<strong class="jxr_keyword">if</strong> (n2.name.equals(n.name))
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 					<strong class="jxr_keyword">return</strong> n2;
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		}
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">if</strong> (n.name == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">for</strong> (<a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> n2 : getNamespaces())
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n2 : getNamespaces())
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 				<strong class="jxr_keyword">if</strong> (n2.uri.equals(n.uri))
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 					<strong class="jxr_keyword">return</strong> n2;
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
@@ -390,7 +390,7 @@
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		Object content = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		ClassMeta&lt;?&gt; contentType = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">for</strong> (<a name="BeanPropertyValue" href="../../../../org/apache/juneau/BeanPropertyValue.html#BeanPropertyValue">BeanPropertyValue</a> p : lp) {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : lp) {
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 			String n = p.getName();
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">if</strong> (attrs.contains(n) || attrs.contains(<span class="jxr_string">"*"</span>) || n.equals(attrsProperty)) {
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 				BeanPropertyMeta pMeta = p.getMeta();
@@ -432,7 +432,7 @@
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">boolean</strong> hasContent = false, preserveWhitespace = false, isVoidElement = xbm.getContentFormat() == VOID;
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">for</strong> (<a name="BeanPropertyValue" href="../../../../org/apache/juneau/BeanPropertyValue.html#BeanPropertyValue">BeanPropertyValue</a> p : lp) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : lp) {
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 			BeanPropertyMeta pMeta = p.getMeta();
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">if</strong> (pMeta.canRead()) {
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 				ClassMeta&lt;?&gt; cMeta = p.getClassMeta();
@@ -480,7 +480,7 @@
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 			<strong class="jxr_keyword">if</strong> (contentType == <strong class="jxr_keyword">null</strong>) {} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (contentType.isCollection()) {
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 				Collection c = (Collection)content;
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 				<strong class="jxr_keyword">boolean</strong> previousWasTextNode = false;
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 				<strong class="jxr_keyword">for</strong> (Object value : c) {
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> value : c) {
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 					<strong class="jxr_keyword">boolean</strong> currentIsTextNode = isTextNode(value);
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 					<em class="jxr_comment">// Insert delimiter between consecutive text nodes</em>
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 					<strong class="jxr_keyword">if</strong> (previousWasTextNode &amp;&amp; currentIsTextNode &amp;&amp; nn(textNodeDelimiter) &amp;&amp; ! textNodeDelimiter.isEmpty()) {
@@ -492,7 +492,7 @@
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (contentType.isArray()) {
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 				Collection c = toList(Object[].<strong class="jxr_keyword">class</strong>, content);
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 				<strong class="jxr_keyword">boolean</strong> previousWasTextNode = false;
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 				<strong class="jxr_keyword">for</strong> (Object value : c) {
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> value : c) {
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 					<strong class="jxr_keyword">boolean</strong> currentIsTextNode = isTextNode(value);
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 					<em class="jxr_comment">// Insert delimiter between consecutive text nodes</em>
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 					<strong class="jxr_keyword">if</strong> (previousWasTextNode &amp;&amp; currentIsTextNode &amp;&amp; nn(textNodeDelimiter) &amp;&amp; ! textNodeDelimiter.isEmpty()) {
@@ -641,7 +641,7 @@
 <a class="jxr_linenumber" name="L633" href="#L633">633</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (aType.isCollection()) {
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 				((Collection&lt;?&gt;)o).forEach(<strong class="jxr_keyword">this</strong>::findNsfMappings);
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (aType.isArray() &amp;&amp; ! aType.getElementType().isPrimitive()) {
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 				<strong class="jxr_keyword">for</strong> (Object o2 : ((Object[])o))
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o2 : ((Object[])o))
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 					findNsfMappings(o2);
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 			}
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<strong class="jxr_keyword">if</strong> (nn(bm)) {
@@ -916,7 +916,7 @@
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 				<strong class="jxr_keyword">if</strong> (addNamespaceUris) {
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 					out.attr((String)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"xmlns"</span>, defaultNamespace.getUri());
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 					<strong class="jxr_keyword">for</strong> (<a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> n : namespaces)
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : namespaces)
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 						out.attr(<span class="jxr_string">"xmlns"</span>, n.getName(), n.getUri());
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 				}
 <a class="jxr_linenumber" name="L914" href="#L914">914</a> 				<strong class="jxr_keyword">if</strong> (! isExpectedType) {

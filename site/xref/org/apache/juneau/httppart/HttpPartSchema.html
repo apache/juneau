@@ -2488,7 +2488,7 @@
 <a class="jxr_linenumber" name="L2480" href="#L2480">2480</a> 		}
 <a class="jxr_linenumber" name="L2481" href="#L2481">2481</a> 
 <a class="jxr_linenumber" name="L2482" href="#L2482">2482</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Long firstNmo(Long...l) {
-<a class="jxr_linenumber" name="L2483" href="#L2483">2483</a> 			<strong class="jxr_keyword">for</strong> (Long ll : l)
+<a class="jxr_linenumber" name="L2483" href="#L2483">2483</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ll : l)
 <a class="jxr_linenumber" name="L2484" href="#L2484">2484</a> 				<strong class="jxr_keyword">if</strong> (nn(ll) &amp;&amp; ll != -1)
 <a class="jxr_linenumber" name="L2485" href="#L2485">2485</a> 					<strong class="jxr_keyword">return</strong> ll;
 <a class="jxr_linenumber" name="L2486" href="#L2486">2486</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -2517,7 +2517,7 @@
 <a class="jxr_linenumber" name="L2509" href="#L2509">2509</a> 		}
 <a class="jxr_linenumber" name="L2510" href="#L2510">2510</a> 
 <a class="jxr_linenumber" name="L2511" href="#L2511">2511</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String joinnlOrNull(String[]...s) {
-<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> 			<strong class="jxr_keyword">for</strong> (String[] ss : s)
+<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss : s)
 <a class="jxr_linenumber" name="L2513" href="#L2513">2513</a> 				<strong class="jxr_keyword">if</strong> (ss.length &gt; 0)
 <a class="jxr_linenumber" name="L2514" href="#L2514">2514</a> 					<strong class="jxr_keyword">return</strong> StringUtils.joinnl(ss);
 <a class="jxr_linenumber" name="L2515" href="#L2515">2515</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -3553,7 +3553,7 @@
 <a class="jxr_linenumber" name="L3545" href="#L3545">3545</a> 
 <a class="jxr_linenumber" name="L3546" href="#L3546">3546</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> Number toNumber(String...s) {
 <a class="jxr_linenumber" name="L3547" href="#L3547">3547</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L3548" href="#L3548">3548</a> 			<strong class="jxr_keyword">for</strong> (String ss : s)
+<a class="jxr_linenumber" name="L3548" href="#L3548">3548</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss : s)
 <a class="jxr_linenumber" name="L3549" href="#L3549">3549</a> 				<strong class="jxr_keyword">if</strong> (isNotEmpty(ss))
 <a class="jxr_linenumber" name="L3550" href="#L3550">3550</a> 					<strong class="jxr_keyword">return</strong> parseNumber(ss, Number.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L3551" href="#L3551">3551</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -3576,14 +3576,14 @@
 <a class="jxr_linenumber" name="L3568" href="#L3568">3568</a> 
 <a class="jxr_linenumber" name="L3569" href="#L3569">3569</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; toSet(String[]...s) {
 <a class="jxr_linenumber" name="L3570" href="#L3570">3570</a> 		<strong class="jxr_keyword">boolean</strong> isNotEmpty = false;
-<a class="jxr_linenumber" name="L3571" href="#L3571">3571</a> 		<strong class="jxr_keyword">for</strong> (String[] ss : s)
+<a class="jxr_linenumber" name="L3571" href="#L3571">3571</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss : s)
 <a class="jxr_linenumber" name="L3572" href="#L3572">3572</a> 			isNotEmpty |= ss.length &gt; 0;
 <a class="jxr_linenumber" name="L3573" href="#L3573">3573</a> 		<strong class="jxr_keyword">if</strong> (! isNotEmpty)
 <a class="jxr_linenumber" name="L3574" href="#L3574">3574</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L3575" href="#L3575">3575</a> 		Set&lt;String&gt; set = set();
-<a class="jxr_linenumber" name="L3576" href="#L3576">3576</a> 		<strong class="jxr_keyword">for</strong> (String[] ss : s)
+<a class="jxr_linenumber" name="L3576" href="#L3576">3576</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss : s)
 <a class="jxr_linenumber" name="L3577" href="#L3577">3577</a> 			<strong class="jxr_keyword">if</strong> (nn(ss))
-<a class="jxr_linenumber" name="L3578" href="#L3578">3578</a> 				<strong class="jxr_keyword">for</strong> (String ss2 : ss)
+<a class="jxr_linenumber" name="L3578" href="#L3578">3578</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss2 : ss)
 <a class="jxr_linenumber" name="L3579" href="#L3579">3579</a> 					StringUtils.split(ss2, x -&gt; set.add(x));
 <a class="jxr_linenumber" name="L3580" href="#L3580">3580</a> 		<strong class="jxr_keyword">return</strong> set.isEmpty() ? <strong class="jxr_keyword">null</strong> : set;
 <a class="jxr_linenumber" name="L3581" href="#L3581">3581</a> 	}
@@ -4430,7 +4430,7 @@
 <a class="jxr_linenumber" name="L4422" href="#L4422">4422</a> 		String[] parts = x.split(<span class="jxr_string">"&#92;&#92;."</span>);
 <a class="jxr_linenumber" name="L4423" href="#L4423">4423</a> 		<strong class="jxr_keyword">if</strong> (parts.length != 4)
 <a class="jxr_linenumber" name="L4424" href="#L4424">4424</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L4425" href="#L4425">4425</a> 		<strong class="jxr_keyword">for</strong> (String part : parts) {
+<a class="jxr_linenumber" name="L4425" href="#L4425">4425</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> part : parts) {
 <a class="jxr_linenumber" name="L4426" href="#L4426">4426</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L4427" href="#L4427">4427</a> 				<strong class="jxr_keyword">int</strong> val = Integer.parseInt(part);
 <a class="jxr_linenumber" name="L4428" href="#L4428">4428</a> 				<strong class="jxr_keyword">if</strong> (val &lt; 0 || val &gt; 255)
@@ -4595,7 +4595,7 @@
 <a class="jxr_linenumber" name="L4587" href="#L4587">4587</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidUniqueItems(Collection&lt;?&gt; x) {
 <a class="jxr_linenumber" name="L4588" href="#L4588">4588</a> 		<strong class="jxr_keyword">if</strong> (uniqueItems &amp;&amp; ! (x instanceof Set)) {
 <a class="jxr_linenumber" name="L4589" href="#L4589">4589</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L4590" href="#L4590">4590</a> 			<strong class="jxr_keyword">for</strong> (Object o : x)
+<a class="jxr_linenumber" name="L4590" href="#L4590">4590</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : x)
 <a class="jxr_linenumber" name="L4591" href="#L4591">4591</a> 				<strong class="jxr_keyword">if</strong> (! s.add(o))
 <a class="jxr_linenumber" name="L4592" href="#L4592">4592</a> 					<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L4593" href="#L4593">4593</a> 		}

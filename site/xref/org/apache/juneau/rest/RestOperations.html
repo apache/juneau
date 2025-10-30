@@ -134,7 +134,7 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">public</strong> <a name="RestOperations" href="../../../../org/apache/juneau/rest/RestOperations.html#RestOperations">RestOperations</a>(Builder builder) {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		Map&lt;String,List&lt;RestOpContext&gt;&gt; m = map();
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,TreeSet&lt;RestOpContext&gt;&gt; e : builder.map.entrySet())
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : builder.map.entrySet())
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			m.put(e.getKey(), toList(e.getValue()));
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">this</strong>.map = m;
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">this</strong>.list = array(builder.set, RestOpContext.<strong class="jxr_keyword">class</strong>);
@@ -154,7 +154,7 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">int</strong> rc = 0;
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">if</strong> (map.containsKey(m)) {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> oc : map.get(m)) {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> oc : map.get(m)) {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<strong class="jxr_keyword">int</strong> mrc = oc.match(session);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				<strong class="jxr_keyword">if</strong> (mrc == 2)
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 					<strong class="jxr_keyword">return</strong> oc;
@@ -163,7 +163,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		}
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">if</strong> (map.containsKey(<span class="jxr_string">"*"</span>)) {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> oc : map.get(<span class="jxr_string">"*"</span>)) {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> oc : map.get(<span class="jxr_string">"*"</span>)) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 				<strong class="jxr_keyword">int</strong> mrc = oc.match(session);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				<strong class="jxr_keyword">if</strong> (mrc == 2)
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 					<strong class="jxr_keyword">return</strong> oc;
@@ -174,7 +174,7 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<em class="jxr_comment">// If no paths matched, see if the path matches any other methods.</em>
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<em class="jxr_comment">// Note that we don't want to match against "/*" patterns such as getOptions().</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">if</strong> (rc == 0) {
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> oc : list) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> oc : list) {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 				<strong class="jxr_keyword">if</strong> (! oc.getPathPattern().endsWith(<span class="jxr_string">"/*"</span>)) {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 					<strong class="jxr_keyword">int</strong> orc = oc.match(session);
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 					<strong class="jxr_keyword">if</strong> (orc == 2)

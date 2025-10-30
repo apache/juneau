@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 					<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			}
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; icm : cm.innerClass.getInterfaces()) {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> icm : cm.innerClass.getInterfaces()) {
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 				String s = findDictionaryName(ctx.getClassMeta(icm));
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 				<strong class="jxr_keyword">if</strong> (nn(s))
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 					<strong class="jxr_keyword">return</strong> s;
@@ -356,7 +356,7 @@
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 					<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 						bi = Introspector.getBeanInfo(c2, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 					<strong class="jxr_keyword">if</strong> (nn(bi)) {
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 						<strong class="jxr_keyword">for</strong> (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pd : bi.getPropertyDescriptors()) {
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 							String name = pd.getName();
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 							<strong class="jxr_keyword">if</strong> (! normalProps.containsKey(name))
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
@@ -452,7 +452,7 @@
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 				});
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 				<em class="jxr_comment">// Mark constructor arg properties.</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">for</strong> (String fp : constructorArgs) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> fp : constructorArgs) {
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 					BeanPropertyMeta.Builder m = normalProps.get(fp);
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 					<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"The property ''{0}'' was defined on the @Beanc(properties=X) annotation but was not found on the class definition."</span>, fp);
@@ -516,7 +516,7 @@
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 				<strong class="jxr_keyword">if</strong> (nn(pNames)) {
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 					Map&lt;String,BeanPropertyMeta&gt; properties2 = map();
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 					<strong class="jxr_keyword">for</strong> (String k : pNames) {
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : pNames) {
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 						<strong class="jxr_keyword">if</strong> (properties.containsKey(k))
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 							properties2.put(k, properties.get(k));
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 						<strong class="jxr_keyword">else</strong>
@@ -600,7 +600,7 @@
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 		List&lt;BeanMethod&gt; l = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 		forEachClass(ClassInfo.of(c), stopClass, c2 -&gt; {
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m : c2.getDeclaredMethods()) {
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : c2.getDeclaredMethods()) {
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 				<strong class="jxr_keyword">if</strong> (m.isStatic() || m.isBridge() || m.getParamCount() &gt; 2 || m.hasAnnotation(ctx, BeanIgnore.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 					<strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 				Transient t = m.getAnnotation(ctx, Transient.<strong class="jxr_keyword">class</strong>);
@@ -761,7 +761,7 @@
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> findTypeVarImpls(Type t, Map&lt;Class&lt;?&gt;,Class&lt;?&gt;[]&gt; m) {
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">if</strong> (t instanceof Class&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 			findTypeVarImpls(c.getGenericSuperclass(), m);
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">for</strong> (Type ci : c.getGenericInterfaces())
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ci : c.getGenericInterfaces())
 <a class="jxr_linenumber" name="L757" href="#L757">757</a> 				findTypeVarImpls(ci, m);
 <a class="jxr_linenumber" name="L758" href="#L758">758</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t instanceof ParameterizedType pt) {
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> 			Type rt = pt.getRawType();
@@ -773,7 +773,7 @@
 <a class="jxr_linenumber" name="L765" href="#L765">765</a> 					<strong class="jxr_keyword">if</strong> (gt instanceof Class&lt;?&gt; c)
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 						gTypes[i] = c;
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (gt instanceof TypeVariable&lt;?&gt; tv) {
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 						<strong class="jxr_keyword">for</strong> (Type upperBound : tv.getBounds())
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> upperBound : tv.getBounds())
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> 							<strong class="jxr_keyword">if</strong> (upperBound instanceof Class)
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> 								gTypes[i] = (Class&lt;?&gt;)upperBound;
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 					}
@@ -810,7 +810,7 @@
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<strong class="jxr_keyword">while</strong> (nn(sc) &amp;&amp; ! sc.is(stopClass) &amp;&amp; ! sc.is(Object.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 			<em class="jxr_comment">// Look for a method with the same signature in the parent class</em>
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 			<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> parentMethod : sc.getDeclaredMethods()) {
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> parentMethod : sc.getDeclaredMethods()) {
 <a class="jxr_linenumber" name="L806" href="#L806">806</a> 				<strong class="jxr_keyword">if</strong> (parentMethod.getSimpleName().equals(methodName) &amp;&amp; paramTypes.size() == parentMethod.getParamTypes().size()) {
 <a class="jxr_linenumber" name="L807" href="#L807">807</a> 
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 					<em class="jxr_comment">// Check if parameter types match</em>
@@ -939,7 +939,7 @@
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 * @return The result of the function.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L932" href="#L932">932</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 	<strong class="jxr_keyword">public</strong> &lt;T2&gt; Optional&lt;T2&gt; firstProperty(Predicate&lt;BeanPropertyMeta&gt; filter, Function&lt;BeanPropertyMeta,T2&gt; function) {
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		<strong class="jxr_keyword">for</strong> (BeanPropertyMeta x : propertyArray)
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : propertyArray)
 <a class="jxr_linenumber" name="L935" href="#L935">935</a> 			<strong class="jxr_keyword">if</strong> (test(filter, x))
 <a class="jxr_linenumber" name="L936" href="#L936">936</a> 				<strong class="jxr_keyword">return</strong> Optional.ofNullable(function.apply(x));
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 		<strong class="jxr_keyword">return</strong> Optional.empty();
@@ -952,7 +952,7 @@
 <a class="jxr_linenumber" name="L944" href="#L944">944</a> <em class="jxr_javadoccomment">	 * @param action The action to apply.</em>
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> forEachProperty(Predicate&lt;BeanPropertyMeta&gt; filter, Consumer&lt;BeanPropertyMeta&gt; action) {
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<strong class="jxr_keyword">for</strong> (BeanPropertyMeta x : propertyArray)
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : propertyArray)
 <a class="jxr_linenumber" name="L948" href="#L948">948</a> 			<strong class="jxr_keyword">if</strong> (test(filter, x))
 <a class="jxr_linenumber" name="L949" href="#L949">949</a> 				action.accept(x);
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> 	}
@@ -1040,7 +1040,7 @@
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(c.getName());
 <a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		sb.append(<span class="jxr_string">" {\n"</span>);
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		<strong class="jxr_keyword">for</strong> (BeanPropertyMeta pm : propertyArray)
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pm : propertyArray)
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 			sb.append('\t').append(pm.toString()).append(<span class="jxr_string">",\n"</span>);
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 		sb.append('}');
 <a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 		<strong class="jxr_keyword">return</strong> sb.toString();

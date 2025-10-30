@@ -165,7 +165,7 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<strong class="jxr_keyword">public</strong> <a name="StringRanges" href="../../../org/apache/juneau/StringRanges.html#StringRanges">StringRanges</a> forEachRange(Consumer&lt;StringRange&gt; action) {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">for</strong> (<a name="StringRange" href="../../../org/apache/juneau/StringRange.html#StringRange">StringRange</a> r : value)
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : value)
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			action.accept(r);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<em class="jxr_comment">// Media ranges are ordered by 'q'.</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<em class="jxr_comment">// So we only need to search until we've found a match.</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">for</strong> (<a name="StringRange" href="../../../org/apache/juneau/StringRange.html#StringRange">StringRange</a> mr : value) {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mr : value) {
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">float</strong> q2 = mr.getQValue();
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">if</strong> (q2 &lt; q || q2 == 0)

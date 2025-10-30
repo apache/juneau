@@ -2898,7 +2898,7 @@
 <a class="jxr_linenumber" name="L2890" href="#L2890">2890</a> <em class="jxr_javadoccomment">		 * @throws Exception If one or more interceptors could not be created.</em>
 <a class="jxr_linenumber" name="L2891" href="#L2891">2891</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2892" href="#L2892">2892</a> 		<strong class="jxr_keyword">public</strong> Builder interceptors(Class&lt;?&gt;...values) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L2893" href="#L2893">2893</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : values) {
+<a class="jxr_linenumber" name="L2893" href="#L2893">2893</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : values) {
 <a class="jxr_linenumber" name="L2894" href="#L2894">2894</a> 				ClassInfo ci = ClassInfo.of(c);
 <a class="jxr_linenumber" name="L2895" href="#L2895">2895</a> 				<strong class="jxr_keyword">if</strong> (nn(ci)) {
 <a class="jxr_linenumber" name="L2896" href="#L2896">2896</a> 					<strong class="jxr_keyword">if</strong> (ci.isChildOfAny(RestCallInterceptor.<strong class="jxr_keyword">class</strong>, HttpRequestInterceptor.<strong class="jxr_keyword">class</strong>, HttpResponseInterceptor.<strong class="jxr_keyword">class</strong>))
@@ -2961,7 +2961,7 @@
 <a class="jxr_linenumber" name="L2953" href="#L2953">2953</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L2954" href="#L2954">2954</a> 		<strong class="jxr_keyword">public</strong> Builder interceptors(Object...value) {
 <a class="jxr_linenumber" name="L2955" href="#L2955">2955</a> 			List&lt;RestCallInterceptor&gt; l = list();
-<a class="jxr_linenumber" name="L2956" href="#L2956">2956</a> 			<strong class="jxr_keyword">for</strong> (Object o : value) {
+<a class="jxr_linenumber" name="L2956" href="#L2956">2956</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : value) {
 <a class="jxr_linenumber" name="L2957" href="#L2957">2957</a> 				ClassInfo ci = ClassInfo.of(o);
 <a class="jxr_linenumber" name="L2958" href="#L2958">2958</a> 				<strong class="jxr_keyword">if</strong> (nn(ci)) {
 <a class="jxr_linenumber" name="L2959" href="#L2959">2959</a> 					<strong class="jxr_keyword">if</strong> (! ci.isChildOfAny(HttpRequestInterceptor.<strong class="jxr_keyword">class</strong>, HttpResponseInterceptor.<strong class="jxr_keyword">class</strong>, RestCallInterceptor.<strong class="jxr_keyword">class</strong>))
@@ -3328,7 +3328,7 @@
 <a class="jxr_linenumber" name="L3320" href="#L3320">3320</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L3321" href="#L3321">3321</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L3322" href="#L3322">3322</a> 		<strong class="jxr_keyword">public</strong> Builder marshallers(Marshaller...value) {
-<a class="jxr_linenumber" name="L3323" href="#L3323">3323</a> 			<strong class="jxr_keyword">for</strong> (<a name="Marshaller" href="../../../../../org/apache/juneau/marshaller/Marshaller.html#Marshaller">Marshaller</a> m : value)
+<a class="jxr_linenumber" name="L3323" href="#L3323">3323</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : value)
 <a class="jxr_linenumber" name="L3324" href="#L3324">3324</a> 				<strong class="jxr_keyword">if</strong> (nn(m))
 <a class="jxr_linenumber" name="L3325" href="#L3325">3325</a> 					serializer(m.getSerializer()).parser(m.getParser());
 <a class="jxr_linenumber" name="L3326" href="#L3326">3326</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -6936,7 +6936,7 @@
 <a class="jxr_linenumber" name="L6928" href="#L6928">6928</a> 					RequestBeanMeta rbm = rmba.getMeta();
 <a class="jxr_linenumber" name="L6929" href="#L6929">6929</a> 					<strong class="jxr_keyword">var</strong> bean = args[rmba.getIndex()];
 <a class="jxr_linenumber" name="L6930" href="#L6930">6930</a> 					<strong class="jxr_keyword">if</strong> (nn(bean)) {
-<a class="jxr_linenumber" name="L6931" href="#L6931">6931</a> 						<strong class="jxr_keyword">for</strong> (<a name="RequestBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#RequestBeanPropertyMeta">RequestBeanPropertyMeta</a> p : rbm.getProperties()) {
+<a class="jxr_linenumber" name="L6931" href="#L6931">6931</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : rbm.getProperties()) {
 <a class="jxr_linenumber" name="L6932" href="#L6932">6932</a> 							<strong class="jxr_keyword">var</strong> val = safeSupplier(() -&gt; p.getGetter().invoke(bean));
 <a class="jxr_linenumber" name="L6933" href="#L6933">6933</a> 							<strong class="jxr_keyword">var</strong> pt = p.getPartType();
 <a class="jxr_linenumber" name="L6934" href="#L6934">6934</a> 							<strong class="jxr_keyword">var</strong> pn = p.getPartName();
@@ -7112,7 +7112,7 @@
 <a class="jxr_linenumber" name="L7104" href="#L7104">7104</a> 					}
 <a class="jxr_linenumber" name="L7105" href="#L7105">7105</a> 					<strong class="jxr_keyword">if</strong> (e instanceof RuntimeException)
 <a class="jxr_linenumber" name="L7106" href="#L7106">7106</a> 						<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L7107" href="#L7107">7107</a> 					<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; t2 : method.getExceptionTypes())
+<a class="jxr_linenumber" name="L7107" href="#L7107">7107</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t2 : method.getExceptionTypes())
 <a class="jxr_linenumber" name="L7108" href="#L7108">7108</a> 						<strong class="jxr_keyword">if</strong> (t2.isInstance(e))
 <a class="jxr_linenumber" name="L7109" href="#L7109">7109</a> 							<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L7110" href="#L7110">7110</a> 					<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
@@ -7595,7 +7595,7 @@
 <a class="jxr_linenumber" name="L7587" href="#L7587">7587</a> 			StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"WARNING:  RestClient garbage collected before it was finalized."</span>);  <em class="jxr_comment">// NOT DEBUG</em>
 <a class="jxr_linenumber" name="L7588" href="#L7588">7588</a> 			<strong class="jxr_keyword">if</strong> (nn(creationStack)) {
 <a class="jxr_linenumber" name="L7589" href="#L7589">7589</a> 				sb.append(<span class="jxr_string">"\nCreation Stack:"</span>);  <em class="jxr_comment">// NOT DEBUG</em>
-<a class="jxr_linenumber" name="L7590" href="#L7590">7590</a> 				<strong class="jxr_keyword">for</strong> (StackTraceElement e : creationStack)
+<a class="jxr_linenumber" name="L7590" href="#L7590">7590</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : creationStack)
 <a class="jxr_linenumber" name="L7591" href="#L7591">7591</a> 					sb.append(<span class="jxr_string">"\n\t"</span> + e);  <em class="jxr_comment">// NOT DEBUG</em>
 <a class="jxr_linenumber" name="L7592" href="#L7592">7592</a> 			}
 <a class="jxr_linenumber" name="L7593" href="#L7593">7593</a> 			log(WARNING, sb.toString());
@@ -7736,7 +7736,7 @@
 <a class="jxr_linenumber" name="L7728" href="#L7728">7728</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L7729" href="#L7729">7729</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> onCallClose(<a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/client/RestResponse.html#RestResponse">RestResponse</a> res) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L7730" href="#L7730">7730</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L7731" href="#L7731">7731</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestCallInterceptor" href="../../../../../org/apache/juneau/rest/client/RestCallInterceptor.html#RestCallInterceptor">RestCallInterceptor</a> rci : interceptors)
+<a class="jxr_linenumber" name="L7731" href="#L7731">7731</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rci : interceptors)
 <a class="jxr_linenumber" name="L7732" href="#L7732">7732</a> 				rci.onClose(req, res);
 <a class="jxr_linenumber" name="L7733" href="#L7733">7733</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException | <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> e) {
 <a class="jxr_linenumber" name="L7734" href="#L7734">7734</a> 			<strong class="jxr_keyword">throw</strong> e;
@@ -7761,7 +7761,7 @@
 <a class="jxr_linenumber" name="L7753" href="#L7753">7753</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L7754" href="#L7754">7754</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> onCallConnect(<a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/client/RestResponse.html#RestResponse">RestResponse</a> res) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L7755" href="#L7755">7755</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L7756" href="#L7756">7756</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestCallInterceptor" href="../../../../../org/apache/juneau/rest/client/RestCallInterceptor.html#RestCallInterceptor">RestCallInterceptor</a> rci : interceptors)
+<a class="jxr_linenumber" name="L7756" href="#L7756">7756</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rci : interceptors)
 <a class="jxr_linenumber" name="L7757" href="#L7757">7757</a> 				rci.onConnect(req, res);
 <a class="jxr_linenumber" name="L7758" href="#L7758">7758</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException | <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> e) {
 <a class="jxr_linenumber" name="L7759" href="#L7759">7759</a> 			<strong class="jxr_keyword">throw</strong> e;
@@ -7785,7 +7785,7 @@
 <a class="jxr_linenumber" name="L7777" href="#L7777">7777</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L7778" href="#L7778">7778</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> onCallInit(<a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> req) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L7779" href="#L7779">7779</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L7780" href="#L7780">7780</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestCallInterceptor" href="../../../../../org/apache/juneau/rest/client/RestCallInterceptor.html#RestCallInterceptor">RestCallInterceptor</a> rci : interceptors)
+<a class="jxr_linenumber" name="L7780" href="#L7780">7780</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rci : interceptors)
 <a class="jxr_linenumber" name="L7781" href="#L7781">7781</a> 				rci.onInit(req);
 <a class="jxr_linenumber" name="L7782" href="#L7782">7782</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException | <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> e) {
 <a class="jxr_linenumber" name="L7783" href="#L7783">7783</a> 			<strong class="jxr_keyword">throw</strong> e;
@@ -7914,7 +7914,7 @@
 <a class="jxr_linenumber" name="L7906" href="#L7906">7906</a> 			Throwable t = e.getCause();
 <a class="jxr_linenumber" name="L7907" href="#L7907">7907</a> 			<strong class="jxr_keyword">if</strong> (t instanceof RuntimeException)
 <a class="jxr_linenumber" name="L7908" href="#L7908">7908</a> 				<strong class="jxr_keyword">throw</strong> t;
-<a class="jxr_linenumber" name="L7909" href="#L7909">7909</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; t2 : method.getExceptionTypes())
+<a class="jxr_linenumber" name="L7909" href="#L7909">7909</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t2 : method.getExceptionTypes())
 <a class="jxr_linenumber" name="L7910" href="#L7910">7910</a> 				<strong class="jxr_keyword">if</strong> (t2.isInstance(t))
 <a class="jxr_linenumber" name="L7911" href="#L7911">7911</a> 					<strong class="jxr_keyword">throw</strong> t;
 <a class="jxr_linenumber" name="L7912" href="#L7912">7912</a> 			<strong class="jxr_keyword">throw</strong> toRuntimeException(e);

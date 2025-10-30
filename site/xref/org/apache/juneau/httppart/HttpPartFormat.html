@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this format is in the provided list.</em>
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isOneOf(HttpPartFormat...list) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">for</strong> (<a name="HttpPartFormat" href="../../../../org/apache/juneau/httppart/HttpPartFormat.html#HttpPartFormat">HttpPartFormat</a> ff : list)
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ff : list)
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == ff)
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">return</strong> false;

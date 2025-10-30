@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkXmlWhitespace(String out) <strong class="jxr_keyword">throws</strong> SerializeException {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">if</strong> (out.indexOf('\u0000') != -1) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">for</strong> (String s : out.split(<span class="jxr_string">"\u0000"</span>))
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : out.split(<span class="jxr_string">"\u0000"</span>))
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  				checkXmlWhitespace(s);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		}
@@ -250,7 +250,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> assertContains(Object value, String...substrings) {
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">for</strong> (String substring : substrings)
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> substring : substrings)
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">if</strong> (! contains(toString(value), substring)) {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 				System.err.println(<span class="jxr_string">"Text did not contain expected substring: '"</span> + toString(substring) + <span class="jxr_string">"'"</span>);  <em class="jxr_comment">// NOT DEBUG</em>
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 				System.err.println(<span class="jxr_string">"=== TEXT ==="</span>);  <em class="jxr_comment">// NOT DEBUG</em>

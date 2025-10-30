@@ -177,7 +177,7 @@
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> append(Header...values) {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">if</strong> (nn(values))
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<strong class="jxr_keyword">for</strong> (Header value : values)
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> value : values)
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 				<strong class="jxr_keyword">if</strong> (nn(value))
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 					append(value);
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -355,7 +355,7 @@
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 		Header first = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 		List&lt;Header&gt; <strong class="jxr_keyword">rest</strong> = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">for</strong> (Header x : <strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : <strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name)) {
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 				<strong class="jxr_keyword">if</strong> (first == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 					first = x;
@@ -375,7 +375,7 @@
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> CharArrayBuffer(128);
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		sb.append(first.getValue());
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">for</strong> (Header element : <strong class="jxr_keyword">rest</strong>) {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> element : <strong class="jxr_keyword">rest</strong>) {
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 			sb.append(<span class="jxr_string">", "</span>);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			sb.append(element.getValue());
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		}
@@ -413,7 +413,7 @@
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		Header first = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 		List&lt;Header&gt; <strong class="jxr_keyword">rest</strong> = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">for</strong> (Header x : <strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : <strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">if</strong> (eq(x.getName(), name)) {
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 				<strong class="jxr_keyword">if</strong> (first == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 					first = x;
@@ -433,7 +433,7 @@
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> CharArrayBuffer(128);
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		sb.append(first.getValue());
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">for</strong> (Header element : <strong class="jxr_keyword">rest</strong>) {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> element : <strong class="jxr_keyword">rest</strong>) {
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 			sb.append(<span class="jxr_string">", "</span>);
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 			sb.append(element.getValue());
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 		}
@@ -629,7 +629,7 @@
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> remove(Header...values) {
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">for</strong> (Header value : values)
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> value : values)
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> 			remove(value);
 <a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L627" href="#L627">627</a> 	}
@@ -665,7 +665,7 @@
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> remove(String...names) {
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">if</strong> (nn(names))
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			<strong class="jxr_keyword">for</strong> (String name : names)
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : names)
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 				remove(name);
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 	}
@@ -785,7 +785,7 @@
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> set(List&lt;Header&gt; values) {
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">if</strong> (nn(values)) {
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 			<strong class="jxr_keyword">for</strong> (Header h : values) {
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : values) {
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 				<strong class="jxr_keyword">if</strong> (nn(h)) {
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i2 = 0, j2 = size(); i2 &lt; j2; i2++) {
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 						<strong class="jxr_keyword">var</strong> x = get(i2);
@@ -797,7 +797,7 @@
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> 				}
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 			}
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">for</strong> (Header x : values) {
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : values) {
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 				<strong class="jxr_keyword">if</strong> (nn(x)) {
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 					add(x);
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 				}

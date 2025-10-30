@@ -461,7 +461,7 @@
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 					<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 						sb.append(sb.length() == 0 ? <span class="jxr_string">""</span> : <span class="jxr_string">"&amp;"</span>).append(urlEncode(k));
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 					<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 						<strong class="jxr_keyword">for</strong> (String v2 : v)
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v2 : v)
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 							sb.append(sb.length() == 0 ? <span class="jxr_string">""</span> : <span class="jxr_string">"&amp;"</span>).append(urlEncode(k)).append('=').append(urlEncode(v2));
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 				});
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 				queryString = sb.toString();

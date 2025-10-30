@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		Class&lt;?&gt;[] classes = a(StringUtils.<strong class="jxr_keyword">class</strong>, ClassUtils2.<strong class="jxr_keyword">class</strong>, CollectionUtils.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : classes) {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : classes) {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  			<strong class="jxr_keyword">var</strong> c1 = c.getDeclaredConstructor();
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  			c1.setAccessible(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  			c1.newInstance();

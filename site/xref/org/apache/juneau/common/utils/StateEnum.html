@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the state is any one of the specified states.</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAny(StateEnum...states) {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">for</strong> (<a name="StateEnum" href="../../../../../org/apache/juneau/common/utils/StateEnum.html#StateEnum">StateEnum</a> s : states)
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : states)
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == s)
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">return</strong> false;

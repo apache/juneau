@@ -450,7 +450,7 @@
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> appendFirst(Predicate&lt;T&gt; test, String key, T...values) {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">for</strong> (T v : values)
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">if</strong> (test(test, v))
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">return</strong> append(key, v);
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -719,7 +719,7 @@
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 		JsonMap m2 = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">this</strong>.forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 			<strong class="jxr_keyword">boolean</strong> exclude = false;
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 			<strong class="jxr_keyword">for</strong> (String kk : keys)
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> kk : keys)
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> 				<strong class="jxr_keyword">if</strong> (kk.equals(k))
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 					exclude = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 			<strong class="jxr_keyword">if</strong> (! exclude)
@@ -783,7 +783,7 @@
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">	 * @return The value of the first entry whose key exists, or &lt;jk&gt;null&lt;/jk&gt; if none of the keys exist in this map.</em>
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T find(Class&lt;T&gt; type, String...keys) {
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<strong class="jxr_keyword">for</strong> (String key : keys)
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> key : keys)
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 			<strong class="jxr_keyword">if</strong> (containsKey(key))
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 				<strong class="jxr_keyword">return</strong> get(key, type);
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -796,7 +796,7 @@
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">	 * @return The value of the first entry whose key exists, or &lt;jk&gt;null&lt;/jk&gt; if none of the keys exist in this map.</em>
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<strong class="jxr_keyword">public</strong> Object find(String...keys) {
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">for</strong> (String key : keys)
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> key : keys)
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">if</strong> (containsKey(key))
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 				<strong class="jxr_keyword">return</strong> get(key);
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -843,7 +843,7 @@
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> <em class="jxr_javadoccomment">	 * @return The key, or &lt;jk&gt;null&lt;/jk&gt; if map does not contain this key.</em>
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> 	<strong class="jxr_keyword">public</strong> String findKeyIgnoreCase(String key) {
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> 		<strong class="jxr_keyword">for</strong> (String k : keySet())
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : keySet())
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> 			<strong class="jxr_keyword">if</strong> (key.equalsIgnoreCase(k))
 <a class="jxr_linenumber" name="L840" href="#L840">840</a> 				<strong class="jxr_keyword">return</strong> k;
 <a class="jxr_linenumber" name="L841" href="#L841">841</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -1440,7 +1440,7 @@
 <a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> include(String...keys) {
 <a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 		JsonMap m2 = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 		<strong class="jxr_keyword">this</strong>.forEach((k, v) -&gt; {
-<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 			<strong class="jxr_keyword">for</strong> (String kk : keys)
+<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> kk : keys)
 <a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 				<strong class="jxr_keyword">if</strong> (kk.equals(k))
 <a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> 					m2.put(kk, v);
 <a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 		});
@@ -1495,7 +1495,7 @@
 <a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> 		<strong class="jxr_keyword">for</strong> (Iterator&lt;String&gt; i = keySet().iterator(); i.hasNext();) {
 <a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> 			<strong class="jxr_keyword">boolean</strong> remove = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> 			String key = i.next();
-<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 			<strong class="jxr_keyword">for</strong> (String k : keys) {
+<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : keys) {
 <a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 				<strong class="jxr_keyword">if</strong> (k.equals(key)) {
 <a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 					remove = false;
 <a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 					<strong class="jxr_keyword">break</strong>;
@@ -1621,7 +1621,7 @@
 <a class="jxr_linenumber" name="L1613" href="#L1613">1613</a> <em class="jxr_javadoccomment">	 * @param keys The list of keys to remove.</em>
 <a class="jxr_linenumber" name="L1614" href="#L1614">1614</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1615" href="#L1615">1615</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeAll(String...keys) {
-<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> 		<strong class="jxr_keyword">for</strong> (String k : keys)
+<a class="jxr_linenumber" name="L1616" href="#L1616">1616</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : keys)
 <a class="jxr_linenumber" name="L1617" href="#L1617">1617</a> 			remove(k);
 <a class="jxr_linenumber" name="L1618" href="#L1618">1618</a> 	}
 <a class="jxr_linenumber" name="L1619" href="#L1619">1619</a> 

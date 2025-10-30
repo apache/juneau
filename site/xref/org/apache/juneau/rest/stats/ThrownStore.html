@@ -280,7 +280,7 @@
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> hash(Throwable t) {
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">long</strong> h = 1125899906842597L; <em class="jxr_comment">// prime</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">for</strong> (String s : createStackTrace(t)) {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : createStackTrace(t)) {
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">int</strong> len = s.length();
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; len; i++)
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 				h = 31 * h + s.charAt(i);

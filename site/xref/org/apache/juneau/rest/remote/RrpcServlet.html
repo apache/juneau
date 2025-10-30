@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	)
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> List&lt;LinkString&gt; getInterfaces() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		List&lt;LinkString&gt; l = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : getServiceMap().keySet())
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : getServiceMap().keySet())
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			l.add(<strong class="jxr_keyword">new</strong> <a name="LinkString" href="../../../../../org/apache/juneau/bean/LinkString.html#LinkString">LinkString</a>(c.getName(), <span class="jxr_string">"servlet:/{0}"</span>, urlEncode(c.getName())));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		List&lt;LinkString&gt; l = list();
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">for</strong> (String s : getMethods(javaInterface).keySet())
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : getMethods(javaInterface).keySet())
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			l.add(<strong class="jxr_keyword">new</strong> <a name="LinkString" href="../../../../../org/apache/juneau/bean/LinkString.html#LinkString">LinkString</a>(s, <span class="jxr_string">"servlet:/{0}/{1}"</span>, urlEncode(javaInterface), urlEncode(s)));
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">private</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a> getInterfaceClass(String javaInterface) <strong class="jxr_keyword">throws</strong> NotFound, Exception {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		RrpcInterfaceMeta rm = serviceMap.get(javaInterface);
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">if</strong> (rm == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : getServiceMap().keySet()) {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : getServiceMap().keySet()) {
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 				<strong class="jxr_keyword">if</strong> (c.getName().equals(javaInterface)) {
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 					rm = <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a>(c, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 					serviceMap.put(javaInterface, rm);

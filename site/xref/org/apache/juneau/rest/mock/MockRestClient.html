@@ -2088,7 +2088,7 @@
 <a class="jxr_linenumber" name="L2080" href="#L2080">2080</a> 
 <a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> 			HttpResponse response = <strong class="jxr_keyword">new</strong> BasicHttpResponse(<strong class="jxr_keyword">new</strong> BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
 <a class="jxr_linenumber" name="L2082" href="#L2082">2082</a> 			res.getHeaders().forEach((k, v) -&gt; {
-<a class="jxr_linenumber" name="L2083" href="#L2083">2083</a> 				<strong class="jxr_keyword">for</strong> (String hv : v)
+<a class="jxr_linenumber" name="L2083" href="#L2083">2083</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> hv : v)
 <a class="jxr_linenumber" name="L2084" href="#L2084">2084</a> 					response.addHeader(k, hv);
 <a class="jxr_linenumber" name="L2085" href="#L2085">2085</a> 			});
 <a class="jxr_linenumber" name="L2086" href="#L2086">2086</a> 
@@ -2156,7 +2156,7 @@
 <a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> 			MockServletRequest r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
 <a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 				.debug(isDebug());
 <a class="jxr_linenumber" name="L2150" href="#L2150">2150</a> 
-<a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> 			<strong class="jxr_keyword">for</strong> (Header h : request.getAllHeaders())
+<a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : request.getAllHeaders())
 <a class="jxr_linenumber" name="L2152" href="#L2152">2152</a> 				r.header(h.getName(), h.getValue());
 <a class="jxr_linenumber" name="L2153" href="#L2153">2153</a> 
 <a class="jxr_linenumber" name="L2154" href="#L2154">2154</a> 			sreq.set(r);

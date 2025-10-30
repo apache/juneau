@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="ParamInfo" href="../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> forEachDeclaredAnnotation(Class&lt;A&gt; type, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">for</strong> (Annotation a : eInfo._getParameterAnnotations(index))
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : eInfo._getParameterAnnotations(index))
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">if</strong> (type.isInstance(a))
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 				consumeIf(filter, action, type.<strong class="jxr_keyword">cast</strong>(a));
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -169,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			A o = ci.getAnnotation(type, filter);
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">if</strong> (nn(o))
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 				<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">for</strong> (Annotation a2 : eInfo._getParameterAnnotations(index))
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a2 : eInfo._getParameterAnnotations(index))
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 				<strong class="jxr_keyword">if</strong> (type.isInstance(a2) &amp;&amp; test(filter, type.<strong class="jxr_keyword">cast</strong>(a2)))
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 					<strong class="jxr_keyword">return</strong> (A)a2;
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		} <strong class="jxr_keyword">else</strong> {
@@ -201,7 +201,7 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A getDeclaredAnnotation(Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (nn(type))
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">for</strong> (Annotation a : eInfo._getParameterAnnotations(index))
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : eInfo._getParameterAnnotations(index))
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 				<strong class="jxr_keyword">if</strong> (type.isInstance(a))
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 					<strong class="jxr_keyword">return</strong> type.<strong class="jxr_keyword">cast</strong>(a);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -316,7 +316,7 @@
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A findAnnotation(Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">if</strong> (eInfo.isConstructor()) {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">for</strong> (Annotation a2 : eInfo._getParameterAnnotations(index))
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a2 : eInfo._getParameterAnnotations(index))
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">if</strong> (type.isInstance(a2))
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 					<strong class="jxr_keyword">return</strong> type.<strong class="jxr_keyword">cast</strong>(a2);
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">return</strong> eInfo.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotation(type);
@@ -332,7 +332,7 @@
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			Annotation[] annotations = eInfo._getParameterAnnotations(index);
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 			ci.forEachAnnotation(ap, a, filter, action);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">for</strong> (Annotation a2 : annotations)
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a2 : annotations)
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 				<strong class="jxr_keyword">if</strong> (a.isInstance(a2))
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 					consumeIf(filter, action, a.<strong class="jxr_keyword">cast</strong>(a2));
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 		} <strong class="jxr_keyword">else</strong> {

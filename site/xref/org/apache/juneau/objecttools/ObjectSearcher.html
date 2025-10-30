@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">if</strong> (cm == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">if</strong> (cm.isCollection()) {
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 				<strong class="jxr_keyword">for</strong> (Object o2 : (Collection)o)
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o2 : (Collection)o)
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 					<strong class="jxr_keyword">if</strong> (matches(o2))
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 				<strong class="jxr_keyword">return</strong> false;
@@ -174,7 +174,7 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			ClassMeta&lt;?&gt; cm = bs.getClassMetaForObject(o);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">if</strong> (cm.isMapOrBean()) {
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				Map m = cm.isMap() ? (Map)o : bs.toBeanMap(o);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,ColumnMatcher&gt; e : entryMatchers.entrySet()) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : entryMatchers.entrySet()) {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 					String key = e.getKey();
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 					Object val = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 					<strong class="jxr_keyword">if</strong> (m instanceof <a name="BeanMap" href="../../../../org/apache/juneau/BeanMap.html#BeanMap">BeanMap</a>) {
@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			}
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">if</strong> (cm.isCollection()) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				<strong class="jxr_keyword">for</strong> (Object o2 : (Collection)o)
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o2 : (Collection)o)
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 					<strong class="jxr_keyword">if</strong> (! matches(o2))
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 						<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;

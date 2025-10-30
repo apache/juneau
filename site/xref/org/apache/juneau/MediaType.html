@@ -194,7 +194,7 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		sb.append(mediaType);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : parameters)
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : parameters)
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			sb.append(';').append(p.getName()).append('=').append(p.getValue());
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">this</strong>.string = sb.toString();
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
@@ -235,7 +235,7 @@
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<strong class="jxr_keyword">public</strong> <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> forEachParameter(Consumer&lt;NameValuePair&gt; action) {
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : parameters)
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : parameters)
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			action.accept(p);
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 	}
@@ -247,7 +247,7 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="MediaType" href="../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> forEachSubType(Consumer&lt;String&gt; action) {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">for</strong> (String s : subTypes)
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : subTypes)
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 			action.accept(s);
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 	}
@@ -259,7 +259,7 @@
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * @return The parameter value, or &lt;jk&gt;null&lt;/jk&gt; if not found.</em>
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<strong class="jxr_keyword">public</strong> String getParameter(String name) {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : parameters)
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : parameters)
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">if</strong> (eq(name, p.getName()))
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 				<strong class="jxr_keyword">return</strong> p.getValue();
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -316,7 +316,7 @@
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> hasSubType(String st) {
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">if</strong> (nn(st))
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">for</strong> (String s : subTypes)
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : subTypes)
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">if</strong> (st.equalsIgnoreCase(s))
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">return</strong> false;
@@ -422,7 +422,7 @@
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">if</strong> (eq(subTypesSorted, o.subTypesSorted))
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">return</strong> c + 7500;
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">for</strong> (String st1 : subTypes) {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st1 : subTypes) {
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(st1))
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 				c += 0;
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (CollectionUtils.contains(st1, o.subTypes))
@@ -432,7 +432,7 @@
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 				<strong class="jxr_keyword">return</strong> 0;
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		}
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">for</strong> (String st2 : o.subTypes) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st2 : o.subTypes) {
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(st2))
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 				c += 0;
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (CollectionUtils.contains(st2, subTypes))

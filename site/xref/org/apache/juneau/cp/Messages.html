@@ -292,7 +292,7 @@
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		ResourceBundle getBundle() {
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			ClassLoader cl = forClass.getClassLoader();
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			JsonMap m = JsonMap.of(<span class="jxr_string">"name"</span>, name, <span class="jxr_string">"package"</span>, forClass.getPackage().getName());
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">for</strong> (String bn : baseNames) {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bn : baseNames) {
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 				bn = StringUtils.replaceVars(bn, m);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 				ResourceBundle rb = findBundle(bn, locale, cl);
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 				<strong class="jxr_keyword">if</strong> (nn(rb))
@@ -407,7 +407,7 @@
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * @return The resolved value, or &lt;jk&gt;null&lt;/jk&gt; if no value is found or the resource bundle is missing.</em>
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<strong class="jxr_keyword">public</strong> String findFirstString(String...keys) {
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">for</strong> (String k : keys) {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : keys) {
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">if</strong> (containsKey(k))
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 				<strong class="jxr_keyword">return</strong> getString(k);
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 		}
@@ -480,7 +480,7 @@
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 		JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">for</strong> (String k : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(keySet()))
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(keySet()))
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 			m.put(k, getString(k));
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">return</strong> Json5.of(m);
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 	}

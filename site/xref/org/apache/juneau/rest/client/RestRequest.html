@@ -1208,7 +1208,7 @@
 <a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 	<strong class="jxr_keyword">public</strong> <a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> interceptors(RestCallInterceptor...interceptors) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestCallInterceptor" href="../../../../../org/apache/juneau/rest/client/RestCallInterceptor.html#RestCallInterceptor">RestCallInterceptor</a> i : interceptors) {
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i : interceptors) {
 <a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 				<strong class="jxr_keyword">this</strong>.interceptors.add(i);
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 				i.onInit(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 			}
@@ -1802,7 +1802,7 @@
 <a class="jxr_linenumber" name="L1794" href="#L1794">1794</a> 	<strong class="jxr_keyword">public</strong> <a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> rethrow(Class&lt;?&gt;...values) {
 <a class="jxr_linenumber" name="L1795" href="#L1795">1795</a> 		<strong class="jxr_keyword">if</strong> (rethrow == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1796" href="#L1796">1796</a> 			rethrow = list();
-<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; v : values) {
+<a class="jxr_linenumber" name="L1797" href="#L1797">1797</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values) {
 <a class="jxr_linenumber" name="L1798" href="#L1798">1798</a> 			<strong class="jxr_keyword">if</strong> (nn(v) &amp;&amp; Throwable.<strong class="jxr_keyword">class</strong>.isAssignableFrom(v))
 <a class="jxr_linenumber" name="L1799" href="#L1799">1799</a> 				rethrow.add((Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt;)v);
 <a class="jxr_linenumber" name="L1800" href="#L1800">1800</a> 		}
@@ -1934,7 +1934,7 @@
 <a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 			<strong class="jxr_keyword">if</strong> (isDebug() || client.logRequests == DetailLevel.FULL)
 <a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 				response.cacheContent();
 <a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 
-<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestCallInterceptor" href="../../../../../org/apache/juneau/rest/client/RestCallInterceptor.html#RestCallInterceptor">RestCallInterceptor</a> rci : interceptors)
+<a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rci : interceptors)
 <a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 				rci.onConnect(<strong class="jxr_keyword">this</strong>, response);
 <a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 			client.onCallConnect(<strong class="jxr_keyword">this</strong>, response);
 <a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 
@@ -1946,7 +1946,7 @@
 <a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 				Thrown.Part thrownPart = thrown.asParts().get().get(0);
 <a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> 				String className = thrownPart.getClassName();
 <a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 				String message = thrownPart.getMessage();
-<a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 				<strong class="jxr_keyword">for</strong> (Class&lt;? <strong class="jxr_keyword">extends</strong> Throwable&gt; t : rethrow) {
+<a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : rethrow) {
 <a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 					<strong class="jxr_keyword">if</strong> (t.getName().equals(className)) {
 <a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 						ConstructorInfo c = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 						ClassInfo ci = ClassInfo.of(t);

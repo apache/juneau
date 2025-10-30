@@ -108,7 +108,7 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;Class&lt;? <strong class="jxr_keyword">extends</strong> T&gt;&gt; get(Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; e : entries)
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : entries)
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			<strong class="jxr_keyword">if</strong> (nn(e) &amp;&amp; type.isAssignableFrom(e))
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 				<strong class="jxr_keyword">return</strong> opt((Class&lt;? <strong class="jxr_keyword">extends</strong> T&gt;)e);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">return</strong> opte();

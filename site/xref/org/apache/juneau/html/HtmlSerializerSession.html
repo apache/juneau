@@ -353,7 +353,7 @@
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		c = sort(c);
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		Object o1 = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">for</strong> (Object o : c)
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : c)
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 			<strong class="jxr_keyword">if</strong> (nn(o)) {
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 				o1 = o;
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 				<strong class="jxr_keyword">break</strong>;
@@ -383,7 +383,7 @@
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">if</strong> (cm1.isMap() &amp;&amp; ! cm1.isBeanMap()) {
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 			Set&lt;Object&gt; set = set();
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<strong class="jxr_keyword">for</strong> (Object o : c) {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : c) {
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 				o = swap(swap, o);
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<strong class="jxr_keyword">if</strong> (! canIgnoreValue(cm1, <strong class="jxr_keyword">null</strong>, o)) {
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 					<strong class="jxr_keyword">if</strong> (! cm1.isInstance(o))
@@ -395,7 +395,7 @@
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 		}
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<em class="jxr_comment">// Must be a bean or BeanMap.</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">for</strong> (Object o : c) {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : c) {
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 			o = swap(swap, o);
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">if</strong> (! canIgnoreValue(cm1, <strong class="jxr_keyword">null</strong>, o)) {
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 				<strong class="jxr_keyword">if</strong> (! cm1.isInstance(o))
@@ -515,7 +515,7 @@
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 			out.oTag(i, <span class="jxr_string">"table"</span>).attr(btpn, type2).w('&gt;').nl(i + 1);
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">if</strong> (th.length &gt; 0) {
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 				out.sTag(i + 1, <span class="jxr_string">"tr"</span>).nl(i + 2);
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 				<strong class="jxr_keyword">for</strong> (Object key : th) {
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> key : th) {
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 					out.sTag(i + 2, <span class="jxr_string">"th"</span>);
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 					out.text(convertToType(key, String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 					out.eTag(<span class="jxr_string">"th"</span>).nl(i + 2);
@@ -525,7 +525,7 @@
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 				th = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 			}
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 			<strong class="jxr_keyword">for</strong> (Object o : c) {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : c) {
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 				ClassMeta&lt;?&gt; cm = getClassMetaForObject(o);
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 				<strong class="jxr_keyword">if</strong> (nn(cm) &amp;&amp; nn(cm.getSwap(<strong class="jxr_keyword">this</strong>))) {
@@ -553,7 +553,7 @@
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 					<strong class="jxr_keyword">if</strong> (th == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 						th = m2.keySet().toArray(<strong class="jxr_keyword">new</strong> Object[m2.size()]);
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 					<strong class="jxr_keyword">for</strong> (Object k : th) {
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : th) {
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 						out.sTag(i + 2, <span class="jxr_string">"td"</span>);
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 						ContentResult cr = serializeAnything(out, m2.get(k), eType.getElementType(), toString(k), <strong class="jxr_keyword">null</strong>, 2, false, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 						<strong class="jxr_keyword">if</strong> (cr == CR_ELEMENTS)
@@ -566,7 +566,7 @@
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 					<strong class="jxr_keyword">if</strong> (th == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 						th = m2.keySet().toArray(<strong class="jxr_keyword">new</strong> Object[m2.size()]);
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 					<strong class="jxr_keyword">for</strong> (Object k : th) {
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : th) {
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 						BeanMapEntry p = m2.getProperty(toString(k));
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 						BeanPropertyMeta pMeta = p.getMeta();
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 						<strong class="jxr_keyword">if</strong> (pMeta.canRead()) {
@@ -607,7 +607,7 @@
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 				out.attr(btpn, type2);
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 			out.w('&gt;').nl(i + 1);
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 			<strong class="jxr_keyword">boolean</strong> isFirst = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			<strong class="jxr_keyword">for</strong> (Object o : c) {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : c) {
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 				<strong class="jxr_keyword">if</strong> (isDc &amp;&amp; ! isFirst)
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 					out.append(isCdc ? <span class="jxr_string">", "</span> : <span class="jxr_string">" "</span>);
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 				<strong class="jxr_keyword">if</strong> (! isDc)

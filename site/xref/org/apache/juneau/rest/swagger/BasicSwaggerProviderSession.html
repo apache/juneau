@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;Integer&gt; getCodes(List&lt;StatusCode&gt; la, Integer def) {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> codes = <strong class="jxr_keyword">new</strong> TreeSet&lt;Integer&gt;();
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">for</strong> (StatusCode a : la) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : la) {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i : a.value())
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  				codes.add(i);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		}
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">static</strong> String joinnl(String[]...s) {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">for</strong> (String[] ss : s) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss : s) {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">if</strong> (ss.length != 0)
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  				<strong class="jxr_keyword">return</strong> StringUtils.joinnl(ss).trim();
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		}
@@ -163,7 +163,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			omSwagger = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<em class="jxr_comment">// Combine it with @Rest(swagger)</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">for</strong> (Rest rr : rci.getAnnotations(context, Rest.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rr : rci.getAnnotations(context, Rest.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 			JsonMap sInfo = omSwagger.getMap(<span class="jxr_string">"info"</span>, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
@@ -247,7 +247,7 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		Map&lt;String,JsonMap&gt; tagMap = map();
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">if</strong> (omSwagger.containsKey(<span class="jxr_string">"tags"</span>)) {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">for</strong> (<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> om : omSwagger.getList(<span class="jxr_string">"tags"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> om : omSwagger.getList(<span class="jxr_string">"tags"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 				String name = om.getString(<span class="jxr_string">"name"</span>);
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 				<strong class="jxr_keyword">if</strong> (name == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SwaggerException" href="../../../../../org/apache/juneau/rest/swagger/SwaggerException.html#SwaggerException">SwaggerException</a>(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Tag definition found without name in swagger JSON."</span>);
@@ -257,7 +257,7 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		String s = mb.findFirstString(<span class="jxr_string">"tags"</span>);
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">if</strong> (nn(s)) {
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">for</strong> (<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> m : parseListOrCdl(s, <span class="jxr_string">"Messages/tags on class {0}"</span>, c).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : parseListOrCdl(s, <span class="jxr_string">"Messages/tags on class {0}"</span>, c).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 				String name = m.getString(<span class="jxr_string">"name"</span>);
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 				<strong class="jxr_keyword">if</strong> (name == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SwaggerException" href="../../../../../org/apache/juneau/rest/swagger/SwaggerException.html#SwaggerException">SwaggerException</a>(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Tag definition found without name in resource bundle on class {0}"</span>, c);
@@ -270,11 +270,11 @@
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<em class="jxr_comment">// Load our existing bean definitions into our session.</em>
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 		JsonMap definitions = omSwagger.getMap(<span class="jxr_string">"definitions"</span>, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">for</strong> (String defId : definitions.keySet())
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> defId : definitions.keySet())
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 			js.addBeanDef(defId, <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(definitions.getMap(defId)));
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<em class="jxr_comment">// Iterate through all the @RestOp methods.</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">for</strong> (<a name="RestOpContext" href="../../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> sm : context.getRestOperations().getOpContexts()) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> sm : context.getRestOperations().getOpContexts()) {
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 			BeanSession bs = sm.getBeanContext().getSession();
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 
@@ -372,17 +372,17 @@
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 			);
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">if</strong> (op.containsKey(<span class="jxr_string">"tags"</span>))
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">for</strong> (String tag : op.getList(<span class="jxr_string">"tags"</span>).elements(String.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> tag : op.getList(<span class="jxr_string">"tags"</span>).elements(String.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 					<strong class="jxr_keyword">if</strong> (! tagMap.containsKey(tag))
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 						tagMap.put(tag, JsonMap.of(<span class="jxr_string">"name"</span>, tag));
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 			JsonMap paramMap = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">if</strong> (op.containsKey(<span class="jxr_string">"parameters"</span>))
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				<strong class="jxr_keyword">for</strong> (<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> param : op.getList(<span class="jxr_string">"parameters"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> param : op.getList(<span class="jxr_string">"parameters"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 					paramMap.put(param.getString(<span class="jxr_string">"in"</span>) + '.' + (<span class="jxr_string">"body"</span>.equals(param.getString(<span class="jxr_string">"in"</span>)) ? <span class="jxr_string">"body"</span> : param.getString(<span class="jxr_string">"name"</span>)), param);
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<em class="jxr_comment">// Finally, look for parameters defined on method.</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">for</strong> (<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> mpi : mi.getParams()) {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mpi : mi.getParams()) {
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 				ClassInfo pt = mpi.getParameterType();
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 				Type type = pt.innerType();
@@ -437,13 +437,13 @@
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 			JsonMap responses = op.getMap(<span class="jxr_string">"responses"</span>, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">for</strong> (<a name="ClassInfo" href="../../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> eci : mi.getExceptionTypes()) {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> eci : mi.getExceptionTypes()) {
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 				<strong class="jxr_keyword">if</strong> (eci.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 					List&lt;Response&gt; la = eci.getAnnotations(context, Response.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 					List&lt;StatusCode&gt; la2 = eci.getAnnotations(context, StatusCode.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 					Set&lt;Integer&gt; codes = getCodes(la2, 500);
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 					<strong class="jxr_keyword">for</strong> (Response a : la) {
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 						<strong class="jxr_keyword">for</strong> (Integer code : codes) {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : la) {
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 							JsonMap om = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 							merge(om, a);
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 							JsonMap schema = getSchema(om.getMap(<span class="jxr_string">"schema"</span>), m.getGenericReturnType(), bs);
@@ -460,7 +460,7 @@
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 							a = ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotation(Header.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 						<strong class="jxr_keyword">if</strong> (nn(a) &amp;&amp; ! isMulti(a)) {
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 							String ha = a.name();
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 							<strong class="jxr_keyword">for</strong> (Integer code : codes) {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 							<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 								JsonMap header = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>).getMap(<span class="jxr_string">"headers"</span>, <strong class="jxr_keyword">true</strong>).getMap(ha, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 								ecmi.forEachAnnotation(context, Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 								ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).forEachAnnotation(Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
@@ -477,8 +477,8 @@
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 				List&lt;StatusCode&gt; la2 = list();
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 				mi.forEachAnnotation(context, StatusCode.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la2.add(x));
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 				Set&lt;Integer&gt; codes = getCodes(la2, 200);
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 				<strong class="jxr_keyword">for</strong> (Response a : la) {
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 					<strong class="jxr_keyword">for</strong> (Integer code : codes) {
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : la) {
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 						JsonMap om = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 						merge(om, a);
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 						JsonMap schema = getSchema(om.getMap(<span class="jxr_string">"schema"</span>), m.getGenericReturnType(), bs);
@@ -496,7 +496,7 @@
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 							Header a = ecmi.getAnnotation(Header.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 							String ha = a.name();
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 							<strong class="jxr_keyword">if</strong> (! isMulti(a)) {
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 								<strong class="jxr_keyword">for</strong> (Integer code : codes) {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 								<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 									JsonMap header = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>).getMap(<span class="jxr_string">"headers"</span>, <strong class="jxr_keyword">true</strong>).getMap(ha, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 									ecmi.forEachAnnotation(context, Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 									ecmi.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).forEachAnnotation(Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
@@ -518,7 +518,7 @@
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 			}
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<em class="jxr_comment">// Finally, look for Value @Header parameters defined on method.</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">for</strong> (<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> mpi : mi.getParams()) {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mpi : mi.getParams()) {
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 				ClassInfo pt = mpi.getParameterType();
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 
@@ -532,9 +532,9 @@
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 					Set&lt;Integer&gt; codes = getCodes(la2, 200);
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 					String name = HeaderAnnotation.findName(mpi).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 					Type type = Value.unwrap(mpi.getParameterType().innerType());
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 					<strong class="jxr_keyword">for</strong> (Header a : la) {
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : la) {
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 						<strong class="jxr_keyword">if</strong> (! isMulti(a)) {
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 							<strong class="jxr_keyword">for</strong> (Integer code : codes) {
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 							<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 								JsonMap header = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>).getMap(<span class="jxr_string">"headers"</span>, <strong class="jxr_keyword">true</strong>).getMap(name, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 								mpi.forEachAnnotation(Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; merge(header, x));
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 								merge(header, a.schema());
@@ -552,8 +552,8 @@
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 					pt.forEachAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; la2.add(x));
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 					Set&lt;Integer&gt; codes = getCodes(la2, 200);
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 					Type type = Value.unwrap(mpi.getParameterType().innerType());
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 					<strong class="jxr_keyword">for</strong> (Response a : la) {
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 						<strong class="jxr_keyword">for</strong> (Integer code : codes) {
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : la) {
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> code : codes) {
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 							JsonMap om = responses.getMap(String.valueOf(code), <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 							merge(om, a);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 							JsonMap schema = getSchema(om.getMap(<span class="jxr_string">"schema"</span>), type, bs);
@@ -567,7 +567,7 @@
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 			}
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 			<em class="jxr_comment">// Add default response descriptions.</em>
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,Object&gt; e : responses.entrySet()) {
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : responses.entrySet()) {
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 				String key = e.getKey();
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 				JsonMap val = responses.getMap(key);
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 				<strong class="jxr_keyword">if</strong> (StringUtils.isDecimal(key))
@@ -593,7 +593,7 @@
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 		}
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">if</strong> (nn(js.getBeanDefs()))
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 			<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,JsonMap&gt; e : js.getBeanDefs().entrySet())
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : js.getBeanDefs().entrySet())
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> 				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">if</strong> (definitions.isEmpty())
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 			omSwagger.remove(<span class="jxr_string">"definitions"</span>);
@@ -646,7 +646,7 @@
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 
 <a class="jxr_linenumber" name="L639" href="#L639">639</a> 		List&lt;MediaType&gt; mediaTypes = response ? sm.getSerializers().getSupportedMediaTypes() : sm.getParsers().getSupportedMediaTypes();
 <a class="jxr_linenumber" name="L640" href="#L640">640</a> 
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">for</strong> (<a name="MediaType" href="../../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> mt : mediaTypes) {
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mt : mediaTypes) {
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 			<strong class="jxr_keyword">if</strong> (mt != MediaType.HTML) {
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 				Serializer s2 = sm.getSerializers().getSerializer(mt);
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 				<strong class="jxr_keyword">if</strong> (nn(s2)) {
@@ -702,7 +702,7 @@
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> 
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T firstNonEmpty(T...t) {
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		<strong class="jxr_keyword">for</strong> (T oo : t)
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> oo : t)
 <a class="jxr_linenumber" name="L698" href="#L698">698</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(oo))
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 				<strong class="jxr_keyword">return</strong> oo;
 <a class="jxr_linenumber" name="L700" href="#L700">700</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -803,7 +803,7 @@
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 		<strong class="jxr_keyword">if</strong> (a.length == 0)
 <a class="jxr_linenumber" name="L796" href="#L796">796</a> 			<strong class="jxr_keyword">return</strong> om;
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 		om = newMap(om);
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		<strong class="jxr_keyword">for</strong> (Header aa : a) {
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> aa : a) {
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> 			<strong class="jxr_keyword">if</strong> (isEmpty(name))
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 				<strong class="jxr_keyword">throw</strong> illegalArg(<span class="jxr_string">"@Header used without name or value."</span>);
@@ -1055,7 +1055,7 @@
 <a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 
 <a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a> resolve(<a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a> om) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		JsonList ol2 = <strong class="jxr_keyword">new</strong> <a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>();
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 		<strong class="jxr_keyword">for</strong> (Object val : om) {
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> val : om) {
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 			<strong class="jxr_keyword">if</strong> (val instanceof <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>) {
 <a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 				val = resolve((<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)val);
 <a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (val instanceof <a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>) {
@@ -1076,7 +1076,7 @@
 <a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 			om2 = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 		}
-<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 		<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,Object&gt; e : om.entrySet()) {
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : om.entrySet()) {
 <a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 			Object val = e.getValue();
 <a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 			<strong class="jxr_keyword">if</strong> (val instanceof <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>) {
 <a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 				val = resolve((<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>)val);
@@ -1097,7 +1097,7 @@
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 	}
 <a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 
 <a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 	<strong class="jxr_keyword">private</strong> String resolve(String[]...s) {
-<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		<strong class="jxr_keyword">for</strong> (String[] ss : s) {
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ss : s) {
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 			<strong class="jxr_keyword">if</strong> (ss.length != 0)
 <a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 				<strong class="jxr_keyword">return</strong> resolve(joinnl(ss));
 <a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 		}
@@ -1131,7 +1131,7 @@
 <a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 		<strong class="jxr_keyword">if</strong> (aa.length == 0)
 <a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 		JsonList ol = <strong class="jxr_keyword">new</strong> <a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>();
-<a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 		<strong class="jxr_keyword">for</strong> (<a name="Tag" href="../../../../../org/apache/juneau/http/annotation/Tag.html#Tag">Tag</a> a : aa)
+<a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : aa)
 <a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 			ol.add(toMap(a, location, locationArgs));
 <a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 		<strong class="jxr_keyword">return</strong> nullIfEmpty(ol);
 <a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 	}
@@ -1190,7 +1190,7 @@
 <a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 		<strong class="jxr_keyword">if</strong> (ss.length == 0)
 <a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 		Set&lt;String&gt; set = set();
-<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 		<strong class="jxr_keyword">for</strong> (String s : ss)
+<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : ss)
 <a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 			StringUtils.split(s, x -&gt; set.add(x));
 <a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 		<strong class="jxr_keyword">return</strong> set.isEmpty() ? <strong class="jxr_keyword">null</strong> : set;
 <a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 	}

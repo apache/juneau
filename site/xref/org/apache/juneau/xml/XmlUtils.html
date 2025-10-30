@@ -478,13 +478,13 @@
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<em class="jxr_comment">// If only prefix specified, need to search for namespaceURI.</em>
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">if</strong> (! prefix.isEmpty()) {
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 			<strong class="jxr_keyword">if</strong> (nn(xmls))
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 				<strong class="jxr_keyword">for</strong> (Xml xml2 : xmls)
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> xml2 : xmls)
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 					<strong class="jxr_keyword">if</strong> (xml2.prefix().equals(prefix) &amp;&amp; ! xml2.namespace().isEmpty())
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 						<strong class="jxr_keyword">return</strong> Namespace.of(prefix, xml2.namespace());
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">for</strong> (<a name="XmlSchema" href="../../../../org/apache/juneau/xml/annotation/XmlSchema.html#XmlSchema">XmlSchema</a> schema : schemas) {
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> schema : schemas) {
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 				<strong class="jxr_keyword">if</strong> (schema.prefix().equals(prefix) &amp;&amp; ! schema.namespace().isEmpty())
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 					<strong class="jxr_keyword">return</strong> Namespace.of(prefix, schema.namespace());
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">for</strong> (XmlNs xmlNs : schema.xmlNs())
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> xmlNs : schema.xmlNs())
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 					<strong class="jxr_keyword">if</strong> (xmlNs.prefix().equals(prefix))
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 						<strong class="jxr_keyword">return</strong> Namespace.of(prefix, xmlNs.namespaceURI());
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 			}
@@ -494,13 +494,13 @@
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<em class="jxr_comment">// If only namespaceURI specified, need to search for prefix.</em>
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">if</strong> (! ns.isEmpty()) {
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">if</strong> (nn(xmls))
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 				<strong class="jxr_keyword">for</strong> (Xml xml2 : xmls)
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> xml2 : xmls)
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 					<strong class="jxr_keyword">if</strong> (xml2.namespace().equals(ns) &amp;&amp; ! xml2.prefix().isEmpty())
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 						<strong class="jxr_keyword">return</strong> Namespace.of(xml2.prefix(), ns);
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			<strong class="jxr_keyword">for</strong> (<a name="XmlSchema" href="../../../../org/apache/juneau/xml/annotation/XmlSchema.html#XmlSchema">XmlSchema</a> schema : schemas) {
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> schema : schemas) {
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 				<strong class="jxr_keyword">if</strong> (schema.namespace().equals(ns) &amp;&amp; ! schema.prefix().isEmpty())
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 					<strong class="jxr_keyword">return</strong> Namespace.of(schema.prefix(), ns);
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 				<strong class="jxr_keyword">for</strong> (XmlNs xmlNs : schema.xmlNs())
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> xmlNs : schema.xmlNs())
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 					<strong class="jxr_keyword">if</strong> (xmlNs.namespaceURI().equals(ns))
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 						<strong class="jxr_keyword">return</strong> Namespace.of(xmlNs.prefix(), ns);
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 			}

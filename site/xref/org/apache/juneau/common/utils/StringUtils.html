@@ -3925,7 +3925,7 @@
 <a class="jxr_linenumber" name="L3917" href="#L3917">3917</a> <em class="jxr_javadoccomment">	 * @return The first non-blank string, or &lt;jk&gt;null&lt;/jk&gt; if all values were blank or &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L3918" href="#L3918">3918</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L3919" href="#L3919">3919</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String firstNonBlank(String...vals) {
-<a class="jxr_linenumber" name="L3920" href="#L3920">3920</a> 		<strong class="jxr_keyword">for</strong> (String v : vals) {
+<a class="jxr_linenumber" name="L3920" href="#L3920">3920</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : vals) {
 <a class="jxr_linenumber" name="L3921" href="#L3921">3921</a> 			<strong class="jxr_keyword">if</strong> (isNotBlank(v))
 <a class="jxr_linenumber" name="L3922" href="#L3922">3922</a> 				<strong class="jxr_keyword">return</strong> v;
 <a class="jxr_linenumber" name="L3923" href="#L3923">3923</a> 		}

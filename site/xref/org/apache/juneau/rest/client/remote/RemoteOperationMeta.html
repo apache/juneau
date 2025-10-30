@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 				}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			});
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			mi.getAnnotationList().forEach(ContentAnnotation.Array.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				<strong class="jxr_keyword">for</strong> (Content c : x.<strong class="jxr_keyword">inner</strong>().value()) {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : x.<strong class="jxr_keyword">inner</strong>().value()) {
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 					String def = c.def();
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 					<strong class="jxr_keyword">if</strong> (isNotEmpty(def)) {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 						contentDefault = def;
@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				}
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			});
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			mi.getAnnotationList().forEach(FormDataAnnotation.Array.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<strong class="jxr_keyword">for</strong> (FormData fd : x.<strong class="jxr_keyword">inner</strong>().value()) {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> fd : x.<strong class="jxr_keyword">inner</strong>().value()) {
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 					String name = firstNonEmpty(fd.name(), fd.value());
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 					String def = fd.def();
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 					<strong class="jxr_keyword">if</strong> (isNotEmpty(name) &amp;&amp; isNotEmpty(def)) {
@@ -198,7 +198,7 @@
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			});
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<em class="jxr_comment">// Check for @Header.Array (repeated annotations)</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 			mi.getAnnotationList().forEach(HeaderAnnotation.Array.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				<strong class="jxr_keyword">for</strong> (Header h : x.<strong class="jxr_keyword">inner</strong>().value()) {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : x.<strong class="jxr_keyword">inner</strong>().value()) {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 					String name = firstNonEmpty(h.name(), h.value());
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 					String def = h.def();
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 					<strong class="jxr_keyword">if</strong> (isNotEmpty(name) &amp;&amp; isNotEmpty(def)) {
@@ -218,7 +218,7 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 				}
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 			});
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 			mi.getAnnotationList().forEach(PathAnnotation.Array.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 				<strong class="jxr_keyword">for</strong> (Path p : x.<strong class="jxr_keyword">inner</strong>().value()) {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : x.<strong class="jxr_keyword">inner</strong>().value()) {
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 					String name = firstNonEmpty(p.name(), p.value());
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 					String def = p.def();
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 					<strong class="jxr_keyword">if</strong> (isNotEmpty(name) &amp;&amp; isNotEmpty(def)) {
@@ -238,7 +238,7 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 				}
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			});
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 			mi.getAnnotationList().forEach(QueryAnnotation.Array.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">for</strong> (Query q : x.<strong class="jxr_keyword">inner</strong>().value()) {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> q : x.<strong class="jxr_keyword">inner</strong>().value()) {
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 					String name = firstNonEmpty(q.name(), q.value());
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 					String def = q.def();
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 					<strong class="jxr_keyword">if</strong> (isNotEmpty(name) &amp;&amp; isNotEmpty(def)) {
@@ -295,7 +295,7 @@
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<strong class="jxr_keyword">public</strong> <a name="RemoteOperationMeta" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationMeta.html#RemoteOperationMeta">RemoteOperationMeta</a> forEachException(Consumer&lt;Class&lt;?&gt;&gt; action) {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; e : exceptions)
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : exceptions)
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			action.accept(e);
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
@@ -307,7 +307,7 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">public</strong> <a name="RemoteOperationMeta" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationMeta.html#RemoteOperationMeta">RemoteOperationMeta</a> forEachFormDataArg(Consumer&lt;RemoteOperationArg&gt; action) {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">for</strong> (<a name="RemoteOperationArg" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationArg.html#RemoteOperationArg">RemoteOperationArg</a> a : formDataArgs)
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : formDataArgs)
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 			action.accept(a);
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 	}
@@ -319,7 +319,7 @@
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">public</strong> <a name="RemoteOperationMeta" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationMeta.html#RemoteOperationMeta">RemoteOperationMeta</a> forEachHeaderArg(Consumer&lt;RemoteOperationArg&gt; action) {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">for</strong> (<a name="RemoteOperationArg" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationArg.html#RemoteOperationArg">RemoteOperationArg</a> a : headerArgs)
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : headerArgs)
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			action.accept(a);
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
@@ -331,7 +331,7 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<strong class="jxr_keyword">public</strong> <a name="RemoteOperationMeta" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationMeta.html#RemoteOperationMeta">RemoteOperationMeta</a> forEachPathArg(Consumer&lt;RemoteOperationArg&gt; action) {
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">for</strong> (<a name="RemoteOperationArg" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationArg.html#RemoteOperationArg">RemoteOperationArg</a> a : pathArgs)
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : pathArgs)
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 			action.accept(a);
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
@@ -343,7 +343,7 @@
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<strong class="jxr_keyword">public</strong> <a name="RemoteOperationMeta" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationMeta.html#RemoteOperationMeta">RemoteOperationMeta</a> forEachQueryArg(Consumer&lt;RemoteOperationArg&gt; action) {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">for</strong> (<a name="RemoteOperationArg" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationArg.html#RemoteOperationArg">RemoteOperationArg</a> a : queryArgs)
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : queryArgs)
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 			action.accept(a);
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 	}
@@ -355,7 +355,7 @@
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<strong class="jxr_keyword">public</strong> <a name="RemoteOperationMeta" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationMeta.html#RemoteOperationMeta">RemoteOperationMeta</a> forEachRequestArg(Consumer&lt;RemoteOperationBeanArg&gt; action) {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">for</strong> (<a name="RemoteOperationBeanArg" href="../../../../../../org/apache/juneau/rest/client/remote/RemoteOperationBeanArg.html#RemoteOperationBeanArg">RemoteOperationBeanArg</a> a : requestArgs)
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : requestArgs)
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 			action.accept(a);
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 	}

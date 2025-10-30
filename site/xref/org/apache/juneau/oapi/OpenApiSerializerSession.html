@@ -421,7 +421,7 @@
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 						((Collection&lt;?&gt;)value).forEach(x -&gt; sb.append(serialize(partType, items, x)));
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (vt.hasMutaterTo(String[].<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 						String[] ss = toType(value, CM_StringArray);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 						<strong class="jxr_keyword">for</strong> (String element : ss)
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> element : ss)
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 							sb.append(serialize(partType, items, element));
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 					} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<span class="jxr_string">"Input is not a valid array type: "</span> + type);

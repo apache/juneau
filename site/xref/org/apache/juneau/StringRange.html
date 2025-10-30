@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<em class="jxr_comment">// The media type consists of everything up to the q parameter.</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// The q parameter and stuff after is part of the range.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		List&lt;NameValuePair&gt; extensions = list();
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">for</strong> (NameValuePair p : e.getParameters()) {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : e.getParameters()) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			<strong class="jxr_keyword">if</strong> (p.getName().equals(<span class="jxr_string">"q"</span>)) {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  				qValue = Float.parseFloat(p.getValue());
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			} <strong class="jxr_keyword">else</strong> {
@@ -134,7 +134,7 @@
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">public</strong> <a name="StringRange" href="../../../org/apache/juneau/StringRange.html#StringRange">StringRange</a> forEachExtension(Consumer&lt;NameValuePair&gt; action) {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : extensions)
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : extensions)
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			action.accept(p);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}

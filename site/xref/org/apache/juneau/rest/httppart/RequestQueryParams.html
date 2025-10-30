@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">this</strong>.caseSensitive = caseSensitive;
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">this</strong>.vs = req.getVarResolverSession();
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,String[]&gt; e : query.entrySet()) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : query.entrySet()) {
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			String name = e.getKey();
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			String[] values = e.getValue();
@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">if</strong> (values.length == 0)
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				values = a((String)<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">for</strong> (String value : values)
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> value : values)
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 				add(<strong class="jxr_keyword">new</strong> <a name="RequestQueryParam" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParam.html#RequestQueryParam">RequestQueryParam</a>(req, name, value));
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		caseSensitive = copyFrom.caseSensitive;
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		parser = copyFrom.parser;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		vs = copyFrom.vs;
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">for</strong> (String n : names)
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : names)
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			copyFrom.stream().filter(x -&gt; eq(x.getName(), n)).forEach(<strong class="jxr_keyword">this</strong>::add);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
@@ -207,7 +207,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestQueryParams" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParams.html#RequestQueryParams">RequestQueryParams</a> add(NameValuePair...parameters) {
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertArgNotNull(<span class="jxr_string">"parameters"</span>, parameters);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : parameters)
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : parameters)
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">if</strong> (nn(p))
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 				add(p.getName(), p.getValue());
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -242,7 +242,7 @@
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestQueryParams" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParams.html#RequestQueryParams">RequestQueryParams</a> addDefault(List&lt;? <strong class="jxr_keyword">extends</strong> NameValuePair&gt; pairs) {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : pairs) {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : pairs) {
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			String name = p.getName();
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 			Stream&lt;RequestQueryParam&gt; l = stream(name);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">boolean</strong> hasAllBlanks = l.allMatch(x -&gt; StringUtils.isEmpty(x.getValue()));
@@ -290,7 +290,7 @@
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">public</strong> String asQueryString() {
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">for</strong> (<a name="RequestQueryParam" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParam.html#RequestQueryParam">RequestQueryParam</a> e : <strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : <strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0)
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 				sb.append(<span class="jxr_string">"&amp;"</span>);
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
@@ -327,7 +327,7 @@
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> containsAny(String...names) {
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 		assertArgNotNull(<span class="jxr_string">"names"</span>, names);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">for</strong> (String n : names)
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : names)
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">if</strong> (stream(n).findAny().isPresent())
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">return</strong> false;
@@ -513,9 +513,9 @@
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestQueryParams" href="../../../../../org/apache/juneau/rest/httppart/RequestQueryParams.html#RequestQueryParams">RequestQueryParams</a> set(NameValuePair...parameters) {
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 		assertArgNotNull(<span class="jxr_string">"headers"</span>, parameters);
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : parameters)
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : parameters)
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 			remove(p);
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">for</strong> (NameValuePair p : parameters)
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : parameters)
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 			add(p);
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 	}
@@ -563,7 +563,7 @@
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L556" href="#L556">556</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 		JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<strong class="jxr_keyword">for</strong> (String n : getNames())
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : getNames())
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 			m.put(n, get(n).asString().orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">return</strong> m.asJson();
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 	}

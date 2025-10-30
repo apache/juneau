@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">public</strong> Builder append(Class&lt;? <strong class="jxr_keyword">extends</strong> RestMatcher&gt;...values) {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">for</strong> (Class&lt;? <strong class="jxr_keyword">extends</strong> RestMatcher&gt; v : values)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  				entries.add(beanStore().createBean(RestMatcher.<strong class="jxr_keyword">class</strong>).type(v));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		}
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">public</strong> Builder append(RestMatcher...values) {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">for</strong> (<a name="RestMatcher" href="../../../../../org/apache/juneau/rest/matcher/RestMatcher.html#RestMatcher">RestMatcher</a> v : values)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values)
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  				entries.add(beanStore().createBean(RestMatcher.<strong class="jxr_keyword">class</strong>).impl(v));
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		}

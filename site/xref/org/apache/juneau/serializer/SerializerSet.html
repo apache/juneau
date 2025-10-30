@@ -162,7 +162,7 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">public</strong> Builder add(Class&lt;?&gt;...values) {
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			List&lt;Object&gt; l = list();
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; e : values) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : values) {
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 				<strong class="jxr_keyword">if</strong> (Serializer.<strong class="jxr_keyword">class</strong>.isAssignableFrom(e)) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 					l.add(createBuilder(e));
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				} <strong class="jxr_keyword">else</strong> {
@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">		 * @return &lt;jk&gt;true&lt;/jk&gt; if at least one of the specified annotations can be applied to at least one serializer builder in this group.</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canApply(<a name="AnnotationWorkList" href="../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> work) {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">for</strong> (Object o : entries)
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : entries)
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 				<strong class="jxr_keyword">if</strong> (o instanceof Serializer.Builder)
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 					<strong class="jxr_keyword">if</strong> (((Serializer.Builder)o).canApply(work))
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
@@ -347,7 +347,7 @@
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">public</strong> Builder set(Class&lt;?&gt;...values) {
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 			List&lt;Object&gt; l = list();
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; e : values) {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : values) {
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 				<strong class="jxr_keyword">if</strong> (e.getSimpleName().equals(<span class="jxr_string">"Inherit"</span>)) {
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 					l.addAll(entries);
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Serializer.<strong class="jxr_keyword">class</strong>.isAssignableFrom(e)) {
@@ -488,7 +488,7 @@
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> 		List&lt;MediaRange&gt; lmtr = list();
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 		Set&lt;MediaType&gt; lmt = set();
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		List&lt;Serializer&gt; l = list();
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">for</strong> (<a name="Serializer" href="../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a> e : entries) {
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : entries) {
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 			e.getMediaTypeRanges().forEachRange(x -&gt; {
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 				lmtr.add(x);
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 				l.add(e);

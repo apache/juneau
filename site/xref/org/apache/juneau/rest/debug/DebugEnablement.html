@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">public</strong> Builder enable(<a name="Enablement" href="../../../../../org/apache/juneau/Enablement.html#Enablement">Enablement</a> enablement, Class&lt;?&gt;...classes) {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : classes)
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : classes)
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 				mapBuilder.append(c.getName(), enablement);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		}
@@ -171,7 +171,7 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">public</strong> Builder enable(<a name="Enablement" href="../../../../../org/apache/juneau/Enablement.html#Enablement">Enablement</a> enablement, String...keys) {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">for</strong> (String k : keys)
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : keys)
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 				mapBuilder.append(k, enablement);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		}

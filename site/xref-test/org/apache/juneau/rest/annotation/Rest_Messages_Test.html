@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap asMap(ResourceBundle rb) {
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> JsonMap();
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">for</strong> (String k : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(rb.keySet()))
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(rb.keySet()))
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			m.put(k, rb.getString(k));
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}

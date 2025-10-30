@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">public</strong> <a name="MediaRanges" href="../../../org/apache/juneau/MediaRanges.html#MediaRanges">MediaRanges</a> forEachRange(Consumer&lt;MediaRange&gt; action) {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">for</strong> (<a name="MediaRange" href="../../../org/apache/juneau/MediaRange.html#MediaRange">MediaRange</a> r : ranges)
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : ranges)
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			action.accept(r);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasSubtypePart(String part) {
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">for</strong> (<a name="MediaRange" href="../../../org/apache/juneau/MediaRange.html#MediaRange">MediaRange</a> mr : ranges)
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mr : ranges)
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">if</strong> (mr.getQValue() &gt; 0 &amp;&amp; mr.getSubTypes().indexOf(part) &gt;= 0)
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
@@ -207,7 +207,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<em class="jxr_comment">// Media ranges are ordered by 'q'.</em>
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<em class="jxr_comment">// So we only need to search until we've found a match.</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">for</strong> (<a name="MediaRange" href="../../../org/apache/juneau/MediaRange.html#MediaRange">MediaRange</a> mr : ranges) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mr : ranges) {
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">float</strong> q2 = mr.getQValue();
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">if</strong> (q2 &lt; q || q2 == 0)

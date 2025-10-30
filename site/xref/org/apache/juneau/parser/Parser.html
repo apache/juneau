@@ -1032,7 +1032,7 @@
 <a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canHandle(String contentType) {
 <a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<strong class="jxr_keyword">if</strong> (nn(contentType))
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 			<strong class="jxr_keyword">for</strong> (<a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> mt : getMediaTypes())
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mt : getMediaTypes())
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 				<strong class="jxr_keyword">if</strong> (contentType.equals(mt.toString()))
 <a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		<strong class="jxr_keyword">return</strong> false;

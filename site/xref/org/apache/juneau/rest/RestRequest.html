@@ -860,7 +860,7 @@
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 		<strong class="jxr_keyword">if</strong> (nn(h)) {
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 			StringRanges sr = StringRanges.of(h);
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 			<strong class="jxr_keyword">float</strong> qValue = 0;
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 			<strong class="jxr_keyword">for</strong> (<a name="StringRange" href="../../../../org/apache/juneau/StringRange.html#StringRange">StringRange</a> r : sr.toList()) {
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : sr.toList()) {
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 				<strong class="jxr_keyword">if</strong> (r.getQValue() &gt; qValue) {
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> 					best = toLocale(r.getName());
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 					qValue = r.getQValue();
@@ -1301,7 +1301,7 @@
 <a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 			StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(uri);
 <a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 			RequestQueryParams rq = <strong class="jxr_keyword">this</strong>.queryParams.copy();
 <a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 			<strong class="jxr_keyword">if</strong> (nn(addQueryParams))
-<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 				<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,?&gt; e : addQueryParams.entrySet())
+<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : addQueryParams.entrySet())
 <a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 					rq.set(e.getKey(), e.getValue());
 <a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 			<strong class="jxr_keyword">if</strong> (! rq.isEmpty())
 <a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 				sb.append('?').append(rq.asQueryString());

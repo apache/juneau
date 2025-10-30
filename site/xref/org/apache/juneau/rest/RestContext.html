@@ -3799,7 +3799,7 @@
 <a class="jxr_linenumber" name="L3791" href="#L3791">3791</a> 			);
 <a class="jxr_linenumber" name="L3792" href="#L3792">3792</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L3793" href="#L3793">3793</a> 
-<a class="jxr_linenumber" name="L3794" href="#L3794">3794</a> 			<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m : map.values()) {
+<a class="jxr_linenumber" name="L3794" href="#L3794">3794</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : map.values()) {
 <a class="jxr_linenumber" name="L3795" href="#L3795">3795</a> 				<strong class="jxr_keyword">if</strong> (! beanStore.hasAllParams(m))
 <a class="jxr_linenumber" name="L3796" href="#L3796">3796</a> 					<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, scn(m.getDeclaringClass()), m.getSignature(),
 <a class="jxr_linenumber" name="L3797" href="#L3797">3797</a> 						beanStore.getMissingParams(m));
@@ -4471,7 +4471,7 @@
 <a class="jxr_linenumber" name="L4463" href="#L4463">4463</a> 			Value&lt;RestChildren.Builder&gt; v = Value.of(RestChildren.create(beanStore).type(childrenClass));
 <a class="jxr_linenumber" name="L4464" href="#L4464">4464</a> 
 <a class="jxr_linenumber" name="L4465" href="#L4465">4465</a> 			<em class="jxr_comment">// Initialize our child resources.</em>
-<a class="jxr_linenumber" name="L4466" href="#L4466">4466</a> 			<strong class="jxr_keyword">for</strong> (Object o : children) {
+<a class="jxr_linenumber" name="L4466" href="#L4466">4466</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : children) {
 <a class="jxr_linenumber" name="L4467" href="#L4467">4467</a> 				String path = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L4468" href="#L4468">4468</a> 			Supplier&lt;?&gt; so;
 <a class="jxr_linenumber" name="L4469" href="#L4469">4469</a> 
@@ -4589,7 +4589,7 @@
 <a class="jxr_linenumber" name="L4581" href="#L4581">4581</a> 			);
 <a class="jxr_linenumber" name="L4582" href="#L4582">4582</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L4583" href="#L4583">4583</a> 
-<a class="jxr_linenumber" name="L4584" href="#L4584">4584</a> 			<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi : rci.getPublicMethods()) {
+<a class="jxr_linenumber" name="L4584" href="#L4584">4584</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : rci.getPublicMethods()) {
 <a class="jxr_linenumber" name="L4585" href="#L4585">4585</a> 				AnnotationList al = mi.getAnnotationList(REST_OP_GROUP);
 <a class="jxr_linenumber" name="L4586" href="#L4586">4586</a> 
 <a class="jxr_linenumber" name="L4587" href="#L4587">4587</a> 				<em class="jxr_comment">// Also include methods on @Rest-annotated interfaces.</em>
@@ -4606,7 +4606,7 @@
 <a class="jxr_linenumber" name="L4598" href="#L4598">4598</a> 						RestOpContext.Builder rocb = RestOpContext.create(mi.<strong class="jxr_keyword">inner</strong>(), restContext).beanStore(beanStore).type(opContextClass);
 <a class="jxr_linenumber" name="L4599" href="#L4599">4599</a> 
 <a class="jxr_linenumber" name="L4600" href="#L4600">4600</a> 						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.<strong class="jxr_keyword">class</strong>, rocb);
-<a class="jxr_linenumber" name="L4601" href="#L4601">4601</a> 					<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m : initMap.values()) {
+<a class="jxr_linenumber" name="L4601" href="#L4601">4601</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : initMap.values()) {
 <a class="jxr_linenumber" name="L4602" href="#L4602">4602</a> 						<strong class="jxr_keyword">if</strong> (! beanStore.hasAllParams(m)) {
 <a class="jxr_linenumber" name="L4603" href="#L4603">4603</a> 							<strong class="jxr_keyword">throw</strong> servletException(<span class="jxr_string">"Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}."</span>, scn(m.getDeclaringClass()), m.getSignature(),
 <a class="jxr_linenumber" name="L4604" href="#L4604">4604</a> 								beanStore.getMissingParams(m));
@@ -5101,7 +5101,7 @@
 <a class="jxr_linenumber" name="L5093" href="#L5093">5093</a> <em class="jxr_javadoccomment">	 * Called during servlet destruction to invoke all {@link RestDestroy} methods.</em>
 <a class="jxr_linenumber" name="L5094" href="#L5094">5094</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L5095" href="#L5095">5095</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> destroy() {
-<a class="jxr_linenumber" name="L5096" href="#L5096">5096</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInvoker" href="../../../../org/apache/juneau/rest/stats/MethodInvoker.html#MethodInvoker">MethodInvoker</a> x : destroyMethods) {
+<a class="jxr_linenumber" name="L5096" href="#L5096">5096</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : destroyMethods) {
 <a class="jxr_linenumber" name="L5097" href="#L5097">5097</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5098" href="#L5098">5098</a> 				x.invoke(beanStore, getResource());
 <a class="jxr_linenumber" name="L5099" href="#L5099">5099</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -5782,7 +5782,7 @@
 <a class="jxr_linenumber" name="L5774" href="#L5774">5774</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ServletException(e.unwrap());
 <a class="jxr_linenumber" name="L5775" href="#L5775">5775</a> 			}
 <a class="jxr_linenumber" name="L5776" href="#L5776">5776</a> 		}
-<a class="jxr_linenumber" name="L5777" href="#L5777">5777</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInvoker" href="../../../../org/apache/juneau/rest/stats/MethodInvoker.html#MethodInvoker">MethodInvoker</a> x : postInitMethods) {
+<a class="jxr_linenumber" name="L5777" href="#L5777">5777</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : postInitMethods) {
 <a class="jxr_linenumber" name="L5778" href="#L5778">5778</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5779" href="#L5779">5779</a> 				x.invoke(beanStore, getResource());
 <a class="jxr_linenumber" name="L5780" href="#L5780">5780</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -5803,7 +5803,7 @@
 <a class="jxr_linenumber" name="L5795" href="#L5795">5795</a> 		<strong class="jxr_keyword">if</strong> (initialized.get())
 <a class="jxr_linenumber" name="L5796" href="#L5796">5796</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L5797" href="#L5797">5797</a> 		restChildren.postInitChildFirst();
-<a class="jxr_linenumber" name="L5798" href="#L5798">5798</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInvoker" href="../../../../org/apache/juneau/rest/stats/MethodInvoker.html#MethodInvoker">MethodInvoker</a> x : postInitChildFirstMethods) {
+<a class="jxr_linenumber" name="L5798" href="#L5798">5798</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : postInitChildFirstMethods) {
 <a class="jxr_linenumber" name="L5799" href="#L5799">5799</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5800" href="#L5800">5800</a> 				x.invoke(beanStore, getResource());
 <a class="jxr_linenumber" name="L5801" href="#L5801">5801</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -5895,7 +5895,7 @@
 <a class="jxr_linenumber" name="L5887" href="#L5887">5887</a> <em class="jxr_javadoccomment">	 * @param session The current request.</em>
 <a class="jxr_linenumber" name="L5888" href="#L5888">5888</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L5889" href="#L5889">5889</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> endCall(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session) {
-<a class="jxr_linenumber" name="L5890" href="#L5890">5890</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInvoker" href="../../../../org/apache/juneau/rest/stats/MethodInvoker.html#MethodInvoker">MethodInvoker</a> x : endCallMethods) {
+<a class="jxr_linenumber" name="L5890" href="#L5890">5890</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : endCallMethods) {
 <a class="jxr_linenumber" name="L5891" href="#L5891">5891</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5892" href="#L5892">5892</a> 				x.invoke(session.getBeanStore(), session.getResource());
 <a class="jxr_linenumber" name="L5893" href="#L5893">5893</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -5924,7 +5924,7 @@
 <a class="jxr_linenumber" name="L5916" href="#L5916">5916</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pt.size(); i++) {
 <a class="jxr_linenumber" name="L5917" href="#L5917">5917</a> 			ParamInfo pi = mi.getParam(i);
 <a class="jxr_linenumber" name="L5918" href="#L5918">5918</a> 			beanStore.addBean(ParamInfo.<strong class="jxr_keyword">class</strong>, pi);
-<a class="jxr_linenumber" name="L5919" href="#L5919">5919</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;? <strong class="jxr_keyword">extends</strong> RestOpArg&gt; c : restOpArgs) {
+<a class="jxr_linenumber" name="L5919" href="#L5919">5919</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : restOpArgs) {
 <a class="jxr_linenumber" name="L5920" href="#L5920">5920</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L5921" href="#L5921">5921</a> 					ra[i] = beanStore.createBean(RestOpArg.<strong class="jxr_keyword">class</strong>).type(c).run();
 <a class="jxr_linenumber" name="L5922" href="#L5922">5922</a> 					<strong class="jxr_keyword">if</strong> (nn(ra[i]))
@@ -6060,7 +6060,7 @@
 <a class="jxr_linenumber" name="L6052" href="#L6052">6052</a> <em class="jxr_javadoccomment">		 * @throws Throwable If thrown from call methods.</em>
 <a class="jxr_linenumber" name="L6053" href="#L6053">6053</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L6054" href="#L6054">6054</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> postCall(<a name="RestOpSession" href="../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> session) <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L6055" href="#L6055">6055</a> 		<strong class="jxr_keyword">for</strong> (<a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a> m : session.getContext().getPostCallMethods())
+<a class="jxr_linenumber" name="L6055" href="#L6055">6055</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : session.getContext().getPostCallMethods())
 <a class="jxr_linenumber" name="L6056" href="#L6056">6056</a> 			m.invoke(session);
 <a class="jxr_linenumber" name="L6057" href="#L6057">6057</a> 	}
 <a class="jxr_linenumber" name="L6058" href="#L6058">6058</a> 
@@ -6071,7 +6071,7 @@
 <a class="jxr_linenumber" name="L6063" href="#L6063">6063</a> <em class="jxr_javadoccomment">	 * @throws Throwable If thrown from call methods.</em>
 <a class="jxr_linenumber" name="L6064" href="#L6064">6064</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L6065" href="#L6065">6065</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> preCall(<a name="RestOpSession" href="../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> session) <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="L6066" href="#L6066">6066</a> 		<strong class="jxr_keyword">for</strong> (<a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a> m : session.getContext().getPreCallMethods())
+<a class="jxr_linenumber" name="L6066" href="#L6066">6066</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : session.getContext().getPreCallMethods())
 <a class="jxr_linenumber" name="L6067" href="#L6067">6067</a> 			m.invoke(session);
 <a class="jxr_linenumber" name="L6068" href="#L6068">6068</a> 	}
 <a class="jxr_linenumber" name="L6069" href="#L6069">6069</a> 
@@ -6147,7 +6147,7 @@
 <a class="jxr_linenumber" name="L6139" href="#L6139">6139</a> <em class="jxr_javadoccomment">	 * @throws BasicHttpException If thrown from call methods.</em>
 <a class="jxr_linenumber" name="L6140" href="#L6140">6140</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L6141" href="#L6141">6141</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> startCall(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session) <strong class="jxr_keyword">throws</strong> <a name="BasicHttpException" href="../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a> {
-<a class="jxr_linenumber" name="L6142" href="#L6142">6142</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInvoker" href="../../../../org/apache/juneau/rest/stats/MethodInvoker.html#MethodInvoker">MethodInvoker</a> x : startCallMethods) {
+<a class="jxr_linenumber" name="L6142" href="#L6142">6142</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : startCallMethods) {
 <a class="jxr_linenumber" name="L6143" href="#L6143">6143</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L6144" href="#L6144">6144</a> 				x.invoke(session.getBeanStore(), session.getContext().getResource());
 <a class="jxr_linenumber" name="L6145" href="#L6145">6145</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | IllegalArgumentException e) {

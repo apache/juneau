@@ -1586,7 +1586,7 @@
 <a class="jxr_linenumber" name="L1578" href="#L1578">1578</a> 
 <a class="jxr_linenumber" name="L1579" href="#L1579">1579</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; merge(List&lt;String&gt; old, String[] newValues) {
 <a class="jxr_linenumber" name="L1580" href="#L1580">1580</a> 			List&lt;String&gt; x = listOfSize(newValues.length);
-<a class="jxr_linenumber" name="L1581" href="#L1581">1581</a> 			<strong class="jxr_keyword">for</strong> (String s : newValues) {
+<a class="jxr_linenumber" name="L1581" href="#L1581">1581</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : newValues) {
 <a class="jxr_linenumber" name="L1582" href="#L1582">1582</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"NONE"</span>.equals(s)) {
 <a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> 					<strong class="jxr_keyword">if</strong> (nn(old))
 <a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> 						old.clear();
@@ -1602,7 +1602,7 @@
 <a class="jxr_linenumber" name="L1594" href="#L1594">1594</a> 
 <a class="jxr_linenumber" name="L1595" href="#L1595">1595</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; mergeNavLinks(List&lt;String&gt; old, String[] newValues) {
 <a class="jxr_linenumber" name="L1596" href="#L1596">1596</a> 			List&lt;String&gt; x = listOfSize(newValues.length);
-<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> 			<strong class="jxr_keyword">for</strong> (String s : newValues) {
+<a class="jxr_linenumber" name="L1597" href="#L1597">1597</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : newValues) {
 <a class="jxr_linenumber" name="L1598" href="#L1598">1598</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"NONE"</span>.equals(s)) {
 <a class="jxr_linenumber" name="L1599" href="#L1599">1599</a> 					<strong class="jxr_keyword">if</strong> (nn(old))
 <a class="jxr_linenumber" name="L1600" href="#L1600">1600</a> 						old.clear();
@@ -1719,7 +1719,7 @@
 <a class="jxr_linenumber" name="L1711" href="#L1711">1711</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1712" href="#L1712">1712</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a name="HtmlDocSerializer" href="../../../../org/apache/juneau/html/HtmlDocSerializer.html#HtmlDocSerializer">HtmlDocSerializer</a> forEachWidget(Consumer&lt;HtmlWidget&gt; action) {
-<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a> 		<strong class="jxr_keyword">for</strong> (<a name="HtmlWidget" href="../../../../org/apache/juneau/html/HtmlWidget.html#HtmlWidget">HtmlWidget</a> w : widgetArray)
+<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> w : widgetArray)
 <a class="jxr_linenumber" name="L1715" href="#L1715">1715</a> 			action.accept(w);
 <a class="jxr_linenumber" name="L1716" href="#L1716">1716</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1717" href="#L1717">1717</a> 	}

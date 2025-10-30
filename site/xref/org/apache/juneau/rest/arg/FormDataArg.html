@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<em class="jxr_comment">// Find matching @FormData from class-level formDataParams array</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		FormData classLevelFormData = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">for</strong> (FormData f : restAnnotation.formDataParams()) {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : restAnnotation.formDataParams()) {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			String fName = firstNonEmpty(f.name(), f.value());
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">if</strong> (paramName.equals(fName)) {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  				classLevelFormData = f;

@@ -212,7 +212,7 @@
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> vrb = VarResolver.create().defaultVars();
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<em class="jxr_comment">// Should reject names with characters outside A-Za-z</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;? <strong class="jxr_keyword">extends</strong> Var&gt; c : a(InvalidVar1.<strong class="jxr_keyword">class</strong>, InvalidVar2.<strong class="jxr_keyword">class</strong>, InvalidVar3.<strong class="jxr_keyword">class</strong>, InvalidVar4.<strong class="jxr_keyword">class</strong>, InvalidVar5.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : a(InvalidVar1.<strong class="jxr_keyword">class</strong>, InvalidVar2.<strong class="jxr_keyword">class</strong>, InvalidVar3.<strong class="jxr_keyword">class</strong>, InvalidVar4.<strong class="jxr_keyword">class</strong>, InvalidVar5.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, ()-&gt;VarResolver.create().vars(c).build());
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		}
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 

@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<em class="jxr_comment">// Find matching @Query from class-level queryParams array</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		Query classLevelQuery = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">for</strong> (Query q : restAnnotation.queryParams()) {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> q : restAnnotation.queryParams()) {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			String qName = firstNonEmpty(q.name(), q.value());
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">if</strong> (paramName.equals(qName)) {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  				classLevelQuery = q;

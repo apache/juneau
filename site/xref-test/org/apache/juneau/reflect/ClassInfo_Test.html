@@ -1113,9 +1113,9 @@
 <a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 	<strong class="jxr_keyword">static</strong> List&lt;Object&gt; primitiveDefaults = l(false,(byte)0,(<strong class="jxr_keyword">short</strong>)0,(<strong class="jxr_keyword">char</strong>)0,0,0L,0f,0d);
 <a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 
 <a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 	@Test <strong class="jxr_keyword">void</strong> hasPrimitiveWrapper() {
-<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : primitives)
+<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : primitives)
 <a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 			assertTrue(of(c).hasPrimitiveWrapper());
-<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : primitiveWrappers)
+<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : primitiveWrappers)
 <a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 			assertFalse(of(c).hasPrimitiveWrapper());
 <a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 	}
 <a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 

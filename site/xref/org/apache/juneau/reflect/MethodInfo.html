@@ -84,13 +84,13 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;MethodInfo&gt; findMatching(List&lt;MethodInfo&gt; l, <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m, <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> c) {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m2 : c._getDeclaredMethods())
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : c._getDeclaredMethods())
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">if</strong> (m.hasName(m2.getName()) &amp;&amp; Arrays.equals(m._getParameterTypes(), m2._getParameterTypes()))
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  				l.add(m2);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		ClassInfo pc = c.getSuperclass();
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">if</strong> (nn(pc))
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			findMatching(l, m, pc);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">for</strong> (<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ic : c._getDeclaredInterfaces())
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ic : c._getDeclaredInterfaces())
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			findMatching(l, m, ic);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
@@ -148,9 +148,9 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the method parameters only consist of the types specified in the list.</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> argsOnlyOfType(Class&lt;?&gt;...args) {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c1 : _getRawParamTypes()) {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c1 : _getRawParamTypes()) {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">boolean</strong> foundMatch = false;
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c2 : args)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c2 : args)
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 				<strong class="jxr_keyword">if</strong> (c1 == c2)
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 					foundMatch = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">if</strong> (! foundMatch)
@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> canAcceptFuzzy(Object...args) {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">int</strong> matches = 0;
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">outer</strong>: <strong class="jxr_keyword">for</strong> (<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> pi : _getParameterTypes()) {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">for</strong> (Object a : args) {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : args) {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">if</strong> (pi.canAcceptArg(a)) {
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 					matches++;
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 					<strong class="jxr_keyword">continue</strong> <strong class="jxr_keyword">outer</strong>;
@@ -228,7 +228,7 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		MethodInfo[] m = _getMatching();
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = m.length - 1; i &gt;= 0; i--)
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">for</strong> (Annotation a2 : m[i]._getDeclaredAnnotations())
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a2 : m[i]._getDeclaredAnnotations())
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 				<strong class="jxr_keyword">if</strong> (type.isInstance(a2))
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 					consumeIf(filter, action, type.<strong class="jxr_keyword">cast</strong>(a2));
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 		getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).forEachAnnotation(annotationProvider, type, filter, action);
@@ -287,7 +287,7 @@
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> forEachMatching(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m : _getMatching())
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : _getMatching())
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 			consumeIf(filter, action, m);
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
@@ -331,7 +331,7 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		Value&lt;A&gt; t = Value.empty();
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m2 : _getMatching()) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : _getMatching()) {
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 			annotationProvider.forEachAnnotation(type, m2.<strong class="jxr_keyword">inner</strong>(), x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; t.set(x));
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">if</strong> (t.isPresent())
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 				<strong class="jxr_keyword">return</strong> t.get();
@@ -414,7 +414,7 @@
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Annotation getAnyAnnotation(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;...types) {
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; cc : types) {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> cc : types) {
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 			Annotation a = getAnnotation(cc);
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">if</strong> (nn(a))
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 				<strong class="jxr_keyword">return</strong> a;
@@ -496,7 +496,7 @@
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasAllArgs(Class&lt;?&gt;...requiredParams) {
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 		List&lt;Class&lt;?&gt;&gt; rawParamTypes = getRawParamTypes();
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : requiredParams)
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : requiredParams)
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 			<strong class="jxr_keyword">if</strong> (! rawParamTypes.contains(c))
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 
@@ -512,7 +512,7 @@
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation is present on this method.</em>
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(<a name="AnnotationProvider" href="../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m2 : _getMatching())
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : _getMatching())
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">if</strong> (nn(annotationProvider.firstAnnotation(type, m2.<strong class="jxr_keyword">inner</strong>(), x -&gt; <strong class="jxr_keyword">true</strong>)))
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">return</strong> false;
@@ -537,7 +537,7 @@
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> hasAnyAnnotations(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt;...types) {
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; a : types)
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : types)
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 			<strong class="jxr_keyword">if</strong> (hasAnnotation(a))
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">return</strong> false;
@@ -696,7 +696,7 @@
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 	}
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> 
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<strong class="jxr_keyword">private</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> findMatchingOnClass(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> c) {
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">for</strong> (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m2 : c._getDeclaredMethods())
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : c._getDeclaredMethods())
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 			<strong class="jxr_keyword">if</strong> (hasName(m2.getName()) &amp;&amp; Arrays.equals(_getParameterTypes(), m2._getParameterTypes()))
 <a class="jxr_linenumber" name="L693" href="#L693">693</a> 				<strong class="jxr_keyword">return</strong> m2;
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -714,20 +714,20 @@
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotationInfo(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci, Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 		<strong class="jxr_keyword">if</strong> (nn(ci))
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			<strong class="jxr_keyword">for</strong> (Annotation a : ci._getDeclaredAnnotations())
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : ci._getDeclaredAnnotations())
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 				AnnotationInfo.of(ci, a).accept(filter, action);
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 	}
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotationInfo(Package p, Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">if</strong> (nn(p))
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			<strong class="jxr_keyword">for</strong> (Annotation a : p.getDeclaredAnnotations())
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : p.getDeclaredAnnotations())
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 				AnnotationInfo.of(p, a).accept(filter, action);
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 	}
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> forEachDeclaredMethodAnnotationInfo(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci, Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> 		MethodInfo m = findMatchingOnClass(ci);
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> 		<strong class="jxr_keyword">if</strong> (nn(m))
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 			<strong class="jxr_keyword">for</strong> (Annotation a : m._getDeclaredAnnotations())
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : m._getDeclaredAnnotations())
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> 				AnnotationInfo.of(m, a).accept(filter, action);
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> 	}
 <a class="jxr_linenumber" name="L725" href="#L725">725</a> 

@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicResource" href="../../../../../org/apache/juneau/http/resource/BasicResource.html#BasicResource">BasicResource</a> addHeaders(Header...values) {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">for</strong> (Header h : values) {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : values) {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<strong class="jxr_keyword">if</strong> (nn(h)) {
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 				String n = h.getName();
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 				String v = h.getValue();
@@ -402,7 +402,7 @@
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicResource" href="../../../../../org/apache/juneau/http/resource/BasicResource.html#BasicResource">BasicResource</a> setHeaders(Header...values) {
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">for</strong> (Header h : values) {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : values) {
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">if</strong> (nn(h)) {
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 				String n = h.getName();
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 				String v = h.getValue();

@@ -690,7 +690,7 @@
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSortable(Collection&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">for</strong> (Object o : c)
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> o : c)
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 			<strong class="jxr_keyword">if</strong> (! (o instanceof Comparable))
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;

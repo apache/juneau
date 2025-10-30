@@ -166,7 +166,7 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">if</strong> (h == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			charset = opContext.getDefaultCharset();
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">for</strong> (<a name="StringRange" href="../../../../org/apache/juneau/StringRange.html#StringRange">StringRange</a> r : StringRanges.of(h).toList()) {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : StringRanges.of(h).toList()) {
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">if</strong> (r.getQValue() &gt; 0) {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 					<strong class="jxr_keyword">if</strong> (r.getName().equals(<span class="jxr_string">"*"</span>))
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 						charset = opContext.getDefaultCharset();

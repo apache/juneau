@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">public</strong> Builder debugRules(CallLoggerRule...values) {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">for</strong> (<a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a> rule : values)
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rule : values)
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 				debugRules.add(rule);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		}
@@ -308,7 +308,7 @@
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">public</strong> Builder normalRules(CallLoggerRule...values) {
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">for</strong> (<a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a> rule : values)
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rule : values)
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 				normalRules.add(rule);
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 		}
@@ -720,7 +720,7 @@
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 * @return The applicable logging rule, or the default rule if not found.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 	<strong class="jxr_keyword">protected</strong> <a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a> getRule(HttpServletRequest req, HttpServletResponse res) {
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">for</strong> (<a name="CallLoggerRule" href="../../../../../org/apache/juneau/rest/logger/CallLoggerRule.html#CallLoggerRule">CallLoggerRule</a> r : isDebug(req) ? debugRules : normalRules)
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : isDebug(req) ? debugRules : normalRules)
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 			<strong class="jxr_keyword">if</strong> (r.matches(req, res))
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 				<strong class="jxr_keyword">return</strong> r;
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 		<strong class="jxr_keyword">return</strong> DEFAULT_RULE;

@@ -503,7 +503,7 @@
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 			<strong class="jxr_keyword">return</strong> parentContent;
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 		List&lt;String&gt; list = list();
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">for</strong> (String l : content) {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> l : content) {
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"INHERIT"</span>.equals(l)) {
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 				addAll(list, parentContent);
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"NONE"</span>.equals(l)) {
@@ -520,7 +520,7 @@
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<strong class="jxr_keyword">return</strong> parentLinks;
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 		List&lt;String&gt; list = list();
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<strong class="jxr_keyword">for</strong> (String l : links) {
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> l : links) {
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"INHERIT"</span>.equals(l))
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 				addAll(list, parentLinks);
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (l.indexOf('[') != -1 &amp;&amp; INDEXED_LINK_PATTERN.matcher(l).matches()) {
@@ -542,7 +542,7 @@
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 			<strong class="jxr_keyword">return</strong> fromParent;
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 		List&lt;String&gt; l = list();
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">for</strong> (String v : value) {
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : value) {
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"INHERIT"</span>.equals(v))
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 				l.add(v);
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(fromParent))

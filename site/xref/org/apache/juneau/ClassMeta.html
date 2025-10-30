@@ -876,7 +876,7 @@
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> 				<strong class="jxr_keyword">return</strong> Optional.ofNullable(info.firstAnnotation(BeanContext.DEFAULT, type, filter));
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> 			<strong class="jxr_keyword">return</strong> Optional.empty();
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> 		}
-<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		<strong class="jxr_keyword">for</strong> (A a : array)
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : array)
 <a class="jxr_linenumber" name="L872" href="#L872">872</a> 			<strong class="jxr_keyword">if</strong> (test(filter, a))
 <a class="jxr_linenumber" name="L873" href="#L873">873</a> 				<strong class="jxr_keyword">return</strong> Optional.of(a);
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> 		<strong class="jxr_keyword">return</strong> Optional.empty();
@@ -898,7 +898,7 @@
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> 				info.forEachAnnotation(BeanContext.DEFAULT, type, filter, action);
 <a class="jxr_linenumber" name="L891" href="#L891">891</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L892" href="#L892">892</a> 		}
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		<strong class="jxr_keyword">for</strong> (A a : array)
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : array)
 <a class="jxr_linenumber" name="L894" href="#L894">894</a> 			PredicateUtils.consumeIf(filter, action, a);
 <a class="jxr_linenumber" name="L895" href="#L895">895</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L896" href="#L896">896</a> 	}
@@ -1989,7 +1989,7 @@
 <a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> 		<strong class="jxr_keyword">if</strong> (nn(childSwapMap)) {
 <a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> 			ObjectSwap&lt;?,?&gt; s = childSwapMap.get(normalClass);
 <a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> 				<strong class="jxr_keyword">for</strong> (ObjectSwap&lt;?,?&gt; f : childSwaps)
+<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : childSwaps)
 <a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 					<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> &amp;&amp; f.getNormalClass().isParentOf(normalClass))
 <a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 						s = f;
 <a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
@@ -2016,7 +2016,7 @@
 <a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> 		<strong class="jxr_keyword">if</strong> (nn(childUnswapMap)) {
 <a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> 			ObjectSwap&lt;?,?&gt; s = childUnswapMap.get(swapClass);
 <a class="jxr_linenumber" name="L2010" href="#L2010">2010</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> 				<strong class="jxr_keyword">for</strong> (ObjectSwap&lt;?,?&gt; f : childSwaps)
+<a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : childSwaps)
 <a class="jxr_linenumber" name="L2012" href="#L2012">2012</a> 					<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> &amp;&amp; f.getSwapClass().isParentOf(swapClass))
 <a class="jxr_linenumber" name="L2013" href="#L2013">2013</a> 						s = f;
 <a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> 				<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)

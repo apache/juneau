@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			List&lt;Pattern&gt; ands = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			List&lt;Pattern&gt; nots = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">for</strong> (String s : StringUtils.splitQuoted(pattern, <strong class="jxr_keyword">true</strong>)) {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : StringUtils.splitQuoted(pattern, <strong class="jxr_keyword">true</strong>)) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  				<strong class="jxr_keyword">char</strong> c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  				<strong class="jxr_keyword">if</strong> (c0 == '/' &amp;&amp; c9 == '/' &amp;&amp; s.length() &gt; 1) {
@@ -147,13 +147,13 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		@Override
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(ClassMeta&lt;?&gt; cm, Object o) {
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			String s = (String)o;
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">for</strong> (Pattern andPattern : andPatterns)
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> andPattern : andPatterns)
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 				<strong class="jxr_keyword">if</strong> (! andPattern.matcher(s).matches())
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 					<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">for</strong> (Pattern notPattern : notPatterns)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> notPattern : notPatterns)
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 				<strong class="jxr_keyword">if</strong> (notPattern.matcher(s).matches())
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 					<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">for</strong> (Pattern orPattern : orPatterns)
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> orPattern : orPatterns)
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 				<strong class="jxr_keyword">if</strong> (orPattern.matcher(s).matches())
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">return</strong> orPatterns.length == 0;

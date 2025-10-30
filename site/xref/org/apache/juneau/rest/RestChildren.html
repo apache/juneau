@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * @param builder The builder containing the settings for this object.</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">public</strong> <a name="RestChildren" href="../../../../org/apache/juneau/rest/RestChildren.html#RestChildren">RestChildren</a>(Builder builder) {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">for</strong> (<a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> rc : builder.list)
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rc : builder.list)
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			children.put(rc.getPath(), rc);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 
@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * Called during servlet destruction on all children to invoke all {@link RestDestroy} and {@link Servlet#destroy()} methods.</em>
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> destroy() {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">for</strong> (<a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> r : children.values()) {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : children.values()) {
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			r.destroy();
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">if</strong> (r.getResource() instanceof Servlet)
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 				((Servlet)r.getResource()).destroy();
@@ -154,7 +154,7 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;RestChildMatch&gt; findMatch(RestSession.Builder builder) {
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">var</strong> pi = builder.getPathInfoUndecoded();
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">if</strong> ((! children.isEmpty()) &amp;&amp; nn(pi) &amp;&amp; ! pi.equals(<span class="jxr_string">"/"</span>)) {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">for</strong> (<a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> rc : children.values()) {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rc : children.values()) {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 				UrlPathMatcher upp = rc.getPathMatcher();
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				UrlPathMatch uppm = upp.match(builder.getUrlPath());
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				<strong class="jxr_keyword">if</strong> (nn(uppm)) {
@@ -171,7 +171,7 @@
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * @throws ServletException Error occurred.</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> postInit() <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">for</strong> (<a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> childContext : children.values())
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> childContext : children.values())
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			childContext.postInit();
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
@@ -181,7 +181,7 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * @throws ServletException Error occurred.</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> postInitChildFirst() <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">for</strong> (<a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> childContext : children.values())
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> childContext : children.values())
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 			childContext.postInitChildFirst();
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> }
