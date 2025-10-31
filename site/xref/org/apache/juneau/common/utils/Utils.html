@@ -931,103 +931,209 @@
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link ClassUtils#className(Object)}.</em>
 <a class="jxr_linenumber" name="L925" href="#L925">925</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> <em class="jxr_javadoccomment">	 * @param value The object to get the class name for.</em>
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 * @return The name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String cn(Object value) {
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">return</strong> ClassUtils.className(value);
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 	}
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link ClassUtils#simpleClassName(Object)}.</em>
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 * @param value The object to get the simple class name for.</em>
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 * @return The simple name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String scn(Object value) {
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 		<strong class="jxr_keyword">return</strong> ClassUtils.simpleClassName(value);
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 	}
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> <em class="jxr_javadoccomment">	 * Converts an object to a boolean.</em>
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 * @param val The object to convert.</em>
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 * @return The boolean value, or &lt;jk&gt;false&lt;/jk&gt; if the value was &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> b(Object val) {
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		<strong class="jxr_keyword">return</strong> opt(val).map(Object::toString).map(Boolean::valueOf).orElse(false);
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	}
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified number is inclusively between the two values.</em>
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 * @param n The number to check.</em>
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * @param lower The lower bound (inclusive).</em>
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 * @param higher The upper bound (inclusive).</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the number is between the bounds.</em>
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isBetween(<strong class="jxr_keyword">int</strong> n, <strong class="jxr_keyword">int</strong> lower, <strong class="jxr_keyword">int</strong> higher) {
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		<strong class="jxr_keyword">return</strong> n &gt;= lower &amp;&amp; n &lt;= higher;
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 	}
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> <em class="jxr_javadoccomment">	 * Same as {@link Integer#parseInt(String)} but removes any underscore characters first.</em>
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Allows for better readability of numeric literals (e.g., &lt;js&gt;"1_000_000"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 * @param value The string to parse.</em>
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 * @return The parsed integer value.</em>
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 * @throws NumberFormatException If the string cannot be parsed.</em>
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException If the string is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> parseInt(String value) {
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		<strong class="jxr_keyword">return</strong> Integer.parseInt(removeUnderscores(value));
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 	}
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> <em class="jxr_javadoccomment">	 * Same as {@link Long#parseLong(String)} but removes any underscore characters first.</em>
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Allows for better readability of numeric literals (e.g., &lt;js&gt;"1_000_000"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 * @param value The string to parse.</em>
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 * @return The parsed long value.</em>
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 * @throws NumberFormatException If the string cannot be parsed.</em>
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException If the string is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> parseLong(String value) {
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<strong class="jxr_keyword">return</strong> Long.parseLong(removeUnderscores(value));
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 	}
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 * Same as {@link Float#parseFloat(String)} but removes any underscore characters first.</em>
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Allows for better readability of numeric literals (e.g., &lt;js&gt;"1_000.5"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 * @param value The string to parse.</em>
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">	 * @return The parsed float value.</em>
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> <em class="jxr_javadoccomment">	 * @throws NumberFormatException If the string cannot be parsed.</em>
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException If the string is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">float</strong> parseFloat(String value) {
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		<strong class="jxr_keyword">return</strong> Float.parseFloat(removeUnderscores(value));
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 	}
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String removeUnderscores(String value) {
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullPointerException(<span class="jxr_string">"Trying to parse null string."</span>);
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<strong class="jxr_keyword">return</strong> notContains(value, '_') ? value : value.replace(<span class="jxr_string">"_"</span>, <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 	}
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link StringUtils#stringSupplier(Supplier)}.</em>
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 * Returns the fully-qualified class name including the full package path.</em>
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Regular classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> <em class="jxr_javadoccomment">	 * 	cn(String.&lt;jk&gt;class&lt;/jk&gt;);                  &lt;jc&gt;// "java.lang.String"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 * 	cn(&lt;jk&gt;new&lt;/jk&gt; HashMap&amp;lt;&amp;gt;());                &lt;jc&gt;// "java.util.HashMap"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Inner classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 * 	cn(Map.Entry.&lt;jk&gt;class&lt;/jk&gt;);               &lt;jc&gt;// "java.util.Map$Entry"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Primitives&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> <em class="jxr_javadoccomment">	 * 	cn(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                      &lt;jc&gt;// "int"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 * 	cn(&lt;jk&gt;boolean&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                  &lt;jc&gt;// "boolean"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Arrays&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> <em class="jxr_javadoccomment">	 * 	cn(String[].&lt;jk&gt;class&lt;/jk&gt;);                &lt;jc&gt;// "[Ljava.lang.String;"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> <em class="jxr_javadoccomment">	 * 	cn(&lt;jk&gt;int&lt;/jk&gt;[].&lt;jk&gt;class&lt;/jk&gt;);                    &lt;jc&gt;// "[I"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> <em class="jxr_javadoccomment">	 * 	cn(String[][].&lt;jk&gt;class&lt;/jk&gt;);              &lt;jc&gt;// "[[Ljava.lang.String;"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 * 	cn(&lt;jk&gt;null&lt;/jk&gt;);                          &lt;jc&gt;// null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 * @param value The object to get the class name for.</em>
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> <em class="jxr_javadoccomment">	 * @return The name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String cn(Object value) {
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 		<strong class="jxr_keyword">return</strong> ClassUtils.className(value);
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 	}
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link ClassUtils#simpleClassName(Object)}.</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">	 * Returns only the simple class name without any package or outer class information.</em>
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> <em class="jxr_javadoccomment">	 * For inner classes, only the innermost class name is returned.</em>
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Regular classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> <em class="jxr_javadoccomment">	 * 	scn(String.&lt;jk&gt;class&lt;/jk&gt;);            &lt;jc&gt;// "String"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> <em class="jxr_javadoccomment">	 * 	scn(&lt;jk&gt;new&lt;/jk&gt; HashMap&amp;lt;&amp;gt;());          &lt;jc&gt;// "HashMap"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Inner classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 * 	scn(Map.Entry.&lt;jk&gt;class&lt;/jk&gt;);         &lt;jc&gt;// "Entry"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Primitives&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> <em class="jxr_javadoccomment">	 * 	scn(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                &lt;jc&gt;// "int"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 * 	scn(&lt;jk&gt;boolean&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);            &lt;jc&gt;// "boolean"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Arrays&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> <em class="jxr_javadoccomment">	 * 	scn(String[].&lt;jk&gt;class&lt;/jk&gt;);          &lt;jc&gt;// "String[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> <em class="jxr_javadoccomment">	 * 	scn(&lt;jk&gt;int&lt;/jk&gt;[].&lt;jk&gt;class&lt;/jk&gt;);              &lt;jc&gt;// "int[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> <em class="jxr_javadoccomment">	 * 	scn(String[][].&lt;jk&gt;class&lt;/jk&gt;);        &lt;jc&gt;// "String[][]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 * 	scn(&lt;jk&gt;null&lt;/jk&gt;);                    &lt;jc&gt;// null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 * @param value The object to get the simple class name for.</em>
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> <em class="jxr_javadoccomment">	 * @return The simple name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String scn(Object value) {
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">return</strong> ClassUtils.simpleClassName(value);
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	}
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link ClassUtils#simpleQualifiedClassName(Object)}.</em>
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> <em class="jxr_javadoccomment">	 * Returns the simple class name including outer class names, but without the package.</em>
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> <em class="jxr_javadoccomment">	 * Inner class separators ($) are replaced with dots (.).</em>
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> <em class="jxr_javadoccomment">	 * Array types are properly formatted with brackets.</em>
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Regular classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> <em class="jxr_javadoccomment">	 * 	sqcn(String.&lt;jk&gt;class&lt;/jk&gt;);                     &lt;jc&gt;// "String"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> <em class="jxr_javadoccomment">	 * 	sqcn(&lt;jk&gt;new&lt;/jk&gt; HashMap&amp;lt;&amp;gt;());                   &lt;jc&gt;// "HashMap"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Inner classes&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> <em class="jxr_javadoccomment">	 * 	sqcn(Map.Entry.&lt;jk&gt;class&lt;/jk&gt;);                  &lt;jc&gt;// "Map.Entry"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> <em class="jxr_javadoccomment">	 * 	sqcn(Outer.Inner.Deep.&lt;jk&gt;class&lt;/jk&gt;);           &lt;jc&gt;// "Outer.Inner.Deep"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Primitives&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> <em class="jxr_javadoccomment">	 * 	sqcn(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                         &lt;jc&gt;// "int"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> <em class="jxr_javadoccomment">	 * 	sqcn(&lt;jk&gt;boolean&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);                     &lt;jc&gt;// "boolean"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> <em class="jxr_javadoccomment">	 * @param s The supplier.</em>
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> <em class="jxr_javadoccomment">	 * @return A string supplier that calls {@link #r(Object)} on the supplied value.</em>
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Supplier&lt;String&gt; ss(Supplier&lt;?&gt; s) {
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		<strong class="jxr_keyword">return</strong> stringSupplier(s);
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 	}
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> }
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Object arrays&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> <em class="jxr_javadoccomment">	 * 	sqcn(String[].&lt;jk&gt;class&lt;/jk&gt;);                   &lt;jc&gt;// "String[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> <em class="jxr_javadoccomment">	 * 	sqcn(Map.Entry[].&lt;jk&gt;class&lt;/jk&gt;);                &lt;jc&gt;// "Map.Entry[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> <em class="jxr_javadoccomment">	 * 	sqcn(String[][].&lt;jk&gt;class&lt;/jk&gt;);                 &lt;jc&gt;// "String[][]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Primitive arrays&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> <em class="jxr_javadoccomment">	 * 	sqcn(&lt;jk&gt;int&lt;/jk&gt;[].&lt;jk&gt;class&lt;/jk&gt;);                       &lt;jc&gt;// "int[]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> <em class="jxr_javadoccomment">	 * 	sqcn(&lt;jk&gt;boolean&lt;/jk&gt;[][].&lt;jk&gt;class&lt;/jk&gt;);                 &lt;jc&gt;// "boolean[][]"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> <em class="jxr_javadoccomment">	 * 	sqcn(&lt;jk&gt;null&lt;/jk&gt;);                             &lt;jc&gt;// null&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">	 * @param value The object to get the simple qualified class name for.</em>
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * @return The simple qualified name of the class or &lt;jk&gt;null&lt;/jk&gt; if the value was null.</em>
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String sqcn(Object value) {
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		<strong class="jxr_keyword">return</strong> ClassUtils.simpleQualifiedClassName(value);
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 	}
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 * Converts an object to a boolean.</em>
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> <em class="jxr_javadoccomment">	 * @param val The object to convert.</em>
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> <em class="jxr_javadoccomment">	 * @return The boolean value, or &lt;jk&gt;false&lt;/jk&gt; if the value was &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> b(Object val) {
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		<strong class="jxr_keyword">return</strong> opt(val).map(Object::toString).map(Boolean::valueOf).orElse(false);
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	}
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified number is inclusively between the two values.</em>
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> <em class="jxr_javadoccomment">	 * @param n The number to check.</em>
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> <em class="jxr_javadoccomment">	 * @param lower The lower bound (inclusive).</em>
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> <em class="jxr_javadoccomment">	 * @param higher The upper bound (inclusive).</em>
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the number is between the bounds.</em>
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isBetween(<strong class="jxr_keyword">int</strong> n, <strong class="jxr_keyword">int</strong> lower, <strong class="jxr_keyword">int</strong> higher) {
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<strong class="jxr_keyword">return</strong> n &gt;= lower &amp;&amp; n &lt;= higher;
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 	}
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> <em class="jxr_javadoccomment">	 * Same as {@link Integer#parseInt(String)} but removes any underscore characters first.</em>
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Allows for better readability of numeric literals (e.g., &lt;js&gt;"1_000_000"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> <em class="jxr_javadoccomment">	 * @param value The string to parse.</em>
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> <em class="jxr_javadoccomment">	 * @return The parsed integer value.</em>
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> <em class="jxr_javadoccomment">	 * @throws NumberFormatException If the string cannot be parsed.</em>
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException If the string is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> parseInt(String value) {
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 		<strong class="jxr_keyword">return</strong> Integer.parseInt(removeUnderscores(value));
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 	}
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> <em class="jxr_javadoccomment">	 * Same as {@link Long#parseLong(String)} but removes any underscore characters first.</em>
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Allows for better readability of numeric literals (e.g., &lt;js&gt;"1_000_000"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> <em class="jxr_javadoccomment">	 * @param value The string to parse.</em>
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> <em class="jxr_javadoccomment">	 * @return The parsed long value.</em>
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> <em class="jxr_javadoccomment">	 * @throws NumberFormatException If the string cannot be parsed.</em>
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException If the string is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> parseLong(String value) {
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 		<strong class="jxr_keyword">return</strong> Long.parseLong(removeUnderscores(value));
+<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 	}
+<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> <em class="jxr_javadoccomment">	 * Same as {@link Float#parseFloat(String)} but removes any underscore characters first.</em>
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;Allows for better readability of numeric literals (e.g., &lt;js&gt;"1_000.5"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> <em class="jxr_javadoccomment">	 * @param value The string to parse.</em>
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> <em class="jxr_javadoccomment">	 * @return The parsed float value.</em>
+<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> <em class="jxr_javadoccomment">	 * @throws NumberFormatException If the string cannot be parsed.</em>
+<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException If the string is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">float</strong> parseFloat(String value) {
+<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 		<strong class="jxr_keyword">return</strong> Float.parseFloat(removeUnderscores(value));
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 	}
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 
+<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String removeUnderscores(String value) {
+<a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullPointerException(<span class="jxr_string">"Trying to parse null string."</span>);
+<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 		<strong class="jxr_keyword">return</strong> notContains(value, '_') ? value : value.replace(<span class="jxr_string">"_"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 	}
+<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 
+<a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> <em class="jxr_javadoccomment">	 * Shortcut for calling {@link StringUtils#stringSupplier(Supplier)}.</em>
+<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> <em class="jxr_javadoccomment">	 * @param s The supplier.</em>
+<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> <em class="jxr_javadoccomment">	 * @return A string supplier that calls {@link #r(Object)} on the supplied value.</em>
+<a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Supplier&lt;String&gt; ss(Supplier&lt;?&gt; s) {
+<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 		<strong class="jxr_keyword">return</strong> stringSupplier(s);
+<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 	}
+<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 
+<a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> <em class="jxr_javadoccomment">	 * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"</em>
+<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> <em class="jxr_javadoccomment">	 * @param o The object to convert to a string.</em>
+<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> <em class="jxr_javadoccomment">	 * @return An identity string.</em>
+<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String identity(Object o) {
+<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Optional)
+<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 			o = ((Optional&lt;?&gt;)o).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 		<strong class="jxr_keyword">return</strong> sqcn(o) + <span class="jxr_string">"@"</span> + System.identityHashCode(o);
+<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 	}
+<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

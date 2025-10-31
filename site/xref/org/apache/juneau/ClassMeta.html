@@ -580,7 +580,7 @@
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		stringConstructor;                                   <em class="jxr_comment">// The X(String) constructor (if it has one).</em>
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method exampleMethod;                                       <em class="jxr_comment">// The example() or @Example-annotated method (if it has one).</em>
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Field exampleField;                                        <em class="jxr_comment">// The @Example-annotated field (if it has one).</em>
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Setter" href="../../../org/apache/juneau/internal/Setter.html#Setter">Setter</a> namePropertyMethod,                                  <em class="jxr_comment">// The method to set the name on an object (if it has one).</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Setter" href="../../../org/apache/juneau/common/reflect/Setter.html#Setter">Setter</a> namePropertyMethod,                                  <em class="jxr_comment">// The method to set the name on an object (if it has one).</em>
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 		parentPropertyMethod;                                <em class="jxr_comment">// The method to set the parent on an object (if it has one).</em>
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isDelegate,                                          <em class="jxr_comment">// True if this class extends Delegate.</em>
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 		isAbstract,                                          <em class="jxr_comment">// True if this class is abstract.</em>
@@ -1170,7 +1170,7 @@
 <a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> <em class="jxr_javadoccomment">	 * 	The method or field  annotated with {@link NameProperty @NameProperty} or &lt;jk&gt;null&lt;/jk&gt; if method does not</em>
 <a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> <em class="jxr_javadoccomment">	 * 	exist.</em>
 <a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 	<strong class="jxr_keyword">public</strong> <a name="Setter" href="../../../org/apache/juneau/internal/Setter.html#Setter">Setter</a> getNameProperty() { <strong class="jxr_keyword">return</strong> namePropertyMethod; }
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 	<strong class="jxr_keyword">public</strong> <a name="Setter" href="../../../org/apache/juneau/common/reflect/Setter.html#Setter">Setter</a> getNameProperty() { <strong class="jxr_keyword">return</strong> namePropertyMethod; }
 <a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 
 <a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> <em class="jxr_javadoccomment">	 * Returns the reason why this class is not a bean, or &lt;jk&gt;null&lt;/jk&gt; if it is a bean.</em>
@@ -1200,7 +1200,7 @@
 <a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> <em class="jxr_javadoccomment">	 * 	The method or field annotated with {@link ParentProperty @ParentProperty} or &lt;jk&gt;null&lt;/jk&gt; if method does not</em>
 <a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> <em class="jxr_javadoccomment">	 * 	exist.</em>
 <a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 	<strong class="jxr_keyword">public</strong> <a name="Setter" href="../../../org/apache/juneau/internal/Setter.html#Setter">Setter</a> getParentProperty() { <strong class="jxr_keyword">return</strong> parentPropertyMethod; }
+<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 	<strong class="jxr_keyword">public</strong> <a name="Setter" href="../../../org/apache/juneau/common/reflect/Setter.html#Setter">Setter</a> getParentProperty() { <strong class="jxr_keyword">return</strong> parentPropertyMethod; }
 <a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 
 <a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> <em class="jxr_javadoccomment">	 * Returns the default value for primitives such as &lt;jk&gt;int&lt;/jk&gt; or &lt;jk&gt;Integer&lt;/jk&gt;.</em>

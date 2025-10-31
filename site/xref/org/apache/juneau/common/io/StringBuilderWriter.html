@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>StringBuilderWriter xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/internal/StringBuilderWriter.html">View Javadoc</a></div><pre>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/common/io/StringBuilderWriter.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
@@ -22,7 +22,7 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.internal;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.common.io;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.io.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
@@ -37,14 +37,14 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/internal/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a> <strong class="jxr_keyword">extends</strong> Writer {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="StringBuilderWriter" href="../../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a> <strong class="jxr_keyword">extends</strong> Writer {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> StringBuilder sb;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 * Create a new string writer using the default initial string-builder size.</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/internal/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>() {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>() {
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		lock = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	}
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 * 	The number of &lt;tt&gt;char&lt;/tt&gt; values that will fit into this buffer before it is automatically expanded.</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If &lt;tt&gt;initialSize&lt;/tt&gt; is negative.</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/internal/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>(<strong class="jxr_keyword">int</strong> initialSize) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>(<strong class="jxr_keyword">int</strong> initialSize) {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		sb = <strong class="jxr_keyword">new</strong> StringBuilder(initialSize);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		lock = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
@@ -66,19 +66,19 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * @param sb The string builder being wrapped.</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/internal/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>(StringBuilder sb) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a>(StringBuilder sb) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">this</strong>.sb = sb;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		lock = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Override <em class="jxr_comment">/* Overridden from Writer */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/internal/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a> append(<strong class="jxr_keyword">char</strong> c) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a> append(<strong class="jxr_keyword">char</strong> c) {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		write(c);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	@Override <em class="jxr_comment">/* Overridden from Writer */</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/internal/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a> append(CharSequence csq) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a> append(CharSequence csq) {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">if</strong> (csq == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			write(<span class="jxr_string">"null"</span>);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">else</strong>
@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Override <em class="jxr_comment">/* Overridden from Writer */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../org/apache/juneau/internal/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a> append(CharSequence csq, <strong class="jxr_keyword">int</strong> start, <strong class="jxr_keyword">int</strong> end) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> <a name="StringBuilderWriter" href="../../../../../org/apache/juneau/common/io/StringBuilderWriter.html#StringBuilderWriter">StringBuilderWriter</a> append(CharSequence csq, <strong class="jxr_keyword">int</strong> start, <strong class="jxr_keyword">int</strong> end) {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		CharSequence cs = (csq == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"null"</span> : csq);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		write(cs.subSequence(start, end).toString());
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;

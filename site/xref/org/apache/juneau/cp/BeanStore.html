@@ -667,9 +667,9 @@
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 		Predicate&lt;Boolean&gt; nf = Utils::isTrue;
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			.append(<span class="jxr_string">"identity"</span>, Utils2.identity(<strong class="jxr_keyword">this</strong>))
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			.append(<span class="jxr_string">"identity"</span>, identity(<strong class="jxr_keyword">this</strong>))
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 			.append(<span class="jxr_string">"entries"</span>, entries.stream().map(BeanStoreEntry::properties).collect(toList()))
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			.append(<span class="jxr_string">"outer"</span>, Utils2.identity(<strong class="jxr_keyword">outer</strong>.orElse(<strong class="jxr_keyword">null</strong>)))
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			.append(<span class="jxr_string">"outer"</span>, identity(<strong class="jxr_keyword">outer</strong>.orElse(<strong class="jxr_keyword">null</strong>)))
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 			.append(<span class="jxr_string">"parent"</span>, parent.map(BeanStore::properties).orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 			.appendIf(nf, <span class="jxr_string">"readOnly"</span>, readOnly)
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 			.appendIf(nf, <span class="jxr_string">"threadSafe"</span>, threadSafe)

@@ -223,9 +223,9 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> nil = (A)<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		test(x1).isSame(x1);
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		test(nil).isSame(nil);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertThrown(()-&gt;test(x1).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='a=1,b=2(BeanAssertion_Test$A@*)'.  Actual='a=1,b=2(BeanAssertion_Test$A@*)'."</span>);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertThrown(()-&gt;test(nil).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='a=1,b=2(BeanAssertion_Test$A@*)'.  Actual='null(null)'."</span>);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertThrown(()-&gt;test(x1).isSame(nil)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='null(null)'.  Actual='a=1,b=2(BeanAssertion_Test$A@*)'."</span>);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertThrown(()-&gt;test(x1).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='a=1,b=2(BeanAssertion_Test.A@*)'.  Actual='a=1,b=2(BeanAssertion_Test.A@*)'."</span>);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertThrown(()-&gt;test(nil).isSame(x1a)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='a=1,b=2(BeanAssertion_Test.A@*)'.  Actual='null(null)'."</span>);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertThrown(()-&gt;test(x1).isSame(nil)).asMessage().asOneLine().isMatches(<span class="jxr_string">"Not the same value.  Expect='null(null)'.  Actual='a=1,b=2(BeanAssertion_Test.A@*)'."</span>);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	@Test <strong class="jxr_keyword">void</strong> ca09_isSameJsonAs() {
