@@ -659,9 +659,9 @@ public class BeanStore {
 		Predicate<Boolean> nf = Utils::isTrue;
 		// @formatter:off
 		return filteredMap()
-			.append("identity", Utils2.identity(this))
+			.append("identity", identity(this))
 			.append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
-			.append("outer", Utils2.identity(outer.orElse(null)))
+			.append("outer", identity(outer.orElse(null)))
 			.append("parent", parent.map(BeanStore::properties).orElse(null))
 			.appendIf(nf, "readOnly", readOnly)
 			.appendIf(nf, "threadSafe", threadSafe)

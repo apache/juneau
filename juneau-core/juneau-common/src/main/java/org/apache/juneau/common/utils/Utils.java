@@ -923,6 +923,31 @@ public class Utils {
 	/**
 	 * Shortcut for calling {@link ClassUtils#className(Object)}.
 	 *
+	 * <p>
+	 * Returns the fully-qualified class name including the full package path.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular classes</jc>
+	 * 	cn(String.<jk>class</jk>);                  <jc>// "java.lang.String"</jc>
+	 * 	cn(<jk>new</jk> HashMap&lt;&gt;());                <jc>// "java.util.HashMap"</jc>
+	 *
+	 * 	<jc>// Inner classes</jc>
+	 * 	cn(Map.Entry.<jk>class</jk>);               <jc>// "java.util.Map$Entry"</jc>
+	 *
+	 * 	<jc>// Primitives</jc>
+	 * 	cn(<jk>int</jk>.<jk>class</jk>);                      <jc>// "int"</jc>
+	 * 	cn(<jk>boolean</jk>.<jk>class</jk>);                  <jc>// "boolean"</jc>
+	 *
+	 * 	<jc>// Arrays</jc>
+	 * 	cn(String[].<jk>class</jk>);                <jc>// "[Ljava.lang.String;"</jc>
+	 * 	cn(<jk>int</jk>[].<jk>class</jk>);                    <jc>// "[I"</jc>
+	 * 	cn(String[][].<jk>class</jk>);              <jc>// "[[Ljava.lang.String;"</jc>
+	 *
+	 * 	<jc>// Null</jc>
+	 * 	cn(<jk>null</jk>);                          <jc>// null</jc>
+	 * </p>
+	 *
 	 * @param value The object to get the class name for.
 	 * @return The name of the class or <jk>null</jk> if the value was null.
 	 */
@@ -933,11 +958,79 @@ public class Utils {
 	/**
 	 * Shortcut for calling {@link ClassUtils#simpleClassName(Object)}.
 	 *
+	 * <p>
+	 * Returns only the simple class name without any package or outer class information.
+	 * For inner classes, only the innermost class name is returned.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular classes</jc>
+	 * 	scn(String.<jk>class</jk>);            <jc>// "String"</jc>
+	 * 	scn(<jk>new</jk> HashMap&lt;&gt;());          <jc>// "HashMap"</jc>
+	 *
+	 * 	<jc>// Inner classes</jc>
+	 * 	scn(Map.Entry.<jk>class</jk>);         <jc>// "Entry"</jc>
+	 *
+	 * 	<jc>// Primitives</jc>
+	 * 	scn(<jk>int</jk>.<jk>class</jk>);                <jc>// "int"</jc>
+	 * 	scn(<jk>boolean</jk>.<jk>class</jk>);            <jc>// "boolean"</jc>
+	 *
+	 * 	<jc>// Arrays</jc>
+	 * 	scn(String[].<jk>class</jk>);          <jc>// "String[]"</jc>
+	 * 	scn(<jk>int</jk>[].<jk>class</jk>);              <jc>// "int[]"</jc>
+	 * 	scn(String[][].<jk>class</jk>);        <jc>// "String[][]"</jc>
+	 *
+	 * 	<jc>// Null</jc>
+	 * 	scn(<jk>null</jk>);                    <jc>// null</jc>
+	 * </p>
+	 *
 	 * @param value The object to get the simple class name for.
 	 * @return The simple name of the class or <jk>null</jk> if the value was null.
 	 */
 	public static String scn(Object value) {
 		return ClassUtils.simpleClassName(value);
+	}
+
+	/**
+	 * Shortcut for calling {@link ClassUtils#simpleQualifiedClassName(Object)}.
+	 *
+	 * <p>
+	 * Returns the simple class name including outer class names, but without the package.
+	 * Inner class separators ($) are replaced with dots (.).
+	 * Array types are properly formatted with brackets.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Regular classes</jc>
+	 * 	sqcn(String.<jk>class</jk>);                     <jc>// "String"</jc>
+	 * 	sqcn(<jk>new</jk> HashMap&lt;&gt;());                   <jc>// "HashMap"</jc>
+	 *
+	 * 	<jc>// Inner classes</jc>
+	 * 	sqcn(Map.Entry.<jk>class</jk>);                  <jc>// "Map.Entry"</jc>
+	 * 	sqcn(Outer.Inner.Deep.<jk>class</jk>);           <jc>// "Outer.Inner.Deep"</jc>
+	 *
+	 * 	<jc>// Primitives</jc>
+	 * 	sqcn(<jk>int</jk>.<jk>class</jk>);                         <jc>// "int"</jc>
+	 * 	sqcn(<jk>boolean</jk>.<jk>class</jk>);                     <jc>// "boolean"</jc>
+	 *
+	 * 	<jc>// Object arrays</jc>
+	 * 	sqcn(String[].<jk>class</jk>);                   <jc>// "String[]"</jc>
+	 * 	sqcn(Map.Entry[].<jk>class</jk>);                <jc>// "Map.Entry[]"</jc>
+	 * 	sqcn(String[][].<jk>class</jk>);                 <jc>// "String[][]"</jc>
+	 *
+	 * 	<jc>// Primitive arrays</jc>
+	 * 	sqcn(<jk>int</jk>[].<jk>class</jk>);                       <jc>// "int[]"</jc>
+	 * 	sqcn(<jk>boolean</jk>[][].<jk>class</jk>);                 <jc>// "boolean[][]"</jc>
+	 *
+	 * 	<jc>// Null</jc>
+	 * 	sqcn(<jk>null</jk>);                             <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param value The object to get the simple qualified class name for.
+	 * @return The simple qualified name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String sqcn(Object value) {
+		return ClassUtils.simpleQualifiedClassName(value);
 	}
 
 	/**
@@ -1018,5 +1111,18 @@ public class Utils {
 	 */
 	public static Supplier<String> ss(Supplier<?> s) {
 		return stringSupplier(s);
+	}
+
+	/**
+	 * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"
+	 * @param o The object to convert to a string.
+	 * @return An identity string.
+	 */
+	public static String identity(Object o) {
+		if (o instanceof Optional)
+			o = ((Optional<?>)o).orElse(null);
+		if (o == null)
+			return null;
+		return sqcn(o) + "@" + System.identityHashCode(o);
 	}
 }

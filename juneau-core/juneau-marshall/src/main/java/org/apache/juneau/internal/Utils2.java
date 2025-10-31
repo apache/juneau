@@ -34,19 +34,6 @@ public class Utils2 extends Utils {
 	private static final ConcurrentHashMap<Class<?>,Map<String,MethodInfo>> PROPERTIES_METHODS = new ConcurrentHashMap<>();
 
 	/**
-	 * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"
-	 * @param o The object to convert to a string.
-	 * @return An identity string.
-	 */
-	public static String identity(Object o) {
-		if (o instanceof Optional)
-			o = ((Optional<?>)o).orElse(null);
-		if (o == null)
-			return null;
-		return ClassInfo.of(o).getShortName() + "@" + System.identityHashCode(o);
-	}
-
-	/**
 	 * Searches for all <c>properties()</c> methods on the specified object and creates a combine map of them.
 	 *
 	 * @param o The object to return a property map of.

@@ -215,9 +215,9 @@ class BeanAssertion_Test extends TestBase {
 		var nil = (A)null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='a=1,b=2(BeanAssertion_Test$A@*)'.  Actual='a=1,b=2(BeanAssertion_Test$A@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='a=1,b=2(BeanAssertion_Test$A@*)'.  Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='a=1,b=2(BeanAssertion_Test$A@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='a=1,b=2(BeanAssertion_Test.A@*)'.  Actual='a=1,b=2(BeanAssertion_Test.A@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='a=1,b=2(BeanAssertion_Test.A@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='a=1,b=2(BeanAssertion_Test.A@*)'.");
 	}
 
 	@Test void ca09_isSameJsonAs() {

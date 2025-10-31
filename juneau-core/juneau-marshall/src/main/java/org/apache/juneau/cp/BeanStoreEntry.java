@@ -125,7 +125,7 @@ public class BeanStoreEntry<T> {
 		// @formatter:off
 		return filteredMap()
 			.append("type", scn(getType()))
-			.append("bean", Utils2.identity(get()))
+			.append("bean", identity(get()))
 			.append("name", getName());
 		// @formatter:on
 	}

@@ -14,11 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
+package org.apache.juneau.common.reflect;
 
 import java.lang.reflect.*;
-
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Encapsulate a bean setter method that may be a method or field.

@@ -29,6 +29,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.junit.jupiter.api.*;
 
@@ -162,10 +163,10 @@ class BeanStore_Test extends TestBase {
 			assertList(b.stream(A2.class).map(BeanStoreEntry::get), a2a);
 		}
 
-		assertMatchesGlob("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}", b1p);
-		assertMatchesGlob("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}}", b1c);
-		assertMatchesGlob("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true}", b2p);
-		assertMatchesGlob("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true},threadSafe:true}", b2c);
+		assertMatchesGlob("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+Utils.identity(a1a)+"'}]}", b1p);
+		assertMatchesGlob("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+Utils.identity(a1b)+"'},{type:'A1',bean:'"+Utils.identity(a1a)+"'}]}}", b1c);
+		assertMatchesGlob("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+Utils.identity(a1a)+"'}],threadSafe:true}", b2p);
+		assertMatchesGlob("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+Utils.identity(a1b)+"'},{type:'A1',bean:'"+Utils.identity(a1a)+"'}],threadSafe:true},threadSafe:true}", b2c);
 
 		b1p.removeBean(A1.class);
 		b1c.clear().addBean(A1.class, a1a);
