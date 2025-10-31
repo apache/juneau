@@ -26,6 +26,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
 
 /**

@@ -17,8 +17,8 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.cp.DefaultClassList.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.rest.util.DefaultClassList.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

@@ -20,6 +20,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.collections.*;
 import org.junit.jupiter.api.*;
 
 class ControlledArrayList_Test extends TestBase {

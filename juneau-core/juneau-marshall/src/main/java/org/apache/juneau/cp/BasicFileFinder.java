@@ -29,6 +29,7 @@ import java.util.ResourceBundle.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
+import org.apache.juneau.common.io.*;
 import org.apache.juneau.common.utils.*;
 
 /**
