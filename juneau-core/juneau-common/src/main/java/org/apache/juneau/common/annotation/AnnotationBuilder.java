@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.common.annotation;
 
 import java.lang.annotation.*;
 
@@ -61,5 +61,13 @@ public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
 	@SuppressWarnings("unchecked")
 	protected B asThis() {
 		return (B)this;
+	}
+
+	public Class<? extends Annotation> getAnnotationType() {
+		return annotationType;
+	}
+
+	public String[] getDescription() {
+		return description;
 	}
 }

@@ -18,7 +18,7 @@ package org.apache.juneau.json.annotation;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**

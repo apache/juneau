@@ -21,7 +21,7 @@ import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 import jakarta.servlet.http.*;
 

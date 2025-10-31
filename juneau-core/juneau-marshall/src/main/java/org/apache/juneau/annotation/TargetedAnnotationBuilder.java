@@ -20,6 +20,8 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.common.annotation.*;
+
 /**
  * Builder for {@link TargetedAnnotationImpl} objects.
  *

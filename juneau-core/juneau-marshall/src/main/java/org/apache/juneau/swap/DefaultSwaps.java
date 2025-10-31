@@ -27,7 +27,7 @@ import java.util.regex.*;
 
 import javax.xml.datatype.*;
 
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.swaps.*;
 
 /**

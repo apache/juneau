@@ -20,7 +20,7 @@ import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Contains the meta-data about a Java method on a remote class.

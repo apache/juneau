@@ -21,7 +21,7 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Defines an invalid usage of an annotation.

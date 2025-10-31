@@ -27,7 +27,7 @@ import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Implementation of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.

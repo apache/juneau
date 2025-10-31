@@ -33,7 +33,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.reflect.Visibility;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link java.beans.BeanInfo}).

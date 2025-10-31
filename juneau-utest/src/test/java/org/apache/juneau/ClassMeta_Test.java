@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.reflect.ClassInfo_Test.*;
+import org.apache.juneau.common.reflect.ClassInfo_Test.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 

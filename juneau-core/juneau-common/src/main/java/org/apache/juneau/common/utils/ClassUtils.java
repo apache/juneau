@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Utility methods for working with classes.
@@ -452,6 +453,98 @@ public class ClassUtils {
 	public static boolean canPutTo(Map<?,?> value) {
 		assertArgNotNull("value", value);
 		return canAddTo(value.getClass());
+	}
+
+	/**
+	 * Matches arguments to a list of parameter types.
+	 *
+	 * <p>
+	 * This method intelligently matches a variable number of arguments to a fixed set of parameter types,
+	 * handling cases where arguments may be provided in a different order, or where some arguments are
+	 * missing or extra arguments are provided. This is particularly useful for reflective method/constructor
+	 * invocation where parameter order flexibility is desired.
+	 *
+	 * <h5 class='section'>Matching Rules:</h5>
+	 * <ul>
+	 * 	<li>If arguments already match parameter types in order and count, they are returned as-is (fast path)
+	 * 	<li>Otherwise, each parameter type is matched with the first compatible argument
+	 * 	<li>Extra arguments are ignored
+	 * 	<li>Missing parameters are left as <jk>null</jk>
+	 * 	<li>Primitive types are automatically matched with their wrapper equivalents
+	 * 	<li>Type hierarchy is respected (subclasses match parent parameters)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Already in correct order - fast path returns original array</jc>
+	 * 	Class&lt;?&gt;[] types = {String.<jk>class</jk>, Integer.<jk>class</jk>};
+	 * 	Object[] args = {<js>"hello"</js>, 42};
+	 * 	Object[] result = getMatchingArgs(types, args);
+	 * 	<jc>// Returns: ["hello", 42]</jc>
+	 *
+	 * 	<jc>// Arguments in wrong order - method reorders them</jc>
+	 * 	Class&lt;?&gt;[] types = {Integer.<jk>class</jk>, String.<jk>class</jk>};
+	 * 	Object[] args = {<js>"hello"</js>, 42};
+	 * 	Object[] result = getMatchingArgs(types, args);
+	 * 	<jc>// Returns: [42, "hello"]</jc>
+	 *
+	 * 	<jc>// Extra arguments are ignored</jc>
+	 * 	Class&lt;?&gt;[] types = {String.<jk>class</jk>};
+	 * 	Object[] args = {<js>"hello"</js>, 42, <jk>true</jk>};
+	 * 	Object[] result = getMatchingArgs(types, args);
+	 * 	<jc>// Returns: ["hello"]</jc>
+	 *
+	 * 	<jc>// Missing arguments become null</jc>
+	 * 	Class&lt;?&gt;[] types = {String.<jk>class</jk>, Integer.<jk>class</jk>, Boolean.<jk>class</jk>};
+	 * 	Object[] args = {<js>"hello"</js>};
+	 * 	Object[] result = getMatchingArgs(types, args);
+	 * 	<jc>// Returns: ["hello", null, null]</jc>
+	 *
+	 * 	<jc>// Handles primitive types and their wrappers</jc>
+	 * 	Class&lt;?&gt;[] types = {<jk>int</jk>.<jk>class</jk>, String.<jk>class</jk>};
+	 * 	Object[] args = {<js>"hello"</js>, 42};  <jc>// Integer object matches int.class</jc>
+	 * 	Object[] result = getMatchingArgs(types, args);
+	 * 	<jc>// Returns: [42, "hello"]</jc>
+	 *
+	 * 	<jc>// Respects type hierarchy - subclasses match parent types</jc>
+	 * 	Class&lt;?&gt;[] types = {Number.<jk>class</jk>, String.<jk>class</jk>};
+	 * 	Object[] args = {<js>"hello"</js>, 42};  <jc>// Integer extends Number</jc>
+	 * 	Object[] result = getMatchingArgs(types, args);
+	 * 	<jc>// Returns: [42, "hello"]</jc>
+	 * </p>
+	 *
+	 * <p>
+	 * This method is used internally by {@link ClassInfo}, {@link MethodInfo}, and {@link ConstructorInfo}
+	 * to provide flexible parameter matching during reflective invocation.
+	 *
+	 * @param paramTypes The parameter types to match against. Must not be <jk>null</jk>.
+	 * @param args The arguments to match to the parameter types. Can be empty or contain <jk>null</jk> values.
+	 * @return
+	 * 	An array of arguments matched to the parameter types. The returned array will always have
+	 * 	the same length as {@code paramTypes}. Returns the original {@code args} array if it already
+	 * 	matches (fast path optimization).
+	 */
+	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object...args) {
+		boolean needsShuffle = paramTypes.length != args.length;
+		if (! needsShuffle) {
+			for (int i = 0; i < paramTypes.length; i++) {
+				if (! paramTypes[i].isInstance(args[i]))
+					needsShuffle = true;
+			}
+		}
+		if (! needsShuffle)
+			return args;
+		Object[] params = new Object[paramTypes.length];
+		for (int i = 0; i < paramTypes.length; i++) {
+			var pt = ClassInfo.of(paramTypes[i]).getWrapperInfoIfPrimitive();
+			for (var arg : args) {
+				if (nn(arg) && pt.isParentOf(arg.getClass())) {
+					params[i] = arg;
+					break;
+				}
+			}
+		}
+		return params;
 	}
 
 	private static boolean canAddTo(Class<?> c) {

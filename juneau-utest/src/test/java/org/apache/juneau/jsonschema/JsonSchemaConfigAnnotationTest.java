@@ -24,7 +24,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.jsonschema.annotation.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.jupiter.api.*;
 

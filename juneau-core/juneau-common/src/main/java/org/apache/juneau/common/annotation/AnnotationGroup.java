@@ -14,17 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.reflect;
+package org.apache.juneau.common.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+/**
+ * Applied to annotations that belong to a similar group (e.g. <c>RestOp</c> and <c>RestGet</c>).
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * </ul>
+ */
 @Documented
-@Target(PACKAGE)
+@Target({ ANNOTATION_TYPE })
 @Retention(RUNTIME)
 @Inherited
-public @interface PA {
-	int value();
+public @interface AnnotationGroup {
+
+	/**
+	 * The annotation group.
+	 *
+	 * @return The annotation value.
+	 */
+	public Class<? extends Annotation> value();
 }

@@ -18,7 +18,7 @@ package org.apache.juneau.plaintext.annotation;
 
 import org.apache.juneau.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**

@@ -21,7 +21,7 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * POJO method introspector.

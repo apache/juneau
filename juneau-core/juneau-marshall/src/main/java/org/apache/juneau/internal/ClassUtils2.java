@@ -18,7 +18,7 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.common.utils.Utils.*;
 
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Class-related utility methods.

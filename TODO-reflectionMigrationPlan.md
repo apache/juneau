@@ -8,9 +8,11 @@ Move the following classes from `org.apache.juneau.reflect` (juneau-marshall) to
 - `FieldInfo`
 - `MethodInfo`
 - `ParamInfo`
+- `AnnotationInfo` *(added - must move with ClassInfo/MethodInfo due to circular references)*
+- `AnnotationList` *(added - must move with AnnotationInfo)*
 
 ## Current Location
-All six classes are currently in:
+All eight classes are currently in:
 - **Package**: `org.apache.juneau.reflect`
 - **Module**: `juneau-core/juneau-marshall`
 - **Path**: `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/reflect/`
@@ -19,6 +21,9 @@ All six classes are currently in:
 - **Package**: `org.apache.juneau.common.reflect`
 - **Module**: `juneau-core/juneau-common`
 - **Path**: `juneau-core/juneau-common/src/main/java/org/apache/juneau/common/reflect/`
+
+## Note on Circular Dependencies
+`AnnotationInfo` and `AnnotationList` were added to the migration because they have circular references with `ClassInfo` and `MethodInfo`. Phase 1 successfully removed all juneau-marshall dependencies from these classes so they can now move to juneau-common, but they must move together with the other reflection classes.
 
 ## Dependency Analysis
 
@@ -145,52 +150,155 @@ All six classes are currently in:
 
 ---
 
+### 7. AnnotationInfo.java
+**Status**: ✅ **READY TO MOVE** (must move with ClassInfo/MethodInfo)
+
+**Current Imports from juneau-marshall**: None (all removed in Phase 1c)
+
+**Dependencies**:
+- ✅ `org.apache.juneau.common.annotation.*` - Already in juneau-common (AnnotationGroup)
+- ✅ `org.apache.juneau.common.reflect.*` - Already in juneau-common (ExecutableException)
+- ✅ `org.apache.juneau.common.utils.*` - Already in juneau-common
+
+**Circular References**:
+- Has fields of type `ClassInfo` and `MethodInfo`
+- Has static methods that take `ClassInfo` and `MethodInfo` as parameters
+- **Must move together with ClassInfo/MethodInfo**
+
+**Issues**: None (all juneau-marshall dependencies removed in Phase 1c)
+
+**Phase 1c Changes Applied**:
+- ✅ Refactored `toJsonMap()` → `toMap()` using `LinkedHashMap` instead of `JsonMap`
+- ✅ Simplified `toString()` to use standard Java instead of `Json5`
+- ✅ Removed `getApplies()` method (logic moved to `AnnotationWorkList`)
+- ✅ Removed `applyConstructors` field
+
+---
+
+### 8. AnnotationList.java
+**Status**: ✅ **READY TO MOVE** (must move with AnnotationInfo)
+
+**Current Imports from juneau-marshall**: None
+
+**Dependencies**:
+- ✅ `org.apache.juneau.common.utils.*` - Already in juneau-common (PredicateUtils)
+
+**Issues**: None
+
+---
+
 ## Migration Plan
 
-### Phase 1: Refactor AnnotationInfo/AnnotationList dependencies ✅ COMPLETED
-**Goal**: Remove dependencies from ClassInfo/MethodInfo on AnnotationInfo/AnnotationList by moving annotation-related methods to AnnotationInfo as static methods.
+### Phase 1: Prepare AnnotationInfo/AnnotationList for migration ✅ COMPLETED
+**Goal**: Remove juneau-marshall dependencies from AnnotationInfo/AnnotationList so they can move to juneau-common together with ClassInfo/MethodInfo.
 
-**Methods moved from ClassInfo to AnnotationInfo:**
-1. ✅ `ClassInfo.forEachAnnotationInfo(Predicate, Consumer)` → `AnnotationInfo.forEachAnnotationInfo(ClassInfo, Predicate, Consumer)`
-2. ✅ `ClassInfo.getAnnotationList()` → `AnnotationInfo.getAnnotationList(ClassInfo)`
-3. ✅ `ClassInfo.getAnnotationList(Predicate)` → `AnnotationInfo.getAnnotationList(ClassInfo, Predicate)`
+**Sub-phase 1a: Add static methods to AnnotationInfo** ✅
+- Added static methods that take ClassInfo/MethodInfo as parameters
+- Made `ClassInfo.splitRepeated()` and `MethodInfo.findMatchingOnClass()` package-private
 
-**Methods moved from MethodInfo to AnnotationInfo:**
-1. ✅ `MethodInfo.forEachAnnotationInfo(Predicate, Consumer)` → `AnnotationInfo.forEachAnnotationInfo(MethodInfo, Predicate, Consumer)`
-2. ✅ `MethodInfo.getAnnotationList()` → `AnnotationInfo.getAnnotationList(MethodInfo)`
-3. ✅ `MethodInfo.getAnnotationList(Predicate)` → `AnnotationInfo.getAnnotationList(MethodInfo, Predicate)`
-4. ✅ `MethodInfo.getAnnotationListMethodOnly(Predicate)` → `AnnotationInfo.getAnnotationListMethodOnly(MethodInfo, Predicate)`
-5. ✅ `MethodInfo.forEachAnnotationInfoMethodOnly(Predicate, Consumer)` → `AnnotationInfo.forEachAnnotationInfoMethodOnly(MethodInfo, Predicate, Consumer)`
+**Sub-phase 1b: Remove annotation methods from ClassInfo/MethodInfo** ✅
+- Removed methods returning AnnotationList from ClassInfo/MethodInfo
+- Updated all callers (~108 call sites) to use static methods on AnnotationInfo
 
-**Implementation completed:**
-1. ✅ Added static methods to AnnotationInfo that take ClassInfo/MethodInfo as parameters
-2. ✅ Updated ClassInfo/MethodInfo to delegate to the new static methods (maintains backward compatibility)
-3. ✅ Made `ClassInfo.splitRepeated()` and `MethodInfo.findMatchingOnClass()` package-private for access by AnnotationInfo
-4. ✅ Removed private helper methods from MethodInfo (now in AnnotationInfo)
-5. ✅ Full project compilation successful
+**Sub-phase 1c: Remove juneau-marshall dependencies from AnnotationInfo** ✅
+1. ✅ **Refactored `toJsonMap()` and `toString()`**
+   - Changed `toJsonMap()` → `toMap()` returning `LinkedHashMap<String, Object>`
+   - Simplified `toString()` to use standard Java `toString()`
+   - Removed dependencies: `JsonMap`, `Json5`
 
-### Phase 2: Prepare juneau-common
-1. **Add getMatchingArgs() to ClassUtils**
-   - Extract `ClassUtils2.getMatchingArgs()` logic
-   - Add as public method to `org.apache.juneau.common.utils.ClassUtils`
-   - Note: Can use ClassInfo.of() since ClassInfo will be in juneau-common
-   - Add comprehensive javadoc
-   - Add unit tests in juneau-common
+2. ✅ **Moved `AnnotationGroup` to juneau-common** (user action)
+   - Moved from `org.apache.juneau.annotation.AnnotationGroup`
+   - To `org.apache.juneau.common.annotation.AnnotationGroup`
+   - Result: `isInGroup()` method now clean
 
-### Phase 3: Move reflection classes
-1. **Update imports in all 6 classes**
-   - Change package from `org.apache.juneau.reflect` to `org.apache.juneau.common.reflect`
-   - Update `FieldInfo`: Remove unused `import org.apache.juneau.*;`
-   - Update `MethodInfo`: Change `ClassUtils2.getMatchingArgs()` to `ClassUtils.getMatchingArgs()`
-   - Update `ConstructorInfo`: Change `ClassUtils2.getMatchingArgs()` to `ClassUtils.getMatchingArgs()`
-   - Note: `ParamInfo` already fixed to use reflection for @Name
+3. ✅ **Refactored `getApplies()` method**
+   - Moved applier instantiation logic from `AnnotationInfo.getApplies()` to `AnnotationWorkList.applyAnnotation()`
+   - Removed `getApplies()` method from AnnotationInfo
+   - Removed `applyConstructors` field from AnnotationInfo
+   - Removed dependencies: `VarResolverSession`, `ContextApply`, `AnnotationApplier`
 
-2. **Move all 6 files using git mv**
-   - Move from `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/reflect/`
-   - To `juneau-core/juneau-common/src/main/java/org/apache/juneau/common/reflect/`
+**Final AnnotationInfo dependencies (all juneau-common or JDK):**
+- ✅ Standard Java (JDK) classes only
+- ✅ `org.apache.juneau.common.annotation.*` (AnnotationGroup)
+- ✅ `org.apache.juneau.common.reflect.*` (ExecutableException)
+- ✅ `org.apache.juneau.common.utils.*` (utility methods)
 
-3. **Update all imports across the codebase**
-   - Update all files that import `org.apache.juneau.reflect.*` to use `org.apache.juneau.common.reflect.*`
+**Final AnnotationList dependencies (all juneau-common or JDK):**
+- ✅ Standard Java (JDK) classes only
+- ✅ `org.apache.juneau.common.utils.*` (PredicateUtils)
+
+**Result:** ✅ Both AnnotationInfo and AnnotationList are now ready to move to juneau-common (must move together with ClassInfo/MethodInfo due to circular references)
+
+### Phase 2: Prepare juneau-common ✅ COMPLETED (pending Phase 3)
+**Goal**: Add `getMatchingArgs()` method to ClassUtils in juneau-common so that MethodInfo and ConstructorInfo can use it after migration.
+
+**Changes completed:**
+
+1. ✅ **Added `getMatchingArgs()` to `org.apache.juneau.common.utils.ClassUtils`**
+   - Extracted logic from `ClassUtils2.getMatchingArgs()` in juneau-marshall
+   - Added comprehensive Javadoc with detailed examples
+   - Covers all use cases: argument reordering, missing parameters, extra parameters, primitive/wrapper handling, type hierarchy
+   - Method signature: `public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object...args)`
+
+2. ✅ **Updated MethodInfo to use new location**
+   - Changed import from `org.apache.juneau.internal.*` to `org.apache.juneau.common.utils.*`
+   - Changed call from `ClassUtils2.getMatchingArgs()` to `ClassUtils.getMatchingArgs()`
+   - File: `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/reflect/MethodInfo.java` (line 654)
+
+3. ✅ **Updated ConstructorInfo to use new location**
+   - Changed import from `org.apache.juneau.internal.*` to `org.apache.juneau.common.utils.*`
+   - Changed call from `ClassUtils2.getMatchingArgs()` to `ClassUtils.getMatchingArgs()`
+   - File: `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/reflect/ConstructorInfo.java` (line 249)
+
+**Note:** juneau-common won't compile yet because `ClassUtils.getMatchingArgs()` references `ClassInfo.of()`, and `ClassInfo` is still in juneau-marshall. This will be resolved in Phase 3 when all 8 reflection classes move together to juneau-common.
+
+### Phase 3: Move reflection classes ✅ COMPLETED
+**Goal**: Move all 8 reflection classes to juneau-common and update all imports across the codebase.
+
+**Changes completed:**
+
+1. ✅ **Created target directory** in juneau-common
+   - `juneau-core/juneau-common/src/main/java/org/apache/juneau/common/reflect/`
+
+2. ✅ **Moved all 8 classes using git mv**
+   - ClassInfo.java
+   - ConstructorInfo.java
+   - ExecutableInfo.java
+   - FieldInfo.java
+   - MethodInfo.java
+   - ParamInfo.java
+   - AnnotationInfo.java
+   - AnnotationList.java
+
+3. ✅ **Updated package declarations** in all 8 classes
+   - Changed from `package org.apache.juneau.reflect;`
+   - To `package org.apache.juneau.common.reflect;`
+
+4. ✅ **Updated all imports across codebase** (196+ files)
+   - Changed `import org.apache.juneau.reflect.*` to `import org.apache.juneau.common.reflect.*`
+   - Changed all static imports as well
+
+5. ✅ **Fixed remaining juneau-marshall files** that still needed access to Mutater/Mutaters
+   - Added `import org.apache.juneau.reflect.*;` for Mutater/Mutaters (which remain in juneau-marshall)
+   - Fixed: ClassMeta.java, SimplePartParserSession.java, SimplePartSerializerSession.java, UonSerializerSession.java, RrpcServlet.java
+
+6. ✅ **Moved test files** to match new package structure
+   - Moved all test files from `juneau-utest/src/test/java/org/apache/juneau/reflect/`
+   - To `juneau-utest/src/test/java/org/apache/juneau/common/reflect/`
+   - Updated package declarations in all test files
+   - This was necessary to maintain package-private access to internal methods
+   - Files moved: AnnotationInfoTest.java, ClassInfo_Test.java, ConstructorInfoTest.java, ExecutableInfo_Test.java, FieldInfo_Test.java, MethodInfo_Test.java, ParamInfoTest.java, AClass.java, AInterface.java, PA.java, package-info.java
+
+7. ✅ **Fixed test imports**
+   - Updated ClassMeta_Test.java to import from new location
+   - Fixed MutatersTest.java to import Mutaters from old location (still in juneau-marshall)
+   - Removed duplicate imports
+
+**Result:** ✅ **Full project compilation successful!**
+- juneau-common: 101 source files (up from 93)
+- juneau-marshall: Compiles successfully
+- All modules: Compile and test-compile successfully
+- Total time: ~17 seconds
 
 ### Phase 4: Create backward compatibility
 1. **Add deprecated aliases in juneau-marshall**
@@ -205,18 +313,22 @@ All six classes are currently in:
 
 ## Summary of Blockers
 
-### Must be resolved before migration:
+### ✅ Resolved:
 
-1. **AnnotationInfo/AnnotationList dependencies** (affects ClassInfo, MethodInfo) - ✅ **RESOLVED**
+1. **AnnotationInfo/AnnotationList juneau-marshall dependencies** - ✅ **RESOLVED**
    - Status: Phase 1 completed successfully
-   - Solution implemented: Refactored annotation-related methods to static methods on AnnotationInfo that take ClassInfo/MethodInfo as parameters
-   - Impact: Circular dependency removed, ClassInfo/MethodInfo can now be moved to juneau-common
-   - Backward compatibility: Original methods now delegate to static methods, maintaining existing API
+   - Solution implemented:
+     - Sub-phase 1a: Added static methods to AnnotationInfo that take ClassInfo/MethodInfo as parameters
+     - Sub-phase 1b: Removed AnnotationList-returning methods from ClassInfo/MethodInfo
+     - Sub-phase 1c: Removed all juneau-marshall dependencies from AnnotationInfo (toJsonMap/toString refactoring, getApplies refactoring, AnnotationGroup moved)
+   - Result: AnnotationInfo and AnnotationList can now move to juneau-common (must move together with ClassInfo/MethodInfo due to circular references)
 
-2. **ClassUtils2.getMatchingArgs()** (affects MethodInfo, ConstructorInfo)
-   - Current location: `org.apache.juneau.internal.ClassUtils2` (juneau-marshall)
-   - Needs to be: `org.apache.juneau.common.utils.ClassUtils` (juneau-common)
-   - Impact: Used for smart parameter matching in reflection invoke operations
+2. **ClassUtils2.getMatchingArgs()** (affects MethodInfo, ConstructorInfo) - ✅ **RESOLVED**
+   - Status: Phase 2 completed successfully
+   - Solution implemented:
+     - Added `getMatchingArgs()` to `org.apache.juneau.common.utils.ClassUtils`
+     - Updated MethodInfo and ConstructorInfo to use new location
+   - Result: MethodInfo and ConstructorInfo are ready to move (pending Phase 3 when ClassInfo moves)
 
 ### Can be fixed during migration:
 
@@ -233,32 +345,80 @@ All six classes are currently in:
 
 ## Recommended Approach
 
-**Complete Migration with Refactoring** (RECOMMENDED)
-1. **Phase 1**: Refactor AnnotationInfo/AnnotationList dependencies
-   - Move annotation-related methods from ClassInfo/MethodInfo to AnnotationInfo as static methods
-   - Update ClassInfo/MethodInfo to delegate to the new static methods (keeps backward compatibility)
-   - This breaks the circular dependency between reflection classes and annotation classes
-2. **Phase 2**: Add getMatchingArgs() to ClassUtils in juneau-common
-3. **Phase 3**: Move all 6 reflection classes to juneau-common
-4. **Phase 4**: Create deprecated aliases for backward compatibility
-5. **Phase 5**: Test and document
+**Complete Migration with Refactoring** (IN PROGRESS)
+1. ✅ **Phase 1**: Prepare AnnotationInfo/AnnotationList for migration (COMPLETED)
+   - ✅ Sub-phase 1a: Added static methods to AnnotationInfo
+   - ✅ Sub-phase 1b: Removed AnnotationList-returning methods from ClassInfo/MethodInfo
+   - ✅ Sub-phase 1c: Removed all juneau-marshall dependencies from AnnotationInfo
+2. ⏳ **Phase 2**: Add getMatchingArgs() to ClassUtils in juneau-common (IN PROGRESS)
+3. ⏭️ **Phase 3**: Move all 8 reflection classes to juneau-common
+4. ⏭️ **Phase 4**: Create deprecated aliases for backward compatibility
+5. ⏭️ **Phase 5**: Test and document
 
 **Benefits:**
 - Provides full reflection capability in juneau-common
 - Removes circular dependencies between modules
-- Maintains backward compatibility through delegation methods
+- All 8 reflection classes can move together to juneau-common
 - Better separation of concerns (annotation processing vs reflection utilities)
+
+## Phase 1c Summary (Completed)
+
+This phase was critical additional work discovered after starting Phase 1. The goal was to remove all juneau-marshall dependencies from `AnnotationInfo` and `AnnotationList` so they could move to juneau-common.
+
+**Work Completed:**
+
+1. **Refactored `toJsonMap()` and `toString()` methods**
+   - Problem: Used `JsonMap` (juneau-marshall) and `Json5` (juneau-marshall) 
+   - Solution: Changed to use standard Java `LinkedHashMap` and `.toString()`
+   - Files modified: `AnnotationInfo.java`
+
+2. **Moved `AnnotationGroup` annotation to juneau-common**
+   - Problem: `isInGroup()` method depended on `AnnotationGroup` annotation in juneau-marshall
+   - Solution: User moved `AnnotationGroup` from `org.apache.juneau.annotation` to `org.apache.juneau.common.annotation`
+   - Result: `isInGroup()` method now has no juneau-marshall dependencies
+
+3. **Refactored `getApplies()` method**
+   - Problem: Method used `VarResolverSession`, `ContextApply`, and `AnnotationApplier` from juneau-marshall
+   - Solution: Moved applier instantiation logic to `AnnotationWorkList.applyAnnotation()` helper method
+   - Files modified: `AnnotationInfo.java`, `AnnotationWorkList.java`
+   - Removed: `getApplies()` method, `applyConstructors` field
+   - Call sites updated: 1 (in `AnnotationWorkList`)
+
+**Final Result:**
+- ✅ `AnnotationInfo` now depends ONLY on juneau-common and JDK classes
+- ✅ `AnnotationList` now depends ONLY on juneau-common and JDK classes
+- ✅ Both classes ready to move (must move with ClassInfo/MethodInfo due to circular references)
+- ✅ Full project compilation successful
 
 ## Next Steps
 
-1. ✅ **Review and approve** this revised plan (DONE)
-2. ✅ **Implement Phase 1**: Refactor AnnotationInfo dependencies (DONE)
-   - ✅ Added static methods to AnnotationInfo that take ClassInfo/MethodInfo as parameters
-   - ✅ Updated ClassInfo/MethodInfo to delegate to new static methods
-   - ✅ Made helper methods package-private for AnnotationInfo access
+1. ✅ **Phase 1 Complete**: Prepare AnnotationInfo/AnnotationList for migration
+   - ✅ Sub-phase 1a: Added static methods to AnnotationInfo
+   - ✅ Sub-phase 1b: Removed annotation methods from ClassInfo/MethodInfo
+   - ✅ Sub-phase 1c: Removed all juneau-marshall dependencies from AnnotationInfo
+     - ✅ Refactored toJsonMap()/toString()
+     - ✅ AnnotationGroup moved to juneau-common
+     - ✅ Refactored getApplies() method
    - ✅ Full project compilation successful
-3. **Implement Phase 2**: Add getMatchingArgs() to ClassUtils
-4. **Implement Phase 3**: Move reflection classes
-5. **Implement Phase 4**: Create backward compatibility aliases
-6. **Implement Phase 5**: Test and document
+
+2. ✅ **Phase 2 Complete**: Add getMatchingArgs() to ClassUtils
+   - ✅ Extracted `ClassUtils2.getMatchingArgs()` logic from juneau-marshall
+   - ✅ Added as public method to `org.apache.juneau.common.utils.ClassUtils` with comprehensive javadoc
+   - ✅ Updated MethodInfo and ConstructorInfo to use new ClassUtils location
+   - Note: juneau-common won't compile until Phase 3 (ClassInfo still in juneau-marshall)
+
+3. ✅ **Phase 3 Complete**: Move all 8 reflection classes to juneau-common
+   - ✅ Moved all 8 classes using git mv
+   - ✅ Updated package declarations in all classes
+   - ✅ Updated 196+ import statements across entire codebase
+   - ✅ Fixed juneau-marshall files needing Mutater/Mutaters
+   - ✅ Moved test files to new package structure
+   - ✅ Full project compilation successful
+
+4. ⏭️ **Phase 4**: SKIPPED - Backward compatibility not needed for internal APIs
+
+5. ⏭️ **Phase 5**: Test and document
+   - Run all tests
+   - Update documentation (if needed)
+   - Update MIGRATION.md (if needed)
 

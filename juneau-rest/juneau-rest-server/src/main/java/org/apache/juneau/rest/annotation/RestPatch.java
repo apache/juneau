@@ -25,6 +25,7 @@ import java.nio.charset.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;

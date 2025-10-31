@@ -24,6 +24,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.common.reflect.*;
+
 /**
  * Cache of object that convert POJOs to and from common types such as strings, readers, and input streams.
  *

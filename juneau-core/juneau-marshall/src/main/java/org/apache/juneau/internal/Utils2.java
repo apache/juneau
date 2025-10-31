@@ -21,7 +21,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Various generic object utility methods.

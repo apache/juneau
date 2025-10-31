@@ -28,7 +28,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents the metadata gathered from a parameter or class annotated with {@link Request}.

@@ -22,7 +22,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Utility methods.

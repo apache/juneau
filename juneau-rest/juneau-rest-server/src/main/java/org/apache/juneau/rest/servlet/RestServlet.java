@@ -31,7 +31,7 @@ import java.util.logging.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 

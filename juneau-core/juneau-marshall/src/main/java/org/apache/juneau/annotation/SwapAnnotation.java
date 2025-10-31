@@ -23,7 +23,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**

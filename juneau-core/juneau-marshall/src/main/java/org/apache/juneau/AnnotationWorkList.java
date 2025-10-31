@@ -16,10 +16,15 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
+
 import java.lang.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -98,7 +103,36 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 * @return This object.
 	 */
 	public AnnotationWorkList add(AnnotationList annotations) {
-		annotations.sort().forEach(x -> x.getApplies(vrs, y -> add(x, y)));
+		annotations.sort().forEach(x -> applyAnnotation(x));
 		return this;
+	}
+
+	/**
+	 * Helper method to extract and apply annotation appliers for a given annotation.
+	 *
+	 * @param ai The annotation info to process.
+	 */
+	@SuppressWarnings("unchecked")
+	private void applyAnnotation(AnnotationInfo<?> ai) {
+		try {
+			Annotation a = ai.inner();
+			ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
+			Constructor<? extends AnnotationApplier<?,?>>[] applyConstructors;
+			
+			if (cpa == null) {
+				applyConstructors = a(AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class));
+			} else {
+				applyConstructors = new Constructor[cpa.value().length];
+				for (int i = 0; i < cpa.value().length; i++)
+					applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>)cpa.value()[i].getConstructor(VarResolverSession.class);
+			}
+			
+			for (var applyConstructor : applyConstructors) {
+				AnnotationApplier<Annotation,Object> applier = (AnnotationApplier<Annotation,Object>)applyConstructor.newInstance(vrs);
+				add(ai, applier);
+			}
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			throw new ExecutableException(e);
+		}
 	}
 }

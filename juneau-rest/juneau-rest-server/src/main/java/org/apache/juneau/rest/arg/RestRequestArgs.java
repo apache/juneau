@@ -24,7 +24,7 @@ import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.common.function.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;

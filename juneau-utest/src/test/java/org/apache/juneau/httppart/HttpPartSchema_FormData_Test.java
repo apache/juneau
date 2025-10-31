@@ -27,7 +27,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.junit.jupiter.api.*;
 
 class HttpPartSchema_FormData_Test extends TestBase {

@@ -39,7 +39,7 @@ import org.apache.juneau.common.reflect.Visibility;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.utils.*;

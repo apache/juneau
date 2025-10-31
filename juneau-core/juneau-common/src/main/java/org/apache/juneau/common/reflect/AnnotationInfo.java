@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.reflect;
+package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
@@ -26,12 +26,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.marshaller.*;
-import org.apache.juneau.svl.*;
 
 /**
  * Represents an annotation instance on a class and the class it was found on.
@@ -103,8 +99,6 @@ public class AnnotationInfo<T extends Annotation> {
 
 	final int rank;
 
-	private Constructor<? extends AnnotationApplier<?,?>>[] applyConstructors;
-
 	/**
 	 * Constructor.
 	 *
@@ -149,35 +143,6 @@ public class AnnotationInfo<T extends Annotation> {
 		for (var m : _getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type))
 				safe(() -> consumeIf(test, action, (V)m.invoke(a)));
-		return this;
-	}
-
-	/**
-	 * If this annotation has a {@link ContextApply} annotation, consumes an instance of the specified {@link AnnotationApplier} class.
-	 *
-	 * @param vrs Variable resolver passed to the {@link AnnotationApplier} object.
-	 * @param consumer The consumer.
-	 * @return This object.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
-	 */
-	@SuppressWarnings("unchecked")
-	public AnnotationInfo<T> getApplies(VarResolverSession vrs, Consumer<AnnotationApplier<Annotation,Object>> consumer) throws ExecutableException {
-		try {
-			if (applyConstructors == null) {
-				ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
-				if (cpa == null)
-					applyConstructors = a(AnnotationApplier.NoOp.class.getConstructor(VarResolverSession.class));
-				else {
-					applyConstructors = new Constructor[cpa.value().length];
-					for (int i = 0; i < cpa.value().length; i++)
-						applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>)cpa.value()[i].getConstructor(VarResolverSession.class);
-				}
-			}
-			for (var applyConstructor : applyConstructors)
-				consumer.accept((AnnotationApplier<Annotation,Object>)applyConstructor.newInstance(vrs));
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new ExecutableException(e);
-		}
 		return this;
 	}
 
@@ -301,19 +266,19 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
-	 * Converts this object to a readable JSON object for debugging purposes.
+	 * Converts this object to a readable map for debugging purposes.
 	 *
-	 * @return A new map showing the attributes of this object as a JSON object.
+	 * @return A new map showing the attributes of this object.
 	 */
-	public JsonMap toJsonMap() {
-		var jm = new JsonMap();
+	public LinkedHashMap<String, Object> toMap() {
+		var jm = new LinkedHashMap<String, Object>();
 		if (nn(c))
 			jm.put("class", c.getSimpleName());
 		if (nn(m))
 			jm.put("method", m.getShortName());
 		if (nn(p))
 			jm.put("package", p.getName());
-		var ja = new JsonMap();
+		var ja = new LinkedHashMap<String, Object>();
 		var ca = ClassInfo.of(a.annotationType());
 		ca.forEachDeclaredMethod(null, x -> {
 			try {
@@ -333,7 +298,7 @@ public class AnnotationInfo<T extends Annotation> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Json5.DEFAULT_READABLE.write(toJsonMap());
+		return toMap().toString();
 	}
 
 	Method[] _getMethods() {

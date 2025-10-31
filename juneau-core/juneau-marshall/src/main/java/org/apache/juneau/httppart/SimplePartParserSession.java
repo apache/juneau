@@ -18,6 +18,7 @@ package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.reflect.*;
 
 /**

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.reflect;
+package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -25,7 +25,7 @@ import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Lightweight utility class for introspecting information about a constructor.
@@ -246,7 +246,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public <T> T invokeFuzzy(Object...args) throws ExecutableException {
-		return invoke(ClassUtils2.getMatchingArgs(c.getParameterTypes(), args));
+		return invoke(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
 	}
 
 	/**

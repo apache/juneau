@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.reflect;
+package org.apache.juneau.common.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -23,7 +23,7 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.common.reflect.ReflectFlags.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
-import static org.apache.juneau.reflect.ClassInfo.*;
+import static org.apache.juneau.common.reflect.ClassInfo.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -35,6 +35,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
@@ -1142,7 +1143,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getWrapperIfPrimitive_onType() {
-		assertEquals("class org.apache.juneau.reflect.ClassInfo_Test$A1", aTypeInfo.getWrapperIfPrimitive().toString());
+		assertEquals("class org.apache.juneau.common.reflect.ClassInfo_Test$A1", aTypeInfo.getWrapperIfPrimitive().toString());
 		assertEquals("interface java.util.Map", pTypeInfo.getWrapperIfPrimitive().toString());
 		assertEquals("interface java.util.Map", pTypeDimensionalInfo.getWrapperIfPrimitive().toString());
 		assertEquals("class java.util.AbstractMap", pTypeGenericInfo.getWrapperIfPrimitive().toString());
@@ -1180,26 +1181,26 @@ public class ClassInfo_Test extends TestBase {
 	static ClassInfo j1=of(J1.class), j2=of(J2.class), j1_3d=of(J1[][].class), j2_3d=of(J2[][].class);
 
 	@Test void getFullName_simple() {
-		assertEquals("org.apache.juneau.reflect.AClass", aClass.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getFullName());
 	}
 
 	@Test void getFullName_simpleTwice() {
-		assertEquals("org.apache.juneau.reflect.AClass", aClass.getFullName());
-		assertEquals("org.apache.juneau.reflect.AClass", aClass.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getFullName());
 	}
 
 	@Test void getFullName_simpleArray() {
-		assertEquals("org.apache.juneau.reflect.AClass[][]", of(AClass[][].class).getFullName());
+		assertEquals("org.apache.juneau.common.reflect.AClass[][]", of(AClass[][].class).getFullName());
 	}
 
 	@Test void getFullName_inner() {
-		assertEquals("org.apache.juneau.reflect.ClassInfo_Test$J1", j1.getFullName());
-		assertEquals("org.apache.juneau.reflect.ClassInfo_Test$J2", j2.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J1", j1.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J2", j2.getFullName());
 	}
 
 	@Test void getFullName_innerArray() {
-		assertEquals("org.apache.juneau.reflect.ClassInfo_Test$J1[][]", j1_3d.getFullName());
-		assertEquals("org.apache.juneau.reflect.ClassInfo_Test$J2[][]", j2_3d.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J1[][]", j1_3d.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J2[][]", j2_3d.getFullName());
 	}
 
 	@Test void getFullName_primitive() {
@@ -1211,7 +1212,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getFullName_simpleType() {
-		assertEquals("org.apache.juneau.reflect.ClassInfo_Test$A1", aTypeInfo.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$A1", aTypeInfo.getFullName());
 	}
 
 	@Test void getFullName_complexType() {
@@ -1233,7 +1234,7 @@ public class ClassInfo_Test extends TestBase {
 	@Test void getFullName_localClass() {
 		@SuppressWarnings("serial")
 		class LocalClass implements Serializable {}
-		assertEquals("org.apache.juneau.reflect.ClassInfo_Test$1LocalClass", of(LocalClass.class).getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$1LocalClass", of(LocalClass.class).getFullName());
 	}
 
 	@Test void getShortName_simple() {
@@ -1351,7 +1352,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getName() {
-		assertEquals("org.apache.juneau.reflect.AClass", aClass.getName());
+		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getName());
 		assertEquals("java.util.AbstractMap", pTypeGenericInfo.getName());
 		assertEquals("V", pTypeGenericArgInfo.getName());
 	}
@@ -1520,11 +1521,11 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getPackage() {
-		check("org.apache.juneau.reflect", ka.getPackage().getName());
+		check("org.apache.juneau.common.reflect", ka.getPackage().getName());
 	}
 
 	@Test void getPackage_type() {
-		check("org.apache.juneau.reflect", aTypeInfo.getPackage());
+		check("org.apache.juneau.common.reflect", aTypeInfo.getPackage());
 		check("java.util", pTypeInfo.getPackage());
 		check("java.util", pTypeDimensionalInfo.getPackage());
 		check("java.util", pTypeGenericInfo.getPackage());
@@ -1712,9 +1713,9 @@ public class ClassInfo_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void xToString() {
-		assertEquals("class org.apache.juneau.reflect.AClass", aClass.toString());
-		assertEquals("interface org.apache.juneau.reflect.AInterface", aInterface.toString());
-		assertEquals("class org.apache.juneau.reflect.ClassInfo_Test$A1", aType.toString());
+		assertEquals("class org.apache.juneau.common.reflect.AClass", aClass.toString());
+		assertEquals("interface org.apache.juneau.common.reflect.AInterface", aInterface.toString());
+		assertEquals("class org.apache.juneau.common.reflect.ClassInfo_Test$A1", aType.toString());
 		assertEquals("java.util.Map<java.lang.String, java.util.List<java.lang.String>>", pType.toString());
 		assertEquals("java.util.Map<java.lang.String, java.lang.String[][]>", pTypeDimensional.toString());
 		assertEquals("java.util.AbstractMap<K, V>", pTypeGeneric.toString());

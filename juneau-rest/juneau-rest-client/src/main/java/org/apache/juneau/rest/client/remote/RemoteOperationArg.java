@@ -23,7 +23,7 @@ import java.util.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents the metadata about an annotated argument of a method on a REST proxy class.

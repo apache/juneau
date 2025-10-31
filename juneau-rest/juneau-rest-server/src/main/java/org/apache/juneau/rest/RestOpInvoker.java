@@ -21,7 +21,7 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.stats.*;
 

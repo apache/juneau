@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.annotation;
+package org.apache.juneau.common.annotation;
 
 import static java.util.Arrays.*;
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.copyOf;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -26,7 +25,6 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -55,8 +53,8 @@ public class AnnotationImpl implements Annotation {
 	 * @param b The builder used to instantiate the fields of this class.
 	 */
 	public AnnotationImpl(AnnotationBuilder<?> b) {
-		this.annotationType = b.annotationType;
-		this.description = copyOf(b.description);
+		this.annotationType = b.getAnnotationType();
+		this.description = copyOf(b.getDescription());
 	}
 
 	/**
@@ -101,20 +99,20 @@ public class AnnotationImpl implements Annotation {
 	 *
 	 * @return This annotation as a map of key/value pairs.
 	 */
-	public JsonMap toMap() {
-		JsonMap m = create();
+	public Map<String,Object> toMap() {
+		Map<String,Object> m = new LinkedHashMap<>();
 		// @formatter:off
 		stream(annotationType().getDeclaredMethods())
 			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
 			.sorted(Comparator.comparing(Method::getName))
-			.forEach(x -> m.append(x.getName(), safeSupplier(()->x.invoke(this))));
+			.forEach(x -> m.put(x.getName(), safeSupplier(()->x.invoke(this))));
 		// @formatter:on
 		return m;
 	}
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return toMap().asString();
+		return toMap().toString();
 	}
 
 	/**

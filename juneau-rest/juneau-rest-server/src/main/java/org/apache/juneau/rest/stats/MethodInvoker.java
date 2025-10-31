@@ -21,7 +21,7 @@ import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.cp.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * A wrapper around a {@link Method#invoke(Object, Object...)} method that allows for basic instrumentation.

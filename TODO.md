@@ -21,7 +21,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
   - **Phase 1**: ✅ Break up compound declarations (completed - 26 instances)
   - **Phase 2**: ✅ Convert safe patterns in local variable declarations (completed - 276 files)
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
-- [ ] TODO-73 Move reflection classes (ClassInfo, ConstructorInfo, ExecutableInfo, FieldInfo, MethodInfo, ParamInfo) from org.apache.juneau.reflect to org.apache.juneau.common.reflect. See TODO-reflectionMigrationPlan.md for details.
+- [x] TODO-73 Move reflection classes (ClassInfo, ConstructorInfo, ExecutableInfo, FieldInfo, MethodInfo, ParamInfo, AnnotationInfo, AnnotationList) from org.apache.juneau.reflect to org.apache.juneau.common.reflect. ✅ COMPLETED - All classes moved, 196+ files updated, 25,839 tests passing. See TODO-reflectionMigrationPlan.md and REFLECTION_MIGRATION_COMPLETE.md for details.
 
 ## Framework Improvements
 

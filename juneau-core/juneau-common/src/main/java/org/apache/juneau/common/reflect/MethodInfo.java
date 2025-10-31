@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.reflect;
+package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
@@ -28,7 +28,7 @@ import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.internal.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Lightweight utility class for introspecting information about a method.
@@ -651,7 +651,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public Object invokeFuzzy(Object pojo, Object...args) throws ExecutableException {
 		try {
-			return m.invoke(pojo, ClassUtils2.getMatchingArgs(m.getParameterTypes(), args));
+			return m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			throw new ExecutableException(e);
 		}

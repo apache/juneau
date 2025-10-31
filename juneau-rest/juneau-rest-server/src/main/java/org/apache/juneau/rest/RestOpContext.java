@@ -55,7 +55,7 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.common.utils.*;
 import org.apache.juneau.rest.converter.*;

@@ -19,6 +19,8 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 
+import org.apache.juneau.common.annotation.*;
+
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *

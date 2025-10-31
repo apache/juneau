@@ -28,7 +28,7 @@ import java.util.*;
 
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**

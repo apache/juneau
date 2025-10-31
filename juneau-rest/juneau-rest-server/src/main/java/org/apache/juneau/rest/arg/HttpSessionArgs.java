@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.arg;
 
 import org.apache.juneau.common.function.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 
 import jakarta.servlet.http.*;

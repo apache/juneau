@@ -42,7 +42,7 @@ import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.reflect.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents an OpenAPI schema definition.

@@ -21,6 +21,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.annotation.*;
 
 /**
  * Utility classes and methods for the {@link OpSwagger @OpSwagger} annotation.
