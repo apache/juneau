@@ -41,7 +41,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.svl.*;
-import org.eclipse.jetty.ee10.servlet.*;
+import org.eclipse.jetty.ee11.servlet.*;
 import org.eclipse.jetty.server.*;
 
 import jakarta.servlet.*;
