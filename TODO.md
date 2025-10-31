@@ -1,5 +1,7 @@
 # TODO List
 
+**Last generated TODO number: TODO-73**
+
 This file tracks pending tasks for the Apache Juneau project. For completed items, see [TODO-completed.md](TODO-completed.md).
 
 ## Issues to Fix
@@ -19,6 +21,7 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
   - **Phase 1**: ✅ Break up compound declarations (completed - 26 instances)
   - **Phase 2**: ✅ Convert safe patterns in local variable declarations (completed - 276 files)
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
+- [ ] TODO-73 Move reflection classes (ClassInfo, ConstructorInfo, ExecutableInfo, FieldInfo, MethodInfo, ParamInfo) from org.apache.juneau.reflect to org.apache.juneau.common.reflect. See TODO-reflectionMigrationPlan.md for details.
 
 ## Framework Improvements
 

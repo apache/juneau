@@ -21,6 +21,7 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
 

@@ -14,28 +14,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau;
+package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.text.*;
 
 /**
- * General bean runtime operation exception.
+ * A {@link RuntimeException} wrapper around common reflection exceptions.
  *
- * <h5 class='section'>See Also:</h5><ul>
-
+ * <p>
+ * This exception is used to wrap checked exceptions that commonly occur when using Java reflection APIs,
+ * converting them into unchecked exceptions for easier handling in bean-processing code.
+ *
+ * <h5 class='section'>Wrapped Exceptions:</h5>
+ * <ul>
+ * 	<li>{@link InstantiationException}
+ * 	<li>{@link IllegalAccessException}
+ * 	<li>{@link IllegalArgumentException}
+ * 	<li>{@link InvocationTargetException}
+ * 	<li>{@link NoSuchMethodException}
+ * 	<li>{@link SecurityException}
  * </ul>
  *
- * @serial exclude
+ * <p>
+ * The exception message can optionally include the class name of the bean that caused the exception,
+ * making it easier to identify the source of reflection errors in complex bean hierarchies.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jk>try</jk> {
+ * 		Constructor&lt;?&gt; <jv>c</jv> = MyBean.<jk>class</jk>.getConstructor();
+ * 		<jv>c</jv>.newInstance();
+ * 	} <jk>catch</jk> (Exception <jv>e</jv>) {
+ * 		<jk>throw new</jk> BeanRuntimeException(<jv>e</jv>, MyBean.<jk>class</jk>, <js>"Failed to instantiate bean"</js>);
+ * 	}
+ * </p>
  */
-public class BeanRuntimeException extends BasicRuntimeException {
+public class BeanRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private static String getMessage(Throwable cause, Class<?> c, String msg) {
+	private static String getMessage(Throwable cause, Class<?> c, String msg, Object...args) {
 		if (nn(msg))
-			return (c == null ? "" : cn(c) + ": ") + msg;
+			return (c == null ? "" : cn(c) + ": ") + f(msg, args);
 		if (nn(cause))
 			return (c == null ? "" : cn(c) + ": ") + cause.getMessage();
 		return null;
@@ -89,12 +111,6 @@ public class BeanRuntimeException extends BasicRuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BeanRuntimeException(Throwable cause, Class<?> c, String message, Object...args) {
-		super(cause, getMessage(cause, c, message), args);
-	}
-
-	@Override /* Overridden from BasicRuntimeException */
-	public BeanRuntimeException setMessage(String message, Object...args) {
-		super.setMessage(message, args);
-		return this;
+		super(getMessage(cause, c, message, args), cause);
 	}
 }

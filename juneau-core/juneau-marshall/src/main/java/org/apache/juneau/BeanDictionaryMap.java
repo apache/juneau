@@ -23,6 +23,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents a map of dictionary type names to bean classes that make up a bean dictionary.

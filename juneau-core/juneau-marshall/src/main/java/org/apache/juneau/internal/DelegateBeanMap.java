@@ -23,6 +23,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents a wrapped {@link BeanMap} where property values can be overridden, removed, or reordered without
