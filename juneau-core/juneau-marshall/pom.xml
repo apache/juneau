@@ -56,6 +56,8 @@
 				<configuration>
 					<instructions>
 						<Automatic-Module-Name>org.apache.juneau.marshall</Automatic-Module-Name>
+						<_nouses>true</_nouses>
+						<_nodefaultversion>true</_nodefaultversion>
 					</instructions>
 				</configuration>
 				<executions>

@@ -65,7 +65,7 @@ public class RdfAnnotation {
 
 		String namespace = "", prefix = "";
 		boolean beanUri;
-		var collectionFormat = RdfCollectionFormat.DEFAULT;
+		RdfCollectionFormat collectionFormat = RdfCollectionFormat.DEFAULT;
 
 		/**
 		 * Constructor.
