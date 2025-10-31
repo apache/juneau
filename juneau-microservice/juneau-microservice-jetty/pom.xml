@@ -30,7 +30,6 @@
 	<description>Apache Juneau Microservice Server</description>
 
 	<properties>
-		<jetty.version>12.1.0</jetty.version>
 	</properties>
 
 	<dependencyManagement>
@@ -59,8 +58,8 @@
 			<artifactId>jetty-security</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.jetty.ee9</groupId>
-			<artifactId>jetty-ee9-servlet</artifactId>
+			<groupId>org.eclipse.jetty.ee${jetty.ee.version}</groupId>
+			<artifactId>jetty-ee${jetty.ee.version}-servlet</artifactId>
 			<version>${jetty.version}</version>
 		</dependency>
 		<dependency>

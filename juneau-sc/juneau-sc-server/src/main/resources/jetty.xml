@@ -33,10 +33,10 @@
 	</Set>
 
     <!-- Juneau adds its servlets in this ServletContextHandler -->
-    <New id="context" class="org.eclipse.jetty.ee9.servlet.ServletContextHandler">
+    <New id="context" class="org.eclipse.jetty.ee11.servlet.ServletContextHandler">
       <Set name="contextPath">/</Set>
       <Set name="sessionHandler">
-        <New class="org.eclipse.jetty.ee9.nested.SessionHandler" />
+        <New class="org.eclipse.jetty.ee11.servlet.SessionHandler" />
       </Set>
     </New>
 
