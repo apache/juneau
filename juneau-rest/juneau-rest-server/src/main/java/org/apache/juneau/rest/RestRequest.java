@@ -461,7 +461,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		if (authorityPath == null) {
 			String scheme = inner.getScheme();
 			int port = inner.getServerPort();
-			StringBuilder sb = new StringBuilder(inner.getScheme()).append("://").append(inner.getServerName());
+			var sb = new StringBuilder(inner.getScheme()).append("://").append(inner.getServerName());
 			if (! (port == 80 && "http".equals(scheme) || port == 443 && "https".equals(scheme)))
 				sb.append(':').append(port);
 			authorityPath = sb.toString();
@@ -850,7 +850,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var best = inner.getLocale();
 		var h = headers.get("Accept-Language").asString().orElse(null);
 		if (nn(h)) {
-			StringRanges sr = StringRanges.of(h);
+			var sr = StringRanges.of(h);
 			float qValue = 0;
 			for (var r : sr.toList()) {
 				if (r.getQValue() > qValue) {
@@ -1160,7 +1160,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	public <T> T getRequest(final RequestBeanMeta rbm) {
 		try {
-			Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
+			var c = (Class<T>)rbm.getClassMeta().getInnerClass();
 			final BeanSession bs = getBeanSession();
 			final BeanMeta<T> bm = bs.getBeanMeta(c);
 			return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
@@ -1290,7 +1290,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public URI getUri(boolean includeQuery, Map<String,Object> addQueryParams) {
 		var uri = inner.getRequestURI();
 		if (includeQuery || nn(addQueryParams)) {
-			StringBuilder sb = new StringBuilder(uri);
+			var sb = new StringBuilder(uri);
 			RequestQueryParams rq = this.queryParams.copy();
 			if (nn(addQueryParams))
 				for (var e : addQueryParams.entrySet())

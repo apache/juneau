@@ -57,7 +57,7 @@ public class BasicPart implements NameValuePair, Headerable {
 	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 */
 	public static boolean canCast(Object o) {
-		ClassInfo ci = ClassInfo.of(o);
+		var ci = ClassInfo.of(o);
 		return nn(ci) && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 

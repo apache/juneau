@@ -205,7 +205,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 
 	@Override
 	protected void log(Level level, String msg, Throwable e) {
-		LogRecord r = new LogRecord(level, msg);
+		var r = new LogRecord(level, msg);
 		r.setThrown(e);
 		this.lastRecord.set(r);
 	}

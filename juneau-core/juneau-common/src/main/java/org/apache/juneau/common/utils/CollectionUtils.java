@@ -1224,7 +1224,7 @@ public class CollectionUtils {
 			return newElements;
 		if (newElements.length == 0)
 			return array;
-		T[] a = (T[])Array.newInstance(array.getClass().getComponentType(), array.length + newElements.length);
+		var a = (T[])Array.newInstance(array.getClass().getComponentType(), array.length + newElements.length);
 		for (int i = 0; i < array.length; i++)
 			a[i] = array[i];
 		for (int i = 0; i < newElements.length; i++)
@@ -1298,7 +1298,7 @@ public class CollectionUtils {
 		}
 		if (a1 == null)
 			return null;
-		E[] a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
+		var a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
 		int i = 0;
 		for (var aa : arrays)
 			if (nn(aa))
@@ -1544,7 +1544,7 @@ public class CollectionUtils {
 	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
 		if (value == null)
 			return null;
-		E[] array = (E[])Array.newInstance(componentType, value.size());
+		var array = (E[])Array.newInstance(componentType, value.size());
 		return value.toArray(array);
 	}
 

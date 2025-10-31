@@ -101,7 +101,7 @@ class Title_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Title x1 = new Title("a");
+		var x1 = new Title("a");
 		assertString("<title>a</title>", x1);
 
 	}

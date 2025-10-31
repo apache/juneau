@@ -236,7 +236,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 						return s;
 				}
 			}
-			StringWriter w = new StringWriter();
+			var w = new StringWriter();
 			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), "root", null);
 			return w.toString();
 		} catch (Exception e) {
@@ -253,7 +253,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		if (! plainTextParams)
 			out.append('(');
 
-		Flag addComma = Flag.create();
+		var addComma = Flag.create();
 
 		if (nn(typeName)) {
 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
@@ -294,7 +294,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		if (! plainTextParams)
 			out.append('@').append('(');
 
-		Flag addComma = Flag.create();
+		var addComma = Flag.create();
 		forEachEntry(c, x -> {
 			addComma.ifSet(() -> out.append(',')).set();
 			out.cr(indent);
@@ -316,7 +316,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		if (! plainTextParams)
 			out.append('(');
 
-		Flag addComma = Flag.create();
+		var addComma = Flag.create();
 		forEachEntry(m, x -> {
 			addComma.ifSet(() -> out.append(',')).set();
 			Object value = x.getValue();
@@ -368,7 +368,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		Object output = out.getRawOutput();
 		if (output instanceof UonWriter)
 			return (UonWriter)output;
-		UonWriter w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
+		var w = new UonWriter(this, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}

@@ -303,8 +303,8 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 		if (eType == null)
 			eType = object();
-		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
-		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
+		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
@@ -337,7 +337,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				throw new ParseException(this, "Expected ''null'' for void value, but was ''{0}''.", s);
 		} else if (sType.isObject()) {
 			if (c == '(') {
-				JsonMap m = new JsonMap(this);
+				var m = new JsonMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else if (c == '@') {
@@ -371,7 +371,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '(') {
-				JsonMap m = new JsonMap(this);
+				var m = new JsonMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
 				if (m.containsKey(getBeanTypePropertyName(sType)))
@@ -400,7 +400,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				o = sType.newInstanceFromString(outer, s);
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '(') {
-				JsonMap m = new JsonMap(this);
+				var m = new JsonMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				// Handle case where it's an array, but serialized as a map with a _type or _value key.
 				if (m.containsKey(getBeanTypePropertyName(sType)))
@@ -412,12 +412,12 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					o = toArray(sType, l);
 				}
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection(r, list(), sType, isUrlParamValue, pMeta);
+				var l = (ArrayList)parseIntoCollection(r, list(), sType, isUrlParamValue, pMeta);
 				o = toArray(sType, l);
 			}
 		} else if (c == '(') {
 			// It could be a non-bean with _type attribute.
-			JsonMap m = new JsonMap(this);
+			var m = new JsonMap(this);
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(sType)))
 				o = cast(m, pMeta, eType);

@@ -346,7 +346,7 @@ public class EncoderSet {
 		if (nn(em))
 			return em;
 
-		StringRanges ae = StringRanges.of(acceptEncoding);
+		var ae = StringRanges.of(acceptEncoding);
 		int match = ae.match(encodings);
 
 		if (match >= 0) {

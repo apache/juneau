@@ -484,7 +484,7 @@ public class JettyMicroservice extends Microservice {
 	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
 	 */
 	public JettyMicroservice addServlet(Servlet servlet, String pathSpec) {
-		ServletHolder sh = new ServletHolder(servlet);
+		var sh = new ServletHolder(servlet);
 		if (nn(pathSpec) && ! pathSpec.endsWith("/*"))
 			pathSpec = trimTrailingSlashes(pathSpec) + "/*";
 		getServletContextHandler().addServlet(sh, pathSpec);
@@ -572,9 +572,9 @@ public class JettyMicroservice extends Microservice {
 
 		for (var s : cf.get("Jetty/servlets").asStringArray().orElse(new String[0])) {
 			try {
-				ClassInfo c = ClassInfo.of(Class.forName(s));
+				var c = ClassInfo.of(Class.forName(s));
 				if (c.isChildOf(RestServlet.class)) {
-					RestServlet rs = (RestServlet)c.newInstance();
+					var rs = (RestServlet)c.newInstance();
 					addServlet(rs, rs.getPath());
 				} else {
 					throw runtimeException("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: {0}", s);
@@ -586,9 +586,9 @@ public class JettyMicroservice extends Microservice {
 
 		cf.get("Jetty/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -> {
 			try {
-				ClassInfo c = ClassInfo.of(Class.forName(v.toString()));
+				var c = ClassInfo.of(Class.forName(v.toString()));
 				if (c.isChildOf(Servlet.class)) {
-					Servlet rs = (Servlet)c.newInstance();
+					var rs = (Servlet)c.newInstance();
 					addServlet(rs, k);
 				} else {
 					throw runtimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: {0}", cn(v));
@@ -746,7 +746,7 @@ public class JettyMicroservice extends Microservice {
 	public synchronized JettyMicroservice stop() throws Exception {
 		final Logger logger = getLogger();
 		final Messages mb2 = messages;
-		Thread t = new Thread("JettyMicroserviceStop") {
+		var t = new Thread("JettyMicroserviceStop") {
 			@Override /* Overridden from Thread */
 			public void run() {
 				try {

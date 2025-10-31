@@ -1402,7 +1402,7 @@ public class SchemaAnnotation {
 	public static JsonMap asMap(Schema a) throws ParseException {
 		if (a == null)
 			return JsonMap.EMPTY_MAP;
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		if (SchemaAnnotation.empty(a))
 			return m;
 		Predicate<String> ne = Utils::isNotEmpty;

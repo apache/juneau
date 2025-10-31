@@ -104,7 +104,7 @@ class Td_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Td x1 = new Td("a1", strong("a2"));
+		var x1 = new Td("a1", strong("a2"));
 		assertString("<td>a1<strong>a2</strong></td>", x1);
 
 	}

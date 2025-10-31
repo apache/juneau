@@ -103,10 +103,10 @@ class Style_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Style x1 = new Style("a");
+		var x1 = new Style("a");
 		assertString("<style>a</style>", x1);
 
-		Style x2 = new Style("a1", "a2");
+		var x2 = new Style("a1", "a2");
 		assertString("<style>a1\na2</style>", x2);
 
 	}

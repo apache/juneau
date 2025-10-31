@@ -200,7 +200,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 */
 	@Override /* Overridden from SerializerSession */
 	public final byte[] serialize(Object o) throws SerializeException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		var baos = new ByteArrayOutputStream();
 		try {
 			serialize(o, baos);
 			baos.flush();

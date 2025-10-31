@@ -102,7 +102,7 @@ class Figure_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Figure x1 = new Figure("a1", strong("a2"));
+		var x1 = new Figure("a1", strong("a2"));
 		assertString("<figure>a1<strong>a2</strong></figure>", x1);
 
 	}

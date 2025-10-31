@@ -103,7 +103,7 @@ class Html_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Html x1 = new Html("a1", strong("a2"));
+		var x1 = new Html("a1", strong("a2"));
 		assertString("<html>a1<strong>a2</strong></html>", x1);
 
 	}

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 class JsonSchemaProperty_Test extends TestBase {
 
 	@Test void a01_fluentChaining_basicSetters() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test that fluent methods return JsonSchemaProperty (not JsonSchema)
 		JsonSchemaProperty result;
@@ -50,7 +50,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a02_fluentChaining_numericConstraints() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test numeric constraint methods
 		JsonSchemaProperty result;
@@ -73,7 +73,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a03_fluentChaining_stringConstraints() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test string constraint methods
 		JsonSchemaProperty result;
@@ -96,7 +96,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a04_fluentChaining_arrayConstraints() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test array constraint methods
 		JsonSchemaProperty result;
@@ -119,7 +119,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a05_fluentChaining_objectConstraints() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test object constraint methods
 		JsonSchemaProperty result;
@@ -140,7 +140,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a06_fluentChaining_requiredAndEnum() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test required and enum methods
 		JsonSchemaProperty result;
@@ -160,7 +160,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a07_fluentChaining_schemaComposition() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test schema composition methods
 		JsonSchemaProperty result;
@@ -189,7 +189,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a08_fluentChaining_metadata() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test metadata methods
 		JsonSchemaProperty result;
@@ -213,7 +213,7 @@ class JsonSchemaProperty_Test extends TestBase {
 
 	@Test void a09_fluentChaining_complex() {
 		// Test chaining multiple fluent calls
-		JsonSchemaProperty result = new JsonSchemaProperty()
+		var result = new JsonSchemaProperty()
 			.setName("username")
 			.setType(JsonType.STRING)
 			.setMinLength(3)
@@ -225,19 +225,19 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a10_constructor_withName() {
-		JsonSchemaProperty p = new JsonSchemaProperty("myProperty");
+		var p = new JsonSchemaProperty("myProperty");
 
 		assertInstanceOf(JsonSchemaProperty.class, p);
 	}
 
 	@Test void a11_constructor_withNameAndType() {
-		JsonSchemaProperty p = new JsonSchemaProperty("myProperty", JsonType.STRING);
+		var p = new JsonSchemaProperty("myProperty", JsonType.STRING);
 
 		assertInstanceOf(JsonSchemaProperty.class, p);
 	}
 
 	@Test void a12_output_basic() throws Exception {
-		JsonSchemaProperty p = new JsonSchemaProperty("name", JsonType.STRING)
+		var p = new JsonSchemaProperty("name", JsonType.STRING)
 			.setMinLength(1)
 			.setMaxLength(50);
 
@@ -250,7 +250,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a13_fluentChaining_definitions() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test definition methods
 		JsonSchemaProperty result;
@@ -267,7 +267,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a14_fluentChaining_dependencies() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test dependency methods
 		JsonSchemaProperty result;
@@ -293,7 +293,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a15_fluentChaining_patternProperties() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test pattern property methods
 		JsonSchemaProperty result;
@@ -307,7 +307,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a16_fluentChaining_prefixItems() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test prefix items methods
 		JsonSchemaProperty result;
@@ -321,7 +321,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a17_fluentChaining_unevaluated() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test unevaluated methods
 		JsonSchemaProperty result;
@@ -335,7 +335,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a18_fluentChaining_addTypes() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test addTypes method
 		JsonSchemaProperty result = p.addTypes(JsonType.STRING, JsonType.NULL);
@@ -345,7 +345,7 @@ class JsonSchemaProperty_Test extends TestBase {
 	}
 
 	@Test void a19_getterMethods() {
-		JsonSchemaProperty p = new JsonSchemaProperty();
+		var p = new JsonSchemaProperty();
 
 		// Test getter methods that are overridden
 		p.setNot(new JsonSchema().setType(JsonType.STRING));

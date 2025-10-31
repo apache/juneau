@@ -101,7 +101,7 @@ class Span_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Span x1 = new Span("a1", strong("a2"));
+		var x1 = new Span("a1", strong("a2"));
 		assertString("<span>a1<strong>a2</strong></span>", x1);
 
 	}

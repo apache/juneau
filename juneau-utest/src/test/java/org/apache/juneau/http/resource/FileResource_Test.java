@@ -34,12 +34,12 @@ class FileResource_Test extends TestBase {
 		File f = Files.createTempFile("test", "txt").toFile();
 		Files.write(f.toPath(), "foo".getBytes());
 
-		FileResource x = new FileResource(null, f);
+		var x = new FileResource(null, f);
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
-		FileResource x2 = new FileResource(contentType("text/plain"), f);
+		var x2 = new FileResource(contentType("text/plain"), f);
 		assertEquals("foo", toUtf8(x2.getContent()));
 		assertEquals("text/plain", x2.getContentType().getValue());
 		assertTrue(x2.isRepeatable());
@@ -52,7 +52,7 @@ class FileResource_Test extends TestBase {
 		File f = Files.createTempFile("test", "txt").toFile();
 		Files.write(f.toPath(), "foo".getBytes());
 
-		FileResource x = new FileResource(null, f).setCached();
+		var x = new FileResource(null, f).setCached();
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
@@ -63,7 +63,7 @@ class FileResource_Test extends TestBase {
 	@Test void a03_headers() throws Exception {
 		File f = Files.createTempFile("test", "txt").toFile();
 
-		FileResource x = new FileResource(null, f)
+		var x = new FileResource(null, f)
 			.addHeader("Foo", "bar")
 			.addHeader("Foo", "baz")
 			.setHeader("Qux", "quux");
@@ -79,11 +79,11 @@ class FileResource_Test extends TestBase {
 	@Test void a04_contentType() throws Exception {
 		File f = Files.createTempFile("test", "txt").toFile();
 
-		FileResource x = new FileResource(null, f)
+		var x = new FileResource(null, f)
 			.setContentType("text/plain");
 		assertEquals("text/plain", x.getContentType().getValue());
 
-		FileResource x2 = new FileResource(null, f)
+		var x2 = new FileResource(null, f)
 			.setContentType(contentType("text/html"));
 		assertEquals("text/html", x2.getContentType().getValue());
 
@@ -93,11 +93,11 @@ class FileResource_Test extends TestBase {
 	@Test void a05_contentEncoding() throws Exception {
 		File f = Files.createTempFile("test", "txt").toFile();
 
-		FileResource x = new FileResource(null, f)
+		var x = new FileResource(null, f)
 			.setContentEncoding("identity");
 		assertEquals("identity", x.getContentEncoding().getValue());
 
-		FileResource x2 = new FileResource(null, f)
+		var x2 = new FileResource(null, f)
 			.setContentEncoding(contentEncoding("gzip"));
 		assertEquals("gzip", x2.getContentEncoding().getValue());
 
@@ -107,15 +107,15 @@ class FileResource_Test extends TestBase {
 	@Test void a06_chunked() throws Exception {
 		File f = Files.createTempFile("test", "txt").toFile();
 
-		FileResource x = new FileResource(null, f)
+		var x = new FileResource(null, f)
 			.setChunked();
 		assertTrue(x.isChunked());
 
-		FileResource x2 = new FileResource(null, f)
+		var x2 = new FileResource(null, f)
 			.setChunked(true);
 		assertTrue(x2.isChunked());
 
-		FileResource x3 = new FileResource(null, f)
+		var x3 = new FileResource(null, f)
 			.setChunked(false);
 		assertFalse(x3.isChunked());
 
@@ -124,7 +124,7 @@ class FileResource_Test extends TestBase {
 
 	@Test void a07_fluentSetters() throws Exception {
 		File f = Files.createTempFile("test", "txt").toFile();
-		FileResource x = new FileResource(null, f);
+		var x = new FileResource(null, f);
 
 		// Test setHeader returns correct type
 		assertSame(x, x.setHeader("X-Test", "value"));
@@ -149,7 +149,7 @@ class FileResource_Test extends TestBase {
 		File f = Files.createTempFile("test", "txt").toFile();
 		Files.write(f.toPath(), "foo".getBytes());
 
-		FileResource x = new FileResource(contentType("text/plain"), f)
+		var x = new FileResource(contentType("text/plain"), f)
 			.setHeader("Foo", "bar");
 
 		FileResource x2 = x.copy();
@@ -165,11 +165,11 @@ class FileResource_Test extends TestBase {
 		File f = Files.createTempFile("test", "txt").toFile();
 		Files.write(f.toPath(), "foo".getBytes());
 
-		FileResource x = new FileResource(null, f);
+		var x = new FileResource(null, f);
 		assertEquals(3L, x.getContentLength());
 
 		// Content length is derived from actual file length for FileResource
-		FileResource x2 = new FileResource(null, f).setContentLength(10);
+		var x2 = new FileResource(null, f).setContentLength(10);
 		assertEquals(3L, x2.getContentLength());
 
 		f.delete();

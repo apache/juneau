@@ -203,8 +203,8 @@ public class JsonParserSession extends ReaderParserSession {
 
 		if (eType == null)
 			eType = object();
-		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
-		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
+		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
@@ -238,7 +238,7 @@ public class JsonParserSession extends ReaderParserSession {
 			parseKeyword("null", r);
 		} else if (sType.isObject()) {
 			if (c == '{') {
-				JsonMap m2 = new JsonMap(this);
+				var m2 = new JsonMap(this);
 				parseIntoMap2(r, m2, string(), object(), pMeta);
 				o = cast(m2, pMeta, eType);
 			} else if (c == '[') {
@@ -269,7 +269,7 @@ public class JsonParserSession extends ReaderParserSession {
 			o = parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '{') {
-				JsonMap m = new JsonMap(this);
+				var m = new JsonMap(this);
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
@@ -286,11 +286,11 @@ public class JsonParserSession extends ReaderParserSession {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '{') {
-				JsonMap m = new JsonMap(this);
+				var m = new JsonMap(this);
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection2(r, list(), sType, pMeta);
+				var l = (ArrayList)parseIntoCollection2(r, list(), sType, pMeta);
 				o = toArray(sType, l);
 			}
 		} else if (c == '{') {

@@ -219,8 +219,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
-		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
+		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
@@ -239,7 +239,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 		Object o;
 
 		if (sType.isObject()) {
-			JsonMap m = new JsonMap(this);
+			var m = new JsonMap(this);
 			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey("_value"))
 				o = m.get("_value");
@@ -270,7 +270,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 				o = c2;
 		} else {
 			// It could be a non-bean with _type attribute.
-			JsonMap m = new JsonMap(this);
+			var m = new JsonMap(this);
 			parseIntoMap2(r, m, getClassMeta(Map.class, String.class, Object.class), outer);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
 				o = cast(m, null, eType);
@@ -422,7 +422,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 
 	private <K,V> Map<K,V> parseIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
 
-		ClassMeta<K> keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.class) : type.getKeyType());
+		var keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.class) : type.getKeyType());
 
 		int c = r.peekSkipWs();
 		if (c == -1)
@@ -460,7 +460,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 					}
 				} else if (state == S3) {
 					if (c == -1 || c == '\u0001') {
-						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
+						var valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
 						V value = convertAttrToType(m, "", valueType);
 						m.put(currAttr, value);
 						if (c == -1)
@@ -468,7 +468,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 						state = S1;
 					} else {
 						// For performance, we bypass parseAnything for string values.
-						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
+						var valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
 						V value = (V)(valueType.isString() ? super.parseString(r.unread(), true) : super.parseAnything(valueType, r.unread(), outer, true, null));
 
 						// If we already encountered this parameter, turn it into a list.

@@ -101,7 +101,7 @@ class Samp_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Samp x1 = new Samp("a1", strong("a2"));
+		var x1 = new Samp("a1", strong("a2"));
 		assertString("<samp>a1<strong>a2</strong></samp>", x1);
 
 	}

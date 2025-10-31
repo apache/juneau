@@ -86,11 +86,11 @@ public class TestUtils {
 		}
 
 		int indent = -1;
-		Pattern startTag = Pattern.compile("^(\\s*)<[^/>]+(\\s+\\S+=['\"]\\S*['\"])*\\s*>$");
-		Pattern endTag = Pattern.compile("^(\\s*)</[^>]+>$");
-		Pattern combinedTag = Pattern.compile("^(\\s*)<[^>/]+(\\s+\\S+=['\"]\\S*['\"])*\\s*/>$");
-		Pattern contentOnly = Pattern.compile("^(\\s*)[^\\s\\<]+$");
-		Pattern tagWithContent = Pattern.compile("^(\\s*)<[^>]+>.*</[^>]+>$");
+		var startTag = Pattern.compile("^(\\s*)<[^/>]+(\\s+\\S+=['\"]\\S*['\"])*\\s*>$");
+		var endTag = Pattern.compile("^(\\s*)</[^>]+>$");
+		var combinedTag = Pattern.compile("^(\\s*)<[^>/]+(\\s+\\S+=['\"]\\S*['\"])*\\s*/>$");
+		var contentOnly = Pattern.compile("^(\\s*)[^\\s\\<]+$");
+		var tagWithContent = Pattern.compile("^(\\s*)<[^>]+>.*</[^>]+>$");
 		String[] lines = out.split("\n");
 		try {
 			for (int i = 0; i < lines.length; i++) {

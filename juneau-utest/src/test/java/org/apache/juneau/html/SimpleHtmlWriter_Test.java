@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 class SimpleHtmlWriter_Test extends TestBase {
 
 	@Test void a01_fluentChaining_tagMethods() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		// Test that fluent methods return SimpleHtmlWriter (not HtmlWriter)
 		SimpleHtmlWriter result;
@@ -47,7 +47,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a02_fluentChaining_appendMethods() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		// Test append methods
 		SimpleHtmlWriter result;
@@ -73,7 +73,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a03_fluentChaining_formattingMethods() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		// Test formatting methods
 		SimpleHtmlWriter result;
@@ -114,7 +114,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a04_fluentChaining_complex() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		// Test chaining multiple fluent calls
 		SimpleHtmlWriter result = w
@@ -131,7 +131,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a05_output_simpleTable() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		String result = w
 			.sTag("table")
@@ -153,7 +153,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a06_output_withAttributes() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		String result = w
 			.sTag("div")
@@ -173,7 +173,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a08_tagVariations() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		// Test different tag method variations
 		SimpleHtmlWriter result;
@@ -201,7 +201,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a09_attrVariations() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		// Test different attr method variations
 		SimpleHtmlWriter result;
@@ -214,7 +214,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a10_appendVariations() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		// Test different append method variations
 		SimpleHtmlWriter result;
@@ -233,7 +233,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a11_textVariations() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		// Test different text method variations
 		SimpleHtmlWriter result;
@@ -246,7 +246,7 @@ class SimpleHtmlWriter_Test extends TestBase {
 	}
 
 	@Test void a12_ceTag() {
-		SimpleHtmlWriter w = new SimpleHtmlWriter();
+		var w = new SimpleHtmlWriter();
 
 		String result = w
 			.sTag("br")

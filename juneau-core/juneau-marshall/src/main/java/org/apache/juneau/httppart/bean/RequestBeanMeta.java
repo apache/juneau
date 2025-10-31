@@ -107,7 +107,7 @@ public class RequestBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Request}.
 	 */
 	public static RequestBeanMeta create(Class<?> c, AnnotationWorkList annotations) {
-		ClassInfo ci = ClassInfo.of(c);
+		var ci = ClassInfo.of(c);
 		if (ci.hasNoAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(c).build();

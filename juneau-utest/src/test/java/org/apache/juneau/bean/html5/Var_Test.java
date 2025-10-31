@@ -101,7 +101,7 @@ class Var_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Var x1 = new Var("a1", strong("a2"));
+		var x1 = new Var("a1", strong("a2"));
 		assertString("<var>a1<strong>a2</strong></var>", x1);
 
 	}

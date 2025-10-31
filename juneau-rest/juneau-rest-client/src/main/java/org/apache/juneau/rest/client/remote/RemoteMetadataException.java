@@ -38,7 +38,7 @@ public class RemoteMetadataException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	private static final String getMessage(Class<?> c, Method m, String msg) {
-		StringBuilder sb = new StringBuilder("Invalid remote definition found on class ").append(c.getName());
+		var sb = new StringBuilder("Invalid remote definition found on class ").append(c.getName());
 		if (nn(m))
 			sb.append(" on method ").append(m.getName());
 		sb.append(". ").append(msg);

@@ -91,7 +91,7 @@ public class StringMatcherFactory extends MatcherFactory {
 					}
 
 					if (REGEX_CHARS.contains(s) || META_CHARS.contains(s)) {
-						StringBuilder sb = new StringBuilder();
+						var sb = new StringBuilder();
 						boolean isInEscape = false;
 						for (int i = 0; i < s.length(); i++) {
 							char c = s.charAt(i);
@@ -121,7 +121,7 @@ public class StringMatcherFactory extends MatcherFactory {
 					if (ignoreCase)
 						flags |= Pattern.CASE_INSENSITIVE;
 
-					Pattern p = Pattern.compile(s, flags);
+					var p = Pattern.compile(s, flags);
 
 					if (prefix == '-')
 						nots.add(p);
@@ -138,7 +138,7 @@ public class StringMatcherFactory extends MatcherFactory {
 
 		@Override
 		public boolean matches(ClassMeta<?> cm, Object o) {
-			String s = (String)o;
+			var s = (String)o;
 			for (var andPattern : andPatterns)
 				if (! andPattern.matcher(s).matches())
 					return false;

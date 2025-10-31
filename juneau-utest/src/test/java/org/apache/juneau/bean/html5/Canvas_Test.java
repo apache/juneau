@@ -104,7 +104,7 @@ class Canvas_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Canvas x1 = new Canvas(1, 1);
+		var x1 = new Canvas(1, 1);
 		assertString("<canvas width='1' height='1'></canvas>", x1);
 
 	}

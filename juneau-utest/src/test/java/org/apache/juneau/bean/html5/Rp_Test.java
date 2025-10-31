@@ -101,7 +101,7 @@ class Rp_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Rp x1 = new Rp("a1", strong("a2"));
+		var x1 = new Rp("a1", strong("a2"));
 		assertString("<rp>a1<strong>a2</strong></rp>", x1);
 
 	}

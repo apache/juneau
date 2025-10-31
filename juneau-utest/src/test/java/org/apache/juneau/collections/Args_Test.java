@@ -79,7 +79,7 @@ class Args_Test extends TestBase {
 	// test - Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void fluentSetters() {
-		Args a = new Args(a("main1"));
+		var a = new Args(a("main1"));
 
 		// Test inner() returns same instance for fluent chaining
 		var innerMap = new HashMap<String,Object>();
@@ -124,7 +124,7 @@ class Args_Test extends TestBase {
 
 	@Test void fluentChaining() {
 		// Test multiple fluent calls can be chained
-		Args a = new Args(a("main1"))
+		var a = new Args(a("main1"))
 			.append("key1", "value1")
 			.append("key2", "value2")
 			.appendIf(true, "key3", "value3");

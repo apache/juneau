@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class StreamResource_Test extends TestBase {
 
 	@Test void a01_basic() throws Exception {
-		StreamResource x = new StreamResource(contentType("text/plain"), inputStream("foo"));
+		var x = new StreamResource(contentType("text/plain"), inputStream("foo"));
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertEquals("text/plain", x.getContentType().getValue());
 		assertFalse(x.isRepeatable());
@@ -37,14 +37,14 @@ class StreamResource_Test extends TestBase {
 	}
 
 	@Test void a02_caching() throws Exception {
-		StreamResource x = new StreamResource(null, inputStream("foo")).setCached();
+		var x = new StreamResource(null, inputStream("foo")).setCached();
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 	}
 
 	@Test void a03_headers() {
-		StreamResource x = new StreamResource(null, inputStream("foo"))
+		var x = new StreamResource(null, inputStream("foo"))
 			.addHeader("Foo", "bar")
 			.addHeader("Foo", "baz")
 			.setHeader("Qux", "quux");
@@ -56,41 +56,41 @@ class StreamResource_Test extends TestBase {
 	}
 
 	@Test void a04_contentType() {
-		StreamResource x = new StreamResource(null, inputStream("foo"))
+		var x = new StreamResource(null, inputStream("foo"))
 			.setContentType("text/plain");
 		assertEquals("text/plain", x.getContentType().getValue());
 
-		StreamResource x2 = new StreamResource(null, inputStream("foo"))
+		var x2 = new StreamResource(null, inputStream("foo"))
 			.setContentType(contentType("text/html"));
 		assertEquals("text/html", x2.getContentType().getValue());
 	}
 
 	@Test void a05_contentEncoding() {
-		StreamResource x = new StreamResource(null, inputStream("foo"))
+		var x = new StreamResource(null, inputStream("foo"))
 			.setContentEncoding("identity");
 		assertEquals("identity", x.getContentEncoding().getValue());
 
-		StreamResource x2 = new StreamResource(null, inputStream("foo"))
+		var x2 = new StreamResource(null, inputStream("foo"))
 			.setContentEncoding(contentEncoding("gzip"));
 		assertEquals("gzip", x2.getContentEncoding().getValue());
 	}
 
 	@Test void a06_chunked() {
-		StreamResource x = new StreamResource(null, inputStream("foo"))
+		var x = new StreamResource(null, inputStream("foo"))
 			.setChunked();
 		assertTrue(x.isChunked());
 
-		StreamResource x2 = new StreamResource(null, inputStream("foo"))
+		var x2 = new StreamResource(null, inputStream("foo"))
 			.setChunked(true);
 		assertTrue(x2.isChunked());
 
-		StreamResource x3 = new StreamResource(null, inputStream("foo"))
+		var x3 = new StreamResource(null, inputStream("foo"))
 			.setChunked(false);
 		assertFalse(x3.isChunked());
 	}
 
 	@Test void a07_fluentSetters() {
-		StreamResource x = new StreamResource(null, inputStream("foo"));
+		var x = new StreamResource(null, inputStream("foo"));
 
 		// Test setHeader returns correct type
 		assertSame(x, x.setHeader("X-Test", "value"));
@@ -110,7 +110,7 @@ class StreamResource_Test extends TestBase {
 	}
 
 	@Test void a08_copy() throws Exception {
-		StreamResource x = new StreamResource(contentType("text/plain"), inputStream("foo"))
+		var x = new StreamResource(contentType("text/plain"), inputStream("foo"))
 			.setHeader("Foo", "bar");
 
 		StreamResource x2 = x.copy();
@@ -121,10 +121,10 @@ class StreamResource_Test extends TestBase {
 	}
 
 	@Test void a09_contentLength() {
-		StreamResource x = new StreamResource(null, inputStream("foo"));
+		var x = new StreamResource(null, inputStream("foo"));
 		assertEquals(-1L, x.getContentLength());
 
-		StreamResource x2 = new StreamResource(null, inputStream("foo")).setContentLength(3);
+		var x2 = new StreamResource(null, inputStream("foo")).setContentLength(3);
 		assertEquals(3L, x2.getContentLength());
 	}
 

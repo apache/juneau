@@ -191,7 +191,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof MsgPackOutputStream)
 			return (MsgPackOutputStream)output;
-		MsgPackOutputStream os = new MsgPackOutputStream(out.getOutputStream());
+		var os = new MsgPackOutputStream(out.getOutputStream());
 		out.setOutputStream(os);
 		return os;
 	}
@@ -303,7 +303,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 				onBeanGetterException(pMeta, thrown);
 				return;
 			}
-			BeanPropertyValue p = new BeanPropertyValue(pMeta, key, value, null);
+			var p = new BeanPropertyValue(pMeta, key, value, null);
 
 			if ((! isKeepNullProperties()) && willRecurse(p)) {
 				return; // Must handle the case where recursion occurs and property is not serialized.

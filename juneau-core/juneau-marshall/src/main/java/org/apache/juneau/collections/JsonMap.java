@@ -708,7 +708,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return A new map without the keys and values from this map.
 	 */
 	public JsonMap exclude(String...keys) {
-		JsonMap m2 = new JsonMap();
+		var m2 = new JsonMap();
 		this.forEach((k, v) -> {
 			boolean exclude = false;
 			for (var kk : keys)
@@ -1430,7 +1430,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return A new map with just the keys and values from this map.
 	 */
 	public JsonMap include(String...keys) {
-		JsonMap m2 = new JsonMap();
+		var m2 = new JsonMap();
 		this.forEach((k, v) -> {
 			for (var kk : keys)
 				if (kk.equals(k))
@@ -1812,7 +1812,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 				return bm.getBean();
 
 			} else if (cm.isCollectionOrArray()) {
-				List items = (List)get("items");
+				var items = (List)get("items");
 				return bs.convertToType(items, cm);
 
 			} else if (nn(value)) {

@@ -59,16 +59,17 @@ public class RemoteOperationMeta {
 
 		Builder(String parentPath, Method m, String defaultMethod) {
 
-			MethodInfo mi = MethodInfo.of(m);
+			var mi = MethodInfo.of(m);
 
-			AnnotationList al = mi.getAnnotationList(REMOTE_OP_GROUP);
-			if (al.isEmpty())
-				al = mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationList(REMOTE_OP_GROUP);
+		AnnotationList al = mi.getAnnotationList(REMOTE_OP_GROUP);
+		if (al.isEmpty())
+			al = mi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationList(REMOTE_OP_GROUP);
 
-			Value<String> _httpMethod = Value.empty(), _path = Value.empty();
-			al.stream().map(x -> x.getName().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
-			al.forEachValue(String.class, "method", NOT_EMPTY, x -> _httpMethod.set(x.trim().toUpperCase()));
-			al.forEachValue(String.class, "path", NOT_EMPTY, x -> _path.set(x.trim()));
+		var _httpMethod = Value.<String>empty();
+		var _path = Value.<String>empty();
+		al.stream().map(x -> x.getName().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
+		al.forEachValue(String.class, "method", NOT_EMPTY, x -> _httpMethod.set(x.trim().toUpperCase()));
+		al.forEachValue(String.class, "path", NOT_EMPTY, x -> _path.set(x.trim()));
 			httpMethod = _httpMethod.orElse("").trim();
 			path = _path.orElse("").trim();
 
@@ -108,7 +109,7 @@ public class RemoteOperationMeta {
 			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));
 
 			mi.getParams().forEach(x -> {
-				RemoteOperationArg rma = RemoteOperationArg.create(x);
+				var rma = RemoteOperationArg.create(x);
 				if (nn(rma)) {
 					HttpPartType pt = rma.getPartType();
 					if (pt == HEADER)
@@ -122,7 +123,7 @@ public class RemoteOperationMeta {
 					else
 						bodyArg = rma;
 				}
-				RequestBeanMeta rmba = RequestBeanMeta.create(x, AnnotationWorkList.create());
+				var rmba = RequestBeanMeta.create(x, AnnotationWorkList.create());
 				if (nn(rmba)) {
 					requestArgs.add(new RemoteOperationBeanArg(x.getIndex(), rmba));
 				}
@@ -262,7 +263,7 @@ public class RemoteOperationMeta {
 	 * @param defaultMethod The default HTTP method if not specified through annotation.
 	 */
 	public RemoteOperationMeta(final String parentPath, Method m, String defaultMethod) {
-		Builder b = new Builder(parentPath, m, defaultMethod);
+		var b = new Builder(parentPath, m, defaultMethod);
 		this.httpMethod = b.httpMethod;
 		this.fullPath = b.fullPath;
 		this.pathArgs = b.pathArgs.toArray(new RemoteOperationArg[b.pathArgs.size()]);

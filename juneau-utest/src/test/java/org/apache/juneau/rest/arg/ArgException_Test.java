@@ -35,7 +35,7 @@ class ArgException_Test extends TestBase {
 	@BeforeAll
 	public static void setup() throws Exception {
 		// Create a test ParamInfo for a sample method parameter
-		MethodInfo mi = MethodInfo.of(ArgException_Test.class.getMethod("sampleMethod", String.class));
+		var mi = MethodInfo.of(ArgException_Test.class.getMethod("sampleMethod", String.class));
 		testParamInfo = mi.getParam(0);
 	}
 
@@ -44,20 +44,20 @@ class ArgException_Test extends TestBase {
 	}
 
 	@Test void a01_basic() {
-		ArgException x = new ArgException(testParamInfo, "Test message");
+		var x = new ArgException(testParamInfo, "Test message");
 		assertNotNull(x);
 		assertTrue(x.getMessage().contains("Test message"));
 		assertTrue(x.getMessage().contains("parameter 0"));
 	}
 
 	@Test void a02_withArgs() {
-		ArgException x = new ArgException(testParamInfo, "Test {0} {1}", "foo", "bar");
+		var x = new ArgException(testParamInfo, "Test {0} {1}", "foo", "bar");
 		assertTrue(x.getMessage().contains("Test foo bar"));
 		assertTrue(x.getMessage().contains("parameter 0"));
 	}
 
 	@Test void a03_fluentSetters() {
-		ArgException x = new ArgException(testParamInfo, "Test");
+		var x = new ArgException(testParamInfo, "Test");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -67,7 +67,7 @@ class ArgException_Test extends TestBase {
 		assertSame(x, x.setHeader2("X-Test", "test-value"));
 
 		// Test setHeaders(HeaderList) returns same instance
-		HeaderList headers = HeaderList.of(BasicHeader.of("X-Header1", "value1"));
+		var headers = HeaderList.of(BasicHeader.of("X-Header1", "value1"));
 		assertSame(x, x.setHeaders(headers));
 
 		// Test setHeaders2(Header...) returns same instance
@@ -115,7 +115,7 @@ class ArgException_Test extends TestBase {
 
 	@Test void a05_copy() {
 		// Test that copy() returns correct type
-		ArgException x = new ArgException(testParamInfo, "Original message");
+		var x = new ArgException(testParamInfo, "Original message");
 
 		ArgException copy = x.copy();
 

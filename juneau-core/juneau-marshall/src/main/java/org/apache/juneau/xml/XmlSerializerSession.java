@@ -292,7 +292,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof XmlWriter)
 			return (XmlWriter)output;
-		XmlWriter w = new XmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), defaultNamespace);
+		var w = new XmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver(), isEnableNamespaces(), defaultNamespace);
 		out.setWriter(w);
 		return w;
 	}
@@ -373,9 +373,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			attrs = xbm.getAttrPropertyNames(),
 			elements = xbm.getElementPropertyNames(),
 			collapsedElements = xbm.getCollapsedPropertyNames();
-		String
-			attrsProperty = xbm.getAttrsPropertyName(),
-			contentProperty = xbm.getContentPropertyName();
+		var attrsProperty = xbm.getAttrsPropertyName();
+		var contentProperty = xbm.getContentPropertyName();
 		// @formatter:on
 
 		XmlFormat cf = null;
@@ -411,7 +410,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 							out.attr(ns, key2, value2);
 							});
 						} else /* Map */ {
-							Map m2 = (Map)value;
+							var m2 = (Map)value;
 							if (nn(m2))
 								m2.forEach((k, v) -> out.attr(ns, s(k), v));
 						}
@@ -470,7 +469,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		if (nn(content)) {
 			out.w('>').nlIf(! isMixedOrText, indent);
 			if (contentType == null) {} else if (contentType.isCollection()) {
-				Collection c = (Collection)content;
+				var c = (Collection)content;
 				boolean previousWasTextNode = false;
 				for (var value : c) {
 					boolean currentIsTextNode = isTextNode(value);
@@ -544,7 +543,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		ClassMeta<?> keyType = eKeyType == null ? sType.getKeyType() : eKeyType;
 		ClassMeta<?> valueType = eValueType == null ? sType.getValueType() : eValueType;
 
-		Flag hasChildren = Flag.create();
+		var hasChildren = Flag.create();
 		forEachEntry(m, e -> {
 
 			Object k = e.getKey();
@@ -893,7 +892,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		boolean encodeEn = nn(elementName);
 		String ns = (elementNamespace == null ? null : elementNamespace.name);
-		String dns = null, elementNs = null;
+		var dns = (String)null;
+		var elementNs = (String)null;
 		if (isEnableNamespaces()) {
 			dns = elementName == null && nn(defaultNamespace) ? defaultNamespace.name : null;
 			elementNs = elementName == null ? dns : ns;

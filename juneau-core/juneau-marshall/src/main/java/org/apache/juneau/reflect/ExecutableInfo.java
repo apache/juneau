@@ -217,7 +217,7 @@ public abstract class ExecutableInfo {
 	 * @return The underlying executable name.
 	 */
 	public final String getFullName() {
-		StringBuilder sb = new StringBuilder(128);
+		var sb = new StringBuilder(128);
 		ClassInfo dc = declaringClass;
 		Package p = dc.getPackage();
 		if (nn(p))
@@ -353,7 +353,7 @@ public abstract class ExecutableInfo {
 	 * @return The underlying executable name.
 	 */
 	public final String getShortName() {
-		StringBuilder sb = new StringBuilder(64);
+		var sb = new StringBuilder(64);
 		sb.append(getSimpleName()).append('(');
 		Class<?>[] pt = _getRawParamTypes();
 		for (int i = 0; i < pt.length; i++) {

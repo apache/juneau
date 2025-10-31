@@ -1834,11 +1834,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			queryData.stream().map(SimpleQuery::new).filter(SimplePart::isValid).forEach(x -> uriBuilder.addParameter(x.name, x.value));
 
-			pathData.stream().map(SimplePath::new).forEach(x -> {
-				String path = uriBuilder.getPath();
-				String name = x.name, value = x.value;
-				String var = "{" + name + "}";
-				if (path.indexOf(var) == -1 && ! name.equals("/*"))
+		pathData.stream().map(SimplePath::new).forEach(x -> {
+			String path = uriBuilder.getPath();
+			var name = x.name;
+			var value = x.value;
+			String var = "{" + name + "}";
+			if (path.indexOf(var) == -1 && ! name.equals("/*"))
 					throw new IllegalStateException("Path variable {" + name + "} was not found in path.");
 				if (name.equals("/*"))
 					path = path.replaceAll("\\/\\*$", "/" + value);
@@ -1941,7 +1942,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				for (var t : rethrow) {
 					if (t.getName().equals(className)) {
 						ConstructorInfo c = null;
-						ClassInfo ci = ClassInfo.of(t);
+						var ci = ClassInfo.of(t);
 						c = ci.getPublicConstructor(x -> x.hasParamTypes(HttpResponse.class));
 						if (nn(c))
 							throw c.<Throwable>invoke(response);

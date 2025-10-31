@@ -105,7 +105,7 @@ class Track_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Track x1 = new Track("a", "b");
+		var x1 = new Track("a", "b");
 		assertString("<track src='a' kind='b'/>", x1);
 
 	}

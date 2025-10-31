@@ -102,7 +102,7 @@ class Table_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Table x1 = new Table("a1", strong("a2"));
+		var x1 = new Table("a1", strong("a2"));
 		assertString("<table>a1<strong>a2</strong></table>", x1);
 
 	}

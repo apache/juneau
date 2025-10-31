@@ -104,7 +104,7 @@ class Fieldset_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Fieldset x1 = new Fieldset("a1", strong("a2"));
+		var x1 = new Fieldset("a1", strong("a2"));
 		assertString("<fieldset>a1<strong>a2</strong></fieldset>", x1);
 
 	}

@@ -243,7 +243,7 @@ public class HeaderArg implements RestOpArg {
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
-			JsonMap m = new JsonMap();
+			var m = new JsonMap();
 			rh.forEach(x -> m.put(x.getName(), x.parser(ps).schema(schema == null ? null : schema.getProperty(x.getName())).as(cm.getValueType()).orElse(null)));
 			return req.getBeanSession().convertToType(m, cm);
 		}

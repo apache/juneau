@@ -103,7 +103,7 @@ class Label_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Label x1 = new Label("a1", strong("a2"));
+		var x1 = new Label("a1", strong("a2"));
 		assertString("<label>a1<strong>a2</strong></label>", x1);
 
 	}

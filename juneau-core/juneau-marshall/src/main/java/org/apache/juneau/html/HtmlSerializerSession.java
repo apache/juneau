@@ -428,14 +428,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
-			if (canIgnoreValue(cMeta, key, value))
-				return;
+		if (canIgnoreValue(cMeta, key, value))
+			return;
 
-			String link = null, anchorText = null;
-			if (! cMeta.isCollectionOrArray()) {
-				link = m.resolveVars(getLink(pMeta));
-				anchorText = m.resolveVars(getAnchorText(pMeta));
-			}
+		var link = (String)null;
+		var anchorText = (String)null;
+		if (! cMeta.isCollectionOrArray()) {
+			link = m.resolveVars(getLink(pMeta));
+			anchorText = m.resolveVars(getAnchorText(pMeta));
+		}
 
 			if (nn(anchorText))
 				value = anchorText;
@@ -561,14 +562,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					for (var k : th) {
 						BeanMapEntry p = m2.getProperty(toString(k));
 						BeanPropertyMeta pMeta = p.getMeta();
-						if (pMeta.canRead()) {
-							Object value = p.getValue();
+					if (pMeta.canRead()) {
+						Object value = p.getValue();
 
-							String link = null, anchorText = null;
-							if (! pMeta.getClassMeta().isCollectionOrArray()) {
-								link = m2.resolveVars(getLink(pMeta));
-								anchorText = m2.resolveVars(getAnchorText(pMeta));
-							}
+						var link = (String)null;
+						var anchorText = (String)null;
+						if (! pMeta.getClassMeta().isCollectionOrArray()) {
+							link = m2.resolveVars(getLink(pMeta));
+							anchorText = m2.resolveVars(getAnchorText(pMeta));
+						}
 
 							if (nn(anchorText))
 								value = anchorText;
@@ -727,7 +729,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof HtmlWriter)
 			return (HtmlWriter)output;
-		HtmlWriter w = new HtmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver());
+		var w = new HtmlWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getQuoteChar(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
@@ -933,14 +935,15 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				else
 					serializeMap(out, (Map)o, sType, eType.getKeyType(), eType.getValueType(), typeName, pMeta);
 
-			} else if (sType.isBean()) {
-				BeanMap m = toBeanMap(o);
-				if (aType.hasAnnotation(HtmlLink.class)) {
-					Value<String> uriProperty = Value.empty(), nameProperty = Value.empty();
-					aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
-					aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
-					Object urlProp = m.get(uriProperty.orElse(""));
-					Object nameProp = m.get(nameProperty.orElse(""));
+		} else if (sType.isBean()) {
+			BeanMap m = toBeanMap(o);
+			if (aType.hasAnnotation(HtmlLink.class)) {
+				var uriProperty = Value.<String>empty();
+				var nameProperty = Value.<String>empty();
+				aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+				aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
+				Object urlProp = m.get(uriProperty.orElse(""));
+				Object nameProp = m.get(nameProperty.orElse(""));
 
 					out.oTag("a").attrUri("href", urlProp).w('>').text(nameProp).eTag("a");
 					cr = CR_MIXED;

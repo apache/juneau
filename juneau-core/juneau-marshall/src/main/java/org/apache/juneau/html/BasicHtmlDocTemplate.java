@@ -338,7 +338,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	protected void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		Flag addSpace = Flag.create();
+		var addSpace = Flag.create();
 		for (var s : session.getScript())
 			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
 		session.forEachWidget(x -> {
@@ -355,7 +355,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	protected void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		Flag addSpace = Flag.create();
+		var addSpace = Flag.create();
 		for (var s : session.getStylesheet())
 			w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");
 		if (session.isNowrap())

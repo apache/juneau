@@ -57,7 +57,7 @@ public class ConfigException extends BasicRuntimeException {
 		Throwable t = getCause();
 		if (t == null)
 			return super.getMessage();
-		StringBuilder sb = new StringBuilder(super.getMessage());
+		var sb = new StringBuilder(super.getMessage());
 		while (nn(t)) {
 			sb.append("  ").append(t.getMessage());
 			t = t.getCause();

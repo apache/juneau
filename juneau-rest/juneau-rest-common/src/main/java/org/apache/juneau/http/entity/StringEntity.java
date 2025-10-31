@@ -194,7 +194,7 @@ public class StringEntity extends BasicHttpEntity {
 		if (isCached()) {
 			out.write(asBytes());
 		} else {
-			OutputStreamWriter osw = new OutputStreamWriter(out, getCharset());
+			var osw = new OutputStreamWriter(out, getCharset());
 			osw.write(content());
 			osw.flush();
 		}

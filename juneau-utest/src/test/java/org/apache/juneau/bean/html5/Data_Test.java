@@ -102,7 +102,7 @@ class Data_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Data x1 = new Data("a", "b");
+		var x1 = new Data("a", "b");
 		assertString("<data value='a'>b</data>", x1);
 
 	}

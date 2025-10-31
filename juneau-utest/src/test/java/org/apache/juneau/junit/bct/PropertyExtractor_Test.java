@@ -45,7 +45,7 @@ class PropertyExtractor_Test extends TestBase {
 		@Test
 		void a01_interfaceImplementation() {
 			// Verify it's a proper interface with two methods
-			PropertyExtractor extractor = new PropertyExtractor() {
+			var extractor = new PropertyExtractor() {
 				@Override
 				public boolean canExtract(BeanConverter converter, Object o, String key) {
 					return true;
@@ -64,7 +64,7 @@ class PropertyExtractor_Test extends TestBase {
 		@Test
 		void a02_anonymousClassImplementation() {
 			// Test anonymous class implementation
-			PropertyExtractor impl = new PropertyExtractor() {
+			var impl = new PropertyExtractor() {
 				@Override
 				public boolean canExtract(BeanConverter converter, Object o, String key) {
 					return o instanceof String;
@@ -77,7 +77,7 @@ class PropertyExtractor_Test extends TestBase {
 			};
 
 			BeanConverter converter = BasicBeanConverter.DEFAULT;
-			String result = (String) impl.extract(converter, "test", "length");
+			var result = (String) impl.extract(converter, "test", "length");
 
 			assertEquals("String.length", result);
 		}
@@ -271,7 +271,7 @@ class PropertyExtractor_Test extends TestBase {
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
 					if (o instanceof Map) {
-						Map<?, ?> map = (Map<?, ?>) o;
+						var map = (Map<?, ?>) o;
 						return switch (key) {
 							case "keys" -> new ArrayList<>(map.keySet());
 							case "values" -> new ArrayList<>(map.values());

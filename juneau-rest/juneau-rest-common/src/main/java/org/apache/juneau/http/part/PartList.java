@@ -871,7 +871,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	@Override /* Overridden from Object */
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		forEach(p -> {
 			if (nn(p)) {
 				String v = p.getValue();

@@ -129,7 +129,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 
 		// Add parameters from parent context if any.
 		@SuppressWarnings("unchecked")
-		Map<String,String> parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(Collections.emptyMap());
+		var parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(Collections.emptyMap());
 		for (var e : parentVars.entrySet())
 			add(e.getKey(), e.getValue());
 
@@ -330,7 +330,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 			return new RequestPathParam(req, name, null).parser(parser);
 		if (l.size() == 1)
 			return l.get(0);
-		StringBuilder sb = new StringBuilder(128);
+		var sb = new StringBuilder(128);
 		for (int i = 0, j = l.size(); i < j; i++) {
 			if (i > 0)
 				sb.append(", ");
@@ -556,7 +556,7 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		for (var n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();

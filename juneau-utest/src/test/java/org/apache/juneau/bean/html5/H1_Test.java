@@ -101,7 +101,7 @@ class H1_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		H1 x1 = new H1("a1", strong("a2"));
+		var x1 = new H1("a1", strong("a2"));
 		assertString("<h1>a1<strong>a2</strong></h1>", x1);
 
 	}

@@ -110,7 +110,7 @@ public class SerializedEntity extends BasicHttpEntity {
 
 	@Override /* Overridden from BasicHttpEntity */
 	public InputStream getContent() {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		var baos = new ByteArrayOutputStream();
 		try {
 			writeTo(baos);
 			return new ByteArrayInputStream(baos.toByteArray());

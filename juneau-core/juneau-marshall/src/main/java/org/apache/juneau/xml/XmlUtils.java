@@ -330,7 +330,7 @@ public class XmlUtils {
 			if (! needsTextEncoding(s))
 				return s;
 			final int len = s.length();
-			StringWriter sw = new StringWriter(s.length() * 2);
+			var sw = new StringWriter(s.length() * 2);
 			for (int i = 0; i < len; i++) {
 				char c = s.charAt(i);
 				if ((i == 0 || i == len - 1) && Character.isWhitespace(c))

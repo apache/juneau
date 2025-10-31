@@ -382,7 +382,7 @@ public class CallLoggerRule {
 		if (nn(statusFilter) && ! statusFilter.test(res.getStatus()))
 			return false;
 
-		Throwable e = (Throwable)req.getAttribute("Exception");
+		var e = (Throwable)req.getAttribute("Exception");
 		if (nn(e) && nn(exceptionFilter) && ! exceptionFilter.test(e))
 			return false;
 

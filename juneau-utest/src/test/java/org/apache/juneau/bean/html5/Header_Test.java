@@ -101,7 +101,7 @@ class Header_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Header x1 = new Header("a1", strong("a2"));
+		var x1 = new Header("a1", strong("a2"));
 		assertString("<header>a1<strong>a2</strong></header>", x1);
 
 	}

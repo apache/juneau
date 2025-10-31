@@ -107,7 +107,7 @@ class Script_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Script x1 = new Script("a", "b1", "b2");
+		var x1 = new Script("a", "b1", "b2");
 		assertString("<script type='a'>b1\nb2</script>", x1);
 
 	}

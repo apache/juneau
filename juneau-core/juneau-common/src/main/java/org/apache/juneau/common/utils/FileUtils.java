@@ -69,7 +69,7 @@ public class FileUtils {
 	 */
 	public static File createTempFile(String name) throws IOException {
 		String[] parts = name.split("\\.");
-		File f = File.createTempFile(parts[0], "." + parts[1]);
+		var f = File.createTempFile(parts[0], "." + parts[1]);
 		f.deleteOnExit();
 		return f;
 	}

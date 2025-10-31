@@ -248,14 +248,14 @@ public class CsvSerializerSession extends WriterSerializerSession {
 				ClassMeta<?> entryType = getClassMetaForObject(l.iterator().next());
 				if (entryType.isBean()) {
 					BeanMeta<?> bm = entryType.getBeanMeta();
-					Flag addComma = Flag.create();
+					var addComma = Flag.create();
 					bm.forEachProperty(BeanPropertyMeta::canRead, x -> {
 						addComma.ifSet(() -> w.w(',')).set();
 						w.writeEntry(x.getName());
 					});
 					w.append('\n');
 					l.forEach(x -> {
-						Flag addComma2 = Flag.create();
+						var addComma2 = Flag.create();
 						BeanMap<?> bean = toBeanMap(x);
 						bm.forEachProperty(BeanPropertyMeta::canRead, y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
@@ -266,16 +266,16 @@ public class CsvSerializerSession extends WriterSerializerSession {
 						w.w('\n');
 					});
 				} else if (entryType.isMap()) {
-					Flag addComma = Flag.create();
-					Map first = (Map)l.iterator().next();
+					var addComma = Flag.create();
+					var first = (Map)l.iterator().next();
 					first.keySet().forEach(x -> {
 						addComma.ifSet(() -> w.w(',')).set();
 						w.writeEntry(x);
 					});
 					w.append('\n');
 					l.stream().forEach(x -> {
-						Flag addComma2 = Flag.create();
-						Map map = (Map)x;
+						var addComma2 = Flag.create();
+						var map = (Map)x;
 						map.values().forEach(y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
 							Object value = applySwap(y, getClassMetaForObject(y));
@@ -300,7 +300,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof CsvWriter)
 			return (CsvWriter)output;
-		CsvWriter w = new CsvWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), getQuoteChar(), isTrimStrings(), getUriResolver());
+		var w = new CsvWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), getQuoteChar(), isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}

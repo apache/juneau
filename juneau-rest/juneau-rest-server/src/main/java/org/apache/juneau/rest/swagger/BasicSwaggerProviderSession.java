@@ -271,7 +271,7 @@ public class BasicSwaggerProviderSession {
 			BeanSession bs = sm.getBeanContext().getSession();
 
 			Method m = sm.getJavaMethod();
-			MethodInfo mi = MethodInfo.of(m);
+			var mi = MethodInfo.of(m);
 			AnnotationList al = mi.getAnnotationList(REST_OP_GROUP);
 			String mn = m.getName();
 
@@ -368,7 +368,7 @@ public class BasicSwaggerProviderSession {
 					if (! tagMap.containsKey(tag))
 						tagMap.put(tag, JsonMap.of("name", tag));
 
-			JsonMap paramMap = new JsonMap();
+			var paramMap = new JsonMap();
 			if (op.containsKey("parameters"))
 				for (var param : op.getList("parameters").elements(JsonMap.class))
 					paramMap.put(param.getString("in") + '.' + ("body".equals(param.getString("in")) ? "body" : param.getString("name")), param);
@@ -501,7 +501,7 @@ public class BasicSwaggerProviderSession {
 				}
 			} else if (m.getGenericReturnType() != void.class) {
 				JsonMap om = responses.getMap("200", true);
-				ClassInfo pt2 = ClassInfo.of(m.getGenericReturnType());
+				var pt2 = ClassInfo.of(m.getGenericReturnType());
 				JsonMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
 				pt2.forEachAnnotation(Schema.class, x -> true, x -> merge(schema, x));
 				pushupSchemaFields(RESPONSE, om, schema);
@@ -1046,7 +1046,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private JsonList resolve(JsonList om) throws ParseException {
-		JsonList ol2 = new JsonList();
+		var ol2 = new JsonList();
 		for (var val : om) {
 			if (val instanceof JsonMap) {
 				val = resolve((JsonMap)val);
@@ -1122,7 +1122,7 @@ public class BasicSwaggerProviderSession {
 	private JsonList toList(Tag[] aa, String location, Object...locationArgs) {
 		if (aa.length == 0)
 			return null;
-		JsonList ol = new JsonList();
+		var ol = new JsonList();
 		for (var a : aa)
 			ol.add(toMap(a, location, locationArgs));
 		return nullIfEmpty(ol);
@@ -1133,7 +1133,7 @@ public class BasicSwaggerProviderSession {
 			return null;
 		Predicate<String> ne = Utils::isNotEmpty;
 		// @formatter:off
-		JsonMap om = JsonMap.create()
+		var om = JsonMap.create()
 			.appendIf(ne, "name", resolve(a.name()))
 			.appendIf(ne, "url", resolve(a.url()))
 			.appendIf(ne, "email", resolve(a.email()));
@@ -1146,7 +1146,7 @@ public class BasicSwaggerProviderSession {
 			return null;
 		Predicate<String> ne = Utils::isNotEmpty;
 		// @formatter:off
-		JsonMap om = JsonMap.create()
+		var om = JsonMap.create()
 			.appendIf(ne, "description", resolve(joinnl(a.description())))
 			.appendIf(ne, "url", resolve(a.url()));
 		// @formatter:on
@@ -1158,7 +1158,7 @@ public class BasicSwaggerProviderSession {
 			return null;
 		Predicate<String> ne = Utils::isNotEmpty;
 		// @formatter:off
-		JsonMap om = JsonMap.create()
+		var om = JsonMap.create()
 			.appendIf(ne, "name", resolve(a.name()))
 			.appendIf(ne, "url", resolve(a.url()));
 		// @formatter:on
@@ -1166,7 +1166,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private JsonMap toMap(Tag a, String location, Object...locationArgs) {
-		JsonMap om = JsonMap.create();
+		var om = JsonMap.create();
 		Predicate<String> ne = Utils::isNotEmpty;
 		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
 		// @formatter:off

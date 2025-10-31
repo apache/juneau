@@ -111,7 +111,7 @@ public abstract class RestServlet extends HttpServlet {
 		RestContext context = this.context.get();
 		if (nn(context))
 			return context.getFullPath();
-		ClassInfo ci = ClassInfo.of(getClass());
+		var ci = ClassInfo.of(getClass());
 		Value<String> path = Value.empty();
 		ci.forEachAnnotation(Rest.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
 		return path.orElse("");

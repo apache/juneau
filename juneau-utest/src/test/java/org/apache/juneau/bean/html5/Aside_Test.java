@@ -101,7 +101,7 @@ class Aside_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Aside x1 = new Aside("a1", strong("a2"));
+		var x1 = new Aside("a1", strong("a2"));
 		assertString("<aside>a1<strong>a2</strong></aside>", x1);
 
 	}

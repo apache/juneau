@@ -102,7 +102,7 @@ class Base_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Base x1 = new Base("a");
+		var x1 = new Base("a");
 		assertString("<base href='a'/>", x1);
 
 	}

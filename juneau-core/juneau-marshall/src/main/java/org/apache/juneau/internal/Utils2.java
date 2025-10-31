@@ -57,7 +57,7 @@ public class Utils2 extends Utils {
 			return null;
 		Map<String,MethodInfo> methods = PROPERTIES_METHODS.get(o.getClass());
 		if (methods == null) {
-			ClassInfo ci = ClassInfo.of(o);
+			var ci = ClassInfo.of(o);
 			var methods2 = new LinkedHashMap<String,MethodInfo>();
 			do {
 				String cname = ci.getShortName();
@@ -69,7 +69,7 @@ public class Utils2 extends Utils {
 			methods = methods2;
 			PROPERTIES_METHODS.put(o.getClass(), methods);
 		}
-		JsonMap m = JsonMap.create().append("id", identity(o));
+		var m = JsonMap.create().append("id", identity(o));
 		methods.forEach((k, v) -> m.put(k, v.invoke(o)));
 		return m;
 	}

@@ -354,7 +354,7 @@ public class DateUtils {
 	 * @see Calendar#getTimeZone()
 	 */
 	public static String toIso8601(Calendar c) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+		var sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 		sdf.setTimeZone(c.getTimeZone());
 		return sdf.format(c.getTime());
 	}
@@ -513,7 +513,7 @@ public class DateUtils {
 		// S14: Found timezone (Z, +HH:mm, -HH:mm)
 
 		StateEnum state = S1;
-		ChronoField precision = ChronoField.YEAR; // Track precision as we go
+		var precision = ChronoField.YEAR; // Track precision as we go
 
 		for (int i = 0; i < seg.length(); i++) {
 			char c = seg.charAt(i);

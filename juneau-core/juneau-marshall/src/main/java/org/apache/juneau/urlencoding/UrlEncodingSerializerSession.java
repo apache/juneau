@@ -203,7 +203,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
 		var m = new TreeMap<Integer,Object>();
-		IntegerValue i = IntegerValue.create();
+		var i = IntegerValue.create();
 		c.forEach(o -> m.put(i.getAndIncrement(), o));
 		return m;
 	}
@@ -287,7 +287,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	}
 
 	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
-		Flag addAmp = Flag.create();
+		var addAmp = Flag.create();
 
 		if (nn(typeName)) {
 			var pm = m.getMeta().getTypeProperty();
@@ -336,7 +336,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 		ClassMeta<?> valueType = type.getValueType();
 
-		Flag addAmp = Flag.create();
+		var addAmp = Flag.create();
 
 		m.forEach((k, v) -> {
 			addAmp.ifSet(() -> out.cr(indent).append('&')).set();
@@ -351,7 +351,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
-		Flag addAmp = Flag.create();
+		var addAmp = Flag.create();
 
 		forEachEntry(m, e -> {
 			var key = generalize(e.getKey(), keyType);

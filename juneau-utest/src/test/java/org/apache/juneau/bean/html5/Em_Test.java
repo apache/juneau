@@ -101,7 +101,7 @@ class Em_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Em x1 = new Em("a1", strong("a2"));
+		var x1 = new Em("a1", strong("a2"));
 		assertString("<em>a1<strong>a2</strong></em>", x1);
 
 	}

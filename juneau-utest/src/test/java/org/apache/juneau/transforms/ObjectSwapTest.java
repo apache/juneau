@@ -75,7 +75,7 @@ class ObjectSwapTest extends TestBase {
 
 	@Test void doTest() throws Exception {
 
-		SerializerSet s = SerializerSet.create()
+		var s = SerializerSet.create()
 			.add(JsonSerializer.class, XmlSerializer.class, HtmlSerializer.class)
 			.forEach(WriterSerializer.Builder.class, Builder::sq)
 			.forEach(Serializer.Builder.class, x -> x.swaps(MyJsonSwap.class, MyXmlSwap.class, MyOtherSwap.class))

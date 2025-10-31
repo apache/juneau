@@ -73,7 +73,7 @@ public class PatternExtractVar extends MultipartVar {
 		String result = "";
 		int groupId = Integer.parseInt(args[2]);
 
-		Pattern p = Pattern.compile(pattern.replace("*", ".*").replace("?", "."));
+		var p = Pattern.compile(pattern.replace("*", ".*").replace("?", "."));
 		Matcher m = p.matcher(stringArg);
 
 		if (m.find() && groupId <= m.groupCount() && groupId >= 0) {

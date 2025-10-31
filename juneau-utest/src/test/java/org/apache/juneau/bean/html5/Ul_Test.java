@@ -102,7 +102,7 @@ class Ul_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Ul x1 = new Ul("a1", strong("a2"));
+		var x1 = new Ul("a1", strong("a2"));
 		assertString("<ul>a1<strong>a2</strong></ul>", x1);
 
 	}

@@ -56,7 +56,7 @@ public class RrpcInterfaceMeta {
 	public RrpcInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
 		Value<String> path = Value.of("");
-		ClassInfo ci = ClassInfo.of(c);
+		var ci = ClassInfo.of(c);
 
 		ci.forEachAnnotation(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
 

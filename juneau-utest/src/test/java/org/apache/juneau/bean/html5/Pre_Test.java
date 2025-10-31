@@ -101,7 +101,7 @@ class Pre_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Pre x1 = new Pre("a1", strong("a2"));
+		var x1 = new Pre("a1", strong("a2"));
 		assertString("<pre>a1<strong>a2</strong></pre>", x1);
 
 	}

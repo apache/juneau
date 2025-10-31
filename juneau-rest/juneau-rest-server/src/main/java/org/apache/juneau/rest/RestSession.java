@@ -113,7 +113,7 @@ public class RestSession extends ContextSession {
 		@SuppressWarnings("unchecked")
 		public Builder pathVars(Map<String,String> value) {
 			if (nn(value) && ! value.isEmpty()) {
-				Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
+				var m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
 				if (m == null) {
 					m = new TreeMap<>();
 					req.setAttribute(REST_PATHVARS_ATTR, m);
@@ -371,7 +371,7 @@ public class RestSession extends ContextSession {
 	 */
 	@SuppressWarnings("unchecked")
 	public Map<String,String> getPathVars() {
-		Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
+		var m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
 		return m == null ? Collections.emptyMap() : m;
 	}
 

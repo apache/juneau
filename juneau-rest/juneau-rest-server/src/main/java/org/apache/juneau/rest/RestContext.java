@@ -5138,7 +5138,7 @@ public class RestContext extends Context {
 			if (pathMatcher.hasVars() && parentContext == null) {
 				String sp = sb.req().getServletPath();
 				String pi = sb.getPathInfoUndecoded();
-				UrlPath upi2 = UrlPath.of(pi == null ? sp : sp + pi);
+				var upi2 = UrlPath.of(pi == null ? sp : sp + pi);
 				UrlPathMatch uppm = pathMatcher.match(upi2);
 				if (nn(uppm) && ! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());

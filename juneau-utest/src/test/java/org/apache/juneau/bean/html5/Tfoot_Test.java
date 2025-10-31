@@ -102,7 +102,7 @@ class Tfoot_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Tfoot x1 = new Tfoot("a1", strong("a2"));
+		var x1 = new Tfoot("a1", strong("a2"));
 		assertString("<tfoot>a1<strong>a2</strong></tfoot>", x1);
 
 	}

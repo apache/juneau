@@ -103,7 +103,7 @@ class Progress_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Progress x1 = new Progress("a1", strong("a2"));
+		var x1 = new Progress("a1", strong("a2"));
 		assertString("<progress>a1<strong>a2</strong></progress>", x1);
 
 	}

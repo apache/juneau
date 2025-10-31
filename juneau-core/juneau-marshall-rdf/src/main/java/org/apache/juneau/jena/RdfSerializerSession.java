@@ -387,7 +387,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 				n = m.createResource(uri2);
 				serializeBeanMap(bm, (Resource)n, typeName);
 			} else {
-				Map m2 = (Map)o;
+				var m2 = (Map)o;
 				n = m.createResource();
 				serializeMap(m2, (Resource)n, sType);
 			}

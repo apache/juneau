@@ -101,7 +101,7 @@ class Figcaption_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Figcaption x1 = new Figcaption("a1", strong("a2"));
+		var x1 = new Figcaption("a1", strong("a2"));
 		assertString("<figcaption>a1<strong>a2</strong></figcaption>", x1);
 
 	}

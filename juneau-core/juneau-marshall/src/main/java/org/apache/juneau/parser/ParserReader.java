@@ -154,7 +154,7 @@ public class ParserReader extends Reader implements Positionable {
 			holesExist = false;
 		}
 		int start = iMark + offsetStart, len = iCurrent - iMark + offsetEnd - offsetStart - offset;
-		String s = new String(buff, start, len);
+		var s = new String(buff, start, len);
 		iMark = -1;
 		return s;
 	}

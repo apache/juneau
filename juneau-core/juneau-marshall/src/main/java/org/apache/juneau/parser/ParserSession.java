@@ -290,7 +290,7 @@ public class ParserSession extends BeanSession {
 	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
 	public final JsonMap getLastLocation() {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		if (nn(currentClass))
 			m.put("currentClass", currentClass.toString(true));
 		if (nn(currentProperty))

@@ -226,7 +226,8 @@ public class LogsResource extends BasicRestServlet {
 
 		File f = getFile(path);
 
-		Date startDate = parseIsoDate(start), endDate = parseIsoDate(end);
+		var startDate = parseIsoDate(start);
+		var endDate = parseIsoDate(end);
 
 		if (! highlight) {
 			Object o = getReader(f, startDate, endDate, thread, loggers, severity);
@@ -295,7 +296,8 @@ public class LogsResource extends BasicRestServlet {
 		File f = getFile(path);
 		req.setAttribute("fullPath", f.getAbsolutePath());
 
-		Date startDate = parseIsoDate(start), endDate = parseIsoDate(end);
+		var startDate = parseIsoDate(start);
+		var endDate = parseIsoDate(end);
 
 		return getLogParser(f, startDate, endDate, thread, loggers, severity);
 	}
@@ -317,7 +319,7 @@ public class LogsResource extends BasicRestServlet {
 	private File getFile(String path) throws NotFound {
 		if (path == null)
 			return logDir;
-		File f = new File(logDir.getAbsolutePath() + '/' + path);
+		var f = new File(logDir.getAbsolutePath() + '/' + path);
 		if (f.exists())
 			return f;
 		throw new NotFound("File not found.");

@@ -44,7 +44,7 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 			pipe(r, w);
 			w.flush();
 		}
-		XmlConfiguration xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f.toPath()));
+		var xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f.toPath()));
 		return (Server)xmlConfiguration.configure();
 	}
 }

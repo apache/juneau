@@ -104,7 +104,7 @@ class Output_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Output x1 = new Output("a");
+		var x1 = new Output("a");
 		assertString("<output name='a'></output>", x1);
 
 	}

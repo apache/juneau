@@ -101,7 +101,7 @@ class Bdo_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Bdo x1 = new Bdo("a", "b1", strong("b2"));
+		var x1 = new Bdo("a", "b1", strong("b2"));
 		assertString("<bdo dir='a'>b1<strong>b2</strong></bdo>", x1);
 
 	}

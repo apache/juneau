@@ -101,7 +101,7 @@ class Cite_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Cite x1 = new Cite("a1", strong("a2"));
+		var x1 = new Cite("a1", strong("a2"));
 		assertString("<cite>a1<strong>a2</strong></cite>", x1);
 
 	}

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 class Hyperlink_Test extends TestBase {
 
 	@Test void a01_fluentChaining_anchorAttributes() {
-		Hyperlink h = new Hyperlink();
+		var h = new Hyperlink();
 
 		// Test that fluent methods return Hyperlink (not A)
 		Hyperlink result;
@@ -50,7 +50,7 @@ class Hyperlink_Test extends TestBase {
 	}
 
 	@Test void a02_fluentChaining_globalAttributes() {
-		Hyperlink h = new Hyperlink();
+		var h = new Hyperlink();
 
 		// Test global HTML attributes
 		Hyperlink result;
@@ -94,7 +94,7 @@ class Hyperlink_Test extends TestBase {
 	}
 
 	@Test void a03_fluentChaining_eventHandlers() {
-		Hyperlink h = new Hyperlink();
+		var h = new Hyperlink();
 
 		// Test event handler attributes
 		Hyperlink result;
@@ -117,7 +117,7 @@ class Hyperlink_Test extends TestBase {
 	}
 
 	@Test void a04_fluentChaining_childMethods() {
-		Hyperlink h = new Hyperlink();
+		var h = new Hyperlink();
 
 		// Test child/attribute methods
 		Hyperlink result;
@@ -138,7 +138,7 @@ class Hyperlink_Test extends TestBase {
 
 	@Test void a05_fluentChaining_complex() {
 		// Test chaining multiple fluent calls
-		Hyperlink result = new Hyperlink()
+		var result = new Hyperlink()
 			.href("/path/to/page")
 			.target("_blank")
 			._class("nav-link")
@@ -150,7 +150,7 @@ class Hyperlink_Test extends TestBase {
 	}
 
 	@Test void a06_output_basic() throws Exception {
-		Hyperlink h = new Hyperlink("/foo", "bar");
+		var h = new Hyperlink("/foo", "bar");
 
 		String html = HtmlSerializer.DEFAULT.serialize(h);
 
@@ -160,7 +160,7 @@ class Hyperlink_Test extends TestBase {
 	}
 
 	@Test void a07_output_withAttributes() throws Exception {
-		Hyperlink h = new Hyperlink()
+		var h = new Hyperlink()
 			.href("/path")
 			.target("_blank")
 			._class("link")
@@ -181,7 +181,7 @@ class Hyperlink_Test extends TestBase {
 	}
 
 	@Test void a08_output_eventHandlers() throws Exception {
-		Hyperlink h = new Hyperlink()
+		var h = new Hyperlink()
 			.href("#")
 			.onclick("doSomething()")
 			.onmouseover("highlight(this)")
@@ -196,13 +196,13 @@ class Hyperlink_Test extends TestBase {
 	}
 
 	@Test void a09_staticCreator() {
-		Hyperlink h = Hyperlink.create("/test", "Test link");
+		var h = Hyperlink.create("/test", "Test link");
 
 		assertInstanceOf(Hyperlink.class, h);
 	}
 
 	@Test void a10_staticCreator_output() throws Exception {
-		Hyperlink h = Hyperlink.create("/static", "Static link");
+		var h = Hyperlink.create("/static", "Static link");
 
 		String html = HtmlSerializer.DEFAULT.serialize(h);
 
@@ -211,7 +211,7 @@ class Hyperlink_Test extends TestBase {
 	}
 
 	@Test void a11_multipleEventHandlers() {
-		Hyperlink h = new Hyperlink();
+		var h = new Hyperlink();
 
 		// Test multiple event handlers
 		Hyperlink result = h

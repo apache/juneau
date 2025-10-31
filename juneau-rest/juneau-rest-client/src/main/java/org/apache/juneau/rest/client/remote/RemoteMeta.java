@@ -66,7 +66,7 @@ public class RemoteMeta {
 
 		var versionHeader = "Client-Version";
 		var clientVersion = (String)null;
-		HeaderList headers = HeaderList.create().resolving();
+		var headers = HeaderList.create().resolving();
 
 		for (var r : remotes) {
 			if (isNotEmpty(r.path()))

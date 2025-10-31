@@ -402,7 +402,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 					client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
 				} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
 					String output = getContent().asString();
-					StringBuilder sb = new StringBuilder();
+					var sb = new StringBuilder();
 					sb.append("\n=== HTTP Call (outgoing) ======================================================");
 					sb.append("\n=== REQUEST ===\n");
 					sb.append(request.getMethod()).append(" ").append(request.getURI());
@@ -907,7 +907,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 
 	@SuppressWarnings("unchecked")
 	<T> T as(ResponseBeanMeta rbm) {
-		Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
+		var c = (Class<T>)rbm.getClassMeta().getInnerClass();
 		final RestClient rc = this.client;
 		return (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
 			ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());

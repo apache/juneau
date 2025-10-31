@@ -102,7 +102,7 @@ class Thead_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Thead x1 = new Thead("a1", strong("a2"));
+		var x1 = new Thead("a1", strong("a2"));
 		assertString("<thead>a1<strong>a2</strong></thead>", x1);
 
 	}

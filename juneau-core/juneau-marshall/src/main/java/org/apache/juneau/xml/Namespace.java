@@ -84,7 +84,7 @@ public class Namespace {
 			return (Namespace[])o;
 
 		if (o instanceof String[]) {
-			String[] ss = (String[])o;
+			var ss = (String[])o;
 			Namespace[] n = new Namespace[ss.length];
 			for (int i = 0; i < ss.length; i++)
 				n[i] = create(ss[i]);

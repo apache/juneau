@@ -101,7 +101,7 @@ class Rtc_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Rtc x1 = new Rtc("a1", strong("a2"));
+		var x1 = new Rtc("a1", strong("a2"));
 		assertString("<rtc>a1<strong>a2</strong></rtc>", x1);
 
 	}

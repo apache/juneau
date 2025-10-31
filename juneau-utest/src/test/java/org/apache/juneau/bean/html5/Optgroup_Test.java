@@ -104,7 +104,7 @@ class Optgroup_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Optgroup x1 = new Optgroup("a1", strong("a2"));
+		var x1 = new Optgroup("a1", strong("a2"));
 		assertString("<optgroup>a1<strong>a2</strong></optgroup>", x1);
 
 	}

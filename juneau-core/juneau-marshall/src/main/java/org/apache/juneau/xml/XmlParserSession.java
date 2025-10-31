@@ -773,8 +773,8 @@ public class XmlParserSession extends ReaderParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
-		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
+		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
@@ -817,7 +817,7 @@ public class XmlParserSession extends ReaderParserSession {
 
 		if (sType.isObject()) {
 			if (jsonType == OBJECT) {
-				JsonMap m = new JsonMap(this);
+				var m = new JsonMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				if (nn(wrapperAttr))
 					m = new JsonMap(this).append(wrapperAttr, m);
@@ -866,12 +866,12 @@ public class XmlParserSession extends ReaderParserSession {
 				o = nn(builder) ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
 		} else if (sType.isArray() || sType.isArgs()) {
-			ArrayList l = (ArrayList)parseIntoCollection(r, list(), sType, pMeta);
+			var l = (ArrayList)parseIntoCollection(r, list(), sType, pMeta);
 			o = toArray(sType, l);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, getElementText(r));
 		} else if (nn(sType.getProxyInvocationHandler())) {
-			JsonMap m = new JsonMap(this);
+			var m = new JsonMap(this);
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (nn(wrapperAttr))
 				m = new JsonMap(this).append(wrapperAttr, m);

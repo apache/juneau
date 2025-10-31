@@ -57,7 +57,7 @@ class MutatersTest extends TestBase {
 	public static class D1 {
 		private String f;
 		public static D1 create(String f) {
-			D1 d = new D1(); d.f = f; return d;
+			var d = new D1(); d.f = f; return d;
 		}
 	}
 	@Test void fromString_create() {
@@ -67,7 +67,7 @@ class MutatersTest extends TestBase {
 	public static class D2 {
 		private String f;
 		public static D2 fromString(String f) {
-			D2 d = new D2(); d.f = f; return d;
+			var d = new D2(); d.f = f; return d;
 		}
 	}
 	@Test void fromString_fromString() {
@@ -77,7 +77,7 @@ class MutatersTest extends TestBase {
 	public static class D3 {
 		private String f;
 		public static D3 fromValue(String f) {
-			D3 d = new D3(); d.f = f; return d;
+			var d = new D3(); d.f = f; return d;
 		}
 	}
 	@Test void fromString_fromValue() {
@@ -87,7 +87,7 @@ class MutatersTest extends TestBase {
 	public static class D4 {
 		private String f;
 		public static D4 valueOf(String f) {
-			D4 d = new D4(); d.f = f; return d;
+			var d = new D4(); d.f = f; return d;
 		}
 	}
 	@Test void fromString_valueOf() {
@@ -97,7 +97,7 @@ class MutatersTest extends TestBase {
 	public static class D5 {
 		private String f;
 		public static D5 parse(String f) {
-			D5 d = new D5(); d.f = f; return d;
+			var d = new D5(); d.f = f; return d;
 		}
 	}
 	@Test void fromString_parse() {
@@ -107,7 +107,7 @@ class MutatersTest extends TestBase {
 	public static class D6 {
 		private String f;
 		public static D6 parseString(String f) {
-			D6 d = new D6(); d.f = f; return d;
+			var d = new D6(); d.f = f; return d;
 		}
 	}
 	@Test void fromString_parseString() {
@@ -117,7 +117,7 @@ class MutatersTest extends TestBase {
 	public static class D7 {
 		private String f;
 		public static D7 forName(String f) {
-			D7 d = new D7(); d.f = f; return d;
+			var d = new D7(); d.f = f; return d;
 		}
 	}
 	@Test void fromString_forName() {
@@ -127,7 +127,7 @@ class MutatersTest extends TestBase {
 	public static class D8 {
 		private String f;
 		public static D8 forString(String f) {
-			D8 d = new D8(); d.f = f; return d;
+			var d = new D8(); d.f = f; return d;
 		}
 	}
 	@Test void fromString_forString() {
@@ -143,7 +143,7 @@ class MutatersTest extends TestBase {
 	public static class E1 {
 		private String f;
 		public static E1 create(X x) {
-			E1 e = new E1(); e.f = "ok"; return e;
+			var e = new E1(); e.f = "ok"; return e;
 		}
 	}
 	@Test void fromX_create() {
@@ -153,7 +153,7 @@ class MutatersTest extends TestBase {
 	public static class E2 {
 		private String f;
 		public static E2 fromX(X x) {
-			E2 e = new E2(); e.f = "ok"; return e;
+			var e = new E2(); e.f = "ok"; return e;
 		}
 	}
 	@Test void fromX_fromX() {

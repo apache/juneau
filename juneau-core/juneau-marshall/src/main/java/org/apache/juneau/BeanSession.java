@@ -1184,25 +1184,27 @@ public class BeanSession extends ContextSession {
 				if (! ((to.isMap() && to.getValueType().isNotObject()) || ((to.isCollection() || to.isOptional()) && to.getElementType().isNotObject())))
 					return (T)value;
 
-			ObjectSwap swap = to.getSwap(this);
-			if (nn(swap)) {
-				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
-				if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
-					return (T)swap.unswap(this, value, to);
-				ClassMeta fcm = getClassMeta(fc.inner());
+		ObjectSwap swap = to.getSwap(this);
+		if (nn(swap)) {
+			var nc = swap.getNormalClass();
+			var fc = swap.getSwapClass();
+			if (nc.isParentOf(tc) && fc.isParentOf(value.getClass()))
+				return (T)swap.unswap(this, value, to);
+			ClassMeta fcm = getClassMeta(fc.inner());
 				if (fcm.isNumber() && value instanceof Number) {
 					value = convertToMemberType(null, value, fc.inner());
 					return (T)swap.unswap(this, value, to);
 				}
 			}
 
-			ClassMeta<?> from = getClassMetaForObject(value);
-			swap = from.getSwap(this);
-			if (nn(swap)) {
-				ClassInfo nc = swap.getNormalClass(), fc = swap.getSwapClass();
-				if (nc.isParentOf(from.getInnerClass()) && fc.isParentOf(tc))
-					return (T)swap.swap(this, value);
-			}
+		ClassMeta<?> from = getClassMetaForObject(value);
+		swap = from.getSwap(this);
+		if (nn(swap)) {
+			var nc = swap.getNormalClass();
+			var fc = swap.getSwapClass();
+			if (nc.isParentOf(from.getInnerClass()) && fc.isParentOf(tc))
+				return (T)swap.swap(this, value);
+		}
 
 			if (to.isPrimitive()) {
 				if (to.isNumber()) {
@@ -1393,12 +1395,13 @@ public class BeanSession extends ContextSession {
 			// Target type is some sort of Map that needs to be converted.
 			if (to.isMap()) {
 				try {
-					if (from.isMap()) {
-						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
-						ClassMeta keyType = to.getKeyType(), valueType = to.getValueType();
-						((Map<?,?>)value).forEach((k, v) -> {
-							Object k2 = k;
-							if (keyType.isNotObject()) {
+			if (from.isMap()) {
+				Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
+				var keyType = to.getKeyType();
+				var valueType = to.getValueType();
+				((Map<?,?>)value).forEach((k, v) -> {
+					Object k2 = k;
+					if (keyType.isNotObject()) {
 								if (keyType.isString() && k.getClass() != Class.class)
 									k2 = k.toString();
 								else

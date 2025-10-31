@@ -509,7 +509,7 @@ public abstract class Context implements AnnotationProvider {
 		 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			Flag f = Flag.create();
+			var f = Flag.create();
 			work.forEach(x -> builders.forEach(b -> f.setIf(x.canApply(b))));
 			return f.isSet();
 		}
@@ -729,7 +729,7 @@ public abstract class Context implements AnnotationProvider {
 		try {
 			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
 			if (mi == null) {
-				ClassInfo c = ClassInfo.of(type);
+				var c = ClassInfo.of(type);
 				for (var ci : c.getPublicConstructors()) {
 					if (ci.matches(x -> x.hasNumParams(1) && ! x.getParam(0).getParameterType().is(type))) {
 						// @formatter:off
@@ -748,7 +748,7 @@ public abstract class Context implements AnnotationProvider {
 					throw runtimeException("Could not find builder create method on class {0}", cn(type));
 				BUILDER_CREATE_METHODS.put(type, mi);
 			}
-			Builder b = (Builder)mi.invoke(null);
+			var b = (Builder)mi.invoke(null);
 			b.type(type);
 			return b;
 		} catch (ExecutableException e) {
@@ -781,7 +781,7 @@ public abstract class Context implements AnnotationProvider {
 
 		annotations.forEach(a -> {
 			try {
-				ClassInfo ci = ClassInfo.of(a.getClass());
+				var ci = ClassInfo.of(a.getClass());
 
 				MethodInfo mi = ci.getPublicMethod(x -> x.hasName("onClass"));
 				if (nn(mi)) {

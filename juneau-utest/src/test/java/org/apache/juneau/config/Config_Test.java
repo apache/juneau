@@ -444,7 +444,7 @@ class Config_Test extends TestBase {
 		assertInstanceOf(String.class, a1.keySet().iterator().next());
 		assertInstanceOf(Integer.class, a1.values().iterator().next());
 
-		List<Map<String,Integer>> a2a = (List<Map<String,Integer>>) c.get("a2").as(List.class, Map.class, String.class, Integer.class).get();
+		var a2a = (List<Map<String,Integer>>) c.get("a2").as(List.class, Map.class, String.class, Integer.class).get();
 		assertJson("[{foo:123}]", a2a);
 		assertInstanceOf(String.class, a2a.get(0).keySet().iterator().next());
 		assertInstanceOf(Integer.class, a2a.get(0).values().iterator().next());

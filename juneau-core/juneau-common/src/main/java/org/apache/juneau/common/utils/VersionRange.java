@@ -73,7 +73,7 @@ public class VersionRange {
 	public boolean matches(String v) {
 		if (isEmpty(v))
 			return (minVersion == null && maxVersion == null);
-		Version ver = new Version(v);
+		var ver = new Version(v);
 		if ((nn(minVersion) && ! ver.isAtLeast(minVersion, minExclusive)) || (nn(maxVersion) && ! ver.isAtMost(maxVersion, maxExclusive)))
 			return false;
 		return true;

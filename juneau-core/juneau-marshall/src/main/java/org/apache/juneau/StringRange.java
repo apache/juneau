@@ -81,7 +81,7 @@ public class StringRange {
 		this.extensions = extensions.toArray(new NameValuePair[extensions.size()]);
 		this.name = e.getName();
 
-		StringBuffer sb = new StringBuffer();
+		var sb = new StringBuffer();
 		sb.append(name);
 
 		// '1' is equivalent to specifying no qValue. If there's no extensions, then we won't include a qValue.

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 class JsonSchemaRef_Test extends TestBase {
 
 	@Test void a01_fluentChaining_basicSetters() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test that fluent methods return JsonSchemaRef (not JsonSchema)
 		JsonSchemaRef result;
@@ -50,7 +50,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a02_fluentChaining_numericConstraints() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test numeric constraint methods
 		JsonSchemaRef result;
@@ -73,7 +73,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a03_fluentChaining_stringConstraints() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test string constraint methods
 		JsonSchemaRef result;
@@ -96,7 +96,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a04_fluentChaining_arrayConstraints() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test array constraint methods
 		JsonSchemaRef result;
@@ -119,7 +119,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a05_fluentChaining_objectConstraints() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test object constraint methods
 		JsonSchemaRef result;
@@ -140,7 +140,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a06_fluentChaining_requiredAndEnum() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test required and enum methods
 		JsonSchemaRef result;
@@ -160,7 +160,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a07_fluentChaining_schemaComposition() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test schema composition methods
 		JsonSchemaRef result;
@@ -189,7 +189,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a08_fluentChaining_metadata() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test metadata methods
 		JsonSchemaRef result;
@@ -213,7 +213,7 @@ class JsonSchemaRef_Test extends TestBase {
 
 	@Test void a09_fluentChaining_complex() {
 		// Test chaining multiple fluent calls
-		JsonSchemaRef result = new JsonSchemaRef("http://example.com/user-schema")
+		var result = new JsonSchemaRef("http://example.com/user-schema")
 			.setName("userRef")
 			.setTitle("User Reference")
 			.setDescription("Reference to user schema");
@@ -222,13 +222,13 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a10_constructor_withUri() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		assertInstanceOf(JsonSchemaRef.class, r);
 	}
 
 	@Test void a11_output_basic() throws Exception {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		String json = JsonSerializer.DEFAULT.serialize(r);
 
@@ -237,7 +237,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a12_fluentChaining_definitions() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test definition methods
 		JsonSchemaRef result;
@@ -254,7 +254,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a13_fluentChaining_dependencies() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test dependency methods
 		JsonSchemaRef result;
@@ -280,7 +280,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a14_fluentChaining_patternProperties() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test pattern property methods
 		JsonSchemaRef result;
@@ -294,7 +294,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a15_fluentChaining_prefixItems() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test prefix items methods
 		JsonSchemaRef result;
@@ -308,7 +308,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a16_fluentChaining_unevaluated() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test unevaluated methods
 		JsonSchemaRef result;
@@ -322,7 +322,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a17_fluentChaining_addTypes() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test addTypes method
 		JsonSchemaRef result = r.addTypes(JsonType.STRING, JsonType.NULL);
@@ -332,7 +332,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a18_getterMethods() {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema");
+		var r = new JsonSchemaRef("http://example.com/schema");
 
 		// Test getter methods that are overridden
 		r.setNot(new JsonSchema().setType(JsonType.STRING));
@@ -345,7 +345,7 @@ class JsonSchemaRef_Test extends TestBase {
 	}
 
 	@Test void a19_output_withAdditionalProperties() throws Exception {
-		JsonSchemaRef r = new JsonSchemaRef("http://example.com/schema")
+		var r = new JsonSchemaRef("http://example.com/schema")
 			.setTitle("User Schema")
 			.setDescription("Schema for user objects");
 

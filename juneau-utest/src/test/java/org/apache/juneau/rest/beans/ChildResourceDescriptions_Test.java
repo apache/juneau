@@ -25,13 +25,13 @@ import org.junit.jupiter.api.*;
 class ChildResourceDescriptions_Test extends TestBase {
 
 	@Test void a01_basic() {
-		ChildResourceDescriptions x = new ChildResourceDescriptions();
+		var x = new ChildResourceDescriptions();
 		assertNotNull(x);
 		assertEmpty(x);
 	}
 
 	@Test void a02_appendWithDescription() {
-		ChildResourceDescriptions x = new ChildResourceDescriptions();
+		var x = new ChildResourceDescriptions();
 		x.append("child1", "Description 1");
 		assertSize(1, x);
 		assertEquals("child1", x.get(0).getName());
@@ -39,7 +39,7 @@ class ChildResourceDescriptions_Test extends TestBase {
 	}
 
 	@Test void a03_appendWithUri() {
-		ChildResourceDescriptions x = new ChildResourceDescriptions();
+		var x = new ChildResourceDescriptions();
 		x.append("child1", "/api/child1", "Child 1 API");
 		assertSize(1, x);
 		assertEquals("child1", x.get(0).getName());
@@ -48,7 +48,7 @@ class ChildResourceDescriptions_Test extends TestBase {
 	}
 
 	@Test void a04_fluentSetters() {
-		ChildResourceDescriptions x = new ChildResourceDescriptions();
+		var x = new ChildResourceDescriptions();
 
 		// Test append(String, String) returns same instance for fluent chaining
 		assertSame(x, x.append("resource1", "Resource 1"));
@@ -61,7 +61,7 @@ class ChildResourceDescriptions_Test extends TestBase {
 
 	@Test void a05_fluentChaining() {
 		// Test multiple fluent calls can be chained
-		ChildResourceDescriptions x = new ChildResourceDescriptions()
+		var x = new ChildResourceDescriptions()
 			.append("users", "User management")
 			.append("products", "/api/products", "Product catalog")
 			.append("orders", "Order processing");
@@ -78,7 +78,7 @@ class ChildResourceDescriptions_Test extends TestBase {
 
 	@Test void a06_multipleResources() {
 		// Test building a list of child resources
-		ChildResourceDescriptions x = new ChildResourceDescriptions()
+		var x = new ChildResourceDescriptions()
 			.append("child1", "First child resource")
 			.append("child2", "/child2", "Second child resource")
 			.append("child3", "Third child resource");

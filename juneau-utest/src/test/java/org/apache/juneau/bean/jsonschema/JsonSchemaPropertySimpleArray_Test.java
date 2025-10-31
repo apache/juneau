@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 class JsonSchemaPropertySimpleArray_Test extends TestBase {
 
 	@Test void a01_fluentChaining_basicSetters() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("myArray", JsonType.STRING);
+		var p = new JsonSchemaPropertySimpleArray("myArray", JsonType.STRING);
 
 		// Test that fluent methods return JsonSchemaPropertySimpleArray (not JsonSchemaProperty or JsonSchema)
 		JsonSchemaPropertySimpleArray result;
@@ -47,7 +47,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a02_fluentChaining_arrayConstraints() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("items", JsonType.NUMBER);
+		var p = new JsonSchemaPropertySimpleArray("items", JsonType.NUMBER);
 
 		// Test array constraint methods
 		JsonSchemaPropertySimpleArray result;
@@ -70,7 +70,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a03_fluentChaining_numericConstraints() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("numbers", JsonType.INTEGER);
+		var p = new JsonSchemaPropertySimpleArray("numbers", JsonType.INTEGER);
 
 		// Test numeric constraint methods
 		JsonSchemaPropertySimpleArray result;
@@ -87,7 +87,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a04_fluentChaining_stringConstraints() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("tags", JsonType.STRING);
+		var p = new JsonSchemaPropertySimpleArray("tags", JsonType.STRING);
 
 		// Test string constraint methods
 		JsonSchemaPropertySimpleArray result;
@@ -104,7 +104,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a05_fluentChaining_metadata() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("data", JsonType.OBJECT);
+		var p = new JsonSchemaPropertySimpleArray("data", JsonType.OBJECT);
 
 		// Test metadata methods
 		JsonSchemaPropertySimpleArray result;
@@ -124,7 +124,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a06_fluentChaining_requiredAndEnum() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("values", JsonType.STRING);
+		var p = new JsonSchemaPropertySimpleArray("values", JsonType.STRING);
 
 		// Test required and enum methods
 		JsonSchemaPropertySimpleArray result;
@@ -138,7 +138,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a07_fluentChaining_schemaComposition() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("composite", JsonType.ANY);
+		var p = new JsonSchemaPropertySimpleArray("composite", JsonType.ANY);
 
 		// Test schema composition methods
 		JsonSchemaPropertySimpleArray result;
@@ -159,7 +159,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 
 	@Test void a08_fluentChaining_complex() {
 		// Test chaining multiple fluent calls
-		JsonSchemaPropertySimpleArray result = new JsonSchemaPropertySimpleArray("usernames", JsonType.STRING)
+		var result = new JsonSchemaPropertySimpleArray("usernames", JsonType.STRING)
 			.setMinItems(1)
 			.setMaxItems(10)
 			.setMinLength(3)
@@ -171,13 +171,13 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a09_constructor_withNameAndType() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("myArray", JsonType.STRING);
+		var p = new JsonSchemaPropertySimpleArray("myArray", JsonType.STRING);
 
 		assertInstanceOf(JsonSchemaPropertySimpleArray.class, p);
 	}
 
 	@Test void a10_output_basic() throws Exception {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("tags", JsonType.STRING)
+		var p = new JsonSchemaPropertySimpleArray("tags", JsonType.STRING)
 			.setMinItems(1)
 			.setMaxItems(5);
 
@@ -190,7 +190,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a11_fluentChaining_definitions() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("array", JsonType.STRING);
+		var p = new JsonSchemaPropertySimpleArray("array", JsonType.STRING);
 
 		// Test definition methods
 		JsonSchemaPropertySimpleArray result;
@@ -204,7 +204,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a12_fluentChaining_properties() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("objects", JsonType.OBJECT);
+		var p = new JsonSchemaPropertySimpleArray("objects", JsonType.OBJECT);
 
 		// Test property methods
 		JsonSchemaPropertySimpleArray result;
@@ -218,7 +218,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a13_fluentChaining_dependencies() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("data", JsonType.ANY);
+		var p = new JsonSchemaPropertySimpleArray("data", JsonType.ANY);
 
 		// Test dependency methods
 		JsonSchemaPropertySimpleArray result;
@@ -235,7 +235,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a14_fluentChaining_prefixItems() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("tuple", JsonType.ANY);
+		var p = new JsonSchemaPropertySimpleArray("tuple", JsonType.ANY);
 
 		// Test prefix items methods
 		JsonSchemaPropertySimpleArray result;
@@ -249,7 +249,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a15_fluentChaining_unevaluated() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("array", JsonType.ANY);
+		var p = new JsonSchemaPropertySimpleArray("array", JsonType.ANY);
 
 		// Test unevaluated methods
 		JsonSchemaPropertySimpleArray result;
@@ -263,7 +263,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a16_output_withConstraints() throws Exception {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("ids", JsonType.INTEGER)
+		var p = new JsonSchemaPropertySimpleArray("ids", JsonType.INTEGER)
 			.setMinItems(1)
 			.setUniqueItems(true)
 			.setDescription("List of unique IDs");
@@ -277,7 +277,7 @@ class JsonSchemaPropertySimpleArray_Test extends TestBase {
 	}
 
 	@Test void a17_fluentChaining_addTypes() {
-		JsonSchemaPropertySimpleArray p = new JsonSchemaPropertySimpleArray("mixed", JsonType.ANY);
+		var p = new JsonSchemaPropertySimpleArray("mixed", JsonType.ANY);
 
 		// Test addTypes method
 		JsonSchemaPropertySimpleArray result = p.addTypes(JsonType.STRING, JsonType.NULL);

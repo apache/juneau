@@ -30,12 +30,12 @@ class ManifestFile_Test extends TestBase {
 	// test - Basic tests
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a01_basic() throws Exception {
-		Manifest manifest = new Manifest();
+		var manifest = new Manifest();
 		manifest.getMainAttributes().put(java.util.jar.Attributes.Name.MANIFEST_VERSION, "1.0");
 		manifest.getMainAttributes().put(new java.util.jar.Attributes.Name("Bundle-Name"), "Test Bundle");
 		manifest.getMainAttributes().put(new java.util.jar.Attributes.Name("Bundle-Version"), "1.0.0");
 
-		ManifestFile mf = new ManifestFile(manifest);
+		var mf = new ManifestFile(manifest);
 
 		assertEquals("1.0", mf.get("Manifest-Version"));
 		assertEquals("Test Bundle", mf.get("Bundle-Name"));
@@ -46,10 +46,10 @@ class ManifestFile_Test extends TestBase {
 	// test - Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void a02_fluentSetters() throws Exception {
-		Manifest manifest = new Manifest();
+		var manifest = new Manifest();
 		manifest.getMainAttributes().put(java.util.jar.Attributes.Name.MANIFEST_VERSION, "1.0");
 
-		ManifestFile mf = new ManifestFile(manifest);
+		var mf = new ManifestFile(manifest);
 
 		// Test inner() returns same instance for fluent chaining
 		var innerMap = new HashMap<String,Object>();
@@ -93,11 +93,11 @@ class ManifestFile_Test extends TestBase {
 	}
 
 	@Test void a03_fluentChaining() throws Exception {
-		Manifest manifest = new Manifest();
+		var manifest = new Manifest();
 		manifest.getMainAttributes().put(java.util.jar.Attributes.Name.MANIFEST_VERSION, "1.0");
 
 		// Test multiple fluent calls can be chained
-		ManifestFile mf = new ManifestFile(manifest)
+		var mf = new ManifestFile(manifest)
 			.append("Key1", "value1")
 			.append("Key2", "value2")
 			.appendIf(true, "Key3", "value3");

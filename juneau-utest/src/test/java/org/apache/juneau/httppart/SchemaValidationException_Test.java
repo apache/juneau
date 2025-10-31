@@ -24,18 +24,18 @@ import org.junit.jupiter.api.*;
 class SchemaValidationException_Test extends TestBase {
 
 	@Test void a01_basic() {
-		SchemaValidationException x = new SchemaValidationException("Test message");
+		var x = new SchemaValidationException("Test message");
 		assertNotNull(x);
 		assertTrue(x.getMessage().contains("Test message"));
 	}
 
 	@Test void a02_withArgs() {
-		SchemaValidationException x = new SchemaValidationException("Test {0} {1}", "foo", "bar");
+		var x = new SchemaValidationException("Test {0} {1}", "foo", "bar");
 		assertTrue(x.getMessage().contains("Test foo bar"));
 	}
 
 	@Test void a03_setMessage_fluentChaining() {
-		SchemaValidationException x = new SchemaValidationException("Original");
+		var x = new SchemaValidationException("Original");
 
 		// Test that setMessage returns SchemaValidationException for fluent chaining
 		SchemaValidationException result = x.setMessage("New message");
@@ -45,7 +45,7 @@ class SchemaValidationException_Test extends TestBase {
 	}
 
 	@Test void a04_getRootCause_single() {
-		SchemaValidationException x = new SchemaValidationException("Root cause");
+		var x = new SchemaValidationException("Root cause");
 
 		// Test that getRootCause returns SchemaValidationException (not ParseException)
 		SchemaValidationException root = x.getRootCause();
@@ -54,10 +54,10 @@ class SchemaValidationException_Test extends TestBase {
 	}
 
 	@Test void a05_getRootCause_nested() {
-		SchemaValidationException cause = new SchemaValidationException("Cause");
-		SchemaValidationException middle = new SchemaValidationException("Middle");
+		var cause = new SchemaValidationException("Cause");
+		var middle = new SchemaValidationException("Middle");
 		middle.initCause(cause);
-		SchemaValidationException top = new SchemaValidationException("Top");
+		var top = new SchemaValidationException("Top");
 		top.initCause(middle);
 
 		// Test that getRootCause returns the deepest SchemaValidationException
@@ -69,7 +69,7 @@ class SchemaValidationException_Test extends TestBase {
 
 	@Test void a06_fluentChaining() {
 		// Test multiple fluent calls can be chained
-		SchemaValidationException x = new SchemaValidationException("Initial")
+		var x = new SchemaValidationException("Initial")
 			.setMessage("Updated message");
 
 		assertTrue(x.getMessage().contains("Updated message"));

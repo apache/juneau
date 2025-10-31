@@ -34,7 +34,7 @@ class MediaRange_Test extends TestBase {
 		// Test basic MediaRange creation
 		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/html;charset=UTF-8;q=0.9", null);
 
-		MediaRange x = new MediaRange(element);
+		var x = new MediaRange(element);
 
 		assertEquals("text", x.getType());
 		assertEquals("html", x.getSubType());
@@ -45,7 +45,7 @@ class MediaRange_Test extends TestBase {
 		// Test that forEachParameter returns MediaRange for fluent chaining
 		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/html;charset=UTF-8;level=1", null);
 
-		MediaRange x = new MediaRange(element);
+		var x = new MediaRange(element);
 
 		// Test fluent chaining
 		List<String> names = list();
@@ -64,7 +64,7 @@ class MediaRange_Test extends TestBase {
 		// Test that forEachParameter properly iterates parameters
 		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("application/json;charset=UTF-8;version=2", null);
 
-		MediaRange x = new MediaRange(element);
+		var x = new MediaRange(element);
 
 		// Collect all parameter values
 		var params = new HashMap<String, String>();
@@ -78,7 +78,7 @@ class MediaRange_Test extends TestBase {
 		// Test with no parameters
 		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/plain", null);
 
-		MediaRange x = new MediaRange(element);
+		var x = new MediaRange(element);
 
 		// Should not throw exception with empty parameters
 		int[] count = {0};
@@ -92,7 +92,7 @@ class MediaRange_Test extends TestBase {
 		// Test chaining forEachParameter multiple times
 		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/html;charset=UTF-8;level=1", null);
 
-		MediaRange x = new MediaRange(element);
+		var x = new MediaRange(element);
 
 		// Chain multiple calls
 		List<String> names1 = list();
@@ -111,7 +111,7 @@ class MediaRange_Test extends TestBase {
 		// Test that both forEachParameter and forEachExtension APIs work
 		HeaderElement element = BasicHeaderValueParser.parseHeaderElement("text/html;q=0.9", null);
 
-		MediaRange x = new MediaRange(element);
+		var x = new MediaRange(element);
 
 		// Test that forEachParameter can be called (returns MediaRange)
 		MediaRange result = x.forEachParameter(p -> {});

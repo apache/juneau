@@ -94,7 +94,7 @@ public class PartBeanMeta<T> {
 	private PartBeanMeta(Class<T> type) {
 		this.type = type;
 
-		ClassInfo ci = ClassInfo.of(type);
+		var ci = ClassInfo.of(type);
 
 		ConstructorInfo cci = ci.getPublicConstructor(x -> x.hasParamTypes(String.class));
 		if (cci == null)

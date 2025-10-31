@@ -116,7 +116,7 @@ class Textarea_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Textarea x1 = new Textarea("a", "b");
+		var x1 = new Textarea("a", "b");
 		assertString("<textarea name='a'>b</textarea>", x1);
 
 	}

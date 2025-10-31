@@ -307,7 +307,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 * @return A new query string, or an empty string if this object is empty.
 	 */
 	public String asQueryString() {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		for (var e : this) {
 			if (sb.length() > 0)
 				sb.append("&");
@@ -392,7 +392,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 			return new RequestFormParam(req, name, null).parser(parser);
 		if (l.size() == 1)
 			return l.get(0);
-		StringBuilder sb = new StringBuilder(128);
+		var sb = new StringBuilder(128);
 		for (int i = 0, j = l.size(); i < j; i++) {
 			if (i > 0)
 				sb.append(", ");
@@ -548,7 +548,7 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		for (var n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();

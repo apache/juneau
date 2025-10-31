@@ -49,7 +49,7 @@ public class RestCallException extends HttpException {
 		if (! needsCleaning)
 			return message;
 
-		StringBuilder sb = new StringBuilder(message.length());
+		var sb = new StringBuilder(message.length());
 		for (int i = 0; i < message.length(); i++) {
 			char c = message.charAt(i);
 			sb.append(c < 32 ? ' ' : c);

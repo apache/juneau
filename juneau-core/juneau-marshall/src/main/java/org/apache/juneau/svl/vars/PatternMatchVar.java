@@ -71,7 +71,7 @@ public class PatternMatchVar extends MultipartVar {
 
 		String stringArg = args[0];
 		String pattern = args[1];
-		Pattern p = Pattern.compile(pattern.replace("*", ".*").replace("?", "."));
+		var p = Pattern.compile(pattern.replace("*", ".*").replace("?", "."));
 		return String.valueOf(p.matcher(stringArg).matches());
 	}
 }

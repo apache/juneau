@@ -101,7 +101,7 @@ class Sup_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Sup x1 = new Sup("a1", strong("a2"));
+		var x1 = new Sup("a1", strong("a2"));
 		assertString("<sup>a1<strong>a2</strong></sup>", x1);
 
 	}

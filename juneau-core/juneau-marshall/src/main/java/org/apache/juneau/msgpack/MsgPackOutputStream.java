@@ -204,7 +204,7 @@ public class MsgPackOutputStream extends OutputStream {
 	 */
 	MsgPackOutputStream appendBinary(InputStream is) {
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		var baos = new ByteArrayOutputStream();
 		pipe(is, baos, x -> {
 			throw new SerializeException(x);
 		});

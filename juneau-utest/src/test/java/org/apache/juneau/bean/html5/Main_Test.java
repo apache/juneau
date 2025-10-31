@@ -102,7 +102,7 @@ class Main_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Main x1 = new Main("a1", strong("a2"));
+		var x1 = new Main("a1", strong("a2"));
 		assertString("<main>a1<strong>a2</strong></main>", x1);
 
 	}

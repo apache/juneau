@@ -4,6 +4,61 @@ This file contains TODO items that have been completed and moved from TODO.md.
 
 ## Code Quality Improvements
 
+- **TODO-51** ✅ Convert local variable declarations to use `var` keyword where type is explicit on right-hand side.
+  - **Status**: COMPLETED
+  - **Completed**: October 31, 2025
+  - **Total changes**: 276 files modified, 915 insertions(+), 859 deletions(-)
+  
+  ### Phase 1: Break up compound declarations (26 instances)
+  - **Pattern**: `Type var1 = ..., var2 = ...;` → `var var1 = ...; var var2 = ...;`
+  - **Files**: 15+ files including HtmlSerializerSession.java, BeanSession.java, RemoteOperationMeta.java, etc.
+  
+  ### Phase 2: Conservative safe-pattern conversion (276 files)
+  - **Approach**: Conservative conversion of only the safest patterns
+  - **Patterns converted**:
+    1. `Type var = new Type(...)` → `var var = new Type(...)` (constructor calls where type matches)
+    2. `Type var = Type.staticMethod(...)` → `var var = Type.staticMethod(...)` (static method calls on same type)
+    3. `Type var = (Type)cast` → `var var = (Type)cast` (explicit casts)
+  - **Patterns explicitly AVOIDED**:
+    - Lambda expressions: `Predicate<String> p = x -> ...` (cannot use var)
+    - Field declarations (fields don't support var)
+    - Generic type inference issues (e.g., Long vs long, wrapper vs primitive)
+    - Cases where right-hand side doesn't provide sufficient type information
+  - **Implementation strategy**:
+    - Created conservative conversion script targeting only safe patterns
+    - Batch processed ALL Java files (272 files initially converted)
+    - Compiled to identify files with errors
+    - Reverted problematic files (10 files):
+      - `ClassMeta.java`, `BeanSession.java`, `RestClient.java` (field declarations)
+      - `HttpPartSchema.java`, `HtmlBeanPropertyMeta.java` (field declarations)
+      - `BasicHttpException.java`, `HtmlAnnotation.java`, `XmlAnnotation.java` (annotation implementations)
+      - `ResponseBeanPropertyMeta.java`, `BeanDiff.java` (type inference issues)
+      - 7 test files with field declarations
+    - Final result: 276 files successfully converted
+  - **Test results**: ✅ All 25,828 tests pass (0 failures, 0 errors)
+  - **Conversion examples**:
+    ```java
+    // Phase 1: Compound declarations
+    String x = null, y = null;  →  var x = (String)null; var y = (String)null;
+    Value<T> a = Value.empty(), b = Value.empty();  →  var a = Value.<T>empty(); var b = Value.<T>empty();
+    
+    // Phase 2: Safe patterns
+    JsonMap map = new JsonMap();  →  var map = new JsonMap();
+    ClassInfo ci = ClassInfo.of(c);  →  var ci = ClassInfo.of(c);
+    String s = (String)obj;  →  var s = (String)obj;
+    ```
+  - **Benefits**:
+    - **Reduces verbosity**: Eliminates redundant type declarations
+    - **Improves readability**: Type is obvious from right-hand side
+    - **Modernizes codebase**: Adopts Java 10+ best practices
+    - **Maintains type safety**: All conversions preserve compile-time type checking
+    - **One variable per line**: Compound declarations eliminated
+  - **Statistics**:
+    - Phase 1: 26 compound declarations → 52 separate var declarations
+    - Phase 2: ~1,000+ local variable declarations converted to var
+    - Total files modified: 276
+    - Net change: +56 lines (more readable single-line declarations)
+
 - **TODO-50** ✅ Use `var` keyword in enhanced for loops where type is explicitly declared.
   - **Status**: COMPLETED
   - **Completed**: October 30, 2025

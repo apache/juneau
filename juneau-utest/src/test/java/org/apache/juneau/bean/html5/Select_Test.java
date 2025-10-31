@@ -109,7 +109,7 @@ class Select_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Select x1 = new Select("a", "b1", strong("b2"));
+		var x1 = new Select("a", "b1", strong("b2"));
 		assertString("<select name='a'>b1<strong>b2</strong></select>", x1);
 
 	}

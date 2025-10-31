@@ -198,7 +198,7 @@ public class ReaderEntity extends BasicHttpEntity {
 		if (isCached()) {
 			out.write(asBytes());
 		} else {
-			OutputStreamWriter osw = new OutputStreamWriter(out, getCharset());
+			var osw = new OutputStreamWriter(out, getCharset());
 			pipe(content(), osw);
 			osw.flush();
 		}

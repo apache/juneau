@@ -28,12 +28,12 @@ import org.junit.jupiter.api.*;
 class ByteArrayResource_Test extends TestBase {
 
 	@Test void a01_basic() throws Exception {
-		ByteArrayResource x = new ByteArrayResource();
+		var x = new ByteArrayResource();
 		assertEquals("", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
-		ByteArrayResource x2 = new ByteArrayResource(contentType("text/plain"), "foo".getBytes());
+		var x2 = new ByteArrayResource(contentType("text/plain"), "foo".getBytes());
 		assertEquals("foo", toUtf8(x2.getContent()));
 		assertEquals("text/plain", x2.getContentType().getValue());
 		assertTrue(x2.isRepeatable());
@@ -41,14 +41,14 @@ class ByteArrayResource_Test extends TestBase {
 	}
 
 	@Test void a02_caching() throws Exception {
-		ByteArrayResource x = new ByteArrayResource(null, "foo".getBytes()).setCached();
+		var x = new ByteArrayResource(null, "foo".getBytes()).setCached();
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertEquals("foo", toUtf8(x.getContent()));
 		assertTrue(x.isRepeatable());
 	}
 
 	@Test void a03_headers() {
-		ByteArrayResource x = new ByteArrayResource(null, "foo".getBytes())
+		var x = new ByteArrayResource(null, "foo".getBytes())
 			.addHeader("Foo", "bar")
 			.addHeader("Foo", "baz")
 			.setHeader("Qux", "quux");
@@ -60,41 +60,41 @@ class ByteArrayResource_Test extends TestBase {
 	}
 
 	@Test void a04_contentType() {
-		ByteArrayResource x = new ByteArrayResource(null, "foo".getBytes())
+		var x = new ByteArrayResource(null, "foo".getBytes())
 			.setContentType("text/plain");
 		assertEquals("text/plain", x.getContentType().getValue());
 
-		ByteArrayResource x2 = new ByteArrayResource(null, "foo".getBytes())
+		var x2 = new ByteArrayResource(null, "foo".getBytes())
 			.setContentType(contentType("text/html"));
 		assertEquals("text/html", x2.getContentType().getValue());
 	}
 
 	@Test void a05_contentEncoding() {
-		ByteArrayResource x = new ByteArrayResource(null, "foo".getBytes())
+		var x = new ByteArrayResource(null, "foo".getBytes())
 			.setContentEncoding("identity");
 		assertEquals("identity", x.getContentEncoding().getValue());
 
-		ByteArrayResource x2 = new ByteArrayResource(null, "foo".getBytes())
+		var x2 = new ByteArrayResource(null, "foo".getBytes())
 			.setContentEncoding(contentEncoding("gzip"));
 		assertEquals("gzip", x2.getContentEncoding().getValue());
 	}
 
 	@Test void a06_chunked() {
-		ByteArrayResource x = new ByteArrayResource(null, "foo".getBytes())
+		var x = new ByteArrayResource(null, "foo".getBytes())
 			.setChunked();
 		assertTrue(x.isChunked());
 
-		ByteArrayResource x2 = new ByteArrayResource(null, "foo".getBytes())
+		var x2 = new ByteArrayResource(null, "foo".getBytes())
 			.setChunked(true);
 		assertTrue(x2.isChunked());
 
-		ByteArrayResource x3 = new ByteArrayResource(null, "foo".getBytes())
+		var x3 = new ByteArrayResource(null, "foo".getBytes())
 			.setChunked(false);
 		assertFalse(x3.isChunked());
 	}
 
 	@Test void a07_fluentSetters() {
-		ByteArrayResource x = new ByteArrayResource(null, "foo".getBytes());
+		var x = new ByteArrayResource(null, "foo".getBytes());
 
 		// Test setHeader returns correct type
 		assertSame(x, x.setHeader("X-Test", "value"));
@@ -114,7 +114,7 @@ class ByteArrayResource_Test extends TestBase {
 	}
 
 	@Test void a08_copy() throws Exception {
-		ByteArrayResource x = new ByteArrayResource(contentType("text/plain"), "foo".getBytes())
+		var x = new ByteArrayResource(contentType("text/plain"), "foo".getBytes())
 			.setHeader("Foo", "bar");
 
 		ByteArrayResource x2 = x.copy();
@@ -125,11 +125,11 @@ class ByteArrayResource_Test extends TestBase {
 	}
 
 	@Test void a09_contentLength() {
-		ByteArrayResource x = new ByteArrayResource(null, "foo".getBytes());
+		var x = new ByteArrayResource(null, "foo".getBytes());
 		assertEquals(3L, x.getContentLength());
 
 		// Content length is derived from actual content for ByteArrayResource
-		ByteArrayResource x2 = new ByteArrayResource(null, "foo".getBytes()).setContentLength(10);
+		var x2 = new ByteArrayResource(null, "foo".getBytes()).setContentLength(10);
 		assertEquals(3L, x2.getContentLength());
 	}
 

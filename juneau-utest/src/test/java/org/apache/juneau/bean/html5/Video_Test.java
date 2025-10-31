@@ -113,7 +113,7 @@ class Video_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Video x1 = new Video("a");
+		var x1 = new Video("a");
 		assertString("<video src='a'></video>", x1);
 
 	}

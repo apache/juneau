@@ -107,7 +107,7 @@ class Body_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Body x1 = new Body("a1", strong("a2"));
+		var x1 = new Body("a1", strong("a2"));
 		assertString("<body>a1<strong>a2</strong></body>", x1);
 
 	}

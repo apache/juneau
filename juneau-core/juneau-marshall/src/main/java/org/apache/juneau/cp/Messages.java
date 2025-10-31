@@ -283,7 +283,7 @@ public class Messages extends ResourceBundle {
 
 		ResourceBundle getBundle() {
 			ClassLoader cl = forClass.getClassLoader();
-			JsonMap m = JsonMap.of("name", name, "package", forClass.getPackage().getName());
+			var m = JsonMap.of("name", name, "package", forClass.getPackage().getName());
 			for (var bn : baseNames) {
 				bn = StringUtils.replaceVars(bn, m);
 				ResourceBundle rb = findBundle(bn, locale, cl);
@@ -471,7 +471,7 @@ public class Messages extends ResourceBundle {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		for (var k : new TreeSet<>(keySet()))
 			m.put(k, getString(k));
 		return Json5.of(m);

@@ -225,7 +225,7 @@ public class ClassInfo {
 	 */
 	private static Annotation[] splitRepeated(Annotation a) {
 		try {
-			ClassInfo ci = ClassInfo.of(a.annotationType());
+			var ci = ClassInfo.of(a.annotationType());
 			MethodInfo mi = ci.getRepeatedAnnotationMethod();
 			if (nn(mi))
 				return mi.invoke(a);
@@ -296,7 +296,7 @@ public class ClassInfo {
 			return sb.append(ct.getName());
 		sb.append(nn(ct) ? ct.getName() : t.getTypeName());
 		if (isParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
+			var pt = (ParameterizedType)t;
 			sb.append('<');
 			boolean first = true;
 			for (var t2 : pt.getActualTypeArguments()) {
@@ -332,7 +332,7 @@ public class ClassInfo {
 			sb.append(t.getTypeName());
 		}
 		if (isParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
+			var pt = (ParameterizedType)t;
 			sb.append('<');
 			boolean first = true;
 			for (var t2 : pt.getActualTypeArguments()) {
@@ -742,7 +742,7 @@ public class ClassInfo {
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		AnnotationList l = new AnnotationList();
+		var l = new AnnotationList();
 		forEachAnnotationInfo(filter, x -> l.add(x));
 		return l;
 	}
@@ -931,7 +931,7 @@ public class ClassInfo {
 		int dim = getDimensions();
 		if (nn(ct) && dim == 0 && ! isParameterizedType)
 			return ct.getName();
-		StringBuilder sb = new StringBuilder(128);
+		var sb = new StringBuilder(128);
 		appendFullName(sb);
 		return sb.toString();
 	}
@@ -1055,7 +1055,7 @@ public class ClassInfo {
 
 		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
 
-		ParameterizedType cpt = (ParameterizedType)gsc;
+		var cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
 		assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
 		Type actualType = cpt.getActualTypeArguments()[index];
@@ -1075,14 +1075,15 @@ public class ClassInfo {
 		for (Class<?> ec = cc.getEnclosingClass(); nn(ec); ec = ec.getEnclosingClass()) {
 			Class<?> outerClass = cc.getClass();
 			nestedOuterTypes.add(outerClass);
-			var outerTypeMap = new HashMap<Type,Type>();
-			extractTypes(outerTypeMap, outerClass);
-			for (var entry : outerTypeMap.entrySet()) {
-				Type key = entry.getKey(), value = entry.getValue();
-				if (key instanceof TypeVariable<?> keyType) {
-					if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
-						if (value instanceof Class<?> c)
-							return c;
+		var outerTypeMap = new HashMap<Type,Type>();
+		extractTypes(outerTypeMap, outerClass);
+		for (var entry : outerTypeMap.entrySet()) {
+			var key = entry.getKey();
+			var value = entry.getValue();
+			if (key instanceof TypeVariable<?> keyType) {
+				if (keyType.getName().equals(typeVariable.getName()) && isInnerClass(keyType.getGenericDeclaration(), typeVariable.getGenericDeclaration())) {
+					if (value instanceof Class<?> c)
+						return c;
 						typeVariable = (TypeVariable<?>)entry.getValue();
 					}
 				}
@@ -1213,7 +1214,7 @@ public class ClassInfo {
 		if (! c.isArray())
 			return c.getSimpleName();
 		Class<?> c = this.c;
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		while (c.isArray()) {
 			sb.append("Array");
 			c = c.getComponentType();
@@ -1256,7 +1257,7 @@ public class ClassInfo {
 		int dim = getDimensions();
 		if (nn(ct) && dim == 0 && ! (isParameterizedType || isMemberClass() || c.isLocalClass()))
 			return ct.getSimpleName();
-		StringBuilder sb = new StringBuilder(32);
+		var sb = new StringBuilder(32);
 		appendShortName(sb);
 		return sb.toString();
 	}
@@ -2080,7 +2081,7 @@ public class ClassInfo {
 
 	private Type getFirstParameterType(Class<?> parameterizedType) {
 		if (t instanceof ParameterizedType) {
-		ParameterizedType pt = (ParameterizedType)t;
+		var pt = (ParameterizedType)t;
 		Type[] ta = pt.getActualTypeArguments();
 		if (ta.length > 0)
 			return ta[0];
@@ -2138,7 +2139,8 @@ public class ClassInfo {
 	ClassInfo[] _getAllParents() {
 		if (allParents == null) {
 			synchronized (this) {
-				ClassInfo[] a1 = _getParents(), a2 = _getInterfaces();
+				var a1 = _getParents();
+				var a2 = _getInterfaces();
 				ClassInfo[] l = new ClassInfo[a1.length + a2.length];
 				for (int i = 0; i < a1.length; i++)
 					l[i] = a1[i];

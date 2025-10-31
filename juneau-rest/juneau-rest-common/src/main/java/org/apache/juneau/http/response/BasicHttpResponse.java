@@ -435,7 +435,7 @@ public class BasicHttpResponse implements HttpResponse {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		StringBuilder sb = new StringBuilder().append(statusLine).append(' ').append(headers);
+		var sb = new StringBuilder().append(statusLine).append(' ').append(headers);
 		if (nn(content))
 			sb.append(' ').append(content);
 		return sb.toString();

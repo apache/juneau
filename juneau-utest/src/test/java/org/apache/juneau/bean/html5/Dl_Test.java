@@ -102,7 +102,7 @@ class Dl_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Dl x1 = new Dl("a1", strong("a2"));
+		var x1 = new Dl("a1", strong("a2"));
 		assertString("<dl>a1<strong>a2</strong></dl>", x1);
 
 	}

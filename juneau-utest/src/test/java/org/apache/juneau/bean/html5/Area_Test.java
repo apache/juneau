@@ -109,7 +109,7 @@ class Area_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Area x1 = new Area("a", "b", "c");
+		var x1 = new Area("a", "b", "c");
 		assertString("<area shape='a' coords='b' href='c'/>", x1);
 
 	}

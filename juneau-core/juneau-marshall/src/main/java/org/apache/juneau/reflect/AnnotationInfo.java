@@ -80,7 +80,7 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	private static int getRank(Object a) {
-		ClassInfo ci = ClassInfo.of(a);
+		var ci = ClassInfo.of(a);
 		MethodInfo mi = ci.getPublicMethod(x -> x.hasName("rank") && x.hasNoParams() && x.hasReturnType(int.class));
 		if (nn(mi)) {
 			try {
@@ -306,15 +306,15 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return A new map showing the attributes of this object as a JSON object.
 	 */
 	public JsonMap toJsonMap() {
-		JsonMap jm = new JsonMap();
+		var jm = new JsonMap();
 		if (nn(c))
 			jm.put("class", c.getSimpleName());
 		if (nn(m))
 			jm.put("method", m.getShortName());
 		if (nn(p))
 			jm.put("package", p.getName());
-		JsonMap ja = new JsonMap();
-		ClassInfo ca = ClassInfo.of(a.annotationType());
+		var ja = new JsonMap();
+		var ca = ClassInfo.of(a.annotationType());
 		ca.forEachDeclaredMethod(null, x -> {
 			try {
 				Object v = x.invoke(a);

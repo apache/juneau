@@ -101,7 +101,7 @@ class Kbd_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Kbd x1 = new Kbd("a1", strong("a2"));
+		var x1 = new Kbd("a1", strong("a2"));
 		assertString("<kbd>a1<strong>a2</strong></kbd>", x1);
 
 	}

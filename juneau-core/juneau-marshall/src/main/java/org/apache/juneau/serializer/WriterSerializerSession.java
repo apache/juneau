@@ -291,7 +291,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 */
 	@Override /* Overridden from SerializerSession */
 	public final String serialize(Object o) throws SerializeException {
-		StringWriter w = new StringWriter();
+		var w = new StringWriter();
 		try {
 			serialize(o, w);
 		} catch (IOException e) {

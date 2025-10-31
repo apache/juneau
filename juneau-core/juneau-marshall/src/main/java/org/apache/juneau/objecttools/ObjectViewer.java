@@ -92,7 +92,7 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 			for (int i = 0; i < size; i++)
 				l.add(Array.get(input, i));
 		} else if (type.isCollection()) {
-			Collection c = (Collection)input;
+			var c = (Collection)input;
 			l = listOfSize(c.size());
 			List<Object> l2 = l;
 			c.forEach(x -> l2.add(x));

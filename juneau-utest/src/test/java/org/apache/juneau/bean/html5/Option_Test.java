@@ -105,10 +105,10 @@ class Option_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Option x1 = new Option("a");
+		var x1 = new Option("a");
 		assertString("<option>a</option>", x1);
 
-		Option x2 = new Option("a", "b");
+		var x2 = new Option("a", "b");
 		assertString("<option value='a'>b</option>", x2);
 
 	}

@@ -102,7 +102,7 @@ class Source_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Source x1 = new Source("a", "b");
+		var x1 = new Source("a", "b");
 		assertString("<source src='a' type='b'/>", x1);
 
 	}

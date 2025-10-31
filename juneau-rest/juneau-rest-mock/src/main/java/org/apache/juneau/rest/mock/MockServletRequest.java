@@ -57,7 +57,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return A new request.
 	 */
 	public static MockServletRequest create() {
-		MockServletRequest r = new MockServletRequest();
+		var r = new MockServletRequest();
 		return r;
 	}
 
@@ -448,7 +448,7 @@ public class MockServletRequest implements HttpServletRequest {
 			if (queryDataMap.isEmpty())
 				queryString = "";
 			else {
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 				queryDataMap.forEach((k, v) -> {
 					if (v == null)
 						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k));

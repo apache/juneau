@@ -101,7 +101,7 @@ class Head_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Head x1 = new Head("a1", strong("a2"));
+		var x1 = new Head("a1", strong("a2"));
 		assertString("<head>a1<strong>a2</strong></head>", x1);
 
 	}

@@ -26,12 +26,12 @@ class RequestHttpPart_FluentSetters_Test extends TestBase {
 	@Test
 	public void a01_RequestFormParam_def() throws Exception {
 		// Test that def() returns correct type for fluent chaining
-		RequestFormParam x = new RequestFormParam(null, "test", null);
+		var x = new RequestFormParam(null, "test", null);
 		assertSame(x, x.def("default"));
 		assertEquals("default", x.asString().orElse(null));
 
 		// Test fluent chaining with other methods
-		RequestFormParam y = new RequestFormParam(null, "test", null)
+		var y = new RequestFormParam(null, "test", null)
 			.def("default-value")
 			.schema(null);
 		assertInstanceOf(RequestFormParam.class, y);
@@ -41,12 +41,12 @@ class RequestHttpPart_FluentSetters_Test extends TestBase {
 	@Test
 	public void a02_RequestHeader_def() throws Exception {
 		// Test that def() returns correct type for fluent chaining
-		RequestHeader x = new RequestHeader(null, "X-Missing", null);
+		var x = new RequestHeader(null, "X-Missing", null);
 		assertSame(x, x.def("default"));
 		assertEquals("default", x.asString().orElse(null));
 
 		// Test fluent chaining with other methods
-		RequestHeader y = new RequestHeader(null, "X-Missing2", null)
+		var y = new RequestHeader(null, "X-Missing2", null)
 			.def("default-header")
 			.schema(null);
 		assertInstanceOf(RequestHeader.class, y);
@@ -56,12 +56,12 @@ class RequestHttpPart_FluentSetters_Test extends TestBase {
 	@Test
 	public void a03_RequestPathParam_def() throws Exception {
 		// Test that def() returns correct type for fluent chaining
-		RequestPathParam x = new RequestPathParam(null, "param", null);
+		var x = new RequestPathParam(null, "param", null);
 		assertSame(x, x.def("default"));
 		assertEquals("default", x.asString().orElse(null));
 
 		// Test fluent chaining with other methods
-		RequestPathParam y = new RequestPathParam(null, "param2", null)
+		var y = new RequestPathParam(null, "param2", null)
 			.def("default-path")
 			.schema(null);
 		assertInstanceOf(RequestPathParam.class, y);
@@ -71,12 +71,12 @@ class RequestHttpPart_FluentSetters_Test extends TestBase {
 	@Test
 	public void a04_RequestQueryParam_def() throws Exception {
 		// Test that def() returns correct type for fluent chaining
-		RequestQueryParam x = new RequestQueryParam(null, "missing", null);
+		var x = new RequestQueryParam(null, "missing", null);
 		assertSame(x, x.def("default"));
 		assertEquals("default", x.asString().orElse(null));
 
 		// Test fluent chaining with other methods
-		RequestQueryParam y = new RequestQueryParam(null, "missing2", null)
+		var y = new RequestQueryParam(null, "missing2", null)
 			.def("default-query")
 			.schema(null);
 		assertInstanceOf(RequestQueryParam.class, y);
@@ -86,7 +86,7 @@ class RequestHttpPart_FluentSetters_Test extends TestBase {
 	@Test
 	public void a05_def_withExistingValue() throws Exception {
 		// Test that def() does not override existing values
-		RequestHeader x = new RequestHeader(null, "X-Test", "existing");
+		var x = new RequestHeader(null, "X-Test", "existing");
 		x.def("default");
 		assertEquals("existing", x.asString().orElse(null));
 	}

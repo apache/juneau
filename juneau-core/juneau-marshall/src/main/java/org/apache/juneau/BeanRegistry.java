@@ -116,7 +116,7 @@ public class BeanRegistry {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		sb.append('{');
 		map.forEach((k, v) -> sb.append(k).append(":").append(v.toString(true)).append(", "));
 		sb.append('}');
@@ -126,7 +126,7 @@ public class BeanRegistry {
 	private void addClass(Class<?> c) {
 		try {
 			if (nn(c)) {
-				ClassInfo ci = ClassInfo.of(c);
+				var ci = ClassInfo.of(c);
 				if (ci.isChildOf(Collection.class)) {
 					Collection<?> cc = BeanCreator.of(Collection.class).type(c).run();
 					cc.forEach(x -> {
@@ -171,7 +171,7 @@ public class BeanRegistry {
 		int len = Array.getLength(array);
 		if (len == 0)
 			throw new BeanRuntimeException("Map entry had an empty array value.");
-		Type type = (Type)Array.get(array, 0);
+		var type = (Type)Array.get(array, 0);
 		Type[] args = new Type[len - 1];
 		for (int i = 1; i < len; i++)
 			args[i - 1] = (Type)Array.get(array, i);

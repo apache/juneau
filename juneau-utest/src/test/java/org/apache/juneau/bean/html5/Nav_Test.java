@@ -101,7 +101,7 @@ class Nav_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Nav x1 = new Nav("a1", strong("a2"));
+		var x1 = new Nav("a1", strong("a2"));
 		assertString("<nav>a1<strong>a2</strong></nav>", x1);
 
 	}

@@ -107,7 +107,7 @@ class Meter_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Meter x1 = new Meter("a1", strong("a2"));
+		var x1 = new Meter("a1", strong("a2"));
 		assertString("<meter>a1<strong>a2</strong></meter>", x1);
 
 	}

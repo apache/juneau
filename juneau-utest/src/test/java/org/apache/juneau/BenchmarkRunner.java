@@ -259,7 +259,7 @@ public class BenchmarkRunner {
 	 * </pre>
 	 */
 	public static void main(String[] args) throws RunnerException {
-		Options opt = new OptionsBuilder()
+		var opt = new OptionsBuilder()
 			.include(BenchmarkRunner.class.getSimpleName())
 			.forks(1) // Use 1 fork for faster development testing
 			.warmupIterations(2) // Reduced for faster testing

@@ -31,17 +31,17 @@ import org.junit.jupiter.api.*;
 class SeeOtherRoot_Test extends TestBase {
 
 	@Test void a01_basic() {
-		SeeOtherRoot x = new SeeOtherRoot();
+		var x = new SeeOtherRoot();
 		assertNotNull(x);
 	}
 
 	@Test void a02_withContent() {
-		SeeOtherRoot x = new SeeOtherRoot("test content");
+		var x = new SeeOtherRoot("test content");
 		assertNotNull(x);
 	}
 
 	@Test void a03_fluentSetters() throws Exception {
-		SeeOtherRoot x = new SeeOtherRoot();
+		var x = new SeeOtherRoot();
 
 		// Test setContent(String) returns same instance
 		assertSame(x, x.setContent("test content"));
@@ -62,7 +62,7 @@ class SeeOtherRoot_Test extends TestBase {
 		assertEquals("value1", x.getFirstHeader("X-Header1").getValue());
 
 		// Test setHeaders(HeaderList) returns same instance
-		HeaderList headers = HeaderList.of(BasicHeader.of("X-Header2", "value2"));
+		var headers = HeaderList.of(BasicHeader.of("X-Header2", "value2"));
 		assertSame(x, x.setHeaders(headers));
 
 		// Test setHeaders2(Header...) returns same instance
@@ -112,7 +112,7 @@ class SeeOtherRoot_Test extends TestBase {
 
 	@Test void a06_copy() throws Exception {
 		// Test that copy() returns correct type
-		SeeOtherRoot x = new SeeOtherRoot();
+		var x = new SeeOtherRoot();
 
 		SeeOtherRoot copy = x.copy();
 

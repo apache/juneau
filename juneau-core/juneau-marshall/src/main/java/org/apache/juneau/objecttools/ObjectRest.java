@@ -203,9 +203,9 @@ public class ObjectRest {
 	}
 
 	private static Object[] removeArrayEntry(Object o, int index) {
-		Object[] a = (Object[])o;
+		var a = (Object[])o;
 		// Shrink the array.
-		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length - 1);
+		var a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length - 1);
 		System.arraycopy(a, 0, a2, 0, index);
 		System.arraycopy(a, index + 1, a2, index, a.length - index - 1);
 		return a2;
@@ -787,9 +787,9 @@ public class ObjectRest {
 	}
 
 	private Object[] addArrayEntry(Object o, Object val, ClassMeta componentType) {
-		Object[] a = (Object[])o;
+		var a = (Object[])o;
 		// Expand out the array.
-		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length + 1);
+		var a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length + 1);
 		System.arraycopy(a, 0, a2, 0, a.length);
 		a2[a.length] = convert(val, componentType);
 		return a2;
@@ -863,7 +863,7 @@ public class ObjectRest {
 				ClassMeta cm = root.cm;
 				Object o = root.o;
 				if (cm.isCollection()) {
-					Collection c = (Collection)o;
+					var c = (Collection)o;
 					c.add(convert(val, cm.getElementType()));
 					return (c instanceof List ? url + "/" + (c.size() - 1) : null);
 				}
@@ -895,7 +895,7 @@ public class ObjectRest {
 				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isCollection()) {
-				Collection c = (Collection)o;
+				var c = (Collection)o;
 				c.add(convert(val, cm.getElementType()));
 				return (c instanceof List ? url + "/" + (c.size() - 1) : null);
 			}
@@ -943,10 +943,10 @@ public class ObjectRest {
 	}
 
 	private Object[] setArrayEntry(Object o, int index, Object val, ClassMeta componentType) {
-		Object[] a = (Object[])o;
+		var a = (Object[])o;
 		if (a.length <= index) {
 			// Expand out the array.
-			Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);
+			var a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);
 			System.arraycopy(a, 0, a2, 0, a.length);
 			a = a2;
 		}

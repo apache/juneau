@@ -102,7 +102,7 @@ class Time_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Time x1 = new Time("a1", strong("a2"));
+		var x1 = new Time("a1", strong("a2"));
 		assertString("<time>a1<strong>a2</strong></time>", x1);
 
 	}

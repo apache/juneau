@@ -113,10 +113,10 @@ class Button_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Button x1 = new Button("a");
+		var x1 = new Button("a");
 		assertString("<button type='a'></button>", x1);
 
-		Button x2 = new Button("a", "b1", strong("b2"));
+		var x2 = new Button("a", "b1", strong("b2"));
 		assertString("<button type='a'>b1<strong>b2</strong></button>", x2);
 
 	}

@@ -103,7 +103,7 @@ class Map_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Map x1 = new Map("a1", strong("a2"));
+		var x1 = new Map("a1", strong("a2"));
 		assertString("<map>a1<strong>a2</strong></map>", x1);
 
 	}

@@ -101,7 +101,7 @@ class Li_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Li x1 = new Li("a1", strong("a2"));
+		var x1 = new Li("a1", strong("a2"));
 		assertString("<li>a1<strong>a2</strong></li>", x1);
 
 	}

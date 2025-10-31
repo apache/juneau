@@ -101,7 +101,7 @@ class Legend_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Legend x1 = new Legend("a1", strong("a2"));
+		var x1 = new Legend("a1", strong("a2"));
 		assertString("<legend>a1<strong>a2</strong></legend>", x1);
 
 	}

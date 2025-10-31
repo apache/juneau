@@ -101,7 +101,7 @@ class Dfn_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Dfn x1 = new Dfn("a1", strong("a2"));
+		var x1 = new Dfn("a1", strong("a2"));
 		assertString("<dfn>a1<strong>a2</strong></dfn>", x1);
 
 	}

@@ -101,7 +101,7 @@ class Mark_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Mark x1 = new Mark("a1", strong("a2"));
+		var x1 = new Mark("a1", strong("a2"));
 		assertString("<mark>a1<strong>a2</strong></mark>", x1);
 
 	}

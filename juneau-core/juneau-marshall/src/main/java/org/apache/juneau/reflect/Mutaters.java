@@ -184,7 +184,7 @@ public class Mutaters {
 	public static String toString(Object o) {
 		if (o == null)
 			return null;
-		Mutater<Object,String> t = (Mutater<Object,String>)get(o.getClass(), String.class);
+		var t = (Mutater<Object,String>)get(o.getClass(), String.class);
 		return t == null ? o.toString() : t.mutate(o);
 	}
 
@@ -200,7 +200,8 @@ public class Mutaters {
 			};
 		}
 
-		ClassInfo ici = ClassInfo.of(ic), oci = ClassInfo.of(oc);
+		var ici = ClassInfo.of(ic);
+		var oci = ClassInfo.of(oc);
 
 		ClassInfo pic = ici.getAnyParent(x -> nn(m.get(x.inner())));
 		if (nn(pic))
@@ -208,7 +209,7 @@ public class Mutaters {
 
 		if (ic == String.class) {
 			Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
-			ClassInfo oc2i = ClassInfo.of(oc2);
+			var oc2i = ClassInfo.of(oc2);
 
 			// @formatter:off
 			final MethodInfo createMethod = oc2i.getPublicMethod(
@@ -314,7 +315,8 @@ public class Mutaters {
 	}
 
 	private static boolean isStaticCreateMethodName(MethodInfo mi, Class<?> ic) {
-		String n = mi.getSimpleName(), cn = ic.getSimpleName();
+		var n = mi.getSimpleName();
+		var cn = ic.getSimpleName();
 		// @formatter:off
 		return isOneOf(n, "create","from","fromValue","parse","valueOf","builder")
 			|| (n.startsWith("from") && n.substring(4).equals(cn))

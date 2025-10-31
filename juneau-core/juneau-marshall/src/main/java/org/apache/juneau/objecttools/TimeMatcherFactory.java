@@ -86,11 +86,12 @@ public class TimeMatcherFactory extends MatcherFactory {
 			// S13 = Found [2000 - 2], looking for WS (WS=S1)
 
 			var state = S1;
-			var mark = 0;
-			var eq = Equality.NONE;
-			String s1 = null, s2 = null;
+		var mark = 0;
+		var eq = Equality.NONE;
+		var s1 = (String)null;
+		var s2 = (String)null;
 
-			int i;
+		int i;
 			char c = 0;
 			for (i = 0; i < s.trim().length(); i++) {
 				c = s.charAt(i);

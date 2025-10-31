@@ -46,7 +46,7 @@ public class RemoteOperationArg {
 		} else if (mpi.hasAnnotation(PathRemainder.class)) {
 			// PathRemainder is equivalent to @Path("/*")
 			// Create with schema properties but override name to "/*"
-			HttpPartSchema schema = HttpPartSchema.create(PathRemainder.class, mpi);
+			var schema = HttpPartSchema.create(PathRemainder.class, mpi);
 			return new RemoteOperationArg(i, PATH, schema, "/*");
 		} else if (mpi.hasAnnotation(Path.class)) {
 			return new RemoteOperationArg(i, PATH, HttpPartSchema.create(Path.class, mpi));

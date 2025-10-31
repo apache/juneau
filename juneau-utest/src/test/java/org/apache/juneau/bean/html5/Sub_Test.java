@@ -101,7 +101,7 @@ class Sub_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Sub x1 = new Sub("a1", strong("a2"));
+		var x1 = new Sub("a1", strong("a2"));
 		assertString("<sub>a1<strong>a2</strong></sub>", x1);
 
 	}

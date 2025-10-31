@@ -15,6 +15,9 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
 - [ ] TODO-15 It appears StringUtils is going to become a commonly-used external class. Let's see if we can enhance it with commonly used string utility methods.
 - [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
 - [ ] TODO-29 Finish setting up SonarQube analysis in git workflow.
+- [x] TODO-51 Convert local variable declarations to use `var` keyword where type is explicit on right-hand side.
+  - **Phase 1**: ✅ Break up compound declarations (completed - 26 instances)
+  - **Phase 2**: ✅ Convert safe patterns in local variable declarations (completed - 276 files)
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
 
 ## Framework Improvements

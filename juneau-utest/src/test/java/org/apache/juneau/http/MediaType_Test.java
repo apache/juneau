@@ -34,7 +34,7 @@ class MediaType_Test extends TestBase {
 		x.add(MediaType.of("text/bar"));
 		assertList(x, "text/bar", "text/foo");
 
-		MediaType x2 = new MediaType((String)null);  // Interpreted as "/*"
+		var x2 = new MediaType((String)null);  // Interpreted as "/*"
 		assertEmpty(x2.getType());
 		assertEquals("*", x2.getSubType());
 		assertList(x2.getSubTypes(), "*");
@@ -55,7 +55,7 @@ class MediaType_Test extends TestBase {
 	}
 
 	@Test void a03_getParameter() {
-		MediaType x1 = MediaType.of("text/json;x=1;q=1;y=2");
+		var x1 = MediaType.of("text/json;x=1;q=1;y=2");
 		assertEquals("1", x1.getParameter("x"));
 		assertNull(x1.getParameter("q"));
 		assertNull(x1.getParameter("y"));

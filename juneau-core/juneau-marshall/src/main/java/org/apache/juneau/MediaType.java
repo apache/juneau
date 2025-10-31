@@ -184,7 +184,7 @@ public class MediaType implements Comparable<MediaType> {
 	Arrays.sort(this.subTypesSorted);
 	hasSubtypeMeta = CollectionUtils.contains("*", this.subTypes);
 
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		sb.append(mediaType);
 		for (var p : parameters)
 			sb.append(';').append(p.getName()).append('=').append(p.getValue());

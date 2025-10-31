@@ -111,7 +111,7 @@ class Audio_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Audio x1 = new Audio("a");
+		var x1 = new Audio("a");
 		assertString("<audio src='a'></audio>", x1);
 
 	}
@@ -122,7 +122,7 @@ class Audio_Test extends TestBase {
 		assertString("<audio>ab<strong>c</strong></audio>", x1);
 
 		// Test with space delimiter
-		HtmlSerializer serializer = HtmlSerializer.create()
+		var serializer = HtmlSerializer.create()
 			.textNodeDelimiter(" ")
 			.disableJsonTags()
 			.build();
@@ -130,7 +130,7 @@ class Audio_Test extends TestBase {
 		assertString("<audio>a b<strong>c</strong></audio>", serializer.toString(x2));
 
 		// Test with custom delimiter
-		HtmlSerializer serializer2 = HtmlSerializer.create()
+		var serializer2 = HtmlSerializer.create()
 			.textNodeDelimiter(" | ")
 			.disableJsonTags()
 			.build();

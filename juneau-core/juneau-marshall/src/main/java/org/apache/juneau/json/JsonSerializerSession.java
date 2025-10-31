@@ -208,7 +208,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		int i = indent;
 		out.w('{');
 
-		Flag addComma = Flag.create();
+		var addComma = Flag.create();
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
 		if (nn(typeName)) {
@@ -242,7 +242,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		ClassMeta<?> elementType = type.getElementType();
 
 		out.w('[');
-		Flag addComma = Flag.create();
+		var addComma = Flag.create();
 		forEachEntry(c, x -> {
 			addComma.ifSet(() -> out.w(',').smi(indent)).set();
 			out.cr(indent);
@@ -261,7 +261,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		int i = indent;
 		out.w('{');
 
-		Flag addComma = Flag.create();
+		var addComma = Flag.create();
 		forEachEntry(m, x -> {
 			addComma.ifSet(() -> out.w(',').smi(i)).set();
 			Object value = x.getValue();
@@ -301,7 +301,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		Object output = out.getRawOutput();
 		if (output instanceof JsonWriter)
 			return (JsonWriter)output;
-		JsonWriter w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), isSimpleAttrs(), isTrimStrings(), getUriResolver());
+		var w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(), isSimpleAttrs(), isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
@@ -446,7 +446,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @throws Exception Error occurred.
 	 */
 	protected String serializeJson(Object o) throws Exception {
-		StringWriter sw = new StringWriter();
+		var sw = new StringWriter();
 		serializeAnything(getJsonWriter(createPipe(sw)).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 		return sw.toString();
 	}

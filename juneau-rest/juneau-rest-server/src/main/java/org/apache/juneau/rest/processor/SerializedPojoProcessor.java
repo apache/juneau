@@ -88,7 +88,7 @@ public class SerializedPojoProcessor implements ResponseProcessor {
 				if (! session.isWriterSerializer()) {
 					if (req.isPlainText()) {
 						FinishablePrintWriter w = res.getNegotiatedWriter();
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						var baos = new ByteArrayOutputStream();
 						session.serialize(o, baos);
 						w.write(toSpacedHex(baos.toByteArray()));
 						w.flush();

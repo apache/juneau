@@ -258,7 +258,7 @@ public class BeanMeta<T> {
 						if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 						constructorArgs = new String[x.getParamCount()];
-						IntegerValue i = IntegerValue.create();
+						var i = IntegerValue.create();
 						x.forEachParam(null, pi -> {
 							String pn = pi.getName();
 							if (pn == null)
@@ -281,7 +281,7 @@ public class BeanMeta<T> {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 							constructorArgs = new String[x.getParamCount()];
-							IntegerValue i = IntegerValue.create();
+							var i = IntegerValue.create();
 							x.forEachParam(null, y -> {
 								String pn = y.getName();
 								if (pn == null)
@@ -797,7 +797,7 @@ public class BeanMeta<T> {
 		List<ClassInfo> paramTypes = method.getParamTypes();
 
 		// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name
-		ClassInfo currentClass = ClassInfo.of(c);
+		var currentClass = ClassInfo.of(c);
 		ClassInfo sc = currentClass.getSuperclass();
 
 		while (nn(sc) && ! sc.is(stopClass) && ! sc.is(Object.class)) {
@@ -1030,7 +1030,7 @@ public class BeanMeta<T> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		StringBuilder sb = new StringBuilder(c.getName());
+		var sb = new StringBuilder(c.getName());
 		sb.append(" {\n");
 		for (var pm : propertyArray)
 			sb.append('\t').append(pm.toString()).append(",\n");

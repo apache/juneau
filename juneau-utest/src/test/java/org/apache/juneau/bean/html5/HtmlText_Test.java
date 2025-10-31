@@ -25,12 +25,12 @@ import org.junit.jupiter.api.*;
 class HtmlText_Test extends TestBase {
 
 	@Test void a01_basic() {
-		HtmlText x = new HtmlText("test content");
+		var x = new HtmlText("test content");
 		assertString("test content", x);
 	}
 
 	@Test void a02_null() {
-		HtmlText x = new HtmlText(null);
+		var x = new HtmlText(null);
 		assertNull(x.toString());
 	}
 }

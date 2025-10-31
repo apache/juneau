@@ -225,13 +225,13 @@ class MockPathResolver {
 		}
 
 		if (! contextPath.isEmpty()) {
-			UrlPathMatcher p = UrlPathMatcher.of(contextPath);
+			var p = UrlPathMatcher.of(contextPath);
 			if (p.match(UrlPath.of(this.contextPath)) == null)
 				throw runtimeException("Context path [{0}] not found in URI:  {1}", contextPath, uri);
 		}
 
 		if (! servletPath.isEmpty()) {
-			UrlPathMatcher p = UrlPathMatcher.of(servletPath);
+			var p = UrlPathMatcher.of(servletPath);
 			if (p.match(UrlPath.of(this.servletPath)) == null)
 				throw runtimeException("Servlet path [{0}] not found in URI:  {1}", servletPath, uri);
 		}

@@ -63,7 +63,7 @@ public class Traversable implements RestConverter {
 				if (nn(swap))
 					o = swap.swap(bs, o);
 				ReaderParser rp = req.getContent().getParserMatch().map(ParserMatch::getParser).filter(ReaderParser.class::isInstance).map(ReaderParser.class::cast).orElse(null);
-				ObjectRest or = ObjectRest.create(o, rp);
+				var or = ObjectRest.create(o, rp);
 				o = or.get(pathRemainder);
 			} catch (ObjectRestException e) {
 				throw new BasicHttpException(e.getStatus(), e);

@@ -174,7 +174,7 @@ public class RequestAttributes {
 	 * @return The request attributes as a map.  Never <jk>null</jk>.
 	 */
 	public Map<String,Object> asMap() {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		Enumeration<String> e = sreq.getAttributeNames();
 		while (e.hasMoreElements()) {
 			String n = e.nextElement();

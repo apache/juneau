@@ -105,7 +105,7 @@ class Article_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Article x1 = new Article("a1", strong("a2"));
+		var x1 = new Article("a1", strong("a2"));
 		assertString("<article>a1<strong>a2</strong></article>", x1);
 
 	}

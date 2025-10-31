@@ -107,7 +107,7 @@ class Link_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Link x1 = new Link("a");
+		var x1 = new Link("a");
 		assertString("<link href='a'/>", x1);
 
 	}

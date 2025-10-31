@@ -114,7 +114,7 @@ public class BeanStore {
 			if (type == null || type == BeanStore.class)
 				return new BeanStore(this);
 
-			ClassInfo c = ClassInfo.of(type);
+			var c = ClassInfo.of(type);
 
 			// @formatter:off
 			MethodInfo m = c.getDeclaredMethod(
@@ -467,7 +467,7 @@ public class BeanStore {
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType) {
 		try (SimpleLock x = lock.read()) {
-			BeanStoreEntry<T> e = (BeanStoreEntry<T>)unnamedEntries.get(beanType);
+			var e = (BeanStoreEntry<T>)unnamedEntries.get(beanType);
 			if (nn(e))
 				return opt(e.get());
 			if (parent.isPresent())
@@ -487,7 +487,7 @@ public class BeanStore {
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> getBean(Class<T> beanType, String name) {
 		try (SimpleLock x = lock.read()) {
-			BeanStoreEntry<T> e = (BeanStoreEntry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
+			var e = (BeanStoreEntry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
 			if (nn(e))
 				return opt(e.get());
 			if (parent.isPresent())

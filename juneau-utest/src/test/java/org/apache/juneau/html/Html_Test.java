@@ -320,7 +320,7 @@ class Html_Test extends TestBase {
 	// Test @Html.noTableHeaders
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void d01_testNoTableHeaders() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
+		var s = HtmlSerializer.DEFAULT_SQ;
 
 		var m = new MyMap();
 		m.put("foo", "bar");
@@ -351,7 +351,7 @@ class Html_Test extends TestBase {
 	// Test @Html.noTableHeaders on beans
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void d03_testNoTableHeadersOnBeans() throws Exception {
-		HtmlSerializer s = HtmlSerializer.DEFAULT_SQ;
+		var s = HtmlSerializer.DEFAULT_SQ;
 
 		var b = new MyBean();
 		var o = JsonList.of(b,b);

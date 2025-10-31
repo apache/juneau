@@ -59,7 +59,7 @@ public class XmlReader implements XMLStreamReader, Positionable {
 		try {
 			@SuppressWarnings("resource")
 			Reader r = pipe.getBufferedReader();
-			XMLInputFactory factory = XMLInputFactory.newInstance();
+			var factory = XMLInputFactory.newInstance();
 			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);
 			factory.setProperty(XMLInputFactory.IS_COALESCING, true);
 			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);

@@ -101,7 +101,7 @@ class Col_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Col x1 = new Col(1);
+		var x1 = new Col(1);
 		assertString("<col span='1'/>", x1);
 
 	}

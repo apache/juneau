@@ -542,7 +542,7 @@ public class ParserSet {
 		if (nn(pm))
 			return pm;
 
-		MediaType ct = MediaType.of(contentTypeHeader);
+		var ct = MediaType.of(contentTypeHeader);
 		int match = ct.match(l(mediaTypes));
 
 		if (match >= 0) {

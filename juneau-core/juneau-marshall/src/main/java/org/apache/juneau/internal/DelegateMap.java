@@ -61,7 +61,7 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	 * @return This object.
 	 */
 	public DelegateMap<T> filterKeys(List<String> keys) {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		keys.forEach(k -> {
 			if (containsKey(k))
 				m.put(k, get(k));

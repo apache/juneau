@@ -67,7 +67,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 		Enablement debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(builder.isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
 		b.defaultEnable(debugDefault);
 
-		ClassInfo ci = ClassInfo.ofProxy(resource.get());
+		var ci = ClassInfo.ofProxy(resource.get());
 
 		// Gather @Rest(debug) settings.
 		// @formatter:off
@@ -107,11 +107,12 @@ public class BasicDebugEnablement extends DebugEnablement {
 			Rest.class,
 			x -> true,
 			x -> {
-				String x2 = varResolver.resolve(x.debugOn());
-				for (var e : splitMap(x2, true).entrySet()) {
-					String k = e.getKey(), v = e.getValue();
-					if (v.isEmpty())
-						v = "ALWAYS";
+			String x2 = varResolver.resolve(x.debugOn());
+			for (var e : splitMap(x2, true).entrySet()) {
+				var k = e.getKey();
+				var v = e.getValue();
+				if (v.isEmpty())
+					v = "ALWAYS";
 					if (! k.isEmpty())
 						b.enable(Enablement.fromString(v), k);
 				}

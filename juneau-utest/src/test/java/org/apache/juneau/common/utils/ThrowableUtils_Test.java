@@ -33,9 +33,9 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a01_findCause() {
-		IOException rootCause = new IOException("root");
-		RuntimeException middleCause = new RuntimeException("middle", rootCause);
-		Exception topException = new Exception("top", middleCause);
+		var rootCause = new IOException("root");
+		var middleCause = new RuntimeException("middle", rootCause);
+		var topException = new Exception("top", middleCause);
 
 		// Find IOException
 		assertTrue(findCause(topException, IOException.class).isPresent());
@@ -58,7 +58,7 @@ class ThrowableUtils_Test extends TestBase {
 
 	@Test
 	void a02_findCause_noCause() {
-		Exception ex = new Exception("test");
+		var ex = new Exception("test");
 		
 		// Find itself
 		assertTrue(findCause(ex, Exception.class).isPresent());
@@ -151,7 +151,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void d01_illegalArg_withCause() {
-		IOException cause = new IOException("root cause");
+		var cause = new IOException("root cause");
 		IllegalArgumentException ex = illegalArg(cause, "Invalid parameter {0}", "userId");
 		
 		assertEquals("Invalid parameter userId", ex.getMessage());
@@ -161,7 +161,7 @@ class ThrowableUtils_Test extends TestBase {
 
 	@Test
 	void d02_runtimeException_withCause() {
-		SQLException cause = new SQLException("Database error");
+		var cause = new SQLException("Database error");
 		RuntimeException ex = runtimeException(cause, "Failed to process {0} at {1}", "user", "login");
 		
 		assertEquals("Failed to process user at login", ex.getMessage());
@@ -171,7 +171,7 @@ class ThrowableUtils_Test extends TestBase {
 
 	@Test
 	void d03_unsupportedOp_withCause() {
-		IllegalStateException cause = new IllegalStateException("Locked");
+		var cause = new IllegalStateException("Locked");
 		UnsupportedOperationException ex = unsupportedOp(cause, "Cannot {0} on {1}", "delete", "immutable collection");
 		
 		assertEquals("Cannot delete on immutable collection", ex.getMessage());
@@ -181,7 +181,7 @@ class ThrowableUtils_Test extends TestBase {
 
 	@Test
 	void d04_ioException_withCause() {
-		FileNotFoundException cause = new FileNotFoundException("config.xml");
+		var cause = new FileNotFoundException("config.xml");
 		IOException ex = ioException(cause, "Failed to load {0}", "configuration");
 		
 		assertEquals("Failed to load configuration", ex.getMessage());
@@ -191,7 +191,7 @@ class ThrowableUtils_Test extends TestBase {
 
 	@Test
 	void d05_runtimeException_withCause_noArgs() {
-		NullPointerException cause = new NullPointerException("value was null");
+		var cause = new NullPointerException("value was null");
 		RuntimeException ex = runtimeException(cause, "Processing failed");
 		
 		assertEquals("Processing failed", ex.getMessage());
@@ -200,7 +200,7 @@ class ThrowableUtils_Test extends TestBase {
 
 	@Test
 	void d06_ioException_withCause_multipleArgs() {
-		SocketException cause = new SocketException("Connection reset");
+		var cause = new SocketException("Connection reset");
 		IOException ex = ioException(cause, "Network error at {0}:{1} for host {2}", "192.168.1.1", "8080", "server");
 		
 		assertEquals("Network error at 192.168.1.1:8080 for host server", ex.getMessage());
@@ -209,7 +209,7 @@ class ThrowableUtils_Test extends TestBase {
 
 	@Test
 	void d07_exception_withCause_chaining() {
-		IOException rootCause = new IOException("disk full");
+		var rootCause = new IOException("disk full");
 		RuntimeException wrappedException = runtimeException(rootCause, "Cannot write file {0}", "output.txt");
 		IllegalArgumentException topException = illegalArg(wrappedException, "Invalid operation");
 		

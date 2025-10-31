@@ -48,7 +48,7 @@ public class HashKey {
 
 	@Override
 	public boolean equals(Object o) {
-		HashKey x = (HashKey)o;
+		var x = (HashKey)o;
 		if (array.length != x.array.length)
 			return false;
 		for (int i = 0; i < array.length; i++)

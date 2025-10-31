@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 class HtmlElementContainer_Test extends TestBase {
 
 	@Test void a01_getChild() {
-		Div x = new Div();
+		var x = new Div();
 		assertNull(new Div().getChild(0));
 		assertNull(x.getChild(String.class, 0));
 
@@ -93,7 +93,7 @@ class HtmlElementContainer_Test extends TestBase {
 	}
 
 	@Test void a03_setChildren() {
-		Div x = new Div();
+		var x = new Div();
 		java.util.List<Object> children = l("child1", "child2");
 		x.setChildren(children);
 		assertString("[child1,child2]", x.getChildren());

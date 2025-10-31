@@ -165,7 +165,7 @@ public class ParamInfo {
 				if (type.isInstance(a2) && test(filter, type.cast(a2)))
 					return (A)a2;
 		} else {
-			MethodInfo mi = (MethodInfo)eInfo;
+			var mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			A o = ci.getAnnotation(type, filter);
 			if (nn(o))
@@ -313,7 +313,7 @@ public class ParamInfo {
 					return type.cast(a2);
 			return eInfo.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type);
 		}
-		MethodInfo mi = (MethodInfo)eInfo;
+		var mi = (MethodInfo)eInfo;
 		Value<A> v = Value.empty();
 		mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, y -> true, y -> v.set(y)));
 		return v.orElseGet(() -> eInfo.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type));
@@ -328,7 +328,7 @@ public class ParamInfo {
 				if (a.isInstance(a2))
 					consumeIf(filter, action, a.cast(a2));
 		} else {
-			MethodInfo mi = (MethodInfo)eInfo;
+			var mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			ci.forEachAnnotation(ap, a, filter, action);
 			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, a, filter, action));

@@ -30,25 +30,25 @@ class CharValue_Test extends TestBase {
 
 	@Test
 	void a01_create() {
-		CharValue v = CharValue.create();
+		var v = CharValue.create();
 		assertEquals('\0', v.get());
 	}
 
 	@Test
 	void a02_of() {
-		CharValue v = CharValue.of('A');
+		var v = CharValue.of('A');
 		assertEquals('A', v.get());
 	}
 
 	@Test
 	void a03_constructor() {
-		CharValue v = new CharValue('Z');
+		var v = new CharValue('Z');
 		assertEquals('Z', v.get());
 	}
 
 	@Test
 	void a04_constructor_withNull() {
-		CharValue v = new CharValue(null);
+		var v = new CharValue(null);
 		assertNull(v.get());
 	}
 
@@ -58,14 +58,14 @@ class CharValue_Test extends TestBase {
 
 	@Test
 	void b01_set() {
-		CharValue v = CharValue.create();
+		var v = CharValue.create();
 		v.set('B');
 		assertEquals('B', v.get());
 	}
 
 	@Test
 	void b02_setIfEmpty() {
-		CharValue v = new CharValue(null);
+		var v = new CharValue(null);
 		v.setIfEmpty('X');
 		assertEquals('X', v.get());
 		
@@ -75,7 +75,7 @@ class CharValue_Test extends TestBase {
 
 	@Test
 	void b03_orElse() {
-		CharValue v = new CharValue(null);
+		var v = new CharValue(null);
 		assertEquals('?', v.orElse('?'));
 		
 		v.set('!');
@@ -84,22 +84,22 @@ class CharValue_Test extends TestBase {
 
 	@Test
 	void b04_map() {
-		CharValue v = CharValue.of('a');
+		var v = CharValue.of('a');
 		Value<Character> v2 = v.map(Character::toUpperCase);
 		assertEquals('A', v2.get());
 	}
 
 	@Test
 	void b05_ifPresent() {
-		CharValue v = CharValue.of('C');
-		StringBuilder sb = new StringBuilder();
+		var v = CharValue.of('C');
+		var sb = new StringBuilder();
 		v.ifPresent(sb::append);
 		assertEquals("C", sb.toString());
 	}
 
 	@Test
 	void b06_isPresent() {
-		CharValue v = new CharValue(null);
+		var v = new CharValue(null);
 		assertFalse(v.isPresent());
 		
 		v.set('D');
@@ -108,7 +108,7 @@ class CharValue_Test extends TestBase {
 
 	@Test
 	void b07_isEmpty() {
-		CharValue v = new CharValue(null);
+		var v = new CharValue(null);
 		assertEmpty(v);
 		
 		v.set('E');
@@ -117,14 +117,14 @@ class CharValue_Test extends TestBase {
 
 	@Test
 	void b08_getAndSet() {
-		CharValue v = CharValue.of('F');
+		var v = CharValue.of('F');
 		assertEquals('F', v.getAndSet('G'));
 		assertEquals('G', v.get());
 	}
 
 	@Test
 	void b09_getAndUnset() {
-		CharValue v = CharValue.of('H');
+		var v = CharValue.of('H');
 		assertEquals('H', v.getAndUnset());
 		assertNull(v.get());
 	}
@@ -135,7 +135,7 @@ class CharValue_Test extends TestBase {
 
 	@Test
 	void c01_trackingLastCharacter() {
-		CharValue lastChar = CharValue.create();
+		var lastChar = CharValue.create();
 		
 		"Hello World".chars().mapToObj(c -> (char)c).forEach(ch -> {
 			lastChar.set(ch);
@@ -146,7 +146,7 @@ class CharValue_Test extends TestBase {
 
 	@Test
 	void c02_findingFirstUppercase() {
-		CharValue firstUpper = CharValue.of('\0');
+		var firstUpper = CharValue.of('\0');
 		
 		"helloWorld".chars().mapToObj(c -> (char)c).forEach(ch -> {
 			if (Character.isUpperCase(ch) && firstUpper.get() == '\0') {
@@ -159,7 +159,7 @@ class CharValue_Test extends TestBase {
 
 	@Test
 	void c03_toggleCase() {
-		CharValue ch = CharValue.of('a');
+		var ch = CharValue.of('a');
 		
 		// Toggle to uppercase
 		ch.set(Character.toUpperCase(ch.get()));
@@ -173,12 +173,12 @@ class CharValue_Test extends TestBase {
 	@Test
 	void c04_trackingMostFrequentChar() {
 		String text = "aabbccccdd";
-		CharValue mostFrequent = CharValue.of('\0');
-		IntegerValue maxCount = IntegerValue.create();
+		var mostFrequent = CharValue.of('\0');
+		var maxCount = IntegerValue.create();
 		
 		for (char c = 'a'; c <= 'z'; c++) {
 			final char current = c;
-			IntegerValue count = IntegerValue.create();
+			var count = IntegerValue.create();
 			text.chars().mapToObj(ch -> (char)ch).forEach(ch -> {
 				if (ch == current) {
 					count.getAndIncrement();

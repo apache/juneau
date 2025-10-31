@@ -101,7 +101,7 @@ class Rt_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Rt x1 = new Rt("a1", strong("a2"));
+		var x1 = new Rt("a1", strong("a2"));
 		assertString("<rt>a1<strong>a2</strong></rt>", x1);
 
 	}

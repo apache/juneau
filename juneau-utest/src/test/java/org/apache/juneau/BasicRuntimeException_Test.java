@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 class BasicRuntimeException_Test extends TestBase {
 
 	@Test void a01_BeanRuntimeException_fluentSetters() {
-		BeanRuntimeException x = new BeanRuntimeException("Original message");
+		var x = new BeanRuntimeException("Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -44,7 +44,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a02_ClassMetaRuntimeException_fluentSetters() {
-		ClassMetaRuntimeException x = new ClassMetaRuntimeException("Original message");
+		var x = new ClassMetaRuntimeException("Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -56,7 +56,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a03_ConfigException_fluentSetters() {
-		ConfigException x = new ConfigException("Original message");
+		var x = new ConfigException("Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -68,7 +68,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a04_ContextRuntimeException_fluentSetters() {
-		ContextRuntimeException x = new ContextRuntimeException("Original message");
+		var x = new ContextRuntimeException("Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -92,7 +92,7 @@ class BasicRuntimeException_Test extends TestBase {
 //	}
 
 	@Test void a06_InvalidAnnotationException_fluentSetters() {
-		InvalidAnnotationException x = new InvalidAnnotationException("Original message");
+		var x = new InvalidAnnotationException("Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -104,7 +104,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a07_InvalidDataConversionException_fluentSetters() {
-		InvalidDataConversionException x = new InvalidDataConversionException(null, "Original message");
+		var x = new InvalidDataConversionException(null, "Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -116,7 +116,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a08_ObjectRestException_fluentSetters() {
-		ObjectRestException x = new ObjectRestException(404, "Original message");
+		var x = new ObjectRestException(404, "Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -128,7 +128,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a09_ParseException_fluentSetters() {
-		ParseException x = new ParseException("Original message");
+		var x = new ParseException("Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -140,7 +140,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a10_PatternException_fluentSetters() {
-		PatternException x = new PatternException("Original message");
+		var x = new PatternException("Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -152,7 +152,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a11_RemoteMetadataException_fluentSetters() {
-		RemoteMetadataException x = new RemoteMetadataException((Throwable)null, "Original message");
+		var x = new RemoteMetadataException((Throwable)null, "Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -164,7 +164,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a12_SerializeException_fluentSetters() {
-		SerializeException x = new SerializeException("Original message");
+		var x = new SerializeException("Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));
@@ -176,7 +176,7 @@ class BasicRuntimeException_Test extends TestBase {
 	}
 
 	@Test void a13_VarResolverException_fluentSetters() {
-		VarResolverException x = new VarResolverException("Original message");
+		var x = new VarResolverException("Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));

@@ -101,7 +101,7 @@ class Strong_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Strong x1 = new Strong("a1", strong("a2"));
+		var x1 = new Strong("a1", strong("a2"));
 		assertString("<strong>a1<strong>a2</strong></strong>", x1);
 
 	}

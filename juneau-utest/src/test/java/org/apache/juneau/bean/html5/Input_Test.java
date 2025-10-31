@@ -133,7 +133,7 @@ class Input_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Input x1 = new Input("a");
+		var x1 = new Input("a");
 		assertString("<input type='a'/>", x1);
 
 	}

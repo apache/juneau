@@ -86,7 +86,7 @@ public class ResponseBeanMeta {
 				if (x.hasAnnotation(Header.class)) {
 					assertNoArgs(x, Header.class);
 					assertReturnNotVoid(x, Header.class);
-					HttpPartSchema s = HttpPartSchema.create(x.getAnnotation(Header.class), x.getPropertyName());
+					var s = HttpPartSchema.create(x.getAnnotation(Header.class), x.getPropertyName());
 					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, x));
 				} else if (x.hasAnnotation(StatusCode.class)) {
 					assertNoArgs(x, Header.class);
@@ -123,7 +123,7 @@ public class ResponseBeanMeta {
 	public static ResponseBeanMeta create(MethodInfo m, AnnotationWorkList annotations) {
 		if (! (m.hasAnnotation(Response.class) || m.getReturnType().unwrap(Value.class, Optional.class).hasAnnotation(Response.class)))
 			return null;
-		Builder b = new Builder(annotations);
+		var b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
 		m.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
 		m.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
@@ -140,7 +140,7 @@ public class ResponseBeanMeta {
 	public static ResponseBeanMeta create(ParamInfo mpi, AnnotationWorkList annotations) {
 		if (mpi.hasNoAnnotation(Response.class))
 			return null;
-		Builder b = new Builder(annotations);
+		var b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
 		mpi.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
 		mpi.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
@@ -155,10 +155,10 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(Type t, AnnotationWorkList annotations) {
-		ClassInfo ci = ClassInfo.of(t).unwrap(Value.class, Optional.class);
+		var ci = ClassInfo.of(t).unwrap(Value.class, Optional.class);
 		if (ci.hasNoAnnotation(Response.class))
 			return null;
-		Builder b = new Builder(annotations);
+		var b = new Builder(annotations);
 		b.apply(ci.innerType());
 		ci.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
 		ci.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));

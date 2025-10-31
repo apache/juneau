@@ -310,7 +310,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		if (ctx.isIgnoredType(eType))
 			return null;
 
-		JsonMap out = new JsonMap();
+		var out = new JsonMap();
 
 		if (eType == null)
 			eType = object();
@@ -323,8 +323,10 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		sType = eType.getSerializedClassMeta(this);
 
-		String type = null, format = null;
-		Object example = null, description = null;
+		var type = (String)null;
+		var format = (String)null;
+		var example = (Object)null;
+		var description = (Object)null;
 
 		boolean useDef = isUseBeanDefs() && sType.isBean() && pNames == null;
 
@@ -415,7 +417,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			descriptionAdded |= nn(description);
 
 			if (tc == BEAN) {
-				JsonMap properties = new JsonMap();
+				var properties = new JsonMap();
 				BeanMeta bm = getBeanMeta(sType.getInnerClass());
 				if (nn(pNames))
 					bm = new BeanMetaFiltered(bm, pNames);

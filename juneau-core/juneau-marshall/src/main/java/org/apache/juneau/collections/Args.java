@@ -210,7 +210,7 @@ public class Args extends JsonMap {
 	 * @return The optional argument value, or blank if the optional argument was not specified.
 	 */
 	public <T> T getArg(Class<T> c, String name) {
-		JsonList l = (JsonList)get(name);
+		var l = (JsonList)get(name);
 		if (l == null || l.isEmpty())
 			return null;
 		return l.get(0, c);
@@ -258,7 +258,7 @@ public class Args extends JsonMap {
 	 * @return The optional argument value, or blank if the optional argument was not specified.
 	 */
 	public String getArg(String name) {
-		JsonList l = (JsonList)get(name);
+		var l = (JsonList)get(name);
 		if (l == null || l.isEmpty())
 			return null;
 		if (l.size() == 1)

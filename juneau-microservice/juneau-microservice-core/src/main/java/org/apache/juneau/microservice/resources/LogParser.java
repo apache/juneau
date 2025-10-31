@@ -81,7 +81,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 			int i = text.length();
 			for (var s : additionalText)
 				i += s.length() + 1;
-			StringBuilder sb = new StringBuilder(i);
+			var sb = new StringBuilder(i);
 			sb.append(text);
 			for (var s : additionalText)
 				sb.append('\n').append(s);
@@ -162,7 +162,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		// Find the first line.
 		String line;
 		while (next == null && nn(line = br.readLine())) {
-			Entry e = new Entry(line);
+			var e = new Entry(line);
 			if (e.matches())
 				next = e;
 		}
@@ -192,7 +192,7 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 			next = null;
 			String line = null;
 			while (next == null && nn(line = br.readLine())) {
-				Entry e = new Entry(line);
+				var e = new Entry(line);
 				if (e.isRecord) {
 					if (e.matches())
 						next = e;

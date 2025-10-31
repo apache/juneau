@@ -58,7 +58,7 @@ public class VarResolverSession {
 	private static final AsciiSet AS1 = AsciiSet.of("\\{"), AS2 = AsciiSet.of("\\${}");
 
 	private static boolean containsVars(Collection<?> c) {
-		Flag f = Flag.create();
+		var f = Flag.create();
 		c.forEach(x -> {
 			if (x instanceof CharSequence && x.toString().contains("$"))
 				f.set();
@@ -67,7 +67,7 @@ public class VarResolverSession {
 	}
 
 	private static boolean containsVars(Map<?,?> m) {
-		Flag f = Flag.create();
+		var f = Flag.create();
 		m.forEach((k, v) -> {
 			if (v instanceof CharSequence && v.toString().contains("$"))
 				f.set();
@@ -192,7 +192,7 @@ public class VarResolverSession {
 			if (nn(v)) {
 				try {
 					if (v.streamed) {
-						StringWriter sw = new StringWriter();
+						var sw = new StringWriter();
 						v.resolveTo(this, sw, val);
 						return sw.toString();
 					}

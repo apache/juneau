@@ -107,7 +107,7 @@ class Iframe_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Iframe x1 = new Iframe("a1", strong("a2"));
+		var x1 = new Iframe("a1", strong("a2"));
 		assertString("<iframe>a1<strong>a2</strong></iframe>", x1);
 
 	}

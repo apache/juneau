@@ -77,7 +77,7 @@ public class SwitchVar extends MultipartVar {
 			String[] parts = splita(pattern, ':', 2);
 			assertArg(parts.length >= 2, "Invalid arguments passed to $SW var.  Each case statement must contains 'pattern:value'.");
 
-			Pattern p = Pattern.compile(parts[0].replace("*", ".*").replace("?", "."));
+			var p = Pattern.compile(parts[0].replace("*", ".*").replace("?", "."));
 			if (p.matcher(stringArg).matches())
 				return parts[1];
 		}

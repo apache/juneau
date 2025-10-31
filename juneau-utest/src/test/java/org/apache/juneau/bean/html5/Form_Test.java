@@ -109,10 +109,10 @@ class Form_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Form x1 = new Form("a");
+		var x1 = new Form("a");
 		assertString("<form action='a'></form>", x1);
 
-		Form x2 = new Form("a", "b1", strong("b2"));
+		var x2 = new Form("a", "b1", strong("b2"));
 		assertString("<form action='a'>b1<strong>b2</strong></form>", x2);
 
 	}

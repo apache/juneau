@@ -101,7 +101,7 @@ class Noscript_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Noscript x1 = new Noscript("a1", strong("a2"));
+		var x1 = new Noscript("a1", strong("a2"));
 		assertString("<noscript>a1<strong>a2</strong></noscript>", x1);
 
 	}

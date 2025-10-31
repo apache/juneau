@@ -102,7 +102,7 @@ class Datalist_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Datalist x1 = new Datalist("a", option("b1"), option("b2"));
+		var x1 = new Datalist("a", option("b1"), option("b2"));
 		assertString("<datalist id='a'><option>b1</option><option>b2</option></datalist>", x1);
 
 	}

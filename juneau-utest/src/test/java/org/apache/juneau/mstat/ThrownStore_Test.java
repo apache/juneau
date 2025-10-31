@@ -86,7 +86,7 @@ class ThrownStore_Test extends TestBase {
 	@Test void a04_sameStackTraces() {
 		var db = new ThrownStore();
 
-		Throwable t1 = new Throwable() {
+		var t1 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
 				return a(
@@ -97,7 +97,7 @@ class ThrownStore_Test extends TestBase {
 				);
 			}
 		};
-		Throwable t2 = new Throwable() {
+		var t2 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
 				return a(
@@ -119,7 +119,7 @@ class ThrownStore_Test extends TestBase {
 	@Test void a05_slightlyDifferentStackTraces() {
 		var db = new ThrownStore();
 
-		Throwable t1 = new Throwable() {
+		var t1 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
 				return a(
@@ -130,7 +130,7 @@ class ThrownStore_Test extends TestBase {
 				);
 			}
 		};
-		Throwable t2 = new Throwable() {
+		var t2 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
 				return a(
@@ -152,7 +152,7 @@ class ThrownStore_Test extends TestBase {
 	@Test void a06_proxyElements() {
 		var db = new ThrownStore();
 
-		Throwable t1 = new Throwable() {
+		var t1 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
 				return a(
@@ -163,7 +163,7 @@ class ThrownStore_Test extends TestBase {
 				);
 			}
 		};
-		Throwable t2 = new Throwable() {
+		var t2 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
 				return a(
@@ -315,7 +315,7 @@ class ThrownStore_Test extends TestBase {
 	@Test void d01_ignoreClasses() {
 		var db = ThrownStore.create().ignoreClasses(D1.class,D2.class,ThrownStore_Test.class).build();
 
-		Throwable t1 = new Throwable() {
+		var t1 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
 				return a(
@@ -327,7 +327,7 @@ class ThrownStore_Test extends TestBase {
 				);
 			}
 		};
-		Throwable t2 = new Throwable() {
+		var t2 = new Throwable() {
 			@Override
 			public StackTraceElement[] getStackTrace() {
 				return a(

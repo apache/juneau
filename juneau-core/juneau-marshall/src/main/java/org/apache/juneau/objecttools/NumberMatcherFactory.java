@@ -83,11 +83,12 @@ public class NumberMatcherFactory extends MatcherFactory {
 
 			StateEnum state = S1;
 			int mark = 0;
-			boolean isNot = false;
-			Equality eq = Equality.NONE;
-			Integer n1 = null, n2 = null;
+		boolean isNot = false;
+		var eq = Equality.NONE;
+		var n1 = (Integer)null;
+		var n2 = (Integer)null;
 
-			int i;
+		int i;
 			for (i = 0; i < s.length(); i++) {
 				char c = s.charAt(i);
 				if (state == S1) {
@@ -243,7 +244,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 
 		@Override /* Overridden from Matcher */
 		public boolean matches(ClassMeta<?> cm, Object o) {
-			Number n = (Number)o;
+			var n = (Number)o;
 			if (numberRanges.length == 0)
 				return true;
 			for (var numberRange : numberRanges)

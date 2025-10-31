@@ -502,7 +502,7 @@ public class HttpHeaders {
 	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 */
 	public static boolean canCast(Object o) {
-		ClassInfo ci = ClassInfo.of(o);
+		var ci = ClassInfo.of(o);
 		return nn(ci) && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
 

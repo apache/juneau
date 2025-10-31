@@ -148,7 +148,7 @@ public class BeanTraverseSession extends BeanSession {
 		}
 
 		String toString(boolean simple) {
-			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
+			var sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
 			sb.append(isEmpty(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
 			if (aType != aType.getSerializedClassMeta(BeanTraverseSession.this))
@@ -277,7 +277,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return The current stack trace.
 	 */
 	protected String getStack(boolean full) {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		stack.forEach(x -> {
 			if (full) {
 				sb.append("\n\t");

@@ -128,7 +128,7 @@ public class ClassUtils {
 
 		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", scn(pt));
 
-		ParameterizedType cpt = (ParameterizedType)gsc;
+		var cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
 		assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
 		Type actualType = cpt.getActualTypeArguments()[index];

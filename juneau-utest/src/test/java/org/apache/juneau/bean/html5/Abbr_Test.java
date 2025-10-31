@@ -101,7 +101,7 @@ class Abbr_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Abbr x1 = new Abbr("a", "b1", strong("b2"));
+		var x1 = new Abbr("a", "b1", strong("b2"));
 		assertString("<abbr title='a'>b1<strong>b2</strong></abbr>", x1);
 
 	}

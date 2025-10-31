@@ -196,7 +196,7 @@ public class FormDataArg implements RestOpArg {
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
-			JsonMap m = new JsonMap();
+			var m = new JsonMap();
 			rh.forEach(e -> m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null)));
 			return req.getBeanSession().convertToType(m, cm);
 		}

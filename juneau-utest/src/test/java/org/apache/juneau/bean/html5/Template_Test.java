@@ -101,7 +101,7 @@ class Template_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Template x1 = new Template("a", "b1", strong("b2"));
+		var x1 = new Template("a", "b1", strong("b2"));
 		assertString("<template id='a'>b1<strong>b2</strong></template>", x1);
 
 	}

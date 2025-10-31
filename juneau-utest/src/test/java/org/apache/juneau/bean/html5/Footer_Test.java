@@ -101,7 +101,7 @@ class Footer_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Footer x1 = new Footer("a1", strong("a2"));
+		var x1 = new Footer("a1", strong("a2"));
 		assertString("<footer>a1<strong>a2</strong></footer>", x1);
 
 	}

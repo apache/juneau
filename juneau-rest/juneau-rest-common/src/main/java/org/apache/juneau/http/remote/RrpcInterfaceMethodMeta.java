@@ -42,13 +42,13 @@ public class RrpcInterfaceMethodMeta {
 	 * @return The arguments signature for the specified method.
 	 */
 	private static String getMethodArgsSignature(Method m) {
-		StringBuilder sb = new StringBuilder(128);
+		var sb = new StringBuilder(128);
 		Class<?>[] pt = m.getParameterTypes();
 		if (pt.length == 0)
 			return "";
 		sb.append('(');
 		for (int i = 0; i < pt.length; i++) {
-			ClassInfo pti = ClassInfo.of(pt[i]);
+			var pti = ClassInfo.of(pt[i]);
 			if (i > 0)
 				sb.append(',');
 			pti.appendFullName(sb);

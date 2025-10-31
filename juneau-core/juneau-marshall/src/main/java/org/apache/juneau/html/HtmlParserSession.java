@@ -239,7 +239,7 @@ public class HtmlParserSession extends XmlParserSession {
 		if (et == END_DOCUMENT)
 			throw new ParseException(this, "Unexpected end of document.");
 
-		HtmlTag tag = HtmlTag.forEvent(this, r);
+		var tag = HtmlTag.forEvent(this, r);
 		if (expected.length == 0)
 			return tag;
 		for (var t : expected)
@@ -256,7 +256,8 @@ public class HtmlParserSession extends XmlParserSession {
 		String href = r.getAttributeValue(null, "href");
 		String name = getElementText(r);
 		if (nn(beanType) && beanType.hasAnnotation(HtmlLink.class)) {
-			Value<String> uriProperty = Value.empty(), nameProperty = Value.empty();
+			var uriProperty = Value.<String>empty();
+			var nameProperty = Value.<String>empty();
 			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
 			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
 			BeanMap<T> m = newBeanMap(beanType.getInnerClass());
@@ -277,8 +278,8 @@ public class HtmlParserSession extends XmlParserSession {
 
 		if (eType == null)
 			eType = (ClassMeta<T>)object();
-		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
-		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
+		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
@@ -424,7 +425,7 @@ public class HtmlParserSession extends XmlParserSession {
 				else if (sType.isCollection())
 					o = parseTableIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : new JsonList(this)), sType, pMeta);
 				else if (sType.isArray() || sType.isArgs()) {
-					ArrayList l = (ArrayList)parseTableIntoCollection(r, list(), sType, pMeta);
+					var l = (ArrayList)parseTableIntoCollection(r, list(), sType, pMeta);
 					o = toArray(sType, l);
 				} else
 					isValid = false;
@@ -632,7 +633,7 @@ public class HtmlParserSession extends XmlParserSession {
 				// @formatter:on
 			} else {
 				String c = getAttributes(r).get(getBeanTypePropertyName(type.getElementType()));
-				Map m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l) : newGenericMap(elementType));
+				var m = (Map)(elementType.isMap() && elementType.canCreateNewInstance(l) ? elementType.newInstance(l) : newGenericMap(elementType));
 				for (var key : keys) {
 					tag = nextTag(r, TD, NULL);
 					if (tag == NULL) {
@@ -641,7 +642,8 @@ public class HtmlParserSession extends XmlParserSession {
 						break;
 					}
 					if (nn(m)) {
-						ClassMeta<?> kt = elementType.getKeyType(), vt = elementType.getValueType();
+						var kt = elementType.getKeyType();
+						var vt = elementType.getValueType();
 						Object value = parseAnything(vt, r, l, false, pMeta);
 						setName(vt, value, key);
 						m.put(convertToType(key, kt), value);
@@ -698,7 +700,7 @@ public class HtmlParserSession extends XmlParserSession {
 	}
 
 	private void skipTag(XmlReader r, HtmlTag...expected) throws ParseException, XMLStreamException {
-		HtmlTag tag = HtmlTag.forEvent(this, r);
+		var tag = HtmlTag.forEvent(this, r);
 		if (tag.isOneOf(expected))
 			r.next();
 		else
@@ -820,7 +822,7 @@ public class HtmlParserSession extends XmlParserSession {
 					sb.append(characters);
 					characters = null;
 				}
-				HtmlTag tag = HtmlTag.forEvent(this, r);
+				var tag = HtmlTag.forEvent(this, r);
 				if (tag == BR) {
 					sb.append('\n');
 					r.nextTag();
@@ -882,7 +884,7 @@ public class HtmlParserSession extends XmlParserSession {
 	@Override /* Overridden from XmlParserSession */
 	protected String parseWhitespaceElement(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
-		HtmlTag tag = HtmlTag.forEvent(this, r);
+		var tag = HtmlTag.forEvent(this, r);
 		int et = r.next();
 		if (tag == BR) {
 			return "\n";

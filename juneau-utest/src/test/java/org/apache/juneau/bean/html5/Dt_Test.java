@@ -101,7 +101,7 @@ class Dt_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Dt x1 = new Dt("a1", strong("a2"));
+		var x1 = new Dt("a1", strong("a2"));
 		assertString("<dt>a1<strong>a2</strong></dt>", x1);
 
 	}

@@ -542,7 +542,7 @@ public class Value<T> {
 			return true;
 		if (!(obj instanceof Value))
 			return false;
-		Value<?> other = (Value<?>) obj;
+		var other = (Value<?>) obj;
 		return t == null ? other.t == null : t.equals(other.t);
 	}
 

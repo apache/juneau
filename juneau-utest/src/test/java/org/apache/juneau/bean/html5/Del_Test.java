@@ -103,7 +103,7 @@ class Del_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Del x1 = new Del("a1", strong("a2"));
+		var x1 = new Del("a1", strong("a2"));
 		assertString("<del>a1<strong>a2</strong></del>", x1);
 
 	}

@@ -121,7 +121,7 @@ public abstract class MenuItemWidget extends Widget {
 
 	@Override /* Overridden from Widget */
 	public String getHtml(RestRequest req, RestResponse res) {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 
 		// Need a unique number to define unique function names.
 		Integer id = null;

@@ -26,7 +26,7 @@ class SpringBeanStore_Test extends TestBase {
 
 	@Test void a01_fluentChaining_clear() {
 		// Test that clear() returns SpringBeanStore (not BeanStore)
-		SpringBeanStore store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
+		var store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
 
 		SpringBeanStore result = store.clear();
 
@@ -36,7 +36,7 @@ class SpringBeanStore_Test extends TestBase {
 
 	@Test void a02_fluentChaining_removeBean_byClass() {
 		// Test that removeBean(Class) returns SpringBeanStore (not BeanStore)
-		SpringBeanStore store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
+		var store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
 
 		SpringBeanStore result = store.removeBean(String.class);
 
@@ -46,7 +46,7 @@ class SpringBeanStore_Test extends TestBase {
 
 	@Test void a03_fluentChaining_removeBean_byClassAndName() {
 		// Test that removeBean(Class, String) returns SpringBeanStore (not BeanStore)
-		SpringBeanStore store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
+		var store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
 
 		SpringBeanStore result = store.removeBean(String.class, "testBean");
 
@@ -56,7 +56,7 @@ class SpringBeanStore_Test extends TestBase {
 
 	@Test void a04_fluentChaining_complex() {
 		// Test chaining multiple fluent calls
-		SpringBeanStore store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
+		var store = new SpringBeanStore(Optional.empty(), Optional.empty(), null);
 
 		SpringBeanStore result = store
 			.removeBean(String.class)

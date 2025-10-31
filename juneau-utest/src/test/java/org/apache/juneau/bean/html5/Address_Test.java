@@ -101,7 +101,7 @@ class Address_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Address x1 = new Address("a1", strong("a2"));
+		var x1 = new Address("a1", strong("a2"));
 		assertString("<address>a1<strong>a2</strong></address>", x1);
 
 	}

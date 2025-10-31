@@ -3521,7 +3521,7 @@ public class BeanContext extends Context {
 			if (x instanceof ObjectSwap) {
 				_swaps.add((ObjectSwap<?,?>)x);
 			} else {
-				ClassInfo ci = ClassInfo.of((Class<?>)x);
+				var ci = ClassInfo.of((Class<?>)x);
 				if (ci.isChildOf(ObjectSwap.class))
 					_swaps.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
 				else if (ci.isChildOf(Surrogate.class))
@@ -3741,7 +3741,7 @@ public class BeanContext extends Context {
 		ClassMeta<?>[] cma = new ClassMeta[args.length + 1];
 		cma[0] = cm;
 		for (int i = 0; i < Array.getLength(args); i++) {
-			Type arg = (Type)Array.get(args, i);
+			var arg = (Type)Array.get(args, i);
 			cma[i + 1] = arg instanceof Class ? getClassMeta((Class)arg) : resolveClassMeta(arg, null);
 		}
 		return (ClassMeta<T>)getTypedClassMeta(cma, 0);
@@ -4190,7 +4190,7 @@ public class BeanContext extends Context {
 				if (p.getName().startsWith(p2))
 					return true;
 		}
-		ClassInfo ci = ClassInfo.of(c);
+		var ci = ClassInfo.of(c);
 		for (var exclude : notBeanClassesArray)
 			if (ci.isChildOf(exclude))
 				return true;
@@ -4408,7 +4408,7 @@ public class BeanContext extends Context {
 		if (nn(typeVarImpls)) {
 			String varName = tv.getName();
 			int varIndex = -1;
-			Class gc = (Class)tv.getGenericDeclaration();
+			var gc = (Class)tv.getGenericDeclaration();
 			TypeVariable[] tvv = gc.getTypeParameters();
 			for (int i = 0; i < tvv.length; i++) {
 				if (tvv[i].getName().equals(varName)) {
@@ -4478,7 +4478,7 @@ public class BeanContext extends Context {
 
 		if (rawType.isArray()) {
 			if (o instanceof GenericArrayType) {
-				GenericArrayType gat = (GenericArrayType)o;
+				var gat = (GenericArrayType)o;
 				ClassMeta elementType = resolveClassMeta(gat.getGenericComponentType(), typeVarImpls);
 				return new ClassMeta(rawType, null, null, elementType);
 			}

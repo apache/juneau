@@ -107,7 +107,7 @@ class Th_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Th x1 = new Th("a1", strong("a2"));
+		var x1 = new Th("a1", strong("a2"));
 		assertString("<th>a1<strong>a2</strong></th>", x1);
 
 	}

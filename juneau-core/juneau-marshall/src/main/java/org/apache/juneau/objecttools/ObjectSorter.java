@@ -131,7 +131,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 			for (int i = 0; i < size; i++)
 				l.add(new SortEntry(session, Array.get(input, i)));
 		} else /* isCollection() */ {
-			Collection c = (Collection)input;
+			var c = (Collection)input;
 			l = listOfSize(c.size());
 			List<SortEntry> l2 = l;
 			c.forEach(x -> l2.add(new SortEntry(session, x)));

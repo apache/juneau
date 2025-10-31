@@ -60,7 +60,7 @@ public class JettyLogger implements LocationAwareLogger {
 		msg = String.valueOf(msg);
 		if (args.length == 0)
 			return msg;
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		int start = 0;
 		for (var arg : args) {
 			int bi = msg.indexOf("{}", start);
@@ -547,7 +547,7 @@ public class JettyLogger implements LocationAwareLogger {
 	 * @param thrown The throwable to log, or <jk>null</jk> if none.
 	 */
 	private void log(Level level, String msg, Throwable thrown) {
-		LogRecord r = new LogRecord(level, msg);
+		var r = new LogRecord(level, msg);
 		if (nn(thrown))
 			r.setThrown(thrown);
 		r.setLoggerName(logger.getName());

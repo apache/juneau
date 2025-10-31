@@ -111,7 +111,7 @@ public class LogEntryFormatter extends Formatter {
 
 		// Construct a regular expression to match this log entry.
 		int index = 1;
-		StringBuilder re = new StringBuilder();
+		var re = new StringBuilder();
 
 		// S1: Looking for %
 		// S2: Found %, looking for number.
@@ -219,7 +219,7 @@ public class LogEntryFormatter extends Formatter {
 				t = null;
 			}
 		}
-		String s = String.format(format, df.format(new Date(r.getMillis())), r.getSourceClassName(), r.getSourceMethodName(), r.getLoggerName(), r.getLevel(), msg, r.getThreadID(),
+		var s = String.format(format, df.format(new Date(r.getMillis())), r.getSourceClassName(), r.getSourceMethodName(), r.getLoggerName(), r.getLevel(), msg, r.getThreadID(),
 			r.getThrown() == null ? "" : r.getThrown().getMessage());
 		if (nn(t))
 			s += String.format("%n%s", getStackTrace(r.getThrown()));

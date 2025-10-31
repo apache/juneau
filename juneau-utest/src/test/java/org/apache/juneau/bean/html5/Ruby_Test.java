@@ -101,7 +101,7 @@ class Ruby_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Ruby x1 = new Ruby("a1", strong("a2"));
+		var x1 = new Ruby("a1", strong("a2"));
 		assertString("<ruby>a1<strong>a2</strong></ruby>", x1);
 
 	}

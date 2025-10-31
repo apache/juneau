@@ -107,7 +107,7 @@ class Img_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Img x1 = new Img("a");
+		var x1 = new Img("a");
 		assertString("<img src='a'/>", x1);
 
 	}

@@ -65,7 +65,7 @@ public class ParseException extends BasicRuntimeException {
 
 		if (nn(session)) {
 			Position p = session.getPosition();
-			StringBuilder sb = new StringBuilder(msg);
+			var sb = new StringBuilder(msg);
 
 			sb.append("\n\tAt: ").append(p);
 

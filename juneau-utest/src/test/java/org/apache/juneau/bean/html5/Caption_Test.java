@@ -101,7 +101,7 @@ class Caption_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Caption x1 = new Caption("a1", strong("a2"));
+		var x1 = new Caption("a1", strong("a2"));
 		assertString("<caption>a1<strong>a2</strong></caption>", x1);
 
 	}

@@ -369,7 +369,7 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void h01_toIso8601(Input input) {
 			// Create Calendar with specified timezone and date/time
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(input.timezone));
+			var cal = Calendar.getInstance(TimeZone.getTimeZone(input.timezone));
 			cal.set(input.year, input.month, input.day, input.hour, input.minute, input.second);
 			cal.set(Calendar.MILLISECOND, input.millisecond);
 
@@ -384,7 +384,7 @@ class DateUtils_Test extends TestBase {
 		@MethodSource("input")
 		void h02_toIso8601_formatValidation(Input input) {
 			// Create Calendar with specified timezone and date/time
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(input.timezone));
+			var cal = Calendar.getInstance(TimeZone.getTimeZone(input.timezone));
 			cal.set(input.year, input.month, input.day, input.hour, input.minute, input.second);
 			cal.set(Calendar.MILLISECOND, input.millisecond);
 
@@ -421,7 +421,7 @@ class DateUtils_Test extends TestBase {
 
 		@Test
 		void i02_minimumDate() {
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			var cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			cal.set(1, Calendar.JANUARY, 1, 0, 0, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 
@@ -431,7 +431,7 @@ class DateUtils_Test extends TestBase {
 
 		@Test
 		void i03_maximumDate() {
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			var cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			cal.set(9999, Calendar.DECEMBER, 31, 23, 59, 59);
 			cal.set(Calendar.MILLISECOND, 999);
 
@@ -441,7 +441,7 @@ class DateUtils_Test extends TestBase {
 
 		@Test
 		void i04_leapYear() {
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			var cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			cal.set(2024, Calendar.FEBRUARY, 29, 12, 0, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 
@@ -451,7 +451,7 @@ class DateUtils_Test extends TestBase {
 
 		@Test
 		void i05_nonLeapYear() {
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			var cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			cal.set(2023, Calendar.FEBRUARY, 28, 12, 0, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 
@@ -462,7 +462,7 @@ class DateUtils_Test extends TestBase {
 		@Test
 		void i06_dstTransition() {
 			// Test DST transition in America/New_York (Spring forward)
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+			var cal = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
 			cal.set(2024, Calendar.MARCH, 10, 2, 30, 0); // 2:30 AM on DST transition day
 			cal.set(Calendar.MILLISECOND, 0);
 
@@ -548,7 +548,7 @@ class DateUtils_Test extends TestBase {
 
 			// Verify timezone (for non-system timezones)
 			if (!"System".equals(input.expectedTimezone)) {
-				TimeZone expectedTz = TimeZone.getTimeZone(input.expectedTimezone);
+				var expectedTz = TimeZone.getTimeZone(input.expectedTimezone);
 				assertEquals(expectedTz.getID(), result.getTimeZone().getID(), "Test " + input.index + ": Timezone should match");
 			}
 		}
@@ -645,7 +645,7 @@ class DateUtils_Test extends TestBase {
 
 			// Verify timezone (for non-system timezones)
 			if (!"System".equals(input.expectedTimezone)) {
-				ZoneId expectedZone = ZoneId.of(input.expectedTimezone);
+				var expectedZone = ZoneId.of(input.expectedTimezone);
 				assertEquals(expectedZone, result.getZone(), "Test " + input.index + ": Timezone should match");
 			}
 		}
@@ -770,7 +770,7 @@ class DateUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void test_addSubtractDays() {
-		Calendar cal = Calendar.getInstance();
+		var cal = Calendar.getInstance();
 		cal.set(2024, Calendar.JANUARY, 15, 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 
@@ -789,7 +789,7 @@ class DateUtils_Test extends TestBase {
 
 	@Test
 	void test_add() {
-		Calendar cal = Calendar.getInstance();
+		var cal = Calendar.getInstance();
 		cal.set(2024, Calendar.JANUARY, 15, 12, 30, 45);
 		cal.set(Calendar.MILLISECOND, 0);
 
@@ -830,7 +830,7 @@ class DateUtils_Test extends TestBase {
 
 	@Test
 	void test_toZonedDateTime_preservesTimezone() {
-		TimeZone tz = TimeZone.getTimeZone("America/New_York");
+		var tz = TimeZone.getTimeZone("America/New_York");
 		Calendar cal = new GregorianCalendar(tz);
 		cal.set(2024, Calendar.JANUARY, 15, 12, 30, 45);
 

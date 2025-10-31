@@ -101,7 +101,7 @@ class Code_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Code x1 = new Code("a1", strong("a2"));
+		var x1 = new Code("a1", strong("a2"));
 		assertString("<code>a1<strong>a2</strong></code>", x1);
 
 	}

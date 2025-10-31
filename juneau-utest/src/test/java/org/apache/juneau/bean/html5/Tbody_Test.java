@@ -102,7 +102,7 @@ class Tbody_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Tbody x1 = new Tbody("a1", strong("a2"));
+		var x1 = new Tbody("a1", strong("a2"));
 		assertString("<tbody>a1<strong>a2</strong></tbody>", x1);
 
 	}

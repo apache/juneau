@@ -101,7 +101,7 @@ class Bdi_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Bdi x1 = new Bdi("a");
+		var x1 = new Bdi("a");
 		assertString("<bdi>a</bdi>", x1);
 
 	}

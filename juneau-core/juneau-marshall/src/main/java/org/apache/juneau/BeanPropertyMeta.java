@@ -146,7 +146,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				c = s.impl();
 			if (isVoid(c))
 				return null;
-			ClassInfo ci = ClassInfo.of(c);
+			var ci = ClassInfo.of(c);
 			if (ci.isChildOf(ObjectSwap.class)) {
 				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
 				if (nn(ps.forMediaTypes()))
@@ -467,7 +467,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			Object v = session.convertToType(value, elementType);
 
 			if (isCollection) {
-				Collection c = (Collection)invokeGetter(bean, pName);
+				var c = (Collection)invokeGetter(bean, pName);
 
 				Collection c2 = null;
 				if (nn(c)) {
@@ -553,7 +553,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			Object v = session.convertToType(value, elementType);
 
 			if (isMap) {
-				Map map = (Map)invokeGetter(bean, pName);
+				var map = (Map)invokeGetter(bean, pName);
 
 				if (nn(map)) {
 					map.put(key, v);
@@ -1104,8 +1104,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
 
-					Map valueMap = (Map)value;
-					Map propMap = (Map)r;
+					var valueMap = (Map)value;
+					var propMap = (Map)r;
 					ClassMeta<?> valueType = rawTypeMeta.getValueType();
 
 					// If the property type is abstract, then we either need to reuse the existing
@@ -1119,7 +1119,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 							if (propertyClass.isInstance(valueMap)) {
 								if (! valueType.isObject()) {
-									Flag needsConversion = Flag.create();
+									var needsConversion = Flag.create();
 									valueMap.forEach((k, v) -> {
 										if (nn(v) && ! valueType.getInnerClass().isInstance(v)) {
 											needsConversion.set();
@@ -1162,8 +1162,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
 
-					Collection valueList = (Collection)value;
-					Collection propList = (Collection)r;
+					var valueList = (Collection)value;
+					var propList = (Collection)r;
 					ClassMeta elementType = rawTypeMeta.getElementType();
 
 					// If the property type is abstract, then we either need to reuse the existing
@@ -1315,14 +1315,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				return null;
 			if (nn(properties)) {
 				if (rawTypeMeta.isArray()) {
-					Object[] a = (Object[])o;
+					var a = (Object[])o;
 					List l = new DelegateList(rawTypeMeta);
 					ClassMeta childType = rawTypeMeta.getElementType();
 					for (var c : a)
 						l.add(applyChildPropertiesFilter(session, childType, c));
 					return l;
 				} else if (rawTypeMeta.isCollection()) {
-					Collection c = (Collection)o;
+					var c = (Collection)o;
 					List l = listOfSize(c.size());
 					ClassMeta childType = rawTypeMeta.getElementType();
 					c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));

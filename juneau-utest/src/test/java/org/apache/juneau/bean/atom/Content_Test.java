@@ -24,25 +24,25 @@ import org.junit.jupiter.api.*;
 class Content_Test extends TestBase {
 
 	@Test void a01_basic() {
-		Content x = new Content("text");
+		var x = new Content("text");
 		assertNotNull(x);
 		assertEquals("text", x.getType());
 	}
 
 	@Test void a02_withText() {
-		Content x = new Content("html");
+		var x = new Content("html");
 		x.setText("<p>HTML content</p>");
 		assertEquals("<p>HTML content</p>", x.getText());
 	}
 
 	@Test void a03_withSrc() {
-		Content x = new Content();
+		var x = new Content();
 		x.setSrc("http://example.com/content");
 		assertEquals("http://example.com/content", x.getSrc().toString());
 	}
 
 	@Test void a04_fluentSetters() {
-		Content x = new Content();
+		var x = new Content();
 
 		// Test setType returns same instance for fluent chaining
 		assertSame(x, x.setType("html"));
@@ -65,7 +65,7 @@ class Content_Test extends TestBase {
 
 	@Test void a05_fluentChaining() {
 		// Test multiple fluent calls can be chained
-		Content x = new Content()
+		var x = new Content()
 			.setType("xhtml")
 			.setText("<div>XHTML content</div>")
 			.setBase("http://example.com/")
@@ -78,7 +78,7 @@ class Content_Test extends TestBase {
 
 	@Test void a06_outOfLineContent() {
 		// Test external content (out-of-line) with src attribute
-		Content x = new Content()
+		var x = new Content()
 			.setType("video/mp4")
 			.setSrc("http://example.org/movie.mp4");
 

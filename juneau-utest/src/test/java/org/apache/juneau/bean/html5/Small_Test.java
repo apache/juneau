@@ -101,7 +101,7 @@ class Small_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Small x1 = new Small("a1", strong("a2"));
+		var x1 = new Small("a1", strong("a2"));
 		assertString("<small>a1<strong>a2</strong></small>", x1);
 
 	}

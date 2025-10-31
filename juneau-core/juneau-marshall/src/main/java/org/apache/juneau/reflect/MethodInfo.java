@@ -381,7 +381,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		AnnotationList al = new AnnotationList();
+		var al = new AnnotationList();
 		forEachAnnotationInfo(filter, x -> al.add(x));
 		return al;
 	}
@@ -393,7 +393,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationListMethodOnly(Predicate<AnnotationInfo<?>> filter) {
-		AnnotationList al = new AnnotationList();
+		var al = new AnnotationList();
 		forEachAnnotationInfoMethodOnly(filter, x -> al.add(x));
 		return al;
 	}
@@ -460,7 +460,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return The methods signature.
 	 */
 	public String getSignature() {
-		StringBuilder sb = new StringBuilder(128);
+		var sb = new StringBuilder(128);
 		sb.append(m.getName());
 		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length > 0) {

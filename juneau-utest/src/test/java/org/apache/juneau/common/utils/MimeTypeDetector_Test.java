@@ -34,7 +34,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testDefaultInstance() {
-		MimeTypeDetector detector = MimeTypeDetector.DEFAULT;
+		var detector = MimeTypeDetector.DEFAULT;
 		assertNotNull(detector);
 		
 		// Test some default mappings
@@ -56,7 +56,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testAddFileType() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addFileType("special.txt", "text/special")
 			.build();
 		
@@ -86,7 +86,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testAddExtensionType() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addExtensionType("custom", "application/x-custom")
 			.addExtensionType("CUSTOM", "application/x-custom-upper")  // Should be lowercased
 			.build();
@@ -118,7 +118,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testAddNioContentBasedDetection() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addNioContentBasedDetection(false)
 			.addExtensionType("test", "application/x-test")
 			.build();
@@ -129,7 +129,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testSetCacheSize() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.setCacheSize(50)
 			.addExtensionType("test", "application/x-test")
 			.build();
@@ -141,7 +141,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testSetCacheDisabled() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.setCacheDisabled(true)
 			.addExtensionType("test", "application/x-test")
 			.build();
@@ -153,7 +153,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testSetCacheLogOnExit() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.setCacheLogOnExit(true)
 			.build();
 		
@@ -163,7 +163,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testSetDefaultType() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.setDefaultType("application/unknown")
 			.build();
 		
@@ -174,7 +174,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testAddTypesIndividualLines() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addTypes(
 				"text/html        html htm",
 				"image/png        png",
@@ -199,7 +199,7 @@ public class MimeTypeDetector_Test {
 			"# Another comment\n" +
 			"application/x-custom custom cst";
 			
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addTypes(mimeTypesFile)
 			.build();
 		
@@ -215,7 +215,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testAddTypesMixedUsage() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addTypes("text/html html htm")  // Single line
 			.addTypes("image/png png\napplication/json json")  // File contents
 			.addTypes("application/x-foo foo bar")  // Another single line
@@ -231,7 +231,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testAddTypesEmptyAndInvalidLines() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addTypes(
 				"",  // Empty line
 				"   ",  // Whitespace only
@@ -248,7 +248,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testAddDefaultMappings() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addDefaultMappings()
 			.build();
 		
@@ -268,7 +268,7 @@ public class MimeTypeDetector_Test {
 		Path testFile = tempDir.resolve("test.txt");
 		Files.write(testFile, "Hello World".getBytes());
 		
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addNioContentBasedDetection(true)
 			.build();
 		
@@ -284,7 +284,7 @@ public class MimeTypeDetector_Test {
 		Path testFile = tempDir.resolve("test.txt");
 		Files.write(testFile, "Hello World".getBytes());
 		
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addNioContentBasedDetection(false)
 			.addExtensionType("txt", "text/plain")
 			.build();
@@ -295,7 +295,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testGetContentTypeWithNioException() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addNioContentBasedDetection(true)
 			.addExtensionType("test", "application/x-test")
 			.build();
@@ -306,7 +306,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testGetContentTypeEmptyAndNull() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.setDefaultType("application/unknown")
 			.build();
 		
@@ -316,7 +316,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testGetContentTypeFallbackToDefault() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.setDefaultType("application/unknown")
 			.build();
 		
@@ -325,7 +325,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testCacheBehavior() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addExtensionType("test", "application/x-test")
 			.build();
 		
@@ -351,7 +351,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testClearCache() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addExtensionType("test", "application/x-test")
 			.build();
 		
@@ -370,7 +370,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testCacheDisabled() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.setCacheDisabled(true)
 			.addExtensionType("test", "application/x-test")
 			.build();
@@ -383,7 +383,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testCacheSizeLimit() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.setCacheSize(2)
 			.addExtensionType("test", "application/x-test")
 			.build();
@@ -400,7 +400,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testBuilderChaining() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addFileType("special.txt", "text/special")
 			.addExtensionType("custom", "application/x-custom")
 			.addNioContentBasedDetection(false)
@@ -422,7 +422,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testExtensionCaseInsensitive() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addExtensionType("TEST", "application/x-test")
 			.build();
 		
@@ -434,7 +434,7 @@ public class MimeTypeDetector_Test {
 
 	@Test
 	public void testMultipleExtensionsPerMimeType() {
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addTypes("text/html html htm HTML HTM")
 			.build();
 		
@@ -449,7 +449,7 @@ public class MimeTypeDetector_Test {
 	public void testWindowsLineEndings() {
 		String mimeTypesFile = "text/html\thtml\thtm\r\nimage/png\tpng\r\n";
 		
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addTypes(mimeTypesFile)
 			.build();
 		
@@ -462,7 +462,7 @@ public class MimeTypeDetector_Test {
 	public void testUnixLineEndings() {
 		String mimeTypesFile = "text/html\thtml\thtm\nimage/png\tpng\n";
 		
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addTypes(mimeTypesFile)
 			.build();
 		
@@ -475,7 +475,7 @@ public class MimeTypeDetector_Test {
 	public void testMixedLineEndings() {
 		String mimeTypesFile = "text/html\thtml\thtm\r\nimage/png\tpng\napplication/json\tjson\r\n";
 		
-		MimeTypeDetector detector = MimeTypeDetector.builder()
+		var detector = MimeTypeDetector.builder()
 			.addTypes(mimeTypesFile)
 			.build();
 		

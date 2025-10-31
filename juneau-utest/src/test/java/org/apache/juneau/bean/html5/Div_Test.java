@@ -101,7 +101,7 @@ class Div_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Div x1 = new Div("a1", strong("a2"));
+		var x1 = new Div("a1", strong("a2"));
 		assertString("<div>a1<strong>a2</strong></div>", x1);
 
 	}

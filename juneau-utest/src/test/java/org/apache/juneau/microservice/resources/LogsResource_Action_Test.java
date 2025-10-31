@@ -29,7 +29,7 @@ class LogsResource_Action_Test extends TestBase {
 
 	@Test void a01_basic() {
 		// Test basic constructor
-		Action x = new Action("view", "/logs/test.log");
+		var x = new Action("view", "/logs/test.log");
 
 		assertEquals("view", x.getName());
 		assertTrue(x.getUri().toString().contains("/logs/test.log"));
@@ -37,7 +37,7 @@ class LogsResource_Action_Test extends TestBase {
 
 	@Test void a02_withArgs() {
 		// Test constructor with URI args
-		Action x = new Action("view", "/logs/{0}", "test.log");
+		var x = new Action("view", "/logs/{0}", "test.log");
 
 		assertEquals("view", x.getName());
 		assertTrue(x.getUri().toString().contains("test.log"));
@@ -45,7 +45,7 @@ class LogsResource_Action_Test extends TestBase {
 
 	@Test void a03_setName() {
 		// Test setName() returns correct type
-		Action x = new Action("view", "/logs/test.log");
+		var x = new Action("view", "/logs/test.log");
 
 		Action result = x.setName("download");
 
@@ -57,7 +57,7 @@ class LogsResource_Action_Test extends TestBase {
 
 	@Test void a04_setUri_String() {
 		// Test setUri(String) returns correct type
-		Action x = new Action("view", "/logs/test.log");
+		var x = new Action("view", "/logs/test.log");
 
 		Action result = x.setUri("/logs/other.log");
 
@@ -69,7 +69,7 @@ class LogsResource_Action_Test extends TestBase {
 
 	@Test void a05_setUri_URI() {
 		// Test setUri(java.net.URI) returns correct type
-		Action x = new Action("view", "/logs/test.log");
+		var x = new Action("view", "/logs/test.log");
 
 		try {
 			Action result = x.setUri(new java.net.URI("http://example.com/logs/test.log"));
@@ -85,7 +85,7 @@ class LogsResource_Action_Test extends TestBase {
 
 	@Test void a06_setUri_withArgs() {
 		// Test setUri(String, Object...) returns correct type
-		Action x = new Action("view", "/logs/test.log");
+		var x = new Action("view", "/logs/test.log");
 
 		Action result = x.setUri("/logs/{0}/{1}", "dir", "file.log");
 
@@ -98,7 +98,7 @@ class LogsResource_Action_Test extends TestBase {
 
 	@Test void a07_fluentChaining() {
 		// Test fluent chaining works correctly
-		Action x = new Action("view", "/logs/test.log")
+		var x = new Action("view", "/logs/test.log")
 			.setName("download")
 			.setUri("/logs/other.log");
 

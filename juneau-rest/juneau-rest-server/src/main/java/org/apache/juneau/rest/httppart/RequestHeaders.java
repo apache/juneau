@@ -331,7 +331,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 			return new RequestHeader(req, name, null).parser(parser);
 		if (l.size() == 1)
 			return l.get(0);
-		StringBuilder sb = new StringBuilder(128);
+		var sb = new StringBuilder(128);
 		for (int i = 0, j = l.size(); i < j; i++) {
 			if (i > 0)
 				sb.append(", ");
@@ -487,7 +487,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		for (var n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();

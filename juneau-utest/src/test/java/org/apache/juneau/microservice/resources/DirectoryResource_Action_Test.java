@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 class DirectoryResource_Action_Test extends TestBase {
 
 	@Test void a01_fluentChaining_setName() {
-		Action action = new Action("view", "/view", "file.txt");
+		var action = new Action("view", "/view", "file.txt");
 
 		// Test that setName() returns Action (not LinkString)
 		Action result = action.setName("download");
@@ -37,10 +37,10 @@ class DirectoryResource_Action_Test extends TestBase {
 	}
 
 	@Test void a02_fluentChaining_setUri_URI() throws Exception {
-		Action action = new Action("view", "/view", "file.txt");
+		var action = new Action("view", "/view", "file.txt");
 
 		// Test that setUri(URI) returns Action (not LinkString)
-		URI newUri = new URI("http://example.com/file");
+		var newUri = new URI("http://example.com/file");
 		Action result = action.setUri(newUri);
 
 		assertSame(action, result);
@@ -49,7 +49,7 @@ class DirectoryResource_Action_Test extends TestBase {
 	}
 
 	@Test void a03_fluentChaining_setUri_String() {
-		Action action = new Action("view", "/view", "file.txt");
+		var action = new Action("view", "/view", "file.txt");
 
 		// Test that setUri(String) returns Action (not LinkString)
 		Action result = action.setUri("/download");
@@ -60,7 +60,7 @@ class DirectoryResource_Action_Test extends TestBase {
 	}
 
 	@Test void a04_fluentChaining_setUri_StringWithArgs() {
-		Action action = new Action("view", "/view", "file.txt");
+		var action = new Action("view", "/view", "file.txt");
 
 		// Test that setUri(String, Object...) returns Action (not LinkString)
 		Action result = action.setUri("/files/{0}/download", "myfile.txt");
@@ -72,7 +72,7 @@ class DirectoryResource_Action_Test extends TestBase {
 
 	@Test void a05_fluentChaining_complex() {
 		// Test chaining multiple fluent calls
-		Action result = new Action("view", "/view", "file.txt")
+		var result = new Action("view", "/view", "file.txt")
 			.setName("download")
 			.setUri("/download/{0}", "newfile.txt");
 
@@ -83,7 +83,7 @@ class DirectoryResource_Action_Test extends TestBase {
 
 	@Test void a06_constructor() {
 		// Test basic constructor functionality
-		Action action = new Action("view", "/files/{0}/view", "test.txt");
+		var action = new Action("view", "/files/{0}/view", "test.txt");
 
 		assertEquals("view", action.getName());
 		assertTrue(action.getUri().toString().contains("test.txt"));

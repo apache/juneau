@@ -184,8 +184,8 @@ public class MsgPackParserSession extends InputStreamParserSession {
 
 		if (eType == null)
 			eType = object();
-		ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)eType.getSwap(this);
-		BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
+		var swap = (ObjectSwap<T,Object>)eType.getSwap(this);
+		var builder = (BuilderSwap<T,Object>)eType.getBuilderSwap(this);
 		ClassMeta<?> sType = null;
 		if (nn(builder))
 			sType = builder.getBuilderClassMeta(this);
@@ -219,12 +219,12 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			else if (dt == BIN)
 				o = is.readBinary();
 			else if (dt == ARRAY && sType.isObject()) {
-				JsonList jl = new JsonList(this);
+				var jl = new JsonList(this);
 				for (int i = 0; i < length; i++)
 					jl.add(parseAnything(object(), is, outer, pMeta));
 				o = jl;
 			} else if (dt == MAP && sType.isObject()) {
-				JsonMap jm = new JsonMap(this);
+				var jm = new JsonMap(this);
 				for (int i = 0; i < length; i++)
 					jm.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, jm, pMeta));
 				o = cast(jm, pMeta, eType);
@@ -279,7 +279,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
 			} else if (sType.isCollection()) {
 				if (dt == MAP) {
-					JsonMap m = new JsonMap(this);
+					var m = new JsonMap(this);
 					for (int i = 0; i < length; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
@@ -293,7 +293,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 				}
 			} else if (sType.isArray() || sType.isArgs()) {
 				if (dt == MAP) {
-					JsonMap m = new JsonMap(this);
+					var m = new JsonMap(this);
 					for (int i = 0; i < length; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
@@ -306,7 +306,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
 			} else if (dt == MAP) {
-				JsonMap m = new JsonMap(this);
+				var m = new JsonMap(this);
 				for (int i = 0; i < length; i++)
 					m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 				if (m.containsKey(getBeanTypePropertyName(eType)))

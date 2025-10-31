@@ -105,7 +105,7 @@ class Ol_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Ol x1 = new Ol("a1", strong("a2"));
+		var x1 = new Ol("a1", strong("a2"));
 		assertString("<ol>a1<strong>a2</strong></ol>", x1);
 
 	}

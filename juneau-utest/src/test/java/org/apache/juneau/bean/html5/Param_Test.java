@@ -102,7 +102,7 @@ class Param_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Param x1 = new Param("a", "b");
+		var x1 = new Param("a", "b");
 		assertString("<param name='a' value='b'/>", x1);
 
 	}

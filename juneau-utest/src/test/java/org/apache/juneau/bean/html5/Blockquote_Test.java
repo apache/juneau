@@ -102,7 +102,7 @@ class Blockquote_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Blockquote x1 = new Blockquote("a1", strong("a2"));
+		var x1 = new Blockquote("a1", strong("a2"));
 		assertString("<blockquote>a1<strong>a2</strong></blockquote>", x1);
 
 	}

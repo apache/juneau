@@ -2064,7 +2064,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	@Override /* Overridden from HttpClientConnection */
 	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
 		try {
-			MockServletResponse res = MockServletResponse.create();
+			var res = MockServletResponse.create();
 			restContext.execute(restObject, sreq.get(), res);
 
 			// If the status isn't set, something's broken.
@@ -2118,7 +2118,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			long length = entity.getContentLength();
 			if (length < 0)
 				length = 1024;
-			ByteArrayOutputStream baos = new ByteArrayOutputStream((int)Math.min(length, 1024));
+			var baos = new ByteArrayOutputStream((int)Math.min(length, 1024));
 			entity.writeTo(baos);
 			baos.flush();
 			body = baos.toByteArray();
@@ -2141,11 +2141,11 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 			path = target + path;
 
-			MockPathResolver pr = new MockPathResolver(target, contextPath, servletPath, path, null);
+			var pr = new MockPathResolver(target, contextPath, servletPath, path, null);
 			if (nn(pr.getError()))
 				throw new IllegalStateException(pr.getError());
 
-			MockServletRequest r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
+			var r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
 				.debug(isDebug());
 
 			for (var h : request.getAllHeaders())

@@ -567,7 +567,7 @@ public class SerializerSet {
 		if (nn(sm))
 			return sm;
 
-		MediaRanges a = MediaRanges.of(acceptHeader);
+		var a = MediaRanges.of(acceptHeader);
 		int match = a.match(mediaRangesList);
 		if (match >= 0) {
 			sm = new SerializerMatch(mediaRanges[match], mediaTypeRangeSerializers[match]);

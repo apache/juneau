@@ -248,7 +248,7 @@ public class ResponseContent implements HttpEntity {
 			if (parser == null)
 				parser = client.getMatchingParser(ct);
 
-			MediaType mt = MediaType.of(ct);
+			var mt = MediaType.of(ct);
 
 			if (parser == null || (mt.toString().contains("text/plain") && ! parser.canHandle(ct))) {
 				if (type.hasStringMutater())

@@ -245,7 +245,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 			return input;
 
 		List<Object> l = null;
-		RowMatcher rowMatcher = new RowMatcher(session, search);
+		var rowMatcher = new RowMatcher(session, search);
 
 		if (type.isCollection()) {
 			Collection<?> c = (Collection)input;

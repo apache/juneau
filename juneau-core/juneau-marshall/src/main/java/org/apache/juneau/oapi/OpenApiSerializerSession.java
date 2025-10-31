@@ -404,7 +404,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 
 					HttpPartSchema items = schema.getItems();
 					ClassMeta<?> vt = getClassMetaForObject(value);
-					OapiStringBuilder sb = new OapiStringBuilder(cf);
+					var sb = new OapiStringBuilder(cf);
 
 					if (type.isArray()) {
 						for (int i = 0; i < Array.getLength(value); i++)
@@ -430,7 +430,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 					out = super.serialize(partType, null, value);
 
 				} else if (type.isBean()) {
-					OapiStringBuilder sb = new OapiStringBuilder(cf);
+					var sb = new OapiStringBuilder(cf);
 					Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 					HttpPartSchema schema2 = schema;
 
@@ -441,7 +441,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 					out = sb.toString();
 
 				} else if (type.isMap()) {
-					OapiStringBuilder sb = new OapiStringBuilder(cf);
+					var sb = new OapiStringBuilder(cf);
 					HttpPartSchema schema2 = schema;
 					((Map<?,?>)value).forEach((k, v) -> sb.append(k, serialize(partType, schema2.getProperty(s(k)), v)));
 					out = sb.toString();
@@ -471,7 +471,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	private List toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
-		JsonList l = new JsonList();
+		var l = new JsonList();
 		HttpPartSchema items = s.getItems();
 		if (type.isArray()) {
 			for (int i = 0; i < Array.getLength(o); i++)
@@ -489,7 +489,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	private Map<String,Object> toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
-		JsonMap m = new JsonMap();
+		var m = new JsonMap();
 		if (type.isBean()) {
 			Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 			HttpPartSchema s2 = s;

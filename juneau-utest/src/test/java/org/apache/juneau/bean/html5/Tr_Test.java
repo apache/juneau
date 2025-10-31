@@ -102,7 +102,7 @@ class Tr_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Tr x1 = new Tr("a1", strong("a2"));
+		var x1 = new Tr("a1", strong("a2"));
 		assertString("<tr>a1<strong>a2</strong></tr>", x1);
 
 	}

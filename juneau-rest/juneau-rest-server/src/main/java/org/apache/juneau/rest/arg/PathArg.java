@@ -183,7 +183,7 @@ public class PathArg implements RestOpArg {
 	public Object resolve(RestOpSession opSession) throws Exception {
 		RestRequest req = opSession.getRequest();
 		if (name.equals("*")) {
-			JsonMap m = new JsonMap();
+			var m = new JsonMap();
 			req.getPathParams().stream().forEach(x -> m.put(x.getName(), x.getValue()));
 			return req.getBeanSession().convertToType(m, type);
 		}
@@ -209,7 +209,7 @@ public class PathArg implements RestOpArg {
 				throw new ArgException(pi, "Number of attribute parameters exceeds the number of URL pattern variables");
 
 			// Check for {#} variables.
-			String idxs = String.valueOf(idx);
+			var idxs = String.valueOf(idx);
 			for (var var : vars)
 				if (StringUtils.isNumeric(var) && var.equals(idxs))
 					return var;

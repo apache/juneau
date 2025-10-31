@@ -43,7 +43,7 @@ class LongValue_Test extends TestBase {
 
 	@Test
 	void a03_constructor() {
-		LongValue v = new LongValue(100L);
+		var v = new LongValue(100L);
 		assertEquals(100L, v.get());
 	}
 

@@ -154,7 +154,7 @@ public class MethodExecStore {
 	 */
 	public String getReport() {
 		// @formatter:off
-		StringBuilder sb = new StringBuilder()
+		var sb = new StringBuilder()
 			.append(" Method                         Runs      Running   Errors   Avg          Total     \n")
 			.append("------------------------------ --------- --------- -------- ------------ -----------\n");
 		getStatsByTotalTime()

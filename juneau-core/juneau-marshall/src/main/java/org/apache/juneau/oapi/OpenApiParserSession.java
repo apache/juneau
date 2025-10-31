@@ -254,8 +254,8 @@ public class OpenApiParserSession extends UonParserSession {
 			in = schema.getDefault();
 		} else {
 
-			ObjectSwap<T,Object> swap = (ObjectSwap<T,Object>)type.getSwap(this);
-			BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)type.getBuilderSwap(this);
+			var swap = (ObjectSwap<T,Object>)type.getSwap(this);
+			var builder = (BuilderSwap<T,Object>)type.getBuilderSwap(this);
 			ClassMeta<?> sType = null;
 			if (nn(builder))
 				sType = builder.getBuilderClassMeta(this);
@@ -440,11 +440,12 @@ public class OpenApiParserSession extends UonParserSession {
 				if (type.isBean()) {
 					BeanMap<T> m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
 					for (var s : ss) {
-						String[] kv = StringUtils.splita(s, '=', 2);
-						if (kv.length != 2)
-							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
-						String key = kv[0], value = kv[1];
-						BeanPropertyMeta bpm = m.getPropertyMeta(key);
+					String[] kv = StringUtils.splita(s, '=', 2);
+					if (kv.length != 2)
+						throw new ParseException("Invalid input {0} for part type OBJECT.", in);
+					var key = kv[0];
+					var value = kv[1];
+					BeanPropertyMeta bpm = m.getPropertyMeta(key);
 						if (bpm == null && ! isIgnoreUnknownBeanProperties())
 							throw new ParseException("Invalid input {0} for part type OBJECT.  Cannot find property {1}", in, key);
 						m.put(key, parse(partType, schema.getProperty(key), value, ((ClassMeta<T>)(bpm == null ? object() : bpm.getClassMeta()))));
@@ -459,16 +460,17 @@ public class OpenApiParserSession extends UonParserSession {
 					eType = string();
 
 				try {
-					Map<String,Object> m = (Map<String,Object>)type.newInstance();
+					var m = (Map<String,Object>)type.newInstance();
 					if (m == null)
 						m = JsonMap.create();
 
-					for (var s : ss) {
-						String[] kv = StringUtils.splita(s, '=', 2);
-						if (kv.length != 2)
-							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
-						String key = kv[0], value = kv[1];
-						m.put(key, parse(partType, schema.getProperty(key), value, eType));
+				for (var s : ss) {
+					String[] kv = StringUtils.splita(s, '=', 2);
+					if (kv.length != 2)
+						throw new ParseException("Invalid input {0} for part type OBJECT.", in);
+					var key = kv[0];
+					var value = kv[1];
+					m.put(key, parse(partType, schema.getProperty(key), value, eType));
 					}
 					return (T)m;
 				} catch (ExecutableException e) {

@@ -103,7 +103,7 @@ class Colgroup_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Colgroup x1 = new Colgroup("a1", strong("a2"));
+		var x1 = new Colgroup("a1", strong("a2"));
 		assertString("<colgroup>a1<strong>a2</strong></colgroup>", x1);
 
 	}

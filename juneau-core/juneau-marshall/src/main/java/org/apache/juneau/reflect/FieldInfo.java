@@ -165,7 +165,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 * @return The underlying executable name.
 	 */
 	public String getFullName() {
-		StringBuilder sb = new StringBuilder(128);
+		var sb = new StringBuilder(128);
 		ClassInfo dc = declaringClass;
 		Package p = dc.getPackage();
 		if (nn(p))

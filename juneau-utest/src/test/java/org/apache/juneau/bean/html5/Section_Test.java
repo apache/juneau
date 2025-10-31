@@ -101,7 +101,7 @@ class Section_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Section x1 = new Section("a1", strong("a2"));
+		var x1 = new Section("a1", strong("a2"));
 		assertString("<section>a1<strong>a2</strong></section>", x1);
 
 	}

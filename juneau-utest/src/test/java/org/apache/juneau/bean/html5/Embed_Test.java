@@ -104,7 +104,7 @@ class Embed_Test extends TestBase {
 	}
 
 	@Test void a03_otherConstructors() {
-		Embed x1 = new Embed("a");
+		var x1 = new Embed("a");
 		assertString("<embed src='a'/>", x1);
 
 	}
