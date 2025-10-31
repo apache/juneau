@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>LocalDir xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/cp/LocalDir.html">View Javadoc</a></div><pre>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/common/io/LocalDir.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
@@ -22,7 +22,7 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.cp;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.common.io;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.StringUtils.*;
@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="LocalDir" href="../../../../org/apache/juneau/cp/LocalDir.html#LocalDir">LocalDir</a> {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="LocalDir" href="../../../../../org/apache/juneau/common/io/LocalDir.html#LocalDir">LocalDir</a> {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; clazz;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String clazzPath;
@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * 		&lt;li&gt;Relative path (does not start with &lt;js&gt;'/'&lt;/js&gt;) - Relative to class package.</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">public</strong> <a name="LocalDir" href="../../../../org/apache/juneau/cp/LocalDir.html#LocalDir">LocalDir</a>(Class&lt;?&gt; clazz, String clazzPath) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">public</strong> <a name="LocalDir" href="../../../../../org/apache/juneau/common/io/LocalDir.html#LocalDir">LocalDir</a>(Class&lt;?&gt; clazz, String clazzPath) {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">this</strong>.clazz = assertArgNotNull(<span class="jxr_string">"clazz"</span>, clazz);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">this</strong>.clazzPath = <span class="jxr_string">"/"</span>.equals(clazzPath) ? <span class="jxr_string">"/"</span> : StringUtils.nullIfEmpty(trimTrailingSlashes(clazzPath));
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">this</strong>.path = <strong class="jxr_keyword">null</strong>;
@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * @param path Filesystem directory location.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <a name="LocalDir" href="../../../../org/apache/juneau/cp/LocalDir.html#LocalDir">LocalDir</a>(Path path) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <a name="LocalDir" href="../../../../../org/apache/juneau/common/io/LocalDir.html#LocalDir">LocalDir</a>(Path path) {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">this</strong>.clazz = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">this</strong>.clazzPath = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">this</strong>.path = assertArgNotNull(<span class="jxr_string">"path"</span>, path);
@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> o instanceof <a name="LocalDir" href="../../../../org/apache/juneau/cp/LocalDir.html#LocalDir">LocalDir</a> o2 &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.clazz, y.clazz) &amp;&amp; eq(x.clazzPath, y.clazzPath) &amp;&amp; eq(x.path, y.path));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> o instanceof <a name="LocalDir" href="../../../../../org/apache/juneau/common/io/LocalDir.html#LocalDir">LocalDir</a> o2 &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.clazz, y.clazz) &amp;&amp; eq(x.clazzPath, y.clazzPath) &amp;&amp; eq(x.path, y.path));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Override <em class="jxr_comment">/* Overridden from Object */</em>
@@ -98,15 +98,15 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Does no cleanup of the path (e.g. checking for security holes or malformed values).</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * @return The file if it exists, or &lt;jk&gt;null&lt;/jk&gt; if it does not.</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">public</strong> <a name="LocalFile" href="../../../../org/apache/juneau/cp/LocalFile.html#LocalFile">LocalFile</a> resolve(String path) {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">public</strong> <a name="LocalFile" href="../../../../../org/apache/juneau/common/io/LocalFile.html#LocalFile">LocalFile</a> resolve(String path) {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">if</strong> (nn(clazz)) {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			String p = clazzPath == <strong class="jxr_keyword">null</strong> ? path : (<span class="jxr_string">"/"</span>.equals(clazzPath) ? <span class="jxr_string">""</span> : clazzPath) + '/' + path;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">if</strong> (isClasspathFile(clazz.getResource(p)))
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="LocalFile" href="../../../../org/apache/juneau/cp/LocalFile.html#LocalFile">LocalFile</a>(clazz, p);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="LocalFile" href="../../../../../org/apache/juneau/common/io/LocalFile.html#LocalFile">LocalFile</a>(clazz, p);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			Path p = <strong class="jxr_keyword">this</strong>.path.resolve(path);
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<strong class="jxr_keyword">if</strong> (Files.isReadable(p) &amp;&amp; ! Files.isDirectory(p))
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="LocalFile" href="../../../../org/apache/juneau/cp/LocalFile.html#LocalFile">LocalFile</a>(p);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="LocalFile" href="../../../../../org/apache/juneau/common/io/LocalFile.html#LocalFile">LocalFile</a>(p);
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		}
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}

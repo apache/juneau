@@ -206,7 +206,7 @@
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<em class="jxr_comment">// Read-only snapshots of these will be made in RestServletContext.</em>
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> getAnnotatedMethods(Supplier&lt;?&gt; resource, Class&lt;T&gt; annotation, Predicate&lt;T&gt; predicate) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> getAnnotatedMethods(Supplier&lt;?&gt; resource, Class&lt;T&gt; annotation, Predicate&lt;T&gt; predicate) {
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 			Map&lt;String,Method&gt; x = map();
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">var</strong> r = resource.get();
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
@@ -239,8 +239,8 @@
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">final</strong> Class&lt;?&gt; resourceClass;
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">final</strong> <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> parentContext;
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">private</strong> <a name="DefaultClassList" href="../../../../org/apache/juneau/cp/DefaultClassList.html#DefaultClassList">DefaultClassList</a> defaultClasses;
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">private</strong> <a name="DefaultSettingsMap" href="../../../../org/apache/juneau/cp/DefaultSettingsMap.html#DefaultSettingsMap">DefaultSettingsMap</a> defaultSettings;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">private</strong> <a name="DefaultClassList" href="../../../../org/apache/juneau/rest/util/DefaultClassList.html#DefaultClassList">DefaultClassList</a> defaultClasses;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">private</strong> <a name="DefaultSettingsMap" href="../../../../org/apache/juneau/rest/util/DefaultSettingsMap.html#DefaultSettingsMap">DefaultSettingsMap</a> defaultSettings;
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">private</strong> <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> rootBeanStore, beanStore;
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">private</strong> <a name="Config" href="../../../../org/apache/juneau/config/Config.html#Config">Config</a> config;
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">private</strong> VarResolver.Builder varResolver;
@@ -258,7 +258,7 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">private</strong> <a name="NamedAttributeMap" href="../../../../org/apache/juneau/rest/httppart/NamedAttributeMap.html#NamedAttributeMap">NamedAttributeMap</a> defaultRequestAttributes;
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">private</strong> RestOpArgList.Builder restOpArgs;
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">private</strong> BeanCreator&lt;DebugEnablement&gt; debugEnablement;
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">private</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">private</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">private</strong> RestOperations.Builder restOperations;
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">private</strong> RestChildren.Builder restChildren;
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">private</strong> BeanCreator&lt;SwaggerProvider&gt; swaggerProvider;
@@ -1201,7 +1201,7 @@
 <a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> <em class="jxr_javadoccomment">		 * @return The default implementation class list.</em>
 <a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 		<strong class="jxr_keyword">public</strong> <a name="DefaultClassList" href="../../../../org/apache/juneau/cp/DefaultClassList.html#DefaultClassList">DefaultClassList</a> defaultClasses() {
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 		<strong class="jxr_keyword">public</strong> <a name="DefaultClassList" href="../../../../org/apache/juneau/rest/util/DefaultClassList.html#DefaultClassList">DefaultClassList</a> defaultClasses() {
 <a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 			<strong class="jxr_keyword">return</strong> defaultClasses;
 <a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 		}
 <a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 
@@ -1473,7 +1473,7 @@
 <a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> <em class="jxr_javadoccomment">		 * @return The default settings map.</em>
 <a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 		<strong class="jxr_keyword">public</strong> <a name="DefaultSettingsMap" href="../../../../org/apache/juneau/cp/DefaultSettingsMap.html#DefaultSettingsMap">DefaultSettingsMap</a> defaultSettings() {
+<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 		<strong class="jxr_keyword">public</strong> <a name="DefaultSettingsMap" href="../../../../org/apache/juneau/rest/util/DefaultSettingsMap.html#DefaultSettingsMap">DefaultSettingsMap</a> defaultSettings() {
 <a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 			<strong class="jxr_keyword">return</strong> defaultSettings;
 <a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 		}
 <a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 
@@ -1482,7 +1482,7 @@
 <a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> <em class="jxr_javadoccomment">		 * @return The destroy method list.</em>
 <a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> destroyMethods() {
+<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> destroyMethods() {
 <a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 			<strong class="jxr_keyword">if</strong> (destroyMethods == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 				destroyMethods = createDestroyMethods(beanStore(), resource());
 <a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 			<strong class="jxr_keyword">return</strong> destroyMethods;
@@ -1630,7 +1630,7 @@
 <a class="jxr_linenumber" name="L1622" href="#L1622">1622</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L1623" href="#L1623">1623</a> <em class="jxr_javadoccomment">		 * @return The end call method list.</em>
 <a class="jxr_linenumber" name="L1624" href="#L1624">1624</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> endCallMethods() {
+<a class="jxr_linenumber" name="L1625" href="#L1625">1625</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> endCallMethods() {
 <a class="jxr_linenumber" name="L1626" href="#L1626">1626</a> 			<strong class="jxr_keyword">if</strong> (endCallMethods == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1627" href="#L1627">1627</a> 				endCallMethods = createEndCallMethods(beanStore(), resource());
 <a class="jxr_linenumber" name="L1628" href="#L1628">1628</a> 			<strong class="jxr_keyword">return</strong> endCallMethods;
@@ -2542,7 +2542,7 @@
 <a class="jxr_linenumber" name="L2534" href="#L2534">2534</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L2535" href="#L2535">2535</a> <em class="jxr_javadoccomment">		 * @return The list of methods that gets called immediately after the &lt;ja&gt;@RestOp&lt;/ja&gt; annotated method gets called..</em>
 <a class="jxr_linenumber" name="L2536" href="#L2536">2536</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L2537" href="#L2537">2537</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> postCallMethods() {
+<a class="jxr_linenumber" name="L2537" href="#L2537">2537</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> postCallMethods() {
 <a class="jxr_linenumber" name="L2538" href="#L2538">2538</a> 			<strong class="jxr_keyword">if</strong> (postCallMethods == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2539" href="#L2539">2539</a> 				postCallMethods = createPostCallMethods(beanStore(), resource());
 <a class="jxr_linenumber" name="L2540" href="#L2540">2540</a> 			<strong class="jxr_keyword">return</strong> postCallMethods;
@@ -2553,7 +2553,7 @@
 <a class="jxr_linenumber" name="L2545" href="#L2545">2545</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L2546" href="#L2546">2546</a> <em class="jxr_javadoccomment">		 * @return The post-init-child-first method list.</em>
 <a class="jxr_linenumber" name="L2547" href="#L2547">2547</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> postInitChildFirstMethods() {
+<a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> postInitChildFirstMethods() {
 <a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> 			<strong class="jxr_keyword">if</strong> (postInitChildFirstMethods == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 				postInitChildFirstMethods = createPostInitChildFirstMethods(beanStore(), resource());
 <a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> 			<strong class="jxr_keyword">return</strong> postInitChildFirstMethods;
@@ -2564,7 +2564,7 @@
 <a class="jxr_linenumber" name="L2556" href="#L2556">2556</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L2557" href="#L2557">2557</a> <em class="jxr_javadoccomment">		 * @return The post-init method list.</em>
 <a class="jxr_linenumber" name="L2558" href="#L2558">2558</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L2559" href="#L2559">2559</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> postInitMethods() {
+<a class="jxr_linenumber" name="L2559" href="#L2559">2559</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> postInitMethods() {
 <a class="jxr_linenumber" name="L2560" href="#L2560">2560</a> 			<strong class="jxr_keyword">if</strong> (postInitMethods == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2561" href="#L2561">2561</a> 				postInitMethods = createPostInitMethods(beanStore(), resource());
 <a class="jxr_linenumber" name="L2562" href="#L2562">2562</a> 			<strong class="jxr_keyword">return</strong> postInitMethods;
@@ -2578,7 +2578,7 @@
 <a class="jxr_linenumber" name="L2570" href="#L2570">2570</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L2571" href="#L2571">2571</a> <em class="jxr_javadoccomment">		 * @return The pre-call method list.</em>
 <a class="jxr_linenumber" name="L2572" href="#L2572">2572</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L2573" href="#L2573">2573</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> preCallMethods() {
+<a class="jxr_linenumber" name="L2573" href="#L2573">2573</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> preCallMethods() {
 <a class="jxr_linenumber" name="L2574" href="#L2574">2574</a> 			<strong class="jxr_keyword">if</strong> (preCallMethods == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2575" href="#L2575">2575</a> 				preCallMethods = createPreCallMethods(beanStore(), resource());
 <a class="jxr_linenumber" name="L2576" href="#L2576">2576</a> 			<strong class="jxr_keyword">return</strong> preCallMethods;
@@ -3185,7 +3185,7 @@
 <a class="jxr_linenumber" name="L3177" href="#L3177">3177</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L3178" href="#L3178">3178</a> <em class="jxr_javadoccomment">		 * @return The start call method list.</em>
 <a class="jxr_linenumber" name="L3179" href="#L3179">3179</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L3180" href="#L3180">3180</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> startCallMethods() {
+<a class="jxr_linenumber" name="L3180" href="#L3180">3180</a> 		<strong class="jxr_keyword">public</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> startCallMethods() {
 <a class="jxr_linenumber" name="L3181" href="#L3181">3181</a> 			<strong class="jxr_keyword">if</strong> (startCallMethods == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L3182" href="#L3182">3182</a> 				startCallMethods = createStartCallMethods(beanStore(), resource());
 <a class="jxr_linenumber" name="L3183" href="#L3183">3183</a> 			<strong class="jxr_keyword">return</strong> startCallMethods;
@@ -4048,7 +4048,7 @@
 <a class="jxr_linenumber" name="L4040" href="#L4040">4040</a> <em class="jxr_javadoccomment">		 * 	The REST servlet/bean instance that this context is defined against.</em>
 <a class="jxr_linenumber" name="L4041" href="#L4041">4041</a> <em class="jxr_javadoccomment">		 * @return A new destroy method list.</em>
 <a class="jxr_linenumber" name="L4042" href="#L4042">4042</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L4043" href="#L4043">4043</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> createDestroyMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
+<a class="jxr_linenumber" name="L4043" href="#L4043">4043</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> createDestroyMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4044" href="#L4044">4044</a> 
 <a class="jxr_linenumber" name="L4045" href="#L4045">4045</a> 			<em class="jxr_comment">// Default value.</em>
 <a class="jxr_linenumber" name="L4046" href="#L4046">4046</a> 			<strong class="jxr_keyword">var</strong> v = Value.of(getAnnotatedMethods(resource, RestDestroy.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>));
@@ -4100,7 +4100,7 @@
 <a class="jxr_linenumber" name="L4092" href="#L4092">4092</a> <em class="jxr_javadoccomment">		 * 	The REST servlet/bean instance that this context is defined against.</em>
 <a class="jxr_linenumber" name="L4093" href="#L4093">4093</a> <em class="jxr_javadoccomment">		 * @return A new end call method list.</em>
 <a class="jxr_linenumber" name="L4094" href="#L4094">4094</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L4095" href="#L4095">4095</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> createEndCallMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
+<a class="jxr_linenumber" name="L4095" href="#L4095">4095</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> createEndCallMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4096" href="#L4096">4096</a> 
 <a class="jxr_linenumber" name="L4097" href="#L4097">4097</a> 			<em class="jxr_comment">// Default value.</em>
 <a class="jxr_linenumber" name="L4098" href="#L4098">4098</a> 			Value&lt;MethodList&gt; v = Value.of(getAnnotatedMethods(resource, RestEndCall.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>));
@@ -4340,7 +4340,7 @@
 <a class="jxr_linenumber" name="L4332" href="#L4332">4332</a> <em class="jxr_javadoccomment">		 * 	The REST servlet/bean instance that this context is defined against.</em>
 <a class="jxr_linenumber" name="L4333" href="#L4333">4333</a> <em class="jxr_javadoccomment">		 * @return A new post-call method list.</em>
 <a class="jxr_linenumber" name="L4334" href="#L4334">4334</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L4335" href="#L4335">4335</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> createPostCallMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
+<a class="jxr_linenumber" name="L4335" href="#L4335">4335</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> createPostCallMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4336" href="#L4336">4336</a> 
 <a class="jxr_linenumber" name="L4337" href="#L4337">4337</a> 			<em class="jxr_comment">// Default value.</em>
 <a class="jxr_linenumber" name="L4338" href="#L4338">4338</a> 			Value&lt;MethodList&gt; v = Value.of(getAnnotatedMethods(resource, RestPostCall.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>));
@@ -4360,7 +4360,7 @@
 <a class="jxr_linenumber" name="L4352" href="#L4352">4352</a> <em class="jxr_javadoccomment">		 * 	The REST servlet/bean instance that this context is defined against.</em>
 <a class="jxr_linenumber" name="L4353" href="#L4353">4353</a> <em class="jxr_javadoccomment">		 * @return A new post-init-child-first method list.</em>
 <a class="jxr_linenumber" name="L4354" href="#L4354">4354</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L4355" href="#L4355">4355</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> createPostInitChildFirstMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
+<a class="jxr_linenumber" name="L4355" href="#L4355">4355</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> createPostInitChildFirstMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4356" href="#L4356">4356</a> 
 <a class="jxr_linenumber" name="L4357" href="#L4357">4357</a> 			<em class="jxr_comment">// Default value.</em>
 <a class="jxr_linenumber" name="L4358" href="#L4358">4358</a> 			Value&lt;MethodList&gt; v = Value.of(getAnnotatedMethods(resource, RestPostInit.<strong class="jxr_keyword">class</strong>, RestPostInit::childFirst));
@@ -4380,7 +4380,7 @@
 <a class="jxr_linenumber" name="L4372" href="#L4372">4372</a> <em class="jxr_javadoccomment">		 * 	The REST servlet/bean instance that this context is defined against.</em>
 <a class="jxr_linenumber" name="L4373" href="#L4373">4373</a> <em class="jxr_javadoccomment">		 * @return A new post-init method list.</em>
 <a class="jxr_linenumber" name="L4374" href="#L4374">4374</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L4375" href="#L4375">4375</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> createPostInitMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
+<a class="jxr_linenumber" name="L4375" href="#L4375">4375</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> createPostInitMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4376" href="#L4376">4376</a> 
 <a class="jxr_linenumber" name="L4377" href="#L4377">4377</a> 			<em class="jxr_comment">// Default value.</em>
 <a class="jxr_linenumber" name="L4378" href="#L4378">4378</a> 			Value&lt;MethodList&gt; v = Value.of(getAnnotatedMethods(resource, RestPostInit.<strong class="jxr_keyword">class</strong>, x -&gt; ! x.childFirst()));
@@ -4400,7 +4400,7 @@
 <a class="jxr_linenumber" name="L4392" href="#L4392">4392</a> <em class="jxr_javadoccomment">		 * 	The REST servlet/bean instance that this context is defined against.</em>
 <a class="jxr_linenumber" name="L4393" href="#L4393">4393</a> <em class="jxr_javadoccomment">		 * @return A new pre-call method list.</em>
 <a class="jxr_linenumber" name="L4394" href="#L4394">4394</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L4395" href="#L4395">4395</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> createPreCallMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
+<a class="jxr_linenumber" name="L4395" href="#L4395">4395</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> createPreCallMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4396" href="#L4396">4396</a> 
 <a class="jxr_linenumber" name="L4397" href="#L4397">4397</a> 			<em class="jxr_comment">// Default value.</em>
 <a class="jxr_linenumber" name="L4398" href="#L4398">4398</a> 			Value&lt;MethodList&gt; v = Value.of(getAnnotatedMethods(resource, RestPreCall.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>));
@@ -4694,7 +4694,7 @@
 <a class="jxr_linenumber" name="L4686" href="#L4686">4686</a> <em class="jxr_javadoccomment">		 * 	The REST servlet/bean instance that this context is defined against.</em>
 <a class="jxr_linenumber" name="L4687" href="#L4687">4687</a> <em class="jxr_javadoccomment">		 * @return A new start call method list.</em>
 <a class="jxr_linenumber" name="L4688" href="#L4688">4688</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L4689" href="#L4689">4689</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> createStartCallMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
+<a class="jxr_linenumber" name="L4689" href="#L4689">4689</a> 		<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> createStartCallMethods(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) {
 <a class="jxr_linenumber" name="L4690" href="#L4690">4690</a> 
 <a class="jxr_linenumber" name="L4691" href="#L4691">4691</a> 			<em class="jxr_comment">// Default value.</em>
 <a class="jxr_linenumber" name="L4692" href="#L4692">4692</a> 			Value&lt;MethodList&gt; v = Value.of(getAnnotatedMethods(resource, RestStartCall.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>));
@@ -4953,15 +4953,15 @@
 <a class="jxr_linenumber" name="L4945" href="#L4945">4945</a> 
 <a class="jxr_linenumber" name="L4946" href="#L4946">4946</a> 	<strong class="jxr_keyword">final</strong> Charset defaultCharset;
 <a class="jxr_linenumber" name="L4947" href="#L4947">4947</a> 	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> maxInput;
-<a class="jxr_linenumber" name="L4948" href="#L4948">4948</a> 	<strong class="jxr_keyword">final</strong> <a name="DefaultClassList" href="../../../../org/apache/juneau/cp/DefaultClassList.html#DefaultClassList">DefaultClassList</a> defaultClasses;
+<a class="jxr_linenumber" name="L4948" href="#L4948">4948</a> 	<strong class="jxr_keyword">final</strong> <a name="DefaultClassList" href="../../../../org/apache/juneau/rest/util/DefaultClassList.html#DefaultClassList">DefaultClassList</a> defaultClasses;
 <a class="jxr_linenumber" name="L4949" href="#L4949">4949</a> 
-<a class="jxr_linenumber" name="L4950" href="#L4950">4950</a> 	<strong class="jxr_keyword">final</strong> <a name="DefaultSettingsMap" href="../../../../org/apache/juneau/cp/DefaultSettingsMap.html#DefaultSettingsMap">DefaultSettingsMap</a> defaultSettings;
+<a class="jxr_linenumber" name="L4950" href="#L4950">4950</a> 	<strong class="jxr_keyword">final</strong> <a name="DefaultSettingsMap" href="../../../../org/apache/juneau/rest/util/DefaultSettingsMap.html#DefaultSettingsMap">DefaultSettingsMap</a> defaultSettings;
 <a class="jxr_linenumber" name="L4951" href="#L4951">4951</a> 
 <a class="jxr_linenumber" name="L4952" href="#L4952">4952</a> 	<strong class="jxr_keyword">final</strong> <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> rootBeanStore;
 <a class="jxr_linenumber" name="L4953" href="#L4953">4953</a> 
 <a class="jxr_linenumber" name="L4954" href="#L4954">4954</a> 	<em class="jxr_comment">// Lifecycle methods</em>
 <a class="jxr_linenumber" name="L4955" href="#L4955">4955</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MethodInvoker" href="../../../../org/apache/juneau/rest/stats/MethodInvoker.html#MethodInvoker">MethodInvoker</a>[] postInitMethods, postInitChildFirstMethods, startCallMethods, endCallMethods, destroyMethods;
-<a class="jxr_linenumber" name="L4956" href="#L4956">4956</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> preCallMethods, postCallMethods;
+<a class="jxr_linenumber" name="L4956" href="#L4956">4956</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> preCallMethods, postCallMethods;
 <a class="jxr_linenumber" name="L4957" href="#L4957">4957</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="StaticFiles" href="../../../../org/apache/juneau/rest/staticfile/StaticFiles.html#StaticFiles">StaticFiles</a> staticFiles;
 <a class="jxr_linenumber" name="L4958" href="#L4958">4958</a> 
 <a class="jxr_linenumber" name="L4959" href="#L4959">4959</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="CallLogger" href="../../../../org/apache/juneau/rest/logger/CallLogger.html#CallLogger">CallLogger</a> callLogger;
@@ -5955,14 +5955,14 @@
 <a class="jxr_linenumber" name="L5947" href="#L5947">5947</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L5948" href="#L5948">5948</a> <em class="jxr_javadoccomment">	 * @return The list of methods to invoke after the actual REST method is called.</em>
 <a class="jxr_linenumber" name="L5949" href="#L5949">5949</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L5950" href="#L5950">5950</a> 	<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> getPostCallMethods() { <strong class="jxr_keyword">return</strong> postCallMethods; }
+<a class="jxr_linenumber" name="L5950" href="#L5950">5950</a> 	<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> getPostCallMethods() { <strong class="jxr_keyword">return</strong> postCallMethods; }
 <a class="jxr_linenumber" name="L5951" href="#L5951">5951</a> 
 <a class="jxr_linenumber" name="L5952" href="#L5952">5952</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L5953" href="#L5953">5953</a> <em class="jxr_javadoccomment">	 * Returns the list of methods to invoke before the actual REST method is called.</em>
 <a class="jxr_linenumber" name="L5954" href="#L5954">5954</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L5955" href="#L5955">5955</a> <em class="jxr_javadoccomment">	 * @return The list of methods to invoke before the actual REST method is called.</em>
 <a class="jxr_linenumber" name="L5956" href="#L5956">5956</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L5957" href="#L5957">5957</a> 	<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/cp/MethodList.html#MethodList">MethodList</a> getPreCallMethods() { <strong class="jxr_keyword">return</strong> preCallMethods; }
+<a class="jxr_linenumber" name="L5957" href="#L5957">5957</a> 	<strong class="jxr_keyword">protected</strong> <a name="MethodList" href="../../../../org/apache/juneau/rest/util/MethodList.html#MethodList">MethodList</a> getPreCallMethods() { <strong class="jxr_keyword">return</strong> preCallMethods; }
 <a class="jxr_linenumber" name="L5958" href="#L5958">5958</a> 
 <a class="jxr_linenumber" name="L5959" href="#L5959">5959</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L5960" href="#L5960">5960</a> <em class="jxr_javadoccomment">	 * Method for handling response errors.</em>
