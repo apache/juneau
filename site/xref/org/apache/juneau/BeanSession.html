@@ -957,7 +957,7 @@
 <a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 * @return A new bean object.</em>
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 * @throws BeanRuntimeException If the specified class is not a valid bean.</em>
 <a class="jxr_linenumber" name="L951" href="#L951">951</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T newBean(Class&lt;T&gt; c) <strong class="jxr_keyword">throws</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> {
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T newBean(Class&lt;T&gt; c) <strong class="jxr_keyword">throws</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> {
 <a class="jxr_linenumber" name="L953" href="#L953">953</a> 		<strong class="jxr_keyword">return</strong> newBean(<strong class="jxr_keyword">null</strong>, c);
 <a class="jxr_linenumber" name="L954" href="#L954">954</a> 	}
 <a class="jxr_linenumber" name="L955" href="#L955">955</a> 
@@ -973,7 +973,7 @@
 <a class="jxr_linenumber" name="L965" href="#L965">965</a> <em class="jxr_javadoccomment">	 * @return A new bean object.</em>
 <a class="jxr_linenumber" name="L966" href="#L966">966</a> <em class="jxr_javadoccomment">	 * @throws BeanRuntimeException If the specified class is not a valid bean.</em>
 <a class="jxr_linenumber" name="L967" href="#L967">967</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T newBean(Object <strong class="jxr_keyword">outer</strong>, Class&lt;T&gt; c) <strong class="jxr_keyword">throws</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> {
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T newBean(Object <strong class="jxr_keyword">outer</strong>, Class&lt;T&gt; c) <strong class="jxr_keyword">throws</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> {
 <a class="jxr_linenumber" name="L969" href="#L969">969</a> 		ClassMeta&lt;T&gt; cm = getClassMeta(c);
 <a class="jxr_linenumber" name="L970" href="#L970">970</a> 		BeanMeta m = cm.getBeanMeta();
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
@@ -981,12 +981,12 @@
 <a class="jxr_linenumber" name="L973" href="#L973">973</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 			T o = (T)m.newBean(<strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Class does not have a no-arg constructor."</span>);
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Class does not have a no-arg constructor."</span>);
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> 			<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 			<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L980" href="#L980">980</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e);
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(e);
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 		}
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> 	}
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 
@@ -1117,7 +1117,7 @@
 <a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> <em class="jxr_javadoccomment">	 * 	BeanRuntimeException If specified object is not a bean according to the bean rules specified in this context</em>
 <a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> <em class="jxr_javadoccomment">	 * class.</em>
 <a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; BeanMap&lt;T&gt; toBeanMap(T o, Class&lt;? <strong class="jxr_keyword">super</strong> T&gt; c) <strong class="jxr_keyword">throws</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> {
+<a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; BeanMap&lt;T&gt; toBeanMap(T o, Class&lt;? <strong class="jxr_keyword">super</strong> T&gt; c) <strong class="jxr_keyword">throws</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> {
 <a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 		assertArgNotNull(<span class="jxr_string">"o"</span>, o);
 <a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 		assertArgNotNull(<span class="jxr_string">"c"</span>, c);
 <a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 		assertArg(c.isInstance(o), <span class="jxr_string">"The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''"</span>, cn(c), cn(o), 0);
@@ -1126,7 +1126,7 @@
 <a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 
 <a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 		BeanMeta m = cm.getBeanMeta();
 <a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Class is not a bean.  Reason=''{0}''"</span>, cm.getNotABeanReason());
+<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Class is not a bean.  Reason=''{0}''"</span>, cm.getNotABeanReason());
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BeanMap&lt;&gt;(<strong class="jxr_keyword">this</strong>, o, m);
 <a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 	}
 <a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 

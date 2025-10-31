@@ -522,7 +522,7 @@
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 									Object value = convertToType(<span class="jxr_string">""</span>, pMeta.getClassMeta());
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 									<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 										pMeta.set(m, currAttr, value);
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 									} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 									} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 										onBeanSetterException(pMeta, e);
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 										<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 									}
@@ -545,7 +545,7 @@
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 									setName(cm, value, currAttr);
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 									<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 										pMeta.set(m, currAttr, value);
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 									} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 									} <strong class="jxr_keyword">catch</strong> (<a name="BeanRuntimeException" href="../../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a> e) {
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 										onBeanSetterException(pMeta, e);
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 										<strong class="jxr_keyword">throw</strong> e;
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 									}
