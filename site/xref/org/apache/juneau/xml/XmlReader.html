@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			@SuppressWarnings(<span class="jxr_string">"resource"</span>)
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			Reader r = pipe.getBufferedReader();
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			XMLInputFactory factory = XMLInputFactory.newInstance();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">var</strong> factory = XMLInputFactory.newInstance();
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  			factory.setProperty(XMLInputFactory.IS_COALESCING, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);

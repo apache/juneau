@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			String[] parts = splita(pattern, ':', 2);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			assertArg(parts.length &gt;= 2, <span class="jxr_string">"Invalid arguments passed to $SW var.  Each case statement must contains 'pattern:value'."</span>);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			Pattern p = Pattern.compile(parts[0].replace(<span class="jxr_string">"*"</span>, <span class="jxr_string">".*"</span>).replace(<span class="jxr_string">"?"</span>, <span class="jxr_string">"."</span>));
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">var</strong> p = Pattern.compile(parts[0].replace(<span class="jxr_string">"*"</span>, <span class="jxr_string">".*"</span>).replace(<span class="jxr_string">"?"</span>, <span class="jxr_string">"."</span>));
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">if</strong> (p.matcher(stringArg).matches())
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  				<strong class="jxr_keyword">return</strong> parts[1];
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		}

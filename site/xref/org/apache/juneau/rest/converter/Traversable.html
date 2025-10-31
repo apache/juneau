@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  				<strong class="jxr_keyword">if</strong> (nn(swap))
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  					o = swap.swap(bs, o);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  				ReaderParser rp = req.getContent().getParserMatch().map(ParserMatch::getParser).filter(ReaderParser.<strong class="jxr_keyword">class</strong>::isInstance).map(ReaderParser.<strong class="jxr_keyword">class</strong>::<strong class="jxr_keyword">cast</strong>).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  				ObjectRest or = ObjectRest.create(o, rp);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  				<strong class="jxr_keyword">var</strong> or = ObjectRest.create(o, rp);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  				o = or.get(pathRemainder);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			} <strong class="jxr_keyword">catch</strong> (<a name="ObjectRestException" href="../../../../../org/apache/juneau/objecttools/ObjectRestException.html#ObjectRestException">ObjectRestException</a> e) {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicHttpException" href="../../../../../org/apache/juneau/http/response/BasicHttpException.html#BasicHttpException">BasicHttpException</a>(e.getStatus(), e);

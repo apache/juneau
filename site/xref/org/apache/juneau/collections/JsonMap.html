@@ -716,7 +716,7 @@
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 * @return A new map without the keys and values from this map.</em>
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> exclude(String...keys) {
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		JsonMap m2 = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">var</strong> m2 = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">this</strong>.forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 			<strong class="jxr_keyword">boolean</strong> exclude = false;
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> kk : keys)
@@ -1438,7 +1438,7 @@
 <a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> <em class="jxr_javadoccomment">	 * @return A new map with just the keys and values from this map.</em>
 <a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> include(String...keys) {
-<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 		JsonMap m2 = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 		<strong class="jxr_keyword">var</strong> m2 = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 		<strong class="jxr_keyword">this</strong>.forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> kk : keys)
 <a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 				<strong class="jxr_keyword">if</strong> (kk.equals(k))
@@ -1820,7 +1820,7 @@
 <a class="jxr_linenumber" name="L1812" href="#L1812">1812</a> 				<strong class="jxr_keyword">return</strong> bm.getBean();
 <a class="jxr_linenumber" name="L1813" href="#L1813">1813</a> 
 <a class="jxr_linenumber" name="L1814" href="#L1814">1814</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (cm.isCollectionOrArray()) {
-<a class="jxr_linenumber" name="L1815" href="#L1815">1815</a> 				List items = (List)get(<span class="jxr_string">"items"</span>);
+<a class="jxr_linenumber" name="L1815" href="#L1815">1815</a> 				<strong class="jxr_keyword">var</strong> items = (List)get(<span class="jxr_string">"items"</span>);
 <a class="jxr_linenumber" name="L1816" href="#L1816">1816</a> 				<strong class="jxr_keyword">return</strong> bs.convertToType(items, cm);
 <a class="jxr_linenumber" name="L1817" href="#L1817">1817</a> 
 <a class="jxr_linenumber" name="L1818" href="#L1818">1818</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(value)) {

@@ -266,7 +266,7 @@
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 						<strong class="jxr_keyword">if</strong> (constructorArgs.length != 0)
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor."</span>);
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 						constructorArgs = <strong class="jxr_keyword">new</strong> String[x.getParamCount()];
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 						IntegerValue i = IntegerValue.create();
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 						<strong class="jxr_keyword">var</strong> i = IntegerValue.create();
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 						x.forEachParam(<strong class="jxr_keyword">null</strong>, pi -&gt; {
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 							String pn = pi.getName();
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 							<strong class="jxr_keyword">if</strong> (pn == <strong class="jxr_keyword">null</strong>)
@@ -289,7 +289,7 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 							<strong class="jxr_keyword">if</strong> (constructorArgs.length != 0)
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor."</span>);
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 							constructorArgs = <strong class="jxr_keyword">new</strong> String[x.getParamCount()];
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 							IntegerValue i = IntegerValue.create();
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 							<strong class="jxr_keyword">var</strong> i = IntegerValue.create();
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 							x.forEachParam(<strong class="jxr_keyword">null</strong>, y -&gt; {
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 								String pn = y.getName();
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 								<strong class="jxr_keyword">if</strong> (pn == <strong class="jxr_keyword">null</strong>)
@@ -805,7 +805,7 @@
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 		List&lt;ClassInfo&gt; paramTypes = method.getParamTypes();
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> 
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> 		<em class="jxr_comment">// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name</em>
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		ClassInfo currentClass = ClassInfo.of(c);
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		<strong class="jxr_keyword">var</strong> currentClass = ClassInfo.of(c);
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 		ClassInfo sc = currentClass.getSuperclass();
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<strong class="jxr_keyword">while</strong> (nn(sc) &amp;&amp; ! sc.is(stopClass) &amp;&amp; ! sc.is(Object.<strong class="jxr_keyword">class</strong>)) {
@@ -1038,7 +1038,7 @@
 <a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(c.getName());
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(c.getName());
 <a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		sb.append(<span class="jxr_string">" {\n"</span>);
 <a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pm : propertyArray)
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 			sb.append('\t').append(pm.toString()).append(<span class="jxr_string">",\n"</span>);

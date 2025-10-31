@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">public</strong> Object resolve(<a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		RestRequest req = opSession.getRequest();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">if</strong> (name.equals(<span class="jxr_string">"*"</span>)) {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 			req.getPathParams().stream().forEach(x -&gt; m.put(x.getName(), x.getValue()));
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">return</strong> req.getBeanSession().convertToType(m, type);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		}
@@ -217,7 +217,7 @@
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"Number of attribute parameters exceeds the number of URL pattern variables"</span>);
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<em class="jxr_comment">// Check for {#} variables.</em>
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			String idxs = String.valueOf(idx);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">var</strong> idxs = String.valueOf(idx);
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">var</strong> : vars)
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 				<strong class="jxr_keyword">if</strong> (StringUtils.isNumeric(<strong class="jxr_keyword">var</strong>) &amp;&amp; <strong class="jxr_keyword">var</strong>.equals(idxs))
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">var</strong>;

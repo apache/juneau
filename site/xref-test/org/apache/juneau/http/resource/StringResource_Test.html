@@ -36,30 +36,30 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">class</strong> <a name="StringResource_Test" href="../../../../../org/apache/juneau/http/resource/StringResource_Test.html#StringResource_Test">StringResource_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		StringResource x = <strong class="jxr_keyword">new</strong> StringResource();
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> StringResource();
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  		assertEquals(<span class="jxr_string">""</span>, toUtf8(x.getContent()));
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  		assertTrue(x.isRepeatable());
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertFalse(x.isStreaming());
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		StringResource x2 = <strong class="jxr_keyword">new</strong> StringResource(contentType(<span class="jxr_string">"text/plain"</span>), <span class="jxr_string">"foo"</span>);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> StringResource(contentType(<span class="jxr_string">"text/plain"</span>), <span class="jxr_string">"foo"</span>);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(<span class="jxr_string">"foo"</span>, toUtf8(x2.getContent()));
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertEquals(<span class="jxr_string">"text/plain"</span>, x2.getContentType().getValue());
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertTrue(x2.isRepeatable());
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertFalse(x2.isStreaming());
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		StringResource x3 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">var</strong> x3 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertEquals(<span class="jxr_string">""</span>, toUtf8(x3.getContent()));
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	}
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@Test <strong class="jxr_keyword">void</strong> a02_caching() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		StringResource x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>).setCached();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>).setCached();
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertEquals(<span class="jxr_string">"foo"</span>, toUtf8(x.getContent()));
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertEquals(<span class="jxr_string">"foo"</span>, toUtf8(x.getContent()));
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertTrue(x.isRepeatable());
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Test <strong class="jxr_keyword">void</strong> a03_headers() {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		StringResource x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.addHeader(<span class="jxr_string">"Foo"</span>, <span class="jxr_string">"bar"</span>)
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.addHeader(<span class="jxr_string">"Foo"</span>, <span class="jxr_string">"baz"</span>)
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  			.setHeader(<span class="jxr_string">"Qux"</span>, <span class="jxr_string">"quux"</span>);
@@ -71,41 +71,41 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test <strong class="jxr_keyword">void</strong> a04_contentType() {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		StringResource x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			.setContentType(<span class="jxr_string">"text/plain"</span>);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertEquals(<span class="jxr_string">"text/plain"</span>, x.getContentType().getValue());
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		StringResource x2 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			.setContentType(contentType(<span class="jxr_string">"text/html"</span>));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEquals(<span class="jxr_string">"text/html"</span>, x2.getContentType().getValue());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Test <strong class="jxr_keyword">void</strong> a05_contentEncoding() {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		StringResource x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			.setContentEncoding(<span class="jxr_string">"identity"</span>);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertEquals(<span class="jxr_string">"identity"</span>, x.getContentEncoding().getValue());
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		StringResource x2 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			.setContentEncoding(contentEncoding(<span class="jxr_string">"gzip"</span>));
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertEquals(<span class="jxr_string">"gzip"</span>, x2.getContentEncoding().getValue());
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a06_chunked() {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		StringResource x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			.setChunked();
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertTrue(x.isChunked());
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		StringResource x2 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			.setChunked(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertTrue(x2.isChunked());
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		StringResource x3 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> x3 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			.setChunked(false);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertFalse(x3.isChunked());
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a07_fluentSetters() {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		StringResource x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>);
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<em class="jxr_comment">// Test setHeader returns correct type</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertSame(x, x.setHeader(<span class="jxr_string">"X-Test"</span>, <span class="jxr_string">"value"</span>));
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	@Test <strong class="jxr_keyword">void</strong> a08_copy() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		StringResource x = <strong class="jxr_keyword">new</strong> StringResource(contentType(<span class="jxr_string">"text/plain"</span>), <span class="jxr_string">"foo"</span>)
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> StringResource(contentType(<span class="jxr_string">"text/plain"</span>), <span class="jxr_string">"foo"</span>)
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 			.setHeader(<span class="jxr_string">"Foo"</span>, <span class="jxr_string">"bar"</span>);
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		StringResource x2 = x.copy();
@@ -136,11 +136,11 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> a09_contentLength() {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		StringResource x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(3L, x.getContentLength());
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<em class="jxr_comment">// Content length can be overridden for StringResource</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		StringResource x2 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>).setContentLength(10);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> StringResource(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"foo"</span>).setContentLength(10);
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertEquals(10L, x2.getContentLength());
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 

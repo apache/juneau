@@ -412,7 +412,7 @@
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 					HttpPartSchema items = schema.getItems();
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 					ClassMeta&lt;?&gt; vt = getClassMetaForObject(value);
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 					OapiStringBuilder sb = <strong class="jxr_keyword">new</strong> OapiStringBuilder(cf);
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 					<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> OapiStringBuilder(cf);
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 					<strong class="jxr_keyword">if</strong> (type.isArray()) {
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(value); i++)
@@ -438,7 +438,7 @@
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 					out = <strong class="jxr_keyword">super</strong>.serialize(partType, <strong class="jxr_keyword">null</strong>, value);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type.isBean()) {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 					OapiStringBuilder sb = <strong class="jxr_keyword">new</strong> OapiStringBuilder(cf);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 					<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> OapiStringBuilder(cf);
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 					Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || nn(x);
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 					HttpPartSchema schema2 = schema;
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 
@@ -449,7 +449,7 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 					out = sb.toString();
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (type.isMap()) {
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					OapiStringBuilder sb = <strong class="jxr_keyword">new</strong> OapiStringBuilder(cf);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> OapiStringBuilder(cf);
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 					HttpPartSchema schema2 = schema;
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 					((Map&lt;?,?&gt;)value).forEach((k, v) -&gt; sb.append(k, serialize(partType, schema2.getProperty(s(k)), v)));
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 					out = sb.toString();
@@ -479,7 +479,7 @@
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 	<strong class="jxr_keyword">private</strong> List toList(<a name="HttpPartType" href="../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType, ClassMeta&lt;?&gt; type, Object o, <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> s) <strong class="jxr_keyword">throws</strong> SerializeException, <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> {
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 			s = DEFAULT_SCHEMA;
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		JsonList l = <strong class="jxr_keyword">new</strong> <a name="JsonList" href="../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>();
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> <a name="JsonList" href="../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a>();
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 		HttpPartSchema items = s.getItems();
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">if</strong> (type.isArray()) {
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Array.getLength(o); i++)
@@ -497,7 +497,7 @@
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 	<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt; toMap(<a name="HttpPartType" href="../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType, ClassMeta&lt;?&gt; type, Object o, <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> s) <strong class="jxr_keyword">throws</strong> SerializeException, <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> {
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 			s = DEFAULT_SCHEMA;
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">if</strong> (type.isBean()) {
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 			Predicate&lt;Object&gt; checkNull = x -&gt; isKeepNullProperties() || nn(x);
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 			HttpPartSchema s2 = s;

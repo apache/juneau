@@ -39,17 +39,17 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">class</strong> <a name="SeeOtherRoot_Test" href="../../../../../org/apache/juneau/rest/beans/SeeOtherRoot_Test.html#SeeOtherRoot_Test">SeeOtherRoot_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() {
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		SeeOtherRoot x = <strong class="jxr_keyword">new</strong> SeeOtherRoot();
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SeeOtherRoot();
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		assertNotNull(x);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	}
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Test <strong class="jxr_keyword">void</strong> a02_withContent() {
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		SeeOtherRoot x = <strong class="jxr_keyword">new</strong> SeeOtherRoot(<span class="jxr_string">"test content"</span>);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SeeOtherRoot(<span class="jxr_string">"test content"</span>);
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertNotNull(x);
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Test <strong class="jxr_keyword">void</strong> a03_fluentSetters() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		SeeOtherRoot x = <strong class="jxr_keyword">new</strong> SeeOtherRoot();
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SeeOtherRoot();
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<em class="jxr_comment">// Test setContent(String) returns same instance</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertSame(x, x.setContent(<span class="jxr_string">"test content"</span>));
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertEquals(<span class="jxr_string">"value1"</span>, x.getFirstHeader(<span class="jxr_string">"X-Header1"</span>).getValue());
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<em class="jxr_comment">// Test setHeaders(HeaderList) returns same instance</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		HeaderList headers = HeaderList.of(BasicHeader.of(<span class="jxr_string">"X-Header2"</span>, <span class="jxr_string">"value2"</span>));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> headers = HeaderList.of(BasicHeader.of(<span class="jxr_string">"X-Header2"</span>, <span class="jxr_string">"value2"</span>));
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertSame(x, x.setHeaders(headers));
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<em class="jxr_comment">// Test setHeaders2(Header...) returns same instance</em>
@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	@Test <strong class="jxr_keyword">void</strong> a06_copy() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<em class="jxr_comment">// Test that copy() returns correct type</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		SeeOtherRoot x = <strong class="jxr_keyword">new</strong> SeeOtherRoot();
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SeeOtherRoot();
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		SeeOtherRoot copy = x.copy();
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 

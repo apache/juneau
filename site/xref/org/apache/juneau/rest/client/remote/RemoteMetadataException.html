@@ -46,7 +46,7 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String getMessage(Class&lt;?&gt; c, Method m, String msg) {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"Invalid remote definition found on class "</span>).append(c.getName());
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"Invalid remote definition found on class "</span>).append(c.getName());
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">if</strong> (nn(m))
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  			sb.append(<span class="jxr_string">" on method "</span>).append(m.getName());
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		sb.append(<span class="jxr_string">". "</span>).append(msg);

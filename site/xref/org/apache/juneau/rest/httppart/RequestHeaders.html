@@ -339,7 +339,7 @@
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="RequestHeader" href="../../../../../org/apache/juneau/rest/httppart/RequestHeader.html#RequestHeader">RequestHeader</a>(req, name, <strong class="jxr_keyword">null</strong>).parser(parser);
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">if</strong> (l.size() == 1)
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">return</strong> l.get(0);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = l.size(); i &lt; j; i++) {
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<strong class="jxr_keyword">if</strong> (i &gt; 0)
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 				sb.append(<span class="jxr_string">", "</span>);
@@ -495,7 +495,7 @@
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : getNames())
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 			m.put(n, get(n).asString().orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">return</strong> m.asJson();

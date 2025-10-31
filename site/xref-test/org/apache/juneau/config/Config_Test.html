@@ -452,7 +452,7 @@
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		assertInstanceOf(String.<strong class="jxr_keyword">class</strong>, a1.keySet().iterator().next());
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 		assertInstanceOf(Integer.<strong class="jxr_keyword">class</strong>, a1.values().iterator().next());
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		List&lt;Map&lt;String,Integer&gt;&gt; a2a = (List&lt;Map&lt;String,Integer&gt;&gt;) c.get(<span class="jxr_string">"a2"</span>).as(List.<strong class="jxr_keyword">class</strong>, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>).get();
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">var</strong> a2a = (List&lt;Map&lt;String,Integer&gt;&gt;) c.get(<span class="jxr_string">"a2"</span>).as(List.<strong class="jxr_keyword">class</strong>, Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>).get();
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 		assertJson(<span class="jxr_string">"[{foo:123}]"</span>, a2a);
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 		assertInstanceOf(String.<strong class="jxr_keyword">class</strong>, a2a.get(0).keySet().iterator().next());
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 		assertInstanceOf(Integer.<strong class="jxr_keyword">class</strong>, a2a.get(0).values().iterator().next());

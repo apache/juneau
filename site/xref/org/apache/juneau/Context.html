@@ -517,7 +517,7 @@
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">		 * @return &lt;jk&gt;true&lt;/jk&gt; if any of the annotations/appliers can be applied to this builder.</em>
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canApply(<a name="AnnotationWorkList" href="../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> work) {
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			Flag f = Flag.create();
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<strong class="jxr_keyword">var</strong> f = Flag.create();
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 			work.forEach(x -&gt; builders.forEach(b -&gt; f.setIf(x.canApply(b))));
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">return</strong> f.isSet();
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 		}
@@ -737,7 +737,7 @@
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 			<strong class="jxr_keyword">if</strong> (mi == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 				ClassInfo c = ClassInfo.of(type);
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 				<strong class="jxr_keyword">var</strong> c = ClassInfo.of(type);
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ci : c.getPublicConstructors()) {
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 					<strong class="jxr_keyword">if</strong> (ci.matches(x -&gt; x.hasNumParams(1) &amp;&amp; ! x.getParam(0).getParameterType().is(type))) {
 <a class="jxr_linenumber" name="L735" href="#L735">735</a> 						<em class="jxr_comment">// @formatter:off</em>
@@ -756,7 +756,7 @@
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Could not find builder create method on class {0}"</span>, cn(type));
 <a class="jxr_linenumber" name="L749" href="#L749">749</a> 				BUILDER_CREATE_METHODS.put(type, mi);
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 			}
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 			Builder b = (Builder)mi.invoke(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 			<strong class="jxr_keyword">var</strong> b = (Builder)mi.invoke(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 			b.type(type);
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 			<strong class="jxr_keyword">return</strong> b;
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
@@ -789,7 +789,7 @@
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 		annotations.forEach(a -&gt; {
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 				ClassInfo ci = ClassInfo.of(a.getClass());
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 				<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(a.getClass());
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 				MethodInfo mi = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"onClass"</span>));
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 				<strong class="jxr_keyword">if</strong> (nn(mi)) {

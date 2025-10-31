@@ -394,7 +394,7 @@
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">if</strong> (hint == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 			hint = session.getClassMeta(Instant.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		Class&lt;? <strong class="jxr_keyword">extends</strong> Temporal&gt; tc = (Class&lt;? <strong class="jxr_keyword">extends</strong> Temporal&gt;)hint.getInnerClass();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<strong class="jxr_keyword">var</strong> tc = (Class&lt;? <strong class="jxr_keyword">extends</strong> Temporal&gt;)hint.getInnerClass();
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 		ZoneId offset = session.getTimeZoneId();
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 

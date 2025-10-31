@@ -469,7 +469,7 @@
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">if</strong> (authorityPath == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 			String scheme = <strong class="jxr_keyword">inner</strong>.getScheme();
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 			<strong class="jxr_keyword">int</strong> port = <strong class="jxr_keyword">inner</strong>.getServerPort();
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(<strong class="jxr_keyword">inner</strong>.getScheme()).append(<span class="jxr_string">"://"</span>).append(<strong class="jxr_keyword">inner</strong>.getServerName());
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<strong class="jxr_keyword">inner</strong>.getScheme()).append(<span class="jxr_string">"://"</span>).append(<strong class="jxr_keyword">inner</strong>.getServerName());
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 			<strong class="jxr_keyword">if</strong> (! (port == 80 &amp;&amp; <span class="jxr_string">"http"</span>.equals(scheme) || port == 443 &amp;&amp; <span class="jxr_string">"https"</span>.equals(scheme)))
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 				sb.append(':').append(port);
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			authorityPath = sb.toString();
@@ -858,7 +858,7 @@
 <a class="jxr_linenumber" name="L850" href="#L850">850</a> 		<strong class="jxr_keyword">var</strong> best = <strong class="jxr_keyword">inner</strong>.getLocale();
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> 		<strong class="jxr_keyword">var</strong> h = headers.get(<span class="jxr_string">"Accept-Language"</span>).asString().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 		<strong class="jxr_keyword">if</strong> (nn(h)) {
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 			StringRanges sr = StringRanges.of(h);
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 			<strong class="jxr_keyword">var</strong> sr = StringRanges.of(h);
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 			<strong class="jxr_keyword">float</strong> qValue = 0;
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : sr.toList()) {
 <a class="jxr_linenumber" name="L856" href="#L856">856</a> 				<strong class="jxr_keyword">if</strong> (r.getQValue() &gt; qValue) {
@@ -1168,7 +1168,7 @@
 <a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T getRequest(<strong class="jxr_keyword">final</strong> <a name="RequestBeanMeta" href="../../../../org/apache/juneau/httppart/bean/RequestBeanMeta.html#RequestBeanMeta">RequestBeanMeta</a> rbm) {
 <a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 			Class&lt;T&gt; c = (Class&lt;T&gt;)rbm.getClassMeta().getInnerClass();
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 			<strong class="jxr_keyword">var</strong> c = (Class&lt;T&gt;)rbm.getClassMeta().getInnerClass();
 <a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 			<strong class="jxr_keyword">final</strong> BeanSession bs = getBeanSession();
 <a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 			<strong class="jxr_keyword">final</strong> BeanMeta&lt;T&gt; bm = bs.getBeanMeta(c);
 <a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -&gt; {
@@ -1298,7 +1298,7 @@
 <a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 	<strong class="jxr_keyword">public</strong> URI getUri(<strong class="jxr_keyword">boolean</strong> includeQuery, Map&lt;String,Object&gt; addQueryParams) {
 <a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 		<strong class="jxr_keyword">var</strong> uri = <strong class="jxr_keyword">inner</strong>.getRequestURI();
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 		<strong class="jxr_keyword">if</strong> (includeQuery || nn(addQueryParams)) {
-<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 			StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(uri);
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(uri);
 <a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 			RequestQueryParams rq = <strong class="jxr_keyword">this</strong>.queryParams.copy();
 <a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 			<strong class="jxr_keyword">if</strong> (nn(addQueryParams))
 <a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : addQueryParams.entrySet())

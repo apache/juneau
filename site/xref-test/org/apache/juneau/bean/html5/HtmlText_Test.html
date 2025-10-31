@@ -33,12 +33,12 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">class</strong> <a name="HtmlText_Test" href="../../../../../org/apache/juneau/bean/html5/HtmlText_Test.html#HtmlText_Test">HtmlText_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() {
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		HtmlText x = <strong class="jxr_keyword">new</strong> HtmlText(<span class="jxr_string">"test content"</span>);
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> HtmlText(<span class="jxr_string">"test content"</span>);
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  		assertString(<span class="jxr_string">"test content"</span>, x);
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	}
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	@Test <strong class="jxr_keyword">void</strong> a02_<strong class="jxr_keyword">null</strong>() {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		HtmlText x = <strong class="jxr_keyword">new</strong> HtmlText(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> HtmlText(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertNull(x.toString());
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	}
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  }

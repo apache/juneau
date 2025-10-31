@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">class</strong> <a name="BasicRuntimeException_Test" href="../../../org/apache/juneau/BasicRuntimeException_Test.html#BasicRuntimeException_Test">BasicRuntimeException_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	@Test <strong class="jxr_keyword">void</strong> a01_BeanRuntimeException_fluentSetters() {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		BeanRuntimeException x = <strong class="jxr_keyword">new</strong> BeanRuntimeException(<span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> BeanRuntimeException(<span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	}
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@Test <strong class="jxr_keyword">void</strong> a02_ClassMetaRuntimeException_fluentSetters() {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		ClassMetaRuntimeException x = <strong class="jxr_keyword">new</strong> ClassMetaRuntimeException(<span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> ClassMetaRuntimeException(<span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	@Test <strong class="jxr_keyword">void</strong> a03_ConfigException_fluentSetters() {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		ConfigException x = <strong class="jxr_keyword">new</strong> ConfigException(<span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> ConfigException(<span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Test <strong class="jxr_keyword">void</strong> a04_ContextRuntimeException_fluentSetters() {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		ContextRuntimeException x = <strong class="jxr_keyword">new</strong> ContextRuntimeException(<span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> ContextRuntimeException(<span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_comment">//	}</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Test <strong class="jxr_keyword">void</strong> a06_InvalidAnnotationException_fluentSetters() {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		InvalidAnnotationException x = <strong class="jxr_keyword">new</strong> InvalidAnnotationException(<span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> InvalidAnnotationException(<span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a07_InvalidDataConversionException_fluentSetters() {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		InvalidDataConversionException x = <strong class="jxr_keyword">new</strong> InvalidDataConversionException(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> InvalidDataConversionException(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -124,7 +124,7 @@
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Test <strong class="jxr_keyword">void</strong> a08_ObjectRestException_fluentSetters() {
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		ObjectRestException x = <strong class="jxr_keyword">new</strong> ObjectRestException(404, <span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> ObjectRestException(404, <span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> a09_ParseException_fluentSetters() {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		ParseException x = <strong class="jxr_keyword">new</strong> ParseException(<span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> ParseException(<span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	}
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	@Test <strong class="jxr_keyword">void</strong> a10_PatternException_fluentSetters() {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		PatternException x = <strong class="jxr_keyword">new</strong> PatternException(<span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> PatternException(<span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -160,7 +160,7 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 	@Test <strong class="jxr_keyword">void</strong> a11_RemoteMetadataException_fluentSetters() {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		RemoteMetadataException x = <strong class="jxr_keyword">new</strong> RemoteMetadataException((Throwable)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> RemoteMetadataException((Throwable)<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Test <strong class="jxr_keyword">void</strong> a12_SerializeException_fluentSetters() {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		SerializeException x = <strong class="jxr_keyword">new</strong> SerializeException(<span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SerializeException(<span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));
@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	@Test <strong class="jxr_keyword">void</strong> a13_VarResolverException_fluentSetters() {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		VarResolverException x = <strong class="jxr_keyword">new</strong> VarResolverException(<span class="jxr_string">"Original message"</span>);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> VarResolverException(<span class="jxr_string">"Original message"</span>);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<em class="jxr_comment">// Test setMessage returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertSame(x, x.setMessage(<span class="jxr_string">"New message"</span>));

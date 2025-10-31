@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	@Test
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">void</strong> c05_ifPresent() {
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> v = BooleanValue.of(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		v.ifPresent(x -&gt; sb.append(x));
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(<span class="jxr_string">"true"</span>, sb.toString());
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}

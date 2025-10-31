@@ -346,7 +346,7 @@
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception can be thrown.</em>
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> script(<a name="HtmlDocSerializerSession" href="../../../../org/apache/juneau/html/HtmlDocSerializerSession.html#HtmlDocSerializerSession">HtmlDocSerializerSession</a> session, <a name="HtmlWriter" href="../../../../org/apache/juneau/html/HtmlWriter.html#HtmlWriter">HtmlWriter</a> w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		Flag addSpace = Flag.create();
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">var</strong> addSpace = Flag.create();
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getScript())
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); <em class="jxr_comment">// Must always append a newline even if whitespace disabled!</em>
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 		session.forEachWidget(x -&gt; {
@@ -363,7 +363,7 @@
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception can be thrown.</em>
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> style(<a name="HtmlDocSerializerSession" href="../../../../org/apache/juneau/html/HtmlDocSerializerSession.html#HtmlDocSerializerSession">HtmlDocSerializerSession</a> session, <a name="HtmlWriter" href="../../../../org/apache/juneau/html/HtmlWriter.html#HtmlWriter">HtmlWriter</a> w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		Flag addSpace = Flag.create();
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">var</strong> addSpace = Flag.create();
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getStylesheet())
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 			w.sIf(addSpace.getAndSet()).append(3, <span class="jxr_string">"@import "</span>).q().append(session.resolveUri(session.resolve(s))).q().appendln(<span class="jxr_string">";"</span>);
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">if</strong> (session.isNowrap())

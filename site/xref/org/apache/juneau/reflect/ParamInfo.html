@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 				<strong class="jxr_keyword">if</strong> (type.isInstance(a2) &amp;&amp; test(filter, type.<strong class="jxr_keyword">cast</strong>(a2)))
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 					<strong class="jxr_keyword">return</strong> (A)a2;
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			MethodInfo mi = (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)eInfo;
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">var</strong> mi = (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)eInfo;
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			A o = ci.getAnnotation(type, filter);
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">if</strong> (nn(o))
@@ -321,7 +321,7 @@
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 					<strong class="jxr_keyword">return</strong> type.<strong class="jxr_keyword">cast</strong>(a2);
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">return</strong> eInfo.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotation(type);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		}
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		MethodInfo mi = (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)eInfo;
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> mi = (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)eInfo;
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		Value&lt;A&gt; v = Value.empty();
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		mi.forEachMatchingParentFirst(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; x.forEachParameterAnnotation(index, type, y -&gt; <strong class="jxr_keyword">true</strong>, y -&gt; v.set(y)));
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">return</strong> v.orElseGet(() -&gt; eInfo.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotation(type));
@@ -336,7 +336,7 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 				<strong class="jxr_keyword">if</strong> (a.isInstance(a2))
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 					consumeIf(filter, action, a.<strong class="jxr_keyword">cast</strong>(a2));
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			MethodInfo mi = (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)eInfo;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">var</strong> mi = (<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)eInfo;
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			ci.forEachAnnotation(ap, a, filter, action);
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 			mi.forEachMatchingParentFirst(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; x.forEachParameterAnnotation(index, a, filter, action));

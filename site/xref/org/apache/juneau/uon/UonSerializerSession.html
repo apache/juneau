@@ -244,7 +244,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 						<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 				}
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			}
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			StringWriter w = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">var</strong> w = <strong class="jxr_keyword">new</strong> StringWriter();
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), <span class="jxr_string">"root"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">return</strong> w.toString();
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -261,7 +261,7 @@
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 			out.append('(');
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		Flag addComma = Flag.create();
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">var</strong> addComma = Flag.create();
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (nn(typeName)) {
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
@@ -302,7 +302,7 @@
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			out.append('@').append('(');
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		Flag addComma = Flag.create();
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> addComma = Flag.create();
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		forEachEntry(c, x -&gt; {
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 			addComma.ifSet(() -&gt; out.append(',')).set();
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			out.cr(indent);
@@ -324,7 +324,7 @@
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">if</strong> (! plainTextParams)
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 			out.append('(');
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		Flag addComma = Flag.create();
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> addComma = Flag.create();
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		forEachEntry(m, x -&gt; {
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 			addComma.ifSet(() -&gt; out.append(',')).set();
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 			Object value = x.getValue();
@@ -376,7 +376,7 @@
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 		Object output = out.getRawOutput();
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">if</strong> (output instanceof <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>)
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">return</strong> (<a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>)output;
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		UonWriter w = <strong class="jxr_keyword">new</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>(<strong class="jxr_keyword">this</strong>, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> w = <strong class="jxr_keyword">new</strong> <a name="UonWriter" href="../../../../org/apache/juneau/uon/UonWriter.html#UonWriter">UonWriter</a>(<strong class="jxr_keyword">this</strong>, out.getWriter(), isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 		out.setWriter(w);
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">return</strong> w;
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}

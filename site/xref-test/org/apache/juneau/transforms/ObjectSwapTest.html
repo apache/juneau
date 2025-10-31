@@ -83,7 +83,7 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> doTest() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		SerializerSet s = SerializerSet.create()
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> s = SerializerSet.create()
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.add(JsonSerializer.<strong class="jxr_keyword">class</strong>, XmlSerializer.<strong class="jxr_keyword">class</strong>, HtmlSerializer.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			.forEach(WriterSerializer.Builder.<strong class="jxr_keyword">class</strong>, Builder::sq)
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			.forEach(Serializer.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.swaps(MyJsonSwap.<strong class="jxr_keyword">class</strong>, MyXmlSwap.<strong class="jxr_keyword">class</strong>, MyOtherSwap.<strong class="jxr_keyword">class</strong>))

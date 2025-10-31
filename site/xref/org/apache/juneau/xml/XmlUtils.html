@@ -338,7 +338,7 @@
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">if</strong> (! needsTextEncoding(s))
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 				<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> len = s.length();
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			StringWriter sw = <strong class="jxr_keyword">new</strong> StringWriter(s.length() * 2);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">var</strong> sw = <strong class="jxr_keyword">new</strong> StringWriter(s.length() * 2);
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; len; i++) {
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 				<strong class="jxr_keyword">char</strong> c = s.charAt(i);
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 				<strong class="jxr_keyword">if</strong> ((i == 0 || i == len - 1) &amp;&amp; Character.isWhitespace(c))

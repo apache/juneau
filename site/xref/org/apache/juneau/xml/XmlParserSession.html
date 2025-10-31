@@ -781,8 +781,8 @@
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 			eType = (ClassMeta&lt;T&gt;)object();
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		ObjectSwap&lt;T,Object&gt; swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		BuilderSwap&lt;T,Object&gt; builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 		ClassMeta&lt;?&gt; sType = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">if</strong> (nn(builder))
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 			sType = builder.getBuilderClassMeta(<strong class="jxr_keyword">this</strong>);
@@ -825,7 +825,7 @@
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">if</strong> (sType.isObject()) {
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 			<strong class="jxr_keyword">if</strong> (jsonType == OBJECT) {
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> 				JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 				<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> 				parseIntoMap(r, m, string(), object(), pMeta);
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> 				<strong class="jxr_keyword">if</strong> (nn(wrapperAttr))
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 					m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>).append(wrapperAttr, m);
@@ -874,12 +874,12 @@
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> 				o = nn(builder) ? builder.build(<strong class="jxr_keyword">this</strong>, m.getBean(), eType) : m.getBean();
 <a class="jxr_linenumber" name="L867" href="#L867">867</a> 			}
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.isArray() || sType.isArgs()) {
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> 			ArrayList l = (ArrayList)parseIntoCollection(r, list(), sType, pMeta);
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 			<strong class="jxr_keyword">var</strong> l = (ArrayList)parseIntoCollection(r, list(), sType, pMeta);
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> 			o = toArray(sType, l);
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sType.canCreateNewInstanceFromString(<strong class="jxr_keyword">outer</strong>)) {
 <a class="jxr_linenumber" name="L872" href="#L872">872</a> 			o = sType.newInstanceFromString(<strong class="jxr_keyword">outer</strong>, getElementText(r));
 <a class="jxr_linenumber" name="L873" href="#L873">873</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (nn(sType.getProxyInvocationHandler())) {
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> 			JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 			<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> 			parseIntoMap(r, m, string(), object(), pMeta);
 <a class="jxr_linenumber" name="L876" href="#L876">876</a> 			<strong class="jxr_keyword">if</strong> (nn(wrapperAttr))
 <a class="jxr_linenumber" name="L877" href="#L877">877</a> 				m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>).append(wrapperAttr, m);

@@ -225,7 +225,7 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * @return The underlying executable name.</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String getFullName() {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		ClassInfo dc = declaringClass;
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		Package p = dc.getPackage();
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">if</strong> (nn(p))
@@ -361,7 +361,7 @@
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * @return The underlying executable name.</em>
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String getShortName() {
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(64);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(64);
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 		sb.append(getSimpleName()).append('(');
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 		Class&lt;?&gt;[] pt = _getRawParamTypes();
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pt.length; i++) {

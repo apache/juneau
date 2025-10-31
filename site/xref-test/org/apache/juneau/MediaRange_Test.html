@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<em class="jxr_comment">// Test basic MediaRange creation</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		HeaderElement element = BasicHeaderValueParser.parseHeaderElement(<span class="jxr_string">"text/html;charset=UTF-8;q=0.9"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		MediaRange x = <strong class="jxr_keyword">new</strong> MediaRange(element);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> MediaRange(element);
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertEquals(<span class="jxr_string">"text"</span>, x.getType());
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertEquals(<span class="jxr_string">"html"</span>, x.getSubType());
@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<em class="jxr_comment">// Test that forEachParameter returns MediaRange for fluent chaining</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		HeaderElement element = BasicHeaderValueParser.parseHeaderElement(<span class="jxr_string">"text/html;charset=UTF-8;level=1"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		MediaRange x = <strong class="jxr_keyword">new</strong> MediaRange(element);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> MediaRange(element);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<em class="jxr_comment">// Test fluent chaining</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		List&lt;String&gt; names = list();
@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<em class="jxr_comment">// Test that forEachParameter properly iterates parameters</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		HeaderElement element = BasicHeaderValueParser.parseHeaderElement(<span class="jxr_string">"application/json;charset=UTF-8;version=2"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		MediaRange x = <strong class="jxr_keyword">new</strong> MediaRange(element);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> MediaRange(element);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<em class="jxr_comment">// Collect all parameter values</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> params = <strong class="jxr_keyword">new</strong> HashMap&lt;String, String&gt;();
@@ -86,7 +86,7 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<em class="jxr_comment">// Test with no parameters</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		HeaderElement element = BasicHeaderValueParser.parseHeaderElement(<span class="jxr_string">"text/plain"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		MediaRange x = <strong class="jxr_keyword">new</strong> MediaRange(element);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> MediaRange(element);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<em class="jxr_comment">// Should not throw exception with empty parameters</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">int</strong>[] count = {0};
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<em class="jxr_comment">// Test chaining forEachParameter multiple times</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		HeaderElement element = BasicHeaderValueParser.parseHeaderElement(<span class="jxr_string">"text/html;charset=UTF-8;level=1"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		MediaRange x = <strong class="jxr_keyword">new</strong> MediaRange(element);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> MediaRange(element);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<em class="jxr_comment">// Chain multiple calls</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		List&lt;String&gt; names1 = list();
@@ -119,7 +119,7 @@
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<em class="jxr_comment">// Test that both forEachParameter and forEachExtension APIs work</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		HeaderElement element = BasicHeaderValueParser.parseHeaderElement(<span class="jxr_string">"text/html;q=0.9"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		MediaRange x = <strong class="jxr_keyword">new</strong> MediaRange(element);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> MediaRange(element);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<em class="jxr_comment">// Test that forEachParameter can be called (returns MediaRange)</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		MediaRange result = x.forEachParameter(p -&gt; {});

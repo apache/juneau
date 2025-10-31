@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		msg = String.valueOf(msg);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">if</strong> (args.length == 0)
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">return</strong> msg;
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">int</strong> start = 0;
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> arg : args) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">int</strong> bi = msg.indexOf(<span class="jxr_string">"{}"</span>, start);
@@ -555,7 +555,7 @@
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 * @param thrown The throwable to log, or &lt;jk&gt;null&lt;/jk&gt; if none.</em>
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> log(Level level, String msg, Throwable thrown) {
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		LogRecord r = <strong class="jxr_keyword">new</strong> LogRecord(level, msg);
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> LogRecord(level, msg);
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">if</strong> (nn(thrown))
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 			r.setThrown(thrown);
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 		r.setLoggerName(logger.getName());

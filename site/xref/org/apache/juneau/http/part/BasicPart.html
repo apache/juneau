@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the {@link #cast(Object)} method can be used on the specified object.</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> canCast(Object o) {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		ClassInfo ci = ClassInfo.of(o);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(o);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">return</strong> nn(ci) &amp;&amp; ci.isChildOfAny(Headerable.<strong class="jxr_keyword">class</strong>, NameValuePair.<strong class="jxr_keyword">class</strong>, NameValuePairable.<strong class="jxr_keyword">class</strong>, Map.Entry.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  

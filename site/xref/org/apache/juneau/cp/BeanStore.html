@@ -122,7 +122,7 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<strong class="jxr_keyword">if</strong> (type == <strong class="jxr_keyword">null</strong> || type == BeanStore.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			ClassInfo c = ClassInfo.of(type);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">var</strong> c = ClassInfo.of(type);
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 			MethodInfo m = c.getDeclaredMethod(
@@ -475,7 +475,7 @@
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; beanType) {
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.read()) {
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			BeanStoreEntry&lt;T&gt; e = (BeanStoreEntry&lt;T&gt;)unnamedEntries.get(beanType);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			<strong class="jxr_keyword">var</strong> e = (BeanStoreEntry&lt;T&gt;)unnamedEntries.get(beanType);
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 			<strong class="jxr_keyword">if</strong> (nn(e))
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 				<strong class="jxr_keyword">return</strong> opt(e.get());
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 			<strong class="jxr_keyword">if</strong> (parent.isPresent())
@@ -495,7 +495,7 @@
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; beanType, String name) {
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 		<strong class="jxr_keyword">try</strong> (<a name="SimpleLock" href="../../../../org/apache/juneau/common/utils/SimpleLock.html#SimpleLock">SimpleLock</a> x = lock.read()) {
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			BeanStoreEntry&lt;T&gt; e = (BeanStoreEntry&lt;T&gt;)entries.stream().filter(x2 -&gt; x2.matches(beanType, name)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			<strong class="jxr_keyword">var</strong> e = (BeanStoreEntry&lt;T&gt;)entries.stream().filter(x2 -&gt; x2.matches(beanType, name)).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 			<strong class="jxr_keyword">if</strong> (nn(e))
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 				<strong class="jxr_keyword">return</strong> opt(e.get());
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 			<strong class="jxr_keyword">if</strong> (parent.isPresent())

@@ -299,7 +299,7 @@
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 	@Override <em class="jxr_comment">/* Overridden from SerializerSession */</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String serialize(Object o) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		StringWriter w = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">var</strong> w = <strong class="jxr_keyword">new</strong> StringWriter();
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			serialize(o, w);
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {

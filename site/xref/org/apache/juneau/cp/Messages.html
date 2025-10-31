@@ -291,7 +291,7 @@
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 		ResourceBundle getBundle() {
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			ClassLoader cl = forClass.getClassLoader();
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			JsonMap m = JsonMap.of(<span class="jxr_string">"name"</span>, name, <span class="jxr_string">"package"</span>, forClass.getPackage().getName());
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">var</strong> m = JsonMap.of(<span class="jxr_string">"name"</span>, name, <span class="jxr_string">"package"</span>, forClass.getPackage().getName());
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bn : baseNames) {
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 				bn = StringUtils.replaceVars(bn, m);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 				ResourceBundle rb = findBundle(bn, locale, cl);
@@ -479,7 +479,7 @@
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(keySet()))
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 			m.put(k, getString(k));
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">return</strong> Json5.of(m);

@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">public</strong> Builder pathVars(Map&lt;String,String&gt; value) {
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">if</strong> (nn(value) &amp;&amp; ! value.isEmpty()) {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				Map&lt;String,String&gt; m = (Map&lt;String,String&gt;)req.getAttribute(REST_PATHVARS_ATTR);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				<strong class="jxr_keyword">var</strong> m = (Map&lt;String,String&gt;)req.getAttribute(REST_PATHVARS_ATTR);
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 				<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 					m = <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 					req.setAttribute(REST_PATHVARS_ATTR, m);
@@ -379,7 +379,7 @@
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,String&gt; getPathVars() {
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		Map&lt;String,String&gt; m = (Map&lt;String,String&gt;)req.getAttribute(REST_PATHVARS_ATTR);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">var</strong> m = (Map&lt;String,String&gt;)req.getAttribute(REST_PATHVARS_ATTR);
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">return</strong> m == <strong class="jxr_keyword">null</strong> ? Collections.emptyMap() : m;
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 	}
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 

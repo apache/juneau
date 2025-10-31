@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <a name="PartBeanMeta" href="../../../../../org/apache/juneau/http/part/PartBeanMeta.html#PartBeanMeta">PartBeanMeta</a>(Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">this</strong>.type = type;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		ClassInfo ci = ClassInfo.of(type);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(type);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		ConstructorInfo cci = ci.getPublicConstructor(x -&gt; x.hasParamTypes(String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">if</strong> (cci == <strong class="jxr_keyword">null</strong>)

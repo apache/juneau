@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		Object output = out.getRawOutput();
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">if</strong> (output instanceof <a name="MsgPackOutputStream" href="../../../../org/apache/juneau/msgpack/MsgPackOutputStream.html#MsgPackOutputStream">MsgPackOutputStream</a>)
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">return</strong> (<a name="MsgPackOutputStream" href="../../../../org/apache/juneau/msgpack/MsgPackOutputStream.html#MsgPackOutputStream">MsgPackOutputStream</a>)output;
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		MsgPackOutputStream os = <strong class="jxr_keyword">new</strong> <a name="MsgPackOutputStream" href="../../../../org/apache/juneau/msgpack/MsgPackOutputStream.html#MsgPackOutputStream">MsgPackOutputStream</a>(out.getOutputStream());
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> os = <strong class="jxr_keyword">new</strong> <a name="MsgPackOutputStream" href="../../../../org/apache/juneau/msgpack/MsgPackOutputStream.html#MsgPackOutputStream">MsgPackOutputStream</a>(out.getOutputStream());
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		out.setOutputStream(os);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">return</strong> os;
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
@@ -311,7 +311,7 @@
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 				onBeanGetterException(pMeta, thrown);
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 			}
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			BeanPropertyValue p = <strong class="jxr_keyword">new</strong> <a name="BeanPropertyValue" href="../../../../org/apache/juneau/BeanPropertyValue.html#BeanPropertyValue">BeanPropertyValue</a>(pMeta, key, value, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">new</strong> <a name="BeanPropertyValue" href="../../../../org/apache/juneau/BeanPropertyValue.html#BeanPropertyValue">BeanPropertyValue</a>(pMeta, key, value, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 			<strong class="jxr_keyword">if</strong> ((! isKeepNullProperties()) &amp;&amp; willRecurse(p)) {
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 				<strong class="jxr_keyword">return</strong>; <em class="jxr_comment">// Must handle the case where recursion occurs and property is not serialized.</em>

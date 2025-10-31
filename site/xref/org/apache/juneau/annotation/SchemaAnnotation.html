@@ -1410,7 +1410,7 @@
 <a class="jxr_linenumber" name="L1402" href="#L1402">1402</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> asMap(Schema a) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
 <a class="jxr_linenumber" name="L1403" href="#L1403">1403</a> 		<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1404" href="#L1404">1404</a> 			<strong class="jxr_keyword">return</strong> JsonMap.EMPTY_MAP;
-<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> 		JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L1406" href="#L1406">1406</a> 		<strong class="jxr_keyword">if</strong> (SchemaAnnotation.empty(a))
 <a class="jxr_linenumber" name="L1407" href="#L1407">1407</a> 			<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;

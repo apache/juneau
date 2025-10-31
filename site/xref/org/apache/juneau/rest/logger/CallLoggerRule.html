@@ -390,7 +390,7 @@
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">if</strong> (nn(statusFilter) &amp;&amp; ! statusFilter.test(res.getStatus()))
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		Throwable e = (Throwable)req.getAttribute(<span class="jxr_string">"Exception"</span>);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">var</strong> e = (Throwable)req.getAttribute(<span class="jxr_string">"Exception"</span>);
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">if</strong> (nn(e) &amp;&amp; nn(exceptionFilter) &amp;&amp; ! exceptionFilter.test(e))
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 

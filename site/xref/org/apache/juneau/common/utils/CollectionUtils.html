@@ -1232,7 +1232,7 @@
 <a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 			<strong class="jxr_keyword">return</strong> newElements;
 <a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 		<strong class="jxr_keyword">if</strong> (newElements.length == 0)
 <a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 			<strong class="jxr_keyword">return</strong> array;
-<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 		T[] a = (T[])Array.newInstance(array.getClass().getComponentType(), array.length + newElements.length);
+<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 		<strong class="jxr_keyword">var</strong> a = (T[])Array.newInstance(array.getClass().getComponentType(), array.length + newElements.length);
 <a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; array.length; i++)
 <a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 			a[i] = array[i];
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; newElements.length; i++)
@@ -1306,7 +1306,7 @@
 <a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 		}
 <a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 		<strong class="jxr_keyword">if</strong> (a1 == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 		E[] a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
+<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 		<strong class="jxr_keyword">var</strong> a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
 <a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 		<strong class="jxr_keyword">int</strong> i = 0;
 <a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> aa : arrays)
 <a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 			<strong class="jxr_keyword">if</strong> (nn(aa))
@@ -1552,7 +1552,7 @@
 <a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; E[] array(Collection&lt;E&gt; value, Class&lt;E&gt; componentType) {
 <a class="jxr_linenumber" name="L1545" href="#L1545">1545</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1546" href="#L1546">1546</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> 		E[] array = (E[])Array.newInstance(componentType, value.size());
+<a class="jxr_linenumber" name="L1547" href="#L1547">1547</a> 		<strong class="jxr_keyword">var</strong> array = (E[])Array.newInstance(componentType, value.size());
 <a class="jxr_linenumber" name="L1548" href="#L1548">1548</a> 		<strong class="jxr_keyword">return</strong> value.toArray(array);
 <a class="jxr_linenumber" name="L1549" href="#L1549">1549</a> 	}
 <a class="jxr_linenumber" name="L1550" href="#L1550">1550</a> 

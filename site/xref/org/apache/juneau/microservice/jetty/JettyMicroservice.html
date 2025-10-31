@@ -492,7 +492,7 @@
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException if {@link #createServer()} has not previously been called.</em>
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 	<strong class="jxr_keyword">public</strong> <a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> addServlet(Servlet servlet, String pathSpec) {
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		ServletHolder sh = <strong class="jxr_keyword">new</strong> ServletHolder(servlet);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">var</strong> sh = <strong class="jxr_keyword">new</strong> ServletHolder(servlet);
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<strong class="jxr_keyword">if</strong> (nn(pathSpec) &amp;&amp; ! pathSpec.endsWith(<span class="jxr_string">"/*"</span>))
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 			pathSpec = trimTrailingSlashes(pathSpec) + <span class="jxr_string">"/*"</span>;
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 		getServletContextHandler().addServlet(sh, pathSpec);
@@ -580,9 +580,9 @@
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : cf.get(<span class="jxr_string">"Jetty/servlets"</span>).asStringArray().orElse(<strong class="jxr_keyword">new</strong> String[0])) {
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 				ClassInfo c = ClassInfo.of(Class.forName(s));
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 				<strong class="jxr_keyword">var</strong> c = ClassInfo.of(Class.forName(s));
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 				<strong class="jxr_keyword">if</strong> (c.isChildOf(RestServlet.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 					RestServlet rs = (<a name="RestServlet" href="../../../../../org/apache/juneau/rest/servlet/RestServlet.html#RestServlet">RestServlet</a>)c.newInstance();
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 					<strong class="jxr_keyword">var</strong> rs = (<a name="RestServlet" href="../../../../../org/apache/juneau/rest/servlet/RestServlet.html#RestServlet">RestServlet</a>)c.newInstance();
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 					addServlet(rs, rs.getPath());
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: {0}"</span>, s);
@@ -594,9 +594,9 @@
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 		cf.get(<span class="jxr_string">"Jetty/servletMap"</span>).asMap().orElse(EMPTY_MAP).forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				ClassInfo c = ClassInfo.of(Class.forName(v.toString()));
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				<strong class="jxr_keyword">var</strong> c = ClassInfo.of(Class.forName(v.toString()));
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 				<strong class="jxr_keyword">if</strong> (c.isChildOf(Servlet.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 					Servlet rs = (Servlet)c.newInstance();
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 					<strong class="jxr_keyword">var</strong> rs = (Servlet)c.newInstance();
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 					addServlet(rs, k);
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 				} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 					<strong class="jxr_keyword">throw</strong> runtimeException(<span class="jxr_string">"Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: {0}"</span>, cn(v));
@@ -754,7 +754,7 @@
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> stop() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<strong class="jxr_keyword">final</strong> Logger logger = getLogger();
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> 		<strong class="jxr_keyword">final</strong> <a name="Messages" href="../../../../../org/apache/juneau/cp/Messages.html#Messages">Messages</a> mb2 = messages;
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		Thread t = <strong class="jxr_keyword">new</strong> Thread(<span class="jxr_string">"JettyMicroserviceStop"</span>) {
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> Thread(<span class="jxr_string">"JettyMicroserviceStop"</span>) {
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 			@Override <em class="jxr_comment">/* Overridden from Thread */</em>
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() {
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 				<strong class="jxr_keyword">try</strong> {

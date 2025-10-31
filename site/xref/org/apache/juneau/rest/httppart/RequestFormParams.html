@@ -315,7 +315,7 @@
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * @return A new query string, or an empty string if this object is empty.</em>
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<strong class="jxr_keyword">public</strong> String asQueryString() {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : <strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">if</strong> (sb.length() &gt; 0)
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 				sb.append(<span class="jxr_string">"&amp;"</span>);
@@ -400,7 +400,7 @@
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="RequestFormParam" href="../../../../../org/apache/juneau/rest/httppart/RequestFormParam.html#RequestFormParam">RequestFormParam</a>(req, name, <strong class="jxr_keyword">null</strong>).parser(parser);
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">if</strong> (l.size() == 1)
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">return</strong> l.get(0);
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, j = l.size(); i &lt; j; i++) {
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">if</strong> (i &gt; 0)
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 				sb.append(<span class="jxr_string">", "</span>);
@@ -556,7 +556,7 @@
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : getNames())
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 			m.put(n, get(n).asString().orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">return</strong> m.asJson();

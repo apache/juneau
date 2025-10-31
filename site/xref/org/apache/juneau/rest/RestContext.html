@@ -5146,7 +5146,7 @@
 <a class="jxr_linenumber" name="L5138" href="#L5138">5138</a> 			<strong class="jxr_keyword">if</strong> (pathMatcher.hasVars() &amp;&amp; parentContext == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L5139" href="#L5139">5139</a> 				String sp = sb.req().getServletPath();
 <a class="jxr_linenumber" name="L5140" href="#L5140">5140</a> 				String pi = sb.getPathInfoUndecoded();
-<a class="jxr_linenumber" name="L5141" href="#L5141">5141</a> 				UrlPath upi2 = UrlPath.of(pi == <strong class="jxr_keyword">null</strong> ? sp : sp + pi);
+<a class="jxr_linenumber" name="L5141" href="#L5141">5141</a> 				<strong class="jxr_keyword">var</strong> upi2 = UrlPath.of(pi == <strong class="jxr_keyword">null</strong> ? sp : sp + pi);
 <a class="jxr_linenumber" name="L5142" href="#L5142">5142</a> 				UrlPathMatch uppm = pathMatcher.match(upi2);
 <a class="jxr_linenumber" name="L5143" href="#L5143">5143</a> 				<strong class="jxr_keyword">if</strong> (nn(uppm) &amp;&amp; ! uppm.hasEmptyVars()) {
 <a class="jxr_linenumber" name="L5144" href="#L5144">5144</a> 					sb.pathVars(uppm.getVars());

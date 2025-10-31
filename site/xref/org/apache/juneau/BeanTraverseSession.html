@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		String toString(<strong class="jxr_keyword">boolean</strong> simple) {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder().append('[').append(depth).append(']').append(' ');
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder().append('[').append(depth).append(']').append(' ');
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			sb.append(isEmpty(name) ? <span class="jxr_string">"&lt;noname&gt;"</span> : name).append(':');
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			sb.append(aType.toString(simple));
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">if</strong> (aType != aType.getSerializedClassMeta(BeanTraverseSession.<strong class="jxr_keyword">this</strong>))
@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * @return The current stack trace.</em>
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 	<strong class="jxr_keyword">protected</strong> String getStack(<strong class="jxr_keyword">boolean</strong> full) {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		stack.forEach(x -&gt; {
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<strong class="jxr_keyword">if</strong> (full) {
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 				sb.append(<span class="jxr_string">"\n\t"</span>);

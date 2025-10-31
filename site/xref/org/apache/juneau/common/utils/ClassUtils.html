@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertArg(gsc instanceof ParameterizedType, <span class="jxr_string">"Class ''{0}'' is not a parameterized type"</span>, scn(pt));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		ParameterizedType cpt = (ParameterizedType)gsc;
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> cpt = (ParameterizedType)gsc;
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		Type[] atArgs = cpt.getActualTypeArguments();
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertArg(index &lt; atArgs.length, <span class="jxr_string">"Invalid type index. index={0}, argsLength={1}"</span>, index, atArgs.length);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		Type actualType = cpt.getActualTypeArguments()[index];

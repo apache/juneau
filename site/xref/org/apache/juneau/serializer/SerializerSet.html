@@ -575,7 +575,7 @@
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">if</strong> (nn(sm))
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 			<strong class="jxr_keyword">return</strong> sm;
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		MediaRanges a = MediaRanges.of(acceptHeader);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">var</strong> a = MediaRanges.of(acceptHeader);
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">int</strong> match = a.match(mediaRangesList);
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">if</strong> (match &gt;= 0) {
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 			sm = <strong class="jxr_keyword">new</strong> <a name="SerializerMatch" href="../../../../org/apache/juneau/serializer/SerializerMatch.html#SerializerMatch">SerializerMatch</a>(mediaRanges[match], mediaTypeRangeSerializers[match]);

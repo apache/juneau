@@ -154,7 +154,7 @@
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 				c = s.impl();
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">if</strong> (isVoid(c))
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			ClassInfo ci = ClassInfo.of(c);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(c);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">if</strong> (ci.isChildOf(ObjectSwap.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				ObjectSwap ps = BeanCreator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(c).run();
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				<strong class="jxr_keyword">if</strong> (nn(ps.forMediaTypes()))
@@ -475,7 +475,7 @@
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			Object v = session.convertToType(value, elementType);
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 			<strong class="jxr_keyword">if</strong> (isCollection) {
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 				Collection c = (Collection)invokeGetter(bean, pName);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 				<strong class="jxr_keyword">var</strong> c = (Collection)invokeGetter(bean, pName);
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 				Collection c2 = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 				<strong class="jxr_keyword">if</strong> (nn(c)) {
@@ -561,7 +561,7 @@
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 			Object v = session.convertToType(value, elementType);
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">if</strong> (isMap) {
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 				Map map = (Map)invokeGetter(bean, pName);
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 				<strong class="jxr_keyword">var</strong> map = (Map)invokeGetter(bean, pName);
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 				<strong class="jxr_keyword">if</strong> (nn(map)) {
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 					map.put(key, v);
@@ -1112,8 +1112,8 @@
 <a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''"</span>, name, propertyClass.getName(), findClassName(value));
 <a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 					}
 <a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 
-<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 					Map valueMap = (Map)value;
-<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 					Map propMap = (Map)r;
+<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 					<strong class="jxr_keyword">var</strong> valueMap = (Map)value;
+<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 					<strong class="jxr_keyword">var</strong> propMap = (Map)r;
 <a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 					ClassMeta&lt;?&gt; valueType = rawTypeMeta.getValueType();
 <a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 
 <a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 					<em class="jxr_comment">// If the property type is abstract, then we either need to reuse the existing</em>
@@ -1127,7 +1127,7 @@
 <a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 
 <a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 							<strong class="jxr_keyword">if</strong> (propertyClass.isInstance(valueMap)) {
 <a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 								<strong class="jxr_keyword">if</strong> (! valueType.isObject()) {
-<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 									Flag needsConversion = Flag.create();
+<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 									<strong class="jxr_keyword">var</strong> needsConversion = Flag.create();
 <a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 									valueMap.forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 										<strong class="jxr_keyword">if</strong> (nn(v) &amp;&amp; ! valueType.getInnerClass().isInstance(v)) {
 <a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 											needsConversion.set();
@@ -1170,8 +1170,8 @@
 <a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(beanMeta.c, <span class="jxr_string">"Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''"</span>, name, propertyClass.getName(), findClassName(value));
 <a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 					}
 <a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 
-<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 					Collection valueList = (Collection)value;
-<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 					Collection propList = (Collection)r;
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 					<strong class="jxr_keyword">var</strong> valueList = (Collection)value;
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 					<strong class="jxr_keyword">var</strong> propList = (Collection)r;
 <a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 					ClassMeta elementType = rawTypeMeta.getElementType();
 <a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 
 <a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 					<em class="jxr_comment">// If the property type is abstract, then we either need to reuse the existing</em>
@@ -1323,14 +1323,14 @@
 <a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 			<strong class="jxr_keyword">if</strong> (nn(properties)) {
 <a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 				<strong class="jxr_keyword">if</strong> (rawTypeMeta.isArray()) {
-<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 					Object[] a = (Object[])o;
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 					<strong class="jxr_keyword">var</strong> a = (Object[])o;
 <a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 					List l = <strong class="jxr_keyword">new</strong> <a name="DelegateList" href="../../../org/apache/juneau/internal/DelegateList.html#DelegateList">DelegateList</a>(rawTypeMeta);
 <a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 					ClassMeta childType = rawTypeMeta.getElementType();
 <a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : a)
 <a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 						l.add(applyChildPropertiesFilter(session, childType, c));
 <a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> 					<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (rawTypeMeta.isCollection()) {
-<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> 					Collection c = (Collection)o;
+<a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> 					<strong class="jxr_keyword">var</strong> c = (Collection)o;
 <a class="jxr_linenumber" name="L1326" href="#L1326">1326</a> 					List l = listOfSize(c.size());
 <a class="jxr_linenumber" name="L1327" href="#L1327">1327</a> 					ClassMeta childType = rawTypeMeta.getElementType();
 <a class="jxr_linenumber" name="L1328" href="#L1328">1328</a> 					c.forEach(x -&gt; l.add(applyChildPropertiesFilter(session, childType, x)));

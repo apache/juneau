@@ -410,7 +410,7 @@
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 					client.log(client.logRequestsLevel, <span class="jxr_string">"HTTP {0} {1}, {2}"</span>, request.getMethod(), request.getURI(), <strong class="jxr_keyword">this</strong>.getStatusLine());
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (request.isDebug() || client.logRequests == DetailLevel.FULL) {
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 					String output = getContent().asString();
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 					StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 					<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 					sb.append(<span class="jxr_string">"\n=== HTTP Call (outgoing) ======================================================"</span>);
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 					sb.append(<span class="jxr_string">"\n=== REQUEST ===\n"</span>);
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 					sb.append(request.getMethod()).append(<span class="jxr_string">" "</span>).append(request.getURI());
@@ -915,7 +915,7 @@
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> 
 <a class="jxr_linenumber" name="L908" href="#L908">908</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 	&lt;T&gt; T as(<a name="ResponseBeanMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> rbm) {
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		Class&lt;T&gt; c = (Class&lt;T&gt;)rbm.getClassMeta().getInnerClass();
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">var</strong> c = (Class&lt;T&gt;)rbm.getClassMeta().getInnerClass();
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">final</strong> <a name="RestClient" href="../../../../../org/apache/juneau/rest/client/RestClient.html#RestClient">RestClient</a> rc = <strong class="jxr_keyword">this</strong>.client;
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 		<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -&gt; {
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 			ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());

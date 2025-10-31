@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  					}
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  					<strong class="jxr_keyword">if</strong> (REGEX_CHARS.contains(s) || META_CHARS.contains(s)) {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  						StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  						<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  						<strong class="jxr_keyword">boolean</strong> isInEscape = false;
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; s.length(); i++) {
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  							<strong class="jxr_keyword">char</strong> c = s.charAt(i);
@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 					<strong class="jxr_keyword">if</strong> (ignoreCase)
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 						flags |= Pattern.CASE_INSENSITIVE;
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 					Pattern p = Pattern.compile(s, flags);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 					<strong class="jxr_keyword">var</strong> p = Pattern.compile(s, flags);
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 					<strong class="jxr_keyword">if</strong> (prefix == '-')
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 						nots.add(p);
@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		@Override
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(ClassMeta&lt;?&gt; cm, Object o) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			String s = (String)o;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">var</strong> s = (String)o;
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> andPattern : andPatterns)
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 				<strong class="jxr_keyword">if</strong> (! andPattern.matcher(s).matches())
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 					<strong class="jxr_keyword">return</strong> false;

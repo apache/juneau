@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		@Test
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">void</strong> a01_interfaceImplementation() {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  			<em class="jxr_comment">// Verify it's a proper interface with two methods</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			PropertyExtractor extractor = <strong class="jxr_keyword">new</strong> PropertyExtractor() {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			<strong class="jxr_keyword">var</strong> extractor = <strong class="jxr_keyword">new</strong> PropertyExtractor() {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  				@Override
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canExtract(BeanConverter converter, Object o, String key) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		@Test
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">void</strong> a02_anonymousClassImplementation() {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<em class="jxr_comment">// Test anonymous class implementation</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			PropertyExtractor impl = <strong class="jxr_keyword">new</strong> PropertyExtractor() {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">var</strong> impl = <strong class="jxr_keyword">new</strong> PropertyExtractor() {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  				@Override
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canExtract(BeanConverter converter, Object o, String key) {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  					<strong class="jxr_keyword">return</strong> o instanceof String;
@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			};
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			BeanConverter converter = BasicBeanConverter.DEFAULT;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			String result = (String) impl.extract(converter, <span class="jxr_string">"test"</span>, <span class="jxr_string">"length"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">var</strong> result = (String) impl.extract(converter, <span class="jxr_string">"test"</span>, <span class="jxr_string">"length"</span>);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			assertEquals(<span class="jxr_string">"String.length"</span>, result);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		}
@@ -279,7 +279,7 @@
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 				@Override
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 				<strong class="jxr_keyword">public</strong> Object extract(BeanConverter converter, Object o, String key) {
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 					<strong class="jxr_keyword">if</strong> (o instanceof Map) {
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 						Map&lt;?, ?&gt; map = (Map&lt;?, ?&gt;) o;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 						<strong class="jxr_keyword">var</strong> map = (Map&lt;?, ?&gt;) o;
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (key) {
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"keys"</span> -&gt; <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(map.keySet());
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 							<strong class="jxr_keyword">case</strong> <span class="jxr_string">"values"</span> -&gt; <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(map.values());

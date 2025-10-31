@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> getRank(Object a) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		ClassInfo ci = ClassInfo.of(a);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(a);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		MethodInfo mi = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"rank"</span>) &amp;&amp; x.hasNoParams() &amp;&amp; x.hasReturnType(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">if</strong> (nn(mi)) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">try</strong> {
@@ -314,15 +314,15 @@
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * @return A new map showing the attributes of this object as a JSON object.</em>
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> toJsonMap() {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		JsonMap jm = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">var</strong> jm = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">if</strong> (nn(c))
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 			jm.put(<span class="jxr_string">"class"</span>, c.getSimpleName());
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">if</strong> (nn(m))
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			jm.put(<span class="jxr_string">"method"</span>, m.getShortName());
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">if</strong> (nn(p))
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			jm.put(<span class="jxr_string">"package"</span>, p.getName());
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		JsonMap ja = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		ClassInfo ca = ClassInfo.of(a.annotationType());
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> ja = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">var</strong> ca = ClassInfo.of(a.annotationType());
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		ca.forEachDeclaredMethod(<strong class="jxr_keyword">null</strong>, x -&gt; {
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 				Object v = x.invoke(a);

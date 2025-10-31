@@ -389,7 +389,7 @@
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * @return A new {@link AnnotationList} object on every call.</em>
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> getAnnotationList(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter) {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		AnnotationList al = <strong class="jxr_keyword">new</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a>();
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> al = <strong class="jxr_keyword">new</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a>();
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		forEachAnnotationInfo(filter, x -&gt; al.add(x));
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">return</strong> al;
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
@@ -401,7 +401,7 @@
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * @return A new {@link AnnotationList} object on every call.</em>
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> getAnnotationListMethodOnly(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter) {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		AnnotationList al = <strong class="jxr_keyword">new</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a>();
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">var</strong> al = <strong class="jxr_keyword">new</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a>();
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 		forEachAnnotationInfoMethodOnly(filter, x -&gt; al.add(x));
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">return</strong> al;
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
@@ -468,7 +468,7 @@
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * @return The methods signature.</em>
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<strong class="jxr_keyword">public</strong> String getSignature() {
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(128);
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 		sb.append(m.getName());
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 		Class&lt;?&gt;[] pt = _getRawParamTypes();
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">if</strong> (pt.length &gt; 0) {

@@ -227,8 +227,8 @@
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 			eType = (ClassMeta&lt;T&gt;)object();
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		ObjectSwap&lt;T,Object&gt; swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		BuilderSwap&lt;T,Object&gt; builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;)eType.getSwap(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;)eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 		ClassMeta&lt;?&gt; sType = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">if</strong> (nn(builder))
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 			sType = builder.getBuilderClassMeta(<strong class="jxr_keyword">this</strong>);
@@ -247,7 +247,7 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 		Object o;
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">if</strong> (sType.isObject()) {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 			parseIntoMap2(r, m, getClassMeta(Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>), <strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">if</strong> (m.containsKey(<span class="jxr_string">"_value"</span>))
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 				o = m.get(<span class="jxr_string">"_value"</span>);
@@ -278,7 +278,7 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 				o = c2;
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<em class="jxr_comment">// It could be a non-bean with _type attribute.</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			parseIntoMap2(r, m, getClassMeta(Map.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>), <strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">if</strong> (m.containsKey(getBeanTypePropertyName(eType)))
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 				o = <strong class="jxr_keyword">cast</strong>(m, <strong class="jxr_keyword">null</strong>, eType);
@@ -430,7 +430,7 @@
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<strong class="jxr_keyword">private</strong> &lt;K,V&gt; Map&lt;K,V&gt; parseIntoMap2(<a name="UonReader" href="../../../../org/apache/juneau/uon/UonReader.html#UonReader">UonReader</a> r, Map&lt;K,V&gt; m, ClassMeta&lt;?&gt; type, Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> IOException, ParseException, <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		ClassMeta&lt;K&gt; keyType = (ClassMeta&lt;K&gt;)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.<strong class="jxr_keyword">class</strong>) : type.getKeyType());
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">var</strong> keyType = (ClassMeta&lt;K&gt;)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.<strong class="jxr_keyword">class</strong>) : type.getKeyType());
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">int</strong> c = r.peekSkipWs();
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">if</strong> (c == -1)
@@ -468,7 +468,7 @@
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 					}
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (state == S3) {
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 					<strong class="jxr_keyword">if</strong> (c == -1 || c == '\u0001') {
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 						ClassMeta&lt;V&gt; valueType = (ClassMeta&lt;V&gt;)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 						<strong class="jxr_keyword">var</strong> valueType = (ClassMeta&lt;V&gt;)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 						V value = convertAttrToType(m, <span class="jxr_string">""</span>, valueType);
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 						m.put(currAttr, value);
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 						<strong class="jxr_keyword">if</strong> (c == -1)
@@ -476,7 +476,7 @@
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 						state = S1;
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 					} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 						<em class="jxr_comment">// For performance, we bypass parseAnything for string values.</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 						ClassMeta&lt;V&gt; valueType = (ClassMeta&lt;V&gt;)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 						<strong class="jxr_keyword">var</strong> valueType = (ClassMeta&lt;V&gt;)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 						V value = (V)(valueType.isString() ? <strong class="jxr_keyword">super</strong>.parseString(r.unread(), <strong class="jxr_keyword">true</strong>) : <strong class="jxr_keyword">super</strong>.parseAnything(valueType, r.unread(), <strong class="jxr_keyword">outer</strong>, <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 						<em class="jxr_comment">// If we already encountered this parameter, turn it into a list.</em>

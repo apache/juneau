@@ -38,12 +38,12 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<em class="jxr_comment">// test - Basic tests</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		Manifest manifest = <strong class="jxr_keyword">new</strong> Manifest();
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">var</strong> manifest = <strong class="jxr_keyword">new</strong> Manifest();
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		manifest.getMainAttributes().put(java.util.jar.Attributes.Name.MANIFEST_VERSION, <span class="jxr_string">"1.0"</span>);
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		manifest.getMainAttributes().put(<strong class="jxr_keyword">new</strong> java.util.jar.Attributes.Name(<span class="jxr_string">"Bundle-Name"</span>), <span class="jxr_string">"Test Bundle"</span>);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		manifest.getMainAttributes().put(<strong class="jxr_keyword">new</strong> java.util.jar.Attributes.Name(<span class="jxr_string">"Bundle-Version"</span>), <span class="jxr_string">"1.0.0"</span>);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		ManifestFile mf = <strong class="jxr_keyword">new</strong> ManifestFile(manifest);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">var</strong> mf = <strong class="jxr_keyword">new</strong> ManifestFile(manifest);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertEquals(<span class="jxr_string">"1.0"</span>, mf.get(<span class="jxr_string">"Manifest-Version"</span>));
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertEquals(<span class="jxr_string">"Test Bundle"</span>, mf.get(<span class="jxr_string">"Bundle-Name"</span>));
@@ -54,10 +54,10 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<em class="jxr_comment">// test - Fluent setters</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	@Test <strong class="jxr_keyword">void</strong> a02_fluentSetters() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		Manifest manifest = <strong class="jxr_keyword">new</strong> Manifest();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> manifest = <strong class="jxr_keyword">new</strong> Manifest();
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		manifest.getMainAttributes().put(java.util.jar.Attributes.Name.MANIFEST_VERSION, <span class="jxr_string">"1.0"</span>);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		ManifestFile mf = <strong class="jxr_keyword">new</strong> ManifestFile(manifest);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">var</strong> mf = <strong class="jxr_keyword">new</strong> ManifestFile(manifest);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<em class="jxr_comment">// Test inner() returns same instance for fluent chaining</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> innerMap = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Object&gt;();
@@ -101,11 +101,11 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test <strong class="jxr_keyword">void</strong> a03_fluentChaining() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		Manifest manifest = <strong class="jxr_keyword">new</strong> Manifest();
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> manifest = <strong class="jxr_keyword">new</strong> Manifest();
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  		manifest.getMainAttributes().put(java.util.jar.Attributes.Name.MANIFEST_VERSION, <span class="jxr_string">"1.0"</span>);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<em class="jxr_comment">// Test multiple fluent calls can be chained</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		ManifestFile mf = <strong class="jxr_keyword">new</strong> ManifestFile(manifest)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> mf = <strong class="jxr_keyword">new</strong> ManifestFile(manifest)
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			.append(<span class="jxr_string">"Key1"</span>, <span class="jxr_string">"value1"</span>)
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 			.append(<span class="jxr_string">"Key2"</span>, <span class="jxr_string">"value2"</span>)
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 			.appendIf(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"Key3"</span>, <span class="jxr_string">"value3"</span>);

@@ -211,9 +211,9 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object[] removeArrayEntry(Object o, <strong class="jxr_keyword">int</strong> index) {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		Object[] a = (Object[])o;
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">var</strong> a = (Object[])o;
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<em class="jxr_comment">// Shrink the array.</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length - 1);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">var</strong> a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length - 1);
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		System.arraycopy(a, 0, a2, 0, index);
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		System.arraycopy(a, index + 1, a2, index, a.length - index - 1);
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">return</strong> a2;
@@ -795,9 +795,9 @@
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 	}
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> 	<strong class="jxr_keyword">private</strong> Object[] addArrayEntry(Object o, Object val, <a name="ClassMeta" href="../../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> componentType) {
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		Object[] a = (Object[])o;
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		<strong class="jxr_keyword">var</strong> a = (Object[])o;
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<em class="jxr_comment">// Expand out the array.</em>
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length + 1);
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		<strong class="jxr_keyword">var</strong> a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length + 1);
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 		System.arraycopy(a, 0, a2, 0, a.length);
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 		a2[a.length] = convert(val, componentType);
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 		<strong class="jxr_keyword">return</strong> a2;
@@ -871,7 +871,7 @@
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> 				ClassMeta cm = root.cm;
 <a class="jxr_linenumber" name="L864" href="#L864">864</a> 				Object o = root.o;
 <a class="jxr_linenumber" name="L865" href="#L865">865</a> 				<strong class="jxr_keyword">if</strong> (cm.isCollection()) {
-<a class="jxr_linenumber" name="L866" href="#L866">866</a> 					Collection c = (Collection)o;
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 					<strong class="jxr_keyword">var</strong> c = (Collection)o;
 <a class="jxr_linenumber" name="L867" href="#L867">867</a> 					c.add(convert(val, cm.getElementType()));
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> 					<strong class="jxr_keyword">return</strong> (c instanceof List ? url + <span class="jxr_string">"/"</span> + (c.size() - 1) : <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> 				}
@@ -903,7 +903,7 @@
 <a class="jxr_linenumber" name="L895" href="#L895">895</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ObjectRestException" href="../../../../org/apache/juneau/objecttools/ObjectRestException.html#ObjectRestException">ObjectRestException</a>(HTTP_BAD_REQUEST, <span class="jxr_string">"Cannot perform POST on ''{0}'' with parent node type ''{1}''"</span>, url, pct);
 <a class="jxr_linenumber" name="L896" href="#L896">896</a> 			}
 <a class="jxr_linenumber" name="L897" href="#L897">897</a> 			<strong class="jxr_keyword">if</strong> (cm.isCollection()) {
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 				Collection c = (Collection)o;
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 				<strong class="jxr_keyword">var</strong> c = (Collection)o;
 <a class="jxr_linenumber" name="L899" href="#L899">899</a> 				c.add(convert(val, cm.getElementType()));
 <a class="jxr_linenumber" name="L900" href="#L900">900</a> 				<strong class="jxr_keyword">return</strong> (c instanceof List ? url + <span class="jxr_string">"/"</span> + (c.size() - 1) : <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> 			}
@@ -951,10 +951,10 @@
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 	}
 <a class="jxr_linenumber" name="L944" href="#L944">944</a> 
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> 	<strong class="jxr_keyword">private</strong> Object[] setArrayEntry(Object o, <strong class="jxr_keyword">int</strong> index, Object val, <a name="ClassMeta" href="../../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a> componentType) {
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		Object[] a = (Object[])o;
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		<strong class="jxr_keyword">var</strong> a = (Object[])o;
 <a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<strong class="jxr_keyword">if</strong> (a.length &lt;= index) {
 <a class="jxr_linenumber" name="L948" href="#L948">948</a> 			<em class="jxr_comment">// Expand out the array.</em>
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 			Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 			<strong class="jxr_keyword">var</strong> a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index + 1);
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> 			System.arraycopy(a, 0, a2, 0, a.length);
 <a class="jxr_linenumber" name="L951" href="#L951">951</a> 			a = a2;
 <a class="jxr_linenumber" name="L952" href="#L952">952</a> 		}

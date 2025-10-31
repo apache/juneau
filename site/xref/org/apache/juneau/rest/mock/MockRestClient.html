@@ -2072,7 +2072,7 @@
 <a class="jxr_linenumber" name="L2064" href="#L2064">2064</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2065" href="#L2065">2065</a> 	<strong class="jxr_keyword">public</strong> HttpResponse receiveResponseHeader() <strong class="jxr_keyword">throws</strong> HttpException, IOException {
 <a class="jxr_linenumber" name="L2066" href="#L2066">2066</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> 			MockServletResponse res = MockServletResponse.create();
+<a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> 			<strong class="jxr_keyword">var</strong> res = MockServletResponse.create();
 <a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> 			restContext.execute(restObject, sreq.get(), res);
 <a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> 
 <a class="jxr_linenumber" name="L2070" href="#L2070">2070</a> 			<em class="jxr_comment">// If the status isn't set, something's broken.</em>
@@ -2126,7 +2126,7 @@
 <a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 			<strong class="jxr_keyword">long</strong> length = entity.getContentLength();
 <a class="jxr_linenumber" name="L2119" href="#L2119">2119</a> 			<strong class="jxr_keyword">if</strong> (length &lt; 0)
 <a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 				length = 1024;
-<a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 			ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream((<strong class="jxr_keyword">int</strong>)Math.min(length, 1024));
+<a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 			<strong class="jxr_keyword">var</strong> baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream((<strong class="jxr_keyword">int</strong>)Math.min(length, 1024));
 <a class="jxr_linenumber" name="L2122" href="#L2122">2122</a> 			entity.writeTo(baos);
 <a class="jxr_linenumber" name="L2123" href="#L2123">2123</a> 			baos.flush();
 <a class="jxr_linenumber" name="L2124" href="#L2124">2124</a> 			body = baos.toByteArray();
@@ -2149,11 +2149,11 @@
 <a class="jxr_linenumber" name="L2141" href="#L2141">2141</a> 
 <a class="jxr_linenumber" name="L2142" href="#L2142">2142</a> 			path = target + path;
 <a class="jxr_linenumber" name="L2143" href="#L2143">2143</a> 
-<a class="jxr_linenumber" name="L2144" href="#L2144">2144</a> 			MockPathResolver pr = <strong class="jxr_keyword">new</strong> <a name="MockPathResolver" href="../../../../../org/apache/juneau/rest/mock/MockPathResolver.html#MockPathResolver">MockPathResolver</a>(target, contextPath, servletPath, path, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L2144" href="#L2144">2144</a> 			<strong class="jxr_keyword">var</strong> pr = <strong class="jxr_keyword">new</strong> <a name="MockPathResolver" href="../../../../../org/apache/juneau/rest/mock/MockPathResolver.html#MockPathResolver">MockPathResolver</a>(target, contextPath, servletPath, path, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2145" href="#L2145">2145</a> 			<strong class="jxr_keyword">if</strong> (nn(pr.getError()))
 <a class="jxr_linenumber" name="L2146" href="#L2146">2146</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(pr.getError());
 <a class="jxr_linenumber" name="L2147" href="#L2147">2147</a> 
-<a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> 			MockServletRequest r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
+<a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> 			<strong class="jxr_keyword">var</strong> r = MockServletRequest.create(request.getRequestLine().getMethod(), pr.getURI()).contextPath(pr.getContextPath()).servletPath(pr.getServletPath()).pathVars(pathVars)
 <a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 				.debug(isDebug());
 <a class="jxr_linenumber" name="L2150" href="#L2150">2150</a> 
 <a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : request.getAllHeaders())

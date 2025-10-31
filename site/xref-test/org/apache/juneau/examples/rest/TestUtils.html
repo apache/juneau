@@ -94,11 +94,11 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		}
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">int</strong> indent = -1;
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		Pattern startTag = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)&lt;[^/&gt;]+(&#92;&#92;s+&#92;&#92;S+=['\&quot;]&#92;&#92;S*['\&quot;])*&#92;&#92;s*&gt;$"</span>);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		Pattern endTag = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)&lt;/[^&gt;]+&gt;$"</span>);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		Pattern combinedTag = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)&lt;[^&gt;/]+(&#92;&#92;s+&#92;&#92;S+=['\&quot;]&#92;&#92;S*['\&quot;])*&#92;&#92;s*/&gt;$"</span>);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		Pattern contentOnly = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)[^&#92;&#92;s&#92;&#92;&lt;]+$"</span>);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		Pattern tagWithContent = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)&lt;[^&gt;]+&gt;.*&lt;/[^&gt;]+&gt;$"</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> startTag = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)&lt;[^/&gt;]+(&#92;&#92;s+&#92;&#92;S+=['\&quot;]&#92;&#92;S*['\&quot;])*&#92;&#92;s*&gt;$"</span>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> endTag = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)&lt;/[^&gt;]+&gt;$"</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> combinedTag = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)&lt;[^&gt;/]+(&#92;&#92;s+&#92;&#92;S+=['\&quot;]&#92;&#92;S*['\&quot;])*&#92;&#92;s*/&gt;$"</span>);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> contentOnly = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)[^&#92;&#92;s&#92;&#92;&lt;]+$"</span>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> tagWithContent = Pattern.compile(<span class="jxr_string">"^(&#92;&#92;s*)&lt;[^&gt;]+&gt;.*&lt;/[^&gt;]+&gt;$"</span>);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		String[] lines = out.split(<span class="jxr_string">"\n"</span>);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; lines.length; i++) {

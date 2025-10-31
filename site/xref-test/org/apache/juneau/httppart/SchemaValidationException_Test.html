@@ -32,18 +32,18 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">class</strong> <a name="SchemaValidationException_Test" href="../../../../org/apache/juneau/httppart/SchemaValidationException_Test.html#SchemaValidationException_Test">SchemaValidationException_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  	@Test <strong class="jxr_keyword">void</strong> a01_basic() {
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		SchemaValidationException x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Test message"</span>);
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Test message"</span>);
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  		assertNotNull(x);
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  		assertTrue(x.getMessage().contains(<span class="jxr_string">"Test message"</span>));
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	}
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	@Test <strong class="jxr_keyword">void</strong> a02_withArgs() {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		SchemaValidationException x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Test {0} {1}"</span>, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Test {0} {1}"</span>, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertTrue(x.getMessage().contains(<span class="jxr_string">"Test foo bar"</span>));
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	}
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	@Test <strong class="jxr_keyword">void</strong> a03_setMessage_fluentChaining() {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		SchemaValidationException x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Original"</span>);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Original"</span>);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<em class="jxr_comment">// Test that setMessage returns SchemaValidationException for fluent chaining</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		SchemaValidationException result = x.setMessage(<span class="jxr_string">"New message"</span>);
@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Test <strong class="jxr_keyword">void</strong> a04_getRootCause_single() {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		SchemaValidationException x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Root cause"</span>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Root cause"</span>);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<em class="jxr_comment">// Test that getRootCause returns SchemaValidationException (not ParseException)</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		SchemaValidationException root = x.getRootCause();
@@ -62,10 +62,10 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	@Test <strong class="jxr_keyword">void</strong> a05_getRootCause_nested() {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		SchemaValidationException cause = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Cause"</span>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		SchemaValidationException middle = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Middle"</span>);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> cause = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Cause"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> middle = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Middle"</span>);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		middle.initCause(cause);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		SchemaValidationException top = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Top"</span>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> top = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Top"</span>);
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		top.initCause(middle);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<em class="jxr_comment">// Test that getRootCause returns the deepest SchemaValidationException</em>
@@ -77,7 +77,7 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Test <strong class="jxr_keyword">void</strong> a06_fluentChaining() {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<em class="jxr_comment">// Test multiple fluent calls can be chained</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		SchemaValidationException x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Initial"</span>)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SchemaValidationException(<span class="jxr_string">"Initial"</span>)
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			.setMessage(<span class="jxr_string">"Updated message"</span>);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertTrue(x.getMessage().contains(<span class="jxr_string">"Updated message"</span>));

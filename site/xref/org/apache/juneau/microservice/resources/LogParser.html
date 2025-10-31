@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">int</strong> i = text.length();
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : additionalText)
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  				i += s.length() + 1;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder(i);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(i);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			sb.append(text);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : additionalText)
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  				sb.append('\n').append(s);
@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<em class="jxr_comment">// Find the first line.</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		String line;
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">while</strong> (next == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(line = br.readLine())) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			Entry e = <strong class="jxr_keyword">new</strong> Entry(line);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> Entry(line);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">if</strong> (e.matches())
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 				next = e;
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		}
@@ -200,7 +200,7 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 			next = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			String line = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">while</strong> (next == <strong class="jxr_keyword">null</strong> &amp;&amp; nn(line = br.readLine())) {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				Entry e = <strong class="jxr_keyword">new</strong> Entry(line);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> Entry(line);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 				<strong class="jxr_keyword">if</strong> (e.isRecord) {
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 					<strong class="jxr_keyword">if</strong> (e.matches())
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 						next = e;

@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * @return A new request.</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="MockServletRequest" href="../../../../../org/apache/juneau/rest/mock/MockServletRequest.html#MockServletRequest">MockServletRequest</a> create() {
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		MockServletRequest r = <strong class="jxr_keyword">new</strong> <a name="MockServletRequest" href="../../../../../org/apache/juneau/rest/mock/MockServletRequest.html#MockServletRequest">MockServletRequest</a>();
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> <a name="MockServletRequest" href="../../../../../org/apache/juneau/rest/mock/MockServletRequest.html#MockServletRequest">MockServletRequest</a>();
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">return</strong> r;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
@@ -456,7 +456,7 @@
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">if</strong> (queryDataMap.isEmpty())
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 				queryString = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 				StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 				<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 				queryDataMap.forEach((k, v) -&gt; {
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 					<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 						sb.append(sb.length() == 0 ? <span class="jxr_string">""</span> : <span class="jxr_string">"&amp;"</span>).append(urlEncode(k));

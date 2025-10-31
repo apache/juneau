@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		x.add(MediaType.of(<span class="jxr_string">"text/bar"</span>));
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		assertList(x, <span class="jxr_string">"text/bar"</span>, <span class="jxr_string">"text/foo"</span>);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		MediaType x2 = <strong class="jxr_keyword">new</strong> MediaType((String)<strong class="jxr_keyword">null</strong>);  <em class="jxr_comment">// Interpreted as "/*"</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">var</strong> x2 = <strong class="jxr_keyword">new</strong> MediaType((String)<strong class="jxr_keyword">null</strong>);  <em class="jxr_comment">// Interpreted as "/*"</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertEmpty(x2.getType());
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertEquals(<span class="jxr_string">"*"</span>, x2.getSubType());
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertList(x2.getSubTypes(), <span class="jxr_string">"*"</span>);
@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Test <strong class="jxr_keyword">void</strong> a03_getParameter() {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		MediaType x1 = MediaType.of(<span class="jxr_string">"text/json;x=1;q=1;y=2"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">var</strong> x1 = MediaType.of(<span class="jxr_string">"text/json;x=1;q=1;y=2"</span>);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertEquals(<span class="jxr_string">"1"</span>, x1.getParameter(<span class="jxr_string">"x"</span>));
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertNull(x1.getParameter(<span class="jxr_string">"q"</span>));
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertNull(x1.getParameter(<span class="jxr_string">"y"</span>));

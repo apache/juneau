@@ -182,7 +182,7 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * @return The request attributes as a map.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt; asMap() {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		JsonMap m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		Enumeration&lt;String&gt; e = sreq.getAttributeNames();
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">while</strong> (e.hasMoreElements()) {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			String n = e.nextElement();
