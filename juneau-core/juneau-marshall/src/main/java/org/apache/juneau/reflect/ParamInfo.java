@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 
@@ -214,19 +213,54 @@ public class ParamInfo {
 	public MethodInfo getMethod() { return eInfo.isConstructor() ? null : (MethodInfo)eInfo; }
 
 	/**
+	 * Helper method to extract the name from any annotation with the simple name "Name".
+	 *
+	 * <p>
+	 * This method uses reflection to find any annotation with the simple name "Name"
+	 * and dynamically invokes its <c>value()</c> method to retrieve the parameter name.
+	 * This allows it to work with any <c>@Name</c> annotation from any package without
+	 * creating a compile-time dependency.
+	 *
+	 * @return The name from the annotation, or <jk>null</jk> if no compatible annotation is found.
+	 */
+	private String getNameFromAnnotation() {
+		for (var annotation : p.getAnnotations()) {
+			var annotationType = annotation.annotationType();
+			if ("Name".equals(annotationType.getSimpleName())) {
+				try {
+					var valueMethod = annotationType.getMethod("value");
+					if (valueMethod.getReturnType() == String.class) {
+						var value = valueMethod.invoke(annotation);
+						if (value instanceof String)
+							return (String)value;
+					}
+				} catch (Exception e) {
+					// Ignore - annotation doesn't have a compatible value() method
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Returns the name of the parameter.
 	 *
 	 * <p>
-	 * If the parameter's name is present, then this method returns the name provided by the class file.
-	 * Otherwise, this method synthesizes a name of the form argN, where N is the index of the parameter in the descriptor of the method which declares the parameter.
+	 * If the parameter has an annotation with the simple name "Name" and a "value()" method, 
+	 * then this method returns the value from that annotation.
+	 * Otherwise, if the parameter's name is present in the class file, then this method returns that name.
+	 * Otherwise, this method returns <jk>null</jk>.
 	 *
-	 * @return The name of the parameter.
+	 * <p>
+	 * This method works with any annotation named "Name" (from any package) that has a <c>String value()</c> method.
+	 *
+	 * @return The name of the parameter, or <jk>null</jk> if not available.
 	 * @see Parameter#getName()
 	 */
 	public String getName() {
-		Name n = p.getAnnotation(Name.class);
-		if (nn(n))
-			return n.value();
+		String name = getNameFromAnnotation();
+		if (name != null)
+			return name;
 		if (p.isNamePresent())
 			return p.getName();
 		return null;
@@ -252,12 +286,16 @@ public class ParamInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the parameter has a name provided by the class file.
+	 * Returns <jk>true</jk> if the parameter has a name.
 	 *
-	 * @return <jk>true</jk> if the parameter has a name provided by the class file.
+	 * <p>
+	 * This returns <jk>true</jk> if the parameter has an annotation with the simple name "Name", 
+	 * or if the parameter's name is present in the class file.
+	 *
+	 * @return <jk>true</jk> if the parameter has a name.
 	 */
 	public boolean hasName() {
-		return p.isNamePresent() || p.isAnnotationPresent(Name.class);
+		return getNameFromAnnotation() != null || p.isNamePresent();
 	}
 
 	/**
