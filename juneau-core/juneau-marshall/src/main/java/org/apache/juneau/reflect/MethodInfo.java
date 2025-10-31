@@ -253,18 +253,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return This object.
 	 */
 	public MethodInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		ClassInfo c = this.declaringClass;
-		forEachDeclaredAnnotationInfo(c.getPackage(), filter, action);
-		ClassInfo[] interfaces = c._getInterfaces();
-		for (int i = interfaces.length - 1; i >= 0; i--) {
-			forEachDeclaredAnnotationInfo(interfaces[i], filter, action);
-			forEachDeclaredMethodAnnotationInfo(interfaces[i], filter, action);
-		}
-		ClassInfo[] parents = c._getParents();
-		for (int i = parents.length - 1; i >= 0; i--) {
-			forEachDeclaredAnnotationInfo(parents[i], filter, action);
-			forEachDeclaredMethodAnnotationInfo(parents[i], filter, action);
-		}
+		AnnotationInfo.forEachAnnotationInfo(this, filter, action);
 		return this;
 	}
 
@@ -362,7 +351,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList() { return getAnnotationList(x -> true); }
+	public AnnotationList getAnnotationList() {
+		return AnnotationInfo.getAnnotationList(this);
+	}
 
 	/**
 	 * Constructs an {@link AnnotationList} of all matching annotations found on this method.
@@ -381,9 +372,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		var al = new AnnotationList();
-		forEachAnnotationInfo(filter, x -> al.add(x));
-		return al;
+		return AnnotationInfo.getAnnotationList(this, filter);
 	}
 
 	/**
@@ -393,9 +382,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationListMethodOnly(Predicate<AnnotationInfo<?>> filter) {
-		var al = new AnnotationList();
-		forEachAnnotationInfoMethodOnly(filter, x -> al.add(x));
-		return al;
+		return AnnotationInfo.getAnnotationListMethodOnly(this, filter);
 	}
 
 	/**
@@ -687,40 +674,11 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		return test(test, this);
 	}
 
-	private MethodInfo findMatchingOnClass(ClassInfo c) {
+	MethodInfo findMatchingOnClass(ClassInfo c) {
 		for (var m2 : c._getDeclaredMethods())
 			if (hasName(m2.getName()) && Arrays.equals(_getParameterTypes(), m2._getParameterTypes()))
 				return m2;
 		return null;
-	}
-
-	private void forEachAnnotationInfoMethodOnly(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		ClassInfo c = this.declaringClass;
-		ClassInfo[] interfaces = c._getInterfaces();
-		for (int i = interfaces.length - 1; i >= 0; i--)
-			forEachDeclaredMethodAnnotationInfo(interfaces[i], filter, action);
-		ClassInfo[] parents = c._getParents();
-		for (int i = parents.length - 1; i >= 0; i--)
-			forEachDeclaredMethodAnnotationInfo(parents[i], filter, action);
-	}
-
-	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		if (nn(ci))
-			for (var a : ci._getDeclaredAnnotations())
-				AnnotationInfo.of(ci, a).accept(filter, action);
-	}
-
-	private static void forEachDeclaredAnnotationInfo(Package p, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		if (nn(p))
-			for (var a : p.getDeclaredAnnotations())
-				AnnotationInfo.of(p, a).accept(filter, action);
-	}
-
-	private void forEachDeclaredMethodAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		MethodInfo m = findMatchingOnClass(ci);
-		if (nn(m))
-			for (var a : m._getDeclaredAnnotations())
-				AnnotationInfo.of(m, a).accept(filter, action);
 	}
 
 	MethodInfo[] _getMatching() {

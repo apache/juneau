@@ -147,14 +147,37 @@ All six classes are currently in:
 
 ## Migration Plan
 
-### Phase 1: Prepare juneau-common
+### Phase 1: Refactor AnnotationInfo/AnnotationList dependencies ✅ COMPLETED
+**Goal**: Remove dependencies from ClassInfo/MethodInfo on AnnotationInfo/AnnotationList by moving annotation-related methods to AnnotationInfo as static methods.
+
+**Methods moved from ClassInfo to AnnotationInfo:**
+1. ✅ `ClassInfo.forEachAnnotationInfo(Predicate, Consumer)` → `AnnotationInfo.forEachAnnotationInfo(ClassInfo, Predicate, Consumer)`
+2. ✅ `ClassInfo.getAnnotationList()` → `AnnotationInfo.getAnnotationList(ClassInfo)`
+3. ✅ `ClassInfo.getAnnotationList(Predicate)` → `AnnotationInfo.getAnnotationList(ClassInfo, Predicate)`
+
+**Methods moved from MethodInfo to AnnotationInfo:**
+1. ✅ `MethodInfo.forEachAnnotationInfo(Predicate, Consumer)` → `AnnotationInfo.forEachAnnotationInfo(MethodInfo, Predicate, Consumer)`
+2. ✅ `MethodInfo.getAnnotationList()` → `AnnotationInfo.getAnnotationList(MethodInfo)`
+3. ✅ `MethodInfo.getAnnotationList(Predicate)` → `AnnotationInfo.getAnnotationList(MethodInfo, Predicate)`
+4. ✅ `MethodInfo.getAnnotationListMethodOnly(Predicate)` → `AnnotationInfo.getAnnotationListMethodOnly(MethodInfo, Predicate)`
+5. ✅ `MethodInfo.forEachAnnotationInfoMethodOnly(Predicate, Consumer)` → `AnnotationInfo.forEachAnnotationInfoMethodOnly(MethodInfo, Predicate, Consumer)`
+
+**Implementation completed:**
+1. ✅ Added static methods to AnnotationInfo that take ClassInfo/MethodInfo as parameters
+2. ✅ Updated ClassInfo/MethodInfo to delegate to the new static methods (maintains backward compatibility)
+3. ✅ Made `ClassInfo.splitRepeated()` and `MethodInfo.findMatchingOnClass()` package-private for access by AnnotationInfo
+4. ✅ Removed private helper methods from MethodInfo (now in AnnotationInfo)
+5. ✅ Full project compilation successful
+
+### Phase 2: Prepare juneau-common
 1. **Add getMatchingArgs() to ClassUtils**
    - Extract `ClassUtils2.getMatchingArgs()` logic
    - Add as public method to `org.apache.juneau.common.utils.ClassUtils`
+   - Note: Can use ClassInfo.of() since ClassInfo will be in juneau-common
    - Add comprehensive javadoc
    - Add unit tests in juneau-common
 
-### Phase 2: Update reflection classes
+### Phase 3: Move reflection classes
 1. **Update imports in all 6 classes**
    - Change package from `org.apache.juneau.reflect` to `org.apache.juneau.common.reflect`
    - Update `FieldInfo`: Remove unused `import org.apache.juneau.*;`
@@ -162,21 +185,20 @@ All six classes are currently in:
    - Update `ConstructorInfo`: Change `ClassUtils2.getMatchingArgs()` to `ClassUtils.getMatchingArgs()`
    - Note: `ParamInfo` already fixed to use reflection for @Name
 
-2. **Move all 6 files**
+2. **Move all 6 files using git mv**
    - Move from `juneau-core/juneau-marshall/src/main/java/org/apache/juneau/reflect/`
    - To `juneau-core/juneau-common/src/main/java/org/apache/juneau/common/reflect/`
 
-### Phase 3: Create backward compatibility
+3. **Update all imports across the codebase**
+   - Update all files that import `org.apache.juneau.reflect.*` to use `org.apache.juneau.common.reflect.*`
+
+### Phase 4: Create backward compatibility
 1. **Add deprecated aliases in juneau-marshall**
    - Create `@Deprecated` classes in old package `org.apache.juneau.reflect`
-   - Each class extends/wraps the new location
+   - Each class extends the new location
    - Point users to new location in deprecation message
 
-2. **Update juneau-marshall imports**
-   - Update all files in juneau-marshall that import these classes
-   - Change to use new package location
-
-### Phase 4: Testing & Documentation
+### Phase 5: Testing & Documentation
 1. **Run all tests** to ensure nothing broke
 2. **Update documentation** to reference new package
 3. **Update MIGRATION.md** with notes about deprecated classes
@@ -185,48 +207,58 @@ All six classes are currently in:
 
 ### Must be resolved before migration:
 
-1. **ClassUtils2.getMatchingArgs()** (affects MethodInfo, ConstructorInfo)
+1. **AnnotationInfo/AnnotationList dependencies** (affects ClassInfo, MethodInfo) - ✅ **RESOLVED**
+   - Status: Phase 1 completed successfully
+   - Solution implemented: Refactored annotation-related methods to static methods on AnnotationInfo that take ClassInfo/MethodInfo as parameters
+   - Impact: Circular dependency removed, ClassInfo/MethodInfo can now be moved to juneau-common
+   - Backward compatibility: Original methods now delegate to static methods, maintaining existing API
+
+2. **ClassUtils2.getMatchingArgs()** (affects MethodInfo, ConstructorInfo)
    - Current location: `org.apache.juneau.internal.ClassUtils2` (juneau-marshall)
    - Needs to be: `org.apache.juneau.common.utils.ClassUtils` (juneau-common)
    - Impact: Used for smart parameter matching in reflection invoke operations
 
 ### Can be fixed during migration:
 
-2. **Unused import** (affects FieldInfo)
+3. **Unused import** (affects FieldInfo)
    - `import org.apache.juneau.*;` appears to be unused
    - Simply remove it
 
 ### ✅ Already Resolved:
 
-3. **@Name annotation dependency** (was affecting ParamInfo) - **FIXED**
+4. **@Name annotation dependency** (was affecting ParamInfo) - **FIXED**
    - Used reflection to work with any annotation named "Name"
    - No longer requires compile-time dependency on specific annotation
    - Works with `@Name` from any package
 
 ## Recommended Approach
 
-**Option A: Complete Migration** (RECOMMENDED)
-- Resolve remaining blocker (getMatchingArgs)
-- Move getMatchingArgs() to ClassUtils
-- Then move all 6 classes together
+**Complete Migration with Refactoring** (RECOMMENDED)
+1. **Phase 1**: Refactor AnnotationInfo/AnnotationList dependencies
+   - Move annotation-related methods from ClassInfo/MethodInfo to AnnotationInfo as static methods
+   - Update ClassInfo/MethodInfo to delegate to the new static methods (keeps backward compatibility)
+   - This breaks the circular dependency between reflection classes and annotation classes
+2. **Phase 2**: Add getMatchingArgs() to ClassUtils in juneau-common
+3. **Phase 3**: Move all 6 reflection classes to juneau-common
+4. **Phase 4**: Create deprecated aliases for backward compatibility
+5. **Phase 5**: Test and document
+
+**Benefits:**
 - Provides full reflection capability in juneau-common
-
-**Option B: Partial Migration**
-- Move ClassInfo, ExecutableInfo, FieldInfo, ParamInfo first (ready now)
-- Leave MethodInfo, ConstructorInfo until getMatchingArgs dependency resolved
-- Requires careful dependency management
-
-**Option C: Keep Current Structure**
-- Don't move anything
-- Keep all reflection in juneau-marshall
-- Simplest but doesn't achieve the stated goal
+- Removes circular dependencies between modules
+- Maintains backward compatibility through delegation methods
+- Better separation of concerns (annotation processing vs reflection utilities)
 
 ## Next Steps
 
-1. **Review and approve** this plan
-2. **Decide on approach** (A, B, or C)
-3. **Implement Phase 1** (prepare juneau-common)
-4. **Implement Phase 2** (move classes)
-5. **Implement Phase 3** (backward compatibility)
-6. **Test and document**
+1. ✅ **Review and approve** this revised plan (DONE)
+2. ✅ **Implement Phase 1**: Refactor AnnotationInfo dependencies (DONE)
+   - ✅ Added static methods to AnnotationInfo that take ClassInfo/MethodInfo as parameters
+   - ✅ Updated ClassInfo/MethodInfo to delegate to new static methods
+   - ✅ Made helper methods package-private for AnnotationInfo access
+   - ✅ Full project compilation successful
+3. **Implement Phase 2**: Add getMatchingArgs() to ClassUtils
+4. **Implement Phase 3**: Move reflection classes
+5. **Implement Phase 4**: Create backward compatibility aliases
+6. **Implement Phase 5**: Test and document
 

@@ -343,4 +343,206 @@ public class AnnotationInfo<T extends Annotation> {
 			}
 		return methods;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static methods for ClassInfo
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Performs an action on all matching annotations on the specified class/parents/package.
+	 *
+	 * <p>
+	 * Annotations are consumed in the following order:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param classInfo The class to process.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
+	 */
+	public static void forEachAnnotationInfo(ClassInfo classInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		var c = classInfo.inner();
+		Package p = c.getPackage();
+		if (nn(p))
+			for (var a : p.getDeclaredAnnotations())
+				for (var a2 : classInfo.splitRepeated(a))
+					AnnotationInfo.of(p, a2).accept(filter, action);
+		ClassInfo[] interfaces = classInfo._getInterfaces();
+		for (int i = interfaces.length - 1; i >= 0; i--)
+			for (var a : interfaces[i].inner().getDeclaredAnnotations())
+				for (var a2 : classInfo.splitRepeated(a))
+					AnnotationInfo.of(interfaces[i], a2).accept(filter, action);
+		ClassInfo[] parents = classInfo._getParents();
+		for (int i = parents.length - 1; i >= 0; i--)
+			for (var a : parents[i].inner().getDeclaredAnnotations())
+				for (var a2 : classInfo.splitRepeated(a))
+					AnnotationInfo.of(parents[i], a2).accept(filter, action);
+	}
+
+	/**
+	 * Constructs an {@link AnnotationList} of all annotations found on the specified class.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param classInfo The class to process.
+	 * @return A new {@link AnnotationList} object on every call.
+	 */
+	public static AnnotationList getAnnotationList(ClassInfo classInfo) {
+		return getAnnotationList(classInfo, x -> true);
+	}
+
+	/**
+	 * Constructs an {@link AnnotationList} of all matching annotations on the specified class.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param classInfo The class to process.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @return A new {@link AnnotationList} object on every call.
+	 */
+	public static AnnotationList getAnnotationList(ClassInfo classInfo, Predicate<AnnotationInfo<?>> filter) {
+		var l = new AnnotationList();
+		forEachAnnotationInfo(classInfo, filter, x -> l.add(x));
+		return l;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static methods for MethodInfo
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Performs an action on all matching annotations on the specified method.
+	 *
+	 * @param methodInfo The method to process.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
+	 */
+	public static void forEachAnnotationInfo(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		ClassInfo c = methodInfo.getDeclaringClass();
+		forEachDeclaredAnnotationInfo(c.getPackage(), filter, action);
+		ClassInfo[] interfaces = c._getInterfaces();
+		for (int i = interfaces.length - 1; i >= 0; i--) {
+			forEachDeclaredAnnotationInfo(interfaces[i], filter, action);
+			forEachDeclaredMethodAnnotationInfo(methodInfo, interfaces[i], filter, action);
+		}
+		ClassInfo[] parents = c._getParents();
+		for (int i = parents.length - 1; i >= 0; i--) {
+			forEachDeclaredAnnotationInfo(parents[i], filter, action);
+			forEachDeclaredMethodAnnotationInfo(methodInfo, parents[i], filter, action);
+		}
+	}
+
+	/**
+	 * Constructs an {@link AnnotationList} of all annotations found on the specified method.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * 	<li>On this method and matching methods ordered parent-to-child.
+	 * </ol>
+	 *
+	 * @param methodInfo The method to process.
+	 * @return A new {@link AnnotationList} object on every call.
+	 */
+	public static AnnotationList getAnnotationList(MethodInfo methodInfo) {
+		return getAnnotationList(methodInfo, x -> true);
+	}
+
+	/**
+	 * Constructs an {@link AnnotationList} of all matching annotations found on the specified method.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * 	<li>On this method and matching methods ordered parent-to-child.
+	 * </ol>
+	 *
+	 * @param methodInfo The method to process.
+	 * @param filter A predicate to apply to the entries to determine if value should be added.  Can be <jk>null</jk>.
+	 * @return A new {@link AnnotationList} object on every call.
+	 */
+	public static AnnotationList getAnnotationList(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter) {
+		var al = new AnnotationList();
+		forEachAnnotationInfo(methodInfo, filter, x -> al.add(x));
+		return al;
+	}
+
+	/**
+	 * Same as {@link #getAnnotationList(MethodInfo, Predicate)} except only returns annotations defined on methods.
+	 *
+	 * @param methodInfo The method to process.
+	 * @param filter A predicate to apply to the entries to determine if value should be added.  Can be <jk>null</jk>.
+	 * @return A new {@link AnnotationList} object on every call.
+	 */
+	public static AnnotationList getAnnotationListMethodOnly(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter) {
+		var al = new AnnotationList();
+		forEachAnnotationInfoMethodOnly(methodInfo, filter, x -> al.add(x));
+		return al;
+	}
+
+	/**
+	 * Performs an action on all matching annotations on methods only.
+	 *
+	 * @param methodInfo The method to process.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
+	 */
+	public static void forEachAnnotationInfoMethodOnly(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		ClassInfo c = methodInfo.getDeclaringClass();
+		ClassInfo[] interfaces = c._getInterfaces();
+		for (int i = interfaces.length - 1; i >= 0; i--)
+			forEachDeclaredMethodAnnotationInfo(methodInfo, interfaces[i], filter, action);
+		ClassInfo[] parents = c._getParents();
+		for (int i = parents.length - 1; i >= 0; i--)
+			forEachDeclaredMethodAnnotationInfo(methodInfo, parents[i], filter, action);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Private helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		if (nn(ci))
+			for (var a : ci._getDeclaredAnnotations())
+				AnnotationInfo.of(ci, a).accept(filter, action);
+	}
+
+	private static void forEachDeclaredAnnotationInfo(Package p, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		if (nn(p))
+			for (var a : p.getDeclaredAnnotations())
+				AnnotationInfo.of(p, a).accept(filter, action);
+	}
+
+	private static void forEachDeclaredMethodAnnotationInfo(MethodInfo methodInfo, ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		MethodInfo mi = methodInfo.findMatchingOnClass(ci);
+		if (nn(mi))
+			for (var a : mi._getDeclaredAnnotations())
+				AnnotationInfo.of(mi, a).accept(filter, action);
+	}
 }

@@ -223,7 +223,7 @@ public class ClassInfo {
 	 * @param a The annotation to split if repeated.
 	 * @return The nested annotations, or a singleton array of the same annotation if it's not repeated.
 	 */
-	private static Annotation[] splitRepeated(Annotation a) {
+	static Annotation[] splitRepeated(Annotation a) {
 		try {
 			var ci = ClassInfo.of(a.annotationType());
 			MethodInfo mi = ci.getRepeatedAnnotationMethod();
@@ -524,21 +524,7 @@ public class ClassInfo {
 	 * @return This object.
 	 */
 	public ClassInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		Package p = c.getPackage();
-		if (nn(p))
-			for (var a : p.getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a))
-					AnnotationInfo.of(p, a2).accept(filter, action);
-		ClassInfo[] interfaces = _getInterfaces();
-		for (int i = interfaces.length - 1; i >= 0; i--)
-			for (var a : interfaces[i].c.getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a))
-					AnnotationInfo.of(interfaces[i], a2).accept(filter, action);
-		ClassInfo[] parents = _getParents();
-		for (int i = parents.length - 1; i >= 0; i--)
-			for (var a : parents[i].c.getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a))
-					AnnotationInfo.of(parents[i], a2).accept(filter, action);
+		AnnotationInfo.forEachAnnotationInfo(this, filter, action);
 		return this;
 	}
 
@@ -724,7 +710,9 @@ public class ClassInfo {
 	 *
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList() { return getAnnotationList(x -> true); }
+	public AnnotationList getAnnotationList() {
+		return AnnotationInfo.getAnnotationList(this);
+	}
 
 	/**
 	 * Constructs an {@link AnnotationList} of all matching annotations on this class.
@@ -742,9 +730,7 @@ public class ClassInfo {
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		var l = new AnnotationList();
-		forEachAnnotationInfo(filter, x -> l.add(x));
-		return l;
+		return AnnotationInfo.getAnnotationList(this, filter);
 	}
 
 	/**
