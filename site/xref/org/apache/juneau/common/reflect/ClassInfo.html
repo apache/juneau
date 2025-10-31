@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>ClassInfo xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/reflect/ClassInfo.html">View Javadoc</a></div><pre>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/common/reflect/ClassInfo.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
@@ -22,7 +22,7 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.reflect;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.common.reflect;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.AssertionUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.ClassUtils.*;
@@ -69,11 +69,11 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,ClassInfo&gt; CACHE = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<em class="jxr_javadoccomment">/** Reusable ClassInfo for Object class. */</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> OBJECT = ClassInfo.of(Object.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> OBJECT = ClassInfo.of(Object.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,Class&lt;?&gt;&gt; pmap1 = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(), pmap2 = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
@@ -126,12 +126,12 @@
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 * @param c The class type.</em>
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * @return The constructed class info, or &lt;jk&gt;null&lt;/jk&gt; if the type was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> of(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> of(Class&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		ClassInfo ci = CACHE.get(c);
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">if</strong> (ci == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			ci = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>(c, c);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			ci = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>(c, c);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			CACHE.put(c, ci);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">return</strong> ci;
@@ -144,10 +144,10 @@
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * @param t The generic type (if parameterized type).</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * @return The constructed class info, or &lt;jk&gt;null&lt;/jk&gt; if the type was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> of(Class&lt;?&gt; c, Type t) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> of(Class&lt;?&gt; c, Type t) {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">if</strong> (c == t)
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">return</strong> of(c);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>(c, t);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>(c, t);
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * @param o The class instance.</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 * @return The constructed class info, or &lt;jk&gt;null&lt;/jk&gt; if the object was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> of(Object o) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> of(Object o) {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">return</strong> of(o == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : o instanceof Class ? (Class&lt;?&gt;)o : o.getClass());
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
@@ -166,12 +166,12 @@
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * @param t The class type.</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * @return The constructed class info, or &lt;jk&gt;null&lt;/jk&gt; if the type was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> of(Type t) {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> of(Type t) {
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">if</strong> (t instanceof Class)
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">return</strong> of((Class&lt;?&gt;)t);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>(toClass(t), t);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>(toClass(t), t);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -180,7 +180,7 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * @param o The class instance.</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * @return The constructed class info, or &lt;jk&gt;null&lt;/jk&gt; if the object was &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ofProxy(Object o) {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ofProxy(Object o) {
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		Class&lt;?&gt; c = getProxyFor(o);
@@ -247,18 +247,18 @@
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">final</strong> Class&lt;?&gt; c;
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isParameterizedType;
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> Boolean isRepeatedAnnotation;
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[] interfaces, declaredInterfaces, parents, allParents;
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[] interfaces, declaredInterfaces, parents, allParents;
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> repeatedAnnotationMethod;
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="ConstructorInfo" href="../../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>[] publicConstructors, declaredConstructors;
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="FieldInfo" href="../../../../org/apache/juneau/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>[] publicFields, declaredFields, allFields;
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> repeatedAnnotationMethod;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>[] publicConstructors, declaredConstructors;
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>[] publicFields, declaredFields, allFields;
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> Annotation[] declaredAnnotations;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> dim = -1;
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<strong class="jxr_keyword">private</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> componentType;
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<strong class="jxr_keyword">private</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> componentType;
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;Method,MethodInfo&gt; methods = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 
@@ -272,7 +272,7 @@
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * @param c The class type.</em>
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * @param t The generic type (if parameterized type).</em>
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">protected</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>(Class&lt;?&gt; c, Type t) {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">protected</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>(Class&lt;?&gt; c, Type t) {
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">this</strong>.t = t;
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">this</strong>.c = c;
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">this</strong>.isParameterizedType = t == <strong class="jxr_keyword">null</strong> ? false : (t instanceof ParameterizedType);
@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on this object.</em>
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> accept(Predicate&lt;ClassInfo&gt; test, Consumer&lt;ClassInfo&gt; action) {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> accept(Predicate&lt;ClassInfo&gt; test, Consumer&lt;ClassInfo&gt; action) {
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">if</strong> (matches(test))
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			action.accept(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -375,7 +375,7 @@
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 	@Override
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.t, y.t));
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; eq(x.t, y.t));
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 	}
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -396,7 +396,7 @@
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(<a name="AnnotationProvider" href="../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">if</strong> (annotationProvider == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 			annotationProvider = AnnotationProvider.DEFAULT;
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 		A x = <strong class="jxr_keyword">null</strong>;
@@ -449,7 +449,7 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAllField(Predicate&lt;FieldInfo&gt; filter, Consumer&lt;FieldInfo&gt; action) {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAllField(Predicate&lt;FieldInfo&gt; filter, Consumer&lt;FieldInfo&gt; action) {
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> fi : _getAllFields())
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			consumeIf(filter, action, fi);
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -462,7 +462,7 @@
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAllMethodParentFirst(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAllMethodParentFirst(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getAllMethodsParentFirst())
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 			consumeIf(filter, action, mi);
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -487,7 +487,7 @@
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAnnotation(<a name="AnnotationProvider" href="../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">if</strong> (annotationProvider == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 			annotationProvider = AnnotationProvider.DEFAULT;
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 		A t2 = getPackageAnnotation(type);
@@ -511,7 +511,7 @@
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAnnotation(Class&lt;A&gt; type, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAnnotation(Class&lt;A&gt; type, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">return</strong> forEachAnnotation(<strong class="jxr_keyword">null</strong>, type, filter, action);
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 	}
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 
@@ -531,7 +531,7 @@
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAnnotationInfo(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachAnnotationInfo(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 		AnnotationInfo.forEachAnnotationInfo(<strong class="jxr_keyword">this</strong>, filter, action);
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 	}
@@ -543,7 +543,7 @@
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachDeclaredConstructor(Predicate&lt;ConstructorInfo&gt; filter, Consumer&lt;ConstructorInfo&gt; action) {
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachDeclaredConstructor(Predicate&lt;ConstructorInfo&gt; filter, Consumer&lt;ConstructorInfo&gt; action) {
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getDeclaredConstructors())
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 			consumeIf(filter, action, mi);
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -556,7 +556,7 @@
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachDeclaredField(Predicate&lt;FieldInfo&gt; filter, Consumer&lt;FieldInfo&gt; action) {
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachDeclaredField(Predicate&lt;FieldInfo&gt; filter, Consumer&lt;FieldInfo&gt; action) {
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> fi : _getDeclaredFields())
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 			consumeIf(filter, action, fi);
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -569,7 +569,7 @@
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachDeclaredMethod(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachDeclaredMethod(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getDeclaredMethods())
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 			consumeIf(filter, action, mi);
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -582,7 +582,7 @@
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachMethod(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachMethod(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getAllMethods())
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 			consumeIf(filter, action, mi);
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -595,7 +595,7 @@
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachPublicConstructor(Predicate&lt;ConstructorInfo&gt; filter, Consumer&lt;ConstructorInfo&gt; action) {
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachPublicConstructor(Predicate&lt;ConstructorInfo&gt; filter, Consumer&lt;ConstructorInfo&gt; action) {
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getPublicConstructors())
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 			consumeIf(filter, action, mi);
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -608,7 +608,7 @@
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachPublicField(Predicate&lt;FieldInfo&gt; filter, Consumer&lt;FieldInfo&gt; action) {
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachPublicField(Predicate&lt;FieldInfo&gt; filter, Consumer&lt;FieldInfo&gt; action) {
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getPublicFields())
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 			consumeIf(filter, action, mi);
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -621,7 +621,7 @@
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachPublicMethod(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> forEachPublicMethod(Predicate&lt;MethodInfo&gt; filter, Consumer&lt;MethodInfo&gt; action) {
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getPublicMethods())
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 			consumeIf(filter, action, mi);
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -672,7 +672,7 @@
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">	 * @param type The annotation to look for.</em>
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * @return The annotation if found, or &lt;jk&gt;null&lt;/jk&gt; if not.</em>
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A getAnnotation(<a name="AnnotationProvider" href="../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A getAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<strong class="jxr_keyword">return</strong> findAnnotation(annotationProvider, type);
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 	}
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 
@@ -718,7 +718,7 @@
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> <em class="jxr_javadoccomment">	 * @return A new {@link AnnotationList} object on every call.</em>
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> getAnnotationList() {
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../../org/apache/juneau/common/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> getAnnotationList() {
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">return</strong> AnnotationInfo.getAnnotationList(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> 	}
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 
@@ -737,7 +737,7 @@
 <a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 * @return A new {@link AnnotationList} object on every call.</em>
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> getAnnotationList(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter) {
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../../org/apache/juneau/common/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> getAnnotationList(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter) {
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 		<strong class="jxr_keyword">return</strong> AnnotationInfo.getAnnotationList(<strong class="jxr_keyword">this</strong>, filter);
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 	}
 <a class="jxr_linenumber" name="L735" href="#L735">735</a> 
@@ -752,7 +752,7 @@
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to look for.</em>
 <a class="jxr_linenumber" name="L745" href="#L745">745</a> <em class="jxr_javadoccomment">	 * @return The matching annotations.</em>
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; List&lt;A&gt; getAnnotations(<a name="AnnotationProvider" href="../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; List&lt;A&gt; getAnnotations(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> 		List&lt;A&gt; l = list();
 <a class="jxr_linenumber" name="L749" href="#L749">749</a> 		forEachAnnotation(annotationProvider, type, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; l.add(x));
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 		<strong class="jxr_keyword">return</strong> l;
@@ -778,7 +778,7 @@
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> <em class="jxr_javadoccomment">	 * @return The parent class or interface that matches the specified predicate.</em>
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getAnyParent(Predicate&lt;ClassInfo&gt; filter) {
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getAnyParent(Predicate&lt;ClassInfo&gt; filter) {
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ci : _getAllParents())
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 			<strong class="jxr_keyword">if</strong> (test(filter, ci))
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 				<strong class="jxr_keyword">return</strong> ci;
@@ -790,7 +790,7 @@
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">	 * @return The base component type of this class if it's an array, or this object if it's not.</em>
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getComponentType() {
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getComponentType() {
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">if</strong> (componentType == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> 			<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 				componentType = <strong class="jxr_keyword">this</strong>;
@@ -806,7 +806,7 @@
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> <em class="jxr_javadoccomment">	 * @return The declared constructor that matches the specified predicate.</em>
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getDeclaredConstructor(Predicate&lt;ConstructorInfo&gt; filter) {
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getDeclaredConstructor(Predicate&lt;ConstructorInfo&gt; filter) {
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ci : _getDeclaredConstructors())
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 			<strong class="jxr_keyword">if</strong> (test(filter, ci))
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 				<strong class="jxr_keyword">return</strong> ci;
@@ -828,7 +828,7 @@
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">	 * @return The declared field, or &lt;jk&gt;null&lt;/jk&gt; if not found.</em>
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 	<strong class="jxr_keyword">public</strong> <a name="FieldInfo" href="../../../../org/apache/juneau/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> getDeclaredField(Predicate&lt;FieldInfo&gt; filter) {
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 	<strong class="jxr_keyword">public</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> getDeclaredField(Predicate&lt;FieldInfo&gt; filter) {
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : _getDeclaredFields())
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> 			<strong class="jxr_keyword">if</strong> (test(filter, f))
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> 				<strong class="jxr_keyword">return</strong> f;
@@ -866,7 +866,7 @@
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> <em class="jxr_javadoccomment">	 * @return The first matching method, or &lt;jk&gt;null&lt;/jk&gt; if no methods matched.</em>
 <a class="jxr_linenumber" name="L860" href="#L860">860</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> getDeclaredMethod(Predicate&lt;MethodInfo&gt; filter) {
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> getDeclaredMethod(Predicate&lt;MethodInfo&gt; filter) {
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getDeclaredMethods())
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> 			<strong class="jxr_keyword">if</strong> (test(filter, mi))
 <a class="jxr_linenumber" name="L864" href="#L864">864</a> 				<strong class="jxr_keyword">return</strong> mi;
@@ -948,7 +948,7 @@
 <a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L941" href="#L941">941</a> <em class="jxr_javadoccomment">	 * @return The first matching method, or &lt;jk&gt;null&lt;/jk&gt; if no methods matched.</em>
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> getMethod(Predicate&lt;MethodInfo&gt; filter) {
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> getMethod(Predicate&lt;MethodInfo&gt; filter) {
 <a class="jxr_linenumber" name="L944" href="#L944">944</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getAllMethods())
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> 			<strong class="jxr_keyword">if</strong> (test(filter, mi))
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> 				<strong class="jxr_keyword">return</strong> mi;
@@ -997,7 +997,7 @@
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> <em class="jxr_javadoccomment">	 * @param v The minimum visibility.</em>
 <a class="jxr_linenumber" name="L990" href="#L990">990</a> <em class="jxr_javadoccomment">	 * @return The constructor, or &lt;jk&gt;null&lt;/jk&gt; if no no-arg constructor exists with the required visibility.</em>
 <a class="jxr_linenumber" name="L991" href="#L991">991</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getNoArgConstructor(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> v) {
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getNoArgConstructor(<a name="Visibility" href="../../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> v) {
 <a class="jxr_linenumber" name="L993" href="#L993">993</a> 		<strong class="jxr_keyword">if</strong> (isAbstract())
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L995" href="#L995">995</a> 		<strong class="jxr_keyword">boolean</strong> isMemberClass = isNonStaticMemberClass();
@@ -1132,7 +1132,7 @@
 <a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> <em class="jxr_javadoccomment">	 * @return The public constructor that matches the specified predicate.</em>
 <a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getPublicConstructor(Predicate&lt;ConstructorInfo&gt; filter) {
+<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getPublicConstructor(Predicate&lt;ConstructorInfo&gt; filter) {
 <a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ci : _getPublicConstructors())
 <a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 			<strong class="jxr_keyword">if</strong> (test(filter, ci))
 <a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 				<strong class="jxr_keyword">return</strong> ci;
@@ -1152,7 +1152,7 @@
 <a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> <em class="jxr_javadoccomment">	 * @return The public field, or &lt;jk&gt;null&lt;/jk&gt; if not found.</em>
 <a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 	<strong class="jxr_keyword">public</strong> <a name="FieldInfo" href="../../../../org/apache/juneau/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> getPublicField(Predicate&lt;FieldInfo&gt; filter) {
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 	<strong class="jxr_keyword">public</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a> getPublicField(Predicate&lt;FieldInfo&gt; filter) {
 <a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : _getPublicFields())
 <a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 			<strong class="jxr_keyword">if</strong> (test(filter, f))
 <a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 				<strong class="jxr_keyword">return</strong> f;
@@ -1178,7 +1178,7 @@
 <a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> <em class="jxr_javadoccomment">	 * @return The first matching method, or &lt;jk&gt;null&lt;/jk&gt; if no methods matched.</em>
 <a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> getPublicMethod(Predicate&lt;MethodInfo&gt; filter) {
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> getPublicMethod(Predicate&lt;MethodInfo&gt; filter) {
 <a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mi : _getPublicMethods())
 <a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 			<strong class="jxr_keyword">if</strong> (test(filter, mi))
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 				<strong class="jxr_keyword">return</strong> mi;
@@ -1226,7 +1226,7 @@
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> <em class="jxr_javadoccomment">	 * @return The repeated annotation method on this class, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</em>
 <a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> getRepeatedAnnotationMethod() {
+<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> getRepeatedAnnotationMethod() {
 <a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 		<strong class="jxr_keyword">if</strong> (isRepeatedAnnotation()) {
 <a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 			<strong class="jxr_keyword">if</strong> (repeatedAnnotationMethod == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 				<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
@@ -1273,7 +1273,7 @@
 <a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> <em class="jxr_javadoccomment">	 * @return</em>
 <a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> <em class="jxr_javadoccomment">	 * 	The parent class, or &lt;jk&gt;null&lt;/jk&gt; if the class has no parent.</em>
 <a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getSuperclass() { <strong class="jxr_keyword">return</strong> c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : of(c.getSuperclass()); }
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getSuperclass() { <strong class="jxr_keyword">return</strong> c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : of(c.getSuperclass()); }
 <a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 
 <a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> <em class="jxr_javadoccomment">	 * If this class is a primitive (e.g. &lt;code&gt;&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;&lt;/code&gt;) returns it's wrapper class</em>
@@ -1292,7 +1292,7 @@
 <a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> <em class="jxr_javadoccomment">	 * @return The wrapper class if it's primitive, or the same class if class is not a primitive.</em>
 <a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getWrapperInfoIfPrimitive() {
+<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getWrapperInfoIfPrimitive() {
 <a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong> || ! c.isPrimitive())
 <a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 		<strong class="jxr_keyword">return</strong> of(pmap1.get(c));
@@ -1306,7 +1306,7 @@
 <a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> <em class="jxr_javadoccomment">	 * @param type The annotation to look for.</em>
 <a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> <em class="jxr_javadoccomment">	 * @return The &lt;jk&gt;true&lt;/jk&gt; if annotation if found.</em>
 <a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(<a name="AnnotationProvider" href="../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
+<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">boolean</strong> hasAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type) {
 <a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 		<strong class="jxr_keyword">if</strong> (annotationProvider == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 			annotationProvider = AnnotationProvider.DEFAULT;
 <a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 		<strong class="jxr_keyword">return</strong> nn(annotationProvider.firstAnnotation(type, c, x -&gt; <strong class="jxr_keyword">true</strong>));
@@ -1393,7 +1393,7 @@
 <a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> <em class="jxr_javadoccomment">	 * @param c The class to check equality with.</em>
 <a class="jxr_linenumber" name="L1386" href="#L1386">1386</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified class is the same as this one.</em>
 <a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> is(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> c) {
+<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> is(<a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> c) {
 <a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 		<strong class="jxr_keyword">if</strong> (nn(<strong class="jxr_keyword">this</strong>.c))
 <a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.c.equals(c.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 		<strong class="jxr_keyword">return</strong> t.equals(c.t);
@@ -1591,7 +1591,7 @@
 <a class="jxr_linenumber" name="L1583" href="#L1583">1583</a> <em class="jxr_javadoccomment">	 * @param parent The parent class.</em>
 <a class="jxr_linenumber" name="L1584" href="#L1584">1584</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class is a parent or the same as &lt;c&gt;parent&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L1585" href="#L1585">1585</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isChildOf(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> parent) {
+<a class="jxr_linenumber" name="L1586" href="#L1586">1586</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isChildOf(<a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> parent) {
 <a class="jxr_linenumber" name="L1587" href="#L1587">1587</a> 		<strong class="jxr_keyword">return</strong> isChildOf(parent.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L1588" href="#L1588">1588</a> 	}
 <a class="jxr_linenumber" name="L1589" href="#L1589">1589</a> 
@@ -1810,7 +1810,7 @@
 <a class="jxr_linenumber" name="L1802" href="#L1802">1802</a> <em class="jxr_javadoccomment">	 * @param child The child class.</em>
 <a class="jxr_linenumber" name="L1803" href="#L1803">1803</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class is a parent or the same as &lt;c&gt;child&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isParentOfFuzzyPrimitives(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> child) {
+<a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isParentOfFuzzyPrimitives(<a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> child) {
 <a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong> || child == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> 		<strong class="jxr_keyword">if</strong> (c.isAssignableFrom(child.<strong class="jxr_keyword">inner</strong>()))
@@ -1911,7 +1911,7 @@
 <a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> <em class="jxr_javadoccomment">	 * @param v The visibility to validate against.</em>
 <a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this visibility matches the modifier attribute of this constructor.</em>
 <a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isVisible(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> v) {
+<a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isVisible(<a name="Visibility" href="../../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> v) {
 <a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 		<strong class="jxr_keyword">return</strong> nn(c) &amp;&amp; v.isVisible(c);
 <a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 	}
 <a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> 
@@ -1933,7 +1933,7 @@
 <a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> <em class="jxr_javadoccomment">	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(<a name="AnnotationProvider" href="../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> annotationProvider, Class&lt;A&gt; type, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 		<strong class="jxr_keyword">if</strong> (annotationProvider == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 			annotationProvider = AnnotationProvider.DEFAULT;
 <a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 		A x = <strong class="jxr_keyword">null</strong>;
@@ -1992,13 +1992,13 @@
 <a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> <em class="jxr_javadoccomment">	 * @return A new instance of the underlying class</em>
 <a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> <em class="jxr_javadoccomment">	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.</em>
 <a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 	<strong class="jxr_keyword">public</strong> Object newInstance() <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
+<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 	<strong class="jxr_keyword">public</strong> Object newInstance() <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Type ''{0}'' cannot be instantiated"</span>, getFullName());
+<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"Type ''{0}'' cannot be instantiated"</span>, getFullName());
 <a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 			<strong class="jxr_keyword">return</strong> c.getDeclaredConstructor().newInstance();
 <a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 		} <strong class="jxr_keyword">catch</strong> (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
-<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
+<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(e);
 <a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> 		}
 <a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> 	}
 <a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> 
@@ -2013,7 +2013,7 @@
 <a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> <em class="jxr_javadoccomment">	 * @param wrapperTypes The parameterized types to unwrap if this class is one of those types.</em>
 <a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> <em class="jxr_javadoccomment">	 * @return The class info on the unwrapped type, or just this type if this isn't one of the specified types.</em>
 <a class="jxr_linenumber" name="L2007" href="#L2007">2007</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> unwrap(Class&lt;?&gt;...wrapperTypes) {
+<a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> unwrap(Class&lt;?&gt;...wrapperTypes) {
 <a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> wt : wrapperTypes) {
 <a class="jxr_linenumber" name="L2010" href="#L2010">2010</a> 			<strong class="jxr_keyword">if</strong> (isParameterizedTypeOf(wt)) {
 <a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> 				Type t = getFirstParameterType(wt);
@@ -2030,7 +2030,7 @@
 <a class="jxr_linenumber" name="L2022" href="#L2022">2022</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L2023" href="#L2023">2023</a> 	}
 <a class="jxr_linenumber" name="L2024" href="#L2024">2024</a> 
-<a class="jxr_linenumber" name="L2025" href="#L2025">2025</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A findAnnotation(<a name="AnnotationProvider" href="../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> ap, Class&lt;A&gt; a) {
+<a class="jxr_linenumber" name="L2025" href="#L2025">2025</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A findAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> ap, Class&lt;A&gt; a) {
 <a class="jxr_linenumber" name="L2026" href="#L2026">2026</a> 		<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2027" href="#L2027">2027</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L2028" href="#L2028">2028</a> 		<strong class="jxr_keyword">if</strong> (ap == <strong class="jxr_keyword">null</strong>)
@@ -2052,7 +2052,7 @@
 <a class="jxr_linenumber" name="L2044" href="#L2044">2044</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L2045" href="#L2045">2045</a> 	}
 <a class="jxr_linenumber" name="L2046" href="#L2046">2046</a> 
-<a class="jxr_linenumber" name="L2047" href="#L2047">2047</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A getAnnotation(<a name="AnnotationProvider" href="../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> ap, Class&lt;A&gt; a, Predicate&lt;A&gt; filter) {
+<a class="jxr_linenumber" name="L2047" href="#L2047">2047</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A getAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> ap, Class&lt;A&gt; a, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L2048" href="#L2048">2048</a> 		<strong class="jxr_keyword">if</strong> (ap == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2049" href="#L2049">2049</a> 			ap = AnnotationProvider.DEFAULT;
 <a class="jxr_linenumber" name="L2050" href="#L2050">2050</a> 		A t2 = getPackageAnnotation(a);
@@ -2098,7 +2098,7 @@
 <a class="jxr_linenumber" name="L2090" href="#L2090">2090</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parents.length - 1; i &gt;= 0; i--)
 <a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : parents[i]._getDeclaredFields())
 <a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> 						l.add(f);
-<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 				allFields = l.toArray(<strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../org/apache/juneau/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 				allFields = l.toArray(<strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> 			}
 <a class="jxr_linenumber" name="L2095" href="#L2095">2095</a> 		}
 <a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> 		<strong class="jxr_keyword">return</strong> allFields;
@@ -2110,7 +2110,7 @@
 <a class="jxr_linenumber" name="L2102" href="#L2102">2102</a> 				List&lt;MethodInfo&gt; l = list();
 <a class="jxr_linenumber" name="L2103" href="#L2103">2103</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : _getAllParents())
 <a class="jxr_linenumber" name="L2104" href="#L2104">2104</a> 					c._appendDeclaredMethods(l);
-<a class="jxr_linenumber" name="L2105" href="#L2105">2105</a> 				allMethods = l.toArray(<strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2105" href="#L2105">2105</a> 				allMethods = l.toArray(<strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2106" href="#L2106">2106</a> 			}
 <a class="jxr_linenumber" name="L2107" href="#L2107">2107</a> 		}
 <a class="jxr_linenumber" name="L2108" href="#L2108">2108</a> 		<strong class="jxr_keyword">return</strong> allMethods;
@@ -2123,7 +2123,7 @@
 <a class="jxr_linenumber" name="L2115" href="#L2115">2115</a> 				ClassInfo[] parents = _getAllParents();
 <a class="jxr_linenumber" name="L2116" href="#L2116">2116</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = parents.length - 1; i &gt;= 0; i--)
 <a class="jxr_linenumber" name="L2117" href="#L2117">2117</a> 					parents[i]._appendDeclaredMethods(l);
-<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 				allMethodsParentFirst = l.toArray(<strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 				allMethodsParentFirst = l.toArray(<strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2119" href="#L2119">2119</a> 			}
 <a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 		}
 <a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 		<strong class="jxr_keyword">return</strong> allMethodsParentFirst;
@@ -2135,7 +2135,7 @@
 <a class="jxr_linenumber" name="L2127" href="#L2127">2127</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L2128" href="#L2128">2128</a> 				<strong class="jxr_keyword">var</strong> a1 = _getParents();
 <a class="jxr_linenumber" name="L2129" href="#L2129">2129</a> 				<strong class="jxr_keyword">var</strong> a2 = _getInterfaces();
-<a class="jxr_linenumber" name="L2130" href="#L2130">2130</a> 				ClassInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[a1.length + a2.length];
+<a class="jxr_linenumber" name="L2130" href="#L2130">2130</a> 				ClassInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[a1.length + a2.length];
 <a class="jxr_linenumber" name="L2131" href="#L2131">2131</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; a1.length; i++)
 <a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> 					l[i] = a1[i];
 <a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; a2.length; i++)
@@ -2163,7 +2163,7 @@
 <a class="jxr_linenumber" name="L2155" href="#L2155">2155</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ccc : cc)
 <a class="jxr_linenumber" name="L2156" href="#L2156">2156</a> 					l.add(getConstructorInfo(ccc));
 <a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> 				l.sort(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> 				declaredConstructors = l.toArray(<strong class="jxr_keyword">new</strong> <a name="ConstructorInfo" href="../../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> 				declaredConstructors = l.toArray(<strong class="jxr_keyword">new</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> 			}
 <a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> 		}
 <a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> 		<strong class="jxr_keyword">return</strong> declaredConstructors;
@@ -2178,7 +2178,7 @@
 <a class="jxr_linenumber" name="L2170" href="#L2170">2170</a> 					<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"$jacocoData"</span>.equals(f.getName()))
 <a class="jxr_linenumber" name="L2171" href="#L2171">2171</a> 						l.add(getFieldInfo(f));
 <a class="jxr_linenumber" name="L2172" href="#L2172">2172</a> 				l.sort(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2173" href="#L2173">2173</a> 				declaredFields = l.toArray(<strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../org/apache/juneau/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2173" href="#L2173">2173</a> 				declaredFields = l.toArray(<strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2174" href="#L2174">2174</a> 			}
 <a class="jxr_linenumber" name="L2175" href="#L2175">2175</a> 		}
 <a class="jxr_linenumber" name="L2176" href="#L2176">2176</a> 		<strong class="jxr_keyword">return</strong> declaredFields;
@@ -2189,7 +2189,7 @@
 <a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 		<strong class="jxr_keyword">if</strong> (declaredInterfaces == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L2183" href="#L2183">2183</a> 				Class&lt;?&gt;[] ii = c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">new</strong> Class[0] : c.getInterfaces();
-<a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> 				ClassInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[ii.length];
+<a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> 				ClassInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[ii.length];
 <a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ii.length; i++)
 <a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> 					l[i] = of(ii[i]);
 <a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 				declaredInterfaces = l;
@@ -2207,7 +2207,7 @@
 <a class="jxr_linenumber" name="L2199" href="#L2199">2199</a> 					<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"$jacocoInit"</span>.equals(m.getName())) <em class="jxr_comment">// Jacoco adds its own simulated methods.</em>
 <a class="jxr_linenumber" name="L2200" href="#L2200">2200</a> 						l.add(getMethodInfo(m));
 <a class="jxr_linenumber" name="L2201" href="#L2201">2201</a> 				l.sort(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> 				declaredMethods = l.toArray(<strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> 				declaredMethods = l.toArray(<strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2203" href="#L2203">2203</a> 			}
 <a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> 		}
 <a class="jxr_linenumber" name="L2205" href="#L2205">2205</a> 		<strong class="jxr_keyword">return</strong> declaredMethods;
@@ -2224,7 +2224,7 @@
 <a class="jxr_linenumber" name="L2216" href="#L2216">2216</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ci3 : ci2._getInterfaces())
 <a class="jxr_linenumber" name="L2217" href="#L2217">2217</a> 							s.add(ci3);
 <a class="jxr_linenumber" name="L2218" href="#L2218">2218</a> 					}
-<a class="jxr_linenumber" name="L2219" href="#L2219">2219</a> 				interfaces = s.toArray(<strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[s.size()]);
+<a class="jxr_linenumber" name="L2219" href="#L2219">2219</a> 				interfaces = s.toArray(<strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[s.size()]);
 <a class="jxr_linenumber" name="L2220" href="#L2220">2220</a> 			}
 <a class="jxr_linenumber" name="L2221" href="#L2221">2221</a> 		}
 <a class="jxr_linenumber" name="L2222" href="#L2222">2222</a> 		<strong class="jxr_keyword">return</strong> interfaces;
@@ -2240,7 +2240,7 @@
 <a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 					l.add(of(pc));
 <a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 					pc = pc.getSuperclass();
 <a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 				}
-<a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> 				parents = l.toArray(<strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> 				parents = l.toArray(<strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2236" href="#L2236">2236</a> 			}
 <a class="jxr_linenumber" name="L2237" href="#L2237">2237</a> 		}
 <a class="jxr_linenumber" name="L2238" href="#L2238">2238</a> 		<strong class="jxr_keyword">return</strong> parents;
@@ -2254,7 +2254,7 @@
 <a class="jxr_linenumber" name="L2246" href="#L2246">2246</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ccc : cc)
 <a class="jxr_linenumber" name="L2247" href="#L2247">2247</a> 					l.add(getConstructorInfo(ccc));
 <a class="jxr_linenumber" name="L2248" href="#L2248">2248</a> 				l.sort(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2249" href="#L2249">2249</a> 				publicConstructors = l.toArray(<strong class="jxr_keyword">new</strong> <a name="ConstructorInfo" href="../../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2249" href="#L2249">2249</a> 				publicConstructors = l.toArray(<strong class="jxr_keyword">new</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2250" href="#L2250">2250</a> 			}
 <a class="jxr_linenumber" name="L2251" href="#L2251">2251</a> 		}
 <a class="jxr_linenumber" name="L2252" href="#L2252">2252</a> 		<strong class="jxr_keyword">return</strong> publicConstructors;
@@ -2273,7 +2273,7 @@
 <a class="jxr_linenumber" name="L2265" href="#L2265">2265</a> 				}
 <a class="jxr_linenumber" name="L2266" href="#L2266">2266</a> 				List&lt;FieldInfo&gt; l = toList(m.values());
 <a class="jxr_linenumber" name="L2267" href="#L2267">2267</a> 				l.sort(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> 				publicFields = l.toArray(<strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../org/apache/juneau/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> 				publicFields = l.toArray(<strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2269" href="#L2269">2269</a> 			}
 <a class="jxr_linenumber" name="L2270" href="#L2270">2270</a> 		}
 <a class="jxr_linenumber" name="L2271" href="#L2271">2271</a> 		<strong class="jxr_keyword">return</strong> publicFields;
@@ -2288,7 +2288,7 @@
 <a class="jxr_linenumber" name="L2280" href="#L2280">2280</a> 					<strong class="jxr_keyword">if</strong> (m.getDeclaringClass() != Object.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> 						l.add(getMethodInfo(m));
 <a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> 				l.sort(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> 				publicMethods = l.toArray(<strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[l.size()]);
+<a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> 				publicMethods = l.toArray(<strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>[l.size()]);
 <a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> 			}
 <a class="jxr_linenumber" name="L2285" href="#L2285">2285</a> 		}
 <a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 		<strong class="jxr_keyword">return</strong> publicMethods;
@@ -2297,7 +2297,7 @@
 <a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> 	ConstructorInfo getConstructorInfo(Constructor&lt;?&gt; x) {
 <a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> 		ConstructorInfo i = constructors.get(x);
 <a class="jxr_linenumber" name="L2291" href="#L2291">2291</a> 		<strong class="jxr_keyword">if</strong> (i == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> 			i = <strong class="jxr_keyword">new</strong> <a name="ConstructorInfo" href="../../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>(<strong class="jxr_keyword">this</strong>, x);
+<a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> 			i = <strong class="jxr_keyword">new</strong> <a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a>(<strong class="jxr_keyword">this</strong>, x);
 <a class="jxr_linenumber" name="L2293" href="#L2293">2293</a> 			constructors.put(x, i);
 <a class="jxr_linenumber" name="L2294" href="#L2294">2294</a> 		}
 <a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> 		<strong class="jxr_keyword">return</strong> i;
@@ -2306,7 +2306,7 @@
 <a class="jxr_linenumber" name="L2298" href="#L2298">2298</a> 	FieldInfo getFieldInfo(Field x) {
 <a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> 		FieldInfo i = fields.get(x);
 <a class="jxr_linenumber" name="L2300" href="#L2300">2300</a> 		<strong class="jxr_keyword">if</strong> (i == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L2301" href="#L2301">2301</a> 			i = <strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../org/apache/juneau/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>(<strong class="jxr_keyword">this</strong>, x);
+<a class="jxr_linenumber" name="L2301" href="#L2301">2301</a> 			i = <strong class="jxr_keyword">new</strong> <a name="FieldInfo" href="../../../../../org/apache/juneau/common/reflect/FieldInfo.html#FieldInfo">FieldInfo</a>(<strong class="jxr_keyword">this</strong>, x);
 <a class="jxr_linenumber" name="L2302" href="#L2302">2302</a> 			fields.put(x, i);
 <a class="jxr_linenumber" name="L2303" href="#L2303">2303</a> 		}
 <a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> 		<strong class="jxr_keyword">return</strong> i;
@@ -2315,7 +2315,7 @@
 <a class="jxr_linenumber" name="L2307" href="#L2307">2307</a> 	MethodInfo getMethodInfo(Method x) {
 <a class="jxr_linenumber" name="L2308" href="#L2308">2308</a> 		MethodInfo i = methods.get(x);
 <a class="jxr_linenumber" name="L2309" href="#L2309">2309</a> 		<strong class="jxr_keyword">if</strong> (i == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> 			i = <strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>(<strong class="jxr_keyword">this</strong>, x);
+<a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> 			i = <strong class="jxr_keyword">new</strong> <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>(<strong class="jxr_keyword">this</strong>, x);
 <a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> 			methods.put(x, i);
 <a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> 		}
 <a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> 		<strong class="jxr_keyword">return</strong> i;

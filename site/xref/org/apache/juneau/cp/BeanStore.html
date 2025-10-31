@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.utils.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.internal.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshaller.*;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * Java bean store.</em>
@@ -510,7 +510,7 @@
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * @param executable The constructor or method to get the params for.</em>
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * @return A comma-delimited list of types that are missing from this factory, or &lt;jk&gt;null&lt;/jk&gt; if none are missing.</em>
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<strong class="jxr_keyword">public</strong> String getMissingParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> executable) {
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<strong class="jxr_keyword">public</strong> String getMissingParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> executable) {
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 		List&lt;ParamInfo&gt; params = executable.getParams();
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 		List&lt;String&gt; l = list();
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 		loop: <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; params.size(); i++) {
@@ -536,7 +536,7 @@
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * @param executable The constructor or method to get the params for.</em>
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * @return The corresponding beans in this factory for the specified param types.</em>
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	<strong class="jxr_keyword">public</strong> Object[] getParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> executable) {
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	<strong class="jxr_keyword">public</strong> Object[] getParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> executable) {
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 		Object[] o = <strong class="jxr_keyword">new</strong> Object[executable.getParamCount()];
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; executable.getParamCount(); i++) {
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 			ParamInfo pi = executable.getParam(i);
@@ -561,7 +561,7 @@
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 * @param executable The constructor or method to get the params for.</em>
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> <em class="jxr_javadoccomment">	 * @return A comma-delimited list of types that are missing from this factory.</em>
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasAllParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> executable) {
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasAllParams(<a name="ExecutableInfo" href="../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> executable) {
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 		loop: <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; executable.getParamCount(); i++) {
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 			ParamInfo pi = executable.getParam(i);
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 			ClassInfo pt = pi.getParameterType();
@@ -656,10 +656,10 @@
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Method cannot be used because BeanStore is read-only."</span>);
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 	}
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> 
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findBeanName(<a name="ParamInfo" href="../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> pi) {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findBeanName(<a name="ParamInfo" href="../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> pi) {
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 		Annotation n = pi.getAnnotation(Annotation.<strong class="jxr_keyword">class</strong>, x -&gt; scn(x.annotationType()).equals(<span class="jxr_string">"Named"</span>));
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">if</strong> (nn(n))
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">return</strong> AnnotationInfo.of((<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>)<strong class="jxr_keyword">null</strong>, n).getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>, NOT_EMPTY).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">return</strong> AnnotationInfo.of((<a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>)<strong class="jxr_keyword">null</strong>, n).getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>, NOT_EMPTY).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 	}
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 

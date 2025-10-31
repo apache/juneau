@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.remote.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.bean.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.common.utils.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">/**</em>
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<em class="jxr_comment">// Helper methods to process method-level annotations with defaults (9.2.0)</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<em class="jxr_comment">// These handle both individual annotations and repeated annotation arrays</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> processContentDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi) {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> processContentDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi) {
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 			mi.getAnnotationList().forEach(Content.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 				Content c = x.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 				String def = c.def();
@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			});
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		}
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processFormDataDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processFormDataDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			mi.getAnnotationList().forEach(FormData.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 				FormData fd = x.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 				String name = firstNonEmpty(fd.name(), fd.value());
@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			});
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processHeaderDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processHeaderDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<em class="jxr_comment">// Check for individual @Header annotations</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			mi.getAnnotationList().forEach(Header.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 				Header h = x.<strong class="jxr_keyword">inner</strong>();
@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			});
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		}
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processPathDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processPathDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			mi.getAnnotationList().forEach(Path.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 				Path p = x.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 				String name = firstNonEmpty(p.name(), p.value());
@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 			});
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		}
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processQueryDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> processQueryDefaults(<a name="MethodInfo" href="../../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, Map&lt;String,String&gt; defaults) {
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 			mi.getAnnotationList().forEach(Query.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, x -&gt; {
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 				Query q = x.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 				String name = firstNonEmpty(q.name(), q.value());

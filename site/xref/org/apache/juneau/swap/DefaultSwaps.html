@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> javax.xml.datatype.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.swaps.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * @param ci The class to find the swap for.</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * @return The matched swap, or &lt;jk&gt;null&lt;/jk&gt; if it couldn't be found.</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ObjectSwap&lt;?,?&gt; find(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ObjectSwap&lt;?,?&gt; find(<a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci) {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> ci2 = ci.getAnyParent(x -&gt; nn(SWAPS.get(x.<strong class="jxr_keyword">inner</strong>())));
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> ci2 == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : SWAPS.get(ci2.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}

@@ -572,11 +572,11 @@
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 	}
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 	<strong class="jxr_keyword">final</strong> Class&lt;T&gt; innerClass;                              <em class="jxr_comment">// The class being wrapped.</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	<strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> info;
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	<strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> info;
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> T&gt; implClass;             <em class="jxr_comment">// The implementation class to use if this is an interface.</em>
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ClassCategory cc;                         <em class="jxr_comment">// The class category.</em>
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method fromStringMethod;                  <em class="jxr_comment">// The static valueOf(String) or fromString(String) or forString(String) method (if it has one).</em>
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> noArgConstructor,                                    <em class="jxr_comment">// The no-arg constructor for this class (if it has one).</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> noArgConstructor,                                    <em class="jxr_comment">// The no-arg constructor for this class (if it has one).</em>
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 		stringConstructor;                                   <em class="jxr_comment">// The X(String) constructor (if it has one).</em>
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method exampleMethod;                                       <em class="jxr_comment">// The example() or @Example-annotated method (if it has one).</em>
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Field exampleField;                                        <em class="jxr_comment">// The @Example-annotated field (if it has one).</em>
@@ -985,7 +985,7 @@
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">	 * @return The no-arg constructor for this class, or &lt;jk&gt;null&lt;/jk&gt; if it does not exist.</em>
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getConstructor() { <strong class="jxr_keyword">return</strong> noArgConstructor; }
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getConstructor() { <strong class="jxr_keyword">return</strong> noArgConstructor; }
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> 
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> <em class="jxr_javadoccomment">	 * Returns the bean dictionary name associated with this class.</em>
@@ -1096,7 +1096,7 @@
 <a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> <em class="jxr_javadoccomment">	 * @param conVis The constructor visibility.</em>
 <a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> <em class="jxr_javadoccomment">	 * @return The no-arg constructor for this class, or &lt;jk&gt;null&lt;/jk&gt; if it does not exist.</em>
 <a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getImplClassConstructor(<a name="Visibility" href="../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> conVis) {
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 	<strong class="jxr_keyword">public</strong> <a name="ConstructorInfo" href="../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> getImplClassConstructor(<a name="Visibility" href="../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> conVis) {
 <a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 		<strong class="jxr_keyword">if</strong> (nn(implClass))
 <a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 			<strong class="jxr_keyword">return</strong> ClassInfo.of(implClass).getNoArgConstructor(conVis);
 <a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -1107,7 +1107,7 @@
 <a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> <em class="jxr_javadoccomment">	 * @return The {@link ClassInfo} wrapper for the underlying class, never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getInfo() { <strong class="jxr_keyword">return</strong> info; }
+<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getInfo() { <strong class="jxr_keyword">return</strong> info; }
 <a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 
 <a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> <em class="jxr_javadoccomment">	 * Returns any exception that was throw in the &lt;c&gt;init()&lt;/c&gt; method.</em>

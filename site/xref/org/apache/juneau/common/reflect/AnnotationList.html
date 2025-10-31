@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>AnnotationList xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/reflect/AnnotationList.html">View Javadoc</a></div><pre>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/common/reflect/AnnotationList.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
@@ -22,7 +22,7 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.reflect;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.common.reflect;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.PredicateUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * @serial exclude</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> <strong class="jxr_keyword">extends</strong> ArrayList&lt;AnnotationInfo&lt;?&gt;&gt; {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="AnnotationList" href="../../../../../org/apache/juneau/common/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> <strong class="jxr_keyword">extends</strong> ArrayList&lt;AnnotationInfo&lt;?&gt;&gt; {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Comparator&lt;AnnotationInfo&lt;?&gt;&gt; RANK_COMPARATOR = (o1, o2) -&gt; o1.rank - o2.rank;
@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> forEach(Class&lt;A&gt; type, Predicate&lt;AnnotationInfo&lt;A&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;A&gt;&gt; action) {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="AnnotationList" href="../../../../../org/apache/juneau/common/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> forEach(Class&lt;A&gt; type, Predicate&lt;AnnotationInfo&lt;A&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;A&gt;&gt; action) {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		forEach(x -&gt; {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">if</strong> (x.isType(type))
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  				consumeIf(filter, action, (AnnotationInfo&lt;A&gt;)x);
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * @param action An action to perform on the entry.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> forEach(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../../org/apache/juneau/common/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> forEach(Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		forEach(x -&gt; consumeIf(filter, action, x));
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
@@ -83,7 +83,7 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * @param action An action to perform on the value.</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">public</strong> &lt;T&gt; <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> forEachValue(Class&lt;T&gt; type, String name, Predicate&lt;T&gt; filter, Consumer&lt;T&gt; action) {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">public</strong> &lt;T&gt; <a name="AnnotationList" href="../../../../../org/apache/juneau/common/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> forEachValue(Class&lt;T&gt; type, String name, Predicate&lt;T&gt; filter, Consumer&lt;T&gt; action) {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		forEach(x -&gt; x.forEachValue(type, name, filter, action));
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../org/apache/juneau/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> sort() {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">public</strong> <a name="AnnotationList" href="../../../../../org/apache/juneau/common/reflect/AnnotationList.html#AnnotationList">AnnotationList</a> sort() {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		Collections.sort(<strong class="jxr_keyword">this</strong>, RANK_COMPARATOR);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}

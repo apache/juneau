@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.*;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.soap.*;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.svl.*;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.swap.*;
@@ -663,7 +663,7 @@
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">if</strong> (o.getClass() == Class.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 			<strong class="jxr_keyword">return</strong> ClassInfo.of((Class&lt;?&gt;)o).getFullName();
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">if</strong> (o.getClass() == ClassInfo.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			<strong class="jxr_keyword">return</strong> ((<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>)o).getFullName();
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			<strong class="jxr_keyword">return</strong> ((<a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>)o).getFullName();
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">if</strong> (o.getClass().isEnum())
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 			<strong class="jxr_keyword">return</strong> getClassMetaForObject(o).toString(o);
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 		String s = o.toString();

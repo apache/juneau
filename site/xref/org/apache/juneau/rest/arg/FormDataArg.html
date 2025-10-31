@@ -36,7 +36,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.collections.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.httppart.*;
@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * @return A new {@link FormDataArg}, or &lt;jk&gt;null&lt;/jk&gt; if the parameter is not annotated with {@link FormData}.</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="FormDataArg" href="../../../../../org/apache/juneau/rest/arg/FormDataArg.html#FormDataArg">FormDataArg</a> create(<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="FormDataArg" href="../../../../../org/apache/juneau/rest/arg/FormDataArg.html#FormDataArg">FormDataArg</a> create(<a name="ParamInfo" href="../../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> paramInfo, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">if</strong> (paramInfo.hasAnnotation(FormData.<strong class="jxr_keyword">class</strong>) || paramInfo.getParameterType().hasAnnotation(FormData.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="FormDataArg" href="../../../../../org/apache/juneau/rest/arg/FormDataArg.html#FormDataArg">FormDataArg</a>(paramInfo, annotations);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * @param paramName The form data parameter name.</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * @return Merged annotation, or null if no class-level defaults exist.</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> FormData getMergedFormData(<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> pi, String paramName) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> FormData getMergedFormData(<a name="ParamInfo" href="../../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> pi, String paramName) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<em class="jxr_comment">// Get the declaring class</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">if</strong> (declaringClass == <strong class="jxr_keyword">null</strong>)
@@ -161,7 +161,7 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String name, def;
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> type;
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> type;
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
@@ -169,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * @param pi The Java method parameter being resolved.</em>
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">protected</strong> <a name="FormDataArg" href="../../../../../org/apache/juneau/rest/arg/FormDataArg.html#FormDataArg">FormDataArg</a>(<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> pi, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">protected</strong> <a name="FormDataArg" href="../../../../../org/apache/juneau/rest/arg/FormDataArg.html#FormDataArg">FormDataArg</a>(<a name="ParamInfo" href="../../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> pi, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<em class="jxr_comment">// Get the form data parameter name</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">this</strong>.name = findName(pi).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"@FormData used without name or value"</span>));
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 

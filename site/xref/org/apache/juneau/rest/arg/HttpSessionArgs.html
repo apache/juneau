@@ -25,7 +25,7 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.arg;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.function.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 * @param paramInfo The Java method parameter being resolved.</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">	 * @return A new arg, or &lt;jk&gt;null&lt;/jk&gt; if the parameter type is not one of the supported types.</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="HttpSessionArgs" href="../../../../../org/apache/juneau/rest/arg/HttpSessionArgs.html#HttpSessionArgs">HttpSessionArgs</a> create(<a name="ParamInfo" href="../../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> paramInfo) {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="HttpSessionArgs" href="../../../../../org/apache/juneau/rest/arg/HttpSessionArgs.html#HttpSessionArgs">HttpSessionArgs</a> create(<a name="ParamInfo" href="../../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> paramInfo) {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">if</strong> (paramInfo.isType(HttpSession.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="HttpSessionArgs" href="../../../../../org/apache/juneau/rest/arg/HttpSessionArgs.html#HttpSessionArgs">HttpSessionArgs</a>(x -&gt; x);
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

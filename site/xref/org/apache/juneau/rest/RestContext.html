@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.oapi.*;
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.*;
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.ParseException;
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.annotation.*;
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.arg.*;
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.debug.*;
@@ -221,12 +221,12 @@
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">return</strong> x2;
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		}
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isRestBeanMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi) {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isRestBeanMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi) {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">var</strong> x = mi.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">return</strong> nn(x) &amp;&amp; x.methodScope().length == 0;
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		}
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isRestBeanMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, String name) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isRestBeanMethod(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, String name) {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">var</strong> x = mi.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">return</strong> nn(x) &amp;&amp; x.methodScope().length == 0 &amp;&amp; x.name().equals(name);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 		}

@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.cp.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.annotation.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.httppart.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Represents the metadata gathered from a getter method of a class annotated with {@link Request}.</em>
@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		}
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">static</strong> RequestBeanPropertyMeta.Builder create(<a name="HttpPartType" href="../../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType, Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="MethodInfo" href="../../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">static</strong> RequestBeanPropertyMeta.Builder create(<a name="HttpPartType" href="../../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType, Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		HttpPartSchema.Builder sb = HttpPartSchema.create().name(m.getPropertyName());
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		m.forEachAnnotation(Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; sb.apply(x));
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		m.forEachAnnotation(c, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; sb.apply(x));

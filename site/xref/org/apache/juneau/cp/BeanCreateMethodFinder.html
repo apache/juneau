@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.annotation.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.reflect.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Utility class for creating beans through creator methods.</em>
@@ -95,7 +95,7 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object resource;
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method;
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> method;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> Object[] args;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">private</strong> Supplier&lt;T&gt; def = () -&gt; <strong class="jxr_keyword">null</strong>;

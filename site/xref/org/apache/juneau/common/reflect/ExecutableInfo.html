@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>ExecutableInfo xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../../../apidocs/org/apache/juneau/reflect/ExecutableInfo.html">View Javadoc</a></div><pre>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/common/reflect/ExecutableInfo.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
@@ -22,7 +22,7 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.reflect;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.common.reflect;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.CollectionUtils.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.PredicateUtils.*;
@@ -43,14 +43,14 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="ExecutableInfo" href="../../../../org/apache/juneau/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> declaringClass;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> declaringClass;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">final</strong> Executable e;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isConstructor;
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="ParamInfo" href="../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a>[] params;
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[] paramTypes, exceptionInfos;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="ParamInfo" href="../../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a>[] params;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[] paramTypes, exceptionInfos;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> Class&lt;?&gt;[] rawParamTypes;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> Type[] rawGenericParamTypes;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> Parameter[] rawParameters;
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * @param declaringClass The class that declares this method or constructor.</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * @param e The constructor or method that this info represents.</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">protected</strong> <a name="ExecutableInfo" href="../../../../org/apache/juneau/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a>(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> declaringClass, Executable e) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">protected</strong> <a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a>(<a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> declaringClass, Executable e) {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">this</strong>.declaringClass = declaringClass;
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">this</strong>.e = e;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">this</strong>.isConstructor = e instanceof Constructor;
@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <a name="ExecutableInfo" href="../../../../org/apache/juneau/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> accessible() {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> accessible() {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		setAccessible();
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
@@ -103,7 +103,7 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * @param action The action to perform.</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">public</strong> <a name="ExecutableInfo" href="../../../../org/apache/juneau/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> forEachParam(Predicate&lt;ParamInfo&gt; filter, Consumer&lt;ParamInfo&gt; action) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">public</strong> <a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> forEachParam(Predicate&lt;ParamInfo&gt; filter, Consumer&lt;ParamInfo&gt; action) {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pi : _getParams())
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<strong class="jxr_keyword">if</strong> (test(filter, pi))
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 				action.accept(pi);
@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * @param consumer The consumer.</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="ExecutableInfo" href="../../../../org/apache/juneau/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> forEachParameterAnnotation(<strong class="jxr_keyword">int</strong> index, Class&lt;A&gt; type, Predicate&lt;A&gt; predicate, Consumer&lt;A&gt; consumer) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="ExecutableInfo" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo.html#ExecutableInfo">ExecutableInfo</a> forEachParameterAnnotation(<strong class="jxr_keyword">int</strong> index, Class&lt;A&gt; type, Predicate&lt;A&gt; predicate, Consumer&lt;A&gt; consumer) {
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : _getParameterAnnotations(index))
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<strong class="jxr_keyword">if</strong> (type.isInstance(a))
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 				consumeIf(predicate, consumer, type.<strong class="jxr_keyword">cast</strong>(a));
@@ -139,7 +139,7 @@
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> fuzzyArgsMatch(Class&lt;?&gt;...argTypes) {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">int</strong> matches = 0;
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">outer</strong>: <strong class="jxr_keyword">for</strong> (<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> pi : getParamTypes()) {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">outer</strong>: <strong class="jxr_keyword">for</strong> (<a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> pi : getParamTypes()) {
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : argTypes) {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 				<strong class="jxr_keyword">if</strong> (pi.isParentOfFuzzyPrimitives(a)) {
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 					matches++;
@@ -163,7 +163,7 @@
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> fuzzyArgsMatch(ClassInfo...argTypes) {
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">int</strong> matches = 0;
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">outer</strong>: <strong class="jxr_keyword">for</strong> (<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> pi : getParamTypes()) {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">outer</strong>: <strong class="jxr_keyword">for</strong> (<a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> pi : getParamTypes()) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : argTypes) {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 				<strong class="jxr_keyword">if</strong> (pi.isParentOfFuzzyPrimitives(a)) {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 					matches++;
@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> fuzzyArgsMatch(Object...argTypes) {
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">int</strong> matches = 0;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">outer</strong>: <strong class="jxr_keyword">for</strong> (<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> pi : getParamTypes()) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">outer</strong>: <strong class="jxr_keyword">for</strong> (<a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> pi : getParamTypes()) {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : argTypes) {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				<strong class="jxr_keyword">if</strong> (pi.canAcceptArg(a)) {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 					matches++;
@@ -204,7 +204,7 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * @return Metadata about the class that declared this method or constructor.</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getDeclaringClass() { <strong class="jxr_keyword">return</strong> declaringClass; }
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getDeclaringClass() { <strong class="jxr_keyword">return</strong> declaringClass; }
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * Returns the exception types on this executable.</em>
@@ -250,7 +250,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * @param index The parameter index.</em>
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * @return The parameter information, never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="ParamInfo" href="../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> getParam(<strong class="jxr_keyword">int</strong> index) {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="ParamInfo" href="../../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> getParam(<strong class="jxr_keyword">int</strong> index) {
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 		checkIndex(index);
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">return</strong> _getParams()[index];
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
@@ -281,7 +281,7 @@
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * @param index The parameter index.</em>
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * @return The parameter type of the parameter at the specified index.</em>
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getParamType(<strong class="jxr_keyword">int</strong> index) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getParamType(<strong class="jxr_keyword">int</strong> index) {
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		checkIndex(index);
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">return</strong> _getParameterTypes()[index];
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
@@ -775,7 +775,7 @@
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * @param v The visibility to validate against.</em>
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this visibility matches the modifier attribute of this method.</em>
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isVisible(<a name="Visibility" href="../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> v) {
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isVisible(<a name="Visibility" href="../../../../../org/apache/juneau/common/reflect/Visibility.html#Visibility">Visibility</a> v) {
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 		<strong class="jxr_keyword">return</strong> v.isVisible(e);
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> 	}
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 
@@ -816,11 +816,11 @@
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 		<strong class="jxr_keyword">return</strong> declaredAnnotations;
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 	}
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	<strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[] _getExceptionTypes() {
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	<strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[] _getExceptionTypes() {
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 		<strong class="jxr_keyword">if</strong> (exceptionInfos == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 				Class&lt;?&gt;[] exceptionTypes = e.getExceptionTypes();
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 				ClassInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[exceptionTypes.length];
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 				ClassInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[exceptionTypes.length];
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; exceptionTypes.length; i++)
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 					l[i] = ClassInfo.of(exceptionTypes[i]);
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 				exceptionInfos = l;
@@ -855,7 +855,7 @@
 <a class="jxr_linenumber" name="L847" href="#L847">847</a> 		<strong class="jxr_keyword">return</strong> x[index];
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> 	}
 <a class="jxr_linenumber" name="L849" href="#L849">849</a> 
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> 	<strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[] _getParameterTypes() {
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 	<strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[] _getParameterTypes() {
 <a class="jxr_linenumber" name="L851" href="#L851">851</a> 		<strong class="jxr_keyword">if</strong> (paramTypes == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 				Class&lt;?&gt;[] ptc = _getRawParamTypes();
@@ -875,7 +875,7 @@
 <a class="jxr_linenumber" name="L867" href="#L867">867</a> 						ptt = ptc;
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> 					}
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> 				}
-<a class="jxr_linenumber" name="L870" href="#L870">870</a> 				ClassInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[ptc.length];
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 				ClassInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>[ptc.length];
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; ptc.length; i++)
 <a class="jxr_linenumber" name="L872" href="#L872">872</a> 					l[i] = ClassInfo.of(ptc[i], ptt[i]);
 <a class="jxr_linenumber" name="L873" href="#L873">873</a> 				paramTypes = l;
@@ -884,13 +884,13 @@
 <a class="jxr_linenumber" name="L876" href="#L876">876</a> 		<strong class="jxr_keyword">return</strong> paramTypes;
 <a class="jxr_linenumber" name="L877" href="#L877">877</a> 	}
 <a class="jxr_linenumber" name="L878" href="#L878">878</a> 
-<a class="jxr_linenumber" name="L879" href="#L879">879</a> 	<strong class="jxr_keyword">final</strong> <a name="ParamInfo" href="../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a>[] _getParams() {
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 	<strong class="jxr_keyword">final</strong> <a name="ParamInfo" href="../../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a>[] _getParams() {
 <a class="jxr_linenumber" name="L880" href="#L880">880</a> 		<strong class="jxr_keyword">if</strong> (params == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L881" href="#L881">881</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L882" href="#L882">882</a> 				Parameter[] rp = _getRawParameters();
-<a class="jxr_linenumber" name="L883" href="#L883">883</a> 				ParamInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ParamInfo" href="../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a>[rp.length];
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 				ParamInfo[] l = <strong class="jxr_keyword">new</strong> <a name="ParamInfo" href="../../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a>[rp.length];
 <a class="jxr_linenumber" name="L884" href="#L884">884</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; rp.length; i++)
-<a class="jxr_linenumber" name="L885" href="#L885">885</a> 					l[i] = <strong class="jxr_keyword">new</strong> <a name="ParamInfo" href="../../../../org/apache/juneau/reflect/ParamInfo.html#ParamInfo">ParamInfo</a>(<strong class="jxr_keyword">this</strong>, rp[i], i);
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 					l[i] = <strong class="jxr_keyword">new</strong> <a name="ParamInfo" href="../../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a>(<strong class="jxr_keyword">this</strong>, rp[i], i);
 <a class="jxr_linenumber" name="L886" href="#L886">886</a> 				params = l;
 <a class="jxr_linenumber" name="L887" href="#L887">887</a> 			}
 <a class="jxr_linenumber" name="L888" href="#L888">888</a> 		}

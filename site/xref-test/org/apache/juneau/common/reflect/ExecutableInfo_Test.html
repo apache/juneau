@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>ExecutableInfo_Test xref</title>
-<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
 </head>
 <body>
-<div id="overview"><a href="../../../../../testapidocs/org/apache/juneau/reflect/ExecutableInfo_Test.html">View Javadoc</a></div><pre>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/common/reflect/ExecutableInfo_Test.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
@@ -22,7 +22,7 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.reflect;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.common.reflect;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.lang.annotation.ElementType.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.lang.annotation.RetentionPolicy.*;
@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.common.reflect.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">class</strong> <a name="ExecutableInfo_Test" href="../../../../org/apache/juneau/reflect/ExecutableInfo_Test.html#ExecutableInfo_Test">ExecutableInfo_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">class</strong> <a name="ExecutableInfo_Test" href="../../../../../org/apache/juneau/common/reflect/ExecutableInfo_Test.html#ExecutableInfo_Test">ExecutableInfo_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> check(String expected, Object o) {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertEquals(expected, TO_STRING.apply(o));
@@ -540,15 +540,15 @@
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 	<strong class="jxr_keyword">static</strong> ClassInfo x2 = ClassInfo.of(X.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 	@Test <strong class="jxr_keyword">void</strong> getFullName_method() {
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.reflect.ExecutableInfo_Test$X.foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParams()).getFullName());
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.reflect.ExecutableInfo_Test$X.foo(java.lang.String)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParamTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.reflect.ExecutableInfo_Test$X.foo(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParamTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParams()).getFullName());
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo(java.lang.String)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParamTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParamTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 	@Test <strong class="jxr_keyword">void</strong> getFullName_constructor() {
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.reflect.ExecutableInfo_Test$X()"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParams).getFullName());
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.reflect.ExecutableInfo_Test$X(java.lang.String)"</span>, x2.getPublicConstructor(x -&gt; x.hasParamTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.reflect.ExecutableInfo_Test$X(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicConstructor(x -&gt; x.hasParamTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X()"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParams).getFullName());
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X(java.lang.String)"</span>, x2.getPublicConstructor(x -&gt; x.hasParamTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicConstructor(x -&gt; x.hasParamTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 	}
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 
 <a class="jxr_linenumber" name="L546" href="#L546">546</a> 	@Test <strong class="jxr_keyword">void</strong> getShortName_method() {
