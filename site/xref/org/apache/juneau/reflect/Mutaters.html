@@ -286,8 +286,8 @@
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 				<strong class="jxr_keyword">public</strong> Object mutate(Object <strong class="jxr_keyword">outer</strong>, Object in) {
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 						<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 							<strong class="jxr_keyword">return</strong> c.invoke(<strong class="jxr_keyword">outer</strong>, in);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 						<strong class="jxr_keyword">return</strong> c.invoke(in);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 							<strong class="jxr_keyword">return</strong> c.newInstance(<strong class="jxr_keyword">outer</strong>, in);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 						<strong class="jxr_keyword">return</strong> c.newInstance(in);
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 					} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 						<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 					}

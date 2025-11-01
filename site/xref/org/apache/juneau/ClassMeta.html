@@ -1854,7 +1854,7 @@
 <a class="jxr_linenumber" name="L1846" href="#L1846">1846</a> 			<strong class="jxr_keyword">return</strong> (T)Array.newInstance(getInnerClass().getComponentType(), 0);
 <a class="jxr_linenumber" name="L1847" href="#L1847">1847</a> 		ConstructorInfo c = getConstructor();
 <a class="jxr_linenumber" name="L1848" href="#L1848">1848</a> 		<strong class="jxr_keyword">if</strong> (nn(c))
-<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;invoke();
+<a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance();
 <a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 		InvocationHandler h = getProxyInvocationHandler();
 <a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 		<strong class="jxr_keyword">if</strong> (nn(h))
 <a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 			<strong class="jxr_keyword">return</strong> (T)Proxy.newProxyInstance(<strong class="jxr_keyword">this</strong>.getClass().getClassLoader(), a(getInnerClass(), java.io.Serializable.<strong class="jxr_keyword">class</strong>), h);
@@ -1874,7 +1874,7 @@
 <a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> 	<strong class="jxr_keyword">public</strong> T newInstance(Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> {
 <a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> 		<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> 			<strong class="jxr_keyword">return</strong> noArgConstructor.&lt;T&gt;invoke(<strong class="jxr_keyword">outer</strong>);
+<a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> 			<strong class="jxr_keyword">return</strong> noArgConstructor.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> 		<strong class="jxr_keyword">return</strong> newInstance();
 <a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> 	}
 <a class="jxr_linenumber" name="L1872" href="#L1872">1872</a> 
@@ -1916,8 +1916,8 @@
 <a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 		ConstructorInfo c = stringConstructor;
 <a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> 		<strong class="jxr_keyword">if</strong> (nn(c)) {
 <a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> 			<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> 				<strong class="jxr_keyword">return</strong> c.&lt;T&gt;invoke(<strong class="jxr_keyword">outer</strong>, arg);
-<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;invoke(arg);
+<a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> 				<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance(<strong class="jxr_keyword">outer</strong>, arg);
+<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> 			<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance(arg);
 <a class="jxr_linenumber" name="L1913" href="#L1913">1913</a> 		}
 <a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ExecutableException" href="../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a>(<span class="jxr_string">"No string constructor or valueOf(String) method found for class '"</span> + getInnerClass().getName() + <span class="jxr_string">"'"</span>);
 <a class="jxr_linenumber" name="L1915" href="#L1915">1915</a> 	}

@@ -245,7 +245,7 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			ConstructorInfo ci = type.getInfo().getPublicConstructor(x -&gt; x.hasParamTypes(HttpResponse.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">if</strong> (nn(ci)) {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 					<strong class="jxr_keyword">return</strong> (T)ci.invoke(response);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 					<strong class="jxr_keyword">return</strong> (T)ci.newInstance(response);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 				} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 					<strong class="jxr_keyword">throw</strong> toRuntimeException(e);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 				}
@@ -282,7 +282,7 @@
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 						ConstructorInfo c = type.getInfo().getPublicConstructor(ConstructorInfo::hasNoParams);
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 						<strong class="jxr_keyword">if</strong> (nn(c)) {
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 							<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 								<strong class="jxr_keyword">return</strong> c.&lt;T&gt;invoke();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 								<strong class="jxr_keyword">return</strong> c.&lt;T&gt;newInstance();
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 							} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/common/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(e);
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 							}

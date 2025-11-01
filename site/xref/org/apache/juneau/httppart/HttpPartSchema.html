@@ -2570,7 +2570,7 @@
 <a class="jxr_linenumber" name="L2562" href="#L2562">2562</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2563" href="#L2563">2563</a> 		}
 <a class="jxr_linenumber" name="L2564" href="#L2564">2564</a> 
-<a class="jxr_linenumber" name="L2565" href="#L2565">2565</a> 		Builder apply(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="ParamInfo" href="../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> mpi) {
+<a class="jxr_linenumber" name="L2565" href="#L2565">2565</a> 		Builder apply(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="ParameterInfo" href="../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> mpi) {
 <a class="jxr_linenumber" name="L2566" href="#L2566">2566</a> 			apply(c, mpi.getParameterType().innerType());
 <a class="jxr_linenumber" name="L2567" href="#L2567">2567</a> 			mpi.forEachDeclaredAnnotation(c, x -&gt; <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">this</strong>::apply);
 <a class="jxr_linenumber" name="L2568" href="#L2568">2568</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -2812,7 +2812,7 @@
 <a class="jxr_linenumber" name="L2804" href="#L2804">2804</a> 			<strong class="jxr_keyword">return</strong> apply(Schema.<strong class="jxr_keyword">class</strong>, m).apply(c, m);
 <a class="jxr_linenumber" name="L2805" href="#L2805">2805</a> 		}
 <a class="jxr_linenumber" name="L2806" href="#L2806">2806</a> 
-<a class="jxr_linenumber" name="L2807" href="#L2807">2807</a> 		Builder applyAll(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="ParamInfo" href="../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> mpi) {
+<a class="jxr_linenumber" name="L2807" href="#L2807">2807</a> 		Builder applyAll(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="ParameterInfo" href="../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> mpi) {
 <a class="jxr_linenumber" name="L2808" href="#L2808">2808</a> 			<strong class="jxr_keyword">return</strong> apply(Schema.<strong class="jxr_keyword">class</strong>, mpi).apply(c, mpi);
 <a class="jxr_linenumber" name="L2809" href="#L2809">2809</a> 		}
 <a class="jxr_linenumber" name="L2810" href="#L2810">2810</a> 
@@ -3162,7 +3162,7 @@
 <a class="jxr_linenumber" name="L3154" href="#L3154">3154</a> <em class="jxr_javadoccomment">	 * @param mpi The Java method parameter.</em>
 <a class="jxr_linenumber" name="L3155" href="#L3155">3155</a> <em class="jxr_javadoccomment">	 * @return The schema information about the parameter.</em>
 <a class="jxr_linenumber" name="L3156" href="#L3156">3156</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L3157" href="#L3157">3157</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> create(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="ParamInfo" href="../../../../org/apache/juneau/common/reflect/ParamInfo.html#ParamInfo">ParamInfo</a> mpi) {
+<a class="jxr_linenumber" name="L3157" href="#L3157">3157</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> create(Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="ParameterInfo" href="../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> mpi) {
 <a class="jxr_linenumber" name="L3158" href="#L3158">3158</a> 		<strong class="jxr_keyword">return</strong> create().applyAll(c, mpi).build();
 <a class="jxr_linenumber" name="L3159" href="#L3159">3159</a> 	}
 <a class="jxr_linenumber" name="L3160" href="#L3160">3160</a> 

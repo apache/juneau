@@ -398,7 +398,7 @@
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 				<em class="jxr_comment">// Check for no-arg constructor.</em>
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 				ConstructorInfo ci = ClassInfo.of((Class&lt;?&gt;)o).getPublicConstructor(ConstructorInfo::hasNoParams);
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 				<strong class="jxr_keyword">if</strong> (nn(ci))
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 					<strong class="jxr_keyword">return</strong> ci.invoke();
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 					<strong class="jxr_keyword">return</strong> ci.newInstance();
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 				<em class="jxr_comment">// Check for builder.</em>
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 				@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
