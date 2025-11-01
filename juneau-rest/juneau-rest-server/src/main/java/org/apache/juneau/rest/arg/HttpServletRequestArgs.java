@@ -48,7 +48,7 @@ public class HttpServletRequestArgs extends SimpleRestOperationArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static HttpServletRequestArgs create(ParamInfo paramInfo) {
+	public static HttpServletRequestArgs create(ParameterInfo paramInfo) {
 		if (paramInfo.isType(AsyncContext.class))
 			return new HttpServletRequestArgs(HttpServletRequest::getAsyncContext);
 		if (paramInfo.isType(CookieList.class))

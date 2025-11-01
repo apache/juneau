@@ -431,7 +431,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			for (int i = 0; i < props.length; i++)
 				args[i] = propertyCache.remove(props[i]);
 			try {
-				bean = c.<T>invoke(args);
+				bean = c.<T>newInstance(args);
 				propertyCache.forEach((k, v) -> put(k, v));
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {

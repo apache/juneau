@@ -668,8 +668,8 @@ public abstract class Context implements AnnotationProvider {
 			if (nn(impl) && type.isInstance(impl))
 				return type.cast(impl);
 			if (nn(cache))
-				return cache.get(hashKey(), () -> getContextConstructor().invoke(this));
-			return getContextConstructor().invoke(this);
+				return cache.get(hashKey(), () -> getContextConstructor().newInstance(this));
+			return getContextConstructor().newInstance(this);
 		}
 
 		private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {

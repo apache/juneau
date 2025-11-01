@@ -137,7 +137,7 @@ public class ResponseBeanMeta {
 	 * @param annotations The annotations to apply to any new part serializers or parsers.
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
-	public static ResponseBeanMeta create(ParamInfo mpi, AnnotationWorkList annotations) {
+	public static ResponseBeanMeta create(ParameterInfo mpi, AnnotationWorkList annotations) {
 		if (mpi.hasNoAnnotation(Response.class))
 			return null;
 		var b = new Builder(annotations);

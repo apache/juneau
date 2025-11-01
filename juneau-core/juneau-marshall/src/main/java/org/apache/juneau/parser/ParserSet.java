@@ -390,7 +390,7 @@ public class ParserSet {
 				// Check for no-arg constructor.
 				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor(ConstructorInfo::hasNoParams);
 				if (nn(ci))
-					return ci.invoke();
+					return ci.newInstance();
 
 				// Check for builder.
 				@SuppressWarnings("unchecked")

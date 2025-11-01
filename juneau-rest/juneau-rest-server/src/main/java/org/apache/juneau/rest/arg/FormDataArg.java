@@ -64,7 +64,7 @@ public class FormDataArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link FormDataArg}, or <jk>null</jk> if the parameter is not annotated with {@link FormData}.
 	 */
-	public static FormDataArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
+	public static FormDataArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(FormData.class) || paramInfo.getParameterType().hasAnnotation(FormData.class))
 			return new FormDataArg(paramInfo, annotations);
 		return null;
@@ -77,7 +77,7 @@ public class FormDataArg implements RestOpArg {
 	 * @param paramName The form data parameter name.
 	 * @return Merged annotation, or null if no class-level defaults exist.
 	 */
-	private static FormData getMergedFormData(ParamInfo pi, String paramName) {
+	private static FormData getMergedFormData(ParameterInfo pi, String paramName) {
 		// Get the declaring class
 		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
 		if (declaringClass == null)
@@ -161,7 +161,7 @@ public class FormDataArg implements RestOpArg {
 	 * @param pi The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected FormDataArg(ParamInfo pi, AnnotationWorkList annotations) {
+	protected FormDataArg(ParameterInfo pi, AnnotationWorkList annotations) {
 		// Get the form data parameter name
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@FormData used without name or value"));
 

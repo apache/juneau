@@ -49,7 +49,7 @@ public class ResponseBeanArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link ResponseBeanArg}, or <jk>null</jk> if the parameter is not annotated with {@link Response}.
 	 */
-	public static ResponseBeanArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
+	public static ResponseBeanArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(Response.class) || paramInfo.getParameterType().hasAnnotation(Response.class))
 			return new ResponseBeanArg(paramInfo, annotations);
 		return null;
@@ -65,7 +65,7 @@ public class ResponseBeanArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected ResponseBeanArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
+	protected ResponseBeanArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		this.type = paramInfo.getParameterType().innerType();
 		this.meta = ResponseBeanMeta.create(paramInfo, annotations);
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;

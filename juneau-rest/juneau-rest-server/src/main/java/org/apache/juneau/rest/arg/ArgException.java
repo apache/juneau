@@ -45,7 +45,7 @@ public class ArgException extends InternalServerError {
 	 * @param msg The message.
 	 * @param args The message args.
 	 */
-	public ArgException(ParamInfo pi, String msg, Object...args) {
+	public ArgException(ParameterInfo pi, String msg, Object...args) {
 		super(format(msg, args) + " on parameter " + pi.getIndex() + " of method " + pi.getMethod().getFullName() + ".");
 	}
 

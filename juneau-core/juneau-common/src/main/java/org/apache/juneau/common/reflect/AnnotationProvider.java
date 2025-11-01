@@ -53,7 +53,7 @@ public interface AnnotationProvider {
 		private final Cache2<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = (Cache2)Cache2.of(Constructor.class, Class.class, Annotation[].class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> k1.getAnnotationsByType(k2)).build();
 		// @formatter:on
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (nn(type) && nn(onClass))
 				for (var a : annotations(type, onClass))
@@ -62,7 +62,7 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 			if (nn(type) && nn(onConstructor))
 				for (var a : annotations(type, onConstructor))
@@ -71,7 +71,7 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 			if (nn(type) && nn(onField))
 				for (var a : annotations(type, onField))
@@ -80,7 +80,7 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 			if (nn(type) && nn(onMethod))
 				for (var a : annotations(type, onMethod))
@@ -89,7 +89,7 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (nn(type) && nn(onClass))
 				for (var a : declaredAnnotations(type, onClass))
@@ -98,42 +98,42 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onClass))
 				for (var a : annotations(type, onClass))
 					consumeIf(filter, action, a);
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onConstructor))
 				for (var a : annotations(type, onConstructor))
 					consumeIf(filter, action, a);
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onField))
 				for (var a : annotations(type, onField))
 					consumeIf(filter, action, a);
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onMethod))
 				for (var a : annotations(type, onMethod))
 					consumeIf(filter, action, a);
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onClass))
 				for (var a : declaredAnnotations(type, onClass))
 					consumeIf(filter, action, a);
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			A x = null;
 			if (nn(type) && nn(onClass))
@@ -143,7 +143,7 @@ public interface AnnotationProvider {
 			return x;
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 			A x = null;
 			if (nn(type) && nn(onConstructor))
@@ -153,7 +153,7 @@ public interface AnnotationProvider {
 			return x;
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 			A x = null;
 			if (nn(type) && nn(onField))
@@ -163,7 +163,7 @@ public interface AnnotationProvider {
 			return x;
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 			A x = null;
 			if (nn(type) && nn(onMethod))
@@ -173,7 +173,7 @@ public interface AnnotationProvider {
 			return x;
 		}
 
-		@Override /* Overridden from MetaProvider */
+		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			A x = null;
 			if (nn(type) && nn(onClass))

@@ -100,6 +100,8 @@ public class ClassInfo_Test extends TestBase {
 			return ((Class<?>)t).getSimpleName();
 		if (t instanceof Package)
 			return ((Package)t).getName();
+		if (t instanceof PackageInfo)
+			return ((PackageInfo)t).getName();
 		if (t instanceof ClassInfo)
 			return ((ClassInfo)t).getSimpleName();
 		if (t instanceof MethodInfo)

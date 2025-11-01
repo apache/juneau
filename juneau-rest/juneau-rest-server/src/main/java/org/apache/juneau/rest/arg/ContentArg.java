@@ -53,7 +53,7 @@ public class ContentArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new {@link ContentArg}, or <jk>null</jk> if the parameter is not annotated with {@link Content}.
 	 */
-	public static ContentArg create(ParamInfo paramInfo) {
+	public static ContentArg create(ParameterInfo paramInfo) {
 		if (paramInfo.hasAnnotation(Content.class) || paramInfo.getParameterType().hasAnnotation(Content.class))
 			return new ContentArg(paramInfo);
 		return null;
@@ -68,7 +68,7 @@ public class ContentArg implements RestOpArg {
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
 	 */
-	protected ContentArg(ParamInfo paramInfo) {
+	protected ContentArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(Content.class, paramInfo);
 	}

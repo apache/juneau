@@ -41,7 +41,7 @@ public class ResponseCodeArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new {@link ResponseCodeArg}, or <jk>null</jk> if the parameter is not annotated with {@link StatusCode}.
 	 */
-	public static ResponseCodeArg create(ParamInfo paramInfo) {
+	public static ResponseCodeArg create(ParameterInfo paramInfo) {
 		if (paramInfo.hasAnnotation(StatusCode.class) || paramInfo.getParameterType().hasAnnotation(StatusCode.class))
 			return new ResponseCodeArg(paramInfo);
 		return null;
@@ -54,7 +54,7 @@ public class ResponseCodeArg implements RestOpArg {
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
 	 */
-	protected ResponseCodeArg(ParamInfo paramInfo) {
+	protected ResponseCodeArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();
 		Class<?> c = type instanceof Class ? (Class<?>)type : type instanceof ParameterizedType ? (Class<?>)((ParameterizedType)type).getRawType() : null;
 		if (c != Value.class || getParameterType(type) != Integer.class)

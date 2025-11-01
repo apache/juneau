@@ -25,12 +25,12 @@ import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.security.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Lightweight utility class for introspecting information about a class.
@@ -62,7 +62,8 @@ import org.apache.juneau.common.reflect.*;
  * </ul>
  */
 public class ClassInfo {
-	private static final Map<Class<?>,ClassInfo> CACHE = new ConcurrentHashMap<>();
+	@SuppressWarnings("rawtypes")
+	private static final Cache<Class,ClassInfo> CACHE = Cache.of(Class.class, ClassInfo.class).build();
 
 	/** Reusable ClassInfo for Object class. */
 	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
@@ -121,12 +122,7 @@ public class ClassInfo {
 	public static ClassInfo of(Class<?> c) {
 		if (c == null)
 			return null;
-		ClassInfo ci = CACHE.get(c);
-		if (ci == null) {
-			ci = new ClassInfo(c, c);
-			CACHE.put(c, ci);
-		}
-		return ci;
+		return CACHE.get(c, () -> new ClassInfo(c, c));
 	}
 
 	/**
@@ -778,6 +774,18 @@ public class ClassInfo {
 	}
 
 	/**
+	 * Returns the {@link ClassLoader} for this class.
+	 *
+	 * <p>
+	 * If this class represents a primitive type or void, <jk>null</jk> is returned.
+	 *
+	 * @return The class loader for this class, or <jk>null</jk> if it doesn't have one.
+	 */
+	public ClassLoader getClassLoader() {
+		return c == null ? null : c.getClassLoader();
+	}
+
+	/**
 	 * Returns the base component type of this class if it's an array.
 	 *
 	 * @return The base component type of this class if it's an array, or this object if it's not.
@@ -790,6 +798,19 @@ public class ClassInfo {
 				getDimensions();
 		}
 		return componentType;
+	}
+
+	/**
+	 * Returns the {@link Class} object representing the class or interface that declares the member class
+	 * represented by this class.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if this class is not a member class.
+	 *
+	 * @return The declaring class, or <jk>null</jk> if this class is not a member of another class.
+	 */
+	public ClassInfo getDeclaringClass() {
+		return c == null ? null : of(c.getDeclaringClass());
 	}
 
 	/**
@@ -838,6 +859,48 @@ public class ClassInfo {
 	public List<FieldInfo> getDeclaredFields() { return u(l(_getDeclaredFields())); }
 
 	/**
+	 * Returns all public member classes and interfaces declared by this class and its superclasses.
+	 *
+	 * <p>
+	 * This includes public class and interface members inherited from superclasses and
+	 * public class and interface members declared by the class.
+	 *
+	 * @return
+	 * 	An unmodifiable list of all public member classes and interfaces declared by this class.
+	 * 	<br>Returns an empty list if this class has no public member classes or interfaces.
+	 */
+	public List<ClassInfo> getClasses() {
+		if (c == null)
+			return u(l());
+		Class<?>[] classes = c.getClasses();
+		List<ClassInfo> l = listOfSize(classes.length);
+		for (Class<?> cc : classes)
+			l.add(of(cc));
+		return u(l);
+	}
+
+	/**
+	 * Returns all classes and interfaces declared as members of this class.
+	 *
+	 * <p>
+	 * This includes public, protected, default (package) access, and private classes and interfaces
+	 * declared by the class, but excludes inherited classes and interfaces.
+	 *
+	 * @return
+	 * 	An unmodifiable list of all classes and interfaces declared as members of this class.
+	 * 	<br>Returns an empty list if this class declares no classes or interfaces as members.
+	 */
+	public List<ClassInfo> getDeclaredClasses() {
+		if (c == null)
+			return u(l());
+		Class<?>[] classes = c.getDeclaredClasses();
+		List<ClassInfo> l = listOfSize(classes.length);
+		for (Class<?> cc : classes)
+			l.add(of(cc));
+		return u(l);
+	}
+
+	/**
 	 * Returns a list of interfaces declared on this class.
 	 *
 	 * <p>
@@ -851,6 +914,50 @@ public class ClassInfo {
 	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
 	 */
 	public List<ClassInfo> getDeclaredInterfaces() { return u(l(_getDeclaredInterfaces())); }
+
+	/**
+	 * Returns the immediately enclosing class of this class.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if this class is a top-level class.
+	 *
+	 * @return The enclosing class, or <jk>null</jk> if this is a top-level class.
+	 */
+	public ClassInfo getEnclosingClass() {
+		return c == null ? null : of(c.getEnclosingClass());
+	}
+
+	/**
+	 * Returns the {@link ConstructorInfo} object representing the constructor that declares this class if this is a
+	 * local or anonymous class declared within a constructor.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if this class was not declared within a constructor.
+	 *
+	 * @return The enclosing constructor, or <jk>null</jk> if this class was not declared within a constructor.
+	 */
+	public ConstructorInfo getEnclosingConstructor() {
+		if (c == null)
+			return null;
+		Constructor<?> ec = c.getEnclosingConstructor();
+		return ec == null ? null : getConstructorInfo(ec);
+	}
+
+	/**
+	 * Returns the {@link MethodInfo} object representing the method that declares this class if this is a
+	 * local or anonymous class declared within a method.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if this class was not declared within a method.
+	 *
+	 * @return The enclosing method, or <jk>null</jk> if this class was not declared within a method.
+	 */
+	public MethodInfo getEnclosingMethod() {
+		if (c == null)
+			return null;
+		Method em = c.getEnclosingMethod();
+		return em == null ? null : getMethodInfo(em);
+	}
 
 	/**
 	 * Returns the first matching declared method on this class.
@@ -965,6 +1072,25 @@ public class ClassInfo {
 	public String getName() { return nn(c) ? c.getName() : t.getTypeName(); }
 
 	/**
+	 * Returns the canonical name of the underlying class.
+	 *
+	 * <p>
+	 * The canonical name is the name that would be used in Java source code to refer to the class.
+	 * For example:
+	 * <ul>
+	 * 	<li><js>"java.lang.String"</js> - Normal class
+	 * 	<li><js>"java.lang.String[]"</js> - Array
+	 * 	<li><js>"java.util.Map.Entry"</js> - Nested class
+	 * 	<li><jk>null</jk> - Local or anonymous class
+	 * </ul>
+	 *
+	 * @return The canonical name of the underlying class, or <jk>null</jk> if this class doesn't have a canonical name.
+	 */
+	public String getCanonicalName() {
+		return c == null ? null : c.getCanonicalName();
+	}
+
+	/**
 	 * Returns all possible names for this class.
 	 *
 	 * @return
@@ -977,6 +1103,33 @@ public class ClassInfo {
 	 * 	</ul>
 	 */
 	public String[] getNames() { return a(getFullName(), c.getName(), getShortName(), getSimpleName()); }
+
+	/**
+	 * Returns the module that this class is a member of.
+	 *
+	 * <p>
+	 * If this class is not in a named module, returns the unnamed module of the class loader for this class.
+	 *
+	 * @return The module that this class is a member of.
+	 */
+	public Module getModule() {
+		return c == null ? null : c.getModule();
+	}
+
+	/**
+	 * Returns the Java language modifiers for this class, encoded in an integer.
+	 *
+	 * <p>
+	 * The modifiers consist of the Java Virtual Machine's constants for <jk>public</jk>, <jk>protected</jk>,
+	 * <jk>private</jk>, <jk>final</jk>, <jk>static</jk>, <jk>abstract</jk> and <jk>interface</jk>;
+	 * they should be decoded using the methods of class {@link Modifier}.
+	 *
+	 * @return The modifiers for this class, or <c>0</c> if this object does not represent a class.
+	 * @see Modifier
+	 */
+	public int getModifiers() {
+		return c == null ? 0 : c.getModifiers();
+	}
 
 	/**
 	 * Locates the no-arg constructor for this class.
@@ -1002,9 +1155,9 @@ public class ClassInfo {
 	/**
 	 * Returns the package of this class.
 	 *
-	 * @return The package of this class.
+	 * @return The package of this class wrapped in a {@link PackageInfo}, or <jk>null</jk> if this class has no package.
 	 */
-	public Package getPackage() { return c == null ? null : c.getPackage(); }
+	public PackageInfo getPackage() { return c == null ? null : PackageInfo.of(c.getPackage()); }
 
 	/**
 	 * Returns the specified annotation only if it's been declared on the package of this class.
@@ -1014,8 +1167,8 @@ public class ClassInfo {
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	public <A extends Annotation> A getPackageAnnotation(Class<A> type) {
-		Package p = c == null ? null : c.getPackage();
-		return (p == null ? null : p.getAnnotation(type));
+		PackageInfo pi = getPackage();
+		return (pi == null ? null : pi.getAnnotation(type));
 	}
 
 	/**
@@ -1268,6 +1421,209 @@ public class ClassInfo {
 	public ClassInfo getSuperclass() { return c == null ? null : of(c.getSuperclass()); }
 
 	/**
+	 * Returns the nest host of this class.
+	 *
+	 * <p>
+	 * Every class belongs to exactly one nest. A class that is not a member of a nest
+	 * is its own nest host.
+	 *
+	 * @return The nest host of this class.
+	 */
+	public ClassInfo getNestHost() {
+		return c == null ? null : of(c.getNestHost());
+	}
+
+	/**
+	 * Returns an array containing all the classes and interfaces that are members of the nest
+	 * to which this class belongs.
+	 *
+	 * @return
+	 * 	An unmodifiable list of all classes and interfaces in the same nest as this class.
+	 * 	<br>Returns an empty list if this object does not represent a class.
+	 */
+	public List<ClassInfo> getNestMembers() {
+		if (c == null)
+			return u(l());
+		Class<?>[] members = c.getNestMembers();
+		List<ClassInfo> l = listOfSize(members.length);
+		for (Class<?> cc : members)
+			l.add(of(cc));
+		return u(l);
+	}
+
+	/**
+	 * Returns the permitted subclasses of this sealed class.
+	 *
+	 * <p>
+	 * If this class is not sealed, returns an empty list.
+	 *
+	 * @return
+	 * 	An unmodifiable list of permitted subclasses if this is a sealed class.
+	 * 	<br>Returns an empty list if this class is not sealed.
+	 */
+	public List<ClassInfo> getPermittedSubclasses() {
+		if (c == null || ! c.isSealed())
+			return u(l());
+		Class<?>[] permitted = c.getPermittedSubclasses();
+		List<ClassInfo> l = listOfSize(permitted.length);
+		for (Class<?> cc : permitted)
+			l.add(of(cc));
+		return u(l);
+	}
+
+	/**
+	 * Returns the record components of this record class.
+	 *
+	 * <p>
+	 * The components are returned in the same order as they appear in the record declaration.
+	 * If this class is not a record, returns an empty array.
+	 *
+	 * @return
+	 * 	An array of record components for this record class.
+	 * 	<br>Returns an empty array if this class is not a record.
+	 */
+	public RecordComponent[] getRecordComponents() {
+		if (c == null || ! c.isRecord())
+			return new RecordComponent[0];
+		return c.getRecordComponents();
+	}
+
+	/**
+	 * Returns the {@link Type} representing the direct superclass of this class.
+	 *
+	 * <p>
+	 * If the superclass is a parameterized type, the {@link Type} returned reflects the actual
+	 * type parameters used in the source code.
+	 *
+	 * @return
+	 * 	The superclass of this class as a {@link Type},
+	 * 	or <jk>null</jk> if this class represents {@link Object}, an interface, a primitive type, or void.
+	 */
+	public Type getGenericSuperclass() {
+		return c == null ? null : c.getGenericSuperclass();
+	}
+
+	/**
+	 * Returns the {@link Type}s representing the interfaces directly implemented by this class.
+	 *
+	 * <p>
+	 * If a superinterface is a parameterized type, the {@link Type} returned for it reflects the actual
+	 * type parameters used in the source code.
+	 *
+	 * @return
+	 * 	An array of {@link Type}s representing the interfaces directly implemented by this class.
+	 * 	<br>Returns an empty array if this class implements no interfaces.
+	 */
+	public Type[] getGenericInterfaces() {
+		return c == null ? new Type[0] : c.getGenericInterfaces();
+	}
+
+	/**
+	 * Returns an array of {@link TypeVariable} objects that represent the type variables declared by this class.
+	 *
+	 * <p>
+	 * The type variables are returned in the same order as they appear in the class declaration.
+	 *
+	 * @return
+	 * 	An array of {@link TypeVariable} objects representing the type parameters of this class.
+	 * 	<br>Returns an empty array if this class declares no type parameters.
+	 */
+	public TypeVariable<?>[] getTypeParameters() {
+		return c == null ? new TypeVariable[0] : c.getTypeParameters();
+	}
+
+	/**
+	 * Returns an {@link AnnotatedType} object that represents the annotated superclass of this class.
+	 *
+	 * <p>
+	 * If this class represents a class type whose superclass is annotated, the returned object reflects
+	 * the annotations used in the source code to declare the superclass.
+	 *
+	 * @return
+	 * 	An {@link AnnotatedType} object representing the annotated superclass,
+	 * 	or <jk>null</jk> if this class represents {@link Object}, an interface, a primitive type, or void.
+	 */
+	public AnnotatedType getAnnotatedSuperclass() {
+		return c == null ? null : c.getAnnotatedSuperclass();
+	}
+
+	/**
+	 * Returns an array of {@link AnnotatedType} objects that represent the annotated interfaces
+	 * implemented by this class.
+	 *
+	 * <p>
+	 * If this class represents a class or interface whose superinterfaces are annotated,
+	 * the returned objects reflect the annotations used in the source code to declare the superinterfaces.
+	 *
+	 * @return
+	 * 	An array of {@link AnnotatedType} objects representing the annotated superinterfaces.
+	 * 	<br>Returns an empty array if this class implements no interfaces.
+	 */
+	public AnnotatedType[] getAnnotatedInterfaces() {
+		return c == null ? new AnnotatedType[0] : c.getAnnotatedInterfaces();
+	}
+
+	/**
+	 * Returns the {@link ProtectionDomain} of this class.
+	 *
+	 * <p>
+	 * If a security manager is installed, this method requires <c>RuntimePermission("getProtectionDomain")</c>.
+	 *
+	 * @return The {@link ProtectionDomain} of this class, or <jk>null</jk> if the class does not have a protection domain.
+	 */
+	public java.security.ProtectionDomain getProtectionDomain() {
+		return c == null ? null : c.getProtectionDomain();
+	}
+
+	/**
+	 * Returns the signers of this class.
+	 *
+	 * @return The signers of this class, or <jk>null</jk> if there are no signers.
+	 */
+	public Object[] getSigners() {
+		return c == null ? null : c.getSigners();
+	}
+
+	/**
+	 * Finds a resource with a given name.
+	 *
+	 * <p>
+	 * The rules for searching resources associated with a given class are implemented by the defining class loader.
+	 *
+	 * @param name The resource name.
+	 * @return A URL object for reading the resource, or <jk>null</jk> if the resource could not be found.
+	 */
+	public java.net.URL getResource(String name) {
+		return c == null ? null : c.getResource(name);
+	}
+
+	/**
+	 * Finds a resource with a given name and returns an input stream for reading the resource.
+	 *
+	 * <p>
+	 * The rules for searching resources associated with a given class are implemented by the defining class loader.
+	 *
+	 * @param name The resource name.
+	 * @return An input stream for reading the resource, or <jk>null</jk> if the resource could not be found.
+	 */
+	public java.io.InputStream getResourceAsStream(String name) {
+		return c == null ? null : c.getResourceAsStream(name);
+	}
+
+	/**
+	 * Returns the descriptor string of this class.
+	 *
+	 * <p>
+	 * The descriptor is a string representing the type of the class, as specified in JVMS 4.3.2.
+	 * For example, the descriptor for <c>String</c> is <js>"Ljava/lang/String;"</js>.
+	 *
+	 * @return The descriptor string of this class.
+	 */
+	public String descriptorString() {
+		return c == null ? null : c.descriptorString();
+	}
+
+	/**
 	 * If this class is a primitive (e.g. <code><jk>int</jk>.<jk>class</jk></code>) returns it's wrapper class
 	 * (e.g. <code>Integer.<jk>class</jk></code>).
 	 *
@@ -1484,6 +1840,16 @@ public class ClassInfo {
 	public boolean isAnnotation() { return nn(c) && c.isAnnotation(); }
 
 	/**
+	 * Returns <jk>true</jk> if this class is an anonymous class.
+	 *
+	 * <p>
+	 * An anonymous class is a local class declared within a method or constructor that has no name.
+	 *
+	 * @return <jk>true</jk> if this class is an anonymous class.
+	 */
+	public boolean isAnonymousClass() { return nn(c) && c.isAnonymousClass(); }
+
+	/**
 	 * Returns <jk>true</jk> if this class is any of the specified types.
 	 *
 	 * @param types The types to check against.
@@ -1672,6 +2038,19 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this class is a member class.
 	 */
 	public boolean isMemberClass() { return nn(c) && c.isMemberClass(); }
+
+	/**
+	 * Determines if this class and the specified class are nestmates.
+	 *
+	 * <p>
+	 * Two classes are nestmates if they belong to the same nest.
+	 *
+	 * @param c The class to check.
+	 * @return <jk>true</jk> if this class and the specified class are nestmates.
+	 */
+	public boolean isNestmateOf(Class<?> c) {
+		return nn(this.c) && nn(c) && this.c.isNestmateOf(c);
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this class is a member class and not static.
@@ -1878,6 +2257,26 @@ public class ClassInfo {
 	public boolean isRuntimeException() { return isChildOf(RuntimeException.class); }
 
 	/**
+	 * Returns <jk>true</jk> if this class is a record class.
+	 *
+	 * <p>
+	 * A record class is a final class that extends {@link java.lang.Record}.
+	 *
+	 * @return <jk>true</jk> if this class is a record class.
+	 */
+	public boolean isRecord() { return nn(c) && c.isRecord(); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is a sealed class.
+	 *
+	 * <p>
+	 * A sealed class is a class that can only be extended by a permitted set of subclasses.
+	 *
+	 * @return <jk>true</jk> if this class is a sealed class.
+	 */
+	public boolean isSealed() { return nn(c) && c.isSealed(); }
+
+	/**
 	 * Returns <jk>true</jk> if this class is public.
 	 *
 	 * <p>
@@ -1886,6 +2285,16 @@ public class ClassInfo {
 	 * @return <jk>true</jk> if this class is public.
 	 */
 	public boolean isStatic() { return nn(c) && Modifier.isStatic(c.getModifiers()); }
+
+	/**
+	 * Returns <jk>true</jk> if this class is a synthetic class.
+	 *
+	 * <p>
+	 * A synthetic class is one that is generated by the compiler and does not appear in source code.
+	 *
+	 * @return <jk>true</jk> if this class is synthetic.
+	 */
+	public boolean isSynthetic() { return nn(c) && c.isSynthetic(); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a child of <c>parent</c>.
@@ -2014,6 +2423,56 @@ public class ClassInfo {
 			}
 		}
 		return this;
+	}
+
+	/**
+	 * Casts an object to the class represented by this {@link ClassInfo} object.
+	 *
+	 * @param <T> The type to cast to.
+	 * @param obj The object to be cast.
+	 * @return The object after casting, or <jk>null</jk> if obj is <jk>null</jk>.
+	 * @throws ClassCastException If the object is not <jk>null</jk> and is not assignable to this class.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T cast(Object obj) {
+		return c == null ? null : (T)c.cast(obj);
+	}
+
+	/**
+	 * Casts this {@link ClassInfo} object to represent a subclass of the class represented by the specified class object.
+	 *
+	 * @param <U> The type to cast to.
+	 * @param clazz The class of the type to cast to.
+	 * @return This {@link ClassInfo} object, cast to represent a subclass of the specified class object.
+	 * @throws ClassCastException If this class is not assignable to the specified class.
+	 */
+	public <U> ClassInfo asSubclass(Class<U> clazz) {
+		if (c == null)
+			return null;
+		c.asSubclass(clazz);  // Throws ClassCastException if not assignable
+		return this;
+	}
+
+	/**
+	 * Returns a {@link ClassInfo} for an array type whose component type is this class.
+	 *
+	 * @return A {@link ClassInfo} representing an array type whose component type is this class.
+	 */
+	public ClassInfo arrayType() {
+		return c == null ? null : of(c.arrayType());
+	}
+
+	/**
+	 * Returns the component type of this class if it is an array type.
+	 *
+	 * <p>
+	 * This is equivalent to {@link Class#getComponentType()} but returns a {@link ClassInfo} instead.
+	 * Note that {@link #getComponentType()} also exists and returns the base component type for multi-dimensional arrays.
+	 *
+	 * @return The {@link ClassInfo} representing the component type, or <jk>null</jk> if this class does not represent an array type.
+	 */
+	public ClassInfo componentType() {
+		return c == null ? null : of(c.componentType());
 	}
 
 	private synchronized List<MethodInfo> _appendDeclaredMethods(List<MethodInfo> l) {

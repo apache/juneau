@@ -64,7 +64,7 @@ public class QueryArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link QueryArg}, or <jk>null</jk> if the parameter is not annotated with {@link Query}.
 	 */
-	public static QueryArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
+	public static QueryArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(Query.class) || paramInfo.getParameterType().hasAnnotation(Query.class))
 			return new QueryArg(paramInfo, annotations);
 		return null;
@@ -77,7 +77,7 @@ public class QueryArg implements RestOpArg {
 	 * @param paramName The query parameter name.
 	 * @return Merged annotation, or null if no class-level defaults exist.
 	 */
-	private static Query getMergedQuery(ParamInfo pi, String paramName) {
+	private static Query getMergedQuery(ParameterInfo pi, String paramName) {
 		// Get the declaring class
 		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
 		if (declaringClass == null)
@@ -166,7 +166,7 @@ public class QueryArg implements RestOpArg {
 	 * @param pi The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected QueryArg(ParamInfo pi, AnnotationWorkList annotations) {
+	protected QueryArg(ParameterInfo pi, AnnotationWorkList annotations) {
 		// Get the query name from the parameter
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
 

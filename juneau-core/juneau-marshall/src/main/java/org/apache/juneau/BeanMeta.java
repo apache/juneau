@@ -1049,10 +1049,10 @@ public class BeanMeta<T> {
 	protected T newBean(Object outer) throws ExecutableException {
 		if (classMeta.isMemberClass()) {
 			if (nn(constructor))
-				return constructor.<T>invoke(outer);
+				return constructor.<T>newInstance(outer);
 		} else {
 			if (nn(constructor))
-				return constructor.<T>invoke();
+				return constructor.<T>newInstance();
 			InvocationHandler h = classMeta.getProxyInvocationHandler();
 			if (nn(h)) {
 				ClassLoader cl = classMeta.innerClass.getClassLoader();

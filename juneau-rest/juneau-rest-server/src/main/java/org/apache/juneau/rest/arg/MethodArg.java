@@ -46,7 +46,7 @@ public class MethodArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new {@link MethodArg}, or <jk>null</jk> if the parameter isn't annotated with {@link Method}.
 	 */
-	public static MethodArg create(ParamInfo paramInfo) {
+	public static MethodArg create(ParameterInfo paramInfo) {
 		if (paramInfo.hasAnnotation(Method.class))
 			return new MethodArg();
 		return null;

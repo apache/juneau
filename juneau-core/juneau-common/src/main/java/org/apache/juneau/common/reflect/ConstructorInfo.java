@@ -24,7 +24,6 @@ import java.lang.reflect.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -140,7 +139,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	@Override /* Overridden from ExecutableInfo */
-	public ConstructorInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
+	public ConstructorInfo forEachParam(Predicate<ParameterInfo> filter, Consumer<ParameterInfo> action) {
 		super.forEachParam(filter, action);
 		return this;
 	}
@@ -166,6 +165,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
+	@Override
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
 		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
@@ -225,7 +225,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T invoke(Object...args) throws ExecutableException {
+	public <T> T newInstance(Object...args) throws ExecutableException {
 		try {
 			return (T)c.newInstance(args);
 		} catch (InvocationTargetException e) {
@@ -245,8 +245,8 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @return The object returned from the constructor.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public <T> T invokeFuzzy(Object...args) throws ExecutableException {
-		return invoke(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
+	public <T> T newInstanceFuzzy(Object...args) throws ExecutableException {
+		return newInstance(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
 	}
 
 	/**
@@ -258,4 +258,9 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	public boolean matches(Predicate<ConstructorInfo> test) {
 		return test(test, this);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// High Priority Methods (direct Constructor API compatibility)
+	//-----------------------------------------------------------------------------------------------------------------
+
 }

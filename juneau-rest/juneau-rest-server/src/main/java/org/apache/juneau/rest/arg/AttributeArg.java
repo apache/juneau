@@ -49,7 +49,7 @@ public class AttributeArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new {@link AttributeArg}, or <jk>null</jk> if the parameter is not annotated with {@link Attr}.
 	 */
-	public static AttributeArg create(ParamInfo paramInfo) {
+	public static AttributeArg create(ParameterInfo paramInfo) {
 		if (paramInfo.hasAnnotation(Attr.class) || paramInfo.getParameterType().hasAnnotation(Attr.class))
 			return new AttributeArg(paramInfo);
 		return null;
@@ -64,7 +64,7 @@ public class AttributeArg implements RestOpArg {
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
 	 */
-	protected AttributeArg(ParamInfo paramInfo) {
+	protected AttributeArg(ParameterInfo paramInfo) {
 		this.name = getName(paramInfo);
 		this.type = paramInfo.getParameterType().inner();
 	}
@@ -74,7 +74,7 @@ public class AttributeArg implements RestOpArg {
 		return opSession.getRequest().getAttribute(name).as(type).orElse(null);
 	}
 
-	private static String getName(ParamInfo paramInfo) {
+	private static String getName(ParameterInfo paramInfo) {
 		Value<String> n = Value.empty();
 		paramInfo.forEachAnnotation(Attr.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
 		paramInfo.forEachAnnotation(Attr.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));

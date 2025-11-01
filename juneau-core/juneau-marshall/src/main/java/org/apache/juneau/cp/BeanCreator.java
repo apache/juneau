@@ -327,7 +327,7 @@ public class BeanCreator<T> {
 
 		// Execute.
 		if (constructorMatch.isPresent())
-			return constructorMatch.get().invoke(getParams(constructorMatch.get()));
+			return constructorMatch.get().newInstance(getParams(constructorMatch.get()));
 
 		if (builder == null) {
 			// Look for static-builder/protected-constructor pair.
@@ -337,7 +337,7 @@ public class BeanCreator<T> {
 				MethodInfo m = type.getPublicMethod(y -> isStaticCreateMethod(y, pt));
 				if (nn(m)) {
 					Object builder = m.invoke(null);
-					value.set(x.accessible().invoke(builder));
+					value.set(x.accessible().newInstance(builder));
 				}
 			});
 			if (value.isPresent())

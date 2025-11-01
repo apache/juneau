@@ -63,7 +63,7 @@ public class RestContextArgs extends SimpleRestOperationArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static RestContextArgs create(ParamInfo paramInfo) {
+	public static RestContextArgs create(ParameterInfo paramInfo) {
 		if (paramInfo.isType(BeanContext.class))
 			return new RestContextArgs(RestContext::getBeanContext);
 		if (paramInfo.isType(Config.class))

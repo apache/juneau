@@ -1846,7 +1846,7 @@ public class ClassMeta<T> implements Type {
 			return (T)Array.newInstance(getInnerClass().getComponentType(), 0);
 		ConstructorInfo c = getConstructor();
 		if (nn(c))
-			return c.<T>invoke();
+			return c.<T>newInstance();
 		InvocationHandler h = getProxyInvocationHandler();
 		if (nn(h))
 			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(getInnerClass(), java.io.Serializable.class), h);
@@ -1866,7 +1866,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	public T newInstance(Object outer) throws ExecutableException {
 		if (isMemberClass)
-			return noArgConstructor.<T>invoke(outer);
+			return noArgConstructor.<T>newInstance(outer);
 		return newInstance();
 	}
 
@@ -1908,8 +1908,8 @@ public class ClassMeta<T> implements Type {
 		ConstructorInfo c = stringConstructor;
 		if (nn(c)) {
 			if (isMemberClass)
-				return c.<T>invoke(outer, arg);
-			return c.<T>invoke(arg);
+				return c.<T>newInstance(outer, arg);
+			return c.<T>newInstance(arg);
 		}
 		throw new ExecutableException("No string constructor or valueOf(String) method found for class '" + getInnerClass().getName() + "'");
 	}

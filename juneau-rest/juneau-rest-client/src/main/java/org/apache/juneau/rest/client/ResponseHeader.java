@@ -255,10 +255,10 @@ public class ResponseHeader extends BasicHeader {
 			var ci = ClassInfo.of(c);
 			ConstructorInfo cc = ci.getPublicConstructor(x -> x.hasParamTypes(String.class));
 			if (nn(cc))
-				return cc.invoke(getValue());
+				return cc.newInstance(getValue());
 			cc = ci.getPublicConstructor(x -> x.hasParamTypes(String.class, String.class));
 			if (nn(cc))
-				return cc.invoke(getName(), getValue());
+				return cc.newInstance(getName(), getValue());
 		} catch (Throwable e) {
 			if (e instanceof ExecutableException)
 				e = e.getCause();

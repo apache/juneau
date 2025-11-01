@@ -278,8 +278,8 @@ public class Mutaters {
 				public Object mutate(Object outer, Object in) {
 					try {
 						if (isMemberClass)
-							return c.invoke(outer, in);
-						return c.invoke(in);
+							return c.newInstance(outer, in);
+						return c.newInstance(in);
 					} catch (Exception e) {
 						throw toRuntimeException(e);
 					}

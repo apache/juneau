@@ -345,7 +345,7 @@ class RestOp_Params_Test extends TestBase {
 
 	public static class B2a implements RestOpArg {
 
-		public static B2a create(ParamInfo pi) {
+		public static B2a create(ParameterInfo pi) {
 			if (pi.isType(B2b.class))
 				return new B2a();
 			return null;

@@ -89,7 +89,7 @@ class ParamInfoTest extends TestBase {
 	}
 
 	static ClassInfo b = ClassInfo.of(B.class);
-	static ParamInfo
+	static ParameterInfo
 		b_b_a = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(0),  // NOSONAR
 		b_b_b = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(1),  // NOSONAR
 		b_a1_a = b.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
@@ -168,7 +168,7 @@ class ParamInfoTest extends TestBase {
 	static ClassInfo
 		cb = ClassInfo.of(CB.class),
 		cc = ClassInfo.of(CC.class);
-	static ParamInfo
+	static ParameterInfo
 		cc_cc = cc.getPublicConstructor(x -> x.hasParamTypes(C1.class)).getParam(0),  // NOSONAR
 		cb_a1 = cb.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
 		cb_a2 = cb.getMethod(x -> x.hasName("a2")).getParam(0),  // NOSONAR
@@ -186,7 +186,7 @@ class ParamInfoTest extends TestBase {
 		check("@CA(9)", declaredAnnotations(cc_cc, CA.class));
 	}
 
-	private static <T extends Annotation> List<T> declaredAnnotations(ParamInfo pi, Class<T> type) {
+	private static <T extends Annotation> List<T> declaredAnnotations(ParameterInfo pi, Class<T> type) {
 		var l = new ArrayList<T>();
 		pi.forEachDeclaredAnnotation(type, x -> true, l::add);
 		return l;
@@ -302,7 +302,7 @@ class ParamInfoTest extends TestBase {
 	static ClassInfo
 		db = ClassInfo.of(DB.class),
 		dc = ClassInfo.of(DC.class);
-	static ParamInfo
+	static ParameterInfo
 		db_a1 = db.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
 		dc_a1 = dc.getMethod(x -> x.hasName("a1")).getParam(0);  // NOSONAR
 
@@ -333,7 +333,7 @@ class ParamInfoTest extends TestBase {
 	}
 
 	static ClassInfo e = ClassInfo.of(E.class);
-	static ParamInfo
+	static ParameterInfo
 		e_a1_a = e.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
 		e_a1_b = e.getMethod(x -> x.hasName("a1")).getParam(1);  // NOSONAR
 
@@ -355,7 +355,7 @@ class ParamInfoTest extends TestBase {
 	// Helpers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static <T extends Annotation> List<T> annotations(ParamInfo pi, Class<T> a) {
+	private static <T extends Annotation> List<T> annotations(ParameterInfo pi, Class<T> a) {
 		List<T> l = list();
 		pi.forEachAnnotation(a, x -> true, l::add);
 		return l;

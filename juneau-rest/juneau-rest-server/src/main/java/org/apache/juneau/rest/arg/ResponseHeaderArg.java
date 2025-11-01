@@ -55,7 +55,7 @@ public class ResponseHeaderArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link ResponseHeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
-	public static ResponseHeaderArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
+	public static ResponseHeaderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.getParameterType().is(Value.class) && (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class)))
 			return new ResponseHeaderArg(paramInfo, annotations);
 		return null;
@@ -72,7 +72,7 @@ public class ResponseHeaderArg implements RestOpArg {
 	 * @param pi The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected ResponseHeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
+	protected ResponseHeaderArg(ParameterInfo pi, AnnotationWorkList annotations) {
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
 		this.type = pi.getParameterType().innerType();
 		var schema = HttpPartSchema.create(Header.class, pi);

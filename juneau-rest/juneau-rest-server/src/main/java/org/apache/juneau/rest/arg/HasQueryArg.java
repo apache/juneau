@@ -56,7 +56,7 @@ public class HasQueryArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new {@link HasQueryArg}, or <jk>null</jk> if the parameter is not annotated with {@link HasQuery}.
 	 */
-	public static HasQueryArg create(ParamInfo paramInfo) {
+	public static HasQueryArg create(ParameterInfo paramInfo) {
 		if (paramInfo.hasAnnotation(HasQuery.class))
 			return new HasQueryArg(paramInfo);
 		return null;
@@ -79,7 +79,7 @@ public class HasQueryArg implements RestOpArg {
 	 *
 	 * @param pi The Java method parameter being resolved.
 	 */
-	protected HasQueryArg(ParamInfo pi) {
+	protected HasQueryArg(ParameterInfo pi) {
 		Value<String> _name = Value.empty();
 		pi.forEachAnnotation(HasQuery.class, HasQueryArg::hasName, x -> _name.set(getName(x)));
 		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasQuery used without name or value"));

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.common.reflect;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -27,7 +26,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.annotation.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Represents an annotation instance on a class and the class it was found on.
@@ -296,6 +294,78 @@ public class AnnotationInfo<T extends Annotation> {
 		return jm;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotation interface methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the annotation type of this annotation.
+	 *
+	 * <p>
+	 * Same as calling {@link Annotation#annotationType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	AnnotationInfo&lt;Deprecated&gt; <jv>ai</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getAnnotation(Deprecated.<jk>class</jk>);
+	 * 	Class&lt;? <jk>extends</jk> Annotation&gt; <jv>type</jv> = <jv>ai</jv>.annotationType();  <jc>// Returns Deprecated.class</jc>
+	 * </p>
+	 *
+	 * @return The annotation type of this annotation.
+	 * @see Annotation#annotationType()
+	 */
+	public Class<? extends Annotation> annotationType() {
+		return a.annotationType();
+	}
+
+	/**
+	 * Returns the hash code of this annotation.
+	 *
+	 * <p>
+	 * Same as calling {@link Annotation#hashCode()} on the wrapped annotation.
+	 *
+	 * <p>
+	 * The hash code of an annotation is the sum of the hash codes of its members (including those with default values).
+	 *
+	 * @return The hash code of this annotation.
+	 * @see Annotation#hashCode()
+	 */
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return a.hashCode();
+	}
+
+	/**
+	 * Returns true if the specified object represents an annotation that is logically equivalent to this one.
+	 *
+	 * <p>
+	 * Same as calling {@link Annotation#equals(Object)} on the wrapped annotation.
+	 *
+	 * <p>
+	 * Two annotations are considered equal if:
+	 * <ul>
+	 * 	<li>They are of the same annotation type
+	 * 	<li>All their corresponding member values are equal
+	 * </ul>
+	 *
+	 * @param obj The reference object with which to compare.
+	 * @return <jk>true</jk> if the specified object is equal to this annotation.
+	 * @see Annotation#equals(Object)
+	 */
+	@Override /* Overridden from Object */
+	public boolean equals(Object obj) {
+		if (obj instanceof AnnotationInfo)
+			return a.equals(((AnnotationInfo<?>)obj).a);
+		return a.equals(obj);
+	}
+
+	/**
+	 * Returns a string representation of this annotation.
+	 *
+	 * <p>
+	 * Returns the map representation created by {@link #toMap()}.
+	 *
+	 * @return A string representation of this annotation.
+	 */
 	@Override /* Overridden from Object */
 	public String toString() {
 		return toMap().toString();
@@ -330,21 +400,20 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param action An action to perform on the entry.
 	 */
 	public static void forEachAnnotationInfo(ClassInfo classInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		var c = classInfo.inner();
-		Package p = c.getPackage();
-		if (nn(p))
-			for (var a : p.getDeclaredAnnotations())
-				for (var a2 : classInfo.splitRepeated(a))
-					AnnotationInfo.of(p, a2).accept(filter, action);
+		PackageInfo pi = classInfo.getPackage();
+		if (nn(pi))
+			for (var a : pi.getDeclaredAnnotations())
+				for (var a2 : ClassInfo.splitRepeated(a))
+					AnnotationInfo.of(pi.inner(), a2).accept(filter, action);
 		ClassInfo[] interfaces = classInfo._getInterfaces();
 		for (int i = interfaces.length - 1; i >= 0; i--)
 			for (var a : interfaces[i].inner().getDeclaredAnnotations())
-				for (var a2 : classInfo.splitRepeated(a))
+				for (var a2 : ClassInfo.splitRepeated(a))
 					AnnotationInfo.of(interfaces[i], a2).accept(filter, action);
 		ClassInfo[] parents = classInfo._getParents();
 		for (int i = parents.length - 1; i >= 0; i--)
 			for (var a : parents[i].inner().getDeclaredAnnotations())
-				for (var a2 : classInfo.splitRepeated(a))
+				for (var a2 : ClassInfo.splitRepeated(a))
 					AnnotationInfo.of(parents[i], a2).accept(filter, action);
 	}
 
@@ -498,10 +567,10 @@ public class AnnotationInfo<T extends Annotation> {
 				AnnotationInfo.of(ci, a).accept(filter, action);
 	}
 
-	private static void forEachDeclaredAnnotationInfo(Package p, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		if (nn(p))
-			for (var a : p.getDeclaredAnnotations())
-				AnnotationInfo.of(p, a).accept(filter, action);
+	private static void forEachDeclaredAnnotationInfo(PackageInfo pi, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+		if (nn(pi))
+			for (var a : pi.getDeclaredAnnotations())
+				AnnotationInfo.of(pi.inner(), a).accept(filter, action);
 	}
 
 	private static void forEachDeclaredMethodAnnotationInfo(MethodInfo methodInfo, ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {

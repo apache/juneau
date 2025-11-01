@@ -41,7 +41,7 @@ public class HttpServletResponseArgs extends SimpleRestOperationArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static HttpServletResponseArgs create(ParamInfo paramInfo) {
+	public static HttpServletResponseArgs create(ParameterInfo paramInfo) {
 		if (paramInfo.isType(HttpServletResponse.class))
 			return new HttpServletResponseArgs(x -> x);
 		return null;

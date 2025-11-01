@@ -237,7 +237,7 @@ public class ResponseContent implements HttpEntity {
 			ConstructorInfo ci = type.getInfo().getPublicConstructor(x -> x.hasParamTypes(HttpResponse.class));
 			if (nn(ci)) {
 				try {
-					return (T)ci.invoke(response);
+					return (T)ci.newInstance(response);
 				} catch (ExecutableException e) {
 					throw toRuntimeException(e);
 				}
@@ -274,7 +274,7 @@ public class ResponseContent implements HttpEntity {
 						ConstructorInfo c = type.getInfo().getPublicConstructor(ConstructorInfo::hasNoParams);
 						if (nn(c)) {
 							try {
-								return c.<T>invoke();
+								return c.<T>newInstance();
 							} catch (ExecutableException e) {
 								throw new ParseException(e);
 							}

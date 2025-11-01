@@ -261,7 +261,7 @@ public class PathRemainderAnnotation {
 	 * @param pi The parameter.
 	 * @return The last matching default value, or {@link Value#empty()} if not found.
 	 */
-	public static Value<String> findDef(ParamInfo pi) {
+	public static Value<String> findDef(ParameterInfo pi) {
 		Value<String> n = Value.empty();
 		pi.forEachAnnotation(PathRemainder.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
 		return n;

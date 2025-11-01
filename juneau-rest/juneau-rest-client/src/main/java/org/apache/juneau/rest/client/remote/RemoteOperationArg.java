@@ -35,7 +35,7 @@ import org.apache.juneau.common.reflect.*;
  */
 public class RemoteOperationArg {
 
-	static RemoteOperationArg create(ParamInfo mpi) {
+	static RemoteOperationArg create(ParameterInfo mpi) {
 		int i = mpi.getIndex();
 		if (mpi.hasAnnotation(Header.class)) {
 			return new RemoteOperationArg(i, HEADER, HttpPartSchema.create(Header.class, mpi));

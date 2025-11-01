@@ -126,9 +126,9 @@ public class RequestHttpPart {
 					if (! isPresent())
 						return opte();
 					if (cc.hasParamTypes(String.class))
-						return opt(cc.invoke(get()));
+						return opt(cc.newInstance(get()));
 					if (cc.hasParamTypes(String.class, String.class))
-						return opt(cc.invoke(getName(), get()));
+						return opt(cc.newInstance(getName(), get()));
 				}
 			}
 			return opt(parser.parse(HEADER, schema, orElse(null), type));

@@ -56,7 +56,7 @@ public class HasFormDataArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new {@link HasFormDataArg}, or <jk>null</jk> if the parameter is not annotated with {@link HasFormData}.
 	 */
-	public static HasFormDataArg create(ParamInfo paramInfo) {
+	public static HasFormDataArg create(ParameterInfo paramInfo) {
 		if (paramInfo.hasAnnotation(HasFormData.class))
 			return new HasFormDataArg(paramInfo);
 		return null;
@@ -79,7 +79,7 @@ public class HasFormDataArg implements RestOpArg {
 	 *
 	 * @param pi The Java method parameter being resolved.
 	 */
-	protected HasFormDataArg(ParamInfo pi) {
+	protected HasFormDataArg(ParameterInfo pi) {
 		Value<String> _name = Value.empty();
 		pi.forEachAnnotation(HasFormData.class, HasFormDataArg::hasName, x -> _name.set(getName(x)));
 		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasFormData used without name or value"));

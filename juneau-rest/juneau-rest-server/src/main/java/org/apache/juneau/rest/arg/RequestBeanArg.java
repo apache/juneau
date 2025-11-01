@@ -49,7 +49,7 @@ public class RequestBeanArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link RequestBeanArg}, or <jk>null</jk> if the parameter is not annotated with {@link Request}.
 	 */
-	public static RequestBeanArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
+	public static RequestBeanArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		if (paramInfo.hasAnnotation(Request.class))
 			return new RequestBeanArg(paramInfo, annotations);
 		return null;
@@ -63,7 +63,7 @@ public class RequestBeanArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected RequestBeanArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
+	protected RequestBeanArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		this.meta = RequestBeanMeta.create(paramInfo, annotations);
 	}
 

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 
 class ArgException_Test extends TestBase {
 
-	private static ParamInfo testParamInfo;
+	private static ParameterInfo testParamInfo;
 
 	@BeforeAll
 	public static void setup() throws Exception {

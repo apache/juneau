@@ -32,7 +32,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * 		<jc>// Implementers must provide a static creator method that returns a RestParam if it's
  * 		// applicable to the specified parameter.</jc>
- * 		<jk>public static</jk> TimeZoneArg <jsm>create</jsm>(ParamInfo <jv>paramInfo</jv>) {
+ * 		<jk>public static</jk> TimeZoneArg <jsm>create</jsm>(ParameterInfo <jv>paramInfo</jv>) {
  * 			<jk>if</jk> (<jv>paramInfo</jv>.isType(TimeZone.<jk>class</jk>))
  * 				<jk>return new</jk> TimeZoneArg();
  * 			<jk>return null</jk>;

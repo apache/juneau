@@ -27,7 +27,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 
 /**
@@ -291,7 +290,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	@Override /* Overridden from ExecutableInfo */
-	public MethodInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
+	public MethodInfo forEachParam(Predicate<ParameterInfo> filter, Consumer<ParameterInfo> action) {
 		super.forEachParam(filter, action);
 		return this;
 	}
@@ -452,7 +451,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length > 0) {
 			sb.append('(');
-			List<ParamInfo> mpi = getParams();
+			List<ParameterInfo> mpi = getParams();
 			for (int i = 0; i < pt.length; i++) {
 				if (i > 0)
 					sb.append(',');
@@ -672,6 +671,107 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public boolean matches(Predicate<MethodInfo> test) {
 		return test(test, this);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// High Priority Methods (direct Method API compatibility)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns a {@link Type} object that represents the formal return type of the method.
+	 *
+	 * <p>
+	 * Same as calling {@link Method#getGenericReturnType()}.
+	 *
+	 * <p>
+	 * If the return type is a parameterized type, the {@link Type} object returned reflects the actual type parameters used in the source code.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For method: public List&lt;String&gt; getValues()</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"getValues"</js>);
+	 * 	Type <jv>returnType</jv> = <jv>mi</jv>.getGenericReturnType();
+	 * 	<jk>if</jk> (<jv>returnType</jv> <jk>instanceof</jk> ParameterizedType) {
+	 * 		ParameterizedType <jv>pType</jv> = (ParameterizedType)<jv>returnType</jv>;
+	 * 		<jc>// pType.getActualTypeArguments()[0] is String.class</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return A {@link Type} object representing the formal return type.
+	 * @see Method#getGenericReturnType()
+	 */
+	public Type getGenericReturnType() {
+		return m.getGenericReturnType();
+	}
+
+	/**
+	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the return type of the method.
+	 *
+	 * <p>
+	 * Same as calling {@link Method#getAnnotatedReturnType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For method: public @NotNull String getName()</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"getName"</js>);
+	 * 	AnnotatedType <jv>aType</jv> = <jv>mi</jv>.getAnnotatedReturnType();
+	 * 	<jc>// Check for @NotNull on the return type</jc>
+	 * </p>
+	 *
+	 * @return An {@link AnnotatedType} object representing the return type.
+	 * @see Method#getAnnotatedReturnType()
+	 */
+	public AnnotatedType getAnnotatedReturnType() {
+		return m.getAnnotatedReturnType();
+	}
+
+	/**
+	 * Returns the default value for the annotation member represented by this method.
+	 *
+	 * <p>
+	 * Same as calling {@link Method#getDefaultValue()}.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if this method is not an annotation member, or if the annotation member has no default value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For annotation: @interface MyAnnotation { String value() default "default"; }</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyAnnotation.<jk>class</jk>).getMethod(<js>"value"</js>);
+	 * 	Object <jv>defaultValue</jv> = <jv>mi</jv>.getDefaultValue();
+	 * 	<jc>// defaultValue is "default"</jc>
+	 * </p>
+	 *
+	 * @return The default value, or <jk>null</jk> if none.
+	 * @see Method#getDefaultValue()
+	 */
+	public Object getDefaultValue() {
+		return m.getDefaultValue();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method is a default method (Java 8+ interface default method).
+	 *
+	 * <p>
+	 * Same as calling {@link Method#isDefault()}.
+	 *
+	 * <p>
+	 * A default method is a public non-abstract instance method (i.e., non-static method with a body) declared in an interface.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// For interface: interface MyInterface { default String getName() { return "default"; } }</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyInterface.<jk>class</jk>).getMethod(<js>"getName"</js>);
+	 * 	<jk>if</jk> (<jv>mi</jv>.isDefault()) {
+	 * 		<jc>// This is a default interface method</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this method is a default method.
+	 * @see Method#isDefault()
+	 */
+	public boolean isDefault() {
+		return m.isDefault();
 	}
 
 	MethodInfo findMatchingOnClass(ClassInfo c) {

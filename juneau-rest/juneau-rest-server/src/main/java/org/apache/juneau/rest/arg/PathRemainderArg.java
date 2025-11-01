@@ -67,7 +67,7 @@ public class PathRemainderArg implements RestOpArg {
 	 * @param pathMatcher Path matcher for the specified method (not used, but included for BeanStore compatibility).
 	 * @return A new {@link PathRemainderArg}, or <jk>null</jk> if the parameter is not annotated with {@link PathRemainder}.
 	 */
-	public static PathRemainderArg create(ParamInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
+	public static PathRemainderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
 		if (paramInfo.hasAnnotation(PathRemainder.class) || paramInfo.getParameterType().hasAnnotation(PathRemainder.class))
 			return new PathRemainderArg(paramInfo, annotations);
 		return null;
@@ -85,7 +85,7 @@ public class PathRemainderArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected PathRemainderArg(ParamInfo paramInfo, AnnotationWorkList annotations) {
+	protected PathRemainderArg(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		this.def = findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(PathRemainder.class, paramInfo);

@@ -27,7 +27,6 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Lightweight utility class for introspecting information about a method parameter.
@@ -35,7 +34,7 @@ import org.apache.juneau.common.reflect.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class ParamInfo {
+public class ParameterInfo {
 
 	private final ExecutableInfo eInfo;
 	private final Parameter p;
@@ -49,7 +48,7 @@ public class ParamInfo {
 	 * @param p The parameter being wrapped.
 	 * @param index The parameter index.
 	 */
-	protected ParamInfo(ExecutableInfo eInfo, Parameter p, int index) {
+	protected ParameterInfo(ExecutableInfo eInfo, Parameter p, int index) {
 		this.eInfo = eInfo;
 		this.p = p;
 		this.index = index;
@@ -62,7 +61,7 @@ public class ParamInfo {
 	 * @param action An action to perform on this object.
 	 * @return This object.
 	 */
-	public ParamInfo accept(Predicate<ParamInfo> test, Consumer<ParamInfo> action) {
+	public ParameterInfo accept(Predicate<ParameterInfo> test, Consumer<ParameterInfo> action) {
 		if (matches(test))
 			action.accept(this);
 		return this;
@@ -93,7 +92,7 @@ public class ParamInfo {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ParamInfo forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
+	public <A extends Annotation> ParameterInfo forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		return forEachAnnotation(AnnotationProvider.DEFAULT, type, filter, action);
 	}
 
@@ -106,7 +105,7 @@ public class ParamInfo {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ParamInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
+	public <A extends Annotation> ParameterInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		for (var a : eInfo._getParameterAnnotations(index))
 			if (type.isInstance(a))
 				consumeIf(filter, action, type.cast(a));
@@ -246,7 +245,7 @@ public class ParamInfo {
 	 * Returns the name of the parameter.
 	 *
 	 * <p>
-	 * If the parameter has an annotation with the simple name "Name" and a "value()" method, 
+	 * If the parameter has an annotation with the simple name "Name" and a "value()" method,
 	 * then this method returns the value from that annotation.
 	 * Otherwise, if the parameter's name is present in the class file, then this method returns that name.
 	 * Otherwise, this method returns <jk>null</jk>.
@@ -289,7 +288,7 @@ public class ParamInfo {
 	 * Returns <jk>true</jk> if the parameter has a name.
 	 *
 	 * <p>
-	 * This returns <jk>true</jk> if the parameter has an annotation with the simple name "Name", 
+	 * This returns <jk>true</jk> if the parameter has an annotation with the simple name "Name",
 	 * or if the parameter's name is present in the class file.
 	 *
 	 * @return <jk>true</jk> if the parameter has a name.
@@ -326,8 +325,307 @@ public class ParamInfo {
 	 * @param test The test to perform.
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
-	public boolean matches(Predicate<ParamInfo> test) {
+	public boolean matches(Predicate<ParameterInfo> test) {
 		return test(test, this);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// High Priority Methods (direct Parameter API compatibility)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the {@link ExecutableInfo} which declares this parameter.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getDeclaringExecutable()} but returns {@link ExecutableInfo} instead.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get the method or constructor that declares this parameter</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	ExecutableInfo <jv>executable</jv> = <jv>pi</jv>.getDeclaringExecutable();
+	 * 	<jk>if</jk> (<jv>executable</jv>.isConstructor()) {
+	 * 		ConstructorInfo <jv>ci</jv> = (ConstructorInfo)<jv>executable</jv>;
+	 * 	}
+	 * </p>
+	 *
+	 * @return The {@link ExecutableInfo} declaring this parameter.
+	 * @see Parameter#getDeclaringExecutable()
+	 */
+	public ExecutableInfo getDeclaringExecutable() {
+		return eInfo;
+	}
+
+	/**
+	 * Returns the Java language modifiers for the parameter represented by this object, as an integer.
+	 *
+	 * <p>
+	 * The {@link java.lang.reflect.Modifier} class should be used to decode the modifiers.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getModifiers()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if parameter is final</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>int</jk> <jv>modifiers</jv> = <jv>pi</jv>.getModifiers();
+	 * 	<jk>boolean</jk> <jv>isFinal</jv> = Modifier.<jsm>isFinal</jsm>(<jv>modifiers</jv>);
+	 * </p>
+	 *
+	 * @return The Java language modifiers for this parameter.
+	 * @see Parameter#getModifiers()
+	 * @see java.lang.reflect.Modifier
+	 */
+	public int getModifiers() {
+		return p.getModifiers();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the parameter has a name according to the <c>.class</c> file.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#isNamePresent()}.
+	 *
+	 * <p>
+	 * <b>Note:</b> This method is different from {@link #hasName()} which also checks for the presence
+	 * of a <c>@Name</c> annotation. This method only checks if the name is present in the bytecode.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if parameter name is in bytecode</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>if</jk> (<jv>pi</jv>.isNamePresent()) {
+	 * 		String <jv>name</jv> = <jv>pi</jv>.getName();
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if the parameter has a name in the bytecode.
+	 * @see Parameter#isNamePresent()
+	 * @see #hasName()
+	 */
+	public boolean isNamePresent() {
+		return p.isNamePresent();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this parameter is implicitly declared in source code.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> if this parameter is neither explicitly nor implicitly declared in source code.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#isImplicit()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Filter out implicit parameters</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>if</jk> (! <jv>pi</jv>.isImplicit()) {
+	 * 		<jc>// Process explicit parameter</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this parameter is implicitly declared.
+	 * @see Parameter#isImplicit()
+	 */
+	public boolean isImplicit() {
+		return p.isImplicit();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this parameter is a synthetic construct as defined by the Java Language Specification.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#isSynthetic()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Filter out compiler-generated parameters</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>if</jk> (! <jv>pi</jv>.isSynthetic()) {
+	 * 		<jc>// Process real parameter</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this parameter is a synthetic construct.
+	 * @see Parameter#isSynthetic()
+	 */
+	public boolean isSynthetic() {
+		return p.isSynthetic();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this parameter represents a variable argument list.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#isVarArgs()}.
+	 *
+	 * <p>
+	 * Only returns <jk>true</jk> for the last parameter of a variable arity method.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if this is a varargs parameter</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	<jk>if</jk> (<jv>pi</jv>.isVarArgs()) {
+	 * 		<jc>// Handle variable arguments</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this parameter represents a variable argument list.
+	 * @see Parameter#isVarArgs()
+	 */
+	public boolean isVarArgs() {
+		return p.isVarArgs();
+	}
+
+	/**
+	 * Returns a {@link Type} object that identifies the parameterized type for this parameter.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getParameterizedType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get generic type information for parameter: List&lt;String&gt; values</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	Type <jv>type</jv> = <jv>pi</jv>.getParameterizedType();
+	 * 	<jk>if</jk> (<jv>type</jv> <jk>instanceof</jk> ParameterizedType) {
+	 * 		ParameterizedType <jv>pType</jv> = (ParameterizedType)<jv>type</jv>;
+	 * 		<jc>// pType.getActualTypeArguments()[0] is String.class</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return A {@link Type} object identifying the parameterized type.
+	 * @see Parameter#getParameterizedType()
+	 */
+	public Type getParameterizedType() {
+		return p.getParameterizedType();
+	}
+
+	/**
+	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the type of this parameter.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getAnnotatedType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get annotated type: void method(@NotNull String value)</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	AnnotatedType <jv>aType</jv> = <jv>pi</jv>.getAnnotatedType();
+	 * 	<jc>// Check for @NotNull on the type</jc>
+	 * </p>
+	 *
+	 * @return An {@link AnnotatedType} object representing the type of this parameter.
+	 * @see Parameter#getAnnotatedType()
+	 */
+	public AnnotatedType getAnnotatedType() {
+		return p.getAnnotatedType();
+	}
+
+	/**
+	 * Returns annotations that are <em>present</em> on this parameter.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getAnnotations()}.
+	 *
+	 * <p>
+	 * <b>Note:</b> This returns the simple array of annotations directly present on the parameter.
+	 * For Juneau's enhanced annotation searching (through class hierarchies), use {@link #getAnnotation(Class)} instead.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all annotations on parameter</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	Annotation[] <jv>annotations</jv> = <jv>pi</jv>.getAnnotations();
+	 * </p>
+	 *
+	 * @return Annotations present on this parameter, or an empty array if there are none.
+	 * @see Parameter#getAnnotations()
+	 */
+	public Annotation[] getAnnotations() {
+		return p.getAnnotations();
+	}
+
+	/**
+	 * Returns annotations that are <em>directly present</em> on this parameter.
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getDeclaredAnnotations()}.
+	 *
+	 * <p>
+	 * <b>Note:</b> This returns the simple array of declared annotations.
+	 * For Juneau's enhanced annotation searching, use {@link #getDeclaredAnnotation(Class)} instead.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get declared annotations on parameter</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	Annotation[] <jv>annotations</jv> = <jv>pi</jv>.getDeclaredAnnotations();
+	 * </p>
+	 *
+	 * @return Annotations directly present on this parameter, or an empty array if there are none.
+	 * @see Parameter#getDeclaredAnnotations()
+	 */
+	public Annotation[] getDeclaredAnnotations() {
+		return p.getDeclaredAnnotations();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Medium Priority Methods (repeatable annotations)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns this element's annotations of the specified type (including repeated annotations).
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getAnnotationsByType(Class)}.
+	 *
+	 * <p>
+	 * This method handles repeatable annotations by "looking through" container annotations.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get all @Author annotations (including repeated): @Authors({@Author(...), @Author(...)})</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	Author[] <jv>authors</jv> = <jv>pi</jv>.getAnnotationsByType(Author.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param annotationClass The Class object corresponding to the annotation type.
+	 * @return All this element's annotations of the specified type, or an empty array if there are none.
+	 * @see Parameter#getAnnotationsByType(Class)
+	 */
+	public <A extends Annotation> A[] getAnnotationsByType(Class<A> annotationClass) {
+		return p.getAnnotationsByType(annotationClass);
+	}
+
+	/**
+	 * Returns this element's declared annotations of the specified type (including repeated annotations).
+	 *
+	 * <p>
+	 * Same as calling {@link Parameter#getDeclaredAnnotationsByType(Class)}.
+	 *
+	 * <p>
+	 * This method handles repeatable annotations by "looking through" container annotations,
+	 * but only examines annotations directly declared on this parameter (not inherited).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get declared @Author annotations (including repeated)</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	Author[] <jv>authors</jv> = <jv>pi</jv>.getDeclaredAnnotationsByType(Author.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param annotationClass The Class object corresponding to the annotation type.
+	 * @return All this element's declared annotations of the specified type, or an empty array if there are none.
+	 * @see Parameter#getDeclaredAnnotationsByType(Class)
+	 */
+	public <A extends Annotation> A[] getDeclaredAnnotationsByType(Class<A> annotationClass) {
+		return p.getDeclaredAnnotationsByType(annotationClass);
 	}
 
 	@Override
@@ -357,7 +655,7 @@ public class ParamInfo {
 		return v.orElseGet(() -> eInfo.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type));
 	}
 
-	private <A extends Annotation> ParamInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
+	private <A extends Annotation> ParameterInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
 			Annotation[] annotations = eInfo._getParameterAnnotations(index);

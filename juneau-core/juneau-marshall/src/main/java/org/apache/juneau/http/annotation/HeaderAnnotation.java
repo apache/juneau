@@ -272,7 +272,7 @@ public class HeaderAnnotation {
 	 * @param pi The parameter.
 	 * @return The last matching default value, or {@link Value#empty()} if not found.
 	 */
-	public static Value<String> findDef(ParamInfo pi) {
+	public static Value<String> findDef(ParameterInfo pi) {
 		Value<String> n = Value.empty();
 		pi.forEachAnnotation(Header.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
 		return n;
@@ -287,7 +287,7 @@ public class HeaderAnnotation {
 	 * @param pi The parameter.
 	 * @return The last matching name, or {@link Value#empty()} if not found.
 	 */
-	public static Value<String> findName(ParamInfo pi) {
+	public static Value<String> findName(ParameterInfo pi) {
 		Value<String> n = Value.empty();
 		pi.forEachAnnotation(Header.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
 		pi.forEachAnnotation(Header.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));

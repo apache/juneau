@@ -1,6 +1,6 @@
 # TODO List
 
-**Last generated TODO number: TODO-73**
+**Last generated TODO number: TODO-86**
 
 This file tracks pending tasks for the Apache Juneau project. For completed items, see [TODO-completed.md](TODO-completed.md).
 
@@ -22,6 +22,18 @@ This file tracks pending tasks for the Apache Juneau project. For completed item
   - **Phase 2**: ✅ Convert safe patterns in local variable declarations (completed - 276 files)
 - [ ] TODO-54 Search for places in code where Calendar should be replaced with ZonedDateTime.
 - [x] TODO-73 Move reflection classes (ClassInfo, ConstructorInfo, ExecutableInfo, FieldInfo, MethodInfo, ParamInfo, AnnotationInfo, AnnotationList) from org.apache.juneau.reflect to org.apache.juneau.common.reflect. ✅ COMPLETED - All classes moved, 196+ files updated, 25,839 tests passing. See TODO-reflectionMigrationPlan.md and REFLECTION_MIGRATION_COMPLETE.md for details.
+- [x] TODO-74 Add missing high-priority methods to ClassInfo to make it a complete replacement for java.lang.Class. ✅ COMPLETED - Added 8 methods including getClassLoader(), getDeclaringClass(), getEnclosingClass(), etc.
+- [x] TODO-75 Add missing medium-priority methods to ClassInfo for enhanced functionality. ✅ COMPLETED - Added 10 methods including getCanonicalName(), isRecord(), isSealed(), getGenericSuperclass(), etc.
+- [x] TODO-76 Add missing low-priority methods to ClassInfo for comprehensive API coverage. ✅ COMPLETED - Added 15 methods including getModule(), getNestHost(), getProtectionDomain(), arrayType(), etc.
+- [x] TODO-77 Update ClassInfo.CACHE to use Juneau's Cache object for better cache management. ✅ COMPLETED - Replaced ConcurrentHashMap with Cache object supporting eviction and statistics.
+- [x] TODO-78 Add missing methods to ExecutableInfo to make it a complete replacement for java.lang.reflect.Executable. ✅ COMPLETED - Added 13 methods including getModifiers(), isSynthetic(), isVarArgs(), getAnnotation(), getGenericExceptionTypes(), toGenericString(), etc. All 25,872 tests passing.
+- [x] TODO-79 Add missing methods to ParamInfo to make it a complete replacement for java.lang.reflect.Parameter. ✅ COMPLETED - Added 12 methods including getDeclaringExecutable(), getModifiers(), isNamePresent(), isImplicit(), isSynthetic(), isVarArgs(), getParameterizedType(), getAnnotatedType(), getAnnotations(), getDeclaredAnnotations(), getAnnotationsByType(), getDeclaredAnnotationsByType(). All 25,872 tests passing.
+- [x] TODO-80 Add missing methods to FieldInfo to make it a complete replacement for java.lang.reflect.Field. ✅ COMPLETED - Added 10 methods (7 high-priority + 3 medium-priority) including getModifiers(), isSynthetic(), isEnumConstant(), getGenericType(), getAnnotatedType(), getAnnotations(), getDeclaredAnnotations(), getAnnotationsByType(), getDeclaredAnnotationsByType(), toGenericString(). All 25,872 tests passing.
+- [x] TODO-81 Add missing methods to MethodInfo to make it a complete replacement for java.lang.reflect.Method. ✅ COMPLETED - Added 4 methods (isBridge already existed) including getGenericReturnType(), getAnnotatedReturnType(), getDefaultValue(), isDefault(). All 25,872 tests passing.
+- [x] TODO-82 Add missing methods to ConstructorInfo to make it a complete replacement for java.lang.reflect.Constructor. ✅ COMPLETED - Added 1 method: newInstance() as standard API alias for invoke(). All 25,872 tests passing.
+- [x] TODO-83 Refactor reflection hierarchy to introduce AccessibleInfo base class. ✅ COMPLETED - Created AccessibleInfo to mirror java.lang.reflect.AccessibleObject, extracted common annotation and accessibility methods from ExecutableInfo and FieldInfo. New hierarchy: AccessibleInfo (base) -> ExecutableInfo -> MethodInfo/ConstructorInfo, and AccessibleInfo -> FieldInfo. All 25,872 tests passing.
+- [x] TODO-85 Add missing methods to AnnotationInfo to make it a drop-in replacement for java.lang.annotation.Annotation. ✅ COMPLETED - Added 3 methods: annotationType(), hashCode(), equals(). AnnotationInfo now provides complete API compatibility with java.lang.annotation.Annotation while maintaining Juneau enhancements for context tracking and annotation hierarchy searching. All 25,872 tests passing.
+- [x] TODO-86 Add PackageInfo class as a wrapper for java.lang.Package. ✅ COMPLETED - Created PackageInfo with caching, complete Package API implementation (getName(), getSpecificationTitle/Version/Vendor(), getImplementationTitle/Version/Vendor(), isSealed(), isCompatibleWith(), annotation methods), Juneau enhancements (hasAnnotation(), hasNoAnnotation()), and factory methods (of(Package), of(Class), of(ClassInfo)). Updated ClassInfo.getPackage() to return PackageInfo. All 25,872 tests passing.
 
 ## Framework Improvements
 

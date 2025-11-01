@@ -46,7 +46,7 @@ public class RestOpContextArgs extends SimpleRestOperationArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static RestOpContextArgs create(ParamInfo paramInfo) {
+	public static RestOpContextArgs create(ParameterInfo paramInfo) {
 		if (paramInfo.isType(JsonSchemaGenerator.class))
 			return new RestOpContextArgs(RestOpContext::getJsonSchemaGenerator);
 		if (paramInfo.isType(ParserSet.class))

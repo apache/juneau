@@ -41,7 +41,7 @@ public class HttpSessionArgs extends SimpleRestOperationArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static HttpSessionArgs create(ParamInfo paramInfo) {
+	public static HttpSessionArgs create(ParameterInfo paramInfo) {
 		if (paramInfo.isType(HttpSession.class))
 			return new HttpSessionArgs(x -> x);
 		return null;

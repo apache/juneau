@@ -106,7 +106,7 @@ public class HeaderArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @return A new {@link HeaderArg}, or <jk>null</jk> if the parameter is not annotated with {@link Header}.
 	 */
-	public static HeaderArg create(ParamInfo paramInfo, AnnotationWorkList annotations) {
+	public static HeaderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {
 		if ((! paramInfo.getParameterType().is(Value.class)) && (paramInfo.hasAnnotation(Header.class) || paramInfo.getParameterType().hasAnnotation(Header.class)))
 			return new HeaderArg(paramInfo, annotations);
 		return null;
@@ -119,7 +119,7 @@ public class HeaderArg implements RestOpArg {
 	 * @param paramName The header name.
 	 * @return Merged annotation, or null if no class-level defaults exist.
 	 */
-	private static Header getMergedHeader(ParamInfo pi, String paramName) {
+	private static Header getMergedHeader(ParameterInfo pi, String paramName) {
 		// Get the declaring class
 		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
 		if (declaringClass == null)
@@ -208,7 +208,7 @@ public class HeaderArg implements RestOpArg {
 	 * @param pi The Java method parameter being resolved.
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
-	protected HeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
+	protected HeaderArg(ParameterInfo pi, AnnotationWorkList annotations) {
 		// Get the header name from the parameter
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
 

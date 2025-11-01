@@ -80,7 +80,7 @@ public class RequestBeanMeta {
 			return this;
 		}
 
-		Builder apply(ParamInfo mpi) {
+		Builder apply(ParameterInfo mpi) {
 			return apply(mpi.getParameterType().inner()).apply(mpi.getAnnotation(Request.class));
 		}
 
@@ -120,7 +120,7 @@ public class RequestBeanMeta {
 	 * @param annotations The annotations to apply to any new part serializers or parsers.
 	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
-	public static RequestBeanMeta create(ParamInfo mpi, AnnotationWorkList annotations) {
+	public static RequestBeanMeta create(ParameterInfo mpi, AnnotationWorkList annotations) {
 		if (mpi.hasNoAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(mpi).build();

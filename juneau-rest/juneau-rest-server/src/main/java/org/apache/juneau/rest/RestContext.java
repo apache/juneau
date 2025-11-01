@@ -5914,8 +5914,8 @@ public class RestContext extends Context {
 		beanStore = BeanStore.of(beanStore, getResource());
 
 		for (int i = 0; i < pt.size(); i++) {
-			ParamInfo pi = mi.getParam(i);
-			beanStore.addBean(ParamInfo.class, pi);
+			ParameterInfo pi = mi.getParam(i);
+			beanStore.addBean(ParameterInfo.class, pi);
 			for (var c : restOpArgs) {
 				try {
 					ra[i] = beanStore.createBean(RestOpArg.class).type(c).run();

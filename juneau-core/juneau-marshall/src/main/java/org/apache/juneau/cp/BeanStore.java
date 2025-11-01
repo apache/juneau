@@ -129,11 +129,11 @@ public class BeanStore {
 
 			ConstructorInfo ci = c.getPublicConstructor(x -> x.canAccept(this));
 			if (nn(ci))
-				return ci.invoke(this);
+				return ci.newInstance(this);
 
 			ci = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this));
 			if (nn(ci))
-				return ci.accessible().invoke(this);
+				return ci.accessible().newInstance(this);
 
 			throw runtimeException("Could not find a way to instantiate class {0}", cn(type));
 		}
@@ -503,10 +503,10 @@ public class BeanStore {
 	 * @return A comma-delimited list of types that are missing from this factory, or <jk>null</jk> if none are missing.
 	 */
 	public String getMissingParams(ExecutableInfo executable) {
-		List<ParamInfo> params = executable.getParams();
+		List<ParameterInfo> params = executable.getParams();
 		List<String> l = list();
 		loop: for (int i = 0; i < params.size(); i++) {
-			ParamInfo pi = params.get(i);
+			ParameterInfo pi = params.get(i);
 			ClassInfo pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
 				continue loop;
@@ -531,7 +531,7 @@ public class BeanStore {
 	public Object[] getParams(ExecutableInfo executable) {
 		Object[] o = new Object[executable.getParamCount()];
 		for (int i = 0; i < executable.getParamCount(); i++) {
-			ParamInfo pi = executable.getParam(i);
+			ParameterInfo pi = executable.getParam(i);
 			ClassInfo pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get())) {
 				o[i] = outer.get();
@@ -555,7 +555,7 @@ public class BeanStore {
 	 */
 	public boolean hasAllParams(ExecutableInfo executable) {
 		loop: for (int i = 0; i < executable.getParamCount(); i++) {
-			ParamInfo pi = executable.getParam(i);
+			ParameterInfo pi = executable.getParam(i);
 			ClassInfo pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
 				continue loop;
@@ -648,7 +648,7 @@ public class BeanStore {
 			throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");
 	}
 
-	private static String findBeanName(ParamInfo pi) {
+	private static String findBeanName(ParameterInfo pi) {
 		Annotation n = pi.getAnnotation(Annotation.class, x -> scn(x.annotationType()).equals("Named"));
 		if (nn(n))
 			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);

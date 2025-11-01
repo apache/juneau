@@ -26,15 +26,17 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Lightweight utility class for introspecting information about a field.
  *
+ * <p>
+ * Extends {@link AccessibleInfo} to provide {@link AccessibleObject} functionality.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class FieldInfo implements Comparable<FieldInfo> {
+public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo> {
 	/**
 	 * Convenience method for instantiating a {@link FieldInfo};
 	 *
@@ -71,6 +73,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 * @param f The field being wrapped.
 	 */
 	protected FieldInfo(ClassInfo declaringClass, Field f) {
+		super(f);
 		this.declaringClass = declaringClass;
 		this.f = f;
 	}
@@ -166,9 +169,9 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	public String getFullName() {
 		var sb = new StringBuilder(128);
 		ClassInfo dc = declaringClass;
-		Package p = dc.getPackage();
-		if (nn(p))
-			sb.append(p.getName()).append('.');
+		PackageInfo pi = dc.getPackage();
+		if (nn(pi))
+			sb.append(pi.getName()).append('.');
 		dc.appendShortName(sb);
 		sb.append(".").append(getName());
 		return sb.toString();
@@ -471,21 +474,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 *
-	 * @return <jk>true</jk> if call was successful.
-	 */
-	public boolean setAccessible() {
-		try {
-			if (nn(f))
-				f.setAccessible(true);
-			return true;
-		} catch (@SuppressWarnings("unused") SecurityException e) {
-			return false;
-		}
-	}
-
-	/**
 	 * Sets the field value on the specified object if the value is <jk>null</jk>.
 	 *
 	 * @param o The object containing the field.
@@ -496,6 +484,149 @@ public class FieldInfo implements Comparable<FieldInfo> {
 		Object v = get(o);
 		if (v == null)
 			set(o, value);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// High Priority Methods (direct Field API compatibility)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the Java language modifiers for the field represented by this object, as an integer.
+	 *
+	 * <p>
+	 * The {@link java.lang.reflect.Modifier} class should be used to decode the modifiers.
+	 *
+	 * <p>
+	 * Same as calling {@link Field#getModifiers()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if field is public and static</jc>
+	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"myField"</js>);
+	 * 	<jk>int</jk> <jv>modifiers</jv> = <jv>fi</jv>.getModifiers();
+	 * 	<jk>boolean</jk> <jv>isPublicStatic</jv> = Modifier.<jsm>isPublic</jsm>(<jv>modifiers</jv>) &amp;&amp; Modifier.<jsm>isStatic</jsm>(<jv>modifiers</jv>);
+	 * </p>
+	 *
+	 * @return The Java language modifiers for this field.
+	 * @see Field#getModifiers()
+	 * @see java.lang.reflect.Modifier
+	 */
+	public int getModifiers() {
+		return f.getModifiers();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field is a synthetic field as defined by the Java Language Specification.
+	 *
+	 * <p>
+	 * Same as calling {@link Field#isSynthetic()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Filter out compiler-generated fields</jc>
+	 * 	FieldInfo <jv>fi</jv> = ...;
+	 * 	<jk>if</jk> (! <jv>fi</jv>.isSynthetic()) {
+	 * 		<jc>// Process real field</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this field is a synthetic field.
+	 * @see Field#isSynthetic()
+	 */
+	public boolean isSynthetic() {
+		return f.isSynthetic();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field represents an element of an enumerated type.
+	 *
+	 * <p>
+	 * Same as calling {@link Field#isEnumConstant()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if field is an enum constant</jc>
+	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyEnum.<jk>class</jk>).getField(<js>"VALUE1"</js>);
+	 * 	<jk>if</jk> (<jv>fi</jv>.isEnumConstant()) {
+	 * 		<jc>// Handle enum constant</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this field represents an enum constant.
+	 * @see Field#isEnumConstant()
+	 */
+	public boolean isEnumConstant() {
+		return f.isEnumConstant();
+	}
+
+	/**
+	 * Returns a {@link Type} object that represents the declared type for the field represented by this object.
+	 *
+	 * <p>
+	 * Same as calling {@link Field#getGenericType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get generic type information for field: List&lt;String&gt; values</jc>
+	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"values"</js>);
+	 * 	Type <jv>type</jv> = <jv>fi</jv>.getGenericType();
+	 * 	<jk>if</jk> (<jv>type</jv> <jk>instanceof</jk> ParameterizedType) {
+	 * 		ParameterizedType <jv>pType</jv> = (ParameterizedType)<jv>type</jv>;
+	 * 		<jc>// pType.getActualTypeArguments()[0] is String.class</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @return A {@link Type} object representing the declared type.
+	 * @see Field#getGenericType()
+	 */
+	public Type getGenericType() {
+		return f.getGenericType();
+	}
+
+	/**
+	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the declared type of the field.
+	 *
+	 * <p>
+	 * Same as calling {@link Field#getAnnotatedType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get annotated type: @NotNull String name</jc>
+	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"name"</js>);
+	 * 	AnnotatedType <jv>aType</jv> = <jv>fi</jv>.getAnnotatedType();
+	 * 	<jc>// Check for @NotNull on the type</jc>
+	 * </p>
+	 *
+	 * @return An {@link AnnotatedType} object representing the declared type.
+	 * @see Field#getAnnotatedType()
+	 */
+	public AnnotatedType getAnnotatedType() {
+		return f.getAnnotatedType();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Field-Specific Methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns a string describing this field, including its generic type.
+	 *
+	 * <p>
+	 * Same as calling {@link Field#toGenericString()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get generic string for: public static final List&lt;String&gt; VALUES</jc>
+	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"VALUES"</js>);
+	 * 	String <jv>str</jv> = <jv>fi</jv>.toGenericString();
+	 * 	<jc>// Returns: "public static final java.util.List&lt;java.lang.String&gt; com.example.MyClass.VALUES"</jc>
+	 * </p>
+	 *
+	 * @return A string describing this field.
+	 * @see Field#toGenericString()
+	 */
+	public String toGenericString() {
+		return f.toGenericString();
 	}
 
 	@Override

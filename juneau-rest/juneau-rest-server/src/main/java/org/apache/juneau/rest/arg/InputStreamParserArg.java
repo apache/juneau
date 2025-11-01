@@ -47,7 +47,7 @@ public class InputStreamParserArg extends SimpleRestOperationArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new {@link InputStreamParserArg}, or <jk>null</jk> if the parameter type is not {@link InputStreamParser}.
 	 */
-	public static InputStreamParserArg create(ParamInfo paramInfo) {
+	public static InputStreamParserArg create(ParameterInfo paramInfo) {
 		if (paramInfo.isType(InputStreamParser.class))
 			return new InputStreamParserArg();
 		return null;

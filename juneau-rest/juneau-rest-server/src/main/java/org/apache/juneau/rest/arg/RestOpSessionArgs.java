@@ -42,7 +42,7 @@ public class RestOpSessionArgs extends SimpleRestOperationArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static RestOpSessionArgs create(ParamInfo paramInfo) {
+	public static RestOpSessionArgs create(ParameterInfo paramInfo) {
 		if (paramInfo.isType(BeanStore.class))
 			return new RestOpSessionArgs(RestOpSession::getBeanStore);
 		if (paramInfo.isType(RestOpSession.class))

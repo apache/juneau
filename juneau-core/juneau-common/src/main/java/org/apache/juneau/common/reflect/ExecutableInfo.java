@@ -27,21 +27,22 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.reflect.*;
-
 /**
  * Contains common methods between {@link ConstructorInfo} and {@link MethodInfo}.
+ *
+ * <p>
+ * Extends {@link AccessibleInfo} to provide {@link AccessibleObject} functionality.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public abstract class ExecutableInfo {
+public abstract class ExecutableInfo extends AccessibleInfo {
 
 	final ClassInfo declaringClass;
 	final Executable e;
 	final boolean isConstructor;
 
-	private volatile ParamInfo[] params;
+	private volatile ParameterInfo[] params;
 	private volatile ClassInfo[] paramTypes, exceptionInfos;
 	private volatile Class<?>[] rawParamTypes;
 	private volatile Type[] rawGenericParamTypes;
@@ -73,6 +74,7 @@ public abstract class ExecutableInfo {
 	 * @param e The constructor or method that this info represents.
 	 */
 	protected ExecutableInfo(ClassInfo declaringClass, Executable e) {
+		super(e);
 		this.declaringClass = declaringClass;
 		this.e = e;
 		this.isConstructor = e instanceof Constructor;
@@ -95,7 +97,7 @@ public abstract class ExecutableInfo {
 	 * @param action The action to perform.
 	 * @return This object.
 	 */
-	public ExecutableInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
+	public ExecutableInfo forEachParam(Predicate<ParameterInfo> filter, Consumer<ParameterInfo> action) {
 		for (var pi : _getParams())
 			if (test(filter, pi))
 				action.accept(pi);
@@ -219,9 +221,9 @@ public abstract class ExecutableInfo {
 	public final String getFullName() {
 		var sb = new StringBuilder(128);
 		ClassInfo dc = declaringClass;
-		Package p = dc.getPackage();
-		if (nn(p))
-			sb.append(p.getName()).append('.');
+		PackageInfo pi = dc.getPackage();
+		if (nn(pi))
+			sb.append(pi.getName()).append('.');
 		dc.appendShortName(sb);
 		if (! isConstructor)
 			sb.append('.').append(getSimpleName());
@@ -242,7 +244,7 @@ public abstract class ExecutableInfo {
 	 * @param index The parameter index.
 	 * @return The parameter information, never <jk>null</jk>.
 	 */
-	public final ParamInfo getParam(int index) {
+	public final ParameterInfo getParam(int index) {
 		checkIndex(index);
 		return _getParams()[index];
 	}
@@ -265,7 +267,7 @@ public abstract class ExecutableInfo {
 	 *
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
-	public final List<ParamInfo> getParams() { return u(l(_getParams())); }
+	public final List<ParameterInfo> getParams() { return u(l(_getParams())); }
 
 	/**
 	 * Returns the parameter type of the parameter at the specified index.
@@ -771,11 +773,229 @@ public abstract class ExecutableInfo {
 		return v.isVisible(e);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// High Priority Methods (direct Executable API compatibility)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the Java language modifiers for the executable represented by this object, as an integer.
+	 *
+	 * <p>
+	 * The {@link java.lang.reflect.Modifier} class should be used to decode the modifiers.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#getModifiers()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if method is public and static</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
+	 * 	<jk>int</jk> <jv>modifiers</jv> = <jv>mi</jv>.getModifiers();
+	 * 	<jk>boolean</jk> <jv>isPublicStatic</jv> = Modifier.<jsm>isPublic</jsm>(<jv>modifiers</jv>) &amp;&amp; Modifier.<jsm>isStatic</jsm>(<jv>modifiers</jv>);
+	 * </p>
+	 *
+	 * @return The Java language modifiers for this executable.
+	 * @see Executable#getModifiers()
+	 * @see java.lang.reflect.Modifier
+	 */
+	public final int getModifiers() {
+		return e.getModifiers();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this executable is a synthetic construct as defined by the Java Language Specification.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#isSynthetic()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if method is compiler-generated</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"access$000"</js>);
+	 * 	<jk>boolean</jk> <jv>isSynthetic</jv> = <jv>mi</jv>.isSynthetic();
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this executable is a synthetic construct.
+	 * @see Executable#isSynthetic()
+	 */
+	public final boolean isSynthetic() {
+		return e.isSynthetic();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this executable was declared to take a variable number of arguments.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#isVarArgs()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Check if method accepts varargs</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, String[].<jk>class</jk>);
+	 * 	<jk>boolean</jk> <jv>isVarArgs</jv> = <jv>mi</jv>.isVarArgs();
+	 * </p>
+	 *
+	 * @return <jk>true</jk> if this executable was declared to take a variable number of arguments.
+	 * @see Executable#isVarArgs()
+	 */
+	public final boolean isVarArgs() {
+		return e.isVarArgs();
+	}
+
+	/**
+	 * Returns an array of {@link TypeVariable} objects that represent the type variables declared by the generic declaration.
+	 *
+	 * <p>
+	 * Returns an empty array if the generic declaration declares no type variables.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#getTypeParameters()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get type parameters from method: &lt;T extends Number&gt; void myMethod(T value)</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, Number.<jk>class</jk>);
+	 * 	TypeVariable&lt;?&gt;[] <jv>typeParams</jv> = <jv>mi</jv>.getTypeParameters();
+	 * 	<jc>// typeParams[0].getName() returns "T"</jc>
+	 * </p>
+	 *
+	 * @return An array of {@link TypeVariable} objects, or an empty array if none.
+	 * @see Executable#getTypeParameters()
+	 */
+	public final TypeVariable<?>[] getTypeParameters() {
+		return e.getTypeParameters();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Medium Priority Methods (generic type information)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns an array of {@link Type} objects that represent the exceptions declared to be thrown by this executable.
+	 *
+	 * <p>
+	 * Returns generic type information including parameterized types, unlike {@link #getExceptionTypes()} which returns raw types.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#getGenericExceptionTypes()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get generic exception types from method that throws IOException, IllegalArgumentException</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
+	 * 	Type[] <jv>exTypes</jv> = <jv>mi</jv>.getGenericExceptionTypes();
+	 * </p>
+	 *
+	 * @return An array of {@link Type} objects representing exception types, or an empty array if none.
+	 * @see Executable#getGenericExceptionTypes()
+	 */
+	public final Type[] getGenericExceptionTypes() {
+		return e.getGenericExceptionTypes();
+	}
+
+	/**
+	 * Returns a string describing this executable, including type parameters.
+	 *
+	 * <p>
+	 * The string includes the method/constructor name, parameter types (with generic information), and return type (for methods).
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#toGenericString()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get generic string for: public &lt;T&gt; List&lt;T&gt; myMethod(T value) throws IOException</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, Object.<jk>class</jk>);
+	 * 	String <jv>str</jv> = <jv>mi</jv>.toGenericString();
+	 * 	<jc>// Returns: "public &lt;T&gt; java.util.List&lt;T&gt; com.example.MyClass.myMethod(T) throws java.io.IOException"</jc>
+	 * </p>
+	 *
+	 * @return A string describing this executable.
+	 * @see Executable#toGenericString()
+	 */
+	public final String toGenericString() {
+		return e.toGenericString();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Low Priority Methods (advanced annotation features)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the receiver type of the method/constructor.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if this executable object represents a top-level type or static member.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#getAnnotatedReceiverType()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get annotated receiver type from method: void myMethod(@MyAnnotation MyClass this)</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
+	 * 	AnnotatedType <jv>receiverType</jv> = <jv>mi</jv>.getAnnotatedReceiverType();
+	 * </p>
+	 *
+	 * @return An {@link AnnotatedType} object representing the receiver type, or <jk>null</jk> if not applicable.
+	 * @see Executable#getAnnotatedReceiverType()
+	 */
+	public final AnnotatedType getAnnotatedReceiverType() {
+		return e.getAnnotatedReceiverType();
+	}
+
+	/**
+	 * Returns an array of {@link AnnotatedType} objects that represent the use of types to specify formal parameter types.
+	 *
+	 * <p>
+	 * The order of the objects corresponds to the order of the formal parameter types in the executable declaration.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#getAnnotatedParameterTypes()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get annotated parameter types from method: void myMethod(@NotNull String s, @Range(min=0) int i)</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
+	 * 	AnnotatedType[] <jv>paramTypes</jv> = <jv>mi</jv>.getAnnotatedParameterTypes();
+	 * </p>
+	 *
+	 * @return An array of {@link AnnotatedType} objects, or an empty array if the executable has no parameters.
+	 * @see Executable#getAnnotatedParameterTypes()
+	 */
+	public final AnnotatedType[] getAnnotatedParameterTypes() {
+		return e.getAnnotatedParameterTypes();
+	}
+
+	/**
+	 * Returns an array of {@link AnnotatedType} objects that represent the use of types to specify the declared exceptions.
+	 *
+	 * <p>
+	 * The order of the objects corresponds to the order of the exception types in the executable declaration.
+	 *
+	 * <p>
+	 * Same as calling {@link Executable#getAnnotatedExceptionTypes()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Get annotated exception types from method: void myMethod() throws @NotNull IOException</jc>
+	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
+	 * 	AnnotatedType[] <jv>exTypes</jv> = <jv>mi</jv>.getAnnotatedExceptionTypes();
+	 * </p>
+	 *
+	 * @return An array of {@link AnnotatedType} objects, or an empty array if the executable declares no exceptions.
+	 * @see Executable#getAnnotatedExceptionTypes()
+	 */
+	public final AnnotatedType[] getAnnotatedExceptionTypes() {
+		return e.getAnnotatedExceptionTypes();
+	}
+
 	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
 	 * @return <jk>true</jk> if call was successful.
 	 */
+	@Override
 	public final boolean setAccessible() {
 		try {
 			if (nn(e))
@@ -876,13 +1096,13 @@ public abstract class ExecutableInfo {
 		return paramTypes;
 	}
 
-	final ParamInfo[] _getParams() {
+	final ParameterInfo[] _getParams() {
 		if (params == null) {
 			synchronized (this) {
 				Parameter[] rp = _getRawParameters();
-				ParamInfo[] l = new ParamInfo[rp.length];
+				ParameterInfo[] l = new ParameterInfo[rp.length];
 				for (int i = 0; i < rp.length; i++)
-					l[i] = new ParamInfo(this, rp[i], i);
+					l[i] = new ParameterInfo(this, rp[i], i);
 				params = l;
 			}
 		}

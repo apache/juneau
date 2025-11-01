@@ -72,7 +72,7 @@ public class RestRequestArgs extends SimpleRestOperationArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new arg, or <jk>null</jk> if the parameter type is not one of the supported types.
 	 */
-	public static RestRequestArgs create(ParamInfo paramInfo) {
+	public static RestRequestArgs create(ParameterInfo paramInfo) {
 		if (paramInfo.isType(HttpPartParserSession.class))
 			return new RestRequestArgs(RestRequest::getPartParserSession);
 		if (paramInfo.isType(HttpPartSerializerSession.class))

@@ -52,21 +52,21 @@ public class DefaultArg implements RestOpArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new {@link DefaultArg}, never <jk>null</jk>.
 	 */
-	public static DefaultArg create(ParamInfo paramInfo) {
+	public static DefaultArg create(ParameterInfo paramInfo) {
 		return new DefaultArg(paramInfo);
 	}
 
 	private final Class<?> type;
 	private final String name;
 
-	private final ParamInfo paramInfo;
+	private final ParameterInfo paramInfo;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
 	 */
-	protected DefaultArg(ParamInfo paramInfo) {
+	protected DefaultArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().inner();
 		this.paramInfo = paramInfo;
 		this.name = findBeanName(paramInfo);
@@ -77,7 +77,7 @@ public class DefaultArg implements RestOpArg {
 		return opSession.getBeanStore().getBean(type, name).orElseThrow(() -> new ArgException(paramInfo, "Could not resolve bean type {0}", cn(type)));
 	}
 
-	private static String findBeanName(ParamInfo pi) {
+	private static String findBeanName(ParameterInfo pi) {
 		Annotation n = pi.getAnnotation(Annotation.class, x -> scn(x.annotationType()).equals("Named"));
 		if (nn(n))
 			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);

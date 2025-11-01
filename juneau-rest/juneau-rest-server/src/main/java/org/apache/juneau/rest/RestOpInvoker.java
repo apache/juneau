@@ -57,7 +57,7 @@ public class RestOpInvoker extends MethodInvoker {
 	public void invoke(RestOpSession opSession) throws Throwable {
 		var args = new Object[opArgs.length];
 		for (int i = 0; i < opArgs.length; i++) {
-			ParamInfo pi = inner().getParam(i);
+			ParameterInfo pi = inner().getParam(i);
 			try {
 				args[i] = opArgs[i].resolve(opSession);
 			} catch (BasicHttpException e) {

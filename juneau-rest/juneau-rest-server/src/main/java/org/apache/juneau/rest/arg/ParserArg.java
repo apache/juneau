@@ -47,7 +47,7 @@ public class ParserArg extends SimpleRestOperationArg {
 	 * @param paramInfo The Java method parameter being resolved.
 	 * @return A new {@link ParserArg}, or <jk>null</jk> if the parameter type is not {@link Parser}.
 	 */
-	public static ParserArg create(ParamInfo paramInfo) {
+	public static ParserArg create(ParameterInfo paramInfo) {
 		if (paramInfo.isType(Parser.class))
 			return new ParserArg();
 		return null;

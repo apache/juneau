@@ -63,7 +63,7 @@ public class PathArg implements RestOpArg {
 	 * @param pathMatcher Path matcher for the specified method.
 	 * @return A new {@link PathArg}, or <jk>null</jk> if the parameter is not annotated with {@link Path}.
 	 */
-	public static PathArg create(ParamInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
+	public static PathArg create(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
 		if (paramInfo.hasAnnotation(Path.class) || paramInfo.getParameterType().hasAnnotation(Path.class))
 			return new PathArg(paramInfo, annotations, pathMatcher);
 		return null;
@@ -76,7 +76,7 @@ public class PathArg implements RestOpArg {
 	 * @param paramName The path parameter name.
 	 * @return Merged annotation, or null if no class-level defaults exist.
 	 */
-	private static Path getMergedPath(ParamInfo pi, String paramName) {
+	private static Path getMergedPath(ParameterInfo pi, String paramName) {
 		// Get the declaring class
 		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
 		if (declaringClass == null)
@@ -164,7 +164,7 @@ public class PathArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 * @param pathMatcher Path matcher for the specified method.
 	 */
-	protected PathArg(ParamInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
+	protected PathArg(ParameterInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
 		// Get the path parameter name
 		this.name = getName(paramInfo, pathMatcher);
 
@@ -191,7 +191,7 @@ public class PathArg implements RestOpArg {
 		return req.getPathParams().get(name).parser(ps).schema(schema).def(def).as(type).orElse(null);
 	}
 
-	private static String getName(ParamInfo pi, UrlPathMatcher pathMatcher) {
+	private static String getName(ParameterInfo pi, UrlPathMatcher pathMatcher) {
 		String p = findName(pi).orElse(null);
 		if (nn(p))
 			return p;

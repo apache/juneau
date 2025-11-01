@@ -2562,7 +2562,7 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		Builder apply(Class<? extends Annotation> c, ParamInfo mpi) {
+		Builder apply(Class<? extends Annotation> c, ParameterInfo mpi) {
 			apply(c, mpi.getParameterType().innerType());
 			mpi.forEachDeclaredAnnotation(c, x -> true, this::apply);
 			return this;
@@ -2804,7 +2804,7 @@ public class HttpPartSchema {
 			return apply(Schema.class, m).apply(c, m);
 		}
 
-		Builder applyAll(Class<? extends Annotation> c, ParamInfo mpi) {
+		Builder applyAll(Class<? extends Annotation> c, ParameterInfo mpi) {
 			return apply(Schema.class, mpi).apply(c, mpi);
 		}
 
@@ -3154,7 +3154,7 @@ public class HttpPartSchema {
 	 * @param mpi The Java method parameter.
 	 * @return The schema information about the parameter.
 	 */
-	public static HttpPartSchema create(Class<? extends Annotation> c, ParamInfo mpi) {
+	public static HttpPartSchema create(Class<? extends Annotation> c, ParameterInfo mpi) {
 		return create().applyAll(c, mpi).build();
 	}
 
