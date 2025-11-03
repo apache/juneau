@@ -264,7 +264,7 @@
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 					<strong class="jxr_keyword">if</strong> (! x.hasNumParams(constructorArgs.length)) {
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 						<strong class="jxr_keyword">if</strong> (constructorArgs.length != 0)
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor."</span>);
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 						constructorArgs = <strong class="jxr_keyword">new</strong> String[x.getParamCount()];
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 						constructorArgs = <strong class="jxr_keyword">new</strong> String[x.getParameterCount()];
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 						<strong class="jxr_keyword">var</strong> i = IntegerValue.create();
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 						x.forEachParam(<strong class="jxr_keyword">null</strong>, pi -&gt; {
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 							String pn = pi.getName();
@@ -287,7 +287,7 @@
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 						<strong class="jxr_keyword">if</strong> (! x.hasNumParams(constructorArgs.length)) {
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 							<strong class="jxr_keyword">if</strong> (constructorArgs.length != 0)
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor."</span>);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 							constructorArgs = <strong class="jxr_keyword">new</strong> String[x.getParamCount()];
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 							constructorArgs = <strong class="jxr_keyword">new</strong> String[x.getParameterCount()];
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 							<strong class="jxr_keyword">var</strong> i = IntegerValue.create();
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 							x.forEachParam(<strong class="jxr_keyword">null</strong>, y -&gt; {
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 								String pn = y.getName();
@@ -600,7 +600,7 @@
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 
 <a class="jxr_linenumber" name="L593" href="#L593">593</a> 		forEachClass(ClassInfo.of(c), stopClass, c2 -&gt; {
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : c2.getDeclaredMethods()) {
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 				<strong class="jxr_keyword">if</strong> (m.isStatic() || m.isBridge() || m.getParamCount() &gt; 2 || m.hasAnnotation(ctx, BeanIgnore.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 				<strong class="jxr_keyword">if</strong> (m.isStatic() || m.isBridge() || m.getParameterCount() &gt; 2 || m.hasAnnotation(ctx, BeanIgnore.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 					<strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="L597" href="#L597">597</a> 				Transient t = m.getAnnotation(ctx, Transient.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 				<strong class="jxr_keyword">if</strong> (nn(t) &amp;&amp; t.value())

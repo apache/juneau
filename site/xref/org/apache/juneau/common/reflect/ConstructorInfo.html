@@ -135,9 +135,9 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(<a name="ConstructorInfo" href="../../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> o) {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">int</strong> i = getSimpleName().compareTo(o.getSimpleName());
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">if</strong> (i == 0) {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			i = getParamCount() - o.getParamCount();
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			i = getParameterCount() - o.getParameterCount();
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">if</strong> (i == 0) {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; getParamCount() &amp;&amp; i == 0; j++) {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> j = 0; j &lt; getParameterCount() &amp;&amp; i == 0; j++) {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 					Class&lt;?&gt;[] tpt = _getRawParamTypes(), opt = o._getRawParamTypes();
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 					i = tpt[j].getName().compareTo(opt[j].getName());
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 				}

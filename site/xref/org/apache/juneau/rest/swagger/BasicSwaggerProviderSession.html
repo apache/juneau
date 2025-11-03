@@ -382,7 +382,7 @@
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 					paramMap.put(param.getString(<span class="jxr_string">"in"</span>) + '.' + (<span class="jxr_string">"body"</span>.equals(param.getString(<span class="jxr_string">"in"</span>)) ? <span class="jxr_string">"body"</span> : param.getString(<span class="jxr_string">"name"</span>)), param);
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<em class="jxr_comment">// Finally, look for parameters defined on method.</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mpi : mi.getParams()) {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mpi : mi.getParameters()) {
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 				ClassInfo pt = mpi.getParameterType();
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 				Type type = pt.innerType();
@@ -518,7 +518,7 @@
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 			}
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<em class="jxr_comment">// Finally, look for Value @Header parameters defined on method.</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mpi : mi.getParams()) {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mpi : mi.getParameters()) {
 <a class="jxr_linenumber" name="L514" href="#L514">514</a> 
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 				ClassInfo pt = mpi.getParameterType();
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 

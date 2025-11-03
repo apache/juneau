@@ -130,8 +130,8 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">void</strong> add(T ei) {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">if</strong> (ei.getParamCount() &gt; numMatches) {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				numMatches = ei.getParamCount();
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">if</strong> (ei.getParameterCount() &gt; numMatches) {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				numMatches = ei.getParameterCount();
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 				executable = (T)ei.accessible();
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		}
@@ -261,7 +261,7 @@
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 				x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 				&amp;&amp; x.isNotDeprecated()
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 				&amp;&amp; x.hasNumParams(1)
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 				&amp;&amp; x.getParam(0).canAccept(builder)
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 				&amp;&amp; x.getParameter(0).canAccept(builder)
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 				&amp;&amp; x.hasReturnType(type)
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 				&amp;&amp; x.hasNoAnnotation(BeanIgnore.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 				&amp;&amp; x.hasName(<span class="jxr_string">"getInstance"</span>)
@@ -340,7 +340,7 @@
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<em class="jxr_comment">// Look for static-builder/protected-constructor pair.</em>
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			Value&lt;T&gt; value = Value.empty();
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 			type.forEachDeclaredConstructor(x -&gt; x.hasNumParams(1) &amp;&amp; x.isVisible(PROTECTED), x -&gt; {
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 				Class&lt;?&gt; pt = x.getParam(0).getParameterType().<strong class="jxr_keyword">inner</strong>();
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 				Class&lt;?&gt; pt = x.getParameter(0).getParameterType().<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 				MethodInfo m = type.getPublicMethod(y -&gt; isStaticCreateMethod(y, pt));
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 				<strong class="jxr_keyword">if</strong> (nn(m)) {
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 					Object builder = m.invoke(<strong class="jxr_keyword">null</strong>);

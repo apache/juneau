@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Test <strong class="jxr_keyword">void</strong> a03_basic_onParameter() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> mpi = MethodInfo.of(A03.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"a"</span>, String.<strong class="jxr_keyword">class</strong>)).getParam(0);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> mpi = MethodInfo.of(A03.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"a"</span>, String.<strong class="jxr_keyword">class</strong>)).getParameter(0);
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertBean(
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			HttpPartSchema.create().applyAll(Header.<strong class="jxr_keyword">class</strong>, mpi).noValidate().build(),
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<span class="jxr_string">"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default"</span>,
@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> a04_basic_onParameterAndClass() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> mpi = MethodInfo.of(A04.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"a"</span>, A01.<strong class="jxr_keyword">class</strong>)).getParam(0);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> mpi = MethodInfo.of(A04.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"a"</span>, A01.<strong class="jxr_keyword">class</strong>)).getParameter(0);
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertBean(
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			HttpPartSchema.create().applyAll(Header.<strong class="jxr_keyword">class</strong>, mpi).noValidate().build(),
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<span class="jxr_string">"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,required,skipIfEmpty,enum,default"</span>,
