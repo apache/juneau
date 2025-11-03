@@ -192,10 +192,10 @@
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	@Test <strong class="jxr_keyword">void</strong> resolvedParams() {
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> mi2 = ClassInfo.of(A6.<strong class="jxr_keyword">class</strong>).getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m1"</span>));
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		check(<span class="jxr_string">"A1"</span>, mi2.getParamType(0).unwrap(Optional.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		check(<span class="jxr_string">"A1"</span>, mi2.getParameter(0).getParameterType().unwrap(Optional.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		check(<span class="jxr_string">"A1"</span>, mi2.getReturnType().unwrap(Optional.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		mi2 = ClassInfo.of(A6.<strong class="jxr_keyword">class</strong>).getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m2"</span>));
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		check(<span class="jxr_string">"A1"</span>, mi2.getParamType(0).unwrap(Value.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		check(<span class="jxr_string">"A1"</span>, mi2.getParameter(0).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		check(<span class="jxr_string">"A1"</span>, mi2.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 

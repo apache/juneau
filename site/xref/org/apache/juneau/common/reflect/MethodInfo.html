@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;MethodInfo&gt; findMatching(List&lt;MethodInfo&gt; l, <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m, ClassInfo c) {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : c.getDeclaredMethods())
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">if</strong> (m.hasName(m2.getName()) &amp;&amp; Arrays.equals(m._getParameterTypes(), m2._getParameterTypes()))
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">if</strong> (m.hasName(m2.getName()) &amp;&amp; m.hasParamTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::<strong class="jxr_keyword">new</strong>)))
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  				l.add(m2);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		ClassInfo pc = c.getSuperclass();
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">if</strong> (nn(pc))
@@ -183,9 +183,9 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> canAcceptFuzzy(Object...args) {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">int</strong> matches = 0;
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">outer</strong>: <strong class="jxr_keyword">for</strong> (ClassInfo pi : _getParameterTypes()) {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">outer</strong>: <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> param : getParameters()) {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : args) {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">if</strong> (pi.canAcceptArg(a)) {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">if</strong> (param.getParameterType().canAcceptArg(a)) {
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 					matches++;
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 					<strong class="jxr_keyword">continue</strong> <strong class="jxr_keyword">outer</strong>;
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 				}
@@ -779,7 +779,7 @@
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 
 <a class="jxr_linenumber" name="L772" href="#L772">772</a> 	MethodInfo findMatchingOnClass(ClassInfo c) {
 <a class="jxr_linenumber" name="L773" href="#L773">773</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m2 : c.getDeclaredMethods())
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">if</strong> (hasName(m2.getName()) &amp;&amp; Arrays.equals(_getParameterTypes(), m2._getParameterTypes()))
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">if</strong> (hasName(m2.getName()) &amp;&amp; hasParamTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::<strong class="jxr_keyword">new</strong>)))
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 			<strong class="jxr_keyword">return</strong> m2;
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 	}

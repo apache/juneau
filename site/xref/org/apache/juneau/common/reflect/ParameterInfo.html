@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A getAnnotation(Class&lt;A&gt; type, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">if</strong> (executable.isConstructor) {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			ClassInfo ci = executable.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 			A o = ci.getAnnotation(type, filter);
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">if</strong> (nn(o))
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 				<strong class="jxr_keyword">return</strong> o;
@@ -181,7 +181,7 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 					<strong class="jxr_keyword">return</strong> (A)a2;
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">var</strong> mi = (<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)executable;
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			ClassInfo ci = executable.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 			A o = ci.getAnnotation(type, filter);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">if</strong> (nn(o))
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 				<strong class="jxr_keyword">return</strong> o;
@@ -667,17 +667,17 @@
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a2 : executable._getParameterAnnotations(index))
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 				<strong class="jxr_keyword">if</strong> (type.isInstance(a2))
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 					<strong class="jxr_keyword">return</strong> type.<strong class="jxr_keyword">cast</strong>(a2);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			<strong class="jxr_keyword">return</strong> executable.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotation(type);
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			<strong class="jxr_keyword">return</strong> executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotation(type);
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 		}
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 		<strong class="jxr_keyword">var</strong> mi = (<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)executable;
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 		Value&lt;A&gt; v = Value.empty();
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 		mi.forEachMatchingParentFirst(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; x.forEachParameterAnnotation(index, type, y -&gt; <strong class="jxr_keyword">true</strong>, y -&gt; v.set(y)));
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		<strong class="jxr_keyword">return</strong> v.orElseGet(() -&gt; executable.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotation(type));
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		<strong class="jxr_keyword">return</strong> v.orElseGet(() -&gt; executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).getAnnotation(type));
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> 	}
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 	<strong class="jxr_keyword">private</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> forEachAnnotation(<a name="AnnotationProvider" href="../../../../../org/apache/juneau/common/reflect/AnnotationProvider.html#AnnotationProvider">AnnotationProvider</a> ap, Class&lt;A&gt; a, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<strong class="jxr_keyword">if</strong> (executable.isConstructor) {
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			ClassInfo ci = executable.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> 			Annotation[] annotations = executable._getParameterAnnotations(index);
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 			ci.forEachAnnotation(ap, a, filter, action);
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a2 : annotations)
@@ -685,7 +685,7 @@
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 					consumeIf(filter, action, a.<strong class="jxr_keyword">cast</strong>(a2));
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 			<strong class="jxr_keyword">var</strong> mi = (<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)executable;
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			ClassInfo ci = executable.getParamType(index).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 			ci.forEachAnnotation(ap, a, filter, action);
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 			mi.forEachMatchingParentFirst(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; x.forEachParameterAnnotation(index, a, filter, action));
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 		}

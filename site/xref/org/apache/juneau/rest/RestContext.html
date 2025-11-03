@@ -5915,13 +5915,13 @@
 <a class="jxr_linenumber" name="L5907" href="#L5907">5907</a> 	<strong class="jxr_keyword">protected</strong> <a name="RestOpArg" href="../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a>[] findRestOperationArgs(<a name="Method" href="../../../../org/apache/juneau/rest/annotation/Method.html#Method">Method</a> m, <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
 <a class="jxr_linenumber" name="L5908" href="#L5908">5908</a> 
 <a class="jxr_linenumber" name="L5909" href="#L5909">5909</a> 		<strong class="jxr_keyword">var</strong> mi = MethodInfo.of(m);
-<a class="jxr_linenumber" name="L5910" href="#L5910">5910</a> 		<strong class="jxr_keyword">var</strong> pt = mi.getParamTypes();
-<a class="jxr_linenumber" name="L5911" href="#L5911">5911</a> 		<strong class="jxr_keyword">var</strong> ra = <strong class="jxr_keyword">new</strong> <a name="RestOpArg" href="../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a>[pt.size()];
+<a class="jxr_linenumber" name="L5910" href="#L5910">5910</a> 		<strong class="jxr_keyword">var</strong> params = mi.getParameters();
+<a class="jxr_linenumber" name="L5911" href="#L5911">5911</a> 		<strong class="jxr_keyword">var</strong> ra = <strong class="jxr_keyword">new</strong> <a name="RestOpArg" href="../../../../org/apache/juneau/rest/arg/RestOpArg.html#RestOpArg">RestOpArg</a>[params.size()];
 <a class="jxr_linenumber" name="L5912" href="#L5912">5912</a> 
 <a class="jxr_linenumber" name="L5913" href="#L5913">5913</a> 		beanStore = BeanStore.of(beanStore, getResource());
 <a class="jxr_linenumber" name="L5914" href="#L5914">5914</a> 
-<a class="jxr_linenumber" name="L5915" href="#L5915">5915</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; pt.size(); i++) {
-<a class="jxr_linenumber" name="L5916" href="#L5916">5916</a> 			ParameterInfo pi = mi.getParameter(i);
+<a class="jxr_linenumber" name="L5915" href="#L5915">5915</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; params.size(); i++) {
+<a class="jxr_linenumber" name="L5916" href="#L5916">5916</a> 			<strong class="jxr_keyword">var</strong> pi = params.get(i);
 <a class="jxr_linenumber" name="L5917" href="#L5917">5917</a> 			beanStore.addBean(ParameterInfo.<strong class="jxr_keyword">class</strong>, pi);
 <a class="jxr_linenumber" name="L5918" href="#L5918">5918</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : restOpArgs) {
 <a class="jxr_linenumber" name="L5919" href="#L5919">5919</a> 				<strong class="jxr_keyword">try</strong> {

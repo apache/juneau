@@ -618,14 +618,14 @@
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 				<strong class="jxr_keyword">if</strong> (! (m.isVisible(v) || isNotEmpty(lp) || isNotEmpty(ln)))
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 					<strong class="jxr_keyword">continue</strong>;
 <a class="jxr_linenumber" name="L612" href="#L612">612</a> 
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 				String n = m.getSimpleName();
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			String n = m.getSimpleName();
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 				List&lt;ClassInfo&gt; pt = m.getParamTypes();
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 				ClassInfo rt = m.getReturnType();
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 				MethodType methodType = UNKNOWN;
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 				String bpName = bpName(lp, ln);
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			List&lt;ParameterInfo&gt; params = m.getParameters();
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			ClassInfo rt = m.getReturnType();
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			MethodType methodType = UNKNOWN;
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			String bpName = bpName(lp, ln);
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 				<strong class="jxr_keyword">if</strong> (pt.isEmpty()) {
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			<strong class="jxr_keyword">if</strong> (params.isEmpty()) {
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(bpName)) {
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 						<strong class="jxr_keyword">if</strong> (rt.isChildOf(Collection.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 							methodType = EXTRAKEYS;
@@ -650,14 +650,14 @@
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 						} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 							n = bpName;
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 						}
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 					}
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (pt.size() == 1) {
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(bpName)) {
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 						<strong class="jxr_keyword">if</strong> (pt.get(0).isChildOf(Map.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 							methodType = SETTER;
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 							n = bpName;
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 						} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (pt.get(0).is(String.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 							methodType = GETTER;
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 				}
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (params.size() == 1) {
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(bpName)) {
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 					<strong class="jxr_keyword">if</strong> (params.get(0).getParameterType().isChildOf(Map.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 						methodType = SETTER;
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 						n = bpName;
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (params.get(0).getParameterType().is(String.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 						methodType = GETTER;
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 							n = bpName;
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 						}
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (n.startsWith(<span class="jxr_string">"set"</span>) &amp;&amp; (rt.isParentOf(c) || rt.is(Void.TYPE))) {
@@ -677,9 +677,9 @@
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 						}
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (fluentSetters &amp;&amp; rt.isParentOf(c)) {
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 						methodType = SETTER;
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 					}
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (pt.size() == 2) {
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(bpName) &amp;&amp; pt.get(0).is(String.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 				}
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (params.size() == 2) {
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(bpName) &amp;&amp; params.get(0).getParameterType().is(String.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 						<strong class="jxr_keyword">if</strong> (n.startsWith(<span class="jxr_string">"set"</span>) &amp;&amp; (rt.isParentOf(c) || rt.is(Void.TYPE))) {
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 							methodType = SETTER;
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 						} <strong class="jxr_keyword">else</strong> {
@@ -800,27 +800,27 @@
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 		<strong class="jxr_keyword">if</strong> (! lp.isEmpty() || ! ln.isEmpty())
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 		String methodName = method.getSimpleName();
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		List&lt;ClassInfo&gt; paramTypes = method.getParamTypes();
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	String methodName = method.getSimpleName();
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 	List&lt;ParameterInfo&gt; params = method.getParameters();
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		<em class="jxr_comment">// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name</em>
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		<strong class="jxr_keyword">var</strong> currentClass = ClassInfo.of(c);
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		ClassInfo sc = currentClass.getSuperclass();
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 	<em class="jxr_comment">// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name</em>
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 	<strong class="jxr_keyword">var</strong> currentClass = ClassInfo.of(c);
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 	ClassInfo sc = currentClass.getSuperclass();
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> 
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 		<strong class="jxr_keyword">while</strong> (nn(sc) &amp;&amp; ! sc.is(stopClass) &amp;&amp; ! sc.is(Object.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 			<em class="jxr_comment">// Look for a method with the same signature in the parent class</em>
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> parentMethod : sc.getDeclaredMethods()) {
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 				<strong class="jxr_keyword">if</strong> (parentMethod.getSimpleName().equals(methodName) &amp;&amp; paramTypes.size() == parentMethod.getParamTypes().size()) {
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	<strong class="jxr_keyword">while</strong> (nn(sc) &amp;&amp; ! sc.is(stopClass) &amp;&amp; ! sc.is(Object.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<em class="jxr_comment">// Look for a method with the same signature in the parent class</em>
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> parentMethod : sc.getDeclaredMethods()) {
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 			<strong class="jxr_keyword">if</strong> (parentMethod.getSimpleName().equals(methodName) &amp;&amp; params.size() == parentMethod.getParameters().size()) {
 <a class="jxr_linenumber" name="L806" href="#L806">806</a> 
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 					<em class="jxr_comment">// Check if parameter types match</em>
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 					<strong class="jxr_keyword">boolean</strong> paramsMatch = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 					List&lt;ClassInfo&gt; parentParamTypes = parentMethod.getParamTypes();
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; paramTypes.size(); i++) {
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 						<strong class="jxr_keyword">if</strong> (! paramTypes.get(i).is(parentParamTypes.get(i).<strong class="jxr_keyword">inner</strong>())) {
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 							paramsMatch = false;
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 							<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 						}
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 					}
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 				<em class="jxr_comment">// Check if parameter types match</em>
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 				<strong class="jxr_keyword">boolean</strong> paramsMatch = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 				List&lt;ParameterInfo&gt; parentParams = parentMethod.getParameters();
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; params.size(); i++) {
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 					<strong class="jxr_keyword">if</strong> (! params.get(i).getParameterType().is(parentParams.get(i).getParameterType().<strong class="jxr_keyword">inner</strong>())) {
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 						paramsMatch = false;
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 					}
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 				}
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> 
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 					<strong class="jxr_keyword">if</strong> (paramsMatch) {
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 						<em class="jxr_comment">// Found a matching parent method - check for @Beanp and @Name annotations</em>
