@@ -448,7 +448,7 @@
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 				fixedBeanProps.forEach(x -&gt; {
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 					<strong class="jxr_keyword">if</strong> (! normalProps.containsKey(x))
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition."</span>, x,
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 							ci.getSimpleName());
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 							ci.getNameSimple());
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 				});
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 				<em class="jxr_comment">// Mark constructor arg properties.</em>
@@ -544,7 +544,7 @@
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanPropertyMeta[] EMPTY_PROPERTIES = {};
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> forEachClass(<a name="ClassInfo" href="../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> c, Class&lt;?&gt; stopClass, Consumer&lt;ClassInfo&gt; consumer) {
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> forEachClass(ClassInfo c, Class&lt;?&gt; stopClass, Consumer&lt;ClassInfo&gt; consumer) {
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 		ClassInfo sc = c.getSuperclass();
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">if</strong> (nn(sc) &amp;&amp; ! sc.is(stopClass))
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 			forEachClass(sc, stopClass, consumer);

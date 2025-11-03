@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;T&gt; normalClass;
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Class&lt;?&gt; swapClass;
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> normalClassInfo, swapClassInfo;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ClassInfo normalClassInfo, swapClassInfo;
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">private</strong> ClassMeta&lt;?&gt; swapClassMeta;
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<em class="jxr_comment">// Unfortunately these cannot be made final because we want to allow for ObjectSwaps with no-arg constructors</em>
@@ -192,7 +192,7 @@
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * @return The normal form of this class.</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getNormalClass() { <strong class="jxr_keyword">return</strong> normalClassInfo; }
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">public</strong> ClassInfo getNormalClass() { <strong class="jxr_keyword">return</strong> normalClassInfo; }
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * Returns the G class, the generalized form of the class.</em>
@@ -203,7 +203,7 @@
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * @return The transformed form of this class.</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">public</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> getSwapClass() { <strong class="jxr_keyword">return</strong> swapClassInfo; }
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">public</strong> ClassInfo getSwapClass() { <strong class="jxr_keyword">return</strong> swapClassInfo; }
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * Returns the {@link ClassMeta} of the transformed class type.</em>
@@ -336,7 +336,7 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">return</strong> getClass().getSimpleName() + '&lt;' + getNormalClass().getSimpleName() + <span class="jxr_string">","</span> + getSwapClass().getSimpleName() + '&gt;';
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">return</strong> getClass().getSimpleName() + '&lt;' + getNormalClass().getNameSimple() + <span class="jxr_string">","</span> + getSwapClass().getNameSimple() + '&gt;';
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 	}
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<em class="jxr_javadoccomment">/**</em>

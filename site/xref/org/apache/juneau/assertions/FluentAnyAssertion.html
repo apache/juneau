@@ -510,7 +510,7 @@
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 		Object o = orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong> || c.isInstance(o))
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 			<strong class="jxr_keyword">return</strong> c.<strong class="jxr_keyword">cast</strong>(o);
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicAssertionError" href="../../../../org/apache/juneau/BasicAssertionError.html#BasicAssertionError">BasicAssertionError</a>(MSG_objectWasNotType, ClassInfo.of(c).getFullName(), o.getClass());
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicAssertionError" href="../../../../org/apache/juneau/BasicAssertionError.html#BasicAssertionError">BasicAssertionError</a>(MSG_objectWasNotType, ClassInfo.of(c).getNameFull(), o.getClass());
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 	}
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> }
 </pre>

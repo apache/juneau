@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findBeanName(<a name="ParameterInfo" href="../../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		Annotation n = pi.getAnnotation(Annotation.<strong class="jxr_keyword">class</strong>, x -&gt; scn(x.annotationType()).equals(<span class="jxr_string">"Named"</span>));
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">if</strong> (nn(n))
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">return</strong> AnnotationInfo.of((<a name="ClassInfo" href="../../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>)<strong class="jxr_keyword">null</strong>, n).getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>, NOT_EMPTY).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">return</strong> AnnotationInfo.of((ClassInfo)<strong class="jxr_keyword">null</strong>, n).getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>, NOT_EMPTY).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  }

@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> store;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> type;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> ClassInfo type;
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<strong class="jxr_keyword">private</strong> Object builder;
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> T impl;
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
@@ -407,7 +407,7 @@
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * @param value The value for this setting.</em>
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	<strong class="jxr_keyword">public</strong> BeanCreator&lt;T&gt; type(<a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> value) {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	<strong class="jxr_keyword">public</strong> BeanCreator&lt;T&gt; type(ClassInfo value) {
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">return</strong> type(value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : value.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 	}
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 

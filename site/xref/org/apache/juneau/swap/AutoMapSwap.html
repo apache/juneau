@@ -106,7 +106,7 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * @return An object swap instance, or &lt;jk&gt;null&lt;/jk&gt; if one could not be created.</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@SuppressWarnings({ <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ObjectSwap&lt;?,?&gt; find(BeanContext bc, <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci) {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> ObjectSwap&lt;?,?&gt; find(BeanContext bc, ClassInfo ci) {
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">if</strong> (shouldIgnore(bc, ci))
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -145,7 +145,7 @@
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isUnswapConstructor(BeanContext bc, <a name="ConstructorInfo" href="../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> cs, <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> rt) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isUnswapConstructor(BeanContext bc, <a name="ConstructorInfo" href="../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> cs, ClassInfo rt) {
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			cs.isNotDeprecated()
@@ -155,7 +155,7 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isUnswapMethod(BeanContext bc, <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci, <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> rt) {
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isUnswapMethod(BeanContext bc, <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi, ClassInfo ci, ClassInfo rt) {
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<em class="jxr_comment">// @formatter:off</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">return</strong>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			mi.isNotDeprecated()
@@ -168,7 +168,7 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> shouldIgnore(BeanContext bc, <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> shouldIgnore(BeanContext bc, ClassInfo ci) {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">return</strong> ci.hasAnnotation(bc, BeanIgnore.<strong class="jxr_keyword">class</strong>) || ci.isNonStaticMemberClass();
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
@@ -177,7 +177,7 @@
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method swapMethod, unswapMethod;
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Constructor&lt;?&gt; unswapConstructor;
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">private</strong> <a name="AutoMapSwap" href="../../../../org/apache/juneau/swap/AutoMapSwap.html#AutoMapSwap">AutoMapSwap</a>(BeanContext bc, <a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci, <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> swapMethod, <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> unswapMethod, <a name="ConstructorInfo" href="../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> unswapConstructor) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">private</strong> <a name="AutoMapSwap" href="../../../../org/apache/juneau/swap/AutoMapSwap.html#AutoMapSwap">AutoMapSwap</a>(BeanContext bc, ClassInfo ci, <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> swapMethod, <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> unswapMethod, <a name="ConstructorInfo" href="../../../../org/apache/juneau/common/reflect/ConstructorInfo.html#ConstructorInfo">ConstructorInfo</a> unswapConstructor) {
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">super</strong>(ci.<strong class="jxr_keyword">inner</strong>(), swapMethod.<strong class="jxr_keyword">inner</strong>().getReturnType());
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">this</strong>.swapMethod = bc.getBeanMethodVisibility().transform(swapMethod.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">this</strong>.unswapMethod = unswapMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bc.getBeanMethodVisibility().transform(unswapMethod.<strong class="jxr_keyword">inner</strong>());

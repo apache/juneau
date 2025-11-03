@@ -650,7 +650,7 @@
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">	 * Also has the following effects:</em>
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Class&lt;/c&gt; object is converted to a readable name.  See {@link ClassInfo#getFullName()}.</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;Class&lt;/c&gt; object is converted to a readable name.  See {@link ClassInfo#getNameFull()}.</em>
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Whitespace is trimmed if the trim-strings setting is enabled.</em>
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">	 *</em>
@@ -661,9 +661,9 @@
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">if</strong> (o.getClass() == Class.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			<strong class="jxr_keyword">return</strong> ClassInfo.of((Class&lt;?&gt;)o).getFullName();
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			<strong class="jxr_keyword">return</strong> ClassInfo.of((Class&lt;?&gt;)o).getNameFull();
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">if</strong> (o.getClass() == ClassInfo.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			<strong class="jxr_keyword">return</strong> ((<a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>)o).getFullName();
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			<strong class="jxr_keyword">return</strong> ((ClassInfo)o).getNameFull();
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">if</strong> (o.getClass().isEnum())
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 			<strong class="jxr_keyword">return</strong> getClassMetaForObject(o).toString(o);
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 		String s = o.toString();

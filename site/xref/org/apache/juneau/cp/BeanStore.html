@@ -523,9 +523,9 @@
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 			String beanName = findBeanName(pi);
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 			Class&lt;?&gt; ptc = pt.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 			<strong class="jxr_keyword">if</strong> (beanName == <strong class="jxr_keyword">null</strong> &amp;&amp; ! hasBean(ptc))
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 				l.add(pt.getSimpleName());
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 				l.add(pt.getNameSimple());
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 			<strong class="jxr_keyword">if</strong> (nn(beanName) &amp;&amp; ! hasBean(ptc, beanName))
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 				l.add(pt.getSimpleName() + '@' + beanName);
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 				l.add(pt.getNameSimple() + '@' + beanName);
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 		}
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">return</strong> l.isEmpty() ? <strong class="jxr_keyword">null</strong> : l.stream().sorted().collect(joining(<span class="jxr_string">","</span>));
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 	}
@@ -659,7 +659,7 @@
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findBeanName(<a name="ParameterInfo" href="../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 		Annotation n = pi.getAnnotation(Annotation.<strong class="jxr_keyword">class</strong>, x -&gt; scn(x.annotationType()).equals(<span class="jxr_string">"Named"</span>));
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">if</strong> (nn(n))
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">return</strong> AnnotationInfo.of((<a name="ClassInfo" href="../../../../org/apache/juneau/common/reflect/ClassInfo.html#ClassInfo">ClassInfo</a>)<strong class="jxr_keyword">null</strong>, n).getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>, NOT_EMPTY).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">return</strong> AnnotationInfo.of((ClassInfo)<strong class="jxr_keyword">null</strong>, n).getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>, NOT_EMPTY).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 	}
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 
