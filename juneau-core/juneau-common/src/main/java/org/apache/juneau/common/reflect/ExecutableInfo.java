@@ -40,12 +40,14 @@ import java.util.stream.*;
 public abstract class ExecutableInfo extends AccessibleInfo {
 
 	final ClassInfo declaringClass;
-	Executable e;  // Effectively final.
+	final Executable e;  // Effectively final.
 	final boolean isConstructor;
 
 	private final Supplier<List<ParameterInfo>> parameters = memoize(this::findParameters);
+	private final Supplier<List<ClassInfo>> exceptions = memoize(this::findExceptions);
+	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations = memoize(this::findDeclaredAnnotations);
 
-	private volatile ClassInfo[] paramTypes, exceptionInfos;
+	private volatile ClassInfo[] paramTypes;
 	private volatile Class<?>[] rawParamTypes;
 	private volatile Type[] rawGenericParamTypes;
 	private volatile Parameter[] rawParameters;
@@ -207,7 +209,14 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The exception types on this executable.
 	 */
-	public final List<ClassInfo> getExceptionTypes() { return u(l(_getExceptionTypes())); }
+	public final List<ClassInfo> getExceptionTypes() { return exceptions.get(); }
+
+	/**
+	 * Returns the declared annotations on this executable.
+	 *
+	 * @return The declared annotations on this executable as {@link AnnotationInfo} objects.
+	 */
+	public final List<AnnotationInfo<Annotation>> getDeclaredAnnotationInfos() { return declaredAnnotations.get(); }
 
 	/**
 	 * Returns the full name of this executable.
@@ -1021,6 +1030,18 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			throw new IndexOutOfBoundsException(format("Invalid index ''{0}''.  Parameter count: {1}", index, pc));
 	}
 
+	private List<AnnotationInfo<Annotation>> findDeclaredAnnotations() {
+		return stream(e.getDeclaredAnnotations())
+			.map(a -> AnnotationInfo.of((Annotatable)this, a))
+			.toList();
+	}
+
+	private List<ClassInfo> findExceptions() {
+		return stream(e.getExceptionTypes())
+			.map(ClassInfo::of)
+			.toList();
+	}
+
 	final Annotation[] _getDeclaredAnnotations() {
 		if (rawDeclaredAnnotations == null) {
 			synchronized (this) {
@@ -1031,16 +1052,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	final ClassInfo[] _getExceptionTypes() {
-		if (exceptionInfos == null) {
-			synchronized (this) {
-				Class<?>[] exceptionTypes = e.getExceptionTypes();
-				ClassInfo[] l = new ClassInfo[exceptionTypes.length];
-				for (int i = 0; i < exceptionTypes.length; i++)
-					l[i] = ClassInfo.of(exceptionTypes[i]);
-				exceptionInfos = l;
-			}
-		}
-		return exceptionInfos;
+		return exceptions.get().toArray(new ClassInfo[0]);
 	}
 
 	final Annotation[][] _getParameterAnnotations() {

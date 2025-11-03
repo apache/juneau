@@ -491,7 +491,6 @@ public class AnnotationInfo<T extends Annotation> {
 	private static void forEachDeclaredMethodAnnotationInfo(MethodInfo methodInfo, ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		MethodInfo mi = methodInfo.findMatchingOnClass(ci);
 		if (nn(mi))
-			for (var a : mi._getDeclaredAnnotations())
-				AnnotationInfo.of(mi, a).accept(filter, action);
+			mi.getDeclaredAnnotationInfos().forEach(ai -> ai.accept(filter, action));
 	}
 }

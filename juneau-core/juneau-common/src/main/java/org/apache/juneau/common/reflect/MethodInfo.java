@@ -219,7 +219,8 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public <A extends Annotation> MethodInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
 		rstream(matchingCache.get())
-			.flatMap(m -> Arrays.stream(m._getDeclaredAnnotations()))
+			.flatMap(m -> m.getDeclaredAnnotationInfos().stream())
+			.map(AnnotationInfo::inner)
 			.filter(type::isInstance)
 			.map(type::cast)
 			.forEach(a -> consumeIf(filter, action, a));
