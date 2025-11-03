@@ -53,7 +53,7 @@ class ExecutableInfo_Test extends TestBase {
 			if (t instanceof Class)
 				return ((Class<?>)t).getSimpleName();
 			if (t instanceof ClassInfo)
-				return ((ClassInfo)t).getSimpleName();
+				return ((ClassInfo)t).getNameSimple();
 			if (t instanceof ConstructorInfo)
 				return ((ConstructorInfo)t).getShortName();
 			if (t instanceof ParameterInfo)

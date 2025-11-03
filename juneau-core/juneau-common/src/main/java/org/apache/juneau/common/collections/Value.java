@@ -155,7 +155,7 @@ public class Value<T> {
 	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
 	 */
 	public static Type unwrap(Type t) {
-		var x = getParameterType(t);
+		var x = getValueParameterType(t);
 		return nn(x) ? x : t;
 	}
 

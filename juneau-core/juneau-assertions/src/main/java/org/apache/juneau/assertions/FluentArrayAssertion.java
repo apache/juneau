@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.assertions;
 
-import static java.util.Arrays.*;
 import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;

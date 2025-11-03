@@ -39,7 +39,12 @@ public class ParameterInfo {
 	private final ExecutableInfo eInfo;
 	private final Parameter p;
 	private final int index;
-	private volatile Map<Class<?>,Optional<Annotation>> annotationMap;
+	
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private final Cache annotationCache = 
+		Cache.of(Class.class, Optional.class)
+			.supplier(k -> opt(findAnnotation(k)))
+			.build();
 
 	/**
 	 * Constructor.
@@ -130,12 +135,7 @@ public class ParameterInfo {
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		Optional<Annotation> o = annotationMap().get(type);
-		if (o == null) {
-			o = opt(findAnnotation(type));
-			annotationMap().put(type, o);
-		}
-		return o.isPresent() ? (A)o.get() : null;
+		return (A)((Optional<Annotation>)annotationCache.get(type)).orElse(null);
 	}
 
 	/**
@@ -631,15 +631,6 @@ public class ParameterInfo {
 	@Override
 	public String toString() {
 		return (eInfo.getSimpleName()) + "[" + index + "]";
-	}
-
-	private Map<Class<?>,Optional<Annotation>> annotationMap() {
-		if (annotationMap == null) {
-			synchronized (this) {
-				annotationMap = new ConcurrentHashMap<>();
-			}
-		}
-		return annotationMap;
 	}
 
 	private <A extends Annotation> A findAnnotation(Class<A> type) {

@@ -58,7 +58,7 @@ class FieldInfo_Test extends TestBase {
 		if (t instanceof A)
 			return "@A(" + ((A)t).value() + ")";
 		if (t instanceof ClassInfo)
-			return ((ClassInfo)t).getSimpleName();
+			return ((ClassInfo)t).getNameSimple();
 		if (t instanceof FieldInfo)
 			return ((FieldInfo)t).getName();
 		if (t instanceof Field)

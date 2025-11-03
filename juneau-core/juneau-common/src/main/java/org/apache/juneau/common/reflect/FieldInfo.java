@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
+import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -62,9 +64,9 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo> {
 		return ClassInfo.of(f.getDeclaringClass()).getFieldInfo(f);
 	}
 
-	private final Field f;
+	Field f;  // Effectively final
 	private final ClassInfo declaringClass;
-	private volatile ClassInfo type;
+	private final Supplier<ClassInfo> typeCache = memoize(() -> ClassInfo.of(f.getType()));
 
 	/**
 	 * Constructor.
@@ -172,7 +174,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo> {
 		PackageInfo pi = dc.getPackage();
 		if (nn(pi))
 			sb.append(pi.getName()).append('.');
-		dc.appendShortName(sb);
+		dc.appendNameFormatted(sb, ClassNameFormat.SHORT, true, '$', ClassArrayFormat.BRACKETS);
 		sb.append(".").append(getName());
 		return sb.toString();
 	}
@@ -202,12 +204,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo> {
 	 * @return The type of this field.
 	 */
 	public ClassInfo getType() {
-		if (type == null) {
-			synchronized (this) {
-				type = ClassInfo.of(f.getType());
-			}
-		}
-		return type;
+		return typeCache.get();
 	}
 
 	/**

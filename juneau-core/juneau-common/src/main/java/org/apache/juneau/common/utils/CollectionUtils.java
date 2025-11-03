@@ -1398,6 +1398,33 @@ public class CollectionUtils {
 	}
 
 	/**
+	 * Returns the length of the specified array.
+	 *
+	 * <p>
+	 * This is a null-safe convenience method that wraps {@link Array#getLength(Object)}.
+	 * Works with both object arrays and primitive arrays.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	String[] <jv>array1</jv> = {<js>"foo"</js>, <js>"bar"</js>};
+	 * 	<jk>int</jk>[] <jv>array2</jv> = {1, 2, 3};
+	 *
+	 * 	<jk>int</jk> <jv>len1</jv> = length(<jv>array1</jv>);  <jc>// Returns 2</jc>
+	 * 	<jk>int</jk> <jv>len2</jv> = length(<jv>array2</jv>);  <jc>// Returns 3</jc>
+	 * 	<jk>int</jk> <jv>len3</jv> = length(<jk>null</jk>);    <jc>// Returns 0</jc>
+	 * </p>
+	 *
+	 * @param array The array object. Can be <jk>null</jk>.
+	 * @return The length of the array, or <c>0</c> if the array is <jk>null</jk> or not an array.
+	 */
+	public static int length(Object array) {
+		if (array == null)
+			return 0;
+		assertArg(array.getClass().isArray(), "Object is not an array");
+		return Array.getLength(array);
+	}
+
+	/**
 	 * Converts the specified array to an <c>ArrayList</c>
 	 *
 	 * @param <E> The element type.
@@ -1739,6 +1766,10 @@ public class CollectionUtils {
 	 * @return An empty list.
 	 */
 	public static <T> List<T> liste(Class<T> type) {
+		return Collections.emptyList();
+	}
+
+	public static <T> List<T> liste() {
 		return Collections.emptyList();
 	}
 
@@ -2098,5 +2129,54 @@ public class CollectionUtils {
 	 */
 	public static char[] chars(char... value) {
 		return value;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Stream utilities
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns a stream of the specified array.
+	 *
+	 * <p>
+	 * Gracefully handles <jk>null</jk> arrays by returning an empty stream.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	String[] <jv>array</jv> = {<js>"a"</js>, <js>"b"</js>, <js>"c"</js>};
+	 * 	
+	 * 	<jc>// Prints "a", "b", "c"</jc>
+	 * 	<jsm>stream</jsm>(<jv>array</jv>).forEach(System.<jk>out</jk>::println);
+	 * 	
+	 * 	<jc>// Handles null gracefully - returns empty stream</jc>
+	 * 	<jsm>stream</jsm>(<jk>null</jk>).forEach(System.<jk>out</jk>::println);  <jc>// Prints nothing</jc>
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param array The array to stream. Can be <jk>null</jk>.
+	 * @return A stream of the array elements, or an empty stream if the array is <jk>null</jk>.
+	 */
+	public static <T> Stream<T> stream(T[] array) {
+		return array == null ? Stream.empty() : Arrays.stream(array);
+	}
+
+	/**
+	 * Returns a reverse stream of the specified list.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>list</jv> = <jsm>list</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
+	 * 	Stream&lt;String&gt; <jv>reversed</jv> = <jsm>rstream</jsm>(<jv>list</jv>);
+	 * 	<jc>// Produces stream: "c", "b", "a"</jc>
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param value The list to stream in reverse order. Can be <jk>null</jk>.
+	 * @return A stream of the list elements in reverse order, or an empty stream if the list is <jk>null</jk> or empty.
+	 */
+	public static <T> Stream<T> rstream(List<T> value) {
+		if (value == null || value.isEmpty())
+			return Stream.empty();
+		return IntStream.range(0, value.size()).mapToObj(i -> value.get(value.size() - 1 - i));
 	}
 }

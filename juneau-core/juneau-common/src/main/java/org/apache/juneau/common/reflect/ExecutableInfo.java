@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
+import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -224,7 +226,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		PackageInfo pi = dc.getPackage();
 		if (nn(pi))
 			sb.append(pi.getName()).append('.');
-		dc.appendShortName(sb);
+		dc.appendNameFormatted(sb, ClassNameFormat.SHORT, true, '$', ClassArrayFormat.BRACKETS);
 		if (! isConstructor)
 			sb.append('.').append(getSimpleName());
 		sb.append('(');
@@ -232,7 +234,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		for (int i = 0; i < pt.size(); i++) {
 			if (i > 0)
 				sb.append(',');
-			pt.get(i).appendFullName(sb);
+			pt.get(i).appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);
 		}
 		sb.append(')');
 		return sb.toString();

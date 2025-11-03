@@ -515,9 +515,9 @@ public class BeanStore {
 			String beanName = findBeanName(pi);
 			Class<?> ptc = pt.inner();
 			if (beanName == null && ! hasBean(ptc))
-				l.add(pt.getSimpleName());
+				l.add(pt.getNameSimple());
 			if (nn(beanName) && ! hasBean(ptc, beanName))
-				l.add(pt.getSimpleName() + '@' + beanName);
+				l.add(pt.getNameSimple() + '@' + beanName);
 		}
 		return l.isEmpty() ? null : l.stream().sorted().collect(joining(","));
 	}

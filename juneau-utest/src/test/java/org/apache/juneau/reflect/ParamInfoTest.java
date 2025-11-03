@@ -67,13 +67,13 @@ class ParamInfoTest extends TestBase {
 			if (isArray(t))
 				return StreamSupport.stream(toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t instanceof MethodInfo)
-				return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getShortName();
+				return ((MethodInfo)t).getDeclaringClass().getNameSimple() + '.' + ((MethodInfo)t).getShortName();
 			if (t instanceof CA)
 				return "@CA(" + ((CA)t).value() + ")";
 			if (t instanceof DA)
 				return "@DA(" + ((DA)t).value() + ")";
 			if (t instanceof ClassInfo)
-				return ((ClassInfo)t).getSimpleName();
+				return ((ClassInfo)t).getNameSimple();
 			return t.toString();
 		}
 	};

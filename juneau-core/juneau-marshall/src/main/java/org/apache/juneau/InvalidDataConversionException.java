@@ -41,11 +41,11 @@ public class InvalidDataConversionException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	private static String name(Class<?> c) {
-		return ClassInfo.of(c).getFullName();
+		return ClassInfo.of(c).getNameFull();
 	}
 
 	private static String name(Object o) {
-		return ClassInfo.of(o).getFullName();
+		return ClassInfo.of(o).getNameFull();
 	}
 
 	private static String value(Object o) {

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http.remote;
 
+import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
+import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -51,7 +53,7 @@ public class RrpcInterfaceMethodMeta {
 			var pti = ClassInfo.of(pt[i]);
 			if (i > 0)
 				sb.append(',');
-			pti.appendFullName(sb);
+			pti.appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);
 		}
 		sb.append(')');
 		return sb.toString();

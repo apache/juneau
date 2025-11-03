@@ -24,6 +24,8 @@ import static org.apache.juneau.common.reflect.ReflectFlags.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.common.reflect.ClassInfo.*;
+import static org.apache.juneau.common.reflect.ClassNameFormat.*;
+import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -103,13 +105,13 @@ public class ClassInfo_Test extends TestBase {
 		if (t instanceof PackageInfo)
 			return ((PackageInfo)t).getName();
 		if (t instanceof ClassInfo)
-			return ((ClassInfo)t).getSimpleName();
+			return ((ClassInfo)t).getNameSimple();
 		if (t instanceof MethodInfo)
-			return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getShortName();
+			return ((MethodInfo)t).getDeclaringClass().getNameSimple() + '.' + ((MethodInfo)t).getShortName();
 		if (t instanceof ConstructorInfo)
 			return ((ConstructorInfo)t).getShortName();
 		if (t instanceof FieldInfo)
-			return ((FieldInfo)t).getDeclaringClass().getSimpleName() + '.' + ((FieldInfo)t).getName();
+			return ((FieldInfo)t).getDeclaringClass().getNameSimple() + '.' + ((FieldInfo)t).getName();
 		if (t instanceof A)
 			return "@A(" + ((A)t).value() + ")";
 		if (t instanceof PA)
@@ -1183,174 +1185,174 @@ public class ClassInfo_Test extends TestBase {
 	static ClassInfo j1=of(J1.class), j2=of(J2.class), j1_3d=of(J1[][].class), j2_3d=of(J2[][].class);
 
 	@Test void getFullName_simple() {
-		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getNameFull());
 	}
 
 	@Test void getFullName_simpleTwice() {
-		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getFullName());
-		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getNameFull());
+		assertEquals("org.apache.juneau.common.reflect.AClass", aClass.getNameFull());
 	}
 
 	@Test void getFullName_simpleArray() {
-		assertEquals("org.apache.juneau.common.reflect.AClass[][]", of(AClass[][].class).getFullName());
+		assertEquals("org.apache.juneau.common.reflect.AClass[][]", of(AClass[][].class).getNameFull());
 	}
 
 	@Test void getFullName_inner() {
-		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J1", j1.getFullName());
-		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J2", j2.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J1", j1.getNameFull());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J2", j2.getNameFull());
 	}
 
 	@Test void getFullName_innerArray() {
-		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J1[][]", j1_3d.getFullName());
-		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J2[][]", j2_3d.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J1[][]", j1_3d.getNameFull());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$J2[][]", j2_3d.getNameFull());
 	}
 
 	@Test void getFullName_primitive() {
-		assertEquals("int", of(int.class).getFullName());
+		assertEquals("int", of(int.class).getNameFull());
 	}
 
 	@Test void getFullName_primitiveArray() {
-		assertEquals("int[][]", of(int[][].class).getFullName());
+		assertEquals("int[][]", of(int[][].class).getNameFull());
 	}
 
 	@Test void getFullName_simpleType() {
-		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$A1", aTypeInfo.getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$A1", aTypeInfo.getNameFull());
 	}
 
 	@Test void getFullName_complexType() {
-		assertEquals("java.util.Map<java.lang.String,java.util.List<java.lang.String>>", pTypeInfo.getFullName());
+		assertEquals("java.util.Map<java.lang.String,java.util.List<java.lang.String>>", pTypeInfo.getNameFull());
 	}
 
 	@Test void getFullName_dimensionalType() {
-		assertEquals("java.util.Map<java.lang.String,java.lang.String[][]>", pTypeDimensionalInfo.getFullName());
+		assertEquals("java.util.Map<java.lang.String,java.lang.String[][]>", pTypeDimensionalInfo.getNameFull());
 	}
 
 	@Test void getFullName_genericType() {
-		assertEquals("java.util.AbstractMap<K,V>", pTypeGenericInfo.getFullName());
+		assertEquals("java.util.AbstractMap<K,V>", pTypeGenericInfo.getNameFull());
 	}
 
 	@Test void getFullName_genericTypeArg() {
-		assertEquals("V", pTypeGenericArgInfo.getFullName());
+		assertEquals("V", pTypeGenericArgInfo.getNameFull());
 	}
 
 	@Test void getFullName_localClass() {
 		@SuppressWarnings("serial")
 		class LocalClass implements Serializable {}
-		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$1LocalClass", of(LocalClass.class).getFullName());
+		assertEquals("org.apache.juneau.common.reflect.ClassInfo_Test$1LocalClass", of(LocalClass.class).getNameFull());
 	}
 
 	@Test void getShortName_simple() {
-		assertEquals("AClass", aClass.getShortName());
+		assertEquals("AClass", aClass.getNameShort());
 	}
 
 	@Test void getShortName_simpleTwice() {
-		assertEquals("AClass", aClass.getShortName());
-		assertEquals("AClass", aClass.getShortName());
+		assertEquals("AClass", aClass.getNameShort());
+		assertEquals("AClass", aClass.getNameShort());
 	}
 
 	@Test void getShortName_simpleArray() {
-		assertEquals("AClass[][]", of(AClass[][].class).getShortName());
+		assertEquals("AClass[][]", of(AClass[][].class).getNameShort());
 	}
 
 	@Test void getShortName_inner() {
-		assertEquals("ClassInfo_Test$J1", j1.getShortName());
-		assertEquals("ClassInfo_Test$J2", j2.getShortName());
+		assertEquals("ClassInfo_Test$J1", j1.getNameShort());
+		assertEquals("ClassInfo_Test$J2", j2.getNameShort());
 	}
 
 	@Test void getShortName_innerArray() {
-		assertEquals("ClassInfo_Test$J1[][]", j1_3d.getShortName());
-		assertEquals("ClassInfo_Test$J2[][]", j2_3d.getShortName());
+		assertEquals("ClassInfo_Test$J1[][]", j1_3d.getNameShort());
+		assertEquals("ClassInfo_Test$J2[][]", j2_3d.getNameShort());
 	}
 
 	@Test void getShortName_primitive() {
-		assertEquals("int", of(int.class).getShortName());
+		assertEquals("int", of(int.class).getNameShort());
 	}
 
 	@Test void getShortName_primitiveArray() {
-		assertEquals("int[][]", of(int[][].class).getShortName());
+		assertEquals("int[][]", of(int[][].class).getNameShort());
 	}
 
 	@Test void getShortName_simpleType() {
-		assertEquals("ClassInfo_Test$A1", aTypeInfo.getShortName());
+		assertEquals("ClassInfo_Test$A1", aTypeInfo.getNameShort());
 	}
 
 	@Test void getShortName_complexType() {
-		assertEquals("Map<String,List<String>>", pTypeInfo.getShortName());
+		assertEquals("Map<String,List<String>>", pTypeInfo.getNameShort());
 	}
 
 	@Test void getShortName_dimensionalType() {
-		assertEquals("Map<String,String[][]>", pTypeDimensionalInfo.getShortName());
+		assertEquals("Map<String,String[][]>", pTypeDimensionalInfo.getNameShort());
 	}
 
 	@Test void getShortName_genericType() {
-		assertEquals("AbstractMap<K,V>", pTypeGenericInfo.getShortName());
+		assertEquals("AbstractMap<K,V>", pTypeGenericInfo.getNameShort());
 	}
 
 	@Test void getShortName_genericTypeArg() {
-		assertEquals("V", pTypeGenericArgInfo.getShortName());
+		assertEquals("V", pTypeGenericArgInfo.getNameShort());
 	}
 
 	@Test void getShortName_localClass() {
 		@SuppressWarnings("serial")
 		class LocalClass implements Serializable {}
-		assertEquals("ClassInfo_Test$LocalClass", of(LocalClass.class).getShortName());
+		assertEquals("ClassInfo_Test$LocalClass", of(LocalClass.class).getNameShort());
 	}
 
 	@Test void getSimpleName_simple() {
-		assertEquals("AClass", aClass.getSimpleName());
+		assertEquals("AClass", aClass.getNameSimple());
 	}
 
 	@Test void getSimpleName_simpleTwice() {
-		assertEquals("AClass", aClass.getSimpleName());
-		assertEquals("AClass", aClass.getSimpleName());
+		assertEquals("AClass", aClass.getNameSimple());
+		assertEquals("AClass", aClass.getNameSimple());
 	}
 
 	@Test void getSimpleName_simpleArray() {
-		assertEquals("AClass[][]", of(AClass[][].class).getSimpleName());
+		assertEquals("AClass[][]", of(AClass[][].class).getNameSimple());
 	}
 
 	@Test void getSimpleName_inner() {
-		assertEquals("J1", j1.getSimpleName());
-		assertEquals("J2", j2.getSimpleName());
+		assertEquals("J1", j1.getNameSimple());
+		assertEquals("J2", j2.getNameSimple());
 	}
 
 	@Test void getSimpleName_innerArray() {
-		assertEquals("J1[][]", j1_3d.getSimpleName());
-		assertEquals("J2[][]", j2_3d.getSimpleName());
+		assertEquals("J1[][]", j1_3d.getNameSimple());
+		assertEquals("J2[][]", j2_3d.getNameSimple());
 	}
 
 	@Test void getSimpleName_primitive() {
-		assertEquals("int", of(int.class).getSimpleName());
+		assertEquals("int", of(int.class).getNameSimple());
 	}
 
 	@Test void getSimpleName_primitiveArray() {
-		assertEquals("int[][]", of(int[][].class).getSimpleName());
+		assertEquals("int[][]", of(int[][].class).getNameSimple());
 	}
 
 	@Test void getSimpleName_simpleType() {
-		assertEquals("A1", aTypeInfo.getSimpleName());
+		assertEquals("A1", aTypeInfo.getNameSimple());
 	}
 
 	@Test void getSimpleName_complexType() {
-		assertEquals("Map", pTypeInfo.getSimpleName());
+		assertEquals("Map", pTypeInfo.getNameSimple());
 	}
 
 	@Test void getSimpleName_dimensionalType() {
-		assertEquals("Map", pTypeDimensionalInfo.getSimpleName());
+		assertEquals("Map", pTypeDimensionalInfo.getNameSimple());
 	}
 
 	@Test void getSimpleName_genericType() {
-		assertEquals("AbstractMap", pTypeGenericInfo.getSimpleName());
+		assertEquals("AbstractMap", pTypeGenericInfo.getNameSimple());
 	}
 
 	@Test void getSimpleName_genericTypeArg() {
-		assertEquals("V", pTypeGenericArgInfo.getSimpleName());
+		assertEquals("V", pTypeGenericArgInfo.getNameSimple());
 	}
 
 	@Test void getSimpleName_localClass() {
 		@SuppressWarnings("serial")
 		class LocalClass implements Serializable {}
-		assertEquals("LocalClass", of(LocalClass.class).getSimpleName());
+		assertEquals("LocalClass", of(LocalClass.class).getNameSimple());
 	}
 
 	@Test void getName() {
@@ -1560,21 +1562,21 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getComponentType() {
-		check("KA", ka.getComponentType());
+		assertEquals(ka, ka.getComponentType());  // Not an array, returns this
 		check("KA", of(KA[][].class).getComponentType());
 	}
 
 	@Test void getComponentType_twice() {
-		check("KA", ka.getComponentType());
-		check("KA", ka.getComponentType());
+		assertEquals(ka, ka.getComponentType());  // Not an array, returns this
+		assertEquals(ka, ka.getComponentType());  // Not an array, returns this
 	}
 
 	@Test void getComponentType_type() {
-		check("A1", aTypeInfo.getComponentType());
-		check("Map", pTypeInfo.getComponentType());
-		check("Map", pTypeDimensionalInfo.getComponentType());
-		check("AbstractMap", pTypeGenericInfo.getComponentType());
-		check("V", pTypeGenericArgInfo.getComponentType());
+		assertEquals(aTypeInfo, aTypeInfo.getComponentType());  // Not an array, returns this
+		assertEquals(pTypeInfo, pTypeInfo.getComponentType());  // Not an array, returns this
+		assertEquals(pTypeDimensionalInfo, pTypeDimensionalInfo.getComponentType());  // Not an array (ParameterizedType, not array)
+		assertEquals(pTypeGenericInfo, pTypeGenericInfo.getComponentType());  // Not an array, returns this
+		assertEquals(pTypeGenericArgInfo, pTypeGenericArgInfo.getComponentType());  // Not an array, returns this
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1708,6 +1710,246 @@ public class ClassInfo_Test extends TestBase {
 		assertTrue(ClassInfo.of(Number.class).isParentOfFuzzyPrimitives(int.class));
 		assertFalse(ClassInfo.of(int.class).isParentOfFuzzyPrimitives(Number.class));
 		assertFalse(ClassInfo.of(int.class).isParentOfFuzzyPrimitives(long.class));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// getFormattedName tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Nested
+	public class P_getFormattedName {
+
+		@Test
+		void a01_simple() {
+			ClassInfo ci = ClassInfo.of(String.class);
+			
+			// SIMPLE format
+			assertEquals("String", 
+				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+			assertEquals("String", 
+				ci.getNameFormatted(SIMPLE, false, '.', BRACKETS));
+			assertEquals("String", 
+				ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
+		}
+
+		@Test
+		void a02_short() {
+			ClassInfo ci = ClassInfo.of(String.class);
+			
+			// SHORT format
+			assertEquals("String", 
+				ci.getNameFormatted(SHORT, false, '$', BRACKETS));
+			assertEquals("String", 
+				ci.getNameFormatted(SHORT, true, '$', BRACKETS));
+		}
+
+		@Test
+		void a03_full() {
+			ClassInfo ci = ClassInfo.of(String.class);
+			
+			// FULL format
+			assertEquals("java.lang.String", 
+				ci.getNameFormatted(FULL, false, '$', BRACKETS));
+			assertEquals("java.lang.String", 
+				ci.getNameFormatted(FULL, true, '$', BRACKETS));
+		}
+
+		@Test
+		void a04_innerClass() {
+			ClassInfo ci = ClassInfo.of(Map.Entry.class);
+			
+			// SIMPLE - only innermost name
+			assertEquals("Entry", 
+				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+			
+			// SHORT - outer class + inner class
+			assertEquals("Map$Entry", 
+				ci.getNameFormatted(SHORT, false, '$', BRACKETS));
+			assertEquals("Map.Entry", 
+				ci.getNameFormatted(SHORT, false, '.', BRACKETS));
+			
+			// FULL - package + outer + inner
+			assertEquals("java.util.Map$Entry", 
+				ci.getNameFormatted(FULL, false, '$', BRACKETS));
+			assertEquals("java.util.Map.Entry", 
+				ci.getNameFormatted(FULL, false, '.', BRACKETS));
+		}
+
+		@Test
+		void a05_arrays() {
+			ClassInfo ci = ClassInfo.of(String[].class);
+			
+			// BRACKETS format
+			assertEquals("String[]", 
+				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+			assertEquals("String[]", 
+				ci.getNameFormatted(SHORT, false, '$', BRACKETS));
+			assertEquals("java.lang.String[]", 
+				ci.getNameFormatted(FULL, false, '$', BRACKETS));
+			
+			// WORD format
+			assertEquals("StringArray", 
+				ci.getNameFormatted(SIMPLE, false, '$', WORD));
+			assertEquals("StringArray", 
+				ci.getNameFormatted(SHORT, false, '$', WORD));
+			assertEquals("java.lang.StringArray", 
+				ci.getNameFormatted(FULL, false, '$', WORD));
+		}
+
+		@Test
+		void a06_multiDimensionalArrays() {
+			ClassInfo ci = ClassInfo.of(String[][].class);
+			
+			// BRACKETS format
+			assertEquals("String[][]", 
+				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+			assertEquals("java.lang.String[][]", 
+				ci.getNameFormatted(FULL, false, '$', BRACKETS));
+			
+			// WORD format
+			assertEquals("StringArrayArray", 
+				ci.getNameFormatted(SIMPLE, false, '$', WORD));
+			assertEquals("java.lang.StringArrayArray", 
+				ci.getNameFormatted(FULL, false, '$', WORD));
+		}
+
+		@Test
+		void a07_primitiveArrays() {
+			ClassInfo ci = ClassInfo.of(int[].class);
+			
+			// BRACKETS format
+			assertEquals("int[]", 
+				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+			assertEquals("int[]", 
+				ci.getNameFormatted(FULL, false, '$', BRACKETS));
+			
+			// WORD format
+			assertEquals("intArray", 
+				ci.getNameFormatted(SIMPLE, false, '$', WORD));
+			assertEquals("intArray", 
+				ci.getNameFormatted(FULL, false, '$', WORD));
+		}
+
+		@Test
+		void a08_generics() throws Exception {
+			// Get a ParameterizedType for HashMap<String, Integer>
+			Field f = GenericsTestClass.class.getDeclaredField("hashMap");
+			Type t = f.getGenericType();
+			ClassInfo ci = ClassInfo.of(t);
+			
+			// Without type params
+			assertEquals("HashMap", 
+				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+			assertEquals("java.util.HashMap", 
+				ci.getNameFormatted(FULL, false, '$', BRACKETS));
+			
+			// With type params - SIMPLE
+			assertEquals("HashMap<String,Integer>", 
+				ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
+			
+			// With type params - SHORT
+			assertEquals("HashMap<String,Integer>", 
+				ci.getNameFormatted(SHORT, true, '$', BRACKETS));
+			
+			// With type params - FULL
+			assertEquals("java.util.HashMap<java.lang.String,java.lang.Integer>", 
+				ci.getNameFormatted(FULL, true, '$', BRACKETS));
+		}
+
+		@Test
+		void a09_nestedGenerics() throws Exception {
+			// Get a ParameterizedType for Map<String, List<Integer>>
+			Field f = GenericsTestClass.class.getDeclaredField("nestedMap");
+			Type t = f.getGenericType();
+			ClassInfo ci = ClassInfo.of(t);
+			
+			// With type params - SIMPLE
+			assertEquals("HashMap<String,ArrayList<Integer>>", 
+				ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
+			
+			// With type params - FULL
+			assertEquals("java.util.HashMap<java.lang.String,java.util.ArrayList<java.lang.Integer>>", 
+				ci.getNameFormatted(FULL, true, '$', BRACKETS));
+		}
+
+		@Test
+		void a10_genericArrays() throws Exception {
+			// Get a ParameterizedType for List<String>[]
+			Field f = GenericsTestClass.class.getDeclaredField("listArray");
+			Type t = f.getGenericType();
+			ClassInfo ci = ClassInfo.of(t);
+			
+			// BRACKETS format
+			assertEquals("ArrayList<String>[]", 
+				ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
+			assertEquals("java.util.ArrayList<java.lang.String>[]", 
+				ci.getNameFormatted(FULL, true, '$', BRACKETS));
+			
+			// WORD format
+			assertEquals("ArrayList<String>Array", 
+				ci.getNameFormatted(SIMPLE, true, '$', WORD));
+		}
+
+		@Test
+		void a11_appendVersion() {
+			ClassInfo ci = ClassInfo.of(String.class);
+			StringBuilder sb = new StringBuilder("Type: ");
+			ci.appendNameFormatted(sb, FULL, false, '$', BRACKETS);
+			assertEquals("Type: java.lang.String", sb.toString());
+			
+			// Verify it returns the same StringBuilder for chaining
+			StringBuilder result = ci.appendNameFormatted(sb, SIMPLE, false, '$', BRACKETS);
+			assertSame(sb, result);
+			assertEquals("Type: java.lang.StringString", sb.toString());
+		}
+
+		@Test
+		void a12_equivalentMethods() {
+			ClassInfo ci = ClassInfo.of(String.class);
+			
+			// getName() equivalent
+			assertEquals(ci.getName(), 
+				ci.getNameFormatted(FULL, false, '$', BRACKETS));
+			
+			// getSimpleName() equivalent
+			assertEquals(ci.getNameSimple(), 
+				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+		}
+
+		@Test
+		void a13_innerClassArrays() {
+			ClassInfo ci = ClassInfo.of(Map.Entry[].class);
+			
+			// SIMPLE
+			assertEquals("Entry[]", 
+				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
+			assertEquals("EntryArray", 
+				ci.getNameFormatted(SIMPLE, false, '$', WORD));
+			
+			// SHORT
+			assertEquals("Map$Entry[]", 
+				ci.getNameFormatted(SHORT, false, '$', BRACKETS));
+			assertEquals("Map.Entry[]", 
+				ci.getNameFormatted(SHORT, false, '.', BRACKETS));
+			assertEquals("Map$EntryArray", 
+				ci.getNameFormatted(SHORT, false, '$', WORD));
+			
+			// FULL
+			assertEquals("java.util.Map$Entry[]", 
+				ci.getNameFormatted(FULL, false, '$', BRACKETS));
+			assertEquals("java.util.Map.Entry[]", 
+				ci.getNameFormatted(FULL, false, '.', BRACKETS));
+			assertEquals("java.util.Map$EntryArray", 
+				ci.getNameFormatted(FULL, false, '$', WORD));
+		}
+
+		// Helper class for testing generics
+		@SuppressWarnings("unused")
+		private static class GenericsTestClass {
+			HashMap<String, Integer> hashMap;
+			HashMap<String, ArrayList<Integer>> nestedMap;
+			ArrayList<String>[] listArray;
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

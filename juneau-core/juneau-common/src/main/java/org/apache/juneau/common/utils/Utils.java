@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.utils;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
@@ -24,12 +25,12 @@ import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Common utility methods.
@@ -1111,6 +1112,66 @@ public class Utils {
 	 */
 	public static Supplier<String> ss(Supplier<?> s) {
 		return stringSupplier(s);
+	}
+
+	/**
+	 * Creates a thread-safe memoizing supplier that computes a value once and caches it.
+	 *
+	 * <p>
+	 * The returned supplier is thread-safe and guarantees that the underlying supplier's {@link Supplier#get() get()}
+	 * method is called at most once, even under concurrent access. The computed value is cached and returned
+	 * on all subsequent calls.
+	 *
+	 * <p>
+	 * This is useful for lazy initialization of expensive-to-compute values that should only be calculated once.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Create a memoizing supplier</jc>
+	 * 	Supplier&lt;ExpensiveObject&gt; <jv>supplier</jv> = memoize(() -&gt; <jk>new</jk> ExpensiveObject());
+	 *
+	 * 	<jc>// First call computes and caches the value</jc>
+	 * 	ExpensiveObject <jv>obj1</jv> = <jv>supplier</jv>.get();
+	 *
+	 * 	<jc>// Subsequent calls return the cached value (no recomputation)</jc>
+	 * 	ExpensiveObject <jv>obj2</jv> = <jv>supplier</jv>.get();  <jc>// Same instance as obj1</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Thread Safety:</h5>
+	 * <p>
+	 * The implementation uses {@link java.util.concurrent.atomic.AtomicReference} with double-checked locking
+	 * to ensure thread-safe lazy initialization. Under high contention, multiple threads may compute the value,
+	 * but only one result is stored and returned to all callers.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul>
+	 * 	<li>The supplier may be called multiple times if threads race, but only one result is cached.
+	 * 	<li>The cached value can be <jk>null</jk> if the supplier returns <jk>null</jk>.
+	 * 	<li>Once cached, the value never changes (immutable after first computation).
+	 * 	<li>The returned supplier does not support {@link #toString()}, {@link #equals(Object)}, or {@link #hashCode()}.
+	 * </ul>
+	 *
+	 * @param <T> The type of value supplied.
+	 * @param supplier The supplier to memoize. Must not be <jk>null</jk>.
+	 * @return A thread-safe memoizing wrapper around the supplier.
+	 * @throws NullPointerException if supplier is <jk>null</jk>.
+	 */
+	public static <T> Supplier<T> memoize(Supplier<T> supplier) {
+		assertArgNotNull("supplier", supplier);
+
+		var cache = new AtomicReference<Optional<T>>();
+
+		return () -> {
+			Optional<T> h = cache.get();
+			if (h == null) {
+				h = Optional.ofNullable(supplier.get());
+				if (!cache.compareAndSet(null, h)) {
+					// Another thread beat us, use their value
+					h = cache.get();
+				}
+			}
+			return h.orElse(null);
+		};
 	}
 
 	/**

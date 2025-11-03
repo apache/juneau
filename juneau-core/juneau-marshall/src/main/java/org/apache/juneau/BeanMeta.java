@@ -440,7 +440,7 @@ public class BeanMeta<T> {
 				fixedBeanProps.forEach(x -> {
 					if (! normalProps.containsKey(x))
 						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x,
-							ci.getSimpleName());
+							ci.getNameSimple());
 				});
 
 				// Mark constructor arg properties.

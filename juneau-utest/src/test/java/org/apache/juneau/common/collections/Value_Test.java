@@ -33,7 +33,7 @@ class Value_Test extends TestBase {
 	public static class A1 {}
 
 	@Test void a01_testSubclass() {
-		assertEquals(A1.class, getParameterType(A.class));
+		assertEquals(A1.class, getValueParameterType(A.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

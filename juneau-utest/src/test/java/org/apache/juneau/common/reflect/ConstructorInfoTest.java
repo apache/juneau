@@ -43,7 +43,7 @@ class ConstructorInfoTest extends TestBase {
 			if (t instanceof Iterable)
 				return StreamSupport.stream(((Iterable<?>)t).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t instanceof ClassInfo)
-				return ((ClassInfo)t).getSimpleName();
+				return ((ClassInfo)t).getNameSimple();
 			if (t instanceof ConstructorInfo)
 				return ((ConstructorInfo)t).getShortName();
 			if (t instanceof Constructor)

@@ -2549,7 +2549,7 @@ public class HttpPartSchema {
 			if (t instanceof Class<?>) {
 				ClassInfo.of((Class<?>)t).forEachAnnotation(c, x -> true, this::apply);
 			} else if (Value.isType(t)) {
-				apply(c, getParameterType(t));
+				apply(c, getValueParameterType(t));
 			}
 			return this;
 		}

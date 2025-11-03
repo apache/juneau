@@ -16,11 +16,13 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
@@ -46,161 +48,131 @@ public interface AnnotationProvider {
 	AnnotationProvider DEFAULT = new AnnotationProvider() {
 
 		// @formatter:off
-		private final Cache2<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, Annotation[].class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> k1.getAnnotationsByType(k2)).build();
-		private final Cache2<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, Annotation[].class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> k1.getDeclaredAnnotationsByType(k2)).build();
-		private final Cache2<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache = (Cache2)Cache2.of(Method.class, Class.class, Annotation[].class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> k1.getAnnotationsByType(k2)).build();
-		private final Cache2<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = (Cache2)Cache2.of(Field.class, Class.class, Annotation[].class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> k1.getAnnotationsByType(k2)).build();
-		private final Cache2<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = (Cache2)Cache2.of(Constructor.class, Class.class, Annotation[].class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> k1.getAnnotationsByType(k2)).build();
+		private final Cache2<Class<?>,Class<? extends Annotation>,List<Annotation>> classAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
+		private final Cache2<Class<?>,Class<? extends Annotation>,List<Annotation>> declaredClassAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getDeclaredAnnotationsByType(k2)))).build();
+		private final Cache2<Method,Class<? extends Annotation>,List<Annotation>> methodAnnotationCache = (Cache2)Cache2.of(Method.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
+		private final Cache2<Field,Class<? extends Annotation>,List<Annotation>> fieldAnnotationCache = (Cache2)Cache2.of(Field.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
+		private final Cache2<Constructor<?>,Class<? extends Annotation>,List<Annotation>> constructorAnnotationCache = (Cache2)Cache2.of(Constructor.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
 		// @formatter:on
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			if (nn(type) && nn(onClass))
-				for (var a : annotations(type, onClass))
-					if (test(filter, a))
-						return a;
-			return null;
+			return nn(type) && nn(onClass) 
+				? annotations(type, onClass).stream().filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-			if (nn(type) && nn(onConstructor))
-				for (var a : annotations(type, onConstructor))
-					if (test(filter, a))
-						return a;
-			return null;
+			return nn(type) && nn(onConstructor)
+				? annotations(type, onConstructor).stream().filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-			if (nn(type) && nn(onField))
-				for (var a : annotations(type, onField))
-					if (test(filter, a))
-						return a;
-			return null;
+			return nn(type) && nn(onField)
+				? annotations(type, onField).stream().filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-			if (nn(type) && nn(onMethod))
-				for (var a : annotations(type, onMethod))
-					if (test(filter, a))
-						return a;
-			return null;
+			return nn(type) && nn(onMethod)
+				? annotations(type, onMethod).stream().filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			if (nn(type) && nn(onClass))
-				for (var a : declaredAnnotations(type, onClass))
-					if (test(filter, a))
-						return a;
-			return null;
+			return nn(type) && nn(onClass)
+				? declaredAnnotations(type, onClass).stream().filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onClass))
-				for (var a : annotations(type, onClass))
-					consumeIf(filter, action, a);
+				annotations(type, onClass).stream().forEach(a -> consumeIf(filter, action, a));
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onConstructor))
-				for (var a : annotations(type, onConstructor))
-					consumeIf(filter, action, a);
+				annotations(type, onConstructor).stream().forEach(a -> consumeIf(filter, action, a));
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onField))
-				for (var a : annotations(type, onField))
-					consumeIf(filter, action, a);
+				annotations(type, onField).stream().forEach(a -> consumeIf(filter, action, a));
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onMethod))
-				for (var a : annotations(type, onMethod))
-					consumeIf(filter, action, a);
+				annotations(type, onMethod).stream().forEach(a -> consumeIf(filter, action, a));
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (nn(type) && nn(onClass))
-				for (var a : declaredAnnotations(type, onClass))
-					consumeIf(filter, action, a);
+				declaredAnnotations(type, onClass).stream().forEach(a -> consumeIf(filter, action, a));
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			A x = null;
-			if (nn(type) && nn(onClass))
-				for (var a : annotations(type, onClass))
-					if (test(filter, a))
-						x = a;
-			return x;
+			return nn(type) && nn(onClass)
+				? rstream(annotations(type, onClass)).filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-			A x = null;
-			if (nn(type) && nn(onConstructor))
-				for (var a : annotations(type, onConstructor))
-					if (test(filter, a))
-						x = a;
-			return x;
+			return nn(type) && nn(onConstructor)
+				? rstream(annotations(type, onConstructor)).filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-			A x = null;
-			if (nn(type) && nn(onField))
-				for (var a : annotations(type, onField))
-					if (test(filter, a))
-						x = a;
-			return x;
+			return nn(type) && nn(onField)
+				? rstream(annotations(type, onField)).filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-			A x = null;
-			if (nn(type) && nn(onMethod))
-				for (var a : annotations(type, onMethod))
-					if (test(filter, a))
-						x = a;
-			return x;
+			return nn(type) && nn(onMethod)
+				? rstream(annotations(type, onMethod)).filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
 		@Override /* Overridden from AnnotationProvider */
 		public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-			A x = null;
-			if (nn(type) && nn(onClass))
-				for (var a : declaredAnnotations(type, onClass))
-					if (test(filter, a))
-						x = a;
-			return x;
+			return nn(type) && nn(onClass)
+				? rstream(declaredAnnotations(type, onClass)).filter(a -> test(filter, a)).findFirst().orElse(null)
+				: null;
 		}
 
-		private <A extends Annotation> A[] annotations(Class<A> type, Class<?> onClass) {
-			return (A[])classAnnotationCache.get(onClass, type);
+		private <A extends Annotation> List<A> annotations(Class<A> type, Class<?> onClass) {
+			return (List<A>)classAnnotationCache.get(onClass, type);
 		}
 
-		private <A extends Annotation> A[] annotations(Class<A> type, Constructor<?> onConstructor) {
-			return (A[])constructorAnnotationCache.get(onConstructor, type);
+		private <A extends Annotation> List<A> annotations(Class<A> type, Constructor<?> onConstructor) {
+			return (List<A>)constructorAnnotationCache.get(onConstructor, type);
 		}
 
-		private <A extends Annotation> A[] annotations(Class<A> type, Field onField) {
-			return (A[])fieldAnnotationCache.get(onField, type);
+		private <A extends Annotation> List<A> annotations(Class<A> type, Field onField) {
+			return (List<A>)fieldAnnotationCache.get(onField, type);
 		}
 
-		private <A extends Annotation> A[] annotations(Class<A> type, Method onMethod) {
-			return (A[])methodAnnotationCache.get(onMethod, type);
+		private <A extends Annotation> List<A> annotations(Class<A> type, Method onMethod) {
+			return (List<A>)methodAnnotationCache.get(onMethod, type);
 		}
 
-		private <A extends Annotation> A[] declaredAnnotations(Class<A> type, Class<?> onClass) {
-			return (A[])declaredClassAnnotationCache.get(onClass, type);
+		private <A extends Annotation> List<A> declaredAnnotations(Class<A> type, Class<?> onClass) {
+			return (List<A>)declaredClassAnnotationCache.get(onClass, type);
 		}
 	};
 

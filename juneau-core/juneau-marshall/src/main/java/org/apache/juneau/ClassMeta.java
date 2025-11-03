@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import static java.util.Arrays.*;
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
@@ -1080,7 +1079,7 @@ public class ClassMeta<T> implements Type {
 	 *
 	 * @return The readable name for this class.
 	 */
-	public String getFullName() { return info.getFullName(); }
+	public String getFullName() { return info.getNameFull(); }
 
 	/**
 	 * Returns the no-arg constructor for this class based on the {@link Marshalled#implClass()} value.

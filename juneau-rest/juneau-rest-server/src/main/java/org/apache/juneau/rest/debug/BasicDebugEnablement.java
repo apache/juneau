@@ -78,7 +78,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 			x -> {
 				String x2 = varResolver.resolve(x.debug());
 				if (! x2.isEmpty())
-					b.enable(Enablement.fromString(x2), ci.getFullName());
+					b.enable(Enablement.fromString(x2), ci.getNameFull());
 			}
 		);
 		// @formatter:on

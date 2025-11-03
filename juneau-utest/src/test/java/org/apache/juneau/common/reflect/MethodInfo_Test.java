@@ -79,7 +79,7 @@ class MethodInfo_Test extends TestBase {
 			if (t == null)
 				return null;
 			if (t instanceof MethodInfo t2)
-				return t2.getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getShortName();
+				return t2.getDeclaringClass().getNameSimple() + '.' + ((MethodInfo)t).getShortName();
 			if (t instanceof Method t2)
 				return t2.getDeclaringClass().getSimpleName() + '.' + MethodInfo.of((Method)t).getShortName();
 			if (t instanceof List<?> t2)
@@ -95,7 +95,7 @@ class MethodInfo_Test extends TestBase {
 			if (t instanceof AnnotationList t2)
 				return t2.toString();
 			if (t instanceof ClassInfo t2)
-				return t2.getSimpleName();
+				return t2.getNameSimple();
 			return t.toString();
 		}
 	};

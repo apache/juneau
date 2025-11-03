@@ -305,7 +305,7 @@ public class Mutaters {
 	}
 
 	private static MethodInfo findToXMethod(ClassInfo ic, ClassInfo oc) {
-		String tn = oc.getReadableName();
+		String tn = oc.getNameReadable();
 		// @formatter:off
 		return ic.getPublicMethod(
 			x -> x.isNotStatic()

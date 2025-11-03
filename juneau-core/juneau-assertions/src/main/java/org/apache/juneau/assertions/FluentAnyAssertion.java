@@ -502,6 +502,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		Object o = orElse(null);
 		if (o == null || c.isInstance(o))
 			return c.cast(o);
-		throw new BasicAssertionError(MSG_objectWasNotType, ClassInfo.of(c).getFullName(), o.getClass());
+		throw new BasicAssertionError(MSG_objectWasNotType, ClassInfo.of(c).getNameFull(), o.getClass());
 	}
 }

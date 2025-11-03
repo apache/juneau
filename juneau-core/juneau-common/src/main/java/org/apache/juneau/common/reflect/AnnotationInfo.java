@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -46,7 +48,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return A new {@link AnnotationInfo} object.
 	 */
 	public static <A extends Annotation> AnnotationInfo<A> of(ClassInfo onClass, A value) {
-		return new AnnotationInfo<>(onClass, null, null, value);
+		return new AnnotationInfo<>(onClass, value);
 	}
 
 	/**
@@ -58,7 +60,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return A new {@link AnnotationInfo} object.
 	 */
 	public static <A extends Annotation> AnnotationInfo<A> of(MethodInfo onMethod, A value) {
-		return new AnnotationInfo<>(null, onMethod, null, value);
+		return new AnnotationInfo<>(onMethod, value);
 	}
 
 	/**
@@ -70,44 +72,176 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return A new {@link AnnotationInfo} object.
 	 */
 	public static <A extends Annotation> AnnotationInfo<A> of(Package onPackage, A value) {
-		return new AnnotationInfo<>(null, null, onPackage, value);
+		return new AnnotationInfo<>(PackageInfo.of(onPackage), value);
+	}
+
+	/**
+	 * Convenience constructor when annotation is found on a package.
+	 *
+	 * @param <A> The annotation class.
+	 * @param onPackage The package where the annotation was found.
+	 * @param value The annotation found.
+	 * @return A new {@link AnnotationInfo} object.
+	 */
+	public static <A extends Annotation> AnnotationInfo<A> of(PackageInfo onPackage, A value) {
+		return new AnnotationInfo<>(onPackage, value);
+	}
+
+	/**
+	 * Convenience constructor when annotation is found on a field.
+	 *
+	 * @param <A> The annotation class.
+	 * @param onField The field where the annotation was found.
+	 * @param value The annotation found.
+	 * @return A new {@link AnnotationInfo} object.
+	 */
+	public static <A extends Annotation> AnnotationInfo<A> of(FieldInfo onField, A value) {
+		return new AnnotationInfo<>(onField, value);
+	}
+
+	/**
+	 * Convenience constructor when annotation is found on a constructor.
+	 *
+	 * @param <A> The annotation class.
+	 * @param onConstructor The constructor where the annotation was found.
+	 * @param value The annotation found.
+	 * @return A new {@link AnnotationInfo} object.
+	 */
+	public static <A extends Annotation> AnnotationInfo<A> of(ConstructorInfo onConstructor, A value) {
+		return new AnnotationInfo<>(onConstructor, value);
+	}
+
+	/**
+	 * Convenience constructor when annotation is found on a parameter.
+	 *
+	 * @param <A> The annotation class.
+	 * @param onParam The parameter where the annotation was found.
+	 * @param value The annotation found.
+	 * @return A new {@link AnnotationInfo} object.
+	 */
+	public static <A extends Annotation> AnnotationInfo<A> of(ParameterInfo onParam, A value) {
+		return new AnnotationInfo<>(onParam, value);
 	}
 
 	private static int getRank(Object a) {
 		var ci = ClassInfo.of(a);
-		MethodInfo mi = ci.getPublicMethod(x -> x.hasName("rank") && x.hasNoParams() && x.hasReturnType(int.class));
+		var mi = ci.getPublicMethod(x -> x.hasName("rank") && x.hasNoParams() && x.hasReturnType(int.class));
 		if (nn(mi)) {
-			try {
-				return (int)mi.invoke(a);
-			} catch (ExecutableException e) {
-				e.printStackTrace();
-			}
+			return safe(() -> (int)mi.invoke(a));
 		}
 		return 0;
 	}
 
 	private final ClassInfo c;
 	private final MethodInfo m;
+	private final FieldInfo f;
+	private final ConstructorInfo ctor;
+	private final ParameterInfo param;
+	private final PackageInfo p;
 
-	private final Package p;
+	private T a;  // Effectively final
 
-	private final T a;
-
-	private volatile Method[] methods;
+	private final Supplier<List<Method>> methods = memoize(() -> u(l(a.annotationType().getMethods())));
 
 	final int rank;
 
 	/**
-	 * Constructor.
+	 * Constructor for class annotations.
 	 *
 	 * @param c The class where the annotation was found.
+	 * @param a The annotation found.
+	 */
+	AnnotationInfo(ClassInfo c, T a) {
+		this.c = c;
+		this.m = null;
+		this.f = null;
+		this.ctor = null;
+		this.param = null;
+		this.p = null;
+		this.a = a;
+		this.rank = getRank(a);
+	}
+
+	/**
+	 * Constructor for method annotations.
+	 *
 	 * @param m The method where the annotation was found.
+	 * @param a The annotation found.
+	 */
+	AnnotationInfo(MethodInfo m, T a) {
+		this.c = null;
+		this.m = m;
+		this.f = null;
+		this.ctor = null;
+		this.param = null;
+		this.p = null;
+		this.a = a;
+		this.rank = getRank(a);
+	}
+
+	/**
+	 * Constructor for field annotations.
+	 *
+	 * @param f The field where the annotation was found.
+	 * @param a The annotation found.
+	 */
+	AnnotationInfo(FieldInfo f, T a) {
+		this.c = null;
+		this.m = null;
+		this.f = f;
+		this.ctor = null;
+		this.param = null;
+		this.p = null;
+		this.a = a;
+		this.rank = getRank(a);
+	}
+
+	/**
+	 * Constructor for constructor annotations.
+	 *
+	 * @param ctor The constructor where the annotation was found.
+	 * @param a The annotation found.
+	 */
+	AnnotationInfo(ConstructorInfo ctor, T a) {
+		this.c = null;
+		this.m = null;
+		this.f = null;
+		this.ctor = ctor;
+		this.param = null;
+		this.p = null;
+		this.a = a;
+		this.rank = getRank(a);
+	}
+
+	/**
+	 * Constructor for parameter annotations.
+	 *
+	 * @param param The parameter where the annotation was found.
+	 * @param a The annotation found.
+	 */
+	AnnotationInfo(ParameterInfo param, T a) {
+		this.c = null;
+		this.m = null;
+		this.f = null;
+		this.ctor = null;
+		this.param = param;
+		this.p = null;
+		this.a = a;
+		this.rank = getRank(a);
+	}
+
+	/**
+	 * Constructor for package annotations.
+	 *
 	 * @param p The package where the annotation was found.
 	 * @param a The annotation found.
 	 */
-	AnnotationInfo(ClassInfo c, MethodInfo m, Package p, T a) {
-		this.c = c;
-		this.m = m;
+	AnnotationInfo(PackageInfo p, T a) {
+		this.c = null;
+		this.m = null;
+		this.f = null;
+		this.ctor = null;
+		this.param = null;
 		this.p = p;
 		this.a = a;
 		this.rank = getRank(a);
@@ -138,14 +272,17 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
-		for (var m : _getMethods())
-			if (m.getName().equals(name) && m.getReturnType().equals(type))
-				safe(() -> consumeIf(test, action, (V)m.invoke(a)));
+		methods.get().stream()
+			.filter(m -> eq(m.getName(), name) && eq(m.getReturnType(), type))
+			.forEach(m -> safe(() -> consumeIf(test, action, (V)m.invoke(a))));
 		return this;
 	}
 
 	/**
 	 * Returns the class that this annotation was found on.
+	 *
+	 * <p>
+	 * Returns the declaring class from whichever context this annotation belongs to.
 	 *
 	 * @return The class that this annotation was found on, or <jk>null</jk> if it was found on a package.
 	 */
@@ -154,6 +291,12 @@ public class AnnotationInfo<T extends Annotation> {
 			return this.c;
 		if (nn(this.m))
 			return this.m.getDeclaringClass();
+		if (nn(this.f))
+			return this.f.getDeclaringClass();
+		if (nn(this.ctor))
+			return this.ctor.getDeclaringClass();
+		if (nn(this.param))
+			return this.param.getDeclaringExecutable().getDeclaringClass();
 		return null;
 	}
 
@@ -172,6 +315,27 @@ public class AnnotationInfo<T extends Annotation> {
 	public MethodInfo getMethodOn() { return m; }
 
 	/**
+	 * Returns the field where the annotation was found.
+	 *
+	 * @return the field where the annotation was found, or <jk>null</jk> if it wasn't found on a field.
+	 */
+	public FieldInfo getFieldOn() { return f; }
+
+	/**
+	 * Returns the constructor where the annotation was found.
+	 *
+	 * @return the constructor where the annotation was found, or <jk>null</jk> if it wasn't found on a constructor.
+	 */
+	public ConstructorInfo getConstructorOn() { return ctor; }
+
+	/**
+	 * Returns the parameter where the annotation was found.
+	 *
+	 * @return the parameter where the annotation was found, or <jk>null</jk> if it wasn't found on a parameter.
+	 */
+	public ParameterInfo getParamOn() { return param; }
+
+	/**
 	 * Returns the class name of the annotation.
 	 *
 	 * @return The simple class name of the annotation.
@@ -183,7 +347,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * @return the package where the annotation was found, or <jk>null</jk> if it wasn't found on a package.
 	 */
-	public Package getPackageOn() { return p; }
+	public PackageInfo getPackageOn() { return p; }
 
 	/**
 	 * Returns a matching value on this annotation.
@@ -196,17 +360,11 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <V> Optional<V> getValue(Class<V> type, String name, Predicate<V> test) {
-		for (var m : _getMethods())
-			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
-				try {
-					V v = (V)m.invoke(a);
-					if (test(test, v))
-						return opt(v);
-				} catch (Exception e) {
-					e.printStackTrace(); // Shouldn't happen.
-				}
-			}
-		return opte();
+		return methods.get().stream()
+			.filter(m -> eq(m.getName(), name) && eq(m.getReturnType(), type))
+			.map(m -> safe(() -> (V)m.invoke(a)))
+			.filter(v -> test(test, v))
+			.findFirst();
 	}
 
 	/**
@@ -237,7 +395,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return <jk>true</jk> if this annotation is in the specified {@link AnnotationGroup group}.
 	 */
 	public <A extends Annotation> boolean isInGroup(Class<A> group) {
-		AnnotationGroup x = a.annotationType().getAnnotation(AnnotationGroup.class);
+		var x = a.annotationType().getAnnotation(AnnotationGroup.class);
 		return (nn(x) && x.value().equals(group));
 	}
 
@@ -249,8 +407,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return <jk>true</jk> if this annotation is the specified type.
 	 */
 	public <A extends Annotation> boolean isType(Class<A> type) {
-		Class<? extends Annotation> at = this.a.annotationType();
-		return at == type;
+		return this.a.annotationType() == type;
 	}
 
 	/**
@@ -271,26 +428,32 @@ public class AnnotationInfo<T extends Annotation> {
 	public LinkedHashMap<String, Object> toMap() {
 		var jm = new LinkedHashMap<String, Object>();
 		if (nn(c))
-			jm.put("class", c.getSimpleName());
+			jm.put("class", c.getNameSimple());
 		if (nn(m))
 			jm.put("method", m.getShortName());
+		if (nn(f))
+			jm.put("field", f.getName());
+		if (nn(ctor))
+			jm.put("constructor", ctor.getShortName());
+		if (nn(param))
+			jm.put("parameter", param.getName());
 		if (nn(p))
 			jm.put("package", p.getName());
 		var ja = new LinkedHashMap<String, Object>();
 		var ca = ClassInfo.of(a.annotationType());
 		ca.forEachDeclaredMethod(null, x -> {
 			try {
-				Object v = x.invoke(a);
-				Object d = x.inner().getDefaultValue();
+				var v = x.invoke(a);
+				var d = x.inner().getDefaultValue();
 				if (ne(v, d)) {
-					if (! (isArray(v) && Array.getLength(v) == 0 && Array.getLength(d) == 0))
-						ja.put(m.getName(), v);
+					if (! (isArray(v) && length(v) == 0 && length(d) == 0))
+						ja.put(x.getName(), v);
 				}
 			} catch (Exception e) {
-				ja.put(m.getName(), lm(e));
+				ja.put(x.getName(), lm(e));
 			}
 		});
-		jm.put("@" + ca.getSimpleName(), ja);
+		jm.put("@" + ca.getNameSimple(), ja);
 		return jm;
 	}
 
@@ -347,15 +510,15 @@ public class AnnotationInfo<T extends Annotation> {
 	 * 	<li>All their corresponding member values are equal
 	 * </ul>
 	 *
-	 * @param obj The reference object with which to compare.
+	 * @param o The reference object with which to compare.
 	 * @return <jk>true</jk> if the specified object is equal to this annotation.
 	 * @see Annotation#equals(Object)
 	 */
 	@Override /* Overridden from Object */
-	public boolean equals(Object obj) {
-		if (obj instanceof AnnotationInfo)
-			return a.equals(((AnnotationInfo<?>)obj).a);
-		return a.equals(obj);
+	public boolean equals(Object o) {
+		if (o instanceof AnnotationInfo o2)
+			return a.equals(o2.a);
+		return a.equals(o);
 	}
 
 	/**
@@ -371,13 +534,6 @@ public class AnnotationInfo<T extends Annotation> {
 		return toMap().toString();
 	}
 
-	Method[] _getMethods() {
-		if (methods == null)
-			synchronized (this) {
-				methods = a.annotationType().getMethods();
-			}
-		return methods;
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static methods for ClassInfo
@@ -399,22 +555,22 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
 	 */
+	// TODO: Once ClassInfo arrays are converted to Lists, convert reverse iterations to rstream() and nested loops to flatMap()
 	public static void forEachAnnotationInfo(ClassInfo classInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		PackageInfo pi = classInfo.getPackage();
+		var pi = classInfo.getPackage();
 		if (nn(pi))
-			for (var a : pi.getDeclaredAnnotations())
-				for (var a2 : ClassInfo.splitRepeated(a))
-					AnnotationInfo.of(pi.inner(), a2).accept(filter, action);
-		ClassInfo[] interfaces = classInfo._getInterfaces();
-		for (int i = interfaces.length - 1; i >= 0; i--)
-			for (var a : interfaces[i].inner().getDeclaredAnnotations())
-				for (var a2 : ClassInfo.splitRepeated(a))
-					AnnotationInfo.of(interfaces[i], a2).accept(filter, action);
-		ClassInfo[] parents = classInfo._getParents();
-		for (int i = parents.length - 1; i >= 0; i--)
-			for (var a : parents[i].inner().getDeclaredAnnotations())
-				for (var a2 : ClassInfo.splitRepeated(a))
-					AnnotationInfo.of(parents[i], a2).accept(filter, action);
+			for (var ai : pi.getAnnotations())
+				ai.accept(filter, action);
+		var interfaces = classInfo.getInterfaces();
+		for (int i = interfaces.size() - 1; i >= 0; i--)
+			for (var a : interfaces.get(i).inner().getDeclaredAnnotations())
+				for (var a2 : splitRepeated(a))
+					AnnotationInfo.of(interfaces.get(i), a2).accept(filter, action);
+		var parents = classInfo.getParents();
+		for (int i = parents.size() - 1; i >= 0; i--)
+			for (var a : parents.get(i).inner().getDeclaredAnnotations())
+				for (var a2 : splitRepeated(a))
+					AnnotationInfo.of(parents.get(i), a2).accept(filter, action);
 	}
 
 	/**
@@ -469,18 +625,19 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
 	 */
+	// TODO: Once ClassInfo arrays are converted to Lists, convert reverse iterations to rstream()
 	public static void forEachAnnotationInfo(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		ClassInfo c = methodInfo.getDeclaringClass();
+		var c = methodInfo.getDeclaringClass();
 		forEachDeclaredAnnotationInfo(c.getPackage(), filter, action);
-		ClassInfo[] interfaces = c._getInterfaces();
-		for (int i = interfaces.length - 1; i >= 0; i--) {
-			forEachDeclaredAnnotationInfo(interfaces[i], filter, action);
-			forEachDeclaredMethodAnnotationInfo(methodInfo, interfaces[i], filter, action);
+		var interfaces = c.getInterfaces();
+		for (int i = interfaces.size() - 1; i >= 0; i--) {
+			forEachDeclaredAnnotationInfo(interfaces.get(i), filter, action);
+			forEachDeclaredMethodAnnotationInfo(methodInfo, interfaces.get(i), filter, action);
 		}
-		ClassInfo[] parents = c._getParents();
-		for (int i = parents.length - 1; i >= 0; i--) {
-			forEachDeclaredAnnotationInfo(parents[i], filter, action);
-			forEachDeclaredMethodAnnotationInfo(methodInfo, parents[i], filter, action);
+		var parents = c.getParents();
+		for (int i = parents.size() - 1; i >= 0; i--) {
+			forEachDeclaredAnnotationInfo(parents.get(i), filter, action);
+			forEachDeclaredMethodAnnotationInfo(methodInfo, parents.get(i), filter, action);
 		}
 	}
 
@@ -547,14 +704,15 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
 	 */
+	// TODO: Once ClassInfo arrays are converted to Lists, convert reverse iterations to rstream()
 	public static void forEachAnnotationInfoMethodOnly(MethodInfo methodInfo, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		ClassInfo c = methodInfo.getDeclaringClass();
-		ClassInfo[] interfaces = c._getInterfaces();
-		for (int i = interfaces.length - 1; i >= 0; i--)
-			forEachDeclaredMethodAnnotationInfo(methodInfo, interfaces[i], filter, action);
-		ClassInfo[] parents = c._getParents();
-		for (int i = parents.length - 1; i >= 0; i--)
-			forEachDeclaredMethodAnnotationInfo(methodInfo, parents[i], filter, action);
+		var c = methodInfo.getDeclaringClass();
+		var interfaces = c.getInterfaces();
+		for (int i = interfaces.size() - 1; i >= 0; i--)
+			forEachDeclaredMethodAnnotationInfo(methodInfo, interfaces.get(i), filter, action);
+		var parents = c.getParents();
+		for (int i = parents.size() - 1; i >= 0; i--)
+			forEachDeclaredMethodAnnotationInfo(methodInfo, parents.get(i), filter, action);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -563,14 +721,14 @@ public class AnnotationInfo<T extends Annotation> {
 
 	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (nn(ci))
-			for (var a : ci._getDeclaredAnnotations())
-				AnnotationInfo.of(ci, a).accept(filter, action);
+			for (var ai : ci.getDeclaredAnnotationInfos())
+				ai.accept(filter, action);
 	}
 
 	private static void forEachDeclaredAnnotationInfo(PackageInfo pi, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (nn(pi))
-			for (var a : pi.getDeclaredAnnotations())
-				AnnotationInfo.of(pi.inner(), a).accept(filter, action);
+			for (var ai : pi.getAnnotations())
+				ai.accept(filter, action);
 	}
 
 	private static void forEachDeclaredMethodAnnotationInfo(MethodInfo methodInfo, ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {

@@ -88,7 +88,7 @@ class MethodInvokerTest extends TestBase {
 		var mi = create(m);
 
 		assertEquals(m, mi.inner().inner());
-		assertEquals("A", mi.getDeclaringClass().getSimpleName());
+		assertEquals("A", mi.getDeclaringClass().getNameSimple());
 		assertEquals(A.class.getName() + ".foo()", mi.getFullName());
 	}
 }

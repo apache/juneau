@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
+import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -25,6 +27,8 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+
+import static java.util.Arrays.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
@@ -75,13 +79,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	private static List<MethodInfo> findMatching(List<MethodInfo> l, MethodInfo m, ClassInfo c) {
-		for (var m2 : c._getDeclaredMethods())
+		for (var m2 : c.getDeclaredMethods())
 			if (m.hasName(m2.getName()) && Arrays.equals(m._getParameterTypes(), m2._getParameterTypes()))
 				l.add(m2);
 		ClassInfo pc = c.getSuperclass();
 		if (nn(pc))
 			findMatching(l, m, pc);
-		for (var ic : c._getDeclaredInterfaces())
+		for (var ic : c.getDeclaredInterfaces())
 			findMatching(l, m, ic);
 		return l;
 	}
@@ -89,7 +93,8 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	private final Method m;
 	private volatile ClassInfo returnType;
 
-	private volatile MethodInfo[] matching;
+	private final Supplier<List<MethodInfo>> matchingCache =
+		memoize(() -> findMatching(list(), this, getDeclaringClass()));
 
 	/**
 	 * Constructor.
@@ -217,11 +222,11 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public <A extends Annotation> MethodInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
-		MethodInfo[] m = _getMatching();
-		for (int i = m.length - 1; i >= 0; i--)
-			for (var a2 : m[i]._getDeclaredAnnotations())
-				if (type.isInstance(a2))
-					consumeIf(filter, action, type.cast(a2));
+		rstream(matchingCache.get())
+			.flatMap(m -> Arrays.stream(m._getDeclaredAnnotations()))
+			.filter(type::isInstance)
+			.map(type::cast)
+			.forEach(a -> consumeIf(filter, action, a));
 		getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
 		return this;
 	}
@@ -267,7 +272,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return This object.
 	 */
 	public MethodInfo forEachMatching(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (var m : _getMatching())
+		for (var m : matchingCache.get())
 			consumeIf(filter, action, m);
 		return this;
 	}
@@ -283,9 +288,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return This object.
 	 */
 	public MethodInfo forEachMatchingParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		MethodInfo[] m = _getMatching();
-		for (int i = m.length - 1; i >= 0; i--)
-			consumeIf(filter, action, m[i]);
+		rstream(matchingCache.get()).forEach(m -> consumeIf(filter, action, m));
 		return this;
 	}
 
@@ -308,15 +311,11 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
 	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		if (type == null)
-			return null;
-		Value<A> t = Value.empty();
-		for (var m2 : _getMatching()) {
-			annotationProvider.forEachAnnotation(type, m2.inner(), x -> true, x -> t.set(x));
-			if (t.isPresent())
-				return t.get();
-		}
-		return null;
+		return matchingCache.get().stream()
+			.map(m2 -> annotationProvider.firstAnnotation(type, m2.inner(), x -> true))
+			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
 	}
 
 	/**
@@ -331,6 +330,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
+	@Override
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
 		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
@@ -392,12 +392,11 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	@SafeVarargs
 	public final Annotation getAnyAnnotation(Class<? extends Annotation>...types) {
-		for (var cc : types) {
-			Annotation a = getAnnotation(cc);
-			if (nn(a))
-				return a;
-		}
-		return null;
+		return Arrays.stream(types)
+			.map(this::getAnnotation)
+			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
 	}
 
 	/**
@@ -455,7 +454,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			for (int i = 0; i < pt.length; i++) {
 				if (i > 0)
 					sb.append(',');
-				mpi.get(i).getParameterType().appendFullName(sb);
+				mpi.get(i).getParameterType().appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);
 			}
 			sb.append(')');
 		}
@@ -490,7 +489,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		for (var m2 : _getMatching())
+		for (var m2 : matchingCache.get())
 			if (nn(annotationProvider.firstAnnotation(type, m2.inner(), x -> true)))
 				return true;
 		return false;
@@ -503,6 +502,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
+	@Override
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
 		return hasAnnotation(AnnotationProvider.DEFAULT, type);
 	}
@@ -553,6 +553,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this method.
 	 */
+	@Override
 	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
 		return getAnnotation(type) == null;
 	}
@@ -775,19 +776,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	MethodInfo findMatchingOnClass(ClassInfo c) {
-		for (var m2 : c._getDeclaredMethods())
+		for (var m2 : c.getDeclaredMethods())
 			if (hasName(m2.getName()) && Arrays.equals(_getParameterTypes(), m2._getParameterTypes()))
 				return m2;
 		return null;
-	}
-
-	MethodInfo[] _getMatching() {
-		if (matching == null) {
-			synchronized (this) {
-				List<MethodInfo> l = findMatching(list(), this, getDeclaringClass());
-				matching = l.toArray(new MethodInfo[l.size()]);
-			}
-		}
-		return matching;
 	}
 }

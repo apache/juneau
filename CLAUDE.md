@@ -125,6 +125,52 @@ InputStream stream = resource.getStream();
 boolean isEmpty = list.isEmpty();
 ```
 
+#### Effectively Final Fields
+When declaring class fields that are non-final but only set once (in constructors):
+
+1. **Add a comment indicating the field is effectively final**:
+   - Use the comment `// Effectively final` on the same line as the field declaration
+   - This clarifies that the field is immutable after construction
+   - Helps reviewers understand why the field can be used in eager initialization
+
+2. **Why this matters:**
+   - Makes the immutability contract explicit in the code
+   - Explains why the field can be safely used to initialize `final` fields or suppliers
+   - Documents thread-safety guarantees (effectively final fields are thread-safe)
+   - Prevents future modifications that might break the immutability assumption
+
+3. **When to use:**
+   - Fields that are only assigned in the constructor(s)
+   - Fields used to eagerly initialize other `final` fields or suppliers
+   - Fields that must be non-final to allow eager initialization of dependent fields
+
+**Examples:**
+```java
+// WRONG - No indication that 'c' is immutable after construction
+Class<?> c;
+
+// CORRECT - Clearly documents effectively final status
+Class<?> c;  // Effectively final
+
+// Example in context
+public class ClassInfo {
+	Class<?> c;  // Effectively final (only set in constructor)
+	
+	// These final suppliers can safely reference 'c' because it's effectively final
+	private final Supplier<List<Type>> genericInterfacesCache = 
+		memoize(() -> c == null ? Collections.emptyList() : u(l(c.getGenericInterfaces())));
+	
+	public ClassInfo(Class<?> c) {
+		this.c = c;  // Only assignment point
+	}
+}
+```
+
+**Why not just make it final?**
+- Java requires `final` fields to be initialized before other instance initializers run
+- When field initializers depend on constructor parameters, the field must be non-final
+- "Effectively final" provides the same immutability guarantee with more initialization flexibility
+
 #### Git Operations and Reverts
 When working with git operations, especially reverting changes:
 

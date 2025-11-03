@@ -16,10 +16,15 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.ClassUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.net.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 
@@ -76,7 +81,10 @@ public class PackageInfo {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final Package p;
+	private Package p;  // Effectively final
+
+	// All annotations on this package, wrapped in AnnotationInfo. Repeated annotations have been unwrapped and are present as individual instances. Lazy-initialized in getter.
+	private final Supplier<List<AnnotationInfo>> annotations = memoize(() -> opt(p).map(p -> stream(p.getAnnotations()).flatMap(a -> stream(splitRepeated(a))).map(a -> (AnnotationInfo)AnnotationInfo.of(this, a)).toList()).orElse(liste()));
 
 	/**
 	 * Constructor.
@@ -95,6 +103,7 @@ public class PackageInfo {
 	public Package inner() {
 		return p;
 	}
+
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Package methods
@@ -247,16 +256,16 @@ public class PackageInfo {
 	}
 
 	/**
-	 * Returns this package's annotation for the specified type if such an annotation is <em>present</em>, else <jk>null</jk>.
+	 * Returns this package's annotation for the specified type wrapped in an {@link AnnotationInfo}, else <jk>null</jk>.
 	 *
 	 * <p>
-	 * Same as calling {@link Package#getAnnotation(Class)}.
+	 * Searches the memoized annotations list for the first matching annotation.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if package has @Deprecated annotation</jc>
 	 * 	PackageInfo <jv>pi</jv> = PackageInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
-	 * 	Deprecated <jv>d</jv> = <jv>pi</jv>.getAnnotation(Deprecated.<jk>class</jk>);
+	 * 	AnnotationInfo&lt;Deprecated&gt; <jv>d</jv> = <jv>pi</jv>.getAnnotation(Deprecated.<jk>class</jk>);
 	 * 	<jk>if</jk> (<jv>d</jv> != <jk>null</jk>) {
 	 * 		<jc>// Package is deprecated</jc>
 	 * 	}
@@ -264,102 +273,44 @@ public class PackageInfo {
 	 *
 	 * @param <A> The annotation type.
 	 * @param annotationClass The Class object corresponding to the annotation type.
-	 * @return This package's annotation for the specified annotation type if present, else <jk>null</jk>.
-	 * @see Package#getAnnotation(Class)
+	 * @return This package's annotation for the specified annotation type wrapped in AnnotationInfo, or <jk>null</jk> if not present.
 	 */
-	public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
-		return p.getAnnotation(annotationClass);
+	public <A extends Annotation> AnnotationInfo<A> getAnnotation(Class<A> annotationClass) {
+		return getAnnotations(annotationClass)
+			.findFirst()
+			.orElse(null);
 	}
 
 	/**
-	 * Returns annotations that are <em>present</em> on this package.
+	 * Returns all annotations on this package, wrapped in {@link AnnotationInfo} objects.
 	 *
 	 * <p>
-	 * Same as calling {@link Package#getAnnotations()}.
+	 * Cached and unmodifiable.
+	 * Repeated annotations (from {@code @Repeatable} containers) have been automatically unwrapped and are present as individual instances in the list.
 	 *
-	 * @return Annotations present on this package, or an empty array if there are none.
-	 * @see Package#getAnnotations()
+	 * @return All annotations present on this package, or an empty list if there are none.
 	 */
-	public Annotation[] getAnnotations() {
-		return p.getAnnotations();
+	public List<AnnotationInfo> getAnnotations() {
+		return annotations.get();
 	}
 
 	/**
-	 * Returns annotations that are <em>directly present</em> on this package (not inherited).
+	 * Returns this package's annotations of the specified type (including repeated annotations), wrapped in {@link AnnotationInfo}.
 	 *
 	 * <p>
-	 * Same as calling {@link Package#getDeclaredAnnotations()}.
-	 *
-	 * @return Annotations directly present on this package, or an empty array if there are none.
-	 * @see Package#getDeclaredAnnotations()
-	 */
-	public Annotation[] getDeclaredAnnotations() {
-		return p.getDeclaredAnnotations();
-	}
-
-	/**
-	 * Returns this package's annotations of the specified type (including repeated annotations).
-	 *
-	 * <p>
-	 * Same as calling {@link Package#getAnnotationsByType(Class)}.
+	 * Filters the cached annotations list by type.
 	 *
 	 * @param <A> The annotation type.
 	 * @param annotationClass The Class object corresponding to the annotation type.
-	 * @return All this package's annotations of the specified type, or an empty array if there are none.
-	 * @see Package#getAnnotationsByType(Class)
+	 * @return All this package's annotations of the specified type wrapped in AnnotationInfo, or an empty list if there are none.
 	 */
-	public <A extends Annotation> A[] getAnnotationsByType(Class<A> annotationClass) {
-		return p.getAnnotationsByType(annotationClass);
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> annotationClass) {
+		return getAnnotations().stream()
+			.filter(ai -> annotationClass.isInstance(ai.inner()))
+			.map(ai -> (AnnotationInfo<A>)ai);
 	}
 
-	/**
-	 * Returns this package's declared annotations of the specified type (including repeated annotations).
-	 *
-	 * <p>
-	 * Same as calling {@link Package#getDeclaredAnnotationsByType(Class)}.
-	 *
-	 * @param <A> The annotation type.
-	 * @param annotationClass The Class object corresponding to the annotation type.
-	 * @return All this package's declared annotations of the specified type, or an empty array if there are none.
-	 * @see Package#getDeclaredAnnotationsByType(Class)
-	 */
-	public <A extends Annotation> A[] getDeclaredAnnotationsByType(Class<A> annotationClass) {
-		return p.getDeclaredAnnotationsByType(annotationClass);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Juneau-specific methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns <jk>true</jk> if this package has the specified annotation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if package is deprecated</jc>
-	 * 	<jk>if</jk> (PackageInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).hasAnnotation(Deprecated.<jk>class</jk>)) {
-	 * 		<jc>// Package is deprecated</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation to check for.
-	 * @return <jk>true</jk> if this package has the specified annotation.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return nn(p.getAnnotation(type));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this package does not have the specified annotation.
-	 *
-	 * @param <A> The annotation type.
-	 * @param type The annotation to check for.
-	 * @return <jk>true</jk> if this package does not have the specified annotation.
-	 */
-	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
-		return ! hasAnnotation(type);
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Object methods

@@ -143,7 +143,7 @@ public class BasicSwaggerProviderSession {
 	public Swagger getSwagger() throws Exception {
 		// @formatter:off
 
-		InputStream is = ff.getStream(rci.getSimpleName() + ".json", locale).orElse(null);
+		InputStream is = ff.getStream(rci.getNameSimple() + ".json", locale).orElse(null);
 
 		Predicate<String> ne = Utils::isNotEmpty;
 		Predicate<Collection<?>> nec = Utils::isNotEmpty;

@@ -1,12 +1,13 @@
 # TODO List
 
-**Last generated TODO number: TODO-86**
+**Last generated TODO number: TODO-87**
 
 This file tracks pending tasks for the Apache Juneau project. For completed items, see [TODO-completed.md](TODO-completed.md).
 
 ## Issues to Fix
 
 - [ ] TODO-3 Figure out why CallLogger and ThrownStore objects are not automatically injected into REST classes in spring boot.
+- [ ] TODO-87 Find references to `ParamInfo` and replace them with `ParameterInfo` throughout the codebase.
 
 ## Code Quality Improvements
 
