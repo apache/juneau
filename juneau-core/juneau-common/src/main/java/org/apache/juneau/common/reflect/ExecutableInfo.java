@@ -40,14 +40,13 @@ import java.util.stream.*;
 public abstract class ExecutableInfo extends AccessibleInfo {
 
 	final ClassInfo declaringClass;
-	final Executable e;  // Effectively final.
+	final Executable e;
 	final boolean isConstructor;
 
 	private final Supplier<List<ParameterInfo>> parameters = memoize(this::findParameters);
 	private final Supplier<List<ClassInfo>> exceptions = memoize(this::findExceptions);
 	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations = memoize(this::findDeclaredAnnotations);
 
-	private volatile ClassInfo[] paramTypes;
 	private volatile Class<?>[] rawParamTypes;
 	private volatile Type[] rawGenericParamTypes;
 	private volatile Parameter[] rawParameters;
@@ -137,9 +136,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final int fuzzyArgsMatch(Class<?>...argTypes) {
 		int matches = 0;
-		outer: for (ClassInfo pi : getParamTypes()) {
+		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
-				if (pi.isParentOfFuzzyPrimitives(a)) {
+				if (param.getParameterType().isParentOfFuzzyPrimitives(a)) {
 					matches++;
 					continue outer;
 				}
@@ -161,9 +160,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final int fuzzyArgsMatch(ClassInfo...argTypes) {
 		int matches = 0;
-		outer: for (ClassInfo pi : getParamTypes()) {
+		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
-				if (pi.isParentOfFuzzyPrimitives(a)) {
+				if (param.getParameterType().isParentOfFuzzyPrimitives(a)) {
 					matches++;
 					continue outer;
 				}
@@ -185,9 +184,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final int fuzzyArgsMatch(Object...argTypes) {
 		int matches = 0;
-		outer: for (ClassInfo pi : getParamTypes()) {
+		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
-				if (pi.canAcceptArg(a)) {
+				if (param.getParameterType().canAcceptArg(a)) {
 					matches++;
 					continue outer;
 				}
@@ -239,11 +238,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		if (! isConstructor)
 			sb.append('.').append(getSimpleName());
 		sb.append('(');
-		List<ClassInfo> pt = getParamTypes();
-		for (int i = 0; i < pt.size(); i++) {
+		var params = getParameters();
+		for (int i = 0; i < params.size(); i++) {
 			if (i > 0)
 				sb.append(',');
-			pt.get(i).appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);
+			params.get(i).getParameterType().appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);
 		}
 		sb.append(')');
 		return sb.toString();
@@ -279,24 +278,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
 	public final List<ParameterInfo> getParameters() { return parameters.get(); }
-
-	/**
-	 * Returns the parameter type of the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The parameter type of the parameter at the specified index.
-	 */
-	public final ClassInfo getParamType(int index) {
-		checkIndex(index);
-		return _getParameterTypes()[index];
-	}
-
-	/**
-	 * Returns the parameter types on this executable.
-	 *
-	 * @return The parameter types on this executable.
-	 */
-	public final List<ClassInfo> getParamTypes() { return u(l(_getParameterTypes())); }
 
 	/**
 	 * Returns the raw generic parameter type of the parameter at the specified index.
@@ -412,13 +393,13 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasMatchingParamTypes(Class<?>...args) {
-		ClassInfo[] pt = _getParameterTypes();
-		if (pt.length != args.length)
+		var params = getParameters();
+		if (params.size() != args.length)
 			return false;
-		for (var element : pt) {
+		for (var param : params) {
 			boolean matched = false;
 			for (var arg : args)
-				if (element.isParentOfFuzzyPrimitives(arg))
+				if (param.getParameterType().isParentOfFuzzyPrimitives(arg))
 					matched = true;
 			if (! matched)
 				return false;
@@ -433,13 +414,13 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasMatchingParamTypes(ClassInfo...args) {
-		ClassInfo[] pt = _getParameterTypes();
-		if (pt.length != args.length)
+		var params = getParameters();
+		if (params.size() != args.length)
 			return false;
-		for (var element : pt) {
+		for (var param : params) {
 			boolean matched = false;
 			for (var arg : args)
-				if (element.isParentOfFuzzyPrimitives(arg.inner()))
+				if (param.getParameterType().isParentOfFuzzyPrimitives(arg.inner()))
 					matched = true;
 			if (! matched)
 				return false;
@@ -1081,40 +1062,30 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return x[index];
 	}
 
-	final ClassInfo[] _getParameterTypes() {
-		if (paramTypes == null) {
-			synchronized (this) {
-				Class<?>[] ptc = e.getParameterTypes();
-				// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
-				// always return an empty array.  This appears to be fixed in Java 8 b75.
-				Type[] ptt = e.getGenericParameterTypes();
-				if (ptt.length != ptc.length) {
-					// Bug in javac: generic type array excludes enclosing instance parameter
-					// for inner classes with at least one generic constructor parameter.
-					if (ptt.length + 1 == ptc.length) {
-						Type[] ptt2 = new Type[ptc.length];
-						ptt2[0] = ptc[0];
-						for (int i = 0; i < ptt.length; i++)
-							ptt2[i + 1] = ptt[i];
-						ptt = ptt2;
-					} else {
-						ptt = ptc;
-					}
-				}
-				ClassInfo[] l = new ClassInfo[ptc.length];
-				for (int i = 0; i < ptc.length; i++)
-					l[i] = ClassInfo.of(ptc[i], ptt[i]);
-				paramTypes = l;
-			}
-		}
-		return paramTypes;
-	}
-
 	private List<ParameterInfo> findParameters() {
 		var rp = e.getParameters();
-		var types = _getParameterTypes();
+		var ptc = e.getParameterTypes();
+		// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
+		// always return an empty array.  This appears to be fixed in Java 8 b75.
+		var ptt = e.getGenericParameterTypes();
+		final Type[] genericTypes;
+		if (ptt.length != ptc.length) {
+			// Bug in javac: generic type array excludes enclosing instance parameter
+			// for inner classes with at least one generic constructor parameter.
+			if (ptt.length + 1 == ptc.length) {
+				var ptt2 = new Type[ptc.length];
+				ptt2[0] = ptc[0];
+				for (int i = 0; i < ptt.length; i++)
+					ptt2[i + 1] = ptt[i];
+				genericTypes = ptt2;
+			} else {
+				genericTypes = ptc;
+			}
+		} else {
+			genericTypes = ptt;
+		}
 		return IntStream.range(0, rp.length)
-			.mapToObj(i -> new ParameterInfo(this, rp[i], i, types[i]))
+			.mapToObj(i -> new ParameterInfo(this, rp[i], i, ClassInfo.of(ptc[i], genericTypes[i])))
 			.toList();
 	}
 

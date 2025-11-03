@@ -5907,13 +5907,13 @@ public class RestContext extends Context {
 	protected RestOpArg[] findRestOperationArgs(Method m, BeanStore beanStore) {
 
 		var mi = MethodInfo.of(m);
-		var pt = mi.getParamTypes();
-		var ra = new RestOpArg[pt.size()];
+		var params = mi.getParameters();
+		var ra = new RestOpArg[params.size()];
 
 		beanStore = BeanStore.of(beanStore, getResource());
 
-		for (int i = 0; i < pt.size(); i++) {
-			ParameterInfo pi = mi.getParameter(i);
+		for (int i = 0; i < params.size(); i++) {
+			var pi = params.get(i);
 			beanStore.addBean(ParameterInfo.class, pi);
 			for (var c : restOpArgs) {
 				try {

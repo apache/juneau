@@ -111,12 +111,12 @@ public class BuilderSwap<T,B> {
 			var cc = pci.getPublicConstructor(
 				x -> x.isVisible(cVis)
 				&& x.hasNumParams(1)
-				&& x.getParamType(0).isChildOf(Builder.class)
+				&& x.getParameter(0).getParameterType().isChildOf(Builder.class)
 			);
 			// @formatter:on
 			if (nn(cc)) {
 				objectConstructor = cc;
-				builderClass.set(cc.getParamType(0).inner());
+				builderClass.set(cc.getParameter(0).getParameterType().inner());
 			}
 		}
 

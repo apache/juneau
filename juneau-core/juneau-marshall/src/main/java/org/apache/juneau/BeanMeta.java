@@ -610,14 +610,14 @@ public class BeanMeta<T> {
 				if (! (m.isVisible(v) || isNotEmpty(lp) || isNotEmpty(ln)))
 					continue;
 
-				String n = m.getSimpleName();
+			String n = m.getSimpleName();
 
-				List<ClassInfo> pt = m.getParamTypes();
-				ClassInfo rt = m.getReturnType();
-				MethodType methodType = UNKNOWN;
-				String bpName = bpName(lp, ln);
+			List<ParameterInfo> params = m.getParameters();
+			ClassInfo rt = m.getReturnType();
+			MethodType methodType = UNKNOWN;
+			String bpName = bpName(lp, ln);
 
-				if (pt.isEmpty()) {
+			if (params.isEmpty()) {
 					if ("*".equals(bpName)) {
 						if (rt.isChildOf(Collection.class)) {
 							methodType = EXTRAKEYS;
@@ -642,14 +642,14 @@ public class BeanMeta<T> {
 						} else {
 							n = bpName;
 						}
-					}
-				} else if (pt.size() == 1) {
-					if ("*".equals(bpName)) {
-						if (pt.get(0).isChildOf(Map.class)) {
-							methodType = SETTER;
-							n = bpName;
-						} else if (pt.get(0).is(String.class)) {
-							methodType = GETTER;
+				}
+			} else if (params.size() == 1) {
+				if ("*".equals(bpName)) {
+					if (params.get(0).getParameterType().isChildOf(Map.class)) {
+						methodType = SETTER;
+						n = bpName;
+					} else if (params.get(0).getParameterType().is(String.class)) {
+						methodType = GETTER;
 							n = bpName;
 						}
 					} else if (n.startsWith("set") && (rt.isParentOf(c) || rt.is(Void.TYPE))) {
@@ -669,9 +669,9 @@ public class BeanMeta<T> {
 						}
 					} else if (fluentSetters && rt.isParentOf(c)) {
 						methodType = SETTER;
-					}
-				} else if (pt.size() == 2) {
-					if ("*".equals(bpName) && pt.get(0).is(String.class)) {
+				}
+			} else if (params.size() == 2) {
+				if ("*".equals(bpName) && params.get(0).getParameterType().is(String.class)) {
 						if (n.startsWith("set") && (rt.isParentOf(c) || rt.is(Void.TYPE))) {
 							methodType = SETTER;
 						} else {
@@ -792,27 +792,27 @@ public class BeanMeta<T> {
 		if (! lp.isEmpty() || ! ln.isEmpty())
 			return;
 
-		String methodName = method.getSimpleName();
-		List<ClassInfo> paramTypes = method.getParamTypes();
+	String methodName = method.getSimpleName();
+	List<ParameterInfo> params = method.getParameters();
 
-		// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name
-		var currentClass = ClassInfo.of(c);
-		ClassInfo sc = currentClass.getSuperclass();
+	// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name
+	var currentClass = ClassInfo.of(c);
+	ClassInfo sc = currentClass.getSuperclass();
 
-		while (nn(sc) && ! sc.is(stopClass) && ! sc.is(Object.class)) {
-			// Look for a method with the same signature in the parent class
-			for (var parentMethod : sc.getDeclaredMethods()) {
-				if (parentMethod.getSimpleName().equals(methodName) && paramTypes.size() == parentMethod.getParamTypes().size()) {
+	while (nn(sc) && ! sc.is(stopClass) && ! sc.is(Object.class)) {
+		// Look for a method with the same signature in the parent class
+		for (var parentMethod : sc.getDeclaredMethods()) {
+			if (parentMethod.getSimpleName().equals(methodName) && params.size() == parentMethod.getParameters().size()) {
 
-					// Check if parameter types match
-					boolean paramsMatch = true;
-					List<ClassInfo> parentParamTypes = parentMethod.getParamTypes();
-					for (int i = 0; i < paramTypes.size(); i++) {
-						if (! paramTypes.get(i).is(parentParamTypes.get(i).inner())) {
-							paramsMatch = false;
-							break;
-						}
+				// Check if parameter types match
+				boolean paramsMatch = true;
+				List<ParameterInfo> parentParams = parentMethod.getParameters();
+				for (int i = 0; i < params.size(); i++) {
+					if (! params.get(i).getParameterType().is(parentParams.get(i).getParameterType().inner())) {
+						paramsMatch = false;
+						break;
 					}
+				}
 
 					if (paramsMatch) {
 						// Found a matching parent method - check for @Beanp and @Name annotations

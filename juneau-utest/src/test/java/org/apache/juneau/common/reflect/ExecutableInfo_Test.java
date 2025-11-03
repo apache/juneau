@@ -164,15 +164,15 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	@Test void getParamTypes() {
-		check("", b_c1.getParamTypes());
-		check("String", b_c2.getParamTypes());
-		check("", b_m1.getParamTypes());
-		check("String", b_m2.getParamTypes());
+		check("", b_c1.getParameters().stream().map(ParameterInfo::getParameterType).toList());
+		check("String", b_c2.getParameters().stream().map(ParameterInfo::getParameterType).toList());
+		check("", b_m1.getParameters().stream().map(ParameterInfo::getParameterType).toList());
+		check("String", b_m2.getParameters().stream().map(ParameterInfo::getParameterType).toList());
 	}
 
 	@Test void getParamTypes_twice() {
-		check("", b_c1.getParamTypes());
-		check("", b_c1.getParamTypes());
+		check("", b_c1.getParameters().stream().map(ParameterInfo::getParameterType).toList());
+		check("", b_c1.getParameters().stream().map(ParameterInfo::getParameterType).toList());
 	}
 
 	enum B1 {
@@ -180,14 +180,14 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	@Test void getParamTypes_enum() {
-		var b1 = ClassInfo.of(B1.class);
-		check("B1(String,int)", b1.getDeclaredConstructors());
-		check("String,int", b1.getDeclaredConstructors().get(0).getParamTypes());
-	}
+	var b1 = ClassInfo.of(B1.class);
+	check("B1(String,int)", b1.getDeclaredConstructors());
+	check("String,int", b1.getDeclaredConstructors().get(0).getParameters().stream().map(ParameterInfo::getParameterType).toList());
+}
 
 	@Test void getParamType() {
-		check("String", b_c2.getParamType(0));
-		check("String", b_m2.getParamType(0));
+		check("String", b_c2.getParameter(0).getParameterType());
+		check("String", b_m2.getParameter(0).getParameterType());
 	}
 
 	@Test void getRawParamTypes() {

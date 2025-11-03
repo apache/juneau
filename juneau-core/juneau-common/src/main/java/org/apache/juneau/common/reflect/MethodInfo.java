@@ -76,7 +76,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	private static List<MethodInfo> findMatching(List<MethodInfo> l, MethodInfo m, ClassInfo c) {
 		for (var m2 : c.getDeclaredMethods())
-			if (m.hasName(m2.getName()) && Arrays.equals(m._getParameterTypes(), m2._getParameterTypes()))
+			if (m.hasName(m2.getName()) && m.hasParamTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
 				l.add(m2);
 		ClassInfo pc = c.getSuperclass();
 		if (nn(pc))
@@ -175,9 +175,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public int canAcceptFuzzy(Object...args) {
 		int matches = 0;
-		outer: for (ClassInfo pi : _getParameterTypes()) {
+		outer: for (var param : getParameters()) {
 			for (var a : args) {
-				if (pi.canAcceptArg(a)) {
+				if (param.getParameterType().canAcceptArg(a)) {
 					matches++;
 					continue outer;
 				}
@@ -771,7 +771,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	MethodInfo findMatchingOnClass(ClassInfo c) {
 		for (var m2 : c.getDeclaredMethods())
-		if (hasName(m2.getName()) && Arrays.equals(_getParameterTypes(), m2._getParameterTypes()))
+		if (hasName(m2.getName()) && hasParamTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
 			return m2;
 		return null;
 	}

@@ -254,11 +254,11 @@ public class ClassMeta<T> implements Type {
 
 			// Find constructor(String) method if present.
 			ci.forEachPublicConstructor(cs -> cs.isPublic() && cs.isNotDeprecated(), cs -> {
-				List<ClassInfo> pt = cs.getParamTypes();
-				if (pt.size() == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
+				var params = cs.getParameters();
+				if (params.size() == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
 					noArgConstructor = cs;
-				} else if (pt.size() == (isMemberClass ? 2 : 1)) {
-					ClassInfo arg = pt.get(isMemberClass ? 1 : 0);
+				} else if (params.size() == (isMemberClass ? 2 : 1)) {
+					var arg = params.get(isMemberClass ? 1 : 0).getParameterType();
 					if (arg.is(String.class))
 						stringConstructor = cs;
 				}

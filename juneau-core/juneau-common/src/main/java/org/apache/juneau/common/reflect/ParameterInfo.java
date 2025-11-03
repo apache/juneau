@@ -164,7 +164,7 @@ public class ParameterInfo implements Annotatable {
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> filter) {
 		if (executable.isConstructor) {
-			ClassInfo ci = executable.getParamType(index).unwrap(Value.class, Optional.class);
+			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
 			A o = ci.getAnnotation(type, filter);
 			if (nn(o))
 				return o;
@@ -173,7 +173,7 @@ public class ParameterInfo implements Annotatable {
 					return (A)a2;
 		} else {
 			var mi = (MethodInfo)executable;
-			ClassInfo ci = executable.getParamType(index).unwrap(Value.class, Optional.class);
+			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
 			A o = ci.getAnnotation(type, filter);
 			if (nn(o))
 				return o;
@@ -659,17 +659,17 @@ public class ParameterInfo implements Annotatable {
 			for (var a2 : executable._getParameterAnnotations(index))
 				if (type.isInstance(a2))
 					return type.cast(a2);
-			return executable.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type);
+			return executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class).getAnnotation(type);
 		}
 		var mi = (MethodInfo)executable;
 		Value<A> v = Value.empty();
 		mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, y -> true, y -> v.set(y)));
-		return v.orElseGet(() -> executable.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type));
+		return v.orElseGet(() -> executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class).getAnnotation(type));
 	}
 
 	private <A extends Annotation> ParameterInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (executable.isConstructor) {
-			ClassInfo ci = executable.getParamType(index).unwrap(Value.class, Optional.class);
+			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
 			Annotation[] annotations = executable._getParameterAnnotations(index);
 			ci.forEachAnnotation(ap, a, filter, action);
 			for (var a2 : annotations)
@@ -677,7 +677,7 @@ public class ParameterInfo implements Annotatable {
 					consumeIf(filter, action, a.cast(a2));
 		} else {
 			var mi = (MethodInfo)executable;
-			ClassInfo ci = executable.getParamType(index).unwrap(Value.class, Optional.class);
+			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
 			ci.forEachAnnotation(ap, a, filter, action);
 			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, a, filter, action));
 		}

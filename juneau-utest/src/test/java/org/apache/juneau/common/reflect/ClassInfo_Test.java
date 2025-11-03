@@ -184,10 +184,10 @@ public class ClassInfo_Test extends TestBase {
 
 	@Test void resolvedParams() {
 		var mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1"));
-		check("A1", mi2.getParamType(0).unwrap(Optional.class));
+		check("A1", mi2.getParameter(0).getParameterType().unwrap(Optional.class));
 		check("A1", mi2.getReturnType().unwrap(Optional.class));
 		mi2 = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2"));
-		check("A1", mi2.getParamType(0).unwrap(Value.class));
+		check("A1", mi2.getParameter(0).getParameterType().unwrap(Value.class));
 		check("A1", mi2.getReturnType().unwrap(Value.class));
 	}
 
