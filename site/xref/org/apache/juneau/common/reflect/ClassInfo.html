@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  @SuppressWarnings({<span class="jxr_string">"unchecked"</span>,<span class="jxr_string">"rawtypes"</span>})
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> ClassInfo {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> ClassInfo <strong class="jxr_keyword">implements</strong> <a name="Annotatable" href="../../../../../org/apache/juneau/common/reflect/Annotatable.html#Annotatable">Annotatable</a> {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Class,ClassInfo&gt; CACHE = Cache.of(Class.<strong class="jxr_keyword">class</strong>, ClassInfo.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
@@ -2801,7 +2801,26 @@
 <a class="jxr_linenumber" name="L2793" href="#L2793">2793</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L2794" href="#L2794">2794</a> 		}
 <a class="jxr_linenumber" name="L2795" href="#L2795">2795</a> 	}
-<a class="jxr_linenumber" name="L2796" href="#L2796">2796</a> }
+<a class="jxr_linenumber" name="L2796" href="#L2796">2796</a> 
+<a class="jxr_linenumber" name="L2797" href="#L2797">2797</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2798" href="#L2798">2798</a> 	<em class="jxr_comment">// Annotatable interface methods</em>
+<a class="jxr_linenumber" name="L2799" href="#L2799">2799</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L2800" href="#L2800">2800</a> 
+<a class="jxr_linenumber" name="L2801" href="#L2801">2801</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
+<a class="jxr_linenumber" name="L2802" href="#L2802">2802</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotatableType" href="../../../../../org/apache/juneau/common/reflect/AnnotatableType.html#AnnotatableType">AnnotatableType</a> getAnnotatableType() {
+<a class="jxr_linenumber" name="L2803" href="#L2803">2803</a> 		<strong class="jxr_keyword">return</strong> AnnotatableType.CLASS;
+<a class="jxr_linenumber" name="L2804" href="#L2804">2804</a> 	}
+<a class="jxr_linenumber" name="L2805" href="#L2805">2805</a> 
+<a class="jxr_linenumber" name="L2806" href="#L2806">2806</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
+<a class="jxr_linenumber" name="L2807" href="#L2807">2807</a> 	<strong class="jxr_keyword">public</strong> ClassInfo getClassInfo() {
+<a class="jxr_linenumber" name="L2808" href="#L2808">2808</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L2809" href="#L2809">2809</a> 	}
+<a class="jxr_linenumber" name="L2810" href="#L2810">2810</a> 
+<a class="jxr_linenumber" name="L2811" href="#L2811">2811</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
+<a class="jxr_linenumber" name="L2812" href="#L2812">2812</a> 	<strong class="jxr_keyword">public</strong> String getAnnotatableName() {
+<a class="jxr_linenumber" name="L2813" href="#L2813">2813</a> 		<strong class="jxr_keyword">return</strong> getNameSimple();
+<a class="jxr_linenumber" name="L2814" href="#L2814">2814</a> 	}
+<a class="jxr_linenumber" name="L2815" href="#L2815">2815</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
