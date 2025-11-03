@@ -100,10 +100,10 @@ class ExecutableInfo_Test extends TestBase {
 	;
 
 	@Test void getParamCount() {
-		assertEquals(0, b_c1.getParamCount());
-		assertEquals(1, b_c2.getParamCount());
-		assertEquals(0, b_m1.getParamCount());
-		assertEquals(1, b_m2.getParamCount());
+		assertEquals(0, b_c1.getParameterCount());
+		assertEquals(1, b_c2.getParameterCount());
+		assertEquals(0, b_m1.getParameterCount());
+		assertEquals(1, b_m2.getParameterCount());
 	}
 
 	@Test void hasParams() {
@@ -128,39 +128,39 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	@Test void getParams() {
-		check("", b_c1.getParams());
-		check("B[0]", b_c2.getParams());
-		check("", b_m1.getParams());
-		check("m[0]", b_m2.getParams());
+		check("", b_c1.getParameters());
+		check("B[0]", b_c2.getParameters());
+		check("", b_m1.getParameters());
+		check("m[0]", b_m2.getParameters());
 	}
 
 	@Test void getParams_twice() {
-		check("", b_c1.getParams());
-		check("", b_c1.getParams());
+		check("", b_c1.getParameters());
+		check("", b_c1.getParameters());
 	}
 
 	@Test void getParam() {
-		check("B[0]", b_c2.getParam(0));
-		check("m[0]", b_m2.getParam(0));
+		check("B[0]", b_c2.getParameter(0));
+		check("m[0]", b_m2.getParameter(0));
 	}
 
 	@Test void getParam_nocache() {
 		var b2 = ClassInfo.of(B.class);
-		check("B[0]", b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(0));
-		check("m[0]", b2.getPublicMethod(x -> x.hasName("m") && x.hasParamTypes(String.class)).getParam(0));
+		check("B[0]", b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParameter(0));
+		check("m[0]", b2.getPublicMethod(x -> x.hasName("m") && x.hasParamTypes(String.class)).getParameter(0));
 	}
 
 	@Test void getParam_indexOutOfBounds() {
-		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b_c1.getParam(0));
-		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '-1'.  Parameter count: 1", ()->b_c2.getParam(-1));
-		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '1'.  Parameter count: 1", ()->b_c2.getParam(1));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b_c1.getParameter(0));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '-1'.  Parameter count: 1", ()->b_c2.getParameter(-1));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '1'.  Parameter count: 1", ()->b_c2.getParameter(1));
 	}
 
 	@Test void getParam_indexOutOfBounds_noCache() {
 		var b2 = ClassInfo.of(B.class);
-		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b2.getPublicConstructor(ConstructorInfo::hasNoParams).getParam(0));
-		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '-1'.  Parameter count: 1", ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(-1));
-		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '1'.  Parameter count: 1", ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(1));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '0'.  No parameters.", ()->b2.getPublicConstructor(ConstructorInfo::hasNoParams).getParameter(0));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '-1'.  Parameter count: 1", ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParameter(-1));
+		assertThrowsWithMessage(IndexOutOfBoundsException.class, "Invalid index '1'.  Parameter count: 1", ()->b2.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParameter(1));
 	}
 
 	@Test void getParamTypes() {

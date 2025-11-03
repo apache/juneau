@@ -69,7 +69,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	@Test void a03_basic_onParameter() throws Exception {
-		var mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
+		var mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParameter(0);
 		var s = HttpPartSchema.create().applyAll(Content.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}
@@ -89,7 +89,7 @@ class HttpPartSchema_Body_Test extends TestBase {
 	}
 
 	@Test void a04_basic_onParameterAndClass() throws Exception {
-		var mpi = MethodInfo.of(A04.class.getMethod("a", A02.class)).getParam(0);
+		var mpi = MethodInfo.of(A04.class.getMethod("a", A02.class)).getParameter(0);
 		var s = HttpPartSchema.create().applyAll(Content.class, mpi).noValidate().build();
 		assertTrue(s.isRequired());
 	}

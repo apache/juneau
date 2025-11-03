@@ -374,7 +374,7 @@ public class BasicSwaggerProviderSession {
 					paramMap.put(param.getString("in") + '.' + ("body".equals(param.getString("in")) ? "body" : param.getString("name")), param);
 
 			// Finally, look for parameters defined on method.
-			for (var mpi : mi.getParams()) {
+			for (var mpi : mi.getParameters()) {
 
 				ClassInfo pt = mpi.getParameterType();
 				Type type = pt.innerType();
@@ -510,7 +510,7 @@ public class BasicSwaggerProviderSession {
 			}
 
 			// Finally, look for Value @Header parameters defined on method.
-			for (var mpi : mi.getParams()) {
+			for (var mpi : mi.getParameters()) {
 
 				ClassInfo pt = mpi.getParameterType();
 

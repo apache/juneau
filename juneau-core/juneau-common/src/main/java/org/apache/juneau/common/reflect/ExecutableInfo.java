@@ -26,6 +26,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Contains common methods between {@link ConstructorInfo} and {@link MethodInfo}.
@@ -42,13 +43,14 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	Executable e;  // Effectively final.
 	final boolean isConstructor;
 
-	private volatile ParameterInfo[] params;
+	private final Supplier<List<ParameterInfo>> parameters = memoize(this::findParameters);
+
 	private volatile ClassInfo[] paramTypes, exceptionInfos;
 	private volatile Class<?>[] rawParamTypes;
 	private volatile Type[] rawGenericParamTypes;
 	private volatile Parameter[] rawParameters;
-	private volatile Annotation[][] parameterAnnotations;
-	private volatile Annotation[] declaredAnnotations;
+	private volatile Annotation[][] rawParameterAnnotations;
+	private volatile Annotation[] rawDeclaredAnnotations;
 
 	/**
 	 * Returns a predicate that evaluates to true only when the value is an instance of the given type and the provided
@@ -244,7 +246,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param index The parameter index.
 	 * @return The parameter information, never <jk>null</jk>.
 	 */
-	public final ParameterInfo getParam(int index) {
+	public final ParameterInfo getParameter(int index) {
 		checkIndex(index);
 		return _getParams()[index];
 	}
@@ -257,7 +259,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return The number of parameters in this executable.
 	 */
-	public final int getParamCount() { return e.getParameterCount(); }
+	public final int getParameterCount() { return e.getParameterCount(); }
 
 	/**
 	 * Returns the parameters defined on this executable.
@@ -267,7 +269,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return An array of parameter information, never <jk>null</jk>.
 	 */
-	public final List<ParameterInfo> getParams() { return u(l(_getParams())); }
+	public final List<ParameterInfo> getParameters() { return parameters.get(); }
 
 	/**
 	 * Returns the parameter type of the parameter at the specified index.
@@ -478,7 +480,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this executable has no parameters.
 	 */
 	public final boolean hasNoParams() {
-		return getParamCount() == 0;
+		return getParameterCount() == 0;
 	}
 
 	/**
@@ -491,7 +493,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this executable has this number of arguments.
 	 */
 	public final boolean hasNumParams(int number) {
-		return getParamCount() == number;
+		return getParameterCount() == number;
 	}
 
 	/**
@@ -503,7 +505,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this executable has at least one parameter.
 	 */
 	public final boolean hasParams() {
-		return getParamCount() != 0;
+		return getParameterCount() != 0;
 	}
 
 	/**
@@ -1012,7 +1014,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	private void checkIndex(int index) {
-		int pc = getParamCount();
+		int pc = getParameterCount();
 		if (pc == 0)
 			throw new IndexOutOfBoundsException(format("Invalid index ''{0}''.  No parameters.", index));
 		if (index < 0 || index >= pc)
@@ -1020,12 +1022,12 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	final Annotation[] _getDeclaredAnnotations() {
-		if (declaredAnnotations == null) {
+		if (rawDeclaredAnnotations == null) {
 			synchronized (this) {
-				declaredAnnotations = e.getDeclaredAnnotations();
+				rawDeclaredAnnotations = e.getDeclaredAnnotations();
 			}
 		}
-		return declaredAnnotations;
+		return rawDeclaredAnnotations;
 	}
 
 	final ClassInfo[] _getExceptionTypes() {
@@ -1042,12 +1044,12 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	final Annotation[][] _getParameterAnnotations() {
-		if (parameterAnnotations == null) {
+		if (rawParameterAnnotations == null) {
 			synchronized (this) {
-				parameterAnnotations = e.getParameterAnnotations();
+				rawParameterAnnotations = e.getParameterAnnotations();
 			}
 		}
-		return parameterAnnotations;
+		return rawParameterAnnotations;
 	}
 
 	final Annotation[] _getParameterAnnotations(int index) {
@@ -1070,10 +1072,10 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	final ClassInfo[] _getParameterTypes() {
 		if (paramTypes == null) {
 			synchronized (this) {
-				Class<?>[] ptc = _getRawParamTypes();
+				Class<?>[] ptc = e.getParameterTypes();
 				// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
 				// always return an empty array.  This appears to be fixed in Java 8 b75.
-				Type[] ptt = _getRawGenericParamTypes();
+				Type[] ptt = e.getGenericParameterTypes();
 				if (ptt.length != ptc.length) {
 					// Bug in javac: generic type array excludes enclosing instance parameter
 					// for inner classes with at least one generic constructor parameter.
@@ -1096,17 +1098,16 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return paramTypes;
 	}
 
+	private List<ParameterInfo> findParameters() {
+		var rp = e.getParameters();
+		var types = _getParameterTypes();
+		return IntStream.range(0, rp.length)
+			.mapToObj(i -> new ParameterInfo(this, rp[i], i, types[i]))
+			.toList();
+	}
+
 	final ParameterInfo[] _getParams() {
-		if (params == null) {
-			synchronized (this) {
-				Parameter[] rp = _getRawParameters();
-				ParameterInfo[] l = new ParameterInfo[rp.length];
-				for (int i = 0; i < rp.length; i++)
-					l[i] = new ParameterInfo(this, rp[i], i);
-				params = l;
-			}
-		}
-		return params;
+		return parameters.get().toArray(new ParameterInfo[0]);
 	}
 
 	final Type[] _getRawGenericParamTypes() {

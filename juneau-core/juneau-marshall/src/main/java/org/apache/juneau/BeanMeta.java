@@ -256,7 +256,7 @@ public class BeanMeta<T> {
 					if (! x.hasNumParams(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
-						constructorArgs = new String[x.getParamCount()];
+						constructorArgs = new String[x.getParameterCount()];
 						var i = IntegerValue.create();
 						x.forEachParam(null, pi -> {
 							String pn = pi.getName();
@@ -279,7 +279,7 @@ public class BeanMeta<T> {
 						if (! x.hasNumParams(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
-							constructorArgs = new String[x.getParamCount()];
+							constructorArgs = new String[x.getParameterCount()];
 							var i = IntegerValue.create();
 							x.forEachParam(null, y -> {
 								String pn = y.getName();
@@ -592,7 +592,7 @@ public class BeanMeta<T> {
 
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			for (var m : c2.getDeclaredMethods()) {
-				if (m.isStatic() || m.isBridge() || m.getParamCount() > 2 || m.hasAnnotation(ctx, BeanIgnore.class))
+				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2 || m.hasAnnotation(ctx, BeanIgnore.class))
 					continue;
 				Transient t = m.getAnnotation(ctx, Transient.class);
 				if (nn(t) && t.value())

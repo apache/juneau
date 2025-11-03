@@ -5913,7 +5913,7 @@ public class RestContext extends Context {
 		beanStore = BeanStore.of(beanStore, getResource());
 
 		for (int i = 0; i < pt.size(); i++) {
-			ParameterInfo pi = mi.getParam(i);
+			ParameterInfo pi = mi.getParameter(i);
 			beanStore.addBean(ParameterInfo.class, pi);
 			for (var c : restOpArgs) {
 				try {

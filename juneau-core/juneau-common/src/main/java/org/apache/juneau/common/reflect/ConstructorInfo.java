@@ -127,9 +127,9 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	public int compareTo(ConstructorInfo o) {
 		int i = getSimpleName().compareTo(o.getSimpleName());
 		if (i == 0) {
-			i = getParamCount() - o.getParamCount();
+			i = getParameterCount() - o.getParameterCount();
 			if (i == 0) {
-				for (int j = 0; j < getParamCount() && i == 0; j++) {
+				for (int j = 0; j < getParameterCount() && i == 0; j++) {
 					Class<?>[] tpt = _getRawParamTypes(), opt = o._getRawParamTypes();
 					i = tpt[j].getName().compareTo(opt[j].getName());
 				}

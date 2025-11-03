@@ -122,8 +122,8 @@ public class BeanCreator<T> {
 
 		@SuppressWarnings("unchecked")
 		void add(T ei) {
-			if (ei.getParamCount() > numMatches) {
-				numMatches = ei.getParamCount();
+			if (ei.getParameterCount() > numMatches) {
+				numMatches = ei.getParameterCount();
 				executable = (T)ei.accessible();
 			}
 		}
@@ -253,7 +253,7 @@ public class BeanCreator<T> {
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasNumParams(1)
-				&& x.getParam(0).canAccept(builder)
+				&& x.getParameter(0).canAccept(builder)
 				&& x.hasReturnType(type)
 				&& x.hasNoAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
@@ -332,7 +332,7 @@ public class BeanCreator<T> {
 			// Look for static-builder/protected-constructor pair.
 			Value<T> value = Value.empty();
 			type.forEachDeclaredConstructor(x -> x.hasNumParams(1) && x.isVisible(PROTECTED), x -> {
-				Class<?> pt = x.getParam(0).getParameterType().inner();
+				Class<?> pt = x.getParameter(0).getParameterType().inner();
 				MethodInfo m = type.getPublicMethod(y -> isStaticCreateMethod(y, pt));
 				if (nn(m)) {
 					Object builder = m.invoke(null);

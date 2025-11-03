@@ -108,7 +108,7 @@ public class RemoteOperationMeta {
 
 			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));
 
-			mi.getParams().forEach(x -> {
+			mi.getParameters().forEach(x -> {
 				var rma = RemoteOperationArg.create(x);
 				if (nn(rma)) {
 					HttpPartType pt = rma.getPartType();

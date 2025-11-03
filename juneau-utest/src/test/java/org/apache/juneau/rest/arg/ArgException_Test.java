@@ -36,7 +36,7 @@ class ArgException_Test extends TestBase {
 	public static void setup() throws Exception {
 		// Create a test ParamInfo for a sample method parameter
 		var mi = MethodInfo.of(ArgException_Test.class.getMethod("sampleMethod", String.class));
-		testParamInfo = mi.getParam(0);
+		testParamInfo = mi.getParameter(0);
 	}
 
 	public static void sampleMethod(String param) {

@@ -210,11 +210,11 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 
 		Class<?> unswapType = null;
 		if (nn(unswapMethod)) {
-			for (var pi : unswapMethod.getParams())
+			for (var pi : unswapMethod.getParameters())
 				if (! pi.getParameterType().is(BeanSession.class))
 					unswapType = pi.getParameterType().getWrapperIfPrimitive();
 		} else if (nn(unswapConstructor)) {
-			for (var pi : unswapConstructor.getParams())
+			for (var pi : unswapConstructor.getParameters())
 				if (! pi.getParameterType().is(BeanSession.class))
 					unswapType = pi.getParameterType().getWrapperIfPrimitive();
 		}

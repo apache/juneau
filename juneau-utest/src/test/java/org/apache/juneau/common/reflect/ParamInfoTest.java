@@ -89,12 +89,12 @@ class ParamInfoTest extends TestBase {
 
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ParameterInfo
-		b_b_a = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(0),  // NOSONAR
-		b_b_b = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(1),  // NOSONAR
-		b_a1_a = b.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
-		b_a1_b = b.getMethod(x -> x.hasName("a1")).getParam(1),  // NOSONAR
-		b_a2_a = b.getMethod(x -> x.hasName("a2")).getParam(0),  // NOSONAR
-		b_a2_b = b.getMethod(x -> x.hasName("a2")).getParam(1);  // NOSONAR
+		b_b_a = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParameter(0),  // NOSONAR
+		b_b_b = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParameter(1),  // NOSONAR
+		b_a1_a = b.getMethod(x -> x.hasName("a1")).getParameter(0),  // NOSONAR
+		b_a1_b = b.getMethod(x -> x.hasName("a1")).getParameter(1),  // NOSONAR
+		b_a2_a = b.getMethod(x -> x.hasName("a2")).getParameter(0),  // NOSONAR
+		b_a2_b = b.getMethod(x -> x.hasName("a2")).getParameter(1);  // NOSONAR
 
 	@Test void getIndex() {
 		assertEquals(0, b_b_a.getIndex());
@@ -168,11 +168,11 @@ class ParamInfoTest extends TestBase {
 		cb = ClassInfo.of(CB.class),
 		cc = ClassInfo.of(CC.class);
 	static ParameterInfo
-		cc_cc = cc.getPublicConstructor(x -> x.hasParamTypes(C1.class)).getParam(0),  // NOSONAR
-		cb_a1 = cb.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
-		cb_a2 = cb.getMethod(x -> x.hasName("a2")).getParam(0),  // NOSONAR
-		cc_a1 = cc.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
-		cc_a2 = cc.getMethod(x -> x.hasName("a2")).getParam(0);  // NOSONAR
+		cc_cc = cc.getPublicConstructor(x -> x.hasParamTypes(C1.class)).getParameter(0),  // NOSONAR
+		cb_a1 = cb.getMethod(x -> x.hasName("a1")).getParameter(0),  // NOSONAR
+		cb_a2 = cb.getMethod(x -> x.hasName("a2")).getParameter(0),  // NOSONAR
+		cc_a1 = cc.getMethod(x -> x.hasName("a1")).getParameter(0),  // NOSONAR
+		cc_a2 = cc.getMethod(x -> x.hasName("a2")).getParameter(0);  // NOSONAR
 
 	@Test void getDeclaredAnnotations() {
 		check("@CA(5)", declaredAnnotations(cb_a1, CA.class));
@@ -302,8 +302,8 @@ class ParamInfoTest extends TestBase {
 		db = ClassInfo.of(DB.class),
 		dc = ClassInfo.of(DC.class);
 	static ParameterInfo
-		db_a1 = db.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
-		dc_a1 = dc.getMethod(x -> x.hasName("a1")).getParam(0);  // NOSONAR
+		db_a1 = db.getMethod(x -> x.hasName("a1")).getParameter(0),  // NOSONAR
+		dc_a1 = dc.getMethod(x -> x.hasName("a1")).getParameter(0);  // NOSONAR
 
 	@Test void getAnnotationsParentFirst_inherited() {
 		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0)", annotations(db_a1, DA.class));
@@ -333,8 +333,8 @@ class ParamInfoTest extends TestBase {
 
 	static ClassInfo e = ClassInfo.of(E.class);
 	static ParameterInfo
-		e_a1_a = e.getMethod(x -> x.hasName("a1")).getParam(0),  // NOSONAR
-		e_a1_b = e.getMethod(x -> x.hasName("a1")).getParam(1);  // NOSONAR
+		e_a1_a = e.getMethod(x -> x.hasName("a1")).getParameter(0),  // NOSONAR
+		e_a1_b = e.getMethod(x -> x.hasName("a1")).getParameter(1);  // NOSONAR
 
 	@Test void hasName() {
 		e_a1_a.hasName();  // This might be true or false based on the JVM compiler used.

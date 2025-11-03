@@ -201,7 +201,7 @@ public class PathArg implements RestOpArg {
 			MethodInfo mi = pi.getMethod();
 
 			for (int j = 0; j < i; j++)
-				if (nn(mi.getParam(i).getAnnotation(Path.class)))
+				if (nn(mi.getParameter(i).getAnnotation(Path.class)))
 					idx++;
 
 			String[] vars = pathMatcher.getVars();

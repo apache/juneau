@@ -445,7 +445,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length > 0) {
 			sb.append('(');
-			List<ParameterInfo> mpi = getParams();
+			List<ParameterInfo> mpi = getParameters();
 			for (int i = 0; i < pt.length; i++) {
 				if (i > 0)
 					sb.append(',');

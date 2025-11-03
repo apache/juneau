@@ -17,6 +17,7 @@
 package org.apache.juneau.common.reflect;
 
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -35,15 +36,18 @@ import org.apache.juneau.common.collections.*;
  */
 public class ParameterInfo implements Annotatable {
 
-	private final ExecutableInfo eInfo;
-	private final Parameter p;
+	private final ExecutableInfo executable;
+	private final Parameter parameter;
 	private final int index;
-	
+	private final ClassInfo type;
+
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private final Cache annotationCache = 
+	private final Cache annotationCache =
 		Cache.of(Class.class, Optional.class)
 			.supplier(k -> opt(findAnnotation(k)))
 			.build();
+
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::findAnnotations);
 
 	/**
 	 * Constructor.
@@ -51,11 +55,17 @@ public class ParameterInfo implements Annotatable {
 	 * @param eInfo The constructor or method wrapper.
 	 * @param p The parameter being wrapped.
 	 * @param index The parameter index.
+	 * @param type The parameter type.
 	 */
-	protected ParameterInfo(ExecutableInfo eInfo, Parameter p, int index) {
-		this.eInfo = eInfo;
-		this.p = p;
+	protected ParameterInfo(ExecutableInfo eInfo, Parameter p, int index, ClassInfo type) {
+		this.executable = eInfo;
+		this.parameter = p;
 		this.index = index;
+		this.type = type;
+	}
+
+	private List<AnnotationInfo<Annotation>> findAnnotations() {
+		return stream(parameter.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
 	}
 
 	/**
@@ -110,7 +120,7 @@ public class ParameterInfo implements Annotatable {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ParameterInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		for (var a : eInfo._getParameterAnnotations(index))
+		for (var a : executable._getParameterAnnotations(index))
 			if (type.isInstance(a))
 				consumeIf(filter, action, type.cast(a));
 		return this;
@@ -153,17 +163,17 @@ public class ParameterInfo implements Annotatable {
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> filter) {
-		if (eInfo.isConstructor) {
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
+		if (executable.isConstructor) {
+			ClassInfo ci = executable.getParamType(index).unwrap(Value.class, Optional.class);
 			A o = ci.getAnnotation(type, filter);
 			if (nn(o))
 				return o;
-			for (var a2 : eInfo._getParameterAnnotations(index))
+			for (var a2 : executable._getParameterAnnotations(index))
 				if (type.isInstance(a2) && test(filter, type.cast(a2)))
 					return (A)a2;
 		} else {
-			var mi = (MethodInfo)eInfo;
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
+			var mi = (MethodInfo)executable;
+			ClassInfo ci = executable.getParamType(index).unwrap(Value.class, Optional.class);
 			A o = ci.getAnnotation(type, filter);
 			if (nn(o))
 				return o;
@@ -179,7 +189,7 @@ public class ParameterInfo implements Annotatable {
 	 *
 	 * @return The constructor that this parameter belongs to, or <jk>null</jk> if it belongs to a method.
 	 */
-	public ConstructorInfo getConstructor() { return eInfo.isConstructor() ? (ConstructorInfo)eInfo : null; }
+	public ConstructorInfo getConstructor() { return executable.isConstructor() ? (ConstructorInfo)executable : null; }
 
 	/**
 	 * Returns the specified parameter annotation declared on this parameter.
@@ -190,7 +200,7 @@ public class ParameterInfo implements Annotatable {
 	 */
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type) {
 		if (nn(type))
-			for (var a : eInfo._getParameterAnnotations(index))
+			for (var a : executable._getParameterAnnotations(index))
 				if (type.isInstance(a))
 					return type.cast(a);
 		return null;
@@ -208,7 +218,7 @@ public class ParameterInfo implements Annotatable {
 	 *
 	 * @return The method that this parameter belongs to, or <jk>null</jk> if it belongs to a constructor.
 	 */
-	public MethodInfo getMethod() { return eInfo.isConstructor() ? null : (MethodInfo)eInfo; }
+	public MethodInfo getMethod() { return executable.isConstructor() ? null : (MethodInfo)executable; }
 
 	/**
 	 * Helper method to extract the name from any annotation with the simple name "Name".
@@ -222,7 +232,7 @@ public class ParameterInfo implements Annotatable {
 	 * @return The name from the annotation, or <jk>null</jk> if no compatible annotation is found.
 	 */
 	private String getNameFromAnnotation() {
-		for (var annotation : p.getAnnotations()) {
+		for (var annotation : parameter.getAnnotations()) {
 			var annotationType = annotation.annotationType();
 			if ("Name".equals(annotationType.getSimpleName())) {
 				try {
@@ -259,9 +269,21 @@ public class ParameterInfo implements Annotatable {
 		String name = getNameFromAnnotation();
 		if (name != null)
 			return name;
-		if (p.isNamePresent())
-			return p.getName();
+		if (parameter.isNamePresent())
+			return parameter.getName();
 		return null;
+	}
+
+	/**
+	 * Returns all annotations declared on this parameter.
+	 *
+	 * <p>
+	 * Returns annotations directly declared on this parameter, wrapped as {@link AnnotationInfo} objects.
+	 *
+	 * @return An unmodifiable list of annotations on this parameter, never <jk>null</jk>.
+	 */
+	public List<AnnotationInfo<Annotation>> getAnnotationInfos() {
+		return annotations.get();
 	}
 
 	/**
@@ -269,7 +291,7 @@ public class ParameterInfo implements Annotatable {
 	 *
 	 * @return The class type of this parameter.
 	 */
-	public ClassInfo getParameterType() { return eInfo.getParamType(index); }
+	public ClassInfo getParameterType() { return type; }
 
 	/**
 	 * Returns <jk>true</jk> if this parameter has the specified annotation.
@@ -293,7 +315,7 @@ public class ParameterInfo implements Annotatable {
 	 * @return <jk>true</jk> if the parameter has a name.
 	 */
 	public boolean hasName() {
-		return getNameFromAnnotation() != null || p.isNamePresent();
+		return getNameFromAnnotation() != null || parameter.isNamePresent();
 	}
 
 	/**
@@ -352,7 +374,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#getDeclaringExecutable()
 	 */
 	public ExecutableInfo getDeclaringExecutable() {
-		return eInfo;
+		return executable;
 	}
 
 	/**
@@ -377,7 +399,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see java.lang.reflect.Modifier
 	 */
 	public int getModifiers() {
-		return p.getModifiers();
+		return parameter.getModifiers();
 	}
 
 	/**
@@ -404,7 +426,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see #hasName()
 	 */
 	public boolean isNamePresent() {
-		return p.isNamePresent();
+		return parameter.isNamePresent();
 	}
 
 	/**
@@ -429,7 +451,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#isImplicit()
 	 */
 	public boolean isImplicit() {
-		return p.isImplicit();
+		return parameter.isImplicit();
 	}
 
 	/**
@@ -451,7 +473,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#isSynthetic()
 	 */
 	public boolean isSynthetic() {
-		return p.isSynthetic();
+		return parameter.isSynthetic();
 	}
 
 	/**
@@ -476,7 +498,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#isVarArgs()
 	 */
 	public boolean isVarArgs() {
-		return p.isVarArgs();
+		return parameter.isVarArgs();
 	}
 
 	/**
@@ -500,7 +522,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#getParameterizedType()
 	 */
 	public Type getParameterizedType() {
-		return p.getParameterizedType();
+		return parameter.getParameterizedType();
 	}
 
 	/**
@@ -521,7 +543,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#getAnnotatedType()
 	 */
 	public AnnotatedType getAnnotatedType() {
-		return p.getAnnotatedType();
+		return parameter.getAnnotatedType();
 	}
 
 	/**
@@ -545,7 +567,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#getAnnotations()
 	 */
 	public Annotation[] getAnnotations() {
-		return p.getAnnotations();
+		return parameter.getAnnotations();
 	}
 
 	/**
@@ -569,7 +591,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#getDeclaredAnnotations()
 	 */
 	public Annotation[] getDeclaredAnnotations() {
-		return p.getDeclaredAnnotations();
+		return parameter.getDeclaredAnnotations();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -598,7 +620,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#getAnnotationsByType(Class)
 	 */
 	public <A extends Annotation> A[] getAnnotationsByType(Class<A> annotationClass) {
-		return p.getAnnotationsByType(annotationClass);
+		return parameter.getAnnotationsByType(annotationClass);
 	}
 
 	/**
@@ -624,38 +646,38 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#getDeclaredAnnotationsByType(Class)
 	 */
 	public <A extends Annotation> A[] getDeclaredAnnotationsByType(Class<A> annotationClass) {
-		return p.getDeclaredAnnotationsByType(annotationClass);
+		return parameter.getDeclaredAnnotationsByType(annotationClass);
 	}
 
 	@Override
 	public String toString() {
-		return (eInfo.getSimpleName()) + "[" + index + "]";
+		return (executable.getSimpleName()) + "[" + index + "]";
 	}
 
 	private <A extends Annotation> A findAnnotation(Class<A> type) {
-		if (eInfo.isConstructor()) {
-			for (var a2 : eInfo._getParameterAnnotations(index))
+		if (executable.isConstructor()) {
+			for (var a2 : executable._getParameterAnnotations(index))
 				if (type.isInstance(a2))
 					return type.cast(a2);
-			return eInfo.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type);
+			return executable.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type);
 		}
-		var mi = (MethodInfo)eInfo;
+		var mi = (MethodInfo)executable;
 		Value<A> v = Value.empty();
 		mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, y -> true, y -> v.set(y)));
-		return v.orElseGet(() -> eInfo.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type));
+		return v.orElseGet(() -> executable.getParamType(index).unwrap(Value.class, Optional.class).getAnnotation(type));
 	}
 
 	private <A extends Annotation> ParameterInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
-		if (eInfo.isConstructor) {
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
-			Annotation[] annotations = eInfo._getParameterAnnotations(index);
+		if (executable.isConstructor) {
+			ClassInfo ci = executable.getParamType(index).unwrap(Value.class, Optional.class);
+			Annotation[] annotations = executable._getParameterAnnotations(index);
 			ci.forEachAnnotation(ap, a, filter, action);
 			for (var a2 : annotations)
 				if (a.isInstance(a2))
 					consumeIf(filter, action, a.cast(a2));
 		} else {
-			var mi = (MethodInfo)eInfo;
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class, Optional.class);
+			var mi = (MethodInfo)executable;
+			ClassInfo ci = executable.getParamType(index).unwrap(Value.class, Optional.class);
 			ci.forEachAnnotation(ap, a, filter, action);
 			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, a, filter, action));
 		}

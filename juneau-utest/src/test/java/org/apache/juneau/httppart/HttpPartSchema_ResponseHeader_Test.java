@@ -110,7 +110,7 @@ class HttpPartSchema_ResponseHeader_Test extends TestBase {
 	}
 
 	@Test void a03_basic_onParameter() throws Exception {
-		var mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParam(0);
+		var mpi = MethodInfo.of(A03.class.getMethod("a", String.class)).getParameter(0);
 		assertBean(
 			HttpPartSchema.create().applyAll(Header.class, mpi).noValidate().build(),
 			"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,enum,default",
@@ -148,7 +148,7 @@ class HttpPartSchema_ResponseHeader_Test extends TestBase {
 	}
 
 	@Test void a04_basic_onParameterAndClass() throws Exception {
-		var mpi = MethodInfo.of(A04.class.getMethod("a", A01.class)).getParam(0);
+		var mpi = MethodInfo.of(A04.class.getMethod("a", A01.class)).getParameter(0);
 		assertBean(
 			HttpPartSchema.create().applyAll(Header.class, mpi).noValidate().build(),
 			"name,type,format,collectionFormat,maximum,minimum,multipleOf,pattern,maxLength,minLength,maxItems,minItems,exclusiveMaximum,exclusiveMinimum,uniqueItems,required,skipIfEmpty,enum,default",

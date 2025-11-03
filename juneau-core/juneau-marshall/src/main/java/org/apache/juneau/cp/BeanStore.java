@@ -502,7 +502,7 @@ public class BeanStore {
 	 * @return A comma-delimited list of types that are missing from this factory, or <jk>null</jk> if none are missing.
 	 */
 	public String getMissingParams(ExecutableInfo executable) {
-		List<ParameterInfo> params = executable.getParams();
+		List<ParameterInfo> params = executable.getParameters();
 		List<String> l = list();
 		loop: for (int i = 0; i < params.size(); i++) {
 			ParameterInfo pi = params.get(i);
@@ -528,9 +528,9 @@ public class BeanStore {
 	 * @return The corresponding beans in this factory for the specified param types.
 	 */
 	public Object[] getParams(ExecutableInfo executable) {
-		Object[] o = new Object[executable.getParamCount()];
-		for (int i = 0; i < executable.getParamCount(); i++) {
-			ParameterInfo pi = executable.getParam(i);
+		Object[] o = new Object[executable.getParameterCount()];
+		for (int i = 0; i < executable.getParameterCount(); i++) {
+			ParameterInfo pi = executable.getParameter(i);
 			ClassInfo pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get())) {
 				o[i] = outer.get();
@@ -553,8 +553,8 @@ public class BeanStore {
 	 * @return A comma-delimited list of types that are missing from this factory.
 	 */
 	public boolean hasAllParams(ExecutableInfo executable) {
-		loop: for (int i = 0; i < executable.getParamCount(); i++) {
-			ParameterInfo pi = executable.getParam(i);
+		loop: for (int i = 0; i < executable.getParameterCount(); i++) {
+			ParameterInfo pi = executable.getParameter(i);
 			ClassInfo pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
 				continue loop;
