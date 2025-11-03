@@ -330,7 +330,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	@Override
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
 		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
@@ -502,7 +501,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
-	@Override
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
 		return hasAnnotation(AnnotationProvider.DEFAULT, type);
 	}
@@ -553,7 +551,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this method.
 	 */
-	@Override
 	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
 		return getAnnotation(type) == null;
 	}

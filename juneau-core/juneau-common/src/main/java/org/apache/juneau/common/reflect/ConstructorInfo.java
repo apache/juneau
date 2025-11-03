@@ -165,7 +165,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	@Override
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
 		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
