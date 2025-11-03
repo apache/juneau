@@ -229,7 +229,6 @@ public abstract class AccessibleInfo {
 	 * @param annotationClass The Class object corresponding to the annotation type.
 	 * @return An unmodifiable list of all this element's annotations of the specified type, or an empty list if there are none.
 	 */
-	@SuppressWarnings("unchecked")
 	public <A extends Annotation> List<A> getAnnotationsByType(Class<A> annotationClass) {
 		return (List<A>) annotationsByType.get(annotationClass);
 	}
@@ -254,7 +253,6 @@ public abstract class AccessibleInfo {
 	 * @param annotationClass The Class object corresponding to the annotation type.
 	 * @return An unmodifiable list of all this element's declared annotations of the specified type, or an empty list if there are none.
 	 */
-	@SuppressWarnings("unchecked")
 	public <A extends Annotation> List<A> getDeclaredAnnotationsByType(Class<A> annotationClass) {
 		return (List<A>) declaredAnnotationsByType.get(annotationClass);
 	}
