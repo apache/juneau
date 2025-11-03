@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.common.reflect;
 
-import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
-import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -28,8 +26,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import static java.util.Arrays.*;
-
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 
@@ -39,7 +35,7 @@ import org.apache.juneau.common.utils.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo> {
+public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {
 	/**
 	 * Convenience method for instantiating a {@link MethodInfo};
 	 *
@@ -774,8 +770,27 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	MethodInfo findMatchingOnClass(ClassInfo c) {
 		for (var m2 : c.getDeclaredMethods())
-			if (hasName(m2.getName()) && Arrays.equals(_getParameterTypes(), m2._getParameterTypes()))
-				return m2;
+		if (hasName(m2.getName()) && Arrays.equals(_getParameterTypes(), m2._getParameterTypes()))
+			return m2;
 		return null;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotatable interface methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() {
+		return AnnotatableType.METHOD;
+	}
+
+	@Override /* Annotatable */
+	public ClassInfo getClassInfo() {
+		return getDeclaringClass();
+	}
+
+	@Override /* Annotatable */
+	public String getAnnotatableName() {
+		return getShortName();
 	}
 }

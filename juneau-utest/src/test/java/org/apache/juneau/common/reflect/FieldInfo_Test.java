@@ -27,7 +27,6 @@ import java.lang.reflect.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
 import org.junit.jupiter.api.*;
 
 class FieldInfo_Test extends TestBase {

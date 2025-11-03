@@ -23,11 +23,9 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.io.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.common.io.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A wrapper around an object that a serializer sends its output to.

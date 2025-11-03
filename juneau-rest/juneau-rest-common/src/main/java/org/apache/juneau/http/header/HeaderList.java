@@ -28,7 +28,6 @@ import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.http.util.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.HttpHeaders;

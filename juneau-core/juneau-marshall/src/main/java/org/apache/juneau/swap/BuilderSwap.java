@@ -24,7 +24,6 @@ import java.lang.reflect.*;
 import org.apache.juneau.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * Specialized transform for builder classes.

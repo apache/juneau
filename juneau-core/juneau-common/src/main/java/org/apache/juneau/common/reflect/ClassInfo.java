@@ -66,7 +66,7 @@ import org.apache.juneau.common.collections.*;
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public class ClassInfo {
+public class ClassInfo implements Annotatable {
 
 	private static final Cache<Class,ClassInfo> CACHE = Cache.of(Class.class, ClassInfo.class).build();
 
@@ -2792,5 +2792,24 @@ public class ClassInfo {
 		} else {
 			return this;
 		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotatable interface methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() {
+		return AnnotatableType.CLASS;
+	}
+
+	@Override /* Annotatable */
+	public ClassInfo getClassInfo() {
+		return this;
+	}
+
+	@Override /* Annotatable */
+	public String getAnnotatableName() {
+		return getNameSimple();
 	}
 }

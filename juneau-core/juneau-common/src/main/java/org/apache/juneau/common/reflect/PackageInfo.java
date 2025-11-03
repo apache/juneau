@@ -37,7 +37,7 @@ import org.apache.juneau.common.collections.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class PackageInfo {
+public class PackageInfo implements Annotatable {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -84,7 +84,7 @@ public class PackageInfo {
 	private Package p;  // Effectively final
 
 	// All annotations on this package, wrapped in AnnotationInfo. Repeated annotations have been unwrapped and are present as individual instances. Lazy-initialized in getter.
-	private final Supplier<List<AnnotationInfo>> annotations = memoize(() -> opt(p).map(p -> stream(p.getAnnotations()).flatMap(a -> stream(splitRepeated(a))).map(a -> (AnnotationInfo)AnnotationInfo.of(this, a)).toList()).orElse(liste()));
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(() -> opt(p).map(p -> stream(p.getAnnotations()).flatMap(a -> stream(splitRepeated(a))).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
 
 	/**
 	 * Constructor.
@@ -290,7 +290,7 @@ public class PackageInfo {
 	 *
 	 * @return All annotations present on this package, or an empty list if there are none.
 	 */
-	public List<AnnotationInfo> getAnnotations() {
+	public List<AnnotationInfo<Annotation>> getAnnotations() {
 		return annotations.get();
 	}
 
@@ -363,6 +363,25 @@ public class PackageInfo {
 	@Override /* Object */
 	public String toString() {
 		return p.toString();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotatable interface methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() {
+		return AnnotatableType.PACKAGE;
+	}
+
+	@Override /* Annotatable */
+	public ClassInfo getClassInfo() {
+		return null;  // Package has no declaring class
+	}
+
+	@Override /* Annotatable */
+	public String getAnnotatableName() {
+		return getName();
 	}
 }
 

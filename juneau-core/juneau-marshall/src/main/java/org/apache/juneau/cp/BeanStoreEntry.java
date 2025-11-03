@@ -25,7 +25,6 @@ import java.util.function.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents a bean in a {@link BeanStore}.

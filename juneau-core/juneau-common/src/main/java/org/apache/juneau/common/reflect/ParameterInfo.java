@@ -23,7 +23,6 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.common.collections.*;
@@ -34,7 +33,7 @@ import org.apache.juneau.common.collections.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class ParameterInfo {
+public class ParameterInfo implements Annotatable {
 
 	private final ExecutableInfo eInfo;
 	private final Parameter p;
@@ -661,5 +660,24 @@ public class ParameterInfo {
 			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, a, filter, action));
 		}
 		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotatable interface methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() {
+		return AnnotatableType.PARAMETER;
+	}
+
+	@Override /* Annotatable */
+	public ClassInfo getClassInfo() {
+		return getDeclaringExecutable().getDeclaringClass();
+	}
+
+	@Override /* Annotatable */
+	public String getAnnotatableName() {
+		return getName();
 	}
 }

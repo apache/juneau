@@ -25,7 +25,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in a variety of content types.

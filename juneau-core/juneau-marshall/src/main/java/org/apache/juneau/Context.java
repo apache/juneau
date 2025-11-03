@@ -42,7 +42,6 @@ import org.apache.juneau.msgpack.annotation.*;
 import org.apache.juneau.oapi.annotation.*;
 import org.apache.juneau.parser.annotation.*;
 import org.apache.juneau.plaintext.annotation.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.annotation.*;
 import org.apache.juneau.svl.*;

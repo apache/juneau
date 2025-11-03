@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.common.reflect;
 
-import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
-import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -38,7 +36,7 @@ import org.apache.juneau.common.collections.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo> {
+public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, Annotatable {
 	/**
 	 * Convenience method for instantiating a {@link FieldInfo};
 	 *
@@ -629,5 +627,24 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo> {
 	@Override
 	public String toString() {
 		return cn(f.getDeclaringClass()) + "." + f.getName();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotatable interface methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() {
+		return AnnotatableType.FIELD;
+	}
+
+	@Override /* Annotatable */
+	public ClassInfo getClassInfo() {
+		return getDeclaringClass();
+	}
+
+	@Override /* Annotatable */
+	public String getAnnotatableName() {
+		return getName();
 	}
 }

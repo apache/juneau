@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
-import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.lang.reflect.*;

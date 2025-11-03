@@ -22,7 +22,6 @@ import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.lang.ref.*;
-import java.lang.reflect.*;
 import java.text.*;
 import java.time.*;
 import java.time.format.*;

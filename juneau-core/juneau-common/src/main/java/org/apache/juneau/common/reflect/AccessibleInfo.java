@@ -16,15 +16,9 @@
  */
 package org.apache.juneau.common.reflect;
 
-import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
-import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.util.*;
-import java.util.function.*;
-
-import org.apache.juneau.common.collections.*;
 
 /**
  * Base class for reflection info classes that wrap {@link AccessibleObject}.
@@ -36,7 +30,6 @@ import org.apache.juneau.common.collections.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class AccessibleInfo {
 
 	AccessibleObject ao;  // Effectively final

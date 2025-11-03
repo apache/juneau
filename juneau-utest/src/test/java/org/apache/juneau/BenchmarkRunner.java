@@ -17,7 +17,6 @@
 package org.apache.juneau;
 
 import java.util.*;
-import java.util.Map.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 

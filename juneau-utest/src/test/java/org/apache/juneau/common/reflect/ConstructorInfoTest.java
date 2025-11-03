@@ -26,7 +26,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.reflect.*;
 import org.junit.jupiter.api.*;
 
 class ConstructorInfoTest extends TestBase {

@@ -27,7 +27,6 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.testutils.pojos.*;

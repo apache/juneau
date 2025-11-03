@@ -37,7 +37,6 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.svl.*;

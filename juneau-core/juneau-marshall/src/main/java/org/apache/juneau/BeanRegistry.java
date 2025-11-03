@@ -26,7 +26,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.common.reflect.*;
 
 /**
  * A lookup table for resolving bean types by name.

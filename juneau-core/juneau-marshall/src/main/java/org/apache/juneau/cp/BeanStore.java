@@ -33,7 +33,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.common.reflect.*;
 

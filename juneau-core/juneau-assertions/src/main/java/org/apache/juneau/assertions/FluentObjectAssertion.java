@@ -27,7 +27,6 @@ import java.util.function.*;
 
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.serializer.*;

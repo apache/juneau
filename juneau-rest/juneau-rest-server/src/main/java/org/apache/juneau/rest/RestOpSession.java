@@ -22,8 +22,6 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.converter.*;
-import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.logger.*;
 
 /**

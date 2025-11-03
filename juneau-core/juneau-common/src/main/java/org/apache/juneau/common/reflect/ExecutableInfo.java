@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.common.reflect;
 
-import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
-import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -41,7 +39,7 @@ import java.util.function.*;
 public abstract class ExecutableInfo extends AccessibleInfo {
 
 	final ClassInfo declaringClass;
-	final Executable e;
+	Executable e;  // Effectively final.
 	final boolean isConstructor;
 
 	private volatile ParameterInfo[] params;

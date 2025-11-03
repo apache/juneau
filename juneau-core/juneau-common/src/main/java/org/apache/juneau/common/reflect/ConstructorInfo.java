@@ -32,7 +32,7 @@ import org.apache.juneau.common.utils.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo> {
+public class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo>, Annotatable {
 	/**
 	 * Convenience method for instantiating a {@link ConstructorInfo};
 	 *
@@ -259,7 +259,21 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// High Priority Methods (direct Constructor API compatibility)
+	// Annotatable interface methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@Override /* Annotatable */
+	public AnnotatableType getAnnotatableType() {
+		return AnnotatableType.CONSTRUCTOR;
+	}
+
+	@Override /* Annotatable */
+	public ClassInfo getClassInfo() {
+		return getDeclaringClass();
+	}
+
+	@Override /* Annotatable */
+	public String getAnnotatableName() {
+		return getShortName();
+	}
 }

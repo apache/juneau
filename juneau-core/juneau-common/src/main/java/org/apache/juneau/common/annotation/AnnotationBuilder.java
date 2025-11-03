@@ -63,10 +63,20 @@ public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
 		return (B)this;
 	}
 
+	/**
+	 * Returns the annotation type being built.
+	 *
+	 * @return The annotation type being built.
+	 */
 	public Class<? extends Annotation> getAnnotationType() {
 		return annotationType;
 	}
 
+	/**
+	 * Returns the description of this annotation builder.
+	 *
+	 * @return The description array, or <jk>null</jk> if not set.
+	 */
 	public String[] getDescription() {
 		return description;
 	}

@@ -19,8 +19,6 @@ package org.apache.juneau.rest.debug;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.common.reflect.*;

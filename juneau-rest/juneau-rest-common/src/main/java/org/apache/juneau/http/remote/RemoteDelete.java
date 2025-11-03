@@ -22,7 +22,6 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.io.*;
 import java.lang.annotation.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.annotation.*;
 import org.apache.juneau.http.annotation.*;
 

@@ -1769,6 +1769,21 @@ public class CollectionUtils {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * Shortcut for creating an empty list.
+	 *
+	 * <p>
+	 * This is a convenience method that provides a more concise syntax than {@link Collections#emptyList()}.
+	 * The "e" suffix indicates "empty".
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;String&gt; <jv>myList</jv> = <jsm>liste</jsm>();
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @return An empty unmodifiable list.
+	 */
 	public static <T> List<T> liste() {
 		return Collections.emptyList();
 	}

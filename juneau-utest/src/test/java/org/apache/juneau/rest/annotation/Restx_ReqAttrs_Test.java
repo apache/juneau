@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
