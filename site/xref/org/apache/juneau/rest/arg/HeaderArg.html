@@ -148,13 +148,13 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 			}
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		}
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">if</strong> (classLevelHeader == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">if</strong> (classLevelHeader == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<em class="jxr_comment">// Get parameter-level @Header</em>
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		Header paramHeader = pi.getAnnotation(Header.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">if</strong> (paramHeader == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			paramHeader = pi.getParameterType().getAnnotation(Header.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<em class="jxr_comment">// Get parameter-level @Header</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	Header paramHeader = opt(pi.findAnnotationInfo(Header.<strong class="jxr_keyword">class</strong>)).map(x -&gt; x.<strong class="jxr_keyword">inner</strong>()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">if</strong> (paramHeader == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		paramHeader = pi.getParameterType().getAnnotation(Header.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">if</strong> (paramHeader == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<em class="jxr_comment">// No parameter-level @Header, use class-level as-is</em>
