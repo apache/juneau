@@ -494,15 +494,149 @@ public class AnnotationInfo<T extends Annotation> {
 			mi.getDeclaredAnnotationInfos().forEach(ai -> ai.accept(filter, action));
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this annotation has the specified simple name.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>boolean</jk> <jv>isName</jv> = <jv>annotationInfo</jv>.hasSimpleName(<js>"Name"</js>);
+	 * </p>
+	 *
+	 * @param value The simple name to check.
+	 * @return <jk>true</jk> if this annotation has the specified simple name.
+	 */
 	public boolean hasSimpleName(String value) {
 		return eq(value, a.annotationType().getSimpleName());
 	}
 
-	public String getValue() {
+	/**
+	 * Returns <jk>true</jk> if this annotation has the specified fully-qualified name.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>boolean</jk> <jv>isName</jv> = <jv>annotationInfo</jv>.hasName(<js>"org.apache.juneau.annotation.Name"</js>);
+	 * </p>
+	 *
+	 * @param value The fully-qualified name to check.
+	 * @return <jk>true</jk> if this annotation has the specified fully-qualified name.
+	 */
+	public boolean hasName(String value) {
+		return eq(value, a.annotationType().getName());
+	}
+
+	/**
+	 * Returns the value of the <c>value()</c> method on this annotation as a string.
+	 *
+	 * @return An optional containing the value of the <c>value()</c> method, or empty if not found or not a string.
+	 */
+	public Optional<String> getValue() {
 		return getString("value");
 	}
 
-	public String getString(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(String.class)).map(x -> s(x.invoke(a))).findFirst().orElse(null);
+	/**
+	 * Returns the value of the specified method on this annotation as a string.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the value of the specified method, or empty if not found or not a string.
+	 */
+	public Optional<String> getString(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(String.class)).map(x -> s(x.invoke(a))).findFirst();
+	}
+
+	/**
+	 * Returns the value of the specified method on this annotation as an integer.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the value of the specified method, or empty if not found or not an integer.
+	 */
+	public Optional<Integer> getInt(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(int.class)).map(x -> (Integer)x.invoke(a)).findFirst();
+	}
+
+	/**
+	 * Returns the value of the specified method on this annotation as a boolean.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the value of the specified method, or empty if not found or not a boolean.
+	 */
+	public Optional<Boolean> getBoolean(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(boolean.class)).map(x -> (Boolean)x.invoke(a)).findFirst();
+	}
+
+	/**
+	 * Returns the value of the specified method on this annotation as a long.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the value of the specified method, or empty if not found or not a long.
+	 */
+	public Optional<Long> getLong(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(long.class)).map(x -> (Long)x.invoke(a)).findFirst();
+	}
+
+	/**
+	 * Returns the value of the specified method on this annotation as a double.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the value of the specified method, or empty if not found or not a double.
+	 */
+	public Optional<Double> getDouble(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(double.class)).map(x -> (Double)x.invoke(a)).findFirst();
+	}
+
+	/**
+	 * Returns the value of the specified method on this annotation as a float.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the value of the specified method, or empty if not found or not a float.
+	 */
+	public Optional<Float> getFloat(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(float.class)).map(x -> (Float)x.invoke(a)).findFirst();
+	}
+
+	/**
+	 * Returns the value of the specified method on this annotation as a class.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the value of the specified method, or empty if not found or not a class.
+	 */
+	@SuppressWarnings("unchecked")
+	public Optional<Class<?>> getClassValue(String methodName) {
+		return (Optional<Class<?>>)(Optional<?>)methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(Class.class)).map(x -> x.invoke(a)).findFirst();
+	}
+
+	/**
+	 * Returns the value of the specified method on this annotation as a string array.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the value of the specified method, or empty if not found or not a string array.
+	 */
+	public Optional<String[]> getStringArray(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(String[].class)).map(x -> (String[])x.invoke(a)).findFirst();
+	}
+
+	/**
+	 * Returns the value of the specified method on this annotation as a class array.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the value of the specified method, or empty if not found or not a class array.
+	 */
+	@SuppressWarnings("unchecked")
+	public Optional<Class<?>[]> getClassArray(String methodName) {
+		return (Optional<Class<?>[]>)(Optional<?>)methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(Class[].class)).map(x -> x.invoke(a)).findFirst();
+	}
+
+	/**
+	 * Returns the return type of the specified method on this annotation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Optional&lt;ClassInfo&gt; <jv>returnType</jv> = <jv>annotationInfo</jv>.getReturnType(<js>"value"</js>);
+	 * </p>
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the return type of the specified method, or empty if method not found.
+	 */
+	public Optional<ClassInfo> getReturnType(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName())).map(x -> x.getReturnType()).findFirst();
 	}
 }

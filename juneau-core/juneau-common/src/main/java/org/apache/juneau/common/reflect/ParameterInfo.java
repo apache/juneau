@@ -308,7 +308,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		for (var mp : getMatchingParameters()) {
 			for (var ai : mp.getAnnotationInfos()) {
 				if (ai.hasSimpleName("Name")) {
-					String value = ai.getValue();
+					String value = ai.getValue().orElse(null);
 					if (value != null)
 						return value;
 				}
@@ -349,7 +349,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		for (var mp : getMatchingParameters()) {
 			for (var ai : mp.getAnnotationInfos()) {
 				if (ai.hasSimpleName("Named") || ai.hasSimpleName("Qualifier")) {
-					String value = ai.getValue();
+					String value = ai.getValue().orElse(null);
 					if (value != null)
 						return value;
 				}
