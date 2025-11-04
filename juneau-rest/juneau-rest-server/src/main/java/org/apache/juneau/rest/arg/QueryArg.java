@@ -98,13 +98,13 @@ public class QueryArg implements RestOpArg {
 			}
 		}
 
-		if (classLevelQuery == null)
-			return null;
+	if (classLevelQuery == null)
+		return null;
 
-		// Get parameter-level @Query
-		Query paramQuery = pi.getAnnotation(Query.class);
-		if (paramQuery == null)
-			paramQuery = pi.getParameterType().getAnnotation(Query.class);
+	// Get parameter-level @Query
+	Query paramQuery = opt(pi.findAnnotationInfo(Query.class)).map(x -> x.inner()).orElse(null);
+	if (paramQuery == null)
+		paramQuery = pi.getParameterType().getAnnotation(Query.class);
 
 		if (paramQuery == null) {
 			// No parameter-level @Query, use class-level as-is

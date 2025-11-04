@@ -98,13 +98,13 @@ public class FormDataArg implements RestOpArg {
 			}
 		}
 
-		if (classLevelFormData == null)
-			return null;
+	if (classLevelFormData == null)
+		return null;
 
-		// Get parameter-level @FormData
-		FormData paramFormData = pi.getAnnotation(FormData.class);
-		if (paramFormData == null)
-			paramFormData = pi.getParameterType().getAnnotation(FormData.class);
+	// Get parameter-level @FormData
+	FormData paramFormData = opt(pi.findAnnotationInfo(FormData.class)).map(x -> x.inner()).orElse(null);
+	if (paramFormData == null)
+		paramFormData = pi.getParameterType().getAnnotation(FormData.class);
 
 		if (paramFormData == null) {
 			// No parameter-level @FormData, use class-level as-is

@@ -42,17 +42,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	private final int index;
 	private final ClassInfo type;
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private final Cache annotationCache =
-		Cache.of(Class.class, Optional.class)
-			.supplier(k -> opt(findAnnotation(k)))
-			.build();
-
 	@SuppressWarnings({"rawtypes"})
-	private final Cache foundAnnotations =
-		Cache.of(Class.class, List.class)
-			.supplier(this::findAnnotationInfosInternal)
-			.build();
+	private final Cache foundAnnotations = Cache.of(Class.class, List.class).supplier(this::findAnnotationInfosInternal).build();
 
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
 	private final Supplier<List<ParameterInfo>> matchingParameters = memoize(this::_findMatchingParameters);
@@ -65,6 +56,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @param index The parameter index.
 	 * @param type The parameter type.
 	 */
+	// TODO - Investigate if we can construct ClassInfo directly from parameter.
 	protected ParameterInfo(ExecutableInfo eInfo, Parameter p, int index, ClassInfo type) {
 		super(p.getModifiers());
 		this.executable = eInfo;
@@ -180,78 +172,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		}
 		// For methods: use matching methods from parent classes
 		return ((MethodInfo)executable).getMatchingMethods().stream().map(m -> m.getParameter(index)).toList();
-	}
-
-	/**
-	 * Finds all annotations of the specified type using enhanced search.
-	 *
-	 * <p>
-	 * Search order:
-	 * <ol>
-	 * 	<li>Annotations on the parameter itself
-	 * 	<li>Annotations on the parameter's type (after unwrapping Value/Optional)
-	 * 	<li>For methods: Annotations on matching parameters in parent class methods (child-to-parent order)
-	 * </ol>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Find all @MyAnnotation annotations with hierarchy search</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> = <jv>pi</jv>.findAnnotations(MyAnnotation.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @return A stream of matching annotations, or an empty stream if none found.
-	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type) {
-		var paramType = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
-
-		if (executable.isConstructor()) {
-			// For constructors: parameter annotations, then parameter type annotations
-			return Stream.concat(
-				getAnnotations(type),
-				paramType.getDeclaredAnnotationInfos().stream()
-					.filter(x -> x.isType(type))
-					.map(x -> (AnnotationInfo<A>)x)
-			);
-		} else {
-			// For methods: parameter annotations, parameter type annotations, then matching methods on parent classes
-			var mi = (MethodInfo)executable;
-			var matchingMethods = new ArrayList<MethodInfo>();
-			mi.forEachMatchingParentFirst(null, matchingMethods::add);
-
-			return Stream.of(
-				getAnnotations(type),
-				paramType.getDeclaredAnnotationInfos().stream()
-					.filter(x -> x.isType(type))
-					.map(x -> (AnnotationInfo<A>)x),
-				matchingMethods.stream()
-					.flatMap(m -> m.getParameter(index).getAnnotations(type))
-			).flatMap(s -> s);
-		}
-	}
-
-	/**
-	 * Finds the annotation of the specified type defined on this method parameter.
-	 *
-	 * <p>
-	 * If the annotation cannot be found on the immediate method, searches methods with the same
-	 * signature on the parent classes or interfaces.
-	 * <br>The search is performed in child-to-parent order.
-	 *
-	 * <p>
-	 * If still not found, searches for the annotation on the return type of the method.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @return
-	 * 	The annotation if found, or <jk>null</jk> if not.
-	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		return (A)((Optional<Annotation>)annotationCache.get(type)).orElse(null);
 	}
 
 	/**
@@ -440,7 +360,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * 	The <jk>true</jk> if annotation if found.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return nn(getAnnotation(type));
+		return nn(findAnnotationInfo(type));
 	}
 
 	/**
@@ -714,7 +634,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 *
 	 * <p>
 	 * <b>Note:</b> This returns the simple array of annotations directly present on the parameter.
-	 * For Juneau's enhanced annotation searching (through class hierarchies), use {@link #getAnnotation(Class)} instead.
+	 * For Juneau's enhanced annotation searching (through class hierarchies), use {@link #findAnnotationInfo(Class)} instead.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -812,19 +732,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	@Override
 	public String toString() {
 		return (executable.getSimpleName()) + "[" + index + "]";
-	}
-
-	private <A extends Annotation> A findAnnotation(Class<A> type) {
-		if (executable.isConstructor()) {
-			for (var a2 : getAnnotations())
-				if (type.isInstance(a2))
-					return type.cast(a2);
-			return executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class).getAnnotation(type);
-		}
-		var mi = (MethodInfo)executable;
-		Value<A> v = Value.empty();
-		mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, y -> true, y -> v.set(y)));
-		return v.orElseGet(() -> executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class).getAnnotation(type));
 	}
 
 	@SuppressWarnings("unchecked")

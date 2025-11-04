@@ -236,33 +236,35 @@ class ParamInfoTest extends TestBase {
 		check("", annotations(cc_cc, DA.class));
 	}
 
-	@Test void getAnnotation() {
-		check("@CA(5)", cb_a1.getAnnotation(CA.class));
-		check("@CA(5)", cb_a2.getAnnotation(CA.class));
-		check("@CA(5)", cc_a1.getAnnotation(CA.class));
-		check("@CA(6)", cc_a2.getAnnotation(CA.class));
+	@Test void findAnnotationInfo() {
+		check("@CA(5)", cb_a1.findAnnotationInfo(CA.class).inner());
+		check("@CA(5)", cb_a2.findAnnotationInfo(CA.class).inner());
+		check("@CA(5)", cc_a1.findAnnotationInfo(CA.class).inner());
+		check("@CA(6)", cc_a2.findAnnotationInfo(CA.class).inner());
 	}
 
-	@Test void getAnnotation_notFound() {
-		check(null, cb_a1.getAnnotation(DA.class));
+	@Test void findAnnotationInfo_notFound() {
+		var ai = cb_a1.findAnnotationInfo(DA.class);
+		check(null, ai == null ? null : ai.inner());
 	}
 
-	@Test void getAnnotation_constructor() {
-		check("@CA(9)", cc_cc.getAnnotation(CA.class));
+	@Test void findAnnotationInfo_constructor() {
+		check("@CA(9)", cc_cc.findAnnotationInfo(CA.class).inner());
 	}
 
-	@Test void getAnnotation_notFound_constructor() {
-		check(null, cc_cc.getAnnotation(DA.class));
+	@Test void findAnnotationInfo_notFound_constructor() {
+		var ai = cc_cc.findAnnotationInfo(DA.class);
+		check(null, ai == null ? null : ai.inner());
 	}
 
-	@Test void getAnnotation_twice() {
-		check("@CA(5)", cb_a1.getAnnotation(CA.class));
-		check("@CA(5)", cb_a1.getAnnotation(CA.class));
+	@Test void findAnnotationInfo_twice() {
+		check("@CA(5)", cb_a1.findAnnotationInfo(CA.class).inner());
+		check("@CA(5)", cb_a1.findAnnotationInfo(CA.class).inner());
 	}
 
-	@Test void getAnnotation_twice_constructor() {
-		check("@CA(9)", cc_cc.getAnnotation(CA.class));
-		check("@CA(9)", cc_cc.getAnnotation(CA.class));
+	@Test void findAnnotationInfo_twice_constructor() {
+		check("@CA(9)", cc_cc.findAnnotationInfo(CA.class).inner());
+		check("@CA(9)", cc_cc.findAnnotationInfo(CA.class).inner());
 	}
 
 	@Test void hasAnnotation() {
@@ -313,13 +315,14 @@ class ParamInfoTest extends TestBase {
 		check("", annotations(db_a1, CA.class));
 	}
 
-	@Test void getAnnotation_inherited() {
-		check("@DA(0)", db_a1.getAnnotation(DA.class));
-		check("@DA(5)", dc_a1.getAnnotation(DA.class));
+	@Test void findAnnotationInfo_inherited() {
+		check("@DA(0)", db_a1.findAnnotationInfo(DA.class).inner());
+		check("@DA(5)", dc_a1.findAnnotationInfo(DA.class).inner());
 	}
 
-	@Test void getAnnotation_inherited_notFound() {
-		check(null, db_a1.getAnnotation(CA.class));
+	@Test void findAnnotationInfo_inherited_notFound() {
+		var ai = db_a1.findAnnotationInfo(CA.class);
+		check(null, ai == null ? null : ai.inner());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

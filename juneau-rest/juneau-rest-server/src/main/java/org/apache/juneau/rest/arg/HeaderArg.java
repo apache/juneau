@@ -140,13 +140,13 @@ public class HeaderArg implements RestOpArg {
 			}
 		}
 
-		if (classLevelHeader == null)
-			return null;
+	if (classLevelHeader == null)
+		return null;
 
-		// Get parameter-level @Header
-		Header paramHeader = pi.getAnnotation(Header.class);
-		if (paramHeader == null)
-			paramHeader = pi.getParameterType().getAnnotation(Header.class);
+	// Get parameter-level @Header
+	Header paramHeader = opt(pi.findAnnotationInfo(Header.class)).map(x -> x.inner()).orElse(null);
+	if (paramHeader == null)
+		paramHeader = pi.getParameterType().getAnnotation(Header.class);
 
 		if (paramHeader == null) {
 			// No parameter-level @Header, use class-level as-is
