@@ -650,7 +650,7 @@ public abstract class Context implements AnnotationProvider {
 			if (cci == null) {
 				// @formatter:off
 				cci = ClassInfo.of(type).getPublicConstructor(
-					x -> x.hasNumParams(1)
+					x -> x.hasNumParameters(1)
 					&& x.getParameter(0).canAccept(this)
 				);
 				// @formatter:on
@@ -730,7 +730,7 @@ public abstract class Context implements AnnotationProvider {
 			if (mi == null) {
 				var c = ClassInfo.of(type);
 				for (var ci : c.getPublicConstructors()) {
-					if (ci.matches(x -> x.hasNumParams(1) && ! x.getParameter(0).getParameterType().is(type))) {
+					if (ci.matches(x -> x.hasNumParameters(1) && ! x.getParameter(0).getParameterType().is(type))) {
 						// @formatter:off
 						mi = c.getPublicMethod(
 							x -> x.isStatic()

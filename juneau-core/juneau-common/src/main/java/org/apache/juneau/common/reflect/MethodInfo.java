@@ -292,12 +292,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		return this;
 	}
 
-	@Override /* Overridden from ExecutableInfo */
-	public MethodInfo forEachParam(Predicate<ParameterInfo> filter, Consumer<ParameterInfo> action) {
-		super.forEachParam(filter, action);
-		return this;
-	}
-
 	/**
 	 * Finds the annotation of the specified type defined on this method.
 	 *

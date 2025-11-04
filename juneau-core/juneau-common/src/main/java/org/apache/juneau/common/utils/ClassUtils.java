@@ -429,7 +429,7 @@ public class ClassUtils {
 		if (s.contains("$$EnhancerBySpringCGLIB$$")) {
 			// Try to invoke getTargetClass() if available (Spring specific)
 			Value<Class<?>> v = Value.empty();
-			ClassInfo.of(c).forEachPublicMethod(m -> m.hasName("getTargetClass") && m.hasNoParams() && m.hasReturnType(Class.class), m -> safe(() -> v.set(m.invoke(o))));
+			ClassInfo.of(c).forEachPublicMethod(m -> m.hasName("getTargetClass") && m.hasNoParameters() && m.hasReturnType(Class.class), m -> safe(() -> v.set(m.invoke(o))));
 			return v.isPresent() ? v.get() : c.getSuperclass();
 		}
 

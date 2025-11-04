@@ -229,13 +229,13 @@ public class ClassMeta<T> implements Type {
 			for (int i = methods.size() - 1; i >= 0; i--) {
 				MethodInfo m = methods.get(i);
 				if (m.hasAnnotation(bc, ParentProperty.class)) {
-					if (m.isStatic() || ! m.hasNumParams(1))
+					if (m.isStatic() || ! m.hasNumParameters(1))
 						throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					parentPropertyMethod = new Setter.MethodSetter(m.inner());
 				}
 				if (m.hasAnnotation(bc, NameProperty.class)) {
-					if (m.isStatic() || ! m.hasNumParams(1))
+					if (m.isStatic() || ! m.hasNumParameters(1))
 						throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					namePropertyMethod = new Setter.MethodSetter(m.inner());
@@ -297,7 +297,7 @@ public class ClassMeta<T> implements Type {
 
 			if (innerClass != Object.class) {
 				ClassInfo x = implClass == null ? ci : ClassInfo.of(implClass);
-				noArgConstructor = x.getPublicConstructor(ConstructorInfo::hasNoParams);
+				noArgConstructor = x.getPublicConstructor(ConstructorInfo::hasNoParameters);
 			}
 
 			try {
@@ -553,7 +553,7 @@ public class ClassMeta<T> implements Type {
 		ConstructorInfo cc = ci.getPublicConstructor(
 			x -> x.isVisible(v)
 			&& x.isNotDeprecated()
-			&& x.hasNumParams(isMemberClass ? 1 : 0)
+			&& x.hasNumParameters(isMemberClass ? 1 : 0)
 		);
 		// @formatter:on
 		if (nn(cc))

@@ -1110,7 +1110,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			return null;
 		int expectedParams = isNonStaticMemberClass() ? 1 : 0;
 		return getDeclaredConstructors().stream()
-			.filter(cc -> cc.hasNumParams(expectedParams))
+			.filter(cc -> cc.hasNumParameters(expectedParams))
 			.filter(cc -> cc.isVisible(v))
 			.map(cc -> cc.accessible(v))
 			.findFirst()

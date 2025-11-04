@@ -139,12 +139,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		return i;
 	}
 
-	@Override /* Overridden from ExecutableInfo */
-	public ConstructorInfo forEachParam(Predicate<ParameterInfo> filter, Consumer<ParameterInfo> action) {
-		super.forEachParam(filter, action);
-		return this;
-	}
-
 	/**
 	 * Finds the annotation of the specified type defined on this constructor.
 	 *

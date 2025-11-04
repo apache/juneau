@@ -253,12 +253,12 @@ public class BeanMeta<T> {
 					constructor = x;
 					constructorArgs = new String[0];
 					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = splita(z.properties()));
-					if (! x.hasNumParams(constructorArgs.length)) {
+					if (! x.hasNumParameters(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
-							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
+						throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 						constructorArgs = new String[x.getParameterCount()];
 						var i = IntegerValue.create();
-						x.forEachParam(null, pi -> {
+						x.getParameters().forEach(pi -> {
 							String pn = pi.getName();
 							if (pn == null)
 								throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
@@ -276,15 +276,15 @@ public class BeanMeta<T> {
 						constructor = x;
 						constructorArgs = new String[0];
 						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = splita(z.properties()));
-						if (! x.hasNumParams(constructorArgs.length)) {
+						if (! x.hasNumParameters(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
-								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
-							constructorArgs = new String[x.getParameterCount()];
-							var i = IntegerValue.create();
-							x.forEachParam(null, y -> {
-								String pn = y.getName();
-								if (pn == null)
-									throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
+							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
+						constructorArgs = new String[x.getParameterCount()];
+						var i = IntegerValue.create();
+						x.getParameters().forEach(y -> {
+							String pn = y.getName();
+							if (pn == null)
+								throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
 								constructorArgs[i.getAndIncrement()] = pn;
 							});
 						}

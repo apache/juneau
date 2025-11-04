@@ -132,7 +132,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			mi.isNotDeprecated()
 			&& mi.isNotStatic()
 			&& mi.isVisible(bc.getBeanMethodVisibility())
-			&& mi.hasName(SWAP_METHOD_NAMES)
+			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParameterTypes(BeanSession.class)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on
@@ -154,7 +154,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			mi.isNotDeprecated()
 			&& mi.isStatic()
 			&& mi.isVisible(bc.getBeanMethodVisibility())
-			&& mi.hasName(UNSWAP_METHOD_NAMES)
+			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParameterTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);

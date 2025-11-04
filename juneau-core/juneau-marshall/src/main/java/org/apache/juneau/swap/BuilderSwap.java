@@ -110,7 +110,7 @@ public class BuilderSwap<T,B> {
 			// @formatter:off
 			var cc = pci.getPublicConstructor(
 				x -> x.isVisible(cVis)
-				&& x.hasNumParams(1)
+				&& x.hasNumParameters(1)
 				&& x.getParameter(0).getParameterType().isChildOf(Builder.class)
 			);
 			// @formatter:on
@@ -144,7 +144,7 @@ public class BuilderSwap<T,B> {
 		// @formatter:off
 		return c.getDeclaredMethod(
 			x -> x.isNotStatic()
-			&& x.hasNoParams()
+			&& x.hasNoParameters()
 			&& (!x.hasReturnType(void.class))
 			&& x.hasName("build")
 		);
@@ -165,7 +165,7 @@ public class BuilderSwap<T,B> {
 	private static boolean hasConstructorThatTakesType(ClassInfo c, ClassInfo argType) {
 		// @formatter:off
 		return nn(c.getPublicConstructor(
-			x -> x.hasNumParams(1)
+			x -> x.hasNumParameters(1)
 			&& x.hasParameterTypes(argType)
 		));
 		// @formatter:on

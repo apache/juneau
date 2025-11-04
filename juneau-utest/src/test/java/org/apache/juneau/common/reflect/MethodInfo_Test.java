@@ -415,14 +415,9 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	@Test void forEachParam_fluentChaining() {
-		// Test that forEachParam returns MethodInfo for fluent chaining
-		MethodInfo result = g_a1b.forEachParam(x -> true, x -> {});
-		assertSame(g_a1b, result);
-		assertInstanceOf(MethodInfo.class, result);
-
-		// Test fluent chaining works
+		// Test stream operations on parameters
 		int[] count = {0};
-		g_a1c.forEachParam(x -> true, x -> count[0]++);
+		g_a1c.getParameters().stream().filter(x -> true).forEach(x -> count[0]++);
 		assertEquals(2, count[0]);
 	}
 }

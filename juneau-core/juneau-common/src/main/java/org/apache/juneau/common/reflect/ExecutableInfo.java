@@ -16,11 +16,14 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
+import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
+import static java.util.stream.Collectors.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -46,6 +49,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	private final Supplier<List<ParameterInfo>> parameters = memoize(this::findParameters);
 	private final Supplier<List<ClassInfo>> exceptions = memoize(this::findExceptions);
 	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations = memoize(this::findDeclaredAnnotations);
+	private final Supplier<String> shortName = memoize(this::findShortName);
+	private final Supplier<String> fullName = memoize(this::findFullName);
 
 	/**
 	 * Constructor.
@@ -71,20 +76,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Performs an action on every parameter that matches the specified filter.
-	 *
-	 * @param filter The filter, can be <jk>null</jk>.
-	 * @param action The action to perform.
-	 * @return This object.
-	 */
-	public ExecutableInfo forEachParam(Predicate<ParameterInfo> filter, Consumer<ParameterInfo> action) {
-		for (var pi : getParameters())
-			if (test(filter, pi))
-				action.accept(pi);
-		return this;
-	}
-
-	/**
 	 * Performs an action on all matching parameter annotations at the specified parameter index.
 	 *
 	 * @param <A> The annotation type.
@@ -94,6 +85,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
+	@Deprecated
 	public final <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
 		for (var a : getParameter(index).getAnnotations())
 			if (type.isInstance(a))
@@ -206,21 +198,23 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return The underlying executable name.
 	 */
 	public final String getFullName() {
+		return fullName.get();
+	}
+
+	private String findFullName() {
 		var sb = new StringBuilder(128);
-		ClassInfo dc = declaringClass;
-		PackageInfo pi = dc.getPackage();
+		var dc = declaringClass;
+		var pi = dc.getPackage();
 		if (nn(pi))
 			sb.append(pi.getName()).append('.');
-		dc.appendNameFormatted(sb, ClassNameFormat.SHORT, true, '$', ClassArrayFormat.BRACKETS);
+		dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
 		if (! isConstructor)
 			sb.append('.').append(getSimpleName());
 		sb.append('(');
-		var params = getParameters();
-		for (int i = 0; i < params.size(); i++) {
-			if (i > 0)
-				sb.append(',');
-			params.get(i).getParameterType().appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);
-		}
+		sb.append(getParameters().stream()
+			.map(p -> p.getParameterType().getNameFormatted(FULL, true, '$', BRACKETS))
+			.collect(joining(","))
+		);
 		sb.append(')');
 		return sb.toString();
 	}
@@ -268,16 +262,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return The underlying executable name.
 	 */
 	public final String getShortName() {
-		var sb = new StringBuilder(64);
-		sb.append(getSimpleName()).append('(');
-		var params = getParameters();
-		for (int i = 0; i < params.size(); i++) {
-			if (i > 0)
-				sb.append(',');
-			sb.append(params.get(i).getParameterType().getNameSimple());
-		}
-		sb.append(')');
-		return sb.toString();
+		return shortName.get();
+	}
+
+	private String findShortName() {
+		return f("{0}({1})", getSimpleName(), getParameters().stream().map(p -> p.getParameterType().getNameSimple()).collect(joining(",")));
 	}
 
 	/**
@@ -315,17 +304,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean hasMatchingParameterTypes(Class<?>...args) {
 		var params = getParameters();
-		if (params.size() != args.length)
-			return false;
-		for (var param : params) {
-			boolean matched = false;
-			for (var arg : args)
-				if (param.getParameterType().isParentOfFuzzyPrimitives(arg))
-					matched = true;
-			if (! matched)
-				return false;
-		}
-		return true;
+		return params.size() == args.length
+			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfFuzzyPrimitives(a)));
 	}
 
 	/**
@@ -336,17 +316,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean hasMatchingParameterTypes(ClassInfo...args) {
 		var params = getParameters();
-		if (params.size() != args.length)
-			return false;
-		for (var param : params) {
-			boolean matched = false;
-			for (var arg : args)
-				if (param.getParameterType().isParentOfFuzzyPrimitives(arg.inner()))
-					matched = true;
-			if (! matched)
-				return false;
-		}
-		return true;
+		return params.size() == args.length
+			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfFuzzyPrimitives(a)));
 	}
 
 	/**
@@ -355,7 +326,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param names The names to test for.
 	 * @return <jk>true</jk> if this method has one of the names.
 	 */
-	public final boolean hasName(Set<String> names) {
+	public final boolean hasAnyName(Collection<String> names) {
 		return names.contains(getSimpleName());
 	}
 
@@ -375,11 +346,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param names The names to test for.
 	 * @return <jk>true</jk> if this method has one of the names.
 	 */
-	public final boolean hasName(String...names) {
-		for (var n : names)
-			if (getSimpleName().equals(n))
-				return true;
-		return false;
+	public final boolean hasAnyName(String...names) {
+		return stream(names).anyMatch(n -> eq(n, getSimpleName()));
 	}
 
 	/**
@@ -390,7 +358,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return <jk>true</jk> if this executable has no parameters.
 	 */
-	public final boolean hasNoParams() {
+	public final boolean hasNoParameters() {
 		return getParameterCount() == 0;
 	}
 
@@ -403,7 +371,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param number The number of expected arguments.
 	 * @return <jk>true</jk> if this executable has this number of arguments.
 	 */
-	public final boolean hasNumParams(int number) {
+	public final boolean hasNumParameters(int number) {
 		return getParameterCount() == number;
 	}
 
@@ -427,13 +395,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean hasParameterTypes(Class<?>...args) {
 		var params = getParameters();
-		if (params.size() == args.length) {
-			for (int i = 0; i < params.size(); i++)
-				if (! params.get(i).getParameterType().inner().equals(args[i]))
-					return false;
-			return true;
-		}
-		return false;
+		return params.size() == args.length
+			&& IntStream.range(0, args.length).allMatch(i -> params.get(i).getParameterType().is(args[i]));
 	}
 
 	/**
@@ -444,13 +407,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean hasParameterTypes(ClassInfo...args) {
 		var params = getParameters();
-		if (params.size() == args.length) {
-			for (int i = 0; i < params.size(); i++)
-				if (! params.get(i).getParameterType().inner().equals(args[i].inner()))
-					return false;
-			return true;
-		}
-		return false;
+		return params.size() == args.length
+			&& IntStream.range(0, args.length).allMatch(i -> params.get(i).getParameterType().is(args[i]));
 	}
 
 	/**
@@ -467,7 +425,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			case DEPRECATED -> isDeprecated();
 			case NOT_DEPRECATED -> isNotDeprecated();
 			case HAS_PARAMS -> hasParameters();
-			case HAS_NO_PARAMS -> hasNoParams();
+			case HAS_NO_PARAMS -> hasNoParameters();
 			case SYNTHETIC -> isSynthetic();
 			case NOT_SYNTHETIC -> !isSynthetic();
 			case VARARGS -> isVarArgs();
@@ -589,10 +547,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return e.getTypeParameters();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Medium Priority Methods (generic type information)
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Returns a string describing this executable, including type parameters.
 	 *
@@ -616,10 +570,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final String toGenericString() {
 		return e.toGenericString();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Low Priority Methods (advanced annotation features)
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns an {@link AnnotatedType} object that represents the use of a type to specify the receiver type of the method/constructor.
@@ -737,7 +687,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
 		// always return an empty array.  This appears to be fixed in Java 8 b75.
 		var ptt = e.getGenericParameterTypes();
-		final Type[] genericTypes;
+		Type[] genericTypes;
 		if (ptt.length != ptc.length) {
 			// Bug in javac: generic type array excludes enclosing instance parameter
 			// for inner classes with at least one generic constructor parameter.

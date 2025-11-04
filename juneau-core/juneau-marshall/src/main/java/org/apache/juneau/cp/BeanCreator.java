@@ -252,7 +252,7 @@ public class BeanCreator<T> {
 			MethodInfo m = type.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
-				&& x.hasNumParams(1)
+				&& x.hasNumParameters(1)
 				&& x.getParameter(0).canAccept(builder)
 				&& x.hasReturnType(type)
 				&& x.hasNoAnnotation(BeanIgnore.class)
@@ -269,7 +269,7 @@ public class BeanCreator<T> {
 			MethodInfo m = type.getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
-				&& x.hasNoParams()
+				&& x.hasNoParameters()
 				&& x.hasReturnType(type)
 				&& x.hasNoAnnotation(BeanIgnore.class)
 				&& x.hasName("getInstance")
@@ -331,7 +331,7 @@ public class BeanCreator<T> {
 		if (builder == null) {
 			// Look for static-builder/protected-constructor pair.
 			Value<T> value = Value.empty();
-			type.forEachDeclaredConstructor(x -> x.hasNumParams(1) && x.isVisible(PROTECTED), x -> {
+			type.forEachDeclaredConstructor(x -> x.hasNumParameters(1) && x.isVisible(PROTECTED), x -> {
 				Class<?> pt = x.getParameter(0).getParameterType().inner();
 				MethodInfo m = type.getPublicMethod(y -> isStaticCreateMethod(y, pt));
 				if (nn(m)) {

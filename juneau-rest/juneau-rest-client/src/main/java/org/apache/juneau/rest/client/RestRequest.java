@@ -1952,7 +1952,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 						c = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, Throwable.class));
 						if (nn(c))
 							throw c.<Throwable>newInstance(nn(message) ? message : response.getContent().asString(), null);
-						c = ci.getPublicConstructor(ConstructorInfo::hasNoParams);
+						c = ci.getPublicConstructor(ConstructorInfo::hasNoParameters);
 						if (nn(c))
 							throw c.<Throwable>newInstance();
 					}

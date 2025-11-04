@@ -107,7 +107,7 @@ class ConstructorInfoTest extends TestBase {
 	}
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ConstructorInfo
-		b_c1 = b.getPublicConstructor(ConstructorInfo::hasNoParams),
+		b_c1 = b.getPublicConstructor(ConstructorInfo::hasNoParameters),
 		b_c2 = b.getPublicConstructor(x -> x.hasParameterTypes(String.class)),
 		b_c3 = b.getDeclaredConstructor(x -> x.hasParameterTypes(int.class)),
 		b_c4 = b.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class));
@@ -129,14 +129,9 @@ class ConstructorInfoTest extends TestBase {
 	}
 
 	@Test void forEachParam_fluentChaining() {
-		// Test that forEachParam returns ConstructorInfo for fluent chaining
-		ConstructorInfo result = b_c2.forEachParam(x -> true, x -> {});
-		assertSame(b_c2, result);
-		assertInstanceOf(ConstructorInfo.class, result);
-
-		// Test fluent chaining works
+		// Test stream operations on parameters
 		int[] count = {0};
-		b_c4.forEachParam(x -> true, x -> count[0]++);
+		b_c4.getParameters().stream().filter(x -> true).forEach(x -> count[0]++);
 		assertEquals(2, count[0]);
 	}
 }

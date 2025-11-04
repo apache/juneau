@@ -118,7 +118,7 @@ public class BeanStore {
 			// @formatter:off
 			MethodInfo m = c.getDeclaredMethod(
 				x -> x.isPublic()
-				&& x.hasNoParams()
+				&& x.hasNoParameters()
 				&& x.isStatic()
 				&& x.hasName("getInstance")
 			);

@@ -469,7 +469,7 @@ public class AnnotationInfo<T extends Annotation> {
 
 	private static int findRank(Object a) {
 		return ClassInfo.of(a).getMethods().stream()
-			.filter(m -> m.hasName("rank") && m.hasNoParams() && m.hasReturnType(int.class))
+			.filter(m -> m.hasName("rank") && m.hasNoParameters() && m.hasReturnType(int.class))
 			.findFirst()
 			.map(m -> safe(() -> (int)m.invoke(a)))
 			.orElse(0);
