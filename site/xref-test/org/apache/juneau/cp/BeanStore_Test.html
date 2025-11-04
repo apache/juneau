@@ -46,7 +46,7 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Target({PARAMETER})
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@Retention(RUNTIME)
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Inherited
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">public</strong> @<strong class="jxr_keyword">interface</strong> Named {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">public</strong> @<strong class="jxr_keyword">interface</strong> Name {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		String value();
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
@@ -248,7 +248,7 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">this</strong>.a3 = a3;
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		}
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">public</strong> B1(@Named(<span class="jxr_string">"foo"</span>) A1 a1, @Named(<span class="jxr_string">"bar"</span>) Optional&lt;A2&gt; a2) {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">public</strong> B1(@Name(<span class="jxr_string">"foo"</span>) A1 a1, @Name(<span class="jxr_string">"bar"</span>) Optional&lt;A2&gt; a2) {
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">this</strong>.a1 = a1;
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">this</strong>.a2 = a2;
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 		}
@@ -259,7 +259,7 @@
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">this</strong>.a3 = a3;
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		}
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m2(@Named(<span class="jxr_string">"foo"</span>) A1 a1, @Named(<span class="jxr_string">"bar"</span>) Optional&lt;A2&gt; a2) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m2(@Name(<span class="jxr_string">"foo"</span>) A1 a1, @Name(<span class="jxr_string">"bar"</span>) Optional&lt;A2&gt; a2) {
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">this</strong>.a1 = a1;
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">this</strong>.a2 = a2;
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">this</strong>.a3 = <strong class="jxr_keyword">null</strong>;
@@ -399,7 +399,7 @@
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<strong class="jxr_keyword">this</strong>.a3 = a3;
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 		}
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">public</strong> B2(@Named(<span class="jxr_string">"foo"</span>) A1 a1, @Named(<span class="jxr_string">"bar"</span>) Optional&lt;A2&gt; a2) {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">public</strong> B2(@Name(<span class="jxr_string">"foo"</span>) A1 a1, @Name(<span class="jxr_string">"bar"</span>) Optional&lt;A2&gt; a2) {
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">this</strong>.a1 = a1;
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">this</strong>.a2 = a2;
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 		}
@@ -589,8 +589,8 @@
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">public</strong> C createC1(A1 a) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> C(); }
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C createC2(A1 a) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> C(); }
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C createC3(Optional&lt;A1&gt; a) { C e = <strong class="jxr_keyword">new</strong> C(); e.a = a.orElse(<strong class="jxr_keyword">null</strong>); <strong class="jxr_keyword">return</strong> e; }
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C createC4(@Named(<span class="jxr_string">"Foo"</span>) A1 a) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> C(); }
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C createC5(@Named(<span class="jxr_string">"Foo"</span>) Optional&lt;A1&gt; a) { C e = <strong class="jxr_keyword">new</strong> C(); e.a = a.orElse(<strong class="jxr_keyword">null</strong>); <strong class="jxr_keyword">return</strong> e; }
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C createC4(@Name(<span class="jxr_string">"Foo"</span>) A1 a) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> C(); }
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C createC5(@Name(<span class="jxr_string">"Foo"</span>) Optional&lt;A1&gt; a) { C e = <strong class="jxr_keyword">new</strong> C(); e.a = a.orElse(<strong class="jxr_keyword">null</strong>); <strong class="jxr_keyword">return</strong> e; }
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C createC6(BeanStore bs) { assertNotNull(bs); <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> C(); }
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 	}
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 
@@ -977,8 +977,8 @@
 <a class="jxr_linenumber" name="L969" href="#L969">969</a> 
 <a class="jxr_linenumber" name="L970" href="#L970">970</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D14 {
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> 		<strong class="jxr_keyword">public</strong> String a;
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		<strong class="jxr_keyword">public</strong> D14(@Named(<span class="jxr_string">"foo"</span>) String o) { a = o; }
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		<strong class="jxr_keyword">public</strong> D14(@Named(<span class="jxr_string">"foo"</span>) String o, Integer i) { a = o + <span class="jxr_string">","</span> + i; }
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		<strong class="jxr_keyword">public</strong> D14(@Name(<span class="jxr_string">"foo"</span>) String o) { a = o; }
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		<strong class="jxr_keyword">public</strong> D14(@Name(<span class="jxr_string">"foo"</span>) String o, Integer i) { a = o + <span class="jxr_string">","</span> + i; }
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 	}
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 
 <a class="jxr_linenumber" name="L976" href="#L976">976</a> 	@Test <strong class="jxr_keyword">void</strong> d14_createBean_constructors_namedBean() {
@@ -990,8 +990,8 @@
 <a class="jxr_linenumber" name="L982" href="#L982">982</a> 
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> D15 {
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 		<strong class="jxr_keyword">public</strong> String a;
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 		<strong class="jxr_keyword">public</strong> D15(@Named(<span class="jxr_string">"foo"</span>) String o) { a = o; }
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<strong class="jxr_keyword">public</strong> D15(@Named(<span class="jxr_string">"foo"</span>) String o, Integer i) { a = o + <span class="jxr_string">","</span> + i; }
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 		<strong class="jxr_keyword">public</strong> D15(@Name(<span class="jxr_string">"foo"</span>) String o) { a = o; }
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<strong class="jxr_keyword">public</strong> D15(@Name(<span class="jxr_string">"foo"</span>) String o, Integer i) { a = o + <span class="jxr_string">","</span> + i; }
 <a class="jxr_linenumber" name="L987" href="#L987">987</a> 	}
 <a class="jxr_linenumber" name="L988" href="#L988">988</a> 
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> 	@Test <strong class="jxr_keyword">void</strong> d15_createBean_constructors_namedBean_withOuter() {

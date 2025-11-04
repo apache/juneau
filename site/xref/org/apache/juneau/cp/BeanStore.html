@@ -33,9 +33,9 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.common.utils.Utils.isEmpty;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * Beans can be stored with or without names.  Named beans are typically resolved using</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * the &lt;ja&gt;@Named&lt;/ja&gt; or &lt;ja&gt;@Qualified&lt;/ja&gt; annotations on constructor or method parameters.</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * the &lt;ja&gt;@Name&lt;/ja&gt; or &lt;ja&gt;@Qualified&lt;/ja&gt; annotations on constructor or method parameters.</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * Beans are added through the following methods:</em>
@@ -519,7 +519,7 @@
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> 				<strong class="jxr_keyword">continue</strong> loop;
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<strong class="jxr_keyword">if</strong> (pt.is(Optional.<strong class="jxr_keyword">class</strong>) || pt.is(BeanStore.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L513" href="#L513">513</a> 				<strong class="jxr_keyword">continue</strong> loop;
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			String beanName = findBeanName(pi);
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			String beanName = pi.findName();
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 			Class&lt;?&gt; ptc = pt.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 			<strong class="jxr_keyword">if</strong> (beanName == <strong class="jxr_keyword">null</strong> &amp;&amp; ! hasBean(ptc))
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 				l.add(pt.getNameSimple());
@@ -545,7 +545,7 @@
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (pt.is(BeanStore.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 				o[i] = <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 				String beanName = findBeanName(pi);
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 				String beanName = pi.findName();
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 				Class&lt;?&gt; ptc = pt.unwrap(Optional.<strong class="jxr_keyword">class</strong>).<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 				Optional&lt;?&gt; o2 = beanName == <strong class="jxr_keyword">null</strong> ? getBean(ptc) : getBean(ptc, beanName);
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 				o[i] = pt.is(Optional.<strong class="jxr_keyword">class</strong>) ? o2 : o2.orElse(<strong class="jxr_keyword">null</strong>);
@@ -568,7 +568,7 @@
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 				<strong class="jxr_keyword">continue</strong> loop;
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 			<strong class="jxr_keyword">if</strong> (pt.is(Optional.<strong class="jxr_keyword">class</strong>) || pt.is(BeanStore.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 				<strong class="jxr_keyword">continue</strong> loop;
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			String beanName = findBeanName(pi);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			String beanName = pi.findName();
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 			Class&lt;?&gt; ptc = pt.<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">if</strong> ((beanName == <strong class="jxr_keyword">null</strong> &amp;&amp; ! hasBean(ptc)) || (nn(beanName) &amp;&amp; ! hasBean(ptc, beanName)))
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 				<strong class="jxr_keyword">return</strong> false;
@@ -655,43 +655,36 @@
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"Method cannot be used because BeanStore is read-only."</span>);
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 	}
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String findBeanName(<a name="ParameterInfo" href="../../../../org/apache/juneau/common/reflect/ParameterInfo.html#ParameterInfo">ParameterInfo</a> pi) {
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		Annotation n = pi.getAnnotation(Annotation.<strong class="jxr_keyword">class</strong>, x -&gt; scn(x.annotationType()).equals(<span class="jxr_string">"Named"</span>));
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<strong class="jxr_keyword">if</strong> (nn(n))
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			<strong class="jxr_keyword">return</strong> AnnotationInfo.of((ClassInfo)<strong class="jxr_keyword">null</strong>, n).getValue(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>, NOT_EMPTY).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	}
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		Predicate&lt;Boolean&gt; nf = Utils::isTrue;
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			.append(<span class="jxr_string">"identity"</span>, identity(<strong class="jxr_keyword">this</strong>))
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			.append(<span class="jxr_string">"entries"</span>, entries.stream().map(BeanStoreEntry::properties).collect(toList()))
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			.append(<span class="jxr_string">"outer"</span>, identity(<strong class="jxr_keyword">outer</strong>.orElse(<strong class="jxr_keyword">null</strong>)))
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 			.append(<span class="jxr_string">"parent"</span>, parent.map(BeanStore::properties).orElse(<strong class="jxr_keyword">null</strong>))
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			.appendIf(nf, <span class="jxr_string">"readOnly"</span>, readOnly)
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 			.appendIf(nf, <span class="jxr_string">"threadSafe"</span>, threadSafe)
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		;
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	}
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * Creates an entry in this store for the specified bean.</em>
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * Subclasses can override this method to create their own entry subtypes.</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The class type to associate with the bean.</em>
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 * @param type The class type to associate with the bean.</em>
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">	 * @param bean The bean supplier.</em>
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 * @param name Optional name to associate with the bean.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 * @return A new bean store entry.</em>
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; BeanStoreEntry&lt;T&gt; createEntry(Class&lt;T&gt; type, Supplier&lt;T&gt; bean, String name) {
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		<strong class="jxr_keyword">return</strong> BeanStoreEntry.create(type, bean, name);
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	}
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> }
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		Predicate&lt;Boolean&gt; nf = Utils::isTrue;
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			.append(<span class="jxr_string">"identity"</span>, identity(<strong class="jxr_keyword">this</strong>))
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			.append(<span class="jxr_string">"entries"</span>, entries.stream().map(BeanStoreEntry::properties).collect(toList()))
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			.append(<span class="jxr_string">"outer"</span>, identity(<strong class="jxr_keyword">outer</strong>.orElse(<strong class="jxr_keyword">null</strong>)))
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			.append(<span class="jxr_string">"parent"</span>, parent.map(BeanStore::properties).orElse(<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			.appendIf(nf, <span class="jxr_string">"readOnly"</span>, readOnly)
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			.appendIf(nf, <span class="jxr_string">"threadSafe"</span>, threadSafe)
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		;
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	}
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * Creates an entry in this store for the specified bean.</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 * Subclasses can override this method to create their own entry subtypes.</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The class type to associate with the bean.</em>
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> <em class="jxr_javadoccomment">	 * @param type The class type to associate with the bean.</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * @param bean The bean supplier.</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 * @param name Optional name to associate with the bean.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * @return A new bean store entry.</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	<strong class="jxr_keyword">protected</strong> &lt;T&gt; BeanStoreEntry&lt;T&gt; createEntry(Class&lt;T&gt; type, Supplier&lt;T&gt; bean, String name) {
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<strong class="jxr_keyword">return</strong> BeanStoreEntry.create(type, bean, name);
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 	}
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
