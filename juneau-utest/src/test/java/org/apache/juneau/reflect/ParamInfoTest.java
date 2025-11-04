@@ -187,9 +187,7 @@ class ParamInfoTest extends TestBase {
 	}
 
 	private static <T extends Annotation> List<T> declaredAnnotations(ParameterInfo pi, Class<T> type) {
-		var l = new ArrayList<T>();
-		pi.forEachDeclaredAnnotation(type, x -> true, l::add);
-		return l;
+		return pi.getAnnotations(type).map(x -> x.inner()).toList();
 	}
 
 	@Test void getDeclaredAnnotation() {

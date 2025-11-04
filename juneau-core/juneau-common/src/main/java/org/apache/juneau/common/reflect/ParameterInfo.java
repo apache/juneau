@@ -25,6 +25,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 
@@ -79,19 +80,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Performs an action on this object if the specified predicate test passes.
-	 *
-	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on this object.
-	 * @return This object.
-	 */
-	public ParameterInfo accept(Predicate<ParameterInfo> test, Consumer<ParameterInfo> action) {
-		if (matches(test))
-			action.accept(this);
-		return this;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this parameter can accept the specified value.
 	 *
 	 * @param value The value to check.
@@ -120,20 +108,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		return forEachAnnotation(AnnotationProvider.DEFAULT, type, filter, action);
 	}
 
-	/**
-	 * Performs an action on all matching annotations declared on this parameter.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public <A extends Annotation> ParameterInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		for (var a : getAnnotations())
-			if (type.isInstance(a))
-				consumeIf(filter, action, type.cast(a));
-		return this;
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
+		return getAnnotationInfos().stream().filter(x -> x.isType(type)).map(x -> (AnnotationInfo<A>)x);
 	}
 
 	/**
