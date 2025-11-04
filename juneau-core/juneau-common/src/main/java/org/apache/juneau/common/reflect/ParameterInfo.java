@@ -130,7 +130,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ParameterInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		for (var a : executable._getParameterAnnotations(index))
+		for (var a : getAnnotations())
 			if (type.isInstance(a))
 				consumeIf(filter, action, type.cast(a));
 		return this;
@@ -178,7 +178,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			A o = ci.getAnnotation(type, filter);
 			if (nn(o))
 				return o;
-			for (var a2 : executable._getParameterAnnotations(index))
+			for (var a2 : getAnnotations())
 				if (type.isInstance(a2) && test(filter, type.cast(a2)))
 					return (A)a2;
 		} else {
@@ -210,7 +210,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type) {
 		if (nn(type))
-			for (var a : executable._getParameterAnnotations(index))
+			for (var a : getAnnotations())
 				if (type.isInstance(a))
 					return type.cast(a);
 		return null;
@@ -688,7 +688,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private <A extends Annotation> A findAnnotation(Class<A> type) {
 		if (executable.isConstructor()) {
-			for (var a2 : executable._getParameterAnnotations(index))
+			for (var a2 : getAnnotations())
 				if (type.isInstance(a2))
 					return type.cast(a2);
 			return executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class).getAnnotation(type);
@@ -702,7 +702,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	private <A extends Annotation> ParameterInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (executable.isConstructor) {
 			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
-			Annotation[] annotations = executable._getParameterAnnotations(index);
+			var annotations = getAnnotations();
 			ci.forEachAnnotation(ap, a, filter, action);
 			for (var a2 : annotations)
 				if (a.isInstance(a2))

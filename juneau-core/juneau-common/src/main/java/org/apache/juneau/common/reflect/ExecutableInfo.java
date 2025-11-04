@@ -47,9 +47,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	private final Supplier<List<ClassInfo>> exceptions = memoize(this::findExceptions);
 	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations = memoize(this::findDeclaredAnnotations);
 
-	private volatile Annotation[][] rawParameterAnnotations;
-	private volatile Annotation[] rawDeclaredAnnotations;
-
 	/**
 	 * Constructor.
 	 *
@@ -98,7 +95,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return This object.
 	 */
 	public final <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		for (var a : _getParameterAnnotations(index))
+		for (var a : getParameter(index).getAnnotations())
 			if (type.isInstance(a))
 				consumeIf(predicate, consumer, type.cast(a));
 		return this;
@@ -732,41 +729,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return stream(e.getExceptionTypes())
 			.map(ClassInfo::of)
 			.toList();
-	}
-
-	final Annotation[] _getDeclaredAnnotations() {
-		if (rawDeclaredAnnotations == null) {
-			synchronized (this) {
-				rawDeclaredAnnotations = e.getDeclaredAnnotations();
-			}
-		}
-		return rawDeclaredAnnotations;
-	}
-
-	final Annotation[][] _getParameterAnnotations() {
-		if (rawParameterAnnotations == null) {
-			synchronized (this) {
-				rawParameterAnnotations = e.getParameterAnnotations();
-			}
-		}
-		return rawParameterAnnotations;
-	}
-
-	final Annotation[] _getParameterAnnotations(int index) {
-		checkIndex(index);
-		Annotation[][] x = _getParameterAnnotations();
-		int c = e.getParameterCount();
-		if (c != x.length) {
-			// Seems to be a JVM bug where getParameterAnnotations() don't take mandated parameters into account.
-			Annotation[][] x2 = new Annotation[c][];
-			int diff = c - x.length;
-			for (int i = 0; i < diff; i++)
-				x2[i] = new Annotation[0];
-			for (int i = diff; i < c; i++)
-				x2[i] = x[i - diff];
-			x = x2;
-		}
-		return x[index];
 	}
 
 	private List<ParameterInfo> findParameters() {

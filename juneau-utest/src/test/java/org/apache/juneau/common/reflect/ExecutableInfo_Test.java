@@ -257,17 +257,17 @@ class ExecutableInfo_Test extends TestBase {
 	;
 
 	@Test void getParameterAnnotations() {
-		check("", c_c1._getParameterAnnotations());
-		check("@CA()", c_c2._getParameterAnnotations());
-		check("", c_c3._getParameterAnnotations());
-		check("", c_m1._getParameterAnnotations());
-		check("@CA()", c_m2._getParameterAnnotations());
-		check("", c_m3._getParameterAnnotations());
+		check("", c_c1.getParameters().stream().map(p -> p.getAnnotations()).toArray());
+		check("@CA()", c_c2.getParameters().stream().map(p -> p.getAnnotations()).toArray());
+		check("", c_c3.getParameters().stream().map(p -> p.getAnnotations()).toArray());
+		check("", c_m1.getParameters().stream().map(p -> p.getAnnotations()).toArray());
+		check("@CA()", c_m2.getParameters().stream().map(p -> p.getAnnotations()).toArray());
+		check("", c_m3.getParameters().stream().map(p -> p.getAnnotations()).toArray());
 	}
 
 	@Test void getParameterAnnotations_atIndex() {
-		check("@CA()", c_c2._getParameterAnnotations(0));
-		check("@CA()", c_m2._getParameterAnnotations(0));
+		check("@CA()", c_c2.getParameter(0).getAnnotations());
+		check("@CA()", c_m2.getParameter(0).getAnnotations());
 	}
 
 	@Test void hasAnnotation() {
