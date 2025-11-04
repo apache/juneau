@@ -316,7 +316,7 @@
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mp : getMatchingParameters()) {
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ai : mp.getAnnotationInfos()) {
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 				<strong class="jxr_keyword">if</strong> (ai.hasSimpleName(<span class="jxr_string">"Name"</span>)) {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 					String value = ai.getValue();
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 					String value = ai.getValue().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 					<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 						<strong class="jxr_keyword">return</strong> value;
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 				}
@@ -357,7 +357,7 @@
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> mp : getMatchingParameters()) {
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ai : mp.getAnnotationInfos()) {
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 				<strong class="jxr_keyword">if</strong> (ai.hasSimpleName(<span class="jxr_string">"Named"</span>) || ai.hasSimpleName(<span class="jxr_string">"Qualifier"</span>)) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 					String value = ai.getValue();
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 					String value = ai.getValue().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 					<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 						<strong class="jxr_keyword">return</strong> value;
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 				}
