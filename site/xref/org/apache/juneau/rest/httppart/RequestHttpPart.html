@@ -133,9 +133,9 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">if</strong> (nn(cc)) {
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 					<strong class="jxr_keyword">if</strong> (! isPresent())
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 						<strong class="jxr_keyword">return</strong> opte();
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 					<strong class="jxr_keyword">if</strong> (cc.hasParamTypes(String.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 					<strong class="jxr_keyword">if</strong> (cc.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 						<strong class="jxr_keyword">return</strong> opt(cc.newInstance(get()));
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 					<strong class="jxr_keyword">if</strong> (cc.hasParamTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 					<strong class="jxr_keyword">if</strong> (cc.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 						<strong class="jxr_keyword">return</strong> opt(cc.newInstance(getName(), get()));
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 				}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			}

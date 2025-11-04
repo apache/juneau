@@ -140,7 +140,7 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			&amp;&amp; mi.isVisible(bc.getBeanMethodVisibility())
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			&amp;&amp; mi.hasName(SWAP_METHOD_NAMES)
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			&amp;&amp; mi.hasReturnTypeParent(List.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			&amp;&amp; mi.hasFuzzyParamTypes(BeanSession.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			&amp;&amp; mi.hasFuzzyParameterTypes(BeanSession.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			&amp;&amp; mi.hasNoAnnotation(bc, BeanIgnore.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	}
@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			cs.isNotDeprecated()
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			&amp;&amp; cs.isVisible(bc.getBeanConstructorVisibility())
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			&amp;&amp; cs.hasMatchingParamTypes(rt)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			&amp;&amp; cs.hasMatchingParameterTypes(rt)
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			&amp;&amp; cs.hasNoAnnotation(bc, BeanIgnore.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
@@ -162,7 +162,7 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			&amp;&amp; mi.isStatic()
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			&amp;&amp; mi.isVisible(bc.getBeanMethodVisibility())
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			&amp;&amp; mi.hasName(UNSWAP_METHOD_NAMES)
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			&amp;&amp; mi.hasFuzzyParamTypes(BeanSession.<strong class="jxr_keyword">class</strong>, rt.<strong class="jxr_keyword">inner</strong>())
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			&amp;&amp; mi.hasFuzzyParameterTypes(BeanSession.<strong class="jxr_keyword">class</strong>, rt.<strong class="jxr_keyword">inner</strong>())
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			&amp;&amp; mi.hasReturnTypeParent(ci)
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			&amp;&amp; mi.hasNoAnnotation(bc, BeanIgnore.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<em class="jxr_comment">// @formatter:on</em>

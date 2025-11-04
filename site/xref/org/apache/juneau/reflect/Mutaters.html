@@ -226,7 +226,7 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 				x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 				&amp;&amp; x.isNotDeprecated()
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 				&amp;&amp; x.hasReturnType(oc2)
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 				&amp;&amp; x.hasParamTypes(ic)
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 				&amp;&amp; x.hasParameterTypes(ic)
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 				&amp;&amp; (x.hasName(<span class="jxr_string">"forName"</span>) || isStaticCreateMethodName(x, ic))
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 			);
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -258,7 +258,7 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 				&amp;&amp; x.isNotDeprecated()
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 				&amp;&amp; x.hasReturnType(oc)
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 				&amp;&amp; x.hasParamTypes(ic)
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 				&amp;&amp; x.hasParameterTypes(ic)
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 				&amp;&amp; isStaticCreateMethodName(x, ic)
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 			);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -278,7 +278,7 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 			}
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		}
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		ConstructorInfo c = oci.getPublicConstructor(x -&gt; x.hasParamTypes(ic));
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		ConstructorInfo c = oci.getPublicConstructor(x -&gt; x.hasParameterTypes(ic));
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">if</strong> (nn(c) &amp;&amp; c.isNotDeprecated()) {
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">boolean</strong> isMemberClass = oci.isNonStaticMemberClass();
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Mutater" href="../../../../org/apache/juneau/reflect/Mutater.html#Mutater">Mutater</a>() {

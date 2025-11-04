@@ -79,9 +79,9 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Function&lt;ClassMeta&lt;?&gt;,ConstructorInfo&gt; CONSTRUCTOR_FUNCTION = x -&gt; {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> ci = x.getInfo();
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> cc = ci.getPublicConstructor(y -&gt; y.hasParamTypes(String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> cc = ci.getPublicConstructor(y -&gt; y.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">if</strong> (cc == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			cc = ci.getPublicConstructor(y -&gt; y.hasParamTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			cc = ci.getPublicConstructor(y -&gt; y.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">return</strong> cc;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	};
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  

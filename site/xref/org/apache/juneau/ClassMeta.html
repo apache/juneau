@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 					x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 					&amp;&amp; x.isNotDeprecated()
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 					&amp;&amp; x.hasReturnType(c)
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 					&amp;&amp; x.hasParamTypes(String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 					&amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 					&amp;&amp; contains(x.getName(), fromStringMethodNames))
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 			).map(MethodInfo::<strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 					x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 					&amp;&amp; x.isNotDeprecated()
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 					&amp;&amp; x.hasName(<span class="jxr_string">"example"</span>)
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 					&amp;&amp; x.hasFuzzyParamTypes(BeanSession.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 					&amp;&amp; x.hasFuzzyParameterTypes(BeanSession.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			).map(MethodInfo::<strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -251,7 +251,7 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 			}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 			ci.forEachDeclaredMethod(m -&gt; m.hasAnnotation(bc, Example.<strong class="jxr_keyword">class</strong>), m -&gt; {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 				<strong class="jxr_keyword">if</strong> (! (m.isStatic() &amp;&amp; m.hasFuzzyParamTypes(BeanSession.<strong class="jxr_keyword">class</strong>) &amp;&amp; ci.isParentOf(m.getReturnType().<strong class="jxr_keyword">inner</strong>())))
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 				<strong class="jxr_keyword">if</strong> (! (m.isStatic() &amp;&amp; m.hasFuzzyParameterTypes(BeanSession.<strong class="jxr_keyword">class</strong>) &amp;&amp; ci.isParentOf(m.getReturnType().<strong class="jxr_keyword">inner</strong>())))
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class."</span>, m.toString());
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 				m.setAccessible();
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 				exampleMethod = m.<strong class="jxr_keyword">inner</strong>();
@@ -792,7 +792,7 @@
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<strong class="jxr_keyword">if</strong> (beanMeta == <strong class="jxr_keyword">null</strong> || beanMeta.constructor == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 			<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">outer</strong>) &amp;&amp; beanMeta.constructor.hasParamTypes(<strong class="jxr_keyword">outer</strong>.getClass());
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 			<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">outer</strong>) &amp;&amp; beanMeta.constructor.hasParameterTypes(<strong class="jxr_keyword">outer</strong>.getClass());
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> 	}
 <a class="jxr_linenumber" name="L790" href="#L790">790</a> 
@@ -821,7 +821,7 @@
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canCreateNewInstance(Object <strong class="jxr_keyword">outer</strong>) {
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> 			<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">outer</strong>) &amp;&amp; nn(noArgConstructor) &amp;&amp; noArgConstructor.hasParamTypes(<strong class="jxr_keyword">outer</strong>.getClass());
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 			<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">outer</strong>) &amp;&amp; nn(noArgConstructor) &amp;&amp; noArgConstructor.hasParameterTypes(<strong class="jxr_keyword">outer</strong>.getClass());
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">return</strong> canCreateNewInstance();
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 	}
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 
@@ -838,7 +838,7 @@
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L831" href="#L831">831</a> 		<strong class="jxr_keyword">if</strong> (nn(stringConstructor)) {
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 			<strong class="jxr_keyword">if</strong> (isMemberClass)
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 				<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">outer</strong>) &amp;&amp; stringConstructor.hasParamTypes(<strong class="jxr_keyword">outer</strong>.getClass(), String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 				<strong class="jxr_keyword">return</strong> nn(<strong class="jxr_keyword">outer</strong>) &amp;&amp; stringConstructor.hasParameterTypes(<strong class="jxr_keyword">outer</strong>.getClass(), String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 		}
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 		<strong class="jxr_keyword">return</strong> false;
