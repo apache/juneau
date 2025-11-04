@@ -92,6 +92,8 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	private final Supplier<List<MethodInfo>> matchingCache =
 		memoize(() -> findMatching(list(), this, getDeclaringClass()));
 
+	private final Supplier<List<MethodInfo>> matchingMethods = memoize(this::_findMatchingMethods);
+
 	/**
 	 * Constructor.
 	 *
@@ -101,6 +103,83 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	protected MethodInfo(ClassInfo declaringClass, Method m) {
 		super(declaringClass, m);
 		this.m = m;
+	}
+
+	/**
+	 * Returns this method and all matching methods up the hierarchy chain.
+	 *
+	 * <p>
+	 * Searches parent classes and interfaces for methods with matching name and parameter types.
+	 * Results are returned in the following order:
+	 * <ol>
+	 * 	<li>This method
+	 * 	<li>Any matching methods on declared interfaces of this class
+	 * 	<li>Matching method on the parent class
+	 * 	<li>Any matching methods on the declared interfaces of the parent class
+	 * 	<li>Continue up the hierarchy
+	 * </ol>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Interface and class hierarchy:</jc>
+	 * 	<jk>interface</jk> I1 {
+	 * 		<jk>void</jk> foo(String <jv>s</jv>);
+	 * 	}
+	 * 	<jk>class</jk> A {
+	 * 		<jk>void</jk> foo(String <jv>s</jv>) {}
+	 * 	}
+	 * 	<jk>interface</jk> I2 {
+	 * 		<jk>void</jk> foo(String <jv>s</jv>);
+	 * 	}
+	 * 	<jk>class</jk> B <jk>extends</jk> A <jk>implements</jk> I2 {
+	 * 		&#64;Override
+	 * 		<jk>void</jk> foo(String <jv>s</jv>) {}
+	 * 	}
+	 * 	<jc>// For B.foo(), returns: [B.foo, I2.foo, A.foo, I1.foo]</jc>
+	 * 	MethodInfo <jv>mi</jv> = ...;
+	 * 	List&lt;MethodInfo&gt; <jv>matching</jv> = <jv>mi</jv>.getMatchingMethods();
+	 * </p>
+	 *
+	 * @return A list of matching methods including this one, in child-to-parent order.
+	 */
+	public List<MethodInfo> getMatchingMethods() {
+		return matchingMethods.get();
+	}
+
+	private List<MethodInfo> _findMatchingMethods() {
+		var result = new ArrayList<MethodInfo>();
+		result.add(this); // 1. This method
+
+		var cc = getDeclaringClass();
+
+		while (nn(cc)) {
+			// 2. Add matching methods from declared interfaces of current class
+			cc.getDeclaredInterfaces().stream()
+				.forEach(di -> addMatchingMethodsFromInterface(result, di));
+
+			// 3. Move to parent class
+			cc = cc.getSuperclass();
+			if (nn(cc)) {
+				// Add matching method from parent class
+				cc.getDeclaredMethods().stream()
+					.filter(this::matches)
+					.findFirst()
+					.ifPresent(result::add);
+			}
+		}
+
+		return result;
+	}
+
+	private void addMatchingMethodsFromInterface(List<MethodInfo> result, ClassInfo iface) {
+		// Add matching methods from this interface
+		iface.getDeclaredMethods().stream()
+			.filter(this::matches)
+			.forEach(result::add);
+
+		// Recursively search parent interfaces
+		iface.getDeclaredInterfaces().stream()
+			.forEach(pi -> addMatchingMethodsFromInterface(result, pi));
 	}
 
 	/**
@@ -685,6 +764,16 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public boolean matches(Predicate<MethodInfo> test) {
 		return test(test, this);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this method matches the specified method by name and parameter types.
+	 *
+	 * @param m The method to compare against.
+	 * @return <jk>true</jk> if this method has the same name and parameter types as the specified method.
+	 */
+	public boolean matches(MethodInfo m) {
+		return hasName(m.getName()) && hasMatchingParameters(m.getParameters());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

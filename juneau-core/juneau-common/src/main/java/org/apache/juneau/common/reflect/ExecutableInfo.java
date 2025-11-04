@@ -412,6 +412,19 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this executable has matching parameter types with the provided parameter list.
+	 *
+	 * @param params The parameters to match against.
+	 * @return <jk>true</jk> if this executable has matching parameter types.
+	 */
+	public final boolean hasMatchingParameters(List<ParameterInfo> params) {
+		var myParams = getParameters();
+		return myParams.size() == params.size()
+			&& IntStream.range(0, params.size()).allMatch(i -> 
+				myParams.get(i).getParameterType().is(params.get(i).getParameterType()));
+	}
+
+	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this method.
 	 *
 	 * @param flags The flags to test for.

@@ -31,6 +31,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
+import org.apache.juneau.annotation.Name;
+
 /**
  * ParamInfo tests.
  */
@@ -346,6 +348,270 @@ class ParamInfoTest extends TestBase {
 
 	@Test void toString2() {
 		assertEquals("a1[1]", e_a1_b.toString());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// getMatchingParameters()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Nested
+	class GetMatchingParametersTests {
+
+		// Method hierarchy tests
+		public interface PM1 {
+			void foo(String s);
+		}
+
+		public static class PM2 implements PM1 {
+			@Override public void foo(String s) {}  // NOSONAR
+		}
+
+		public static class PM3 extends PM2 {
+			@Override public void foo(String s) {}  // NOSONAR
+		}
+
+		@Test void method_simpleHierarchy() throws Exception {
+			var mi = MethodInfo.of(PM3.class.getMethod("foo", String.class));
+			var pi = mi.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			assertEquals(3, matching.size());
+			check("PM3", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+			check("PM2", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+			check("PM1", matching.get(2).getDeclaringExecutable().getDeclaringClass());
+		}
+
+		// Method with multiple interfaces
+		public interface PM4 {
+			void bar(int x, String s);
+		}
+
+		public interface PM5 {
+			void bar(int x, String s);
+		}
+
+		public static class PM6 implements PM4, PM5 {
+			@Override public void bar(int x, String s) {}  // NOSONAR
+		}
+
+		@Test void method_multipleInterfaces() throws Exception {
+			var mi = MethodInfo.of(PM6.class.getMethod("bar", int.class, String.class));
+			var pi0 = mi.getParameter(0);
+			var matching0 = pi0.getMatchingParameters();
+			assertEquals(3, matching0.size());
+			check("PM6", matching0.get(0).getDeclaringExecutable().getDeclaringClass());
+			check("PM4", matching0.get(1).getDeclaringExecutable().getDeclaringClass());
+			check("PM5", matching0.get(2).getDeclaringExecutable().getDeclaringClass());
+
+			var pi1 = mi.getParameter(1);
+			var matching1 = pi1.getMatchingParameters();
+			assertEquals(3, matching1.size());
+			check("PM6", matching1.get(0).getDeclaringExecutable().getDeclaringClass());
+			check("PM4", matching1.get(1).getDeclaringExecutable().getDeclaringClass());
+			check("PM5", matching1.get(2).getDeclaringExecutable().getDeclaringClass());
+		}
+
+		// Constructor hierarchy with same parameter count
+		public static class PC1 {
+			public PC1(String foo) {}  // NOSONAR
+		}
+
+		public static class PC2 extends PC1 {
+			public PC2(String foo) { super(foo); }  // NOSONAR
+		}
+
+		public static class PC3 extends PC2 {
+			public PC3(String foo) { super(foo); }  // NOSONAR
+		}
+
+		@Test void constructor_simpleHierarchy() throws Exception {
+			var ci = ConstructorInfo.of(PC3.class.getConstructor(String.class));
+			var pi = ci.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			assertEquals(3, matching.size());
+			check("PC3", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+			check("PC2", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+			check("PC1", matching.get(2).getDeclaringExecutable().getDeclaringClass());
+		}
+
+		// Constructor hierarchy with different parameter counts
+		public static class PC4 {
+			public PC4(String foo, int bar) {}  // NOSONAR
+		}
+
+		public static class PC5 extends PC4 {
+			public PC5(String foo) { super(foo, 0); }  // NOSONAR
+		}
+
+		@Test void constructor_differentParameterCounts() throws Exception {
+			var ci = ConstructorInfo.of(PC5.class.getConstructor(String.class));
+			var pi = ci.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			// Should find matching "foo" parameter in PC4 even though PC4 has more parameters
+			assertEquals(2, matching.size());
+			check("PC5", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+			check("PC4", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+		}
+
+		// Constructor with multiple constructors in parent
+		public static class PC6 {
+			public PC6(String foo) {}  // NOSONAR
+			public PC6(String foo, int bar) {}  // NOSONAR
+		}
+
+		public static class PC7 extends PC6 {
+			public PC7(String foo) { super(foo); }  // NOSONAR
+		}
+
+		@Test void constructor_multipleParentConstructors() throws Exception {
+			var ci = ConstructorInfo.of(PC7.class.getConstructor(String.class));
+			var pi = ci.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			// Should find "foo" parameter in both PC6 constructors
+			assertEquals(3, matching.size());
+			check("PC7", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+			check("PC6", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+			check("PC6", matching.get(2).getDeclaringExecutable().getDeclaringClass());
+		}
+
+		// False match tests - different parameter names
+		public interface PM7 {
+			void baz(String differentName);
+		}
+
+		public static class PM8 implements PM7 {
+			@Override public void baz(String differentName) {}  // NOSONAR
+			public void foo(String s) {}  // NOSONAR
+		}
+
+		@Test void method_differentParameterName() throws Exception {
+			var mi = MethodInfo.of(PM8.class.getMethod("foo", String.class));
+			var pi = mi.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			// Should only find this parameter
+			assertEquals(1, matching.size());
+			check("PM8", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+		}
+
+		// False match tests - different parameter types
+		public interface PM9 {
+			void qux(int x);
+		}
+
+		public static class PM10 implements PM9 {
+			@Override public void qux(int x) {}  // NOSONAR
+		}
+
+		public static class PM11 extends PM10 {
+			public void qux(String x) {}  // NOSONAR - different overload
+		}
+
+		@Test void method_differentParameterType() throws Exception {
+			var mi = MethodInfo.of(PM11.class.getMethod("qux", String.class));
+			var pi = mi.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			// Should only find this parameter (different type from parent)
+			assertEquals(1, matching.size());
+			check("PM11", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+		}
+
+		// Constructor false match - different parameter type
+		public static class PC8 {
+			public PC8(int foo) {}  // NOSONAR
+		}
+
+		public static class PC9 extends PC8 {
+			public PC9(String foo) { super(0); }  // NOSONAR
+		}
+
+		@Test void constructor_differentParameterType() throws Exception {
+			var ci = ConstructorInfo.of(PC9.class.getConstructor(String.class));
+			var pi = ci.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			// Should only find this parameter (different type from parent)
+			assertEquals(1, matching.size());
+			check("PC9", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+		}
+
+		// Constructor false match - different parameter name
+		public static class PC10 {
+			public PC10(String bar) {}  // NOSONAR
+		}
+
+		public static class PC11 extends PC10 {
+			public PC11(String foo) { super(foo); }  // NOSONAR
+		}
+
+		@Test void constructor_differentParameterName() throws Exception {
+			var ci = ConstructorInfo.of(PC11.class.getConstructor(String.class));
+			var pi = ci.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			// Note: Parameter names are not retained without -parameters flag,
+			// so this will match by type and synthetic name (e.g., "arg0")
+			assertEquals(2, matching.size());
+			check("PC11", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+			check("PC10", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+		}
+
+		// Test with @Name annotation
+		public static class PC12 {
+			public PC12(@Name("foo") String x) {}  // NOSONAR
+			public PC12(@Name("bar") String x, int y) {}  // NOSONAR
+		}
+
+		public static class PC13 extends PC12 {
+			public PC13(@Name("foo") String x) { super(x); }  // NOSONAR
+		}
+
+		@Test void constructor_withNameAnnotation_matching() throws Exception {
+			var ci = ConstructorInfo.of(PC13.class.getConstructor(String.class));
+			var pi = ci.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			// Should match PC12 constructor with @Name("foo"), not the one with @Name("bar")
+			assertEquals(2, matching.size());
+			check("PC13", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+			check("PC12", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+			// Verify the matched parameter has name "foo"
+			assertEquals("foo", matching.get(1).getName());
+		}
+
+		// Test with @Name annotation - different names
+		public static class PC14 {
+			public PC14(@Name("bar") String x) {}  // NOSONAR
+		}
+
+		public static class PC15 extends PC14 {
+			public PC15(@Name("foo") String x) { super(x); }  // NOSONAR
+		}
+
+		@Test void constructor_withNameAnnotation_differentNames() throws Exception {
+			var ci = ConstructorInfo.of(PC15.class.getConstructor(String.class));
+			var pi = ci.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			// Should not match parent parameter because names differ ("foo" vs "bar")
+			assertEquals(1, matching.size());
+			check("PC15", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+			assertEquals("foo", matching.get(0).getName());
+		}
+
+		// Test with @Name annotation on methods
+		public interface PM12 {
+			void test(@Name("param1") String x);
+		}
+
+		public static class PM13 implements PM12 {
+			@Override public void test(@Name("param1") String x) {}  // NOSONAR
+		}
+
+		@Test void method_withNameAnnotation_matching() throws Exception {
+			var mi = MethodInfo.of(PM13.class.getMethod("test", String.class));
+			var pi = mi.getParameter(0);
+			var matching = pi.getMatchingParameters();
+			assertEquals(2, matching.size());
+			check("PM13", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+			check("PM12", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+			assertEquals("param1", matching.get(0).getName());
+			assertEquals("param1", matching.get(1).getName());
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

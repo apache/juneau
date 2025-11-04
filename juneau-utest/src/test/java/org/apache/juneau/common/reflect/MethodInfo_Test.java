@@ -160,6 +160,145 @@ class MethodInfo_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// getMatchingMethods()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Nested
+	class GetMatchingMethodsTests {
+
+		public interface BM1 {
+			void foo(String s);
+		}
+
+		public interface BM2 {
+			void foo(String s);
+		}
+
+		public class BM3 {
+			public void foo(String s) {}  // NOSONAR
+		}
+
+		public interface BM4 extends BM1 {
+			@Override void foo(String s);
+		}
+
+		public class BM5 extends BM3 implements BM2 {
+			@Override public void foo(String s) {}  // NOSONAR
+		}
+
+		public class BM6 extends BM5 implements BM4 {
+			@Override public void foo(String s) {}  // NOSONAR
+		}
+
+		@Test void simpleHierarchy() throws Exception {
+			var mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
+			check("B3.foo(int),B1.foo(int),B2.foo(int)", mi.getMatchingMethods());
+		}
+
+		@Test void multipleInterfaces() throws Exception {
+			var mi = MethodInfo.of(BM5.class.getMethod("foo", String.class));
+			check("BM5.foo(String),BM2.foo(String),BM3.foo(String)", mi.getMatchingMethods());
+		}
+
+		@Test void nestedInterfaces() throws Exception {
+			var mi = MethodInfo.of(BM6.class.getMethod("foo", String.class));
+			check("BM6.foo(String),BM4.foo(String),BM1.foo(String),BM5.foo(String),BM2.foo(String),BM3.foo(String)", mi.getMatchingMethods());
+		}
+
+		@Test void onlyThis() throws Exception {
+			var mi = MethodInfo.of(Object.class.getMethod("toString"));
+			check("Object.toString()", mi.getMatchingMethods());
+		}
+
+		public interface BM7 {
+			void bar();
+		}
+
+		public class BM8 implements BM7 {
+			@Override public void bar() {}  // NOSONAR
+			public void baz() {}  // NOSONAR
+		}
+
+		@Test void withInterface() throws Exception {
+			var mi = MethodInfo.of(BM8.class.getMethod("bar"));
+			check("BM8.bar(),BM7.bar()", mi.getMatchingMethods());
+		}
+
+		@Test void noMatchInParent() throws Exception {
+			var mi = MethodInfo.of(BM8.class.getMethod("baz"));
+			check("BM8.baz()", mi.getMatchingMethods());
+		}
+
+		// False match tests - different method names
+		public class BM9 {
+			public void foo(String s) {}  // NOSONAR
+			public void bar(String s) {}  // NOSONAR
+		}
+
+		public class BM10 extends BM9 {
+			@Override public void foo(String s) {}  // NOSONAR
+		}
+
+		@Test void differentMethodName() throws Exception {
+			var mi = MethodInfo.of(BM10.class.getMethod("foo", String.class));
+			// Should not match bar() even though it has same parameters
+			check("BM10.foo(String),BM9.foo(String)", mi.getMatchingMethods());
+		}
+
+		// False match tests - same method name, different argument types
+		public class BM11 {
+			public void foo(int x) {}  // NOSONAR
+			public void foo(String s) {}  // NOSONAR
+		}
+
+		public class BM12 extends BM11 {
+			@Override public void foo(int x) {}  // NOSONAR
+		}
+
+		@Test void sameNameDifferentArgs() throws Exception {
+			var mi = MethodInfo.of(BM12.class.getMethod("foo", int.class));
+			// Should not match foo(String) even though same method name
+			check("BM12.foo(int),BM11.foo(int)", mi.getMatchingMethods());
+		}
+
+		// False match tests - different method name, same argument types
+		public interface BM13 {
+			void bar(String s);
+		}
+
+		public class BM14 {
+			public void baz(String s) {}  // NOSONAR
+		}
+
+		public class BM15 extends BM14 implements BM13 {
+			@Override public void bar(String s) {}  // NOSONAR
+			public void foo(String s) {}  // NOSONAR
+		}
+
+		@Test void differentNameSameArgs() throws Exception {
+			var mi = MethodInfo.of(BM15.class.getMethod("foo", String.class));
+			// Should not match bar() or baz() even though they have same parameters
+			check("BM15.foo(String)", mi.getMatchingMethods());
+		}
+
+		// False match tests - different parameter count
+		public class BM16 {
+			public void foo(String s) {}  // NOSONAR
+			public void foo(String s, int x) {}  // NOSONAR
+		}
+
+		public class BM17 extends BM16 {
+			@Override public void foo(String s) {}  // NOSONAR
+		}
+
+		@Test void differentParameterCount() throws Exception {
+			var mi = MethodInfo.of(BM17.class.getMethod("foo", String.class));
+			// Should not match foo(String, int)
+			check("BM17.foo(String),BM16.foo(String)", mi.getMatchingMethods());
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
 

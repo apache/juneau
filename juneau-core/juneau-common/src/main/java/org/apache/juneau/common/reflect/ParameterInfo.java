@@ -48,7 +48,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			.supplier(k -> opt(findAnnotation(k)))
 			.build();
 
-	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::findAnnotations);
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
+	private final Supplier<List<ParameterInfo>> matchingParameters = memoize(this::_findMatchingParameters);
 
 	/**
 	 * Constructor.
@@ -75,7 +76,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		return parameter;
 	}
 
-	private List<AnnotationInfo<Annotation>> findAnnotations() {
+	private List<AnnotationInfo<Annotation>> _findAnnotations() {
 		return stream(parameter.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
 	}
 
@@ -111,6 +112,119 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotations(Class<A> type) {
 		return getAnnotationInfos().stream().filter(x -> x.isType(type)).map(x -> (AnnotationInfo<A>)x);
+	}
+
+	/**
+	 * Returns this parameter and all matching parameters in parent classes.
+	 *
+	 * <p>
+	 * For constructors, searches parent class constructors for parameters with matching name and type,
+	 * regardless of parameter count or position. This allows finding annotated parameters that may be
+	 * inherited by child classes even when constructor signatures differ.
+	 *
+	 * <p>
+	 * For methods, searches matching methods (same signature) in parent classes/interfaces
+	 * for parameters at the same index with matching name and type.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Constructor with different parameter counts:</jc>
+	 * 	<jk>class</jk> A {
+	 * 		A(String <jv>foo</jv>, <jk>int</jk> <jv>bar</jv>) {}
+	 * 	}
+	 * 	<jk>class</jk> B <jk>extends</jk> A {
+	 * 		B(String <jv>foo</jv>) {}
+	 * 	}
+	 * 	<jc>// For B's foo parameter, returns: [B.foo, A.foo]</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	List&lt;ParameterInfo&gt; <jv>matching</jv> = <jv>pi</jv>.getMatchingParameters();
+	 * </p>
+	 *
+	 * @return A list of matching parameters including this one, in child-to-parent order.
+	 */
+	public List<ParameterInfo> getMatchingParameters() {
+		return matchingParameters.get();
+	}
+
+	private List<ParameterInfo> _findMatchingParameters() {
+		if (executable.isConstructor()) {
+			// For constructors: search parent class constructors for parameters with matching name and type
+			var ci = (ConstructorInfo)executable;
+			var list = new ArrayList<ParameterInfo>();
+
+			// Add this parameter first
+			list.add(this);
+
+			// Search parent classes for matching parameters
+			var cc = ci.getDeclaringClass().getSuperclass();
+			while (nn(cc)) {
+				// Check all constructors in parent class
+				for (var pc : cc.getDeclaredConstructors()) {
+					// Check all parameters in each constructor for name and type match
+					for (var pp : pc.getParameters()) {
+						if (eq(getName(), pp.getName()) && getParameterType().is(pp.getParameterType())) {
+							list.add(pp);
+						}
+					}
+				}
+				cc = cc.getSuperclass();
+			}
+
+			return list;
+		}
+		// For methods: use matching methods from parent classes
+		return ((MethodInfo)executable).getMatchingMethods().stream().map(m -> m.getParameter(index)).toList();
+	}
+
+	/**
+	 * Finds all annotations of the specified type using enhanced search.
+	 *
+	 * <p>
+	 * Search order:
+	 * <ol>
+	 * 	<li>Annotations on the parameter itself
+	 * 	<li>Annotations on the parameter's type (after unwrapping Value/Optional)
+	 * 	<li>For methods: Annotations on matching parameters in parent class methods (child-to-parent order)
+	 * </ol>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Find all @MyAnnotation annotations with hierarchy search</jc>
+	 * 	ParameterInfo <jv>pi</jv> = ...;
+	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>annotations</jv> = <jv>pi</jv>.findAnnotations(MyAnnotation.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
+	 * @return A stream of matching annotations, or an empty stream if none found.
+	 */
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findAnnotations(Class<A> type) {
+		var paramType = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
+
+		if (executable.isConstructor()) {
+			// For constructors: parameter annotations, then parameter type annotations
+			return Stream.concat(
+				getAnnotations(type),
+				paramType.getDeclaredAnnotationInfos().stream()
+					.filter(x -> x.isType(type))
+					.map(x -> (AnnotationInfo<A>)x)
+			);
+		} else {
+			// For methods: parameter annotations, parameter type annotations, then matching methods on parent classes
+			var mi = (MethodInfo)executable;
+			var matchingMethods = new ArrayList<MethodInfo>();
+			mi.forEachMatchingParentFirst(null, matchingMethods::add);
+
+			return Stream.of(
+				getAnnotations(type),
+				paramType.getDeclaredAnnotationInfos().stream()
+					.filter(x -> x.isType(type))
+					.map(x -> (AnnotationInfo<A>)x),
+				matchingMethods.stream()
+					.flatMap(m -> m.getParameter(index).getAnnotations(type))
+			).flatMap(s -> s);
+		}
 	}
 
 	/**
@@ -243,22 +357,23 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * If the parameter has an annotation with the simple name "Name" and a "value()" method,
 	 * then this method returns the value from that annotation.
-	 * Otherwise, if the parameter's name is present in the class file, then this method returns that name.
-	 * Otherwise, this method returns <jk>null</jk>.
+	 * Otherwise, this method returns the parameter name from the class file.
+	 *
+	 * <p>
+	 * Note: If the code was not compiled with the <c>-parameters</c> flag, the parameter name
+	 * will be a synthetic name like "arg0", "arg1", etc.
 	 *
 	 * <p>
 	 * This method works with any annotation named "Name" (from any package) that has a <c>String value()</c> method.
 	 *
-	 * @return The name of the parameter, or <jk>null</jk> if not available.
+	 * @return The name of the parameter, never <jk>null</jk>.
 	 * @see Parameter#getName()
 	 */
 	public String getName() {
 		String name = getNameFromAnnotation();
 		if (name != null)
 			return name;
-		if (parameter.isNamePresent())
-			return parameter.getName();
-		return null;
+		return parameter.getName();
 	}
 
 	/**
