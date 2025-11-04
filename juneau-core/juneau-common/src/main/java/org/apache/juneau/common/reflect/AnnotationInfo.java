@@ -493,4 +493,16 @@ public class AnnotationInfo<T extends Annotation> {
 		if (nn(mi))
 			mi.getDeclaredAnnotationInfos().forEach(ai -> ai.accept(filter, action));
 	}
+
+	public boolean hasSimpleName(String value) {
+		return eq(value, a.annotationType().getSimpleName());
+	}
+
+	public String getValue() {
+		return getString("value");
+	}
+
+	public String getString(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(String.class)).map(x -> s(x.invoke(a))).findFirst().orElse(null);
+	}
 }

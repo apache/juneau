@@ -28,6 +28,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.annotation.Named;
 import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.common.utils.*;
 import org.junit.jupiter.api.*;
@@ -240,7 +241,7 @@ class BeanStore_Test extends TestBase {
 			this.a3 = a3;
 		}
 
-		public B1(@Name("foo") A1 a1, @Name("bar") Optional<A2> a2) {
+		public B1(@Named("foo") A1 a1, @Named("bar") Optional<A2> a2) {
 			this.a1 = a1;
 			this.a2 = a2;
 		}
@@ -251,7 +252,7 @@ class BeanStore_Test extends TestBase {
 			this.a3 = a3;
 		}
 
-		public void m2(@Name("foo") A1 a1, @Name("bar") Optional<A2> a2) {
+		public void m2(@Named("foo") A1 a1, @Named("bar") Optional<A2> a2) {
 			this.a1 = a1;
 			this.a2 = a2;
 			this.a3 = null;
@@ -391,7 +392,7 @@ class BeanStore_Test extends TestBase {
 			this.a3 = a3;
 		}
 
-		public B2(@Name("foo") A1 a1, @Name("bar") Optional<A2> a2) {
+		public B2(@Named("foo") A1 a1, @Named("bar") Optional<A2> a2) {
 			this.a1 = a1;
 			this.a2 = a2;
 		}
@@ -581,8 +582,8 @@ class BeanStore_Test extends TestBase {
 		public C createC1(A1 a) { return new C(); }
 		public static C createC2(A1 a) { return new C(); }
 		public static C createC3(Optional<A1> a) { C e = new C(); e.a = a.orElse(null); return e; }
-		public static C createC4(@Name("Foo") A1 a) { return new C(); }
-		public static C createC5(@Name("Foo") Optional<A1> a) { C e = new C(); e.a = a.orElse(null); return e; }
+		public static C createC4(@Named("Foo") A1 a) { return new C(); }
+		public static C createC5(@Named("Foo") Optional<A1> a) { C e = new C(); e.a = a.orElse(null); return e; }
 		public static C createC6(BeanStore bs) { assertNotNull(bs); return new C(); }
 	}
 
@@ -969,8 +970,8 @@ class BeanStore_Test extends TestBase {
 
 	public static class D14 {
 		public String a;
-		public D14(@Name("foo") String o) { a = o; }
-		public D14(@Name("foo") String o, Integer i) { a = o + "," + i; }
+		public D14(@Named("foo") String o) { a = o; }
+		public D14(@Named("foo") String o, Integer i) { a = o + "," + i; }
 	}
 
 	@Test void d14_createBean_constructors_namedBean() {
@@ -982,8 +983,8 @@ class BeanStore_Test extends TestBase {
 
 	public class D15 {
 		public String a;
-		public D15(@Name("foo") String o) { a = o; }
-		public D15(@Name("foo") String o, Integer i) { a = o + "," + i; }
+		public D15(@Named("foo") String o) { a = o; }
+		public D15(@Named("foo") String o, Integer i) { a = o + "," + i; }
 	}
 
 	@Test void d15_createBean_constructors_namedBean_withOuter() {

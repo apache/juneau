@@ -31,6 +31,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.function.*;
+import org.apache.juneau.common.function.ResettableSupplier;
 
 /**
  * Common utility methods.
@@ -1172,6 +1173,49 @@ public class Utils {
 			}
 			return h.orElse(null);
 		};
+	}
+
+	/**
+	 * Creates a resettable memoizing supplier that caches the result of the first call and optionally allows resetting.
+	 *
+	 * <p>
+	 * This is similar to {@link #memoize(Supplier)}, but returns a {@link ResettableSupplier} that supports
+	 * clearing the cached value, forcing recomputation on the next call.
+	 *
+	 * <h5 class='section'>Usage:</h5>
+	 * <p class='bjava'>
+	 * 	ResettableSupplier&lt;String&gt; <jv>supplier</jv> = Utils.<jsm>memoizeResettable</jsm>(() -&gt; expensiveComputation());
+	 *
+	 * 	<jc>// First call computes and caches</jc>
+	 * 	String <jv>result1</jv> = <jv>supplier</jv>.get();
+	 *
+	 * 	<jc>// Subsequent calls return cached value</jc>
+	 * 	String <jv>result2</jv> = <jv>supplier</jv>.get();
+	 *
+	 * 	<jc>// Reset forces recomputation on next get()</jc>
+	 * 	<jv>supplier</jv>.reset();
+	 * 	String <jv>result3</jv> = <jv>supplier</jv>.get();  <jc>// Recomputes</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>Thread Safety:</h5>
+	 * <p>
+	 * The returned supplier is thread-safe for both {@link ResettableSupplier#get()} and
+	 * {@link ResettableSupplier#reset()} operations. If multiple threads call get() simultaneously
+	 * after a reset, the supplier may be invoked multiple times, but only one result will be cached.
+	 *
+	 * <h5 class='section'>See Also:</h5>
+	 * <ul>
+	 * 	<li class='jc'>{@link ResettableSupplier}
+	 * </ul>
+	 *
+	 * @param <T> The type of value supplied.
+	 * @param supplier The supplier to memoize. Must not be <jk>null</jk>.
+	 * @return A thread-safe resettable memoizing wrapper around the supplier.
+	 * @throws NullPointerException if supplier is <jk>null</jk>.
+	 */
+	public static <T> ResettableSupplier<T> memoizeResettable(Supplier<T> supplier) {
+		assertArgNotNull("supplier", supplier);
+		return new ResettableSupplier<>(supplier);
 	}
 
 	/**

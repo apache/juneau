@@ -47,6 +47,8 @@ class ExecutableInfo_Test extends TestBase {
 				return ((List<?>)t).stream().map(this).collect(Collectors.joining(","));
 			if (isArray(t))
 				return StreamSupport.stream(toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
+			if (t instanceof AnnotationInfo)
+				return "@" + ((AnnotationInfo<?>)t).inner().annotationType().getSimpleName() + "()";
 			if (t instanceof Annotation)
 				return "@" + ((Annotation)t).annotationType().getSimpleName() + "()";
 			if (t instanceof Class)
@@ -257,17 +259,17 @@ class ExecutableInfo_Test extends TestBase {
 	;
 
 	@Test void getParameterAnnotations() {
-		check("", c_c1.getParameters().stream().map(p -> p.getAnnotations()).toArray());
-		check("@CA()", c_c2.getParameters().stream().map(p -> p.getAnnotations()).toArray());
-		check("", c_c3.getParameters().stream().map(p -> p.getAnnotations()).toArray());
-		check("", c_m1.getParameters().stream().map(p -> p.getAnnotations()).toArray());
-		check("@CA()", c_m2.getParameters().stream().map(p -> p.getAnnotations()).toArray());
-		check("", c_m3.getParameters().stream().map(p -> p.getAnnotations()).toArray());
+		check("", c_c1.getParameters().stream().map(p -> p.getAnnotationInfos()).toArray());
+		check("@CA()", c_c2.getParameters().stream().map(p -> p.getAnnotationInfos()).toArray());
+		check("", c_c3.getParameters().stream().map(p -> p.getAnnotationInfos()).toArray());
+		check("", c_m1.getParameters().stream().map(p -> p.getAnnotationInfos()).toArray());
+		check("@CA()", c_m2.getParameters().stream().map(p -> p.getAnnotationInfos()).toArray());
+		check("", c_m3.getParameters().stream().map(p -> p.getAnnotationInfos()).toArray());
 	}
 
 	@Test void getParameterAnnotations_atIndex() {
-		check("@CA()", c_c2.getParameter(0).getAnnotations());
-		check("@CA()", c_m2.getParameter(0).getAnnotations());
+		check("@CA()", c_c2.getParameter(0).getAnnotationInfos());
+		check("@CA()", c_m2.getParameter(0).getAnnotationInfos());
 	}
 
 	@Test void hasAnnotation() {

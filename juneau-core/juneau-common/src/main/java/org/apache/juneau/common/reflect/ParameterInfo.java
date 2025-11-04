@@ -28,6 +28,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
+import org.apache.juneau.common.function.ResettableSupplier;
 
 /**
  * Lightweight utility class for introspecting information about a method parameter.
@@ -36,6 +37,21 @@ import org.apache.juneau.common.collections.*;
  * </ul>
  */
 public class ParameterInfo extends ElementInfo implements Annotatable {
+
+	/**
+	 * Resettable supplier for the system property to disable bytecode parameter name detection.
+	 *
+	 * <p>
+	 * When the value is <jk>true</jk>, parameter names will only come from {@link org.apache.juneau.annotation.Name @Name}
+	 * annotations and not from bytecode parameter names (even if compiled with <c>-parameters</c> flag).
+	 *
+	 * <p>
+	 * This can be set via system property: <c>juneau.disableParamNameDetection=true</c>
+	 *
+	 * <p>
+	 * The supplier can be reset for testing purposes using {@link #resetDisableParamNameDetection()}.
+	 */
+	static final ResettableSupplier<Boolean> DISABLE_PARAM_NAME_DETECTION = memoizeResettable(() -> Boolean.getBoolean("juneau.disableParamNameDetection"));
 
 	private final ExecutableInfo executable;
 	private final Parameter parameter;
@@ -47,7 +63,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
 	private final Supplier<List<ParameterInfo>> matchingParameters = memoize(this::_findMatchingParameters);
-	private final Supplier<String> foundName = memoize(this::findNameInternal);
+	private final ResettableSupplier<String> foundName = memoizeResettable(this::findNameInternal);
+	private final ResettableSupplier<String> foundQualifier = memoizeResettable(this::findQualifierInternal);
 
 	/**
 	 * Constructor.
@@ -77,6 +94,18 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private List<AnnotationInfo<Annotation>> _findAnnotations() {
 		return stream(parameter.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
+	}
+
+	/**
+	 * Returns all annotations declared on this parameter.
+	 *
+	 * <p>
+	 * Returns annotations directly declared on this parameter, wrapped as {@link AnnotationInfo} objects.
+	 *
+	 * @return An unmodifiable list of annotations on this parameter, never <jk>null</jk>.
+	 */
+	public List<AnnotationInfo<Annotation>> getAnnotationInfos() {
+		return annotations.get();
 	}
 
 	/**
@@ -222,9 +251,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 */
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type) {
 		if (nn(type))
-			for (var a : getAnnotations())
-				if (type.isInstance(a))
-					return type.cast(a);
+			for (var ai : getAnnotationInfos())
+				if (type.isInstance(ai.inner()))
+					return type.cast(ai.inner());
 		return null;
 	}
 
@@ -243,63 +272,88 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	public MethodInfo getMethod() { return executable.isConstructor() ? null : (MethodInfo)executable; }
 
 	/**
-	 * Helper method to extract the name from any annotation with the simple name "Name".
-	 *
-	 * <p>
-	 * This method uses reflection to find any annotation with the simple name "Name"
-	 * and dynamically invokes its <c>value()</c> method to retrieve the parameter name.
-	 * This allows it to work with any <c>@Name</c> annotation from any package without
-	 * creating a compile-time dependency.
-	 *
-	 * @return The name from the annotation, or <jk>null</jk> if no compatible annotation is found.
-	 */
-	private String findNameFromAnnotation() {
-		for (var annotation : parameter.getAnnotations()) {
-			var annotationType = annotation.annotationType();
-			if ("Name".equals(annotationType.getSimpleName())) {
-				try {
-					var valueMethod = annotationType.getMethod("value");
-					if (valueMethod.getReturnType() == String.class) {
-						var value = valueMethod.invoke(annotation);
-						if (value instanceof String)
-							return (String)value;
-					}
-				} catch (Exception e) {
-					// Ignore - annotation doesn't have a compatible value() method
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Finds the name of this parameter by searching the hierarchy.
+	 * Finds the name of this parameter for bean property mapping.
 	 *
 	 * <p>
 	 * Searches for the parameter name in the following order:
 	 * <ol>
-	 * 	<li>@Name annotation value (takes precedence over bytecode parameter names)
-	 * 	<li>Bytecode parameter name (if compiled with -parameters flag)
-	 * 	<li>Matching parameters in parent classes/interfaces (for methods)
+	 * 	<li>{@link org.apache.juneau.annotation.Name @Name} annotation value
+	 * 	<li>Bytecode parameter name (if available and not disabled via system property)
+	 * 	<li>Matching parameters in parent classes/interfaces
 	 * </ol>
 	 *
+	 * <p>
+	 * This method is used for mapping constructor parameters to bean properties.
+	 *
+	 * <p>
+	 * <b>Note:</b> This is different from {@link #findQualifier()} which looks for {@link org.apache.juneau.annotation.Named @Named}
+	 * annotations for bean injection purposes.
+	 *
 	 * @return The parameter name if found, or <jk>null</jk> if not available.
+	 * @see #findQualifier()
+	 * @see #getName()
 	 */
 	public String findName() {
 		return foundName.get();
 	}
 
+	static void reset() {
+		DISABLE_PARAM_NAME_DETECTION.reset();
+	}
+
 	private String findNameInternal() {
-		// Search through matching parameters in hierarchy
+		// Search through matching parameters in hierarchy for @Name annotations only.
+		// Note: We intentionally prioritize @Name annotations over bytecode parameter names
+		// because bytecode names are unreliable - users may or may not compile with -parameters flag.
 		for (var mp : getMatchingParameters()) {
-			// Check for @Name annotation first (overrides bytecode names)
-			String annotationName = mp.findNameFromAnnotation();
-			if (annotationName != null)
-				return annotationName;
-			
-			// Then check if bytecode name is present
-			if (mp.parameter.isNamePresent())
-				return mp.parameter.getName();
+			for (var ai : mp.getAnnotationInfos()) {
+				if (ai.hasSimpleName("Name")) {
+					String value = ai.getValue();
+					if (value != null)
+						return value;
+				}
+			}
+		}
+
+		// Fall back to bytecode parameter name if available and not disabled
+		if (!DISABLE_PARAM_NAME_DETECTION.get() && parameter.isNamePresent()) {
+			return parameter.getName();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Finds the bean injection qualifier for this parameter.
+	 *
+	 * <p>
+	 * Searches for the {@link org.apache.juneau.annotation.Named @Named} annotation value to determine
+	 * which named bean should be injected.
+	 *
+	 * <p>
+	 * This method is used by the {@link org.apache.juneau.cp.BeanStore} for bean injection.
+	 *
+	 * <p>
+	 * <b>Note:</b> This is different from {@link #findName()} which looks for {@link org.apache.juneau.annotation.Name @Name}
+	 * annotations for bean property mapping.
+	 *
+	 * @return The bean qualifier name if {@code @Named} annotation is found, or <jk>null</jk> if not annotated.
+	 * @see #findName()
+	 */
+	public String findQualifier() {
+		return foundQualifier.get();
+	}
+
+	private String findQualifierInternal() {
+		// Search through matching parameters in hierarchy for @Named or javax.inject.Qualifier annotations
+		for (var mp : getMatchingParameters()) {
+			for (var ai : mp.getAnnotationInfos()) {
+				if (ai.hasSimpleName("Named") || ai.hasSimpleName("Qualifier")) {
+					String value = ai.getValue();
+					if (value != null)
+						return value;
+				}
+			}
 		}
 		return null;
 	}
@@ -325,18 +379,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	public String getName() {
 		String name = findName();
 		return name != null ? name : parameter.getName();
-	}
-
-	/**
-	 * Returns all annotations declared on this parameter.
-	 *
-	 * <p>
-	 * Returns annotations directly declared on this parameter, wrapped as {@link AnnotationInfo} objects.
-	 *
-	 * @return An unmodifiable list of annotations on this parameter, never <jk>null</jk>.
-	 */
-	public List<AnnotationInfo<Annotation>> getAnnotationInfos() {
-		return annotations.get();
 	}
 
 	/**
@@ -622,30 +664,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns annotations that are <em>present</em> on this parameter.
-	 *
-	 * <p>
-	 * Same as calling {@link Parameter#getAnnotations()}.
-	 *
-	 * <p>
-	 * <b>Note:</b> This returns the simple array of annotations directly present on the parameter.
-	 * For Juneau's enhanced annotation searching (through class hierarchies), use {@link #findAnnotationInfo(Class)} instead.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get all annotations on parameter</jc>
-	 * 	ParameterInfo <jv>pi</jv> = ...;
-	 * 	Annotation[] <jv>annotations</jv> = <jv>pi</jv>.getAnnotations();
-	 * </p>
-	 *
-	 * @return Annotations present on this parameter, or an empty array if there are none.
-	 * @see Parameter#getAnnotations()
-	 */
-	public Annotation[] getAnnotations() {
-		return parameter.getAnnotations();
-	}
-
-	/**
 	 * Returns annotations that are <em>directly present</em> on this parameter.
 	 *
 	 * <p>
@@ -653,7 +671,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 *
 	 * <p>
 	 * <b>Note:</b> This returns the simple array of declared annotations.
-	 * For Juneau's enhanced annotation searching, use {@link #getDeclaredAnnotation(Class)} instead.
+	 * For Juneau's enhanced annotation searching, use {@link #findAnnotationInfo(Class)} instead.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -668,10 +686,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	public Annotation[] getDeclaredAnnotations() {
 		return parameter.getDeclaredAnnotations();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Medium Priority Methods (repeatable annotations)
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns this element's annotations of the specified type (including repeated annotations).
@@ -754,11 +768,11 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	private <A extends Annotation> ParameterInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (executable.isConstructor) {
 			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
-			var annotations = getAnnotations();
+			var annotationInfos = getAnnotationInfos();
 			ci.forEachAnnotation(ap, a, filter, action);
-			for (var a2 : annotations)
-				if (a.isInstance(a2))
-					consumeIf(filter, action, a.cast(a2));
+			for (var ai : annotationInfos)
+				if (a.isInstance(ai.inner()))
+					consumeIf(filter, action, a.cast(ai.inner()));
 		} else {
 			var mi = (MethodInfo)executable;
 			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);

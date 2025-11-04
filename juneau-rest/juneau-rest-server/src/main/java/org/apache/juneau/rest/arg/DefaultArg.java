@@ -54,7 +54,7 @@ public class DefaultArg implements RestOpArg {
 	}
 
 	private final Class<?> type;
-	private final String name;
+	private final String qualifier;
 
 	private final ParameterInfo paramInfo;
 
@@ -66,11 +66,11 @@ public class DefaultArg implements RestOpArg {
 	protected DefaultArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().inner();
 		this.paramInfo = paramInfo;
-		this.name = paramInfo.findName();
+		this.qualifier = paramInfo.findQualifier();
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getBeanStore().getBean(type, name).orElseThrow(() -> new ArgException(paramInfo, "Could not resolve bean type {0}", cn(type)));
+		return opSession.getBeanStore().getBean(type, qualifier).orElseThrow(() -> new ArgException(paramInfo, "Could not resolve bean type {0}", cn(type)));
 	}
 }

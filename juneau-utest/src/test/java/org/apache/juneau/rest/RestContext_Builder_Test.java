@@ -19,7 +19,7 @@ package org.apache.juneau.rest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.Name;
+import org.apache.juneau.annotation.Named;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -110,7 +110,7 @@ class RestContext_Builder_Test extends TestBase {
 		@RestInject(name="b2") B b4;
 
 		@RestGet("/a1") public B a1(B b) { return b; }
-		@RestGet("/a2") public B a2(@Name("b2") B b) { return b; }
+		@RestGet("/a2") public B a2(@Named("b2") B b) { return b; }
 		@RestGet("/a3") public B a3() { return b3; }
 		@RestGet("/a4") public B a4() { return b4; }
 	}
@@ -118,7 +118,7 @@ class RestContext_Builder_Test extends TestBase {
 	@Rest
 	public static class B1b extends B1a {
 		@RestGet("/a5") public B a5(B b) { return b; }
-		@RestGet("/a6") public B a6(@Name("b2") B b) { return b; }
+		@RestGet("/a6") public B a6(@Named("b2") B b) { return b; }
 		@RestGet("/a7") public B a7() { return b3; }
 		@RestGet("/a8") public B a8() { return b4; }
 	}

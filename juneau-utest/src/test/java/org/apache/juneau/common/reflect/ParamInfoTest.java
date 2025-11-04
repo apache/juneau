@@ -38,6 +38,28 @@ import org.apache.juneau.annotation.Name;
  */
 class ParamInfoTest extends TestBase {
 
+	private static String originalDisableParamNameDetection;
+
+	@BeforeAll
+	public static void beforeAll() {
+		// Save original system property value
+		originalDisableParamNameDetection = System.getProperty("juneau.disableParamNameDetection");
+		
+		// Set to true to ensure consistent behavior regardless of JVM compiler settings
+		System.setProperty("juneau.disableParamNameDetection", "true");
+		ParameterInfo.reset();
+	}
+
+	@AfterAll
+	public static void afterAll() {
+		// Restore original system property value
+		if (originalDisableParamNameDetection == null)
+			System.clearProperty("juneau.disableParamNameDetection");
+		else
+			System.setProperty("juneau.disableParamNameDetection", originalDisableParamNameDetection);
+		ParameterInfo.reset();
+	}
+
 	@Documented
 	@Target(METHOD)
 	@Retention(RUNTIME)
@@ -340,13 +362,18 @@ class ParamInfoTest extends TestBase {
 		e_a1_b = e.getMethod(x -> x.hasName("a1")).getParameter(1);  // NOSONAR
 
 	@Test void hasName() {
-		e_a1_a.hasName();  // This might be true or false based on the JVM compiler used.
-		assertTrue(e_a1_b.hasName());
+		// With DISABLE_PARAM_NAME_DETECTION=true, only parameters with @Name annotation have names
+		assertFalse(e_a1_a.hasName());  // No @Name annotation
+		assertTrue(e_a1_b.hasName());   // Has @Name("b")
 	}
 
 	@Test void getName() {
-		e_a1_a.getName();  // This might be null or a value based on the JVM compiler used.
-		assertEquals("b", e_a1_b.getName());
+		// With DISABLE_PARAM_NAME_DETECTION=true:
+		// - Parameters with @Name use the annotation value
+		// - Parameters without @Name fall back to parameter.getName() which may return
+		//   bytecode names (if compiled with -parameters) or synthetic names (arg0, arg1, etc.)
+		assertNotNull(e_a1_a.getName());  // No @Name, falls back to parameter.getName()
+		assertEquals("b", e_a1_b.getName());  // Has @Name("b")
 	}
 
 	@Test void toString2() {

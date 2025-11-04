@@ -21,7 +21,6 @@ import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
-import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static java.util.stream.Collectors.*;
 
@@ -87,9 +86,9 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	@Deprecated
 	public final <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		for (var a : getParameter(index).getAnnotations())
-			if (type.isInstance(a))
-				consumeIf(predicate, consumer, type.cast(a));
+		for (var ai : getParameter(index).getAnnotationInfos())
+			if (type.isInstance(ai.inner()))
+				consumeIf(predicate, consumer, type.cast(ai.inner()));
 		return this;
 	}
 
@@ -420,7 +419,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final boolean hasMatchingParameters(List<ParameterInfo> params) {
 		var myParams = getParameters();
 		return myParams.size() == params.size()
-			&& IntStream.range(0, params.size()).allMatch(i -> 
+			&& IntStream.range(0, params.size()).allMatch(i ->
 				myParams.get(i).getParameterType().is(params.get(i).getParameterType()));
 	}
 

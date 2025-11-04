@@ -22,7 +22,12 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * Annotation that can be used on method parameters to identify their name.
+ * Specifies the parameter name for bean property mapping.
+ *
+ * <p>
+ * This annotation is used to explicitly specify a parameter name when bytecode parameter names
+ * are not available (i.e., when code is not compiled with the {@code -parameters} flag).
+ * It allows constructors to map parameters to bean properties by name.
  *
  * <p>
  * Can be used in the following locations:
@@ -32,16 +37,38 @@ import java.lang.annotation.*;
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
- * 	<jc>// Identifying bean property names.
- * 	// The field name can be anything.</jc>
- * 	<jk>public class</jk> MyBean {
+ * 	<jc>// Without -parameters flag, parameter names would be arg0, arg1, etc.</jc>
+ * 	<jk>public class</jk> Person {
+ * 		<jk>public</jk> Person(<ja>@Name</ja>(<js>"firstName"</js>) String <jv>arg0</jv>, <ja>@Name</ja>(<js>"lastName"</js>) String <jv>arg1</jv>) {
+ * 			<jc>// Parameters can be mapped to bean properties "firstName" and "lastName"</jc>
+ * 		}
+ * 	}
+ * </p>
  *
- * 		<jk>public</jk> MyBean(<ja>@Name</ja>(<js>"bar"</js>) <jk>int</jk> <jv>foo</jv>) {}
+ * <h5 class='section'>Comparison with @Named:</h5>
+ * <p>
+ * Do not confuse this annotation with {@link Named @Named}, which serves a different purpose:
+ * <ul>
+ * 	<li><b>{@link Name @Name}</b> - Specifies the parameter name for bean property mapping
+ * 	<li><b>{@link Named @Named}</b> - Specifies which named bean to inject (bean qualifier)
+ * </ul>
+ *
+ * <h5 class='section'>Example showing the difference:</h5>
+ * <p class='bjava'>
+ * 	<jc>// @Name - for parameter naming</jc>
+ * 	<jk>public</jk> Person(<ja>@Name</ja>(<js>"firstName"</js>) String <jv>arg0</jv>) {
+ * 		<jc>// Maps parameter to bean property "firstName"</jc>
+ * 	}
+ *
+ * 	<jc>// @Named - for bean injection</jc>
+ * 	<jk>public</jk> MyService(<ja>@Named</ja>(<js>"primaryDb"</js>) Database <jv>db</jv>) {
+ * 		<jc>// Injects the bean named "primaryDb" from BeanStore</jc>
  * 	}
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
-
+ * 	<li class='ja'>{@link Named}
+ * 	<li class='jc'>{@link org.apache.juneau.cp.BeanStore}
  * </ul>
  */
 @Documented

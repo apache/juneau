@@ -206,7 +206,7 @@ public class PathArg implements RestOpArg {
 
 			String[] vars = pathMatcher.getVars();
 			if (vars.length <= idx)
-				throw new ArgException(pi, "Number of attribute parameters exceeds the number of URL pattern variables");
+				throw new ArgException(pi, "Number of attribute parameters exceeds the number of URL pattern variables.  vars.length={0}, idx={1}", vars.length, idx);
 
 			// Check for {#} variables.
 			var idxs = String.valueOf(idx);
