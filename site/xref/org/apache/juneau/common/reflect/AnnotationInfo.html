@@ -501,7 +501,19 @@
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">if</strong> (nn(mi))
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 			mi.getDeclaredAnnotationInfos().forEach(ai -&gt; ai.accept(filter, action));
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 	}
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> }
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasSimpleName(String value) {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">return</strong> eq(value, a.annotationType().getSimpleName());
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	}
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<strong class="jxr_keyword">public</strong> String getValue() {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">return</strong> getString(<span class="jxr_string">"value"</span>);
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	}
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<strong class="jxr_keyword">public</strong> String getString(String methodName) {
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">return</strong> methods.get().stream().filter(x -&gt; eq(methodName, x.getSimpleName()) &amp;&amp; x.hasReturnType(String.<strong class="jxr_keyword">class</strong>)).map(x -&gt; s(x.invoke(a))).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	}
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
