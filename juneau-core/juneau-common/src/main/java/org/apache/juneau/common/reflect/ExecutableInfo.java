@@ -47,8 +47,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	private final Supplier<List<ClassInfo>> exceptions = memoize(this::findExceptions);
 	private final Supplier<List<AnnotationInfo<Annotation>>> declaredAnnotations = memoize(this::findDeclaredAnnotations);
 
-	private volatile Class<?>[] rawParamTypes;
-	private volatile Type[] rawGenericParamTypes;
 	private volatile Annotation[][] rawParameterAnnotations;
 	private volatile Annotation[] rawDeclaredAnnotations;
 
@@ -83,7 +81,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return This object.
 	 */
 	public ExecutableInfo forEachParam(Predicate<ParameterInfo> filter, Consumer<ParameterInfo> action) {
-		for (var pi : _getParams())
+		for (var pi : getParameters())
 			if (test(filter, pi))
 				action.accept(pi);
 		return this;
@@ -238,7 +236,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final ParameterInfo getParameter(int index) {
 		checkIndex(index);
-		return _getParams()[index];
+		return getParameters().get(index);
 	}
 
 	/**
@@ -262,42 +260,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final List<ParameterInfo> getParameters() { return parameters.get(); }
 
 	/**
-	 * Returns the raw generic parameter type of the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The raw generic parameter type of the parameter at the specified index.
-	 */
-	public final Type getRawGenericParamType(int index) {
-		checkIndex(index);
-		return _getRawGenericParamTypes()[index];
-	}
-
-	/**
-	 * Returns the raw generic parameter types on this executable.
-	 *
-	 * @return The raw generic parameter types on this executable.
-	 */
-	public final List<Type> getRawGenericParamTypes() { return u(l(_getRawGenericParamTypes())); }
-
-	/**
-	 * Returns the raw parameter type of the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The raw parameter type of the parameter at the specified index.
-	 */
-	public final Class<?> getRawParamType(int index) {
-		checkIndex(index);
-		return _getRawParamTypes()[index];
-	}
-
-	/**
-	 * Returns the raw parameter types on this executable.
-	 *
-	 * @return The raw parameter types on this executable.
-	 */
-	public final List<Class<?>> getRawParamTypes() { return u(l(_getRawParamTypes())); }
-
-	/**
 	 * Returns the short name of this executable.
 	 *
 	 * <h5 class='section'>Examples:</h5>
@@ -311,11 +273,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final String getShortName() {
 		var sb = new StringBuilder(64);
 		sb.append(getSimpleName()).append('(');
-		Class<?>[] pt = _getRawParamTypes();
-		for (int i = 0; i < pt.length; i++) {
+		var params = getParameters();
+		for (int i = 0; i < params.size(); i++) {
 			if (i > 0)
 				sb.append(',');
-			sb.append(pt[i].getSimpleName());
+			sb.append(params.get(i).getParameterType().getNameSimple());
 		}
 		sb.append(')');
 		return sb.toString();
@@ -467,10 +429,10 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasParameterTypes(Class<?>...args) {
-		Class<?>[] pt = _getRawParamTypes();
-		if (pt.length == args.length) {
-			for (int i = 0; i < pt.length; i++)
-				if (! pt[i].equals(args[i]))
+		var params = getParameters();
+		if (params.size() == args.length) {
+			for (int i = 0; i < params.size(); i++)
+				if (! params.get(i).getParameterType().inner().equals(args[i]))
 					return false;
 			return true;
 		}
@@ -484,10 +446,10 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasParameterTypes(ClassInfo...args) {
-		Class<?>[] pt = _getRawParamTypes();
-		if (pt.length == args.length) {
-			for (int i = 0; i < pt.length; i++)
-				if (! pt[i].equals(args[i].inner()))
+		var params = getParameters();
+		if (params.size() == args.length) {
+			for (int i = 0; i < params.size(); i++)
+				if (! params.get(i).getParameterType().inner().equals(args[i].inner()))
 					return false;
 			return true;
 		}
@@ -633,29 +595,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Medium Priority Methods (generic type information)
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns an array of {@link Type} objects that represent the exceptions declared to be thrown by this executable.
-	 *
-	 * <p>
-	 * Returns generic type information including parameterized types, unlike {@link #getExceptionTypes()} which returns raw types.
-	 *
-	 * <p>
-	 * Same as calling {@link Executable#getGenericExceptionTypes()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get generic exception types from method that throws IOException, IllegalArgumentException</jc>
-	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
-	 * 	Type[] <jv>exTypes</jv> = <jv>mi</jv>.getGenericExceptionTypes();
-	 * </p>
-	 *
-	 * @return An array of {@link Type} objects representing exception types, or an empty array if none.
-	 * @see Executable#getGenericExceptionTypes()
-	 */
-	public final Type[] getGenericExceptionTypes() {
-		return e.getGenericExceptionTypes();
-	}
 
 	/**
 	 * Returns a string describing this executable, including type parameters.
@@ -804,10 +743,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return rawDeclaredAnnotations;
 	}
 
-	final ClassInfo[] _getExceptionTypes() {
-		return exceptions.get().toArray(new ClassInfo[0]);
-	}
-
 	final Annotation[][] _getParameterAnnotations() {
 		if (rawParameterAnnotations == null) {
 			synchronized (this) {
@@ -859,27 +794,5 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 		return IntStream.range(0, rp.length)
 			.mapToObj(i -> new ParameterInfo(this, rp[i], i, ClassInfo.of(ptc[i], genericTypes[i])))
 			.toList();
-	}
-
-	final ParameterInfo[] _getParams() {
-		return parameters.get().toArray(new ParameterInfo[0]);
-	}
-
-	final Type[] _getRawGenericParamTypes() {
-		if (rawGenericParamTypes == null) {
-			synchronized (this) {
-				rawGenericParamTypes = e.getGenericParameterTypes();
-			}
-		}
-		return rawGenericParamTypes;
-	}
-
-	Class<?>[] _getRawParamTypes() {
-		if (rawParamTypes == null) {
-			synchronized (this) {
-				rawParamTypes = e.getParameterTypes();
-			}
-		}
-		return rawParamTypes;
 	}
 }

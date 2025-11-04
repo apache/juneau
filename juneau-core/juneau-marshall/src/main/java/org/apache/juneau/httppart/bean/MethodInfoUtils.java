@@ -33,10 +33,10 @@ import org.apache.juneau.common.reflect.*;
 class MethodInfoUtils {
 
 	static void assertArgType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
-		List<Class<?>> ptt = m.getRawParamTypes();
-		if (ptt.size() != 1)
+		var params = m.getParameters();
+		if (params.size() != 1)
 			throw new InvalidAnnotationException("Only one parameter can be passed to method with @{0} annotation.  Method=''{0}''", scn(a), m);
-		Class<?> rt = ptt.get(0);
+		Class<?> rt = params.get(0).getParameterType().inner();
 		for (var cc : c)
 			if (rt == cc)
 				return;

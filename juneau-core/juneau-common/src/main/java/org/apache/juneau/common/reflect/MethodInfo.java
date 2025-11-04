@@ -140,7 +140,8 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if the method parameters only consist of the types specified in the list.
 	 */
 	public boolean argsOnlyOfType(Class<?>...args) {
-		for (var c1 : _getRawParamTypes()) {
+		for (var param : getParameters()) {
+			var c1 = param.getParameterType().inner();
 			boolean foundMatch = false;
 			for (var c2 : args)
 				if (c1 == c2)
@@ -191,10 +192,12 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public int compareTo(MethodInfo o) {
 		int i = getSimpleName().compareTo(o.getSimpleName());
 		if (i == 0) {
-			i = _getRawParamTypes().length - o._getRawParamTypes().length;
+			var params = getParameters();
+			var oParams = o.getParameters();
+			i = params.size() - oParams.size();
 			if (i == 0) {
-				for (int j = 0; j < _getRawParamTypes().length && i == 0; j++) {
-					i = _getRawParamTypes()[j].getName().compareTo(o._getRawParamTypes()[j].getName());
+				for (int j = 0; j < params.size() && i == 0; j++) {
+					i = params.get(j).getParameterType().getName().compareTo(oParams.get(j).getParameterType().getName());
 				}
 			}
 		}
@@ -443,14 +446,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	public String getSignature() {
 		var sb = new StringBuilder(128);
 		sb.append(m.getName());
-		Class<?>[] pt = _getRawParamTypes();
-		if (pt.length > 0) {
+		var params = getParameters();
+		if (params.size() > 0) {
 			sb.append('(');
-			List<ParameterInfo> mpi = getParameters();
-			for (int i = 0; i < pt.length; i++) {
+			for (int i = 0; i < params.size(); i++) {
 				if (i > 0)
 					sb.append(',');
-				mpi.get(i).getParameterType().appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);
+				params.get(i).getParameterType().appendNameFormatted(sb, ClassNameFormat.FULL, true, '$', ClassArrayFormat.BRACKETS);
 			}
 			sb.append(')');
 		}
@@ -467,10 +469,12 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if this method has at least the specified parameters.
 	 */
 	public boolean hasAllArgs(Class<?>...requiredParams) {
-		List<Class<?>> rawParamTypes = getRawParamTypes();
+		var paramTypes = getParameters().stream()
+			.map(p -> p.getParameterType().inner())
+			.toList();
 
 		for (var c : requiredParams)
-			if (! rawParamTypes.contains(c))
+			if (! paramTypes.contains(c))
 				return false;
 
 		return true;

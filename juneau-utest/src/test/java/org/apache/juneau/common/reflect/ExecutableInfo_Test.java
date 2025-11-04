@@ -191,27 +191,27 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	@Test void getRawParamTypes() {
-		check("", b_c1.getRawParamTypes());
-		check("String", b_c2.getRawParamTypes());
-		check("", b_m1.getRawParamTypes());
-		check("String", b_m2.getRawParamTypes());
+		check("", b_c1.getParameters().stream().map(p -> p.getParameterType().inner()).toList());
+		check("String", b_c2.getParameters().stream().map(p -> p.getParameterType().inner()).toList());
+		check("", b_m1.getParameters().stream().map(p -> p.getParameterType().inner()).toList());
+		check("String", b_m2.getParameters().stream().map(p -> p.getParameterType().inner()).toList());
 	}
 
 	@Test void getRawParamType() {
-		check("String", b_c2.getRawParamType(0));
-		check("String", b_m2.getRawParamType(0));
+		check("String", b_c2.getParameter(0).getParameterType().inner());
+		check("String", b_m2.getParameter(0).getParameterType().inner());
 	}
 
 	@Test void getRawGenericParamType() {
-		check("String", b_c2.getRawGenericParamType(0));
-		check("String", b_m2.getRawGenericParamType(0));
+		check("String", b_c2.getParameter(0).getParameterType().innerType());
+		check("String", b_m2.getParameter(0).getParameterType().innerType());
 	}
 
 	@Test void getRawGenericParamTypes() {
-		check("", b_c1.getRawGenericParamTypes());
-		check("String", b_c2.getRawGenericParamTypes());
-		check("", b_m1.getRawGenericParamTypes());
-		check("String", b_m2.getRawGenericParamTypes());
+		check("", b_c1.getParameters().stream().map(p -> p.getParameterType().innerType()).toList());
+		check("String", b_c2.getParameters().stream().map(p -> p.getParameterType().innerType()).toList());
+		check("", b_m1.getParameters().stream().map(p -> p.getParameterType().innerType()).toList());
+		check("String", b_m2.getParameters().stream().map(p -> p.getParameterType().innerType()).toList());
 	}
 
 	@Test void getRawParameters() {
