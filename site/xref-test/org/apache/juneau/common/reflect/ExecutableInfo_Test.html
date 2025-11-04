@@ -199,27 +199,27 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 	@Test <strong class="jxr_keyword">void</strong> getRawParamTypes() {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		check(<span class="jxr_string">""</span>, b_c1.getRawParamTypes());
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		check(<span class="jxr_string">"String"</span>, b_c2.getRawParamTypes());
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		check(<span class="jxr_string">""</span>, b_m1.getRawParamTypes());
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		check(<span class="jxr_string">"String"</span>, b_m2.getRawParamTypes());
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		check(<span class="jxr_string">""</span>, b_c1.getParameters().stream().map(p -&gt; p.getParameterType().<strong class="jxr_keyword">inner</strong>()).toList());
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		check(<span class="jxr_string">"String"</span>, b_c2.getParameters().stream().map(p -&gt; p.getParameterType().<strong class="jxr_keyword">inner</strong>()).toList());
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		check(<span class="jxr_string">""</span>, b_m1.getParameters().stream().map(p -&gt; p.getParameterType().<strong class="jxr_keyword">inner</strong>()).toList());
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		check(<span class="jxr_string">"String"</span>, b_m2.getParameters().stream().map(p -&gt; p.getParameterType().<strong class="jxr_keyword">inner</strong>()).toList());
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	@Test <strong class="jxr_keyword">void</strong> getRawParamType() {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		check(<span class="jxr_string">"String"</span>, b_c2.getRawParamType(0));
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		check(<span class="jxr_string">"String"</span>, b_m2.getRawParamType(0));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		check(<span class="jxr_string">"String"</span>, b_c2.getParameter(0).getParameterType().<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		check(<span class="jxr_string">"String"</span>, b_m2.getParameter(0).getParameterType().<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 	@Test <strong class="jxr_keyword">void</strong> getRawGenericParamType() {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		check(<span class="jxr_string">"String"</span>, b_c2.getRawGenericParamType(0));
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		check(<span class="jxr_string">"String"</span>, b_m2.getRawGenericParamType(0));
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		check(<span class="jxr_string">"String"</span>, b_c2.getParameter(0).getParameterType().innerType());
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		check(<span class="jxr_string">"String"</span>, b_m2.getParameter(0).getParameterType().innerType());
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@Test <strong class="jxr_keyword">void</strong> getRawGenericParamTypes() {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		check(<span class="jxr_string">""</span>, b_c1.getRawGenericParamTypes());
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		check(<span class="jxr_string">"String"</span>, b_c2.getRawGenericParamTypes());
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		check(<span class="jxr_string">""</span>, b_m1.getRawGenericParamTypes());
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		check(<span class="jxr_string">"String"</span>, b_m2.getRawGenericParamTypes());
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		check(<span class="jxr_string">""</span>, b_c1.getParameters().stream().map(p -&gt; p.getParameterType().innerType()).toList());
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		check(<span class="jxr_string">"String"</span>, b_c2.getParameters().stream().map(p -&gt; p.getParameterType().innerType()).toList());
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		check(<span class="jxr_string">""</span>, b_m1.getParameters().stream().map(p -&gt; p.getParameterType().innerType()).toList());
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		check(<span class="jxr_string">"String"</span>, b_m2.getParameters().stream().map(p -&gt; p.getParameterType().innerType()).toList());
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Test <strong class="jxr_keyword">void</strong> getRawParameters() {
