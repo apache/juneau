@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 			MethodInfo m = type.getPublicMethod(
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 				x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 				&amp;&amp; x.isNotDeprecated()
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				&amp;&amp; x.hasNumParams(1)
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				&amp;&amp; x.hasNumParameters(1)
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 				&amp;&amp; x.getParameter(0).canAccept(builder)
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 				&amp;&amp; x.hasReturnType(type)
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 				&amp;&amp; x.hasNoAnnotation(BeanIgnore.<strong class="jxr_keyword">class</strong>)
@@ -277,7 +277,7 @@
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 			MethodInfo m = type.getPublicMethod(
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 				x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 				&amp;&amp; x.isNotDeprecated()
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				&amp;&amp; x.hasNoParams()
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				&amp;&amp; x.hasNoParameters()
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 				&amp;&amp; x.hasReturnType(type)
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 				&amp;&amp; x.hasNoAnnotation(BeanIgnore.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 				&amp;&amp; x.hasName(<span class="jxr_string">"getInstance"</span>)
@@ -339,7 +339,7 @@
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">if</strong> (builder == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<em class="jxr_comment">// Look for static-builder/protected-constructor pair.</em>
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			Value&lt;T&gt; value = Value.empty();
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			type.forEachDeclaredConstructor(x -&gt; x.hasNumParams(1) &amp;&amp; x.isVisible(PROTECTED), x -&gt; {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			type.forEachDeclaredConstructor(x -&gt; x.hasNumParameters(1) &amp;&amp; x.isVisible(PROTECTED), x -&gt; {
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 				Class&lt;?&gt; pt = x.getParameter(0).getParameterType().<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 				MethodInfo m = type.getPublicMethod(y -&gt; isStaticCreateMethod(y, pt));
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 				<strong class="jxr_keyword">if</strong> (nn(m)) {

@@ -237,13 +237,13 @@
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = methods.size() - 1; i &gt;= 0; i--) {
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 				MethodInfo m = methods.get(i);
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 				<strong class="jxr_keyword">if</strong> (m.hasAnnotation(bc, ParentProperty.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					<strong class="jxr_keyword">if</strong> (m.isStatic() || ! m.hasNumParams(1))
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					<strong class="jxr_keyword">if</strong> (m.isStatic() || ! m.hasNumParameters(1))
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument."</span>, m);
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 					m.setAccessible();
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 					parentPropertyMethod = <strong class="jxr_keyword">new</strong> Setter.MethodSetter(m.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 				}
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 				<strong class="jxr_keyword">if</strong> (m.hasAnnotation(bc, NameProperty.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					<strong class="jxr_keyword">if</strong> (m.isStatic() || ! m.hasNumParams(1))
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					<strong class="jxr_keyword">if</strong> (m.isStatic() || ! m.hasNumParameters(1))
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument."</span>, m);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 					m.setAccessible();
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 					namePropertyMethod = <strong class="jxr_keyword">new</strong> Setter.MethodSetter(m.<strong class="jxr_keyword">inner</strong>());
@@ -305,7 +305,7 @@
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<strong class="jxr_keyword">if</strong> (innerClass != Object.<strong class="jxr_keyword">class</strong>) {
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 				ClassInfo x = implClass == <strong class="jxr_keyword">null</strong> ? ci : ClassInfo.of(implClass);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				noArgConstructor = x.getPublicConstructor(ConstructorInfo::hasNoParams);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				noArgConstructor = x.getPublicConstructor(ConstructorInfo::hasNoParameters);
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 			}
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">try</strong> {
@@ -561,7 +561,7 @@
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 		ConstructorInfo cc = ci.getPublicConstructor(
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 			x -&gt; x.isVisible(v)
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 			&amp;&amp; x.isNotDeprecated()
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			&amp;&amp; x.hasNumParams(isMemberClass ? 1 : 0)
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			&amp;&amp; x.hasNumParameters(isMemberClass ? 1 : 0)
 <a class="jxr_linenumber" name="L557" href="#L557">557</a> 		);
 <a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">if</strong> (nn(cc))

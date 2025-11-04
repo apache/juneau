@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			mi.isNotDeprecated()
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			&amp;&amp; mi.isNotStatic()
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 			&amp;&amp; mi.isVisible(bc.getBeanMethodVisibility())
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			&amp;&amp; mi.hasName(SWAP_METHOD_NAMES)
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			&amp;&amp; mi.hasAnyName(SWAP_METHOD_NAMES)
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			&amp;&amp; mi.hasReturnTypeParent(List.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			&amp;&amp; mi.hasFuzzyParameterTypes(BeanSession.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			&amp;&amp; mi.hasNoAnnotation(bc, BeanIgnore.<strong class="jxr_keyword">class</strong>);
@@ -161,7 +161,7 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			mi.isNotDeprecated()
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			&amp;&amp; mi.isStatic()
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			&amp;&amp; mi.isVisible(bc.getBeanMethodVisibility())
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			&amp;&amp; mi.hasName(UNSWAP_METHOD_NAMES)
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			&amp;&amp; mi.hasAnyName(UNSWAP_METHOD_NAMES)
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			&amp;&amp; mi.hasFuzzyParameterTypes(BeanSession.<strong class="jxr_keyword">class</strong>, rt.<strong class="jxr_keyword">inner</strong>())
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			&amp;&amp; mi.hasReturnTypeParent(ci)
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			&amp;&amp; mi.hasNoAnnotation(bc, BeanIgnore.<strong class="jxr_keyword">class</strong>);
