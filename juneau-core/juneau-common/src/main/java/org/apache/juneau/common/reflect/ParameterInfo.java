@@ -48,6 +48,12 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			.supplier(k -> opt(findAnnotation(k)))
 			.build();
 
+	@SuppressWarnings({"rawtypes"})
+	private final Cache foundAnnotations =
+		Cache.of(Class.class, List.class)
+			.supplier(this::findAnnotationInfosInternal)
+			.build();
+
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
 	private final Supplier<List<ParameterInfo>> matchingParameters = memoize(this::_findMatchingParameters);
 
@@ -246,6 +252,36 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
 		return (A)((Optional<Annotation>)annotationCache.get(type)).orElse(null);
+	}
+
+	/**
+	 * Finds all annotation infos of the specified type defined on this method parameter.
+	 *
+	 * <p>
+	 * Searches through matching parameters in the hierarchy and the parameter type.
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
+	 * @return A list of annotation infos found, or an empty list if none found.
+	 */
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> List<AnnotationInfo<A>> findAnnotationInfos(Class<A> type) {
+		return (List<AnnotationInfo<A>>)foundAnnotations.get(type);
+	}
+
+	/**
+	 * Finds the first annotation info of the specified type defined on this method parameter.
+	 *
+	 * <p>
+	 * Searches through matching parameters in the hierarchy and the parameter type.
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
+	 * @return The annotation info if found, or <jk>null</jk> if not.
+	 */
+	public <A extends Annotation> AnnotationInfo<A> findAnnotationInfo(Class<A> type) {
+		var list = findAnnotationInfos(type);
+		return list.isEmpty() ? null : list.get(0);
 	}
 
 	/**
@@ -789,6 +825,28 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 		Value<A> v = Value.empty();
 		mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, y -> true, y -> v.set(y)));
 		return v.orElseGet(() -> executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class).getAnnotation(type));
+	}
+
+	@SuppressWarnings("unchecked")
+	private <A extends Annotation> List<AnnotationInfo<A>> findAnnotationInfosInternal(Class<A> type) {
+		var list = new ArrayList<AnnotationInfo<A>>();
+
+		// Search through matching parameters in hierarchy
+		for (var mp : getMatchingParameters()) {
+			mp.getAnnotationInfos().stream()
+				.filter(x -> x.isType(type))
+				.map(x -> (AnnotationInfo<A>)x)
+				.forEach(list::add);
+		}
+
+		// Search on parameter type
+		var paramType = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
+		paramType.getDeclaredAnnotationInfos().stream()
+			.filter(x -> x.isType(type))
+			.map(x -> (AnnotationInfo<A>)x)
+			.forEach(list::add);
+
+		return list;
 	}
 
 	private <A extends Annotation> ParameterInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {

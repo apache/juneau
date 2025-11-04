@@ -615,6 +615,168 @@ class ParamInfoTest extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// findAnnotationInfos() / findAnnotationInfo()
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Nested
+	class FindAnnotationInfosTests {
+
+		// Annotations for testing
+		@Documented
+		@Target({PARAMETER, TYPE})
+		@Retention(RUNTIME)
+		public @interface FA1 {
+			int value();
+		}
+
+		@Documented
+		@Target({PARAMETER, TYPE})
+		@Retention(RUNTIME)
+		public @interface FA2 {
+			String value();
+		}
+
+		// Test finding annotation on parameter itself
+		public static class F1 {
+			public void test(@FA1(1) String x) {}  // NOSONAR
+		}
+
+		@Test void findOnParameter() throws Exception {
+			var mi = MethodInfo.of(F1.class.getMethod("test", String.class));
+			var pi = mi.getParameter(0);
+			var infos = pi.findAnnotationInfos(FA1.class);
+			assertEquals(1, infos.size());
+			assertEquals(1, infos.get(0).inner().value());
+		}
+
+		@Test void findOnParameter_single() throws Exception {
+			var mi = MethodInfo.of(F1.class.getMethod("test", String.class));
+			var pi = mi.getParameter(0);
+			var info = pi.findAnnotationInfo(FA1.class);
+			assertNotNull(info);
+			assertEquals(1, info.inner().value());
+		}
+
+		// Test finding annotation from matching method parameters
+		public interface F2 {
+			void test(@FA1(2) String x);
+		}
+
+		public static class F3 implements F2 {
+			@Override public void test(String x) {}  // NOSONAR
+		}
+
+		@Test void findFromMatchingMethod() throws Exception {
+			var mi = MethodInfo.of(F3.class.getMethod("test", String.class));
+			var pi = mi.getParameter(0);
+			var infos = pi.findAnnotationInfos(FA1.class);
+			assertEquals(1, infos.size());
+			assertEquals(2, infos.get(0).inner().value());
+		}
+
+		// Test finding annotation from parameter type
+		@FA1(3)
+		public static class F4Type {}
+
+		public static class F5 {
+			public void test(F4Type x) {}  // NOSONAR
+		}
+
+		@Test void findFromParameterType() throws Exception {
+			var mi = MethodInfo.of(F5.class.getMethod("test", F4Type.class));
+			var pi = mi.getParameter(0);
+			var infos = pi.findAnnotationInfos(FA1.class);
+			assertEquals(1, infos.size());
+			assertEquals(3, infos.get(0).inner().value());
+		}
+
+		// Test finding multiple annotations from hierarchy
+		public interface F6 {
+			void test(@FA1(4) String x);
+		}
+
+		public static class F7 {
+			public void test(@FA1(5) String x) {}  // NOSONAR
+		}
+
+		public static class F8 extends F7 implements F6 {
+			@Override public void test(@FA1(6) String x) {}  // NOSONAR
+		}
+
+		@Test void findMultipleFromHierarchy() throws Exception {
+			var mi = MethodInfo.of(F8.class.getMethod("test", String.class));
+			var pi = mi.getParameter(0);
+			var infos = pi.findAnnotationInfos(FA1.class);
+			assertEquals(3, infos.size());
+			assertEquals(6, infos.get(0).inner().value()); // F8
+			assertEquals(4, infos.get(1).inner().value()); // F6
+			assertEquals(5, infos.get(2).inner().value()); // F7
+		}
+
+		@Test void findMultipleFromHierarchy_single() throws Exception {
+			var mi = MethodInfo.of(F8.class.getMethod("test", String.class));
+			var pi = mi.getParameter(0);
+			var info = pi.findAnnotationInfo(FA1.class);
+			assertNotNull(info);
+			assertEquals(6, info.inner().value()); // Returns first (F8)
+		}
+
+		// Test finding annotation from constructor parameters
+		public static class F9 {
+			public F9(@FA1(7) String x) {}  // NOSONAR
+		}
+
+		public static class F10 extends F9 {
+			public F10(@FA1(8) String x) { super(x); }  // NOSONAR
+		}
+
+		@Test void findFromMatchingConstructor() throws Exception {
+			var ci = ConstructorInfo.of(F10.class.getConstructor(String.class));
+			var pi = ci.getParameter(0);
+			var infos = pi.findAnnotationInfos(FA1.class);
+			assertEquals(2, infos.size());
+			assertEquals(8, infos.get(0).inner().value()); // F10
+			assertEquals(7, infos.get(1).inner().value()); // F9
+		}
+
+		// Test not found
+		public static class F11 {
+			public void test(String x) {}  // NOSONAR
+		}
+
+		@Test void notFound() throws Exception {
+			var mi = MethodInfo.of(F11.class.getMethod("test", String.class));
+			var pi = mi.getParameter(0);
+			var infos = pi.findAnnotationInfos(FA1.class);
+			assertEquals(0, infos.size());
+		}
+
+		@Test void notFound_single() throws Exception {
+			var mi = MethodInfo.of(F11.class.getMethod("test", String.class));
+			var pi = mi.getParameter(0);
+			var info = pi.findAnnotationInfo(FA1.class);
+			assertNull(info);
+		}
+
+		// Test parameter annotation takes precedence over type annotation
+		@FA1(9)
+		public static class F12Type {}
+
+		public static class F13 {
+			public void test(@FA1(10) F12Type x) {}  // NOSONAR
+		}
+
+		@Test void parameterAnnotationBeforeTypeAnnotation() throws Exception {
+			var mi = MethodInfo.of(F13.class.getMethod("test", F12Type.class));
+			var pi = mi.getParameter(0);
+			var infos = pi.findAnnotationInfos(FA1.class);
+			assertEquals(2, infos.size());
+			assertEquals(10, infos.get(0).inner().value()); // Parameter annotation first
+			assertEquals(9, infos.get(1).inner().value());  // Type annotation second
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Helpers
 	//-----------------------------------------------------------------------------------------------------------------
 
