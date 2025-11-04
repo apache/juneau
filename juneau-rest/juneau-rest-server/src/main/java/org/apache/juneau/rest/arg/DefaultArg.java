@@ -16,10 +16,7 @@
  */
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-
-import java.lang.annotation.*;
 
 import org.apache.juneau.cp.*;
 import org.apache.juneau.common.reflect.*;
@@ -69,18 +66,11 @@ public class DefaultArg implements RestOpArg {
 	protected DefaultArg(ParameterInfo paramInfo) {
 		this.type = paramInfo.getParameterType().inner();
 		this.paramInfo = paramInfo;
-		this.name = findBeanName(paramInfo);
+		this.name = paramInfo.findName();
 	}
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		return opSession.getBeanStore().getBean(type, name).orElseThrow(() -> new ArgException(paramInfo, "Could not resolve bean type {0}", cn(type)));
-	}
-
-	private static String findBeanName(ParameterInfo pi) {
-		Annotation n = pi.getAnnotation(Annotation.class, x -> scn(x.annotationType()).equals("Named"));
-		if (nn(n))
-			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
-		return null;
 	}
 }

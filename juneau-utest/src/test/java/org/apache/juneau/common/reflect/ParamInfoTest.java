@@ -565,17 +565,21 @@ class ParamInfoTest extends TestBase {
 			public PC13(@Name("foo") String x) { super(x); }  // NOSONAR
 		}
 
-		@Test void constructor_withNameAnnotation_matching() throws Exception {
-			var ci = ConstructorInfo.of(PC13.class.getConstructor(String.class));
-			var pi = ci.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			// Should match PC12 constructor with @Name("foo"), not the one with @Name("bar")
-			assertEquals(2, matching.size());
-			check("PC13", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-			check("PC12", matching.get(1).getDeclaringExecutable().getDeclaringClass());
-			// Verify the matched parameter has name "foo"
-			assertEquals("foo", matching.get(1).getName());
-		}
+	@Test void constructor_withNameAnnotation_matching() throws Exception {
+		var ci = ConstructorInfo.of(PC13.class.getConstructor(String.class));
+		var pi = ci.getParameter(0);
+		var matching = pi.getMatchingParameters();
+		// Constructors match by index+type only (not by name) to avoid circular dependency
+		// So this matches ALL PC12 constructors with parameter at index 0 with type String
+		// PC12 has TWO such constructors: PC12(String) and PC12(String, int)
+		assertEquals(3, matching.size());
+		check("PC13", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PC12", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+		check("PC12", matching.get(2).getDeclaringExecutable().getDeclaringClass());
+		// Both PC12 parameters have their own @Name annotations
+		assertEquals("foo", matching.get(1).getName());
+		assertEquals("bar", matching.get(2).getName());
+	}
 
 		// Test with @Name annotation - different names
 		public static class PC14 {
@@ -586,15 +590,18 @@ class ParamInfoTest extends TestBase {
 			public PC15(@Name("foo") String x) { super(x); }  // NOSONAR
 		}
 
-		@Test void constructor_withNameAnnotation_differentNames() throws Exception {
-			var ci = ConstructorInfo.of(PC15.class.getConstructor(String.class));
-			var pi = ci.getParameter(0);
-			var matching = pi.getMatchingParameters();
-			// Should not match parent parameter because names differ ("foo" vs "bar")
-			assertEquals(1, matching.size());
-			check("PC15", matching.get(0).getDeclaringExecutable().getDeclaringClass());
-			assertEquals("foo", matching.get(0).getName());
-		}
+	@Test void constructor_withNameAnnotation_differentNames() throws Exception {
+		var ci = ConstructorInfo.of(PC15.class.getConstructor(String.class));
+		var pi = ci.getParameter(0);
+		var matching = pi.getMatchingParameters();
+		// Constructors match by index+type only (not by name) to avoid circular dependency
+		// So this DOES match parent parameter even though names differ ("foo" vs "bar")
+		assertEquals(2, matching.size());
+		check("PC15", matching.get(0).getDeclaringExecutable().getDeclaringClass());
+		check("PC14", matching.get(1).getDeclaringExecutable().getDeclaringClass());
+		assertEquals("foo", matching.get(0).getName());
+		assertEquals("bar", matching.get(1).getName());
+	}
 
 		// Test with @Name annotation on methods
 		public interface PM12 {

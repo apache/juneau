@@ -25,9 +25,9 @@ import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.common.utils.Utils.isEmpty;
 
-import java.lang.annotation.*;
 import java.util.*;
 import java.util.concurrent.*;
+
 import java.util.function.*;
 import java.util.stream.*;
 
@@ -46,7 +46,7 @@ import org.apache.juneau.common.reflect.*;
  *
  * <p>
  * Beans can be stored with or without names.  Named beans are typically resolved using
- * the <ja>@Named</ja> or <ja>@Qualified</ja> annotations on constructor or method parameters.
+ * the <ja>@Name</ja> or <ja>@Qualified</ja> annotations on constructor or method parameters.
  *
  * <p>
  * Beans are added through the following methods:
@@ -511,7 +511,7 @@ public class BeanStore {
 				continue loop;
 			if (pt.is(Optional.class) || pt.is(BeanStore.class))
 				continue loop;
-			String beanName = findBeanName(pi);
+			String beanName = pi.findName();
 			Class<?> ptc = pt.inner();
 			if (beanName == null && ! hasBean(ptc))
 				l.add(pt.getNameSimple());
@@ -537,7 +537,7 @@ public class BeanStore {
 			} else if (pt.is(BeanStore.class)) {
 				o[i] = this;
 			} else {
-				String beanName = findBeanName(pi);
+				String beanName = pi.findName();
 				Class<?> ptc = pt.unwrap(Optional.class).inner();
 				Optional<?> o2 = beanName == null ? getBean(ptc) : getBean(ptc, beanName);
 				o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
@@ -560,7 +560,7 @@ public class BeanStore {
 				continue loop;
 			if (pt.is(Optional.class) || pt.is(BeanStore.class))
 				continue loop;
-			String beanName = findBeanName(pi);
+			String beanName = pi.findName();
 			Class<?> ptc = pt.inner();
 			if ((beanName == null && ! hasBean(ptc)) || (nn(beanName) && ! hasBean(ptc, beanName)))
 				return false;
@@ -645,13 +645,6 @@ public class BeanStore {
 	private void assertCanWrite() {
 		if (readOnly)
 			throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");
-	}
-
-	private static String findBeanName(ParameterInfo pi) {
-		Annotation n = pi.getAnnotation(Annotation.class, x -> scn(x.annotationType()).equals("Named"));
-		if (nn(n))
-			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
-		return null;
 	}
 
 	private JsonMap properties() {

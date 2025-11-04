@@ -115,7 +115,7 @@ import org.apache.juneau.svl.*;
  *
  * 	<jc>// Method that uses injected beans.</jc>
  * 	<ja>@RestGet</ja>
- * 	<jk>public</jk> Object doGet(MyBean <jv>myBean1</jv>, <ja>@Named</ja>(<js>"myBean2"</js>) MyBean <jv>myBean2</jv>) { ... }
+ * 	<jk>public</jk> Object doGet(MyBean <jv>myBean1</jv>, <ja>@Name</ja>(<js>"myBean2"</js>) MyBean <jv>myBean2</jv>) { ... }
  * </p>
  *
  * <p>

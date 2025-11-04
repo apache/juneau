@@ -47,6 +47,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
 	private final Supplier<List<ParameterInfo>> matchingParameters = memoize(this::_findMatchingParameters);
+	private final Supplier<String> foundName = memoize(this::findNameInternal);
 
 	/**
 	 * Constructor.
@@ -146,7 +147,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private List<ParameterInfo> _findMatchingParameters() {
 		if (executable.isConstructor()) {
-			// For constructors: search parent class constructors for parameters with matching name and type
+			// For constructors: search parent class constructors for parameters with matching index and type
+			// Note: We match by index and type only, not by name, to avoid circular dependency
+			// (getName() needs getMatchingParameters() which needs getName())
 			var ci = (ConstructorInfo)executable;
 			var list = new ArrayList<ParameterInfo>();
 
@@ -158,11 +161,10 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			while (nn(cc)) {
 				// Check all constructors in parent class
 				for (var pc : cc.getDeclaredConstructors()) {
-					// Check all parameters in each constructor for name and type match
-					for (var pp : pc.getParameters()) {
-						if (eq(getName(), pp.getName()) && getParameterType().is(pp.getParameterType())) {
-							list.add(pp);
-						}
+					// Check if constructor has parameter at this index with matching type
+					var params = pc.getParameters();
+					if (index < params.size() && getParameterType().is(params.get(index).getParameterType())) {
+						list.add(params.get(index));
 					}
 				}
 				cc = cc.getSuperclass();
@@ -202,43 +204,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	public <A extends Annotation> AnnotationInfo<A> findAnnotationInfo(Class<A> type) {
 		var list = findAnnotationInfos(type);
 		return list.isEmpty() ? null : list.get(0);
-	}
-
-	/**
-	 * Returns the first matching annotation on this method parameter.
-	 *
-	 * <p>
-	 * Searches all methods with the same signature on the parent classes or interfaces
-	 * and the return type on the method.
-	 * <p>
-	 * Results are in parent-to-child order.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
-	 * @return A list of all matching annotations found or an empty list if none found.
-	 */
-	@SuppressWarnings("unchecked")
-	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> filter) {
-		if (executable.isConstructor) {
-			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
-			A o = ci.getAnnotation(type, filter);
-			if (nn(o))
-				return o;
-			for (var a2 : getAnnotations())
-				if (type.isInstance(a2) && test(filter, type.cast(a2)))
-					return (A)a2;
-		} else {
-			var mi = (MethodInfo)executable;
-			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
-			A o = ci.getAnnotation(type, filter);
-			if (nn(o))
-				return o;
-			Value<A> v = Value.empty();
-			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, filter, y -> v.set(y)));
-			return v.orElse(null);
-		}
-		return null;
 	}
 
 	/**
@@ -288,7 +253,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The name from the annotation, or <jk>null</jk> if no compatible annotation is found.
 	 */
-	private String getNameFromAnnotation() {
+	private String findNameFromAnnotation() {
 		for (var annotation : parameter.getAnnotations()) {
 			var annotationType = annotation.annotationType();
 			if ("Name".equals(annotationType.getSimpleName())) {
@@ -308,16 +273,48 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
+	 * Finds the name of this parameter by searching the hierarchy.
+	 *
+	 * <p>
+	 * Searches for the parameter name in the following order:
+	 * <ol>
+	 * 	<li>@Name annotation value (takes precedence over bytecode parameter names)
+	 * 	<li>Bytecode parameter name (if compiled with -parameters flag)
+	 * 	<li>Matching parameters in parent classes/interfaces (for methods)
+	 * </ol>
+	 *
+	 * @return The parameter name if found, or <jk>null</jk> if not available.
+	 */
+	public String findName() {
+		return foundName.get();
+	}
+
+	private String findNameInternal() {
+		// Search through matching parameters in hierarchy
+		for (var mp : getMatchingParameters()) {
+			// Check for @Name annotation first (overrides bytecode names)
+			String annotationName = mp.findNameFromAnnotation();
+			if (annotationName != null)
+				return annotationName;
+			
+			// Then check if bytecode name is present
+			if (mp.parameter.isNamePresent())
+				return mp.parameter.getName();
+		}
+		return null;
+	}
+
+	/**
 	 * Returns the name of the parameter.
 	 *
 	 * <p>
-	 * If the parameter has an annotation with the simple name "Name" and a "value()" method,
-	 * then this method returns the value from that annotation.
-	 * Otherwise, this method returns the parameter name from the class file.
-	 *
-	 * <p>
-	 * Note: If the code was not compiled with the <c>-parameters</c> flag, the parameter name
-	 * will be a synthetic name like "arg0", "arg1", etc.
+	 * Searches for the name in the following order:
+	 * <ol>
+	 * 	<li>@Name annotation value (takes precedence over bytecode parameter names)
+	 * 	<li>Bytecode parameter name (if compiled with -parameters flag)
+	 * 	<li>Matching parameters in parent classes/interfaces (for methods)
+	 * 	<li>Synthetic name like "arg0", "arg1", etc. (fallback)
+	 * </ol>
 	 *
 	 * <p>
 	 * This method works with any annotation named "Name" (from any package) that has a <c>String value()</c> method.
@@ -326,10 +323,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @see Parameter#getName()
 	 */
 	public String getName() {
-		String name = getNameFromAnnotation();
-		if (name != null)
-			return name;
-		return parameter.getName();
+		String name = findName();
+		return name != null ? name : parameter.getName();
 	}
 
 	/**
@@ -373,7 +368,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @return <jk>true</jk> if the parameter has a name.
 	 */
 	public boolean hasName() {
-		return getNameFromAnnotation() != null || parameter.isNamePresent();
+		return findName() != null;
 	}
 
 	/**
