@@ -278,8 +278,8 @@ class BeanStore_Test extends TestBase {
 		var b2c = BeanStore.create().outer(outer).parent(b1p).threadSafe().build();
 
 		var ci = ClassInfo.of(B1.class);
-		var c1 = ci.getPublicConstructor(x -> x.hasParamTypes(A1.class, Optional.class, BeanStore.class));
-		var c2 = ci.getPublicConstructor(x -> x.hasParamTypes(A1.class, Optional.class));
+		var c1 = ci.getPublicConstructor(x -> x.hasParameterTypes(A1.class, Optional.class, BeanStore.class));
+		var c2 = ci.getPublicConstructor(x -> x.hasParameterTypes(A1.class, Optional.class));
 		var m1 = ci.getPublicMethod(x-> x.hasName("m1"));
 		var m2 = ci.getPublicMethod(x-> x.hasName("m2"));
 		var m3 = ci.getPublicMethod(x-> x.hasName("m3"));
@@ -412,8 +412,8 @@ class BeanStore_Test extends TestBase {
 		var b2c = BeanStore.create().outer(this).parent(b1p).threadSafe().build();
 
 		var ci = ClassInfo.of(B2.class);
-		var c1 = ci.getPublicConstructor(x -> x.hasParamTypes(BeanStore_Test.class, A1.class, Optional.class, BeanStore.class));
-		var c2 = ci.getPublicConstructor(x -> x.hasParamTypes(BeanStore_Test.class, A1.class, Optional.class));
+		var c1 = ci.getPublicConstructor(x -> x.hasParameterTypes(BeanStore_Test.class, A1.class, Optional.class, BeanStore.class));
+		var c2 = ci.getPublicConstructor(x -> x.hasParameterTypes(BeanStore_Test.class, A1.class, Optional.class));
 
 		for (var b : array(b1p, b1c, b2p, b2c)) {
 			assertString(A1n, b.getMissingParams(c1));

@@ -344,7 +344,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 				&& x.isNotDeprecated()
 				&& x.hasName("from")
 				&& x.hasReturnType(c)
-				&& x.hasParamTypes(TemporalAccessor.class)
+				&& x.hasParameterTypes(TemporalAccessor.class)
 			);
 			// @formatter:on
 			if (mi == null)

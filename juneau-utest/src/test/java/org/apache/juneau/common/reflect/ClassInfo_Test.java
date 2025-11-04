@@ -20,7 +20,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.Context.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.reflect.ReflectFlags.*;
+import static org.apache.juneau.common.reflect.ElementFlag.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.common.reflect.ClassInfo.*;
@@ -414,7 +414,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getPublicConstructor_classArgs() {
-		check("E1(String)", e1.getPublicConstructor(x -> x.hasParamTypes(String.class)));
+		check("E1(String)", e1.getPublicConstructor(x -> x.hasParameterTypes(String.class)));
 	}
 
 	@Test void getPublicConstructor_objectArgs() {
@@ -445,9 +445,9 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getConstructor() {
-		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PROTECTED) && x.hasParamTypes(int.class)));
-		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PRIVATE) && x.hasParamTypes(int.class)));
-		check(null, e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC) && x.hasParamTypes(int.class)));
+		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PROTECTED) && x.hasParameterTypes(int.class)));
+		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PRIVATE) && x.hasParameterTypes(int.class)));
+		check(null, e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC) && x.hasParameterTypes(int.class)));
 		check("E3()", e3.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)));
 		check("E4(ClassInfo_Test)", e4.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)));
 		check("E5()", e5.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)));
@@ -926,178 +926,82 @@ public class ClassInfo_Test extends TestBase {
 	static ClassInfo h2a=of(H2a.class), h2b=of(H2b.class), h2Deprecated=of(H2_Deprecated.class), h2NotDeprecated=of(H2_NotDeprecated.class), h2Public=of(H2_Public.class), h2NotPublic=of(H2_NotPublic.class), h2Static=of(H2_Static.class), h2NotStatic=of(H2_NotStatic.class), h2Member=of(H2_Member.class), h2StaticMember=of(H2_StaticMember.class), h2Abstract=of(H2_Abstract.class), h2NotAbstract=of(H2_NotAbstract.class);  // NOSONAR
 
 	@Test void isAll() {
-		assertTrue(h2a.isAll(DEPRECATED, PUBLIC, STATIC, MEMBER, ABSTRACT, ReflectFlags.CLASS));
+		assertTrue(h2a.isAll(DEPRECATED, PUBLIC, STATIC, MEMBER, ABSTRACT, ElementFlag.CLASS));
 		assertTrue(h2b.isAll(NOT_DEPRECATED, NOT_PUBLIC, STATIC, ABSTRACT, INTERFACE));
 	}
 
 	@Test void isAll_onType() {
-		assertTrue(aTypeInfo.isAll(PUBLIC, MEMBER, ReflectFlags.CLASS));
-		assertFalse(pTypeInfo.isAll(PUBLIC, MEMBER, ReflectFlags.CLASS));
-		assertFalse(pTypeDimensionalInfo.isAll(PUBLIC, MEMBER, ReflectFlags.CLASS));
-		assertFalse(pTypeGenericInfo.isAll(PUBLIC, MEMBER, ReflectFlags.CLASS));
+		assertTrue(aTypeInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
+		assertFalse(pTypeInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
+		assertFalse(pTypeDimensionalInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
+		assertFalse(pTypeGenericInfo.isAll(PUBLIC, MEMBER, ElementFlag.CLASS));
 	}
 
 	@Test void isAll_deprecated() {
-		assertTrue(h2Deprecated.isAll(DEPRECATED));
-		assertFalse(h2NotDeprecated.isAll(DEPRECATED));
+		assertTrue(h2Deprecated.is(DEPRECATED));
+		assertFalse(h2NotDeprecated.is(DEPRECATED));
 	}
 
 	@Test void isAll_notDeprecated() {
-		assertFalse(h2Deprecated.isAll(NOT_DEPRECATED));
-		assertTrue(h2NotDeprecated.isAll(NOT_DEPRECATED));
+		assertFalse(h2Deprecated.is(NOT_DEPRECATED));
+		assertTrue(h2NotDeprecated.is(NOT_DEPRECATED));
 	}
 
 	@Test void isAll_public() {
-		assertTrue(of(H2_Public.class).isAll(PUBLIC));
-		assertFalse(h2NotPublic.isAll(PUBLIC));
+		assertTrue(of(H2_Public.class).is(PUBLIC));
+		assertFalse(h2NotPublic.is(PUBLIC));
 	}
 
 	@Test void isAll_notPublic() {
-		assertFalse(of(H2_Public.class).isAll(NOT_PUBLIC));
-		assertTrue(h2NotPublic.isAll(NOT_PUBLIC));
+		assertFalse(of(H2_Public.class).is(NOT_PUBLIC));
+		assertTrue(h2NotPublic.is(NOT_PUBLIC));
 	}
 
 	@Test void isAll_static() {
-		assertTrue(of(H2_Static.class).isAll(STATIC));
-		assertFalse(h2NotStatic.isAll(STATIC));
+		assertTrue(of(H2_Static.class).is(STATIC));
+		assertFalse(h2NotStatic.is(STATIC));
 	}
 
 	@Test void isAll_notStatic() {
-		assertFalse(of(H2_Static.class).isAll(NOT_STATIC));
-		assertTrue(h2NotStatic.isAll(NOT_STATIC));
+		assertFalse(of(H2_Static.class).is(NOT_STATIC));
+		assertTrue(h2NotStatic.is(NOT_STATIC));
 	}
 
 	@Test void isAll_member() {
-		assertTrue(h2Member.isAll(MEMBER));
-		assertTrue(h2StaticMember.isAll(MEMBER));
-		assertFalse(aClass.isAll(MEMBER));
+		assertTrue(h2Member.is(MEMBER));
+		assertTrue(h2StaticMember.is(MEMBER));
+		assertFalse(aClass.is(MEMBER));
 	}
 
 	@Test void isAll_notMember() {
-		assertFalse(h2Member.isAll(NOT_MEMBER));
-		assertFalse(h2StaticMember.isAll(NOT_MEMBER));
-		assertTrue(aClass.isAll(NOT_MEMBER));
+		assertFalse(h2Member.is(NOT_MEMBER));
+		assertFalse(h2StaticMember.is(NOT_MEMBER));
+		assertTrue(aClass.is(NOT_MEMBER));
 	}
 
 	@Test void isAll_abstract() {
-		assertTrue(of(H2_Abstract.class).isAll(ABSTRACT));
-		assertFalse(h2NotAbstract.isAll(ABSTRACT));
-		assertTrue(aInterface.isAll(ABSTRACT));
+		assertTrue(of(H2_Abstract.class).is(ABSTRACT));
+		assertFalse(h2NotAbstract.is(ABSTRACT));
+		assertTrue(aInterface.is(ABSTRACT));
 	}
 
 	@Test void isAll_notAbstract() {
-		assertFalse(of(H2_Abstract.class).isAll(NOT_ABSTRACT));
-		assertTrue(h2NotAbstract.isAll(NOT_ABSTRACT));
-		assertFalse(aInterface.isAll(NOT_ABSTRACT));
+		assertFalse(of(H2_Abstract.class).is(NOT_ABSTRACT));
+		assertTrue(h2NotAbstract.is(NOT_ABSTRACT));
+		assertFalse(aInterface.is(NOT_ABSTRACT));
 	}
 
 	@Test void isAll_interface() {
-		assertTrue(aInterface.isAll(INTERFACE));
-		assertFalse(aClass.isAll(INTERFACE));
+		assertTrue(aInterface.is(INTERFACE));
+		assertFalse(aClass.is(INTERFACE));
 	}
 
 	@Test void isAll_class() {
-		assertFalse(aInterface.isAll(ReflectFlags.CLASS));
-		assertTrue(aClass.isAll(ReflectFlags.CLASS));
+		assertFalse(aInterface.is(ElementFlag.CLASS));
+		assertTrue(aClass.is(ElementFlag.CLASS));
 	}
 
-	@Test void isAll_invalid() {
-		var a = aClass;
-		assertThrows(Exception.class, ()->a.isAll(HAS_PARAMS));
-		assertThrows(Exception.class, ()->a.isAll(HAS_NO_PARAMS));
-		assertThrows(Exception.class, ()->a.isAll(TRANSIENT));
-		assertThrows(Exception.class, ()->a.isAll(NOT_TRANSIENT));
-	}
 
-	@Test void isAny() {
-		assertTrue(h2a.isAny(DEPRECATED));
-		assertTrue(h2a.isAny(PUBLIC));
-		assertTrue(h2a.isAny(STATIC));
-		assertTrue(h2a.isAny(MEMBER));
-		assertTrue(h2a.isAny(ABSTRACT));
-		assertTrue(h2a.isAny(ReflectFlags.CLASS));
-		assertTrue(h2b.isAny(NOT_DEPRECATED));
-		assertTrue(h2b.isAny(NOT_PUBLIC));
-		assertTrue(h2b.isAny(STATIC));
-		assertTrue(h2b.isAny(ABSTRACT));
-		assertTrue(h2b.isAny(INTERFACE));
-	}
-
-	@Test void isAny_onType() {
-		assertFalse(aTypeInfo.isAny(new ReflectFlags[0]));
-	}
-
-	@Test void isAny_deprecated() {
-		assertTrue(h2Deprecated.isAny(DEPRECATED));
-		assertFalse(h2NotDeprecated.isAny(DEPRECATED));
-	}
-
-	@Test void isAny_notDeprecated() {
-		assertFalse(h2Deprecated.isAny(NOT_DEPRECATED));
-		assertTrue(h2NotDeprecated.isAny(NOT_DEPRECATED));
-	}
-
-	@Test void isAny_public() {
-		assertTrue(h2Public.isAny(PUBLIC));
-		assertFalse(h2NotPublic.isAny(PUBLIC));
-	}
-
-	@Test void isAny_notPublic() {
-		assertFalse(h2Public.isAny(NOT_PUBLIC));
-		assertTrue(h2NotPublic.isAny(NOT_PUBLIC));
-	}
-
-	@Test void isAny_static() {
-		assertTrue(h2Static.isAny(STATIC));
-		assertFalse(h2NotStatic.isAny(STATIC));
-	}
-
-	@Test void isAny_notStatic() {
-		assertFalse(h2Static.isAny(NOT_STATIC));
-		assertTrue(h2NotStatic.isAny(NOT_STATIC));
-	}
-
-	@Test void isAny_member() {
-		assertTrue(h2Member.isAny(MEMBER));
-		assertTrue(h2StaticMember.isAny(MEMBER));
-		assertFalse(aClass.isAny(MEMBER));
-	}
-
-	@Test void isAny_notMember() {
-		assertFalse(h2Member.isAny(NOT_MEMBER));
-		assertFalse(h2StaticMember.isAny(NOT_MEMBER));
-		assertTrue(aClass.isAny(NOT_MEMBER));
-	}
-
-	@Test void isAny_abstract() {
-		assertTrue(h2Abstract.isAny(ABSTRACT));
-		assertFalse(h2NotAbstract.isAny(ABSTRACT));
-		assertTrue(aInterface.isAny(ABSTRACT));
-	}
-
-	@Test void isAny_notAbstract() {
-		assertFalse(h2Abstract.isAny(NOT_ABSTRACT));
-		assertTrue(h2NotAbstract.isAny(NOT_ABSTRACT));
-		assertFalse(aInterface.isAny(NOT_ABSTRACT));
-	}
-
-	@Test void isAny_interface() {
-		assertTrue(aInterface.isAny(INTERFACE));
-		assertFalse(aClass.isAny(INTERFACE));
-	}
-
-	@Test void isAny_class() {
-		assertFalse(aInterface.isAny(ReflectFlags.CLASS));
-		assertTrue(aClass.isAny(ReflectFlags.CLASS));
-	}
-
-	@Test void isAny_invalid() {
-		var a = aClass;
-		assertThrows(Exception.class, ()->a.isAny(HAS_PARAMS));
-		assertThrows(Exception.class, ()->a.isAny(HAS_NO_PARAMS));
-		assertThrows(Exception.class, ()->a.isAny(TRANSIENT));
-		assertThrows(Exception.class, ()->a.isAny(NOT_TRANSIENT));
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Primitive wrappers

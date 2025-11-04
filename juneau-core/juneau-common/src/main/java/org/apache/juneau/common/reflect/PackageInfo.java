@@ -371,7 +371,7 @@ public class PackageInfo implements Annotatable {
 
 	@Override /* Annotatable */
 	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.PACKAGE;
+		return AnnotatableType.PACKAGE_TYPE;
 	}
 
 	@Override /* Annotatable */

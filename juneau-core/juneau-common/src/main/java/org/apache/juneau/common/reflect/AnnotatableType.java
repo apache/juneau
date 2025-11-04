@@ -25,15 +25,15 @@ package org.apache.juneau.common.reflect;
  */
 public enum AnnotatableType {
 	/** Represents a {@link Class} wrapped in {@link ClassInfo}. */
-	CLASS,
+	CLASS_TYPE,
 	/** Represents a {@link java.lang.reflect.Method} wrapped in {@link MethodInfo}. */
-	METHOD,
+	METHOD_TYPE,
 	/** Represents a {@link java.lang.reflect.Field} wrapped in {@link FieldInfo}. */
-	FIELD,
+	FIELD_TYPE,
 	/** Represents a {@link java.lang.Package} wrapped in {@link PackageInfo}. */
-	PACKAGE,
+	PACKAGE_TYPE,
 	/** Represents a {@link java.lang.reflect.Constructor} wrapped in {@link ConstructorInfo}. */
-	CONSTRUCTOR,
+	CONSTRUCTOR_TYPE,
 	/** Represents a {@link java.lang.reflect.Parameter} wrapped in {@link ParameterInfo}. */
-	PARAMETER
+	PARAMETER_TYPE
 }

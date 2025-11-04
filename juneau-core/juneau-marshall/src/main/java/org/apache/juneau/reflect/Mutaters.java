@@ -218,7 +218,7 @@ public class Mutaters {
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasReturnType(oc2)
-				&& x.hasParamTypes(ic)
+				&& x.hasParameterTypes(ic)
 				&& (x.hasName("forName") || isStaticCreateMethodName(x, ic))
 			);
 			// @formatter:on
@@ -250,7 +250,7 @@ public class Mutaters {
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasReturnType(oc)
-				&& x.hasParamTypes(ic)
+				&& x.hasParameterTypes(ic)
 				&& isStaticCreateMethodName(x, ic)
 			);
 			// @formatter:on
@@ -270,7 +270,7 @@ public class Mutaters {
 			}
 		}
 
-		ConstructorInfo c = oci.getPublicConstructor(x -> x.hasParamTypes(ic));
+		ConstructorInfo c = oci.getPublicConstructor(x -> x.hasParameterTypes(ic));
 		if (nn(c) && c.isNotDeprecated()) {
 			boolean isMemberClass = oci.isNonStaticMemberClass();
 			return new Mutater() {

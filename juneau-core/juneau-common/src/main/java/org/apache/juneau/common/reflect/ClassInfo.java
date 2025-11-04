@@ -66,7 +66,7 @@ import org.apache.juneau.common.collections.*;
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public class ClassInfo implements Annotatable {
+public class ClassInfo extends ElementInfo implements Annotatable {
 
 	private static final Cache<Class,ClassInfo> CACHE = Cache.of(Class.class, ClassInfo.class).build();
 
@@ -285,6 +285,7 @@ public class ClassInfo implements Annotatable {
 	 * @param t The generic type (if parameterized type).
 	 */
 	protected ClassInfo(Class<?> c, Type t) {
+		super(c == null ? 0 : c.getModifiers());
 		this.t = t;
 		this.c = c;
 		this.isParameterizedType = t == null ? false : (t instanceof ParameterizedType);
@@ -1094,21 +1095,6 @@ public class ClassInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns the Java language modifiers for this class, encoded in an integer.
-	 *
-	 * <p>
-	 * The modifiers consist of the Java Virtual Machine's constants for <jk>public</jk>, <jk>protected</jk>,
-	 * <jk>private</jk>, <jk>final</jk>, <jk>static</jk>, <jk>abstract</jk> and <jk>interface</jk>;
-	 * they should be decoded using the methods of class {@link Modifier}.
-	 *
-	 * @return The modifiers for this class, or <c>0</c> if this object does not represent a class.
-	 * @see Modifier
-	 */
-	public int getModifiers() {
-		return c == null ? 0 : c.getModifiers();
-	}
-
-	/**
 	 * Locates the no-arg constructor for this class.
 	 *
 	 * <p>
@@ -1897,88 +1883,46 @@ public class ClassInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
-	 *
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to this field.
-	 */
-	public boolean is(ReflectFlags...flags) {
-		return isAll(flags);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this class is abstract.
-	 *
-	 * <p>
-	 * Note that interfaces are always reported as abstract.
-	 *
-	 * @return <jk>true</jk> if this class is abstract.
-	 */
-	public boolean isAbstract() { return nn(c) && Modifier.isAbstract(c.getModifiers()); }
-
-	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this class.
 	 *
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this class.
 	 */
-	public boolean isAll(ReflectFlags...flags) {
-		for (var f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isNotDeprecated())
-						return false;
-					break;
-				case NOT_DEPRECATED:
-					if (isDeprecated())
-						return false;
-					break;
-				case PUBLIC:
-					if (isNotPublic())
-						return false;
-					break;
-				case NOT_PUBLIC:
-					if (isPublic())
-						return false;
-					break;
-				case STATIC:
-					if (isNotStatic())
-						return false;
-					break;
-				case NOT_STATIC:
-					if (isStatic())
-						return false;
-					break;
-				case MEMBER:
-					if (isNotMemberClass())
-						return false;
-					break;
-				case NOT_MEMBER:
-					if (isMemberClass())
-						return false;
-					break;
-				case ABSTRACT:
-					if (isNotAbstract())
-						return false;
-					break;
-				case NOT_ABSTRACT:
-					if (isAbstract())
-						return false;
-					break;
-				case INTERFACE:
-					if (isClass())
-						return false;
-					break;
-				case CLASS:
-					if (isInterface())
-						return false;
-					break;
-				default:
-					throw runtimeException("Invalid flag for class: {0}", f);
+	@Override
+	public boolean is(ElementFlag flag) {
+		return switch (flag) {
+			case ANNOTATION -> isAnnotation();
+			case NOT_ANNOTATION -> !isAnnotation();
+			case ANONYMOUS -> isAnonymousClass();
+			case NOT_ANONYMOUS -> !isAnonymousClass();
+			case ARRAY -> isArray();
+			case NOT_ARRAY -> !isArray();
+			case CLASS -> !isInterface();
+			case DEPRECATED -> isDeprecated();
+			case NOT_DEPRECATED -> isNotDeprecated();
+			case ENUM -> isEnum();
+			case NOT_ENUM -> !isEnum();
+			case LOCAL -> isLocalClass();
+			case NOT_LOCAL -> !isLocalClass();
+			case MEMBER -> isMemberClass();
+			case NOT_MEMBER -> isNotMemberClass();
+			case NON_STATIC_MEMBER -> isNonStaticMemberClass();
+			case NOT_NON_STATIC_MEMBER -> !isNonStaticMemberClass();
+			case PRIMITIVE -> isPrimitive();
+			case NOT_PRIMITIVE -> !isPrimitive();
+			case RECORD -> isRecord();
+			case NOT_RECORD -> !isRecord();
+			case SEALED -> isSealed();
+			case NOT_SEALED -> !isSealed();
+			case SYNTHETIC -> isSynthetic();
+			case NOT_SYNTHETIC -> !isSynthetic();
+			default -> super.is(flag);
+		};
+	}
 
-			}
-		}
-		return true;
+	@Override
+	public boolean isAll(ElementFlag...flags) {
+		return stream(flags).allMatch(this::is);
 	}
 
 	/**
@@ -1998,6 +1942,11 @@ public class ClassInfo implements Annotatable {
 	 */
 	public boolean isAnonymousClass() { return nn(c) && c.isAnonymousClass(); }
 
+	@Override
+	public boolean isAny(ElementFlag...flags) {
+		return stream(flags).anyMatch(this::is);
+	}
+
 	/**
 	 * Returns <jk>true</jk> if this class is any of the specified types.
 	 *
@@ -2011,69 +1960,6 @@ public class ClassInfo implements Annotatable {
 		return false;
 	}
 
-	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to this class.
-	 *
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to this class.
-	 */
-	public boolean isAny(ReflectFlags...flags) {
-		for (var f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isDeprecated())
-						return true;
-					break;
-				case NOT_DEPRECATED:
-					if (isNotDeprecated())
-						return true;
-					break;
-				case PUBLIC:
-					if (isPublic())
-						return true;
-					break;
-				case NOT_PUBLIC:
-					if (isNotPublic())
-						return true;
-					break;
-				case STATIC:
-					if (isStatic())
-						return true;
-					break;
-				case NOT_STATIC:
-					if (isNotStatic())
-						return true;
-					break;
-				case MEMBER:
-					if (isMemberClass())
-						return true;
-					break;
-				case NOT_MEMBER:
-					if (isNotMemberClass())
-						return true;
-					break;
-				case ABSTRACT:
-					if (isAbstract())
-						return true;
-					break;
-				case NOT_ABSTRACT:
-					if (isNotAbstract())
-						return true;
-					break;
-				case INTERFACE:
-					if (isInterface())
-						return true;
-					break;
-				case CLASS:
-					if (isClass())
-						return true;
-					break;
-				default:
-					throw runtimeException("Invalid flag for class: {0}", f);
-			}
-		}
-		return false;
-	}
 
 	/**
 	 * Returns <jk>true</jk> if this class is an array.
@@ -2168,13 +2054,6 @@ public class ClassInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this class is an interface.
-	 *
-	 * @return <jk>true</jk> if this class is an interface.
-	 */
-	public boolean isInterface() { return nn(c) && c.isInterface(); }
-
-	/**
 	 * Returns <jk>true</jk> if this class is a local class.
 	 *
 	 * @return <jk>true</jk> if this class is a local class.
@@ -2207,16 +2086,6 @@ public class ClassInfo implements Annotatable {
 	 * @return <jk>true</jk> if this class is a member class and not static.
 	 */
 	public boolean isNonStaticMemberClass() { return nn(c) && c.isMemberClass() && ! isStatic(); }
-
-	/**
-	 * Returns <jk>true</jk> if this class is not abstract.
-	 *
-	 * <p>
-	 * Note that interfaces are always reported as abstract.
-	 *
-	 * @return <jk>true</jk> if this class is not abstract.
-	 */
-	public boolean isNotAbstract() { return c == null || ! Modifier.isAbstract(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class doesn't have the {@link Deprecated @Deprecated} annotation on it.
@@ -2252,23 +2121,6 @@ public class ClassInfo implements Annotatable {
 	 * @return <jk>true</jk> if this is not a primitive class.
 	 */
 	public boolean isNotPrimitive() { return c == null || ! c.isPrimitive(); }
-
-	/**
-	 * Returns <jk>true</jk> if this class is not public.
-	 *
-	 * @return <jk>true</jk> if this class is not public.
-	 */
-	public boolean isNotPublic() { return c == null || ! Modifier.isPublic(c.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this class is not static.
-	 *
-	 * <p>
-	 * Note that interfaces are always reported as static, and the static keyword on a member interface is meaningless.
-	 *
-	 * @return <jk>true</jk> if this class is not static.
-	 */
-	public boolean isNotStatic() { return c == null || ! Modifier.isStatic(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a parent or the same as <c>child</c>.
@@ -2361,13 +2213,6 @@ public class ClassInfo implements Annotatable {
 	public boolean isPrimitive() { return nn(c) && c.isPrimitive(); }
 
 	/**
-	 * Returns <jk>true</jk> if this class is public.
-	 *
-	 * @return <jk>true</jk> if this class is public.
-	 */
-	public boolean isPublic() { return nn(c) && Modifier.isPublic(c.getModifiers()); }
-
-	/**
 	 * Returns <jk>true</jk> if this is a repeated annotation class.
 	 *
 	 * <p>
@@ -2407,16 +2252,6 @@ public class ClassInfo implements Annotatable {
 	 * @return <jk>true</jk> if this class is a sealed class.
 	 */
 	public boolean isSealed() { return nn(c) && c.isSealed(); }
-
-	/**
-	 * Returns <jk>true</jk> if this class is public.
-	 *
-	 * <p>
-	 * Note that interfaces are always reported as static, and the static keyword on a member interface is meaningless.
-	 *
-	 * @return <jk>true</jk> if this class is public.
-	 */
-	public boolean isStatic() { return nn(c) && Modifier.isStatic(c.getModifiers()); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a synthetic class.
@@ -2800,7 +2635,7 @@ public class ClassInfo implements Annotatable {
 
 	@Override /* Annotatable */
 	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.CLASS;
+		return AnnotatableType.CLASS_TYPE;
 	}
 
 	@Override /* Annotatable */

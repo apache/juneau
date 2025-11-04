@@ -44,7 +44,7 @@ class MethodInfoUtils {
 	}
 
 	static void assertNoArgs(MethodInfo m, Class<?> a) throws InvalidAnnotationException {
-		if (m.hasParams())
+		if (m.hasParameters())
 			throw new InvalidAnnotationException("Method with @{0} annotation cannot have arguments.  Method=''{1}''", scn(a), m);
 	}
 

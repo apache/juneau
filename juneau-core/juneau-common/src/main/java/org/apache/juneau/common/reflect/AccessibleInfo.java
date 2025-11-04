@@ -30,7 +30,7 @@ import java.lang.reflect.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public abstract class AccessibleInfo {
+public abstract class AccessibleInfo extends ElementInfo {
 
 	AccessibleObject ao;  // Effectively final
 
@@ -39,7 +39,8 @@ public abstract class AccessibleInfo {
 	 *
 	 * @param ao The {@link AccessibleObject} being wrapped.
 	 */
-	protected AccessibleInfo(AccessibleObject ao) {
+	protected AccessibleInfo(AccessibleObject ao, int modifiers) {
+		super(modifiers);
 		this.ao = ao;
 	}
 

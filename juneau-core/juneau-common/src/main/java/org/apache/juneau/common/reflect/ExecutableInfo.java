@@ -49,26 +49,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 
 	private volatile Class<?>[] rawParamTypes;
 	private volatile Type[] rawGenericParamTypes;
-	private volatile Parameter[] rawParameters;
 	private volatile Annotation[][] rawParameterAnnotations;
 	private volatile Annotation[] rawDeclaredAnnotations;
-
-	/**
-	 * Returns a predicate that evaluates to true only when the value is an instance of the given type and the provided
-	 * predicate also returns true for the cast value.
-	 *
-	 * @param <T> The target type to test and cast to.
-	 * @param type The target class.
-	 * @param predicate The predicate to apply to the cast value. Can be null (treated as always-true after type check).
-	 * @return A predicate over Object that performs an instanceof check AND the provided predicate.
-	 */
-	public static <T> java.util.function.Predicate<Object> andType(Class<T> type, java.util.function.Predicate<? super T> predicate) {
-		java.util.function.Predicate<Object> p = type::isInstance;
-		if (nn(predicate)) {
-			p = p.and(o -> predicate.test(type.cast(o)));
-		}
-		return p;
-	}
 
 	/**
 	 * Constructor.
@@ -77,7 +59,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param e The constructor or method that this info represents.
 	 */
 	protected ExecutableInfo(ClassInfo declaringClass, Executable e) {
-		super(e);
+		super(e, e.getModifiers());
 		this.declaringClass = declaringClass;
 		this.e = e;
 		this.isConstructor = e instanceof Constructor;
@@ -134,7 +116,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int fuzzyArgsMatch(Class<?>...argTypes) {
+	public final int fuzzyParametersMatch(Class<?>...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
@@ -158,7 +140,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int fuzzyArgsMatch(ClassInfo...argTypes) {
+	public final int fuzzyParametersMatch(ClassInfo...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
@@ -182,7 +164,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int fuzzyArgsMatch(Object...argTypes) {
+	public final int fuzzyParametersMatch(Object...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
@@ -298,26 +280,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final List<Type> getRawGenericParamTypes() { return u(l(_getRawGenericParamTypes())); }
 
 	/**
-	 * Returns the raw {@link Parameter} object that represents the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The raw {@link Parameter} object that represents the parameter at the specified index.
-	 * @see Executable#getParameters()
-	 */
-	public final Parameter getRawParameter(int index) {
-		checkIndex(index);
-		return _getRawParameters()[index];
-	}
-
-	/**
-	 * Returns an array of raw {@link Parameter} objects that represent all the parameters to the underlying executable represented by this object.
-	 *
-	 * @return An array of raw {@link Parameter} objects, or an empty array if executable has no parameters.
-	 * @see Executable#getParameters()
-	 */
-	public final List<Parameter> getRawParameters() { return u(l(_getRawParameters())); }
-
-	/**
 	 * Returns the raw parameter type of the parameter at the specified index.
 	 *
 	 * @param index The parameter index.
@@ -372,8 +334,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
 	 */
-	public final boolean hasFuzzyParamTypes(Class<?>...args) {
-		return fuzzyArgsMatch(args) != -1;
+	public final boolean hasFuzzyParameterTypes(Class<?>...args) {
+		return fuzzyParametersMatch(args) != -1;
 	}
 
 	/**
@@ -382,8 +344,8 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
 	 */
-	public final boolean hasFuzzyParamTypes(ClassInfo...args) {
-		return fuzzyArgsMatch(args) != -1;
+	public final boolean hasFuzzyParameterTypes(ClassInfo...args) {
+		return fuzzyParametersMatch(args) != -1;
 	}
 
 	/**
@@ -392,7 +354,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasMatchingParamTypes(Class<?>...args) {
+	public final boolean hasMatchingParameterTypes(Class<?>...args) {
 		var params = getParameters();
 		if (params.size() != args.length)
 			return false;
@@ -413,7 +375,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasMatchingParamTypes(ClassInfo...args) {
+	public final boolean hasMatchingParameterTypes(ClassInfo...args) {
 		var params = getParameters();
 		if (params.size() != args.length)
 			return false;
@@ -494,7 +456,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * @return <jk>true</jk> if this executable has at least one parameter.
 	 */
-	public final boolean hasParams() {
+	public final boolean hasParameters() {
 		return getParameterCount() != 0;
 	}
 
@@ -504,7 +466,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasParamTypes(Class<?>...args) {
+	public final boolean hasParameterTypes(Class<?>...args) {
 		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
@@ -521,7 +483,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
-	public final boolean hasParamTypes(ClassInfo...args) {
+	public final boolean hasParameterTypes(ClassInfo...args) {
 		Class<?>[] pt = _getRawParamTypes();
 		if (pt.length == args.length) {
 			for (int i = 0; i < pt.length; i++)
@@ -533,148 +495,36 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
-	 *
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to this field.
-	 */
-	public final boolean is(ReflectFlags...flags) {
-		return isAll(flags);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this method is abstract.
-	 *
-	 * @return <jk>true</jk> if this method is abstract.
-	 */
-	public final boolean isAbstract() { return Modifier.isAbstract(e.getModifiers()); }
-
-	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this method.
 	 *
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this method.
 	 */
-	public final boolean isAll(ReflectFlags...flags) {
-		for (var f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isNotDeprecated())
-						return false;
-					break;
-				case NOT_DEPRECATED:
-					if (isDeprecated())
-						return false;
-					break;
-				case HAS_PARAMS:
-					if (hasNoParams())
-						return false;
-					break;
-				case HAS_NO_PARAMS:
-					if (hasParams())
-						return false;
-					break;
-				case PUBLIC:
-					if (isNotPublic())
-						return false;
-					break;
-				case NOT_PUBLIC:
-					if (isPublic())
-						return false;
-					break;
-				case PROTECTED:
-					if (isNotProtected())
-						return false;
-					break;
-				case NOT_PROTECTED:
-					if (isProtected())
-						return false;
-					break;
-				case STATIC:
-					if (isNotStatic())
-						return false;
-					break;
-				case NOT_STATIC:
-					if (isStatic())
-						return false;
-					break;
-				case ABSTRACT:
-					if (isNotAbstract())
-						return false;
-					break;
-				case NOT_ABSTRACT:
-					if (isAbstract())
-						return false;
-					break;
-				default:
-					throw runtimeException("Invalid flag for executable: {0}", f);
-			}
-		}
-		return true;
+	@Override
+	public boolean is(ElementFlag flag) {
+		return switch (flag) {
+			case CONSTRUCTOR -> isConstructor();
+			case NOT_CONSTRUCTOR -> !isConstructor();
+			case DEPRECATED -> isDeprecated();
+			case NOT_DEPRECATED -> isNotDeprecated();
+			case HAS_PARAMS -> hasParameters();
+			case HAS_NO_PARAMS -> hasNoParams();
+			case SYNTHETIC -> isSynthetic();
+			case NOT_SYNTHETIC -> !isSynthetic();
+			case VARARGS -> isVarArgs();
+			case NOT_VARARGS -> !isVarArgs();
+			default -> super.is(flag);
+		};
 	}
 
-	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to this method.
-	 *
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to this method.
-	 */
-	public final boolean isAny(ReflectFlags...flags) {
-		for (var f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isDeprecated())
-						return true;
-					break;
-				case NOT_DEPRECATED:
-					if (isNotDeprecated())
-						return true;
-					break;
-				case HAS_PARAMS:
-					if (hasParams())
-						return true;
-					break;
-				case HAS_NO_PARAMS:
-					if (hasNoParams())
-						return true;
-					break;
-				case PUBLIC:
-					if (isPublic())
-						return true;
-					break;
-				case NOT_PUBLIC:
-					if (isNotPublic())
-						return true;
-					break;
-				case PROTECTED:
-					if (isProtected())
-						return true;
-					break;
-				case NOT_PROTECTED:
-					if (isNotProtected())
-						return true;
-					break;
-				case STATIC:
-					if (isStatic())
-						return true;
-					break;
-				case NOT_STATIC:
-					if (isNotStatic())
-						return true;
-					break;
-				case ABSTRACT:
-					if (isAbstract())
-						return true;
-					break;
-				case NOT_ABSTRACT:
-					if (isNotAbstract())
-						return true;
-					break;
-				default:
-					throw runtimeException("Invalid flag for executable: {0}", f);
-			}
-		}
-		return false;
+	@Override
+	public boolean isAll(ElementFlag...flags) {
+		return stream(flags).allMatch(this::is);
+	}
+
+	@Override
+	public boolean isAny(ElementFlag...flags) {
+		return stream(flags).anyMatch(this::is);
 	}
 
 	/**
@@ -697,13 +547,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this method is not abstract.
-	 *
-	 * @return <jk>true</jk> if this method is not abstract.
-	 */
-	public final boolean isNotAbstract() { return ! Modifier.isAbstract(e.getModifiers()); }
-
-	/**
 	 * Returns <jk>true</jk> if this method doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 *
 	 * @return <jk>true</jk> if this method doesn't have the {@link Deprecated @Deprecated} annotation on it.
@@ -714,48 +557,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this method is not protected.
-	 *
-	 * @return <jk>true</jk> if this method is not protected.
-	 */
-	public final boolean isNotProtected() { return ! Modifier.isProtected(e.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this method is not public.
-	 *
-	 * @return <jk>true</jk> if this method is not public.
-	 */
-	public final boolean isNotPublic() { return ! Modifier.isPublic(e.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this method is not static.
-	 *
-	 * @return <jk>true</jk> if this method is not static.
-	 */
-	public final boolean isNotStatic() { return ! Modifier.isStatic(e.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this method is protected.
-	 *
-	 * @return <jk>true</jk> if this method is protected.
-	 */
-	public final boolean isProtected() { return Modifier.isProtected(e.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this method is public.
-	 *
-	 * @return <jk>true</jk> if this method is public.
-	 */
-	public final boolean isPublic() { return Modifier.isPublic(e.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this method is static.
-	 *
-	 * @return <jk>true</jk> if this method is static.
-	 */
-	public final boolean isStatic() { return Modifier.isStatic(e.getModifiers()); }
-
-	/**
 	 * Identifies if the specified visibility matches this method.
 	 *
 	 * @param v The visibility to validate against.
@@ -763,35 +564,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 */
 	public final boolean isVisible(Visibility v) {
 		return v.isVisible(e);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// High Priority Methods (direct Executable API compatibility)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the Java language modifiers for the executable represented by this object, as an integer.
-	 *
-	 * <p>
-	 * The {@link java.lang.reflect.Modifier} class should be used to decode the modifiers.
-	 *
-	 * <p>
-	 * Same as calling {@link Executable#getModifiers()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if method is public and static</jc>
-	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
-	 * 	<jk>int</jk> <jv>modifiers</jv> = <jv>mi</jv>.getModifiers();
-	 * 	<jk>boolean</jk> <jv>isPublicStatic</jv> = Modifier.<jsm>isPublic</jsm>(<jv>modifiers</jv>) &amp;&amp; Modifier.<jsm>isStatic</jsm>(<jv>modifiers</jv>);
-	 * </p>
-	 *
-	 * @return The Java language modifiers for this executable.
-	 * @see Executable#getModifiers()
-	 * @see java.lang.reflect.Modifier
-	 */
-	public final int getModifiers() {
-		return e.getModifiers();
 	}
 
 	/**
@@ -1100,15 +872,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 			}
 		}
 		return rawGenericParamTypes;
-	}
-
-	final Parameter[] _getRawParameters() {
-		if (rawParameters == null) {
-			synchronized (this) {
-				rawParameters = e.getParameters();
-			}
-		}
-		return rawParameters;
 	}
 
 	Class<?>[] _getRawParamTypes() {

@@ -188,7 +188,7 @@ public class ClassMeta<T> implements Type {
 					x -> x.isStatic()
 					&& x.isNotDeprecated()
 					&& x.hasReturnType(c)
-					&& x.hasParamTypes(String.class)
+					&& x.hasParameterTypes(String.class)
 					&& contains(x.getName(), fromStringMethodNames))
 			).map(MethodInfo::inner)
 			.orElse(null);
@@ -201,7 +201,7 @@ public class ClassMeta<T> implements Type {
 					x -> x.isStatic()
 					&& x.isNotDeprecated()
 					&& x.hasName("example")
-					&& x.hasFuzzyParamTypes(BeanSession.class))
+					&& x.hasFuzzyParameterTypes(BeanSession.class))
 			).map(MethodInfo::inner)
 			.orElse(null);
 			// @formatter:on
@@ -243,7 +243,7 @@ public class ClassMeta<T> implements Type {
 			}
 
 			ci.forEachDeclaredMethod(m -> m.hasAnnotation(bc, Example.class), m -> {
-				if (! (m.isStatic() && m.hasFuzzyParamTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
+				if (! (m.isStatic() && m.hasFuzzyParameterTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 					throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m.toString());
 				m.setAccessible();
 				exampleMethod = m.inner();
@@ -784,7 +784,7 @@ public class ClassMeta<T> implements Type {
 		if (beanMeta == null || beanMeta.constructor == null)
 			return false;
 		if (isMemberClass)
-			return nn(outer) && beanMeta.constructor.hasParamTypes(outer.getClass());
+			return nn(outer) && beanMeta.constructor.hasParameterTypes(outer.getClass());
 		return true;
 	}
 
@@ -813,7 +813,7 @@ public class ClassMeta<T> implements Type {
 	 */
 	public boolean canCreateNewInstance(Object outer) {
 		if (isMemberClass)
-			return nn(outer) && nn(noArgConstructor) && noArgConstructor.hasParamTypes(outer.getClass());
+			return nn(outer) && nn(noArgConstructor) && noArgConstructor.hasParameterTypes(outer.getClass());
 		return canCreateNewInstance();
 	}
 
@@ -830,7 +830,7 @@ public class ClassMeta<T> implements Type {
 			return true;
 		if (nn(stringConstructor)) {
 			if (isMemberClass)
-				return nn(outer) && stringConstructor.hasParamTypes(outer.getClass(), String.class);
+				return nn(outer) && stringConstructor.hasParameterTypes(outer.getClass(), String.class);
 			return true;
 		}
 		return false;

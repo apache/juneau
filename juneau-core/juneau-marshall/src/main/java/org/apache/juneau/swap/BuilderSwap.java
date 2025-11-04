@@ -69,7 +69,7 @@ public class BuilderSwap<T,B> {
 
 		var pci = ClassInfo.of(objectClass);
 
-		objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass));
+		objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass));
 		if (objectConstructor == null)
 			return null;
 
@@ -131,7 +131,7 @@ public class BuilderSwap<T,B> {
 		objectCreateMethod = getBuilderBuildMethod(bci);
 		var builderClass2 = builderClass.get();
 		if (objectConstructor == null)
-			objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass2));
+			objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParameterTypes(builderClass2));
 
 		if (objectConstructor == null && objectCreateMethod == null)
 			return null;
@@ -166,7 +166,7 @@ public class BuilderSwap<T,B> {
 		// @formatter:off
 		return nn(c.getPublicConstructor(
 			x -> x.hasNumParams(1)
-			&& x.hasParamTypes(argType)
+			&& x.hasParameterTypes(argType)
 		));
 		// @formatter:on
 	}

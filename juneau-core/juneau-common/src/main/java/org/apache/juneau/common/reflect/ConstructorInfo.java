@@ -264,7 +264,7 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 
 	@Override /* Annotatable */
 	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.CONSTRUCTOR;
+		return AnnotatableType.CONSTRUCTOR_TYPE;
 	}
 
 	@Override /* Annotatable */

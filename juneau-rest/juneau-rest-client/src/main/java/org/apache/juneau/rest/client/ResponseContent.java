@@ -233,7 +233,7 @@ public class ResponseContent implements HttpEntity {
 			if (type.is(HttpResource.class))
 				type = (ClassMeta<T>)getClassMeta(BasicResource.class);
 
-			ConstructorInfo ci = type.getInfo().getPublicConstructor(x -> x.hasParamTypes(HttpResponse.class));
+			ConstructorInfo ci = type.getInfo().getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class));
 			if (nn(ci)) {
 				try {
 					return (T)ci.newInstance(response);

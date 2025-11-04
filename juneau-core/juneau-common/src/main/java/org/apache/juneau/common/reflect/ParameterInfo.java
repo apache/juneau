@@ -34,7 +34,7 @@ import org.apache.juneau.common.collections.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-public class ParameterInfo implements Annotatable {
+public class ParameterInfo extends ElementInfo implements Annotatable {
 
 	private final ExecutableInfo executable;
 	private final Parameter parameter;
@@ -58,10 +58,20 @@ public class ParameterInfo implements Annotatable {
 	 * @param type The parameter type.
 	 */
 	protected ParameterInfo(ExecutableInfo eInfo, Parameter p, int index, ClassInfo type) {
+		super(p.getModifiers());
 		this.executable = eInfo;
 		this.parameter = p;
 		this.index = index;
 		this.type = type;
+	}
+
+	/**
+	 * Returns the wrapped {@link Parameter} object.
+	 *
+	 * @return The wrapped {@link Parameter} object.
+	 */
+	public Parameter inner() {
+		return parameter;
 	}
 
 	private List<AnnotationInfo<Annotation>> findAnnotations() {
@@ -398,6 +408,7 @@ public class ParameterInfo implements Annotatable {
 	 * @see Parameter#getModifiers()
 	 * @see java.lang.reflect.Modifier
 	 */
+	@Override
 	public int getModifiers() {
 		return parameter.getModifiers();
 	}
@@ -474,6 +485,27 @@ public class ParameterInfo implements Annotatable {
 	 */
 	public boolean isSynthetic() {
 		return parameter.isSynthetic();
+	}
+
+	@Override
+	public boolean is(ElementFlag flag) {
+		return switch (flag) {
+			case SYNTHETIC -> isSynthetic();
+			case NOT_SYNTHETIC -> !isSynthetic();
+			case VARARGS -> isVarArgs();
+			case NOT_VARARGS -> !isVarArgs();
+			default -> super.is(flag);
+		};
+	}
+
+	@Override
+	public boolean isAll(ElementFlag...flags) {
+		return stream(flags).allMatch(this::is);
+	}
+
+	@Override
+	public boolean isAny(ElementFlag...flags) {
+		return stream(flags).anyMatch(this::is);
 	}
 
 	/**
@@ -690,7 +722,7 @@ public class ParameterInfo implements Annotatable {
 
 	@Override /* Annotatable */
 	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.PARAMETER;
+		return AnnotatableType.PARAMETER_TYPE;
 	}
 
 	@Override /* Annotatable */

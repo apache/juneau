@@ -84,6 +84,23 @@ public final class PredicateUtils {
 	}
 
 	/**
+	 * Returns a predicate that evaluates to true only when the value is an instance of the given type and the provided
+	 * predicate also returns true for the cast value.
+	 *
+	 * @param <T> The target type to test and cast to.
+	 * @param type The target class.
+	 * @param predicate The predicate to apply to the cast value. Can be null (treated as always-true after type check).
+	 * @return A predicate over Object that performs an instanceof check AND the provided predicate.
+	 */
+	public static <T> Predicate<Object> andType(Class<T> type, Predicate<? super T> predicate) {
+		Predicate<Object> p = type::isInstance;
+		if (nn(predicate)) {
+			p = p.and(o -> predicate.test(type.cast(o)));
+		}
+		return p;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
 
 	 * @param <T> The type being tested.

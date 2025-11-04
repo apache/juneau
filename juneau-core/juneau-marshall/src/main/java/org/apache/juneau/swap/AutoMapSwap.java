@@ -132,7 +132,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(Map.class)
-			&& mi.hasFuzzyParamTypes(BeanSession.class)
+			&& mi.hasFuzzyParameterTypes(BeanSession.class)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on
 	}
@@ -142,7 +142,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 		return
 			cs.isNotDeprecated()
 			&& cs.isVisible(bc.getBeanConstructorVisibility())
-			&& cs.hasMatchingParamTypes(rt)
+			&& cs.hasMatchingParameterTypes(rt)
 			&& cs.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on
 	}
@@ -154,7 +154,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.isStatic()
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasName(UNSWAP_METHOD_NAMES)
-			&& mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())
+			&& mi.hasFuzzyParameterTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on

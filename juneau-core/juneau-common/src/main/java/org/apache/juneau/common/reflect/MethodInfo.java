@@ -76,7 +76,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	private static List<MethodInfo> findMatching(List<MethodInfo> l, MethodInfo m, ClassInfo c) {
 		for (var m2 : c.getDeclaredMethods())
-			if (m.hasName(m2.getName()) && m.hasParamTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
+			if (m.hasName(m2.getName()) && m.hasParameterTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
 				l.add(m2);
 		ClassInfo pc = c.getSuperclass();
 		if (nn(pc))
@@ -651,6 +651,27 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		}
 	}
 
+	@Override
+	public boolean is(ElementFlag flag) {
+		return switch (flag) {
+			case BRIDGE -> isBridge();
+			case NOT_BRIDGE -> !isBridge();
+			case DEFAULT -> isDefault();
+			case NOT_DEFAULT -> !isDefault();
+			default -> super.is(flag);
+		};
+	}
+
+	@Override
+	public boolean isAll(ElementFlag...flags) {
+		return stream(flags).allMatch(this::is);
+	}
+
+	@Override
+	public boolean isAny(ElementFlag...flags) {
+		return stream(flags).anyMatch(this::is);
+	}
+
 	/**
 	 * Returns <jk>true</jk> if this method is a bridge method.
 	 *
@@ -771,7 +792,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	MethodInfo findMatchingOnClass(ClassInfo c) {
 		for (var m2 : c.getDeclaredMethods())
-		if (hasName(m2.getName()) && hasParamTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
+		if (hasName(m2.getName()) && hasParameterTypes(m2.getParameters().stream().map(ParameterInfo::getParameterType).toArray(ClassInfo[]::new)))
 			return m2;
 		return null;
 	}
@@ -782,7 +803,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	@Override /* Annotatable */
 	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.METHOD;
+		return AnnotatableType.METHOD_TYPE;
 	}
 
 	@Override /* Annotatable */

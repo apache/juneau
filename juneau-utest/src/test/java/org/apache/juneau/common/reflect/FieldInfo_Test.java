@@ -19,7 +19,7 @@ package org.apache.juneau.common.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.common.reflect.ReflectFlags.*;
+import static org.apache.juneau.common.reflect.ElementFlag.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -162,52 +162,30 @@ class FieldInfo_Test extends TestBase {
 	;
 
 	@Test void isAll() {
-		assertTrue(c_deprecated.isAll(DEPRECATED));
-		assertTrue(c_notDeprecated.isAll(NOT_DEPRECATED));
-		assertTrue(c_isPublic.isAll(PUBLIC));
-		assertTrue(c_isNotPublic.isAll(NOT_PUBLIC));
-		assertTrue(c_isStatic.isAll(STATIC));
-		assertTrue(c_isNotStatic.isAll(NOT_STATIC));
-		assertTrue(c_isTransient.isAll(TRANSIENT));
-		assertTrue(c_isNotTransient.isAll(NOT_TRANSIENT));
+		assertTrue(c_deprecated.is(DEPRECATED));
+		assertTrue(c_notDeprecated.is(NOT_DEPRECATED));
+		assertTrue(c_isPublic.is(PUBLIC));
+		assertTrue(c_isNotPublic.is(NOT_PUBLIC));
+		assertTrue(c_isStatic.is(STATIC));
+		assertTrue(c_isNotStatic.is(NOT_STATIC));
+		assertTrue(c_isTransient.is(TRANSIENT));
+		assertTrue(c_isNotTransient.is(NOT_TRANSIENT));
 
-		assertFalse(c_deprecated.isAll(NOT_DEPRECATED));
-		assertFalse(c_notDeprecated.isAll(DEPRECATED));
-		assertFalse(c_isPublic.isAll(NOT_PUBLIC));
-		assertFalse(c_isNotPublic.isAll(PUBLIC));
-		assertFalse(c_isStatic.isAll(NOT_STATIC));
-		assertFalse(c_isNotStatic.isAll(STATIC));
-		assertFalse(c_isTransient.isAll(NOT_TRANSIENT));
-		assertFalse(c_isNotTransient.isAll(TRANSIENT));
+		assertFalse(c_deprecated.is(NOT_DEPRECATED));
+		assertFalse(c_notDeprecated.is(DEPRECATED));
+		assertFalse(c_isPublic.is(NOT_PUBLIC));
+		assertFalse(c_isNotPublic.is(PUBLIC));
+		assertFalse(c_isStatic.is(NOT_STATIC));
+		assertFalse(c_isNotStatic.is(STATIC));
+		assertFalse(c_isTransient.is(NOT_TRANSIENT));
+		assertFalse(c_isNotTransient.is(TRANSIENT));
 	}
 
 	@Test void isAll_invalidFlag() {
-		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for field: HAS_PARAMS", ()->c_deprecated.isAll(HAS_PARAMS));
+		// HAS_PARAMS doesn't apply to fields, should throw exception
+		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for element: HAS_PARAMS", () -> c_deprecated.is(HAS_PARAMS));
 	}
 
-	@Test void isAny() {
-		assertTrue(c_deprecated.isAny(DEPRECATED));
-		assertTrue(c_notDeprecated.isAny(NOT_DEPRECATED));
-		assertTrue(c_isPublic.isAny(PUBLIC));
-		assertTrue(c_isNotPublic.isAny(NOT_PUBLIC));
-		assertTrue(c_isStatic.isAny(STATIC));
-		assertTrue(c_isNotStatic.isAny(NOT_STATIC));
-		assertTrue(c_isTransient.isAny(TRANSIENT));
-		assertTrue(c_isNotTransient.isAny(NOT_TRANSIENT));
-
-		assertFalse(c_deprecated.isAny(NOT_DEPRECATED));
-		assertFalse(c_notDeprecated.isAny(DEPRECATED));
-		assertFalse(c_isPublic.isAny(NOT_PUBLIC));
-		assertFalse(c_isNotPublic.isAny(PUBLIC));
-		assertFalse(c_isStatic.isAny(NOT_STATIC));
-		assertFalse(c_isNotStatic.isAny(STATIC));
-		assertFalse(c_isTransient.isAny(NOT_TRANSIENT));
-		assertFalse(c_isNotTransient.isAny(TRANSIENT));
-	}
-
-	@Test void isAny_invalidFlag() {
-		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for field: HAS_PARAMS", ()->c_deprecated.isAny(HAS_PARAMS));
-	}
 
 	@Test void isDeprecated() {
 		assertTrue(c_deprecated.isDeprecated());

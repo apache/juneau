@@ -71,9 +71,9 @@ public class HttpParts {
 
 	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {
 		var ci = x.getInfo();
-		var cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class));
+		var cc = ci.getPublicConstructor(y -> y.hasParameterTypes(String.class));
 		if (cc == null)
-			cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class, String.class));
+			cc = ci.getPublicConstructor(y -> y.hasParameterTypes(String.class, String.class));
 		return cc;
 	};
 

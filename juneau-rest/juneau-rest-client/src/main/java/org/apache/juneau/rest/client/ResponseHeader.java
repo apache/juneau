@@ -252,10 +252,10 @@ public class ResponseHeader extends BasicHeader {
 	public <T extends BasicHeader> T asHeader(Class<T> c) {
 		try {
 			var ci = ClassInfo.of(c);
-			ConstructorInfo cc = ci.getPublicConstructor(x -> x.hasParamTypes(String.class));
+			ConstructorInfo cc = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class));
 			if (nn(cc))
 				return cc.newInstance(getValue());
-			cc = ci.getPublicConstructor(x -> x.hasParamTypes(String.class, String.class));
+			cc = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class));
 			if (nn(cc))
 				return cc.newInstance(getName(), getValue());
 		} catch (Throwable e) {

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -73,7 +74,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @param f The field being wrapped.
 	 */
 	protected FieldInfo(ClassInfo declaringClass, Field f) {
-		super(f);
+		super(f, f.getModifiers());
 		this.declaringClass = declaringClass;
 		this.f = f;
 	}
@@ -276,104 +277,27 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this field.
 	 */
-	public boolean is(ReflectFlags...flags) {
-		return isAll(flags);
+	@Override
+	public boolean is(ElementFlag flag) {
+		return switch (flag) {
+			case DEPRECATED -> isDeprecated();
+			case NOT_DEPRECATED -> isNotDeprecated();
+			case ENUM_CONSTANT -> isEnumConstant();
+			case NOT_ENUM_CONSTANT -> !isEnumConstant();
+			case SYNTHETIC -> isSynthetic();
+			case NOT_SYNTHETIC -> !isSynthetic();
+			default -> super.is(flag);
+		};
 	}
 
-	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
-	 *
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to this field.
-	 */
-	public boolean isAll(ReflectFlags...flags) {
-		for (var f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isNotDeprecated())
-						return false;
-					break;
-				case NOT_DEPRECATED:
-					if (isDeprecated())
-						return false;
-					break;
-				case PUBLIC:
-					if (isNotPublic())
-						return false;
-					break;
-				case NOT_PUBLIC:
-					if (isPublic())
-						return false;
-					break;
-				case STATIC:
-					if (isNotStatic())
-						return false;
-					break;
-				case NOT_STATIC:
-					if (isStatic())
-						return false;
-					break;
-				case TRANSIENT:
-					if (isNotTransient())
-						return false;
-					break;
-				case NOT_TRANSIENT:
-					if (isTransient())
-						return false;
-					break;
-				default:
-					throw runtimeException("Invalid flag for field: {0}", f);
-			}
-		}
-		return true;
+	@Override
+	public boolean isAll(ElementFlag...flags) {
+		return stream(flags).allMatch(this::is);
 	}
 
-	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
-	 *
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to this field.
-	 */
-	public boolean isAny(ReflectFlags...flags) {
-		for (var f : flags) {
-			switch (f) {
-				case DEPRECATED:
-					if (isDeprecated())
-						return true;
-					break;
-				case NOT_DEPRECATED:
-					if (isNotDeprecated())
-						return true;
-					break;
-				case PUBLIC:
-					if (isPublic())
-						return true;
-					break;
-				case NOT_PUBLIC:
-					if (isNotPublic())
-						return true;
-					break;
-				case STATIC:
-					if (isStatic())
-						return true;
-					break;
-				case NOT_STATIC:
-					if (isNotStatic())
-						return true;
-					break;
-				case TRANSIENT:
-					if (isTransient())
-						return true;
-					break;
-				case NOT_TRANSIENT:
-					if (isNotTransient())
-						return true;
-					break;
-				default:
-					throw runtimeException("Invalid flag for field: {0}", f);
-			}
-		}
-		return false;
+	@Override
+	public boolean isAny(ElementFlag...flags) {
+		return stream(flags).anyMatch(this::is);
 	}
 
 	/**
@@ -389,48 +313,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return <jk>true</jk> if this field doesn't have the {@link Deprecated @Deprecated} annotation on it.
 	 */
 	public boolean isNotDeprecated() { return ! f.isAnnotationPresent(Deprecated.class); }
-
-	/**
-	 * Returns <jk>true</jk> if this field is not public.
-	 *
-	 * @return <jk>true</jk> if this field is not public.
-	 */
-	public boolean isNotPublic() { return ! Modifier.isPublic(f.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this field is not static.
-	 *
-	 * @return <jk>true</jk> if this field is not static.
-	 */
-	public boolean isNotStatic() { return ! Modifier.isStatic(f.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this field is not transient.
-	 *
-	 * @return <jk>true</jk> if this field is not transient.
-	 */
-	public boolean isNotTransient() { return ! Modifier.isTransient(f.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this field is public.
-	 *
-	 * @return <jk>true</jk> if this field is public.
-	 */
-	public boolean isPublic() { return Modifier.isPublic(f.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this field is static.
-	 *
-	 * @return <jk>true</jk> if this field is static.
-	 */
-	public boolean isStatic() { return Modifier.isStatic(f.getModifiers()); }
-
-	/**
-	 * Returns <jk>true</jk> if this field is transient.
-	 *
-	 * @return <jk>true</jk> if this field is transient.
-	 */
-	public boolean isTransient() { return Modifier.isTransient(f.getModifiers()); }
 
 	/**
 	 * Identifies if the specified visibility matches this field.
@@ -479,35 +361,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		Object v = get(o);
 		if (v == null)
 			set(o, value);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// High Priority Methods (direct Field API compatibility)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the Java language modifiers for the field represented by this object, as an integer.
-	 *
-	 * <p>
-	 * The {@link java.lang.reflect.Modifier} class should be used to decode the modifiers.
-	 *
-	 * <p>
-	 * Same as calling {@link Field#getModifiers()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Check if field is public and static</jc>
-	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"myField"</js>);
-	 * 	<jk>int</jk> <jv>modifiers</jv> = <jv>fi</jv>.getModifiers();
-	 * 	<jk>boolean</jk> <jv>isPublicStatic</jv> = Modifier.<jsm>isPublic</jsm>(<jv>modifiers</jv>) &amp;&amp; Modifier.<jsm>isStatic</jsm>(<jv>modifiers</jv>);
-	 * </p>
-	 *
-	 * @return The Java language modifiers for this field.
-	 * @see Field#getModifiers()
-	 * @see java.lang.reflect.Modifier
-	 */
-	public int getModifiers() {
-		return f.getModifiers();
 	}
 
 	/**
@@ -635,7 +488,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 
 	@Override /* Annotatable */
 	public AnnotatableType getAnnotatableType() {
-		return AnnotatableType.FIELD;
+		return AnnotatableType.FIELD_TYPE;
 	}
 
 	@Override /* Annotatable */

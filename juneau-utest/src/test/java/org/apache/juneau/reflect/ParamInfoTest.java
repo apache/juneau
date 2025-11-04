@@ -90,8 +90,8 @@ class ParamInfoTest extends TestBase {
 
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ParameterInfo
-		b_b_a = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParameter(0),  // NOSONAR
-		b_b_b = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParameter(1),  // NOSONAR
+		b_b_a = b.getPublicConstructor(x -> x.hasParameterTypes(int.class, String.class)).getParameter(0),  // NOSONAR
+		b_b_b = b.getPublicConstructor(x -> x.hasParameterTypes(int.class, String.class)).getParameter(1),  // NOSONAR
 		b_a1_a = b.getMethod(x -> x.hasName("a1")).getParameter(0),  // NOSONAR
 		b_a1_b = b.getMethod(x -> x.hasName("a1")).getParameter(1),  // NOSONAR
 		b_a2_a = b.getMethod(x -> x.hasName("a2")).getParameter(0),  // NOSONAR
@@ -169,7 +169,7 @@ class ParamInfoTest extends TestBase {
 		cb = ClassInfo.of(CB.class),
 		cc = ClassInfo.of(CC.class);
 	static ParameterInfo
-		cc_cc = cc.getPublicConstructor(x -> x.hasParamTypes(C1.class)).getParameter(0),  // NOSONAR
+		cc_cc = cc.getPublicConstructor(x -> x.hasParameterTypes(C1.class)).getParameter(0),  // NOSONAR
 		cb_a1 = cb.getMethod(x -> x.hasName("a1")).getParameter(0),  // NOSONAR
 		cb_a2 = cb.getMethod(x -> x.hasName("a2")).getParameter(0),  // NOSONAR
 		cc_a1 = cc.getMethod(x -> x.hasName("a1")).getParameter(0),  // NOSONAR
