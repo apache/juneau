@@ -24,11 +24,11 @@ import java.lang.reflect.Method;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.reflect.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.utils.*;
 
 import jakarta.servlet.http.*;
 

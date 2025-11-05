@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
@@ -48,7 +48,7 @@ class ReflectionMapTest extends TestBase {
 	static ReflectionMap<Number>
 		A1_SIMPLE = create().append("A1", 1).build(),
 		A1b_SIMPLE = create().append("ReflectionMapTest$A1", 1).build(),
-		A1_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$A1", 1).build();  // Note this could be a static field.
+		A1_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$A1", 1).build();  // Note this could be a static field.
 
 	@Test void a01_classNames_checkEntries() {
 		checkEntries(A1_SIMPLE, true, false, false, false);
@@ -109,12 +109,12 @@ class ReflectionMapTest extends TestBase {
 		B1m1ss_SIMPLE = create().append("B1.m1(java.lang.String)", 1).build(),
 		B1m1si_SIMPLE = create().append("B1.m1(String,int)", 1).build(),
 		B1m1ssi_SIMPLE = create().append("B1.m1(java.lang.String , int)", 1).build(),
-		B1m1_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$B1.m1", 1).build(),
-		B1m1i_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$B1.m1(int)", 1).build(),
-		B1m1s_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$B1.m1(String)", 1).build(),
-		B1m1ss_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$B1.m1(java.lang.String)", 1).build(),
-		B1m1si_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$B1.m1(String,int)", 1).build(),
-		B1m1ssi_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$B1.m1(java.lang.String , int)", 1).build();
+		B1m1_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$B1.m1", 1).build(),
+		B1m1i_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$B1.m1(int)", 1).build(),
+		B1m1s_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$B1.m1(String)", 1).build(),
+		B1m1ss_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$B1.m1(java.lang.String)", 1).build(),
+		B1m1si_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$B1.m1(String,int)", 1).build(),
+		B1m1ssi_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$B1.m1(java.lang.String , int)", 1).build();
 
 	@Test void b01_methodNames_checkEntries() {
 		checkEntries(B1m1_SIMPLE, false, true, true, false);
@@ -199,7 +199,7 @@ class ReflectionMapTest extends TestBase {
 
 	static ReflectionMap<Number>
 		C1f1_SIMPLE = create().append("C1.f1", 1).build(),
-		C1f1_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$C1.f1", 1).build();
+		C1f1_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$C1.f1", 1).build();
 
 	@Test void c01_fieldNames_checkEntries() {
 		checkEntries(C1f1_SIMPLE, false, true, true, false);
@@ -245,12 +245,12 @@ class ReflectionMapTest extends TestBase {
 		Dss_SIMPLE = create().append("D1(java.lang.String)", 1).build(),
 		Dsi_SIMPLE = create().append("D1(String, int)", 1).build(),
 		Dssi_SIMPLE = create().append("D1(java.lang.String, int)", 1).build(),
-		D_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$D1()", 1).build(),
-		Di_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$D1(int)", 1).build(),
-		Ds_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$D1(String)", 1).build(),
-		Dss_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$D1(java.lang.String)", 1).build(),
-		Dsi_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$D1(String, int)", 1).build(),
-		Dssi_FULL = create().append("org.apache.juneau.utils.ReflectionMapTest$D1(java.lang.String, int)", 1).build();
+		D_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$D1()", 1).build(),
+		Di_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$D1(int)", 1).build(),
+		Ds_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$D1(String)", 1).build(),
+		Dss_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$D1(java.lang.String)", 1).build(),
+		Dsi_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$D1(String, int)", 1).build(),
+		Dssi_FULL = create().append("org.apache.juneau.common.reflect.ReflectionMapTest$D1(java.lang.String, int)", 1).build();
 
 	@Test void d01_constructorNames_checkEntries() {
 		checkEntries(D_SIMPLE, false, false, false, true);

@@ -32,12 +32,17 @@ import org.apache.juneau.common.utils.*;
  * other maps, sorting by keys, and applying modifiers like unmodifiable or sparse modes. It's particularly
  * useful when constructing maps dynamically from multiple sources or with conditional entries.
  *
+ * <p>
+ * Instances of this builder can be created using {@link #create(Class, Class)} or the convenience method
+ * {@link org.apache.juneau.common.utils.CollectionUtils#mapb(Class, Class, org.apache.juneau.common.utils.Converter...)}.
+ *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
  * 	<li>Fluent API - all methods return <c>this</c> for method chaining
  * 	<li>Multiple add methods - single entries, pairs, other maps
  * 	<li>Arbitrary input support - automatic type conversion with {@link #addAny(Object...)}
  * 	<li>Pair adding - {@link #addPairs(Object...)} for varargs key-value pairs
+ * 	<li>Filtering support - exclude unwanted values via {@link #filtered()} or {@link #filtered(java.util.function.Predicate)}
  * 	<li>Sorting support - natural key order or custom {@link Comparator}
  * 	<li>Sparse mode - return <jk>null</jk> for empty maps
  * 	<li>Unmodifiable mode - create immutable maps
@@ -46,20 +51,22 @@ import org.apache.juneau.common.utils.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bjava'>
+ * 	<jk>import static</jk> org.apache.juneau.common.utils.CollectionUtils.*;
+ *
  * 	<jc>// Basic usage</jc>
- * 	Map&lt;String,Integer&gt; <jv>map</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
  * 		.add(<js>"one"</js>, 1)
  * 		.add(<js>"two"</js>, 2)
  * 		.add(<js>"three"</js>, 3)
  * 		.build();
  *
  * 	<jc>// Using pairs</jc>
- * 	Map&lt;String,String&gt; <jv>props</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+ * 	Map&lt;String,String&gt; <jv>props</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
  * 		.addPairs(<js>"host"</js>, <js>"localhost"</js>, <js>"port"</js>, <js>"8080"</js>)
  * 		.build();
  *
  * 	<jc>// With sorting by key</jc>
- * 	Map&lt;String,Integer&gt; <jv>sorted</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 	Map&lt;String,Integer&gt; <jv>sorted</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
  * 		.add(<js>"zebra"</js>, 3)
  * 		.add(<js>"apple"</js>, 1)
  * 		.add(<js>"banana"</js>, 2)
@@ -67,7 +74,7 @@ import org.apache.juneau.common.utils.*;
  * 		.build();  <jc>// Returns TreeMap with natural key order</jc>
  *
  * 	<jc>// Immutable map</jc>
- * 	Map&lt;String,String&gt; <jv>config</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+ * 	Map&lt;String,String&gt; <jv>config</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
  * 		.add(<js>"env"</js>, <js>"prod"</js>)
  * 		.add(<js>"region"</js>, <js>"us-west"</js>)
  * 		.unmodifiable()
@@ -75,13 +82,13 @@ import org.apache.juneau.common.utils.*;
  *
  * 	<jc>// From multiple sources</jc>
  * 	Map&lt;String,Integer&gt; <jv>existing</jv> = Map.of(<js>"a"</js>, 1, <js>"b"</js>, 2);
- * 	Map&lt;String,Integer&gt; <jv>combined</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 	Map&lt;String,Integer&gt; <jv>combined</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
  * 		.addAll(<jv>existing</jv>)
  * 		.add(<js>"c"</js>, 3)
  * 		.build();
  *
  * 	<jc>// Sparse mode - returns null when empty</jc>
- * 	Map&lt;String,String&gt; <jv>maybeNull</jv> = MapBuilder.<jsm>create</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+ * 	Map&lt;String,String&gt; <jv>maybeNull</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
  * 		.sparse()
  * 		.build();  <jc>// Returns null, not empty map</jc>
  * </p>
@@ -105,6 +112,7 @@ public class MapBuilder<K,V> {
 	private Map<K,V> map;
 	private boolean unmodifiable = false, sparse = false;
 	private Comparator<K> comparator;
+	private java.util.function.Predicate<Object> filter;
 
 	private Class<K> keyType;
 	private Class<V> valueType;
@@ -151,11 +159,17 @@ public class MapBuilder<K,V> {
 	/**
 	 * Adds a single entry to this map.
 	 *
+	 * <p>
+	 * If a filter has been set via {@link #filtered(java.util.function.Predicate)} or {@link #filtered()},
+	 * the value will only be added if it passes the filter (i.e., the filter returns {@code true}).
+	 *
 	 * @param key The map key.
 	 * @param value The map value.
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> add(K key, V value) {
+		if (filter != null && !filter.test(value))
+			return this;
 		if (map == null)
 			map = new LinkedHashMap<>();
 		map.put(key, value);
@@ -168,15 +182,16 @@ public class MapBuilder<K,V> {
 	 * <p>
 	 * This is a no-op if the value is <jk>null</jk>.
 	 *
+	 * <p>
+	 * If a filter has been set, each value will be filtered before being added.
+	 *
 	 * @param value The map to add to this map.
 	 * @return This object.
 	 */
 	public MapBuilder<K,V> addAll(Map<K,V> value) {
 		if (nn(value)) {
-			if (map == null)
-				map = new LinkedHashMap<>(value);
-			else
-				map.putAll(value);
+			for (Map.Entry<K,V> entry : value.entrySet())
+				add(entry.getKey(), entry.getValue());
 		}
 		return this;
 	}
@@ -306,6 +321,73 @@ public class MapBuilder<K,V> {
 		if (nn(map))
 			map = new LinkedHashMap<>(map);
 		return this;
+	}
+
+	/**
+	 * Applies a filter predicate to values added via {@link #add(Object, Object)}.
+	 *
+	 * <p>
+	 * Values where the predicate returns {@code true} will be kept; values where it returns {@code false} will not be added.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.common.utils.CollectionUtils.*;
+	 *
+	 * 	<jc>// Keep only non-null, non-empty string values</jc>
+	 * 	Map&lt;String,String&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+	 * 		.filtered(<jv>x</jv> -&gt; <jv>x</jv> != <jk>null</jk> &amp;&amp; !<jv>x</jv>.equals(<js>""</js>))
+	 * 		.add(<js>"a"</js>, <js>"foo"</js>)
+	 * 		.add(<js>"b"</js>, <jk>null</jk>)     <jc>// Not added</jc>
+	 * 		.add(<js>"c"</js>, <js>""</js>)       <jc>// Not added</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @param filter The filter predicate.
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> filtered(java.util.function.Predicate<Object> filter) {
+		this.filter = filter;
+		return this;
+	}
+
+	/**
+	 * Applies a default filter that excludes common "empty" or "unset" values from being added to the map.
+	 *
+	 * <p>
+	 * The following values are filtered out:
+	 * <ul>
+	 * 	<li>{@code null}
+	 * 	<li>{@link Boolean#FALSE}
+	 * 	<li>Numbers with {@code intValue() == -1}
+	 * 	<li>Empty arrays
+	 * 	<li>Empty {@link Map Maps}
+	 * 	<li>Empty {@link Collection Collections}
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.common.utils.CollectionUtils.*;
+	 *
+	 * 	Map&lt;String,Object&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Object.<jk>class</jk>)
+	 * 		.filtered()
+	 * 		.add(<js>"name"</js>, <js>"John"</js>)
+	 * 		.add(<js>"age"</js>, -1)              <jc>// Not added</jc>
+	 * 		.add(<js>"enabled"</js>, <jk>false</jk>)   <jc>// Not added</jc>
+	 * 		.add(<js>"tags"</js>, <jk>new</jk> String[0]) <jc>// Not added</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> filtered() {
+		return filtered(x -> ! (
+			x == null
+			|| (x instanceof Boolean && x.equals(false))
+			|| (x instanceof Number && ((Number)x).intValue() == -1)
+			|| (isArray(x) && java.lang.reflect.Array.getLength(x) == 0)
+			|| (x instanceof Map && ((Map<?,?>)x).isEmpty())
+			|| (x instanceof Collection && ((Collection<?>)x).isEmpty())
+		));
 	}
 
 	/**

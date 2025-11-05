@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.debug;
 
 import org.apache.juneau.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.common.reflect.*;
 
 /**
  * A reflection map for the {@link Enablement} setting.

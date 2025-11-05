@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.utils;
+package org.apache.juneau.common.reflect;
 
 import static java.lang.Character.*;
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
@@ -248,16 +247,16 @@ public class ReflectionMap<V> {
 			return classMatches(simpleName, fullName, c);
 		}
 
-		@Override
-		public String toString() {
-			// @formatter:off
-			return filteredMap()
-				.append("simpleName", simpleName)
-				.append("fullName", fullName)
-				.append("value", value)
-				.asString();
-			// @formatter:on
-		}
+	@Override
+	public String toString() {
+		// @formatter:off
+		return mapb().filtered()
+			.add("simpleName", simpleName)
+			.add("fullName", fullName)
+			.add("value", value)
+			.toString();
+		// @formatter:on
+	}
 	}
 
 	static class ConstructorEntry<V> {
@@ -280,17 +279,17 @@ public class ReflectionMap<V> {
 			return classMatches(simpleClassName, fullClassName, c) && (argsMatch(args, m.getParameterTypes()));
 		}
 
-		@Override
-		public String toString() {
-			// @formatter:off
-			return filteredMap()
-				.append("simpleClassName", simpleClassName)
-				.append("fullClassName", fullClassName)
-				.append("args", args)
-				.append("value", value)
-				.asString();
-			// @formatter:on
-		}
+	@Override
+	public String toString() {
+		// @formatter:off
+		return mapb().filtered()
+			.add("simpleClassName", simpleClassName)
+			.add("fullClassName", fullClassName)
+			.add("args", args)
+			.add("value", value)
+			.toString();
+		// @formatter:on
+	}
 	}
 
 	static class FieldEntry<V> {
@@ -314,17 +313,17 @@ public class ReflectionMap<V> {
 			return classMatches(simpleClassName, fullClassName, c) && (eq(f.getName(), fieldName));
 		}
 
-		@Override
-		public String toString() {
-			// @formatter:off
-			return filteredMap()
-				.append("simpleClassName", simpleClassName)
-				.append("fullClassName", fullClassName)
-				.append("fieldName", fieldName)
-				.append("value", value)
-				.asString();
-			// @formatter:on
-		}
+	@Override
+	public String toString() {
+		// @formatter:off
+		return mapb().filtered()
+			.add("simpleClassName", simpleClassName)
+			.add("fullClassName", fullClassName)
+			.add("fieldName", fieldName)
+			.add("value", value)
+			.toString();
+		// @formatter:on
+	}
 	}
 
 	static class MethodEntry<V> {
@@ -379,18 +378,18 @@ public class ReflectionMap<V> {
 			// @formatter:on
 		}
 
-		@Override
-		public String toString() {
-			// @formatter:off
-			return filteredMap()
-				.append("simpleClassName", simpleClassName)
-				.append("fullClassName", fullClassName)
-				.append("methodName", methodName)
-				.append("args", args)
-				.append("value", value)
-				.asString();
-			// @formatter:on
-		}
+	@Override
+	public String toString() {
+		// @formatter:off
+		return mapb().filtered()
+			.add("simpleClassName", simpleClassName)
+			.add("fullClassName", fullClassName)
+			.add("methodName", methodName)
+			.add("args", args)
+			.add("value", value)
+			.toString();
+		// @formatter:on
+	}
 	}
 
 	/**
@@ -811,12 +810,13 @@ public class ReflectionMap<V> {
 	@Override /* Overridden from Object */
 	public String toString() {
 		// @formatter:off
-		return filteredMap()
-			.append("classEntries", classEntries)
-			.append("methodEntries", methodEntries)
-			.append("fieldEntries", fieldEntries)
-			.append("constructorEntries", constructorEntries)
-			.asString();
+		return mapb().filtered()
+			.add("classEntries", classEntries)
+			.add("methodEntries", methodEntries)
+			.add("fieldEntries", fieldEntries)
+			.add("constructorEntries", constructorEntries)
+			.toString();
 		// @formatter:on
 	}
 }
+

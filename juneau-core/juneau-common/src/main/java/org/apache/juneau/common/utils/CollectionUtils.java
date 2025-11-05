@@ -1196,6 +1196,38 @@ public class CollectionUtils {
 	}
 
 	/**
+	 * Convenience factory for a {@link MapBuilder} with {@link String} keys and {@link Object} values.
+	 *
+	 * <p>
+	 * This is a shortcut for <c>MapBuilder.create(String.<jk>class</jk>, Object.<jk>class</jk>)</c>.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapb()
+	 * 		.add(<js>"foo"</js>, 1)
+	 * 		.add(<js>"bar"</js>, 2)
+	 * 		.build();
+	 * </p>
+	 *
+	 * <p>
+	 * This builder supports optional filtering to automatically exclude unwanted values:
+	 * <p class='bjava'>
+	 * 	<jc>// Build a map excluding null and empty values</jc>
+	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapb().filtered()
+	 * 		.add(<js>"foo"</js>, <jk>null</jk>)       <jc>// Excluded</jc>
+	 * 		.add(<js>"bar"</js>, <js>""</js>)         <jc>// Excluded</jc>
+	 * 		.add(<js>"baz"</js>, <js>"value"</js>)    <jc>// Included</jc>
+	 * 		.build();
+	 * </p>
+	 *
+	 * @return A new map builder.
+	 * @see MapBuilder
+	 */
+	public static MapBuilder<String,Object> mapb() {
+		return MapBuilder.create(String.class, Object.class);
+	}
+
+	/**
 	 * Creates a new {@link TreeSet} containing a copy of the specified set.
 	 *
 	 * @param <T> The element type.
@@ -2159,10 +2191,10 @@ public class CollectionUtils {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	String[] <jv>array</jv> = {<js>"a"</js>, <js>"b"</js>, <js>"c"</js>};
-	 * 	
+	 *
 	 * 	<jc>// Prints "a", "b", "c"</jc>
 	 * 	<jsm>stream</jsm>(<jv>array</jv>).forEach(System.<jk>out</jk>::println);
-	 * 	
+	 *
 	 * 	<jc>// Handles null gracefully - returns empty stream</jc>
 	 * 	<jsm>stream</jsm>(<jk>null</jk>).forEach(System.<jk>out</jk>::println);  <jc>// Prints nothing</jc>
 	 * </p>
