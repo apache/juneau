@@ -649,6 +649,8 @@ public class ClassUtils {
 	 * @return The simple name of the class or <jk>null</jk> if the value was null.
 	 */
 	public static String simpleClassName(Object value) {
+		if (value instanceof ClassInfo)
+			return ((ClassInfo)value).getNameSimple();
 		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getSimpleName() : value.getClass().getSimpleName();
 	}
 

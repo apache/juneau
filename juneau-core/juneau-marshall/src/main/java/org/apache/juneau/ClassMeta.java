@@ -861,14 +861,9 @@ public class ClassMeta<T> implements Type {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ClassMeta<T> forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		A[] array = annotationArray(type);
-		if (array == null) {
-			if (beanContext == null)
-				info.forEachAnnotation(BeanContext.DEFAULT, type, filter, action);
-			return this;
+		if (beanContext != null) {
+			beanContext.getAnnotationProvider().find(type, info.inner()).map(x -> x.inner()).filter(x -> x != null).filter(x -> filter == null || filter.test(x)).forEach(x -> action.accept(x));
 		}
-		for (var a : array)
-			PredicateUtils.consumeIf(filter, action, a);
 		return this;
 	}
 

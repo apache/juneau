@@ -345,23 +345,19 @@ public class AnnotationProvider2 {
 		var ci = ClassInfo.of(forClass);
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
 
-		// On this class
-		findDeclaredAnnotations(list, forClass);
-
-		// On parent classes ordered child-to-parent
-		var parents = ci.getParents();
-		for (int i = 0; i < parents.size(); i++)
-			findDeclaredAnnotations(list, parents.get(i).inner());
-
-		// On interfaces ordered child-to-parent
-		var interfaces = ci.getInterfaces();
-		for (int i = 0; i < interfaces.size(); i++)
-			findDeclaredAnnotations(list, interfaces.get(i).inner());
+		// On all parent classes and interfaces (properly traversed to avoid duplicates)
+		var parentsAndInterfaces = ci.getParentsAndInterfaces();
+		for (int i = 0; i < parentsAndInterfaces.size(); i++)
+			findDeclaredAnnotations(list, parentsAndInterfaces.get(i).inner());
 
 		// On the package of this class
 		var pkg = ci.getPackage();
-		if (nn(pkg))
-			findDeclaredAnnotations(list, pkg.inner());
+		if (nn(pkg)) {
+			var pi = PackageInfo.of(pkg.inner());
+			for (var a : pkg.inner().getAnnotations())
+				for (var a2 : splitRepeated(a))
+					list.add(AnnotationInfo.of(pi, a2));
+		}
 
 		return u(list);
 	}

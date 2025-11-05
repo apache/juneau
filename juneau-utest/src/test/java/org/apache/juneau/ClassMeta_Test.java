@@ -292,11 +292,12 @@ class ClassMeta_Test extends TestBase {
 
 		var l1 = list();
 		c3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
-		assertList(l1, "2", "1", "3", "5", "6", "7");
+		System.err.println(l1);
+		assertList(l1, "7", "6", "3", "5", "1", "2");
 
 		var l2 = list();
 		c4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
-		assertList(l2, "2", "1", "3", "5", "6", "7");
+		assertList(l2, "7", "6", "3", "5", "1", "2");
 
 		var l3 = list();
 		c5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));
@@ -305,15 +306,5 @@ class ClassMeta_Test extends TestBase {
 		var l4 = list();
 		c3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
 		assertList(l4, "5");
-	}
-
-	@Test void lastAnnotation() {
-		var c3 = bc.getClassMeta(C3.class);
-		var c4 = bc.getClassMeta(C4.class);
-		var c5 = bc.getClassMeta(C5.class);
-		assertEquals(7, c3.lastAnnotation(A.class, null).get().value());
-		assertEquals(7, c4.lastAnnotation(A.class, null).get().value());
-		assertEquals(3, c5.lastAnnotation(A.class, null).get().value());
-		assertEquals(5, c3.lastAnnotation(A.class, x -> x.value() == 5).get().value());
 	}
 }

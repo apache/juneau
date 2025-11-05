@@ -895,6 +895,7 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
+//		getAnnotationProvider().find(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).forEach(x -> action.accept(x));
 		if (nn(type) && nn(onClass))
 			for (var a : declaredAnnotations(type, onClass))
 				consumeIf(filter, action, a);

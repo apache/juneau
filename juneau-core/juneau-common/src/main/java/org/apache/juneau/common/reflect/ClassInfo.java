@@ -222,7 +222,50 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private final Supplier<List<ClassInfo>> interfaces = memoize(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
 
 	// All parent classes and interfaces, classes first, then in child-to-parent order.
+	// TODO - Determine if this field is still needed now that we have parentsAndInterfaces which handles the hierarchy better.
 	private final Supplier<List<ClassInfo>> allParents = memoize(() -> concat(getParents().stream(), getInterfaces().stream()).toList());
+
+	// All parent classes and interfaces with proper traversal of interface hierarchy to avoid duplicates.
+	private final Supplier<List<ClassInfo>> parentsAndInterfaces = memoize(this::findParentsAndInterfaces);
+
+	/**
+	 * Finds all parent classes and interfaces with proper traversal of interface hierarchy.
+	 *
+	 * @return A list of all parent classes and interfaces without duplicates.
+	 */
+	private List<ClassInfo> findParentsAndInterfaces() {
+		var set = new LinkedHashSet<ClassInfo>();
+		
+		// Process all parent classes (includes this class)
+		var parents = getParents();
+		for (int i = 0; i < parents.size(); i++) {
+			var parent = parents.get(i);
+			set.add(parent);
+			
+			// Process interfaces declared on this parent (and their parent interfaces)
+			var declaredInterfaces = parent.getDeclaredInterfaces();
+			for (int j = 0; j < declaredInterfaces.size(); j++)
+				addInterfaceHierarchy(set, declaredInterfaces.get(j));
+		}
+		
+		return u(new ArrayList<>(set));
+	}
+
+	/**
+	 * Helper method to recursively add an interface and its parent interfaces to the set.
+	 *
+	 * @param set The set to add to.
+	 * @param iface The interface to add.
+	 */
+	private void addInterfaceHierarchy(LinkedHashSet<ClassInfo> set, ClassInfo iface) {
+		if (!set.add(iface))
+			return;
+		
+		// Process parent interfaces recursively
+		var parentInterfaces = iface.getParents();
+		for (int i = 0; i < parentInterfaces.size(); i++)
+			addInterfaceHierarchy(set, parentInterfaces.get(i));
+	}
 
 	// All record components if this is a record class (Java 14+).
 	private final Supplier<List<RecordComponent>> recordComponents = memoize(() -> opt(c).filter(Class::isRecord).map(x -> u(l(x.getRecordComponents()))).orElse(liste()));
@@ -914,6 +957,26 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * 	<br>Results are in child-to-parent order.
 	 */
 	public List<ClassInfo> getInterfaces() { return interfaces.get(); }
+
+	/**
+	 * Returns all parent classes and interfaces in proper traversal order.
+	 *
+	 * <p>
+	 * This method returns a unique list of all parent classes (including this class) and all interfaces
+	 * (including interface hierarchies) with proper handling of duplicates. The order is:
+	 * <ol>
+	 * 	<li>This class
+	 * 	<li>Parent classes in child-to-parent order
+	 * 	<li>For each class, interfaces declared on that class and their parent interfaces
+	 * </ol>
+	 *
+	 * <p>
+	 * This is useful for annotation processing where you need to traverse the complete type hierarchy
+	 * without duplicates.
+	 *
+	 * @return An unmodifiable list of all parent classes and interfaces, properly ordered without duplicates.
+	 */
+	public List<ClassInfo> getParentsAndInterfaces() { return parentsAndInterfaces.get(); }
 
 	/**
 	 * Returns the first matching method on this class.
