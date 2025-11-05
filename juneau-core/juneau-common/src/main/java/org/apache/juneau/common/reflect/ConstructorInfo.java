@@ -207,17 +207,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	public <T> T newInstanceFuzzy(Object...args) throws ExecutableException {
 		return newInstance(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
 	}
-
-	/**
-	 * Returns <jk>true</jk> if this object passes the specified predicate test.
-	 *
-	 * @param test The test to perform.
-	 * @return <jk>true</jk> if this object passes the specified predicate test.
-	 */
-	public boolean matches(Predicate<ConstructorInfo> test) {
-		return test(test, this);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotatable interface methods
 	//-----------------------------------------------------------------------------------------------------------------

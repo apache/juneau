@@ -358,16 +358,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this object passes the specified predicate test.
-	 *
-	 * @param test The test to perform.
-	 * @return <jk>true</jk> if this object passes the specified predicate test.
-	 */
-	public boolean matches(Predicate<FieldInfo> test) {
-		return test(test, this);
-	}
-
-	/**
 	 * Sets the field value on the specified object.
 	 *
 	 * @param o The object containing the field.

@@ -2348,16 +2348,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this object passes the specified predicate test.
-	 *
-	 * @param test The test to perform.
-	 * @return <jk>true</jk> if this object passes the specified predicate test.
-	 */
-	public boolean matches(Predicate<ClassInfo> test) {
-		return test(test, this);
-	}
-
-	/**
 	 * Shortcut for calling <c>Class.getDeclaredConstructor().newInstance()</c> on the underlying class.
 	 *
 	 * @return A new instance of the underlying class

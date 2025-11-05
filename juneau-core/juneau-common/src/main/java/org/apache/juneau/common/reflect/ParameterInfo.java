@@ -434,17 +434,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	public boolean isType(Class<?> c) {
 		return getParameterType().is(c);
 	}
-
-	/**
-	 * Returns <jk>true</jk> if this object passes the specified predicate test.
-	 *
-	 * @param test The test to perform.
-	 * @return <jk>true</jk> if this object passes the specified predicate test.
-	 */
-	public boolean matches(Predicate<ParameterInfo> test) {
-		return test(test, this);
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// High Priority Methods (direct Parameter API compatibility)
 	//-----------------------------------------------------------------------------------------------------------------

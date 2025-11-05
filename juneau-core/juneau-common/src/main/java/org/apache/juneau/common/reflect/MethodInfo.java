@@ -182,19 +182,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			.forEach(pi -> addMatchingMethodsFromInterface(result, pi));
 	}
 
-	/**
-	 * Performs an action on this object if the specified predicate test passes.
-	 *
-	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on this object.
-	 * @return This object.
-	 */
-	public MethodInfo accept(Predicate<MethodInfo> test, Consumer<MethodInfo> action) {
-		if (matches(test))
-			action.accept(this);
-		return this;
-	}
-
 	@Override /* Overridden from ExecutableInfo */
 	public MethodInfo accessible() {
 		super.accessible();
@@ -760,16 +747,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * @return <jk>true</jk> if this method is a bridge method.
 	 */
 	public boolean isBridge() { return m.isBridge(); }
-
-	/**
-	 * Returns <jk>true</jk> if this object passes the specified predicate test.
-	 *
-	 * @param test The test to perform.
-	 * @return <jk>true</jk> if this object passes the specified predicate test.
-	 */
-	public boolean matches(Predicate<MethodInfo> test) {
-		return test(test, this);
-	}
 
 	/**
 	 * Returns <jk>true</jk> if this method matches the specified method by name and parameter types.

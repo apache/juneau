@@ -71,19 +71,6 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
-	 * Performs an action on this object if the specified predicate test passes.
-	 *
-	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on this object.
-	 * @return This object.
-	 */
-	public AnnotationInfo<?> accept(Predicate<AnnotationInfo<?>> test, Consumer<AnnotationInfo<?>> action) {
-		if (matches(test))
-			action.accept(this);
-		return this;
-	}
-
-	/**
 	 * Performs an action on all matching values on this annotation.
 	 *
 	 * @param <V> The annotation field type.
@@ -167,16 +154,6 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	public <A extends Annotation> boolean isType(Class<A> type) {
 		return this.a.annotationType() == type;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this object passes the specified predicate test.
-	 *
-	 * @param test The test to perform.
-	 * @return <jk>true</jk> if this object passes the specified predicate test.
-	 */
-	public boolean matches(Predicate<AnnotationInfo<?>> test) {
-		return test(test, this);
 	}
 
 	/**
@@ -308,17 +285,24 @@ public class AnnotationInfo<T extends Annotation> {
 		var pi = classInfo.getPackage();
 		if (nn(pi))
 			for (var ai : pi.getAnnotations())
-				ai.accept(filter, action);
+				if (filter == null || filter.test(ai))
+					action.accept(ai);
 		var interfaces = classInfo.getInterfaces();
 		for (int i = interfaces.size() - 1; i >= 0; i--)
 			for (var a : interfaces.get(i).inner().getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a))
-					AnnotationInfo.of(interfaces.get(i), a2).accept(filter, action);
+				for (var a2 : splitRepeated(a)) {
+					var ai = AnnotationInfo.of(interfaces.get(i), a2);
+					if (filter == null || filter.test(ai))
+						action.accept(ai);
+				}
 		var parents = classInfo.getParents();
 		for (int i = parents.size() - 1; i >= 0; i--)
 			for (var a : parents.get(i).inner().getDeclaredAnnotations())
-				for (var a2 : splitRepeated(a))
-					AnnotationInfo.of(parents.get(i), a2).accept(filter, action);
+				for (var a2 : splitRepeated(a)) {
+					var ai = AnnotationInfo.of(parents.get(i), a2);
+					if (filter == null || filter.test(ai))
+						action.accept(ai);
+				}
 	}
 
 	/**
@@ -479,19 +463,24 @@ public class AnnotationInfo<T extends Annotation> {
 	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (nn(ci))
 			for (var ai : ci.getDeclaredAnnotationInfos())
-				ai.accept(filter, action);
+				if (filter == null || filter.test(ai))
+					action.accept(ai);
 	}
 
 	private static void forEachDeclaredAnnotationInfo(PackageInfo pi, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (nn(pi))
 			for (var ai : pi.getAnnotations())
-				ai.accept(filter, action);
+				if (filter == null || filter.test(ai))
+					action.accept(ai);
 	}
 
 	private static void forEachDeclaredMethodAnnotationInfo(MethodInfo methodInfo, ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		MethodInfo mi = methodInfo.findMatchingOnClass(ci);
 		if (nn(mi))
-			mi.getDeclaredAnnotationInfos().forEach(ai -> ai.accept(filter, action));
+			mi.getDeclaredAnnotationInfos().forEach(ai -> {
+				if (filter == null || filter.test(ai))
+					action.accept(ai);
+			});
 	}
 
 	/**
