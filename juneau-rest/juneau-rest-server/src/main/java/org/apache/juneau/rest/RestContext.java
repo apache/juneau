@@ -1758,16 +1758,15 @@ public class RestContext extends Context {
 
 			// Get @RestInject fields initialized with values.
 			// @formatter:off
-			rci.forEachAllField(
-				x -> x.hasAnnotation(RestInject.class),
-				x -> x.getOptional(resource.get()).ifPresent(
+			rci.getAllFields().stream()
+				.filter(x -> x.hasAnnotation(RestInject.class))
+				.forEach(x -> x.getOptional(resource.get()).ifPresent(
 					y -> beanStore.add(
 						x.getType().inner(),
 						y,
 						RestInjectAnnotation.name(x.getAnnotation(RestInject.class))
-					)
 				)
-			);
+			));
 			// @formatter:on
 
 			rci.forEachMethod(x -> x.hasAnnotation(RestInject.class), x -> {
@@ -1794,19 +1793,18 @@ public class RestContext extends Context {
 
 			runInitHooks(bs, resource());
 
-			// Set @RestInject fields not initialized with values.
-			// @formatter:off
-			rci.forEachAllField(
-				x -> x.hasAnnotation(RestInject.class),
-				x -> x.setIfNull(
-					resource.get(),
-					beanStore.getBean(
-						x.getType().inner(),
-						RestInjectAnnotation.name(x.getAnnotation(RestInject.class))
-					).orElse(null)
-				)
-			);
-			// @formatter:on
+		// Set @RestInject fields not initialized with values.
+		// @formatter:off
+		rci.getAllFields().stream()
+			.filter(x -> x.hasAnnotation(RestInject.class))
+			.forEach(x -> x.setIfNull(
+				resource.get(),
+				beanStore.getBean(
+					x.getType().inner(),
+					RestInjectAnnotation.name(x.getAnnotation(RestInject.class))
+				).orElse(null)
+			));
+		// @formatter:on
 
 			return this;
 		}

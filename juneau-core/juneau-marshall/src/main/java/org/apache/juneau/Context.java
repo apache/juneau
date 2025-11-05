@@ -18,7 +18,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
-import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -758,8 +757,6 @@ public abstract class Context implements AnnotationProvider {
 	final List<Annotation> annotations;
 	final boolean debug;
 
-	private final ReflectionMap<Annotation> annotationMap;
-	private final Cache2<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache;
 	private final AnnotationProvider2 annotationProvider;
 
 	/**
@@ -767,42 +764,10 @@ public abstract class Context implements AnnotationProvider {
 	 *
 	 * @param builder The builder for this class.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected Context(Builder builder) {
 		init(builder);
 		debug = builder.debug;
 		annotations = opt(builder.annotations).orElseGet(Collections::emptyList);
-
-		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
-
-		annotations.forEach(a -> {
-			try {
-				var ci = ClassInfo.of(a.getClass());
-
-				MethodInfo mi = ci.getPublicMethod(x -> x.hasName("onClass"));
-				if (nn(mi)) {
-					if (! mi.getReturnType().is(Class[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.", scn(a));
-					for (var c : (Class<?>[])mi.accessible().invoke(a))
-						rmb.append(c.getName(), a);
-				}
-
-				mi = ci.getPublicMethod(x -> x.hasName("on"));
-				if (nn(mi)) {
-					if (! mi.getReturnType().is(String[].class))
-						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.", scn(a));
-					for (var s : (String[])mi.accessible().invoke(a))
-						rmb.append(s, a);
-				}
-
-			} catch (Exception e) {
-				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.", cn(a));
-			}
-		});
-		this.annotationMap = rmb.build();
-		var disabled = Boolean.getBoolean("juneau.disableAnnotationCaching");
-		declaredClassAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2))).build();
-
 		annotationProvider = AnnotationProvider2.create().addRuntimeAnnotations(annotations).build();
 	}
 
@@ -812,10 +777,8 @@ public abstract class Context implements AnnotationProvider {
 	 * @param copyFrom The context to copy from.
 	 */
 	protected Context(Context copyFrom) {
-		annotationMap = copyFrom.annotationMap;
 		annotations = copyFrom.annotations;
 		debug = copyFrom.debug;
-		declaredClassAnnotationCache = copyFrom.declaredClassAnnotationCache;
 		annotationProvider = copyFrom.annotationProvider;
 	}
 
@@ -993,11 +956,6 @@ public abstract class Context implements AnnotationProvider {
 	@Override /* Overridden from Object */
 	public String toString() {
 		return Utils2.toPropertyMap(this).asReadableString();
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] declaredAnnotations(Class<A> type, Class<?> onClass) {
-		return (A[])declaredClassAnnotationCache.get(onClass, type);
 	}
 
 	/**

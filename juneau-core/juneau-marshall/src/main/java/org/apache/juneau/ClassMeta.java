@@ -206,13 +206,13 @@ public class ClassMeta<T> implements Type {
 			.orElse(null);
 			// @formatter:on
 
-			ci.forEachAllField(x -> x.hasAnnotation(bc, ParentProperty.class), x -> {
+			ci.getAllFields().stream().filter(x -> x.hasAnnotation(bc, ParentProperty.class)).forEach(x -> {
 				if (x.isStatic())
 					throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid field ''{0}''.  Must be static.", x);
 				parentPropertyMethod = new Setter.FieldSetter(x.accessible().inner());
 			});
 
-			ci.forEachAllField(x -> x.hasAnnotation(bc, NameProperty.class), x -> {
+			ci.getAllFields().stream().filter(x -> x.hasAnnotation(bc, NameProperty.class)).forEach(x -> {
 				if (x.isStatic())
 					throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid field ''{0}''.  Must be static.", x);
 				namePropertyMethod = new Setter.FieldSetter(x.accessible().inner());

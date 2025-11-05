@@ -568,7 +568,7 @@ public class ClassInfo_Test extends TestBase {
 	@Test void hasAnnotation() {
 		assertTrue(g3.hasAnnotation(A.class));
 		assertFalse(g3.hasAnnotation(B.class));
-		assertFalse(g3.hasAnnotation(null));
+		assertThrows(IllegalArgumentException.class, ()->g3.hasAnnotation(null));
 	}
 
 	@Test void getAnnotations() {

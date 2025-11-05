@@ -235,19 +235,19 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	private List<ClassInfo> findParentsAndInterfaces() {
 		var set = new LinkedHashSet<ClassInfo>();
-		
+
 		// Process all parent classes (includes this class)
 		var parents = getParents();
 		for (int i = 0; i < parents.size(); i++) {
 			var parent = parents.get(i);
 			set.add(parent);
-			
+
 			// Process interfaces declared on this parent (and their parent interfaces)
 			var declaredInterfaces = parent.getDeclaredInterfaces();
 			for (int j = 0; j < declaredInterfaces.size(); j++)
 				addInterfaceHierarchy(set, declaredInterfaces.get(j));
 		}
-		
+
 		return u(new ArrayList<>(set));
 	}
 
@@ -260,12 +260,57 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	private void addInterfaceHierarchy(LinkedHashSet<ClassInfo> set, ClassInfo iface) {
 		if (!set.add(iface))
 			return;
-		
+
 		// Process parent interfaces recursively
 		var parentInterfaces = iface.getParents();
 		for (int i = 0; i < parentInterfaces.size(); i++)
 			addInterfaceHierarchy(set, parentInterfaces.get(i));
 	}
+
+	/**
+	 * Finds all annotations on this class and parent classes/interfaces in child-to-parent order.
+	 *
+	 * <p>
+	 * This is similar to {@link org.apache.juneau.common.reflect.AnnotationProvider2#find(Class)} but without runtime annotations.
+	 *
+	 * <p>
+	 * Order of traversal:
+	 * <ol>
+	 * 	<li>Annotations declared on this class
+	 * 	<li>Annotations declared on parent classes (child-to-parent order)
+	 * 	<li>For each parent class, annotations on interfaces declared on that class (child-to-parent interface hierarchy)
+	 * 	<li>Annotations on the package of this class
+	 * </ol>
+	 *
+	 * @return A list of all annotation infos in child-to-parent order.
+	 */
+	private List<AnnotationInfo<Annotation>> findAnnotationInfos() {
+		var list = new ArrayList<AnnotationInfo<Annotation>>();
+
+		// On all parent classes and interfaces (properly traversed to avoid duplicates)
+		var parentsAndInterfaces = getParentsAndInterfaces();
+		for (int i = 0; i < parentsAndInterfaces.size(); i++) {
+			var ci = parentsAndInterfaces.get(i);
+			// Add declared annotations from this class/interface
+			for (var a : ci.inner().getDeclaredAnnotations())
+				for (var a2 : splitRepeated(a))
+					list.add(AnnotationInfo.of(ci, a2));
+		}
+
+		// On the package of this class
+		var pkg = getPackage();
+		if (nn(pkg)) {
+			var pi = PackageInfo.of(pkg.inner());
+			for (var a : pkg.inner().getAnnotations())
+				for (var a2 : splitRepeated(a))
+					list.add(AnnotationInfo.of(pi, a2));
+		}
+
+		return u(list);
+	}
+
+	// All annotations on this class and parent classes/interfaces in child-to-parent order.
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotationInfos = memoize(this::findAnnotationInfos);
 
 	// All record components if this is a record class (Java 14+).
 	private final Supplier<List<RecordComponent>> recordComponents = memoize(() -> opt(c).filter(Class::isRecord).map(x -> u(l(x.getRecordComponents()))).orElse(liste()));
@@ -356,22 +401,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 		return (o instanceof ClassInfo o2) && eq(this, o2, (x, y) -> eq(x.t, y.t));
 	}
 
-	/**
-	 * Performs an action on all matching fields on this class and all parent classes.
-	 *
-	 * <p>
-	 * 	Results are ordered parent-to-child, and then alphabetical per class.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachAllField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
-		getAllFields().stream()
-			.filter(fi -> test(filter, fi))
-			.forEach(action);
-		return this;
-	}
 
 	/**
 	 * Performs an action on all matching declared methods on this class and all parent classes.
@@ -977,6 +1006,53 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return An unmodifiable list of all parent classes and interfaces, properly ordered without duplicates.
 	 */
 	public List<ClassInfo> getParentsAndInterfaces() { return parentsAndInterfaces.get(); }
+
+	/**
+	 * Returns all annotations on this class and parent classes/interfaces in child-to-parent order.
+	 *
+	 * <p>
+	 * This returns all declared annotations from:
+	 * <ol>
+	 * 	<li>This class
+	 * 	<li>Parent classes in child-to-parent order
+	 * 	<li>For each class, interfaces declared on that class and their parent interfaces
+	 * 	<li>The package of this class
+	 * </ol>
+	 *
+	 * <p>
+	 * This does NOT include runtime annotations. For runtime annotation support, use
+	 * {@link org.apache.juneau.common.reflect.AnnotationProvider2}.
+	 *
+	 * @return An unmodifiable list of all annotation infos.
+	 */
+	public List<AnnotationInfo<Annotation>> getAnnotationInfos() { return annotationInfos.get(); }
+
+	/**
+	 * Returns all annotations of the specified type on this class and parent classes/interfaces in child-to-parent order.
+	 *
+	 * <p>
+	 * This returns all declared annotations from:
+	 * <ol>
+	 * 	<li>This class
+	 * 	<li>Parent classes in child-to-parent order
+	 * 	<li>For each class, interfaces declared on that class and their parent interfaces
+	 * 	<li>The package of this class
+	 * </ol>
+	 *
+	 * <p>
+	 * This does NOT include runtime annotations. For runtime annotation support, use
+	 * {@link org.apache.juneau.common.reflect.AnnotationProvider2}.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to filter by.
+	 * @return A stream of annotation infos of the specified type.
+	 */
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotationInfos(Class<A> type) {
+		assertArgNotNull("type", type);
+		return getAnnotationInfos().stream()
+			.filter(a -> a.isType(type))
+			.map(a -> (AnnotationInfo<A>)a);
+	}
 
 	/**
 	 * Returns the first matching method on this class.
@@ -1803,7 +1879,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return hasAnnotation(null, type);
+		return getAnnotationInfos(type).findFirst().isPresent();
 	}
 
 	@Override
