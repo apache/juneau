@@ -4590,7 +4590,7 @@
 <a class="jxr_linenumber" name="L4582" href="#L4582">4582</a> 				<em class="jxr_comment">// Also include methods on @Rest-annotated interfaces.</em>
 <a class="jxr_linenumber" name="L4583" href="#L4583">4583</a> 				<strong class="jxr_keyword">if</strong> (al.isEmpty()) {
 <a class="jxr_linenumber" name="L4584" href="#L4584">4584</a> 					Predicate&lt;MethodInfo&gt; isRestAnnotatedInterface = x -&gt; x.getDeclaringClass().isInterface() &amp;&amp; nn(x.getDeclaringClass().getAnnotation(Rest.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L4585" href="#L4585">4585</a> 					mi.forEachMatching(isRestAnnotatedInterface, x -&gt; al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
+<a class="jxr_linenumber" name="L4585" href="#L4585">4585</a> 					mi.getMatching().filter(isRestAnnotatedInterface).forEach(x -&gt; al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 <a class="jxr_linenumber" name="L4586" href="#L4586">4586</a> 				}
 <a class="jxr_linenumber" name="L4587" href="#L4587">4587</a> 
 <a class="jxr_linenumber" name="L4588" href="#L4588">4588</a> 				<strong class="jxr_keyword">if</strong> (al.size() &gt; 0) {
