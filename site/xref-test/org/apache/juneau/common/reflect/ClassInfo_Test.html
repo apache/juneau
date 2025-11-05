@@ -576,7 +576,7 @@
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 	@Test <strong class="jxr_keyword">void</strong> hasAnnotation() {
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 		assertTrue(g3.hasAnnotation(A.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 		assertFalse(g3.hasAnnotation(B.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		assertFalse(g3.hasAnnotation(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;g3.hasAnnotation(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 	@Test <strong class="jxr_keyword">void</strong> getAnnotations() {

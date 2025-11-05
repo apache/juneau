@@ -214,13 +214,13 @@
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			ci.forEachAllField(x -&gt; x.hasAnnotation(bc, ParentProperty.<strong class="jxr_keyword">class</strong>), x -&gt; {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			ci.getAllFields().stream().filter(x -&gt; x.hasAnnotation(bc, ParentProperty.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">if</strong> (x.isStatic())
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@ParentProperty used on invalid field ''{0}''.  Must be static."</span>, x);
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 				parentPropertyMethod = <strong class="jxr_keyword">new</strong> Setter.FieldSetter(x.accessible().<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 			});
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			ci.forEachAllField(x -&gt; x.hasAnnotation(bc, NameProperty.<strong class="jxr_keyword">class</strong>), x -&gt; {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			ci.getAllFields().stream().filter(x -&gt; x.hasAnnotation(bc, NameProperty.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 				<strong class="jxr_keyword">if</strong> (x.isStatic())
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@NameProperty used on invalid field ''{0}''.  Must be static."</span>, x);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 				namePropertyMethod = <strong class="jxr_keyword">new</strong> Setter.FieldSetter(x.accessible().<strong class="jxr_keyword">inner</strong>());
