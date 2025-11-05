@@ -18,6 +18,7 @@ package org.apache.juneau.common.reflect;
 
 import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.common.reflect.ClassNameFormat.*;
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
@@ -166,6 +167,43 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @return The declared annotations on this executable as {@link AnnotationInfo} objects.
 	 */
 	public final List<AnnotationInfo<Annotation>> getDeclaredAnnotationInfos() { return declaredAnnotations.get(); }
+
+	/**
+	 * Returns the declared annotations of the specified type on this executable.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type.
+	 * @return A stream of matching annotations.
+	 */
+	@SuppressWarnings("unchecked")
+	public final <A extends Annotation> Stream<AnnotationInfo<A>> getDeclaredAnnotationInfos(Class<A> type) {
+		assertArgNotNull("type", type);
+		return declaredAnnotations.get().stream()
+			.filter(x -> type.isInstance(x.inner()))
+			.map(x -> (AnnotationInfo<A>)x);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this executable has the specified annotation.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type.
+	 * @return <jk>true</jk> if this executable has the specified annotation.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+		return getDeclaredAnnotationInfos(type).findFirst().isPresent();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this executable does not have the specified annotation.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type.
+	 * @return <jk>true</jk> if this executable does not have the specified annotation.
+	 */
+	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
+		return !hasAnnotation(type);
+	}
 
 	/**
 	 * Returns the full name of this executable.

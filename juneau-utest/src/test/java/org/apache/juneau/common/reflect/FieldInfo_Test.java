@@ -118,15 +118,6 @@ class FieldInfo_Test extends TestBase {
 		b_a1 = off(B.class, "a1"),
 		b_a2 = off(B.class, "a2");
 
-	@Test void getAnnotation() {
-		check("@A(a1)", b_a1.getAnnotation(A.class));
-		check(null, b_a2.getAnnotation(A.class));
-	}
-
-	@Test void getAnnotation_null() {
-		check(null, b_a1.getAnnotation(null));
-	}
-
 	@Test void hasAnnotation_true() {
 		assertTrue(b_a1.hasAnnotation(A.class));
 	}

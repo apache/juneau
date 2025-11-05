@@ -153,17 +153,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return hasAnnotation(AnnotationProvider.DEFAULT, type);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present on this constructor.
 	 *
 	 * @param <A> The annotation type to look for.
