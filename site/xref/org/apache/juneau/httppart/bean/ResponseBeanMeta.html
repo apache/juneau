@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			Class&lt;?&gt; c = toClass(t);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">this</strong>.cm = BeanContext.DEFAULT.getClassMeta(c);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			ClassInfo ci = cm.getInfo();
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			ci.forEachPublicMethod(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			ci.getPublicMethods().stream().forEach(x -&gt; {
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  				assertNoInvalidAnnotations(x, Query.<strong class="jxr_keyword">class</strong>, FormData.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  				<strong class="jxr_keyword">if</strong> (x.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  					assertNoArgs(x, Header.<strong class="jxr_keyword">class</strong>);

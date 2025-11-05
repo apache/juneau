@@ -61,7 +61,7 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		Builder apply(Class&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  			<strong class="jxr_keyword">this</strong>.cm = BeanContext.DEFAULT.getClassMeta(c);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  			apply(cm.getLastAnnotation(Request.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			cm.getInfo().forEachPublicMethod(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			cm.getInfo().getPublicMethods().stream().forEach(x -&gt; {
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  				String n = x.getSimpleName();
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  				<strong class="jxr_keyword">if</strong> (x.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  					assertNoArgs(x, Header.<strong class="jxr_keyword">class</strong>);

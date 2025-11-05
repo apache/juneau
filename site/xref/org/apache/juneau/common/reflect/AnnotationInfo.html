@@ -174,7 +174,7 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		jm.put(s(annotatable.getAnnotatableType()), annotatable.getAnnotatableName());
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> ja = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String, Object&gt;();
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> ca = ClassInfo.of(a.annotationType());
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		ca.forEachDeclaredMethod(<strong class="jxr_keyword">null</strong>, x -&gt; {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		ca.getDeclaredMethods().stream().forEach(x -&gt; {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 				<strong class="jxr_keyword">var</strong> v = x.invoke(a);
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 				<strong class="jxr_keyword">var</strong> d = x.<strong class="jxr_keyword">inner</strong>().getDefaultValue();

@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		ci.forEachAnnotation(Remote.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.path()), x -&gt; path.set(trimSlashes(x.path())));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		Map&lt;Method,RrpcInterfaceMethodMeta&gt; methods = map();
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		ci.forEachPublicMethod(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; methods.put(x.<strong class="jxr_keyword">inner</strong>(), <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMethodMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.html#RrpcInterfaceMethodMeta">RrpcInterfaceMethodMeta</a>(uri, x.<strong class="jxr_keyword">inner</strong>())));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		ci.getPublicMethods().stream().forEach(x -&gt; methods.put(x.<strong class="jxr_keyword">inner</strong>(), <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMethodMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMethodMeta.html#RrpcInterfaceMethodMeta">RrpcInterfaceMethodMeta</a>(uri, x.<strong class="jxr_keyword">inner</strong>())));
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		Map&lt;String,RrpcInterfaceMethodMeta&gt; methodsByPath = map();
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		methods.values().forEach(x -&gt; methodsByPath.put(x.getPath(), x));

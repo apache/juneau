@@ -293,7 +293,7 @@
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 			Match&lt;MethodInfo&gt; match = <strong class="jxr_keyword">new</strong> Match&lt;&gt;();
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<em class="jxr_comment">// Look for static creator method.</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			type.forEachPublicMethod(x -&gt; isStaticCreateMethod(x), x -&gt; {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			type.getPublicMethods().stream().filter(x -&gt; isStaticCreateMethod(x)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 				found.set(<span class="jxr_string">"STATIC_CREATOR"</span>);
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 				<strong class="jxr_keyword">if</strong> (hasAllParams(x))
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 					match.add(x);
@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<em class="jxr_comment">// Look for public constructor.</em>
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		Match&lt;ConstructorInfo&gt; constructorMatch = <strong class="jxr_keyword">new</strong> Match&lt;&gt;();
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		type.forEachPublicConstructor(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		type.getPublicConstructors().stream().forEach(x -&gt; {
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			found.setIfEmpty(<span class="jxr_string">"PUBLIC_CONSTRUCTOR"</span>);
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">if</strong> (hasAllParams(x))
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 				constructorMatch.add(x);
@@ -325,7 +325,7 @@
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<em class="jxr_comment">// Look for protected constructor.</em>
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">if</strong> (! constructorMatch.isPresent()) {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			type.forEachDeclaredConstructor(ConstructorInfo::isProtected, x -&gt; {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			type.getDeclaredConstructors().stream().filter(ConstructorInfo::isProtected).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 				found.setIfEmpty(<span class="jxr_string">"PROTECTED_CONSTRUCTOR"</span>);
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 				<strong class="jxr_keyword">if</strong> (hasAllParams(x))
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 					constructorMatch.add(x);
@@ -339,7 +339,7 @@
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">if</strong> (builder == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<em class="jxr_comment">// Look for static-builder/protected-constructor pair.</em>
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			Value&lt;T&gt; value = Value.empty();
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			type.forEachDeclaredConstructor(x -&gt; x.hasNumParameters(1) &amp;&amp; x.isVisible(PROTECTED), x -&gt; {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			type.getDeclaredConstructors().stream().filter(x -&gt; x.hasNumParameters(1) &amp;&amp; x.isVisible(PROTECTED)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 				Class&lt;?&gt; pt = x.getParameter(0).getParameterType().<strong class="jxr_keyword">inner</strong>();
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 				MethodInfo m = type.getPublicMethod(y -&gt; isStaticCreateMethod(y, pt));
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 				<strong class="jxr_keyword">if</strong> (nn(m)) {

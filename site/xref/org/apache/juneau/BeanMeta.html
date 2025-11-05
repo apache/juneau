@@ -255,7 +255,7 @@
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Class is not serializable"</span>;
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 				<em class="jxr_comment">// Look for @Beanc constructor on public constructors.</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 				ci.forEachPublicConstructor(x -&gt; x.hasAnnotation(ctx, Beanc.<strong class="jxr_keyword">class</strong>), x -&gt; {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 				ci.getPublicConstructors().stream().filter(x -&gt; x.hasAnnotation(ctx, Beanc.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 					<strong class="jxr_keyword">if</strong> (nn(constructor))
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Multiple instances of '@Beanc' found."</span>);
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 					constructor = x;
@@ -278,7 +278,7 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 				<em class="jxr_comment">// Look for @Beanc on all other constructors.</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 				<strong class="jxr_keyword">if</strong> (constructor == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 					ci.forEachDeclaredConstructor(x -&gt; x.hasAnnotation(ctx, Beanc.<strong class="jxr_keyword">class</strong>), x -&gt; {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 					ci.getDeclaredConstructors().stream().filter(x -&gt; x.hasAnnotation(ctx, Beanc.<strong class="jxr_keyword">class</strong>)).forEach(x -&gt; {
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 						<strong class="jxr_keyword">if</strong> (nn(constructor))
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanRuntimeException" href="../../../org/apache/juneau/common/reflect/BeanRuntimeException.html#BeanRuntimeException">BeanRuntimeException</a>(c, <span class="jxr_string">"Multiple instances of '@Beanc' found."</span>);
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 						constructor = x;
@@ -573,13 +573,13 @@
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">boolean</strong> noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 		forEachClass(ClassInfo.of(c), stopClass, c2 -&gt; {
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			c2.forEachDeclaredField(
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 				x -&gt; x.isNotStatic()
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			c2.getDeclaredFields().stream()
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 				.filter(x -&gt; x.isNotStatic()
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 				&amp;&amp; (x.isNotTransient() || noIgnoreTransients)
 <a class="jxr_linenumber" name="L571" href="#L571">571</a> 				&amp;&amp; (x.hasNoAnnotation(Transient.<strong class="jxr_keyword">class</strong>) || noIgnoreTransients)
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 				&amp;&amp; x.hasNoAnnotation(ctx, BeanIgnore.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 				&amp;&amp; (v.isVisible(x.<strong class="jxr_keyword">inner</strong>()) || x.hasAnnotation(ctx, Beanp.<strong class="jxr_keyword">class</strong>)),
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 				x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>())
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 				&amp;&amp; (v.isVisible(x.<strong class="jxr_keyword">inner</strong>()) || x.hasAnnotation(ctx, Beanp.<strong class="jxr_keyword">class</strong>)))
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 				.forEach(x -&gt; l.add(x.<strong class="jxr_keyword">inner</strong>())
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 			);
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 			<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 		});
