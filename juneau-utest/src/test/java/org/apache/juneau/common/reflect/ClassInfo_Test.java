@@ -1604,14 +1604,14 @@ public class ClassInfo_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void o01_isParentOfFuzzyPrimitives() {
-		assertTrue(ClassInfo.of(String.class).isParentOfFuzzyPrimitives(String.class));
-		assertTrue(ClassInfo.of(CharSequence.class).isParentOfFuzzyPrimitives(String.class));
-		assertFalse(ClassInfo.of(String.class).isParentOfFuzzyPrimitives(CharSequence.class));
-		assertTrue(ClassInfo.of(int.class).isParentOfFuzzyPrimitives(Integer.class));
-		assertTrue(ClassInfo.of(Integer.class).isParentOfFuzzyPrimitives(int.class));
-		assertTrue(ClassInfo.of(Number.class).isParentOfFuzzyPrimitives(int.class));
-		assertFalse(ClassInfo.of(int.class).isParentOfFuzzyPrimitives(Number.class));
-		assertFalse(ClassInfo.of(int.class).isParentOfFuzzyPrimitives(long.class));
+		assertTrue(ClassInfo.of(String.class).isParentOfLenient(String.class));
+		assertTrue(ClassInfo.of(CharSequence.class).isParentOfLenient(String.class));
+		assertFalse(ClassInfo.of(String.class).isParentOfLenient(CharSequence.class));
+		assertTrue(ClassInfo.of(int.class).isParentOfLenient(Integer.class));
+		assertTrue(ClassInfo.of(Integer.class).isParentOfLenient(int.class));
+		assertTrue(ClassInfo.of(Number.class).isParentOfLenient(int.class));
+		assertFalse(ClassInfo.of(int.class).isParentOfLenient(Number.class));
+		assertFalse(ClassInfo.of(int.class).isParentOfLenient(long.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

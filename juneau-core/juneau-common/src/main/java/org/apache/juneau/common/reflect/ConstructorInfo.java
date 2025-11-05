@@ -195,16 +195,20 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	/**
-	 * Shortcut for calling the new-instance method on the underlying constructor.
+	 * Shortcut for calling the new-instance method on the underlying constructor using lenient argument matching.
+	 *
+	 * <p>
+	 * Lenient matching allows arguments to be matched to parameters based on parameter types.
+	 * <br>Arguments can be in any order.
+	 * <br>Extra arguments are ignored.
+	 * <br>Missing arguments are set to <jk>null</jk>.
 	 *
 	 * @param <T> The constructor class type.
-	 * @param args the arguments used for the method call.
-	 * 	<br>Extra parameters are ignored.
-	 * 	<br>Missing parameters are set to null.
+	 * @param args The arguments used for the constructor call.
 	 * @return The object returned from the constructor.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public <T> T newInstanceFuzzy(Object...args) throws ExecutableException {
+	public <T> T newInstanceLenient(Object...args) throws ExecutableException {
 		return newInstance(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
 	}
 	//-----------------------------------------------------------------------------------------------------------------

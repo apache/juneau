@@ -157,7 +157,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& (rt.isChildOf(Number.class) || (rt.isPrimitive() && rt.isAny(int.class, short.class, long.class, float.class, double.class, byte.class)))
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
-			&& mi.hasFuzzyParameterTypes(BeanSession.class)
+			&& mi.hasParameterTypesLenient(BeanSession.class)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on
 	}
@@ -179,7 +179,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			&& mi.isStatic()
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
-			&& mi.hasFuzzyParameterTypes(BeanSession.class, rt.inner())
+			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on

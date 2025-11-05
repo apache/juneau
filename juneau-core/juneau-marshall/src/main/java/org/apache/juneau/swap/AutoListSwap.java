@@ -132,7 +132,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(List.class)
-			&& mi.hasFuzzyParameterTypes(BeanSession.class)
+			&& mi.hasParameterTypesLenient(BeanSession.class)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on
 	}
@@ -154,7 +154,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 			&& mi.isStatic()
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
-			&& mi.hasFuzzyParameterTypes(BeanSession.class, rt.inner())
+			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on

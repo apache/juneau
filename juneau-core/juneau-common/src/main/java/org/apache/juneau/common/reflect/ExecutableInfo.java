@@ -76,7 +76,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Returns how well this method matches the specified arg types.
+	 * Returns how well this method matches the specified arg types using lenient matching.
+	 *
+	 * <p>
+	 * Lenient matching allows arguments to be matched to parameters based on type compatibility,
+	 * where arguments can be in any order.
 	 *
 	 * <p>
 	 * The number returned is the number of method arguments that match the passed in arg types.
@@ -85,11 +89,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int fuzzyParametersMatch(Class<?>...argTypes) {
+	public final int getLenientParameterMatch(Class<?>...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
-				if (param.getParameterType().isParentOfFuzzyPrimitives(a)) {
+				if (param.getParameterType().isParentOfLenient(a)) {
 					matches++;
 					continue outer;
 				}
@@ -100,7 +104,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Returns how well this method matches the specified arg types.
+	 * Returns how well this method matches the specified arg types using lenient matching.
+	 *
+	 * <p>
+	 * Lenient matching allows arguments to be matched to parameters based on type compatibility,
+	 * where arguments can be in any order.
 	 *
 	 * <p>
 	 * The number returned is the number of method arguments that match the passed in arg types.
@@ -109,11 +117,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int fuzzyParametersMatch(ClassInfo...argTypes) {
+	public final int getLenientParameterMatch(ClassInfo...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
-				if (param.getParameterType().isParentOfFuzzyPrimitives(a)) {
+				if (param.getParameterType().isParentOfLenient(a)) {
 					matches++;
 					continue outer;
 				}
@@ -124,7 +132,11 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Returns how well this method matches the specified arg types.
+	 * Returns how well this method matches the specified arg types using lenient matching.
+	 *
+	 * <p>
+	 * Lenient matching allows arguments to be matched to parameters based on type compatibility,
+	 * where arguments can be in any order.
 	 *
 	 * <p>
 	 * The number returned is the number of method arguments that match the passed in arg types.
@@ -133,7 +145,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public final int fuzzyParametersMatch(Object...argTypes) {
+	public final int getLenientParameterMatch(Object...argTypes) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : argTypes) {
@@ -296,23 +308,31 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final String getSimpleName() { return isConstructor ? scn(e.getDeclaringClass()) : e.getName(); }
 
 	/**
-	 * Returns <jk>true</jk> if this method has at most only this arguments in any order.
+	 * Returns <jk>true</jk> if this method has at most only these arguments using lenient matching.
+	 *
+	 * <p>
+	 * Lenient matching allows arguments to be matched to parameters based on type compatibility,
+	 * where arguments can be in any order.
 	 *
 	 * @param args The arguments to test for.
-	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
+	 * @return <jk>true</jk> if this method has at most only these arguments in any order.
 	 */
-	public final boolean hasFuzzyParameterTypes(Class<?>...args) {
-		return fuzzyParametersMatch(args) != -1;
+	public final boolean hasParameterTypesLenient(Class<?>...args) {
+		return getLenientParameterMatch(args) != -1;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this method has at most only this arguments in any order.
+	 * Returns <jk>true</jk> if this method has at most only these arguments using lenient matching.
+	 *
+	 * <p>
+	 * Lenient matching allows arguments to be matched to parameters based on type compatibility,
+	 * where arguments can be in any order.
 	 *
 	 * @param args The arguments to test for.
-	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
+	 * @return <jk>true</jk> if this method has at most only these arguments in any order.
 	 */
-	public final boolean hasFuzzyParameterTypes(ClassInfo...args) {
-		return fuzzyParametersMatch(args) != -1;
+	public final boolean hasParameterTypesLenient(ClassInfo...args) {
+		return getLenientParameterMatch(args) != -1;
 	}
 
 	/**
@@ -324,7 +344,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final boolean hasMatchingParameterTypes(Class<?>...args) {
 		var params = getParameters();
 		return params.size() == args.length
-			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfFuzzyPrimitives(a)));
+			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfLenient(a)));
 	}
 
 	/**
@@ -336,7 +356,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	public final boolean hasMatchingParameterTypes(ClassInfo...args) {
 		var params = getParameters();
 		return params.size() == args.length
-			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfFuzzyPrimitives(a)));
+			&& params.stream().allMatch(p -> stream(args).anyMatch(a -> p.getParameterType().isParentOfLenient(a)));
 	}
 
 	/**

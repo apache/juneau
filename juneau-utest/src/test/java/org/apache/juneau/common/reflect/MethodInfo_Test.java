@@ -482,9 +482,9 @@ class MethodInfo_Test extends TestBase {
 
 	@Test void invokeFuzzy() throws Exception {
 		var e = new E();
-		e_a1.invokeFuzzy(e, "foo", 123);
+		e_a1.invokeLenient(e, "foo", 123);
 		assertEquals("foo", e.f);
-		e_a1.invokeFuzzy(e, 123, "bar");
+		e_a1.invokeLenient(e, 123, "bar");
 		assertEquals("bar", e.f);
 	}
 

@@ -2152,20 +2152,20 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 		ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).isParentOfFuzzyPrimitives(String.<jk>class</jk>);  <jc>// true</jc>
-	 * 		ClassInfo.<jsm>of</jsm>(CharSequence.<jk>class</jk>).isParentOfFuzzyPrimitives(String.<jk>class</jk>);  <jc>// true</jc>
-	 * 		ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).isParentOfFuzzyPrimitives(CharSequence.<jk>class</jk>);  <jc>// false</jc>
-	 * 		ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>).isParentOfFuzzyPrimitives(Integer.<jk>class</jk>);  <jc>// true</jc>
-	 * 		ClassInfo.<jsm>of</jsm>(Integer.<jk>class</jk>).isParentOfFuzzyPrimitives(<jk>int</jk>.<jk>class</jk>);  <jc>// true</jc>
-	 * 		ClassInfo.<jsm>of</jsm>(Number.<jk>class</jk>).isParentOfFuzzyPrimitives(<jk>int</jk>.<jk>class</jk>);  <jc>// true</jc>
-	 * 		ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>).isParentOfFuzzyPrimitives(Number.<jk>class</jk>);  <jc>// false</jc>
-	 * 		ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>).isParentOfFuzzyPrimitives(<jk>long</jk>.<jk>class</jk>);  <jc>// false</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).isParentOfLenient(String.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(CharSequence.<jk>class</jk>).isParentOfLenient(String.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).isParentOfLenient(CharSequence.<jk>class</jk>);  <jc>// false</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>).isParentOfLenient(Integer.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(Integer.<jk>class</jk>).isParentOfLenient(<jk>int</jk>.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(Number.<jk>class</jk>).isParentOfLenient(<jk>int</jk>.<jk>class</jk>);  <jc>// true</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>).isParentOfLenient(Number.<jk>class</jk>);  <jc>// false</jc>
+	 * 		ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>).isParentOfLenient(<jk>long</jk>.<jk>class</jk>);  <jc>// false</jc>
 	 * </p>
 	 *
 	 * @param child The child class.
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
-	public boolean isParentOfFuzzyPrimitives(Class<?> child) {
+	public boolean isParentOfLenient(Class<?> child) {
 		if (c == null || child == null)
 			return false;
 		if (c.isAssignableFrom(child))
@@ -2177,12 +2177,12 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Same as {@link #isParentOfFuzzyPrimitives(Class)} but takes in a {@link ClassInfo}.
+	 * Same as {@link #isParentOfLenient(Class)} but takes in a {@link ClassInfo}.
 	 *
 	 * @param child The child class.
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
-	public boolean isParentOfFuzzyPrimitives(ClassInfo child) {
+	public boolean isParentOfLenient(ClassInfo child) {
 		if (c == null || child == null)
 			return false;
 		if (c.isAssignableFrom(child.inner()))
@@ -2199,9 +2199,9 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * @param child The child class.
 	 * @return <jk>true</jk> if this class is a parent or the same as <c>child</c>.
 	 */
-	public boolean isParentOfFuzzyPrimitives(Type child) {
+	public boolean isParentOfLenient(Type child) {
 		if (child instanceof Class)
-			return isParentOfFuzzyPrimitives((Class<?>)child);
+			return isParentOfLenient((Class<?>)child);
 		return false;
 	}
 

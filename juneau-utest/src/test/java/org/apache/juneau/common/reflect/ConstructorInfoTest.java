@@ -113,13 +113,13 @@ class ConstructorInfoTest extends TestBase {
 		b_c4 = b.getPublicConstructor(x -> x.hasParameterTypes(String.class, String.class));
 
 	@Test void invoke() throws Exception {
-		assertEquals(null, b_c1.newInstanceFuzzy().toString());
-		assertEquals("foo", b_c2.newInstanceFuzzy("foo").toString());
+		assertEquals(null, b_c1.newInstanceLenient().toString());
+		assertEquals("foo", b_c2.newInstanceLenient("foo").toString());
 	}
 
 	@Test void accessible() throws Exception {
 		b_c3.accessible(Visibility.PROTECTED);
-		assertEquals(null, b_c3.newInstanceFuzzy(123).toString());
+		assertEquals(null, b_c3.newInstanceLenient(123).toString());
 	}
 
 	@Test void compareTo() {

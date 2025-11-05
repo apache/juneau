@@ -235,12 +235,30 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
-	 * Returns the number of matching arguments for this method.
+	 * Returns <jk>true</jk> if this method has at most only these parameter types using lenient matching.
+	 *
+	 * <p>
+	 * Lenient matching allows arguments to be matched to parameters based on type compatibility,
+	 * where arguments can be in any order.
+	 *
+	 * @param args The parameter types to test for.
+	 * @return <jk>true</jk> if this method has at most only these parameter types in any order.
+	 */
+	public boolean hasFuzzyParameterTypes(Class<?>...args) {
+		return hasParameterTypesLenient(args);
+	}
+
+	/**
+	 * Returns the number of matching arguments for this method using lenient matching.
+	 *
+	 * <p>
+	 * Lenient matching allows arguments to be matched to parameters based on type compatibility,
+	 * where arguments can be in any order, extra arguments are ignored, and missing arguments return -1.
 	 *
 	 * @param args The arguments to check.
-	 * @return the number of matching arguments for this method.
+	 * @return The number of matching arguments for this method, or -1 if not all parameters can be matched.
 	 */
-	public int canAcceptFuzzy(Object...args) {
+	public int canAcceptLenient(Object...args) {
 		int matches = 0;
 		outer: for (var param : getParameters()) {
 			for (var a : args) {
@@ -691,10 +709,38 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
-	 * Invokes the specified method using fuzzy-arg matching.
+	 * Invokes the specified method using lenient argument matching.
 	 *
 	 * <p>
-	 * Arguments will be matched to the parameters based on the parameter types.
+	 * Lenient matching allows arguments to be matched to parameters based on parameter types.
+	 * <br>Arguments can be in any order.
+	 * <br>Extra arguments will be ignored.
+	 * <br>Missing arguments will be left <jk>null</jk>.
+	 *
+	 * <p>
+	 * Note that this only works for methods that have distinguishable argument types.
+	 * <br>It's not going to work on methods with generic argument types like <c>Object</c>
+	 *
+	 * @param pojo
+	 * 	The POJO the method is being called on.
+	 * 	<br>Can be <jk>null</jk> for static methods.
+	 * @param args
+	 * 	The arguments to pass to the method.
+	 * @return
+	 * 	The results of the method invocation.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 * @deprecated Use {@link #invokeLenient(Object, Object...)}
+	 */
+	@Deprecated
+	public Object invokeFuzzy(Object pojo, Object...args) throws ExecutableException {
+		return invokeLenient(pojo, args);
+	}
+
+	/**
+	 * Invokes the specified method using lenient argument matching.
+	 *
+	 * <p>
+	 * Lenient matching allows arguments to be matched to parameters based on parameter types.
 	 * <br>Arguments can be in any order.
 	 * <br>Extra arguments will be ignored.
 	 * <br>Missing arguments will be left <jk>null</jk>.
@@ -712,7 +758,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * 	The results of the method invocation.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	public Object invokeFuzzy(Object pojo, Object...args) throws ExecutableException {
+	public Object invokeLenient(Object pojo, Object...args) throws ExecutableException {
 		try {
 			return m.invoke(pojo, ClassUtils.getMatchingArgs(m.getParameterTypes(), args));
 		} catch (IllegalAccessException | InvocationTargetException e) {

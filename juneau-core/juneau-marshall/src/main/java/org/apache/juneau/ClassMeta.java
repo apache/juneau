@@ -201,7 +201,7 @@ public class ClassMeta<T> implements Type {
 					x -> x.isStatic()
 					&& x.isNotDeprecated()
 					&& x.hasName("example")
-					&& x.hasFuzzyParameterTypes(BeanSession.class))
+					&& x.hasParameterTypesLenient(BeanSession.class))
 			).map(MethodInfo::inner)
 			.orElse(null);
 			// @formatter:on
@@ -243,7 +243,7 @@ public class ClassMeta<T> implements Type {
 			}
 
 			ci.forEachDeclaredMethod(m -> m.hasAnnotation(bc, Example.class), m -> {
-				if (! (m.isStatic() && m.hasFuzzyParameterTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
+				if (! (m.isStatic() && m.hasParameterTypesLenient(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 					throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m.toString());
 				m.setAccessible();
 				exampleMethod = m.inner();
@@ -1012,7 +1012,7 @@ public class ClassMeta<T> implements Type {
 			if (nn(example))
 				return jpSession.parse(example, this);
 			if (nn(exampleMethod))
-				return (T)MethodInfo.of(exampleMethod).invokeFuzzy(null, session);
+				return (T)MethodInfo.of(exampleMethod).invokeLenient(null, session);
 			if (nn(exampleField))
 				return (T)exampleField.get(null);
 

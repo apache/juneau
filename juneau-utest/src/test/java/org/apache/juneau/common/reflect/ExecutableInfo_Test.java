@@ -390,11 +390,11 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	@Test void hasFuzzyArgs() {
-		assertTrue(e_hasParams.hasFuzzyParameterTypes(int.class));
-		assertTrue(e_hasParams.hasFuzzyParameterTypes(int.class, long.class));
-		assertFalse(e_hasParams.hasFuzzyParameterTypes(long.class));
-		assertTrue(e_hasNoParams.hasFuzzyParameterTypes(new Class[0]));
-		assertTrue(e_hasNoParams.hasFuzzyParameterTypes(long.class));
+		assertTrue(e_hasParams.hasParameterTypesLenient(int.class));
+		assertTrue(e_hasParams.hasParameterTypesLenient(int.class, long.class));
+		assertFalse(e_hasParams.hasParameterTypesLenient(long.class));
+		assertTrue(e_hasNoParams.hasParameterTypesLenient(new Class[0]));
+		assertTrue(e_hasNoParams.hasParameterTypesLenient(long.class));
 	}
 
 	@Test void isDeprecated() {

@@ -132,7 +132,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(SWAP_METHOD_NAMES)
 			&& mi.hasReturnTypeParent(Map.class)
-			&& mi.hasFuzzyParameterTypes(BeanSession.class)
+			&& mi.hasParameterTypesLenient(BeanSession.class)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on
 	}
@@ -154,7 +154,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 			&& mi.isStatic()
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasAnyName(UNSWAP_METHOD_NAMES)
-			&& mi.hasFuzzyParameterTypes(BeanSession.class, rt.inner())
+			&& mi.hasParameterTypesLenient(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
 			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 		// @formatter:on
