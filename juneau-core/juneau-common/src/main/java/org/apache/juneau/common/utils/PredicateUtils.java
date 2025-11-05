@@ -20,6 +20,8 @@ import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.function.*;
 
+import org.apache.juneau.common.reflect.*;
+
 /**
  * Utility methods for composing {@link Predicate} instances.
  */
@@ -173,5 +175,70 @@ public final class PredicateUtils {
 			System.err.println(message.replace("{0}", String.valueOf(formatter.apply(v))));
 			return v;
 		};
+	}
+
+	/**
+	 * Returns a predicate that tests whether an {@link ElementInfo} has the specified flag.
+	 *
+	 * <p>
+	 * Useful for filtering streams of reflection elements.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;ClassInfo&gt; classes = ...;
+	 * 	ClassInfo publicClass = classes.stream()
+	 * 		.filter(is(PUBLIC))
+	 * 		.findFirst()
+	 * 		.orElse(<jk>null</jk>);
+	 * </p>
+	 *
+	 * @param flag The flag to test for.
+	 * @return A predicate that returns {@code true} if the element has the specified flag.
+	 */
+	public static Predicate<ElementInfo> is(ElementFlag flag) {
+		return ei -> ei.is(flag);
+	}
+
+	/**
+	 * Returns a predicate that tests whether an {@link ElementInfo} has all of the specified flags.
+	 *
+	 * <p>
+	 * Useful for filtering streams of reflection elements.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;ClassInfo&gt; classes = ...;
+	 * 	ClassInfo publicNonDeprecated = classes.stream()
+	 * 		.filter(isAll(PUBLIC, NOT_DEPRECATED))
+	 * 		.findFirst()
+	 * 		.orElse(<jk>null</jk>);
+	 * </p>
+	 *
+	 * @param flags The flags to test for.
+	 * @return A predicate that returns {@code true} if the element has all of the specified flags.
+	 */
+	public static Predicate<ElementInfo> isAll(ElementFlag...flags) {
+		return ei -> ei.isAll(flags);
+	}
+
+	/**
+	 * Returns a predicate that tests whether an {@link ElementInfo} has any of the specified flags.
+	 *
+	 * <p>
+	 * Useful for filtering streams of reflection elements.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;ClassInfo&gt; classes = ...;
+	 * 	List&lt;ClassInfo&gt; visibleClasses = classes.stream()
+	 * 		.filter(isAny(PUBLIC, PROTECTED))
+	 * 		.collect(Collectors.toList());
+	 * </p>
+	 *
+	 * @param flags The flags to test for.
+	 * @return A predicate that returns {@code true} if the element has any of the specified flags.
+	 */
+	public static Predicate<ElementInfo> isAny(ElementFlag...flags) {
+		return ei -> ei.isAny(flags);
 	}
 }

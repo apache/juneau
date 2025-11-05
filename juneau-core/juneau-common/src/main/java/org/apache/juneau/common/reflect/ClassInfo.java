@@ -403,19 +403,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 
 
 	/**
-	 * Performs an action on all matching declared methods on this class and all parent classes.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachAllMethodParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (var mi : allMethodsParentFirst.get())
-			consumeIf(filter, action, mi);
-		return this;
-	}
-
-	/**
 	 * Performs an action on all matching annotations on this class and superclasses/interfaces.
 	 *
 	 * <p>
@@ -480,97 +467,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 */
 	public ClassInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		AnnotationInfo.forEachAnnotationInfo(this, filter, action);
-		return this;
-	}
-
-	/**
-	 * Performs an action on all matching declared constructors on this class.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachDeclaredConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
-		for (var mi : declaredConstructors.get())
-			consumeIf(filter, action, mi);
-		return this;
-	}
-
-	/**
-	 * Performs an action on all matching declared fields on this class.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachDeclaredField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
-		for (var fi : declaredFields.get())
-			consumeIf(filter, action, fi);
-		return this;
-	}
-
-	/**
-	 * Performs an action on all matching declared methods on this class.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachDeclaredMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (var mi : declaredMethods.get())
-			consumeIf(filter, action, mi);
-		return this;
-	}
-
-	/**
-	 * Performs an action on all matching methods on this class.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (var mi : allMethods.get())
-			consumeIf(filter, action, mi);
-		return this;
-	}
-
-	/**
-	 * Performs an action on all matching public constructors on this class.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachPublicConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
-		for (var mi : publicConstructors.get())
-			consumeIf(filter, action, mi);
-		return this;
-	}
-
-	/**
-	 * Performs an action on all matching public fields on this class.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachPublicField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
-		for (var mi : publicFields.get())
-			consumeIf(filter, action, mi);
-		return this;
-	}
-
-	/**
-	 * Performs an action on all matching public methods on this class.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachPublicMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (var mi : publicMethods.get())
-			consumeIf(filter, action, mi);
 		return this;
 	}
 

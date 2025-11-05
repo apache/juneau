@@ -218,7 +218,7 @@ public class ClassMeta<T> implements Type {
 				namePropertyMethod = new Setter.FieldSetter(x.accessible().inner());
 			});
 
-			ci.forEachDeclaredField(x -> x.hasAnnotation(bc, Example.class), x -> {
+			ci.getDeclaredFields().stream().filter(x -> x.hasAnnotation(bc, Example.class)).forEach(x -> {
 				if (! (x.isStatic() && ci.isParentOf(x.getType().inner())))
 					throw new ClassMetaRuntimeException(c, "@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", x);
 				exampleField = x.accessible().inner();
@@ -242,7 +242,7 @@ public class ClassMeta<T> implements Type {
 				}
 			}
 
-			ci.forEachDeclaredMethod(m -> m.hasAnnotation(bc, Example.class), m -> {
+			ci.getDeclaredMethods().stream().filter(m -> m.hasAnnotation(bc, Example.class)).forEach(m -> {
 				if (! (m.isStatic() && m.hasParameterTypesLenient(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 					throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m.toString());
 				m.setAccessible();
@@ -253,7 +253,7 @@ public class ClassMeta<T> implements Type {
 			isAbstract = ci.isAbstract() && ci.isNotPrimitive();
 
 			// Find constructor(String) method if present.
-			ci.forEachPublicConstructor(cs -> cs.isPublic() && cs.isNotDeprecated(), cs -> {
+			ci.getPublicConstructors().stream().filter(cs -> cs.isPublic() && cs.isNotDeprecated()).forEach(cs -> {
 				var params = cs.getParameters();
 				if (params.size() == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
 					noArgConstructor = cs;
@@ -267,10 +267,9 @@ public class ClassMeta<T> implements Type {
 			primitiveDefault = ci.getPrimitiveDefault();
 
 			// @formatter:off
-			ci.forEachPublicMethod(
-				MethodInfo::isNotDeprecated,
-				x -> publicMethods.put(x.getSignature(), x.inner())
-			);
+			ci.getPublicMethods().stream()
+				.filter(MethodInfo::isNotDeprecated)
+				.forEach(x -> publicMethods.put(x.getSignature(), x.inner()));
 			// @formatter:on
 
 			BeanFilter beanFilter = findBeanFilter(bc);

@@ -54,7 +54,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, BeanContext bc) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		var ci = ClassInfo.of(c);
-		ci.forEachPublicConstructor(x -> x.hasNoAnnotation(bc, BeanIgnore.class) && x.hasNumParameters(1) && x.isPublic(), x -> {
+		ci.getPublicConstructors().stream().filter(x -> x.hasNoAnnotation(bc, BeanIgnore.class) && x.hasNumParameters(1) && x.isPublic()).forEach(x -> {
 			var pt = x.getParameter(0).getParameterType().inner();
 			if (! pt.equals(c.getDeclaringClass())) {
 				// Find the unswap method if there is one.

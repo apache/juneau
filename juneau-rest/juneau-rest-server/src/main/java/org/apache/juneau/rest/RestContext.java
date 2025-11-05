@@ -202,10 +202,9 @@ public class RestContext extends Context {
 			var r = resource.get();
 
 			// @formatter:off
-			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
-				y -> y.hasAnnotation(annotation),
-				y -> y.forEachAnnotation(annotation, predicate, z -> x.put(y.getSignature(), y.accessible().inner()))
-			);
+			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
+				.filter(y -> y.hasAnnotation(annotation))
+				.forEach(y -> y.forEachAnnotation(annotation, predicate, z -> x.put(y.getSignature(), y.accessible().inner())));
 			// @formatter:on
 
 			var x2 = MethodList.of(x.values());
@@ -1769,7 +1768,7 @@ public class RestContext extends Context {
 			));
 			// @formatter:on
 
-			rci.forEachMethod(x -> x.hasAnnotation(RestInject.class), x -> {
+			rci.getMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
 				var rt = x.getReturnType().<Object>inner();
 				var name = RestInjectAnnotation.name(x.getAnnotation(RestInject.class));
 				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
@@ -3778,9 +3777,9 @@ public class RestContext extends Context {
 
 			var map = CollectionUtils.<String,MethodInfo>map();
 			// @formatter:off
-			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
-				y -> y.hasAnnotation(RestInit.class) && ! y.hasArg(RestOpContext.Builder.class),
-				y -> {
+			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
+				.filter(y -> y.hasAnnotation(RestInit.class) && ! y.hasArg(RestOpContext.Builder.class))
+				.forEach(y -> {
 					var sig = y.getSignature();
 					if (! map.containsKey(sig))
 						map.put(sig, y.accessible());
@@ -4568,14 +4567,13 @@ public class RestContext extends Context {
 
 			var initMap = CollectionUtils.<String,MethodInfo>map();
 			// @formatter:off
-			ClassInfo.ofProxy(resource.get()).forEachAllMethodParentFirst(
-				y -> y.hasAnnotation(RestInit.class) && y.hasArg(RestOpContext.Builder.class),
-				y -> {
+			ClassInfo.ofProxy(resource.get()).getAllMethodsParentFirst().stream()
+				.filter(y -> y.hasAnnotation(RestInit.class) && y.hasArg(RestOpContext.Builder.class))
+				.forEach(y -> {
 					String sig = y.getSignature();
 					if (! initMap.containsKey(sig))
 						initMap.put(sig, y.accessible());
-				}
-			);
+				});
 			// @formatter:on
 
 			for (var mi : rci.getPublicMethods()) {

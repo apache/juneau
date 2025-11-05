@@ -81,7 +81,7 @@ public class ResponseBeanMeta {
 			Class<?> c = toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			ClassInfo ci = cm.getInfo();
-			ci.forEachPublicMethod(x -> true, x -> {
+			ci.getPublicMethods().stream().forEach(x -> {
 				assertNoInvalidAnnotations(x, Query.class, FormData.class);
 				if (x.hasAnnotation(Header.class)) {
 					assertNoArgs(x, Header.class);

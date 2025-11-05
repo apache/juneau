@@ -166,7 +166,7 @@ public class AnnotationInfo<T extends Annotation> {
 		jm.put(s(annotatable.getAnnotatableType()), annotatable.getAnnotatableName());
 		var ja = new LinkedHashMap<String, Object>();
 		var ca = ClassInfo.of(a.annotationType());
-		ca.forEachDeclaredMethod(null, x -> {
+		ca.getDeclaredMethods().stream().forEach(x -> {
 			try {
 				var v = x.invoke(a);
 				var d = x.inner().getDefaultValue();

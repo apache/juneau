@@ -83,9 +83,8 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @RestOp(debug) settings.
 		// @formatter:off
-		ci.forEachPublicMethod(
-			x -> true,
-			x -> {
+		ci.getPublicMethods().stream()
+			.forEach(x -> {
 				x.getAnnotationList(REST_OP_GROUP).forEachValue(
 					String.class,
 					"debug",

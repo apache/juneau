@@ -247,7 +247,7 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @Beanc constructor on public constructors.
-				ci.forEachPublicConstructor(x -> x.hasAnnotation(ctx, Beanc.class), x -> {
+				ci.getPublicConstructors().stream().filter(x -> x.hasAnnotation(ctx, Beanc.class)).forEach(x -> {
 					if (nn(constructor))
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
@@ -270,7 +270,7 @@ public class BeanMeta<T> {
 
 				// Look for @Beanc on all other constructors.
 				if (constructor == null) {
-					ci.forEachDeclaredConstructor(x -> x.hasAnnotation(ctx, Beanc.class), x -> {
+					ci.getDeclaredConstructors().stream().filter(x -> x.hasAnnotation(ctx, Beanc.class)).forEach(x -> {
 						if (nn(constructor))
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
@@ -565,13 +565,13 @@ public class BeanMeta<T> {
 		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			// @formatter:off
-			c2.forEachDeclaredField(
-				x -> x.isNotStatic()
+			c2.getDeclaredFields().stream()
+				.filter(x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
 				&& x.hasNoAnnotation(ctx, BeanIgnore.class)
-				&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx, Beanp.class)),
-				x -> l.add(x.inner())
+				&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx, Beanp.class)))
+				.forEach(x -> l.add(x.inner())
 			);
 			// @formatter:on
 		});

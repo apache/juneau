@@ -53,7 +53,7 @@ public class RequestBeanMeta {
 		Builder apply(Class<?> c) {
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			apply(cm.getLastAnnotation(Request.class));
-			cm.getInfo().forEachPublicMethod(x -> true, x -> {
+			cm.getInfo().getPublicMethods().stream().forEach(x -> {
 				String n = x.getSimpleName();
 				if (x.hasAnnotation(Header.class)) {
 					assertNoArgs(x, Header.class);

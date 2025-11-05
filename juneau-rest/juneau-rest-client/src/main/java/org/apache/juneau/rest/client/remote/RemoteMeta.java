@@ -91,7 +91,7 @@ public class RemoteMeta {
 
 		Map<Method,RemoteOperationMeta> operations = map();
 		var path2 = path;
-		ci.forEachPublicMethod(x -> true, x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));
+		ci.getPublicMethods().stream().forEach(x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));
 
 		this.operations = u(operations);
 		this.headers = headers;
