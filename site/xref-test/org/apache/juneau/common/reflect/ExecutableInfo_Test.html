@@ -289,271 +289,259 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		assertTrue(c_m3.hasAnnotation(CA.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 	}
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	@Test <strong class="jxr_keyword">void</strong> getAnnotation() {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		check(<strong class="jxr_keyword">null</strong>, c_c2.getAnnotation(CA.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		check(<span class="jxr_string">"@CA()"</span>, c_c3.getAnnotation(CA.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		check(<strong class="jxr_keyword">null</strong>, c_m1.getAnnotation(CA.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		check(<strong class="jxr_keyword">null</strong>, c_m2.getAnnotation(CA.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		check(<span class="jxr_string">"@CA()"</span>, c_m3.getAnnotation(CA.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	@Test <strong class="jxr_keyword">void</strong> getAnnotation_nullArg() {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		check(<strong class="jxr_keyword">null</strong>, c_c3.getAnnotation(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<em class="jxr_comment">// Exceptions</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@SuppressWarnings(<span class="jxr_string">"unused"</span>)
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">public</strong> D() <strong class="jxr_keyword">throws</strong> IOException {}  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m() <strong class="jxr_keyword">throws</strong> IOException {}  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">static</strong> ClassInfo d = ClassInfo.of(D.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">static</strong> ExecutableInfo
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		d_c=d.getPublicConstructor(ConstructorInfo::hasNoParameters),
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		d_m=d.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>))
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	;
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	@Test <strong class="jxr_keyword">void</strong> getExceptionTypes() {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		check(<span class="jxr_string">"IOException"</span>, d_c.getExceptionTypes());
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		check(<span class="jxr_string">"IOException"</span>, d_m.getExceptionTypes());
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	}
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	@Test <strong class="jxr_keyword">void</strong> getExceptionTypes_twice() {
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		check(<span class="jxr_string">"IOException"</span>, d_c.getExceptionTypes());
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		check(<span class="jxr_string">"IOException"</span>, d_c.getExceptionTypes());
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<em class="jxr_comment">// Characteristics</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E {
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		@Deprecated <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> deprecated() {}
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> notDeprecated() {}
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> hasParams(<strong class="jxr_keyword">int</strong> foo) {}
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> hasStringParam(String foo) {}
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> hasNoParams() {}
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> isPublic() {}
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> isNotPublic() {}
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> isStatic() {}
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> isNotStatic() {}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">void</strong> isAbstract();
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> isNotAbstract() {}
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	}
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	<strong class="jxr_keyword">static</strong> ClassInfo e = ClassInfo.of(E.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	<strong class="jxr_keyword">static</strong> ExecutableInfo
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		e_deprecated = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"deprecated"</span>)),
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		e_notDeprecated = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"notDeprecated"</span>)),
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		e_hasParams = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"hasParams"</span>)),
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		e_hasStringParam = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"hasStringParam"</span>)),
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		e_hasNoParams = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"hasNoParams"</span>)),
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		e_isPublic = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isPublic"</span>)),
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		e_isNotPublic = e.getMethod(x -&gt; x.hasName(<span class="jxr_string">"isNotPublic"</span>)),
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		e_isStatic = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isStatic"</span>)),
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		e_isNotStatic = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isNotStatic"</span>)),
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		e_isAbstract = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isAbstract"</span>)),
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		e_isNotAbstract = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isNotAbstract"</span>))
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	;
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<em class="jxr_comment">// Exceptions</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	@SuppressWarnings(<span class="jxr_string">"unused"</span>)
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">public</strong> D() <strong class="jxr_keyword">throws</strong> IOException {}  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> m() <strong class="jxr_keyword">throws</strong> IOException {}  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">static</strong> ClassInfo d = ClassInfo.of(D.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<strong class="jxr_keyword">static</strong> ExecutableInfo
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		d_c=d.getPublicConstructor(ConstructorInfo::hasNoParameters),
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		d_m=d.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"m"</span>))
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	;
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	@Test <strong class="jxr_keyword">void</strong> getExceptionTypes() {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		check(<span class="jxr_string">"IOException"</span>, d_c.getExceptionTypes());
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		check(<span class="jxr_string">"IOException"</span>, d_m.getExceptionTypes());
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	@Test <strong class="jxr_keyword">void</strong> getExceptionTypes_twice() {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		check(<span class="jxr_string">"IOException"</span>, d_c.getExceptionTypes());
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		check(<span class="jxr_string">"IOException"</span>, d_c.getExceptionTypes());
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<em class="jxr_comment">// Characteristics</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		@Deprecated <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> deprecated() {}
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> notDeprecated() {}
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> hasParams(<strong class="jxr_keyword">int</strong> foo) {}
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> hasStringParam(String foo) {}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> hasNoParams() {}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> isPublic() {}
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> isNotPublic() {}
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> isStatic() {}
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> isNotStatic() {}
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">void</strong> isAbstract();
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> isNotAbstract() {}
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	}
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">static</strong> ClassInfo e = ClassInfo.of(E.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<strong class="jxr_keyword">static</strong> ExecutableInfo
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		e_deprecated = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"deprecated"</span>)),
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		e_notDeprecated = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"notDeprecated"</span>)),
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		e_hasParams = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"hasParams"</span>)),
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		e_hasStringParam = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"hasStringParam"</span>)),
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		e_hasNoParams = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"hasNoParams"</span>)),
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		e_isPublic = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isPublic"</span>)),
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		e_isNotPublic = e.getMethod(x -&gt; x.hasName(<span class="jxr_string">"isNotPublic"</span>)),
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		e_isStatic = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isStatic"</span>)),
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		e_isNotStatic = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isNotStatic"</span>)),
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		e_isAbstract = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isAbstract"</span>)),
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		e_isNotAbstract = e.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isNotAbstract"</span>))
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	;
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	@Test <strong class="jxr_keyword">void</strong> isAll() {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertTrue(e_deprecated.is(DEPRECATED));
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertTrue(e_notDeprecated.is(NOT_DEPRECATED));
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		assertTrue(e_hasParams.is(HAS_PARAMS));
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertTrue(e_hasNoParams.is(HAS_NO_PARAMS));
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertTrue(e_isPublic.is(PUBLIC));
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertTrue(e_isNotPublic.is(NOT_PUBLIC));
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertTrue(e_isStatic.is(STATIC));
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		assertTrue(e_isNotStatic.is(NOT_STATIC));
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		assertTrue(e_isAbstract.is(ABSTRACT));
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		assertTrue(e_isNotAbstract.is(NOT_ABSTRACT));
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@Test <strong class="jxr_keyword">void</strong> isAll() {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertTrue(e_deprecated.is(DEPRECATED));
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertTrue(e_notDeprecated.is(NOT_DEPRECATED));
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		assertTrue(e_hasParams.is(HAS_PARAMS));
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertTrue(e_hasNoParams.is(HAS_NO_PARAMS));
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertTrue(e_isPublic.is(PUBLIC));
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertTrue(e_isNotPublic.is(NOT_PUBLIC));
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		assertTrue(e_isStatic.is(STATIC));
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertTrue(e_isNotStatic.is(NOT_STATIC));
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertTrue(e_isAbstract.is(ABSTRACT));
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		assertTrue(e_isNotAbstract.is(NOT_ABSTRACT));
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		assertFalse(e_deprecated.is(NOT_DEPRECATED));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertFalse(e_notDeprecated.is(DEPRECATED));
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertFalse(e_hasParams.is(HAS_NO_PARAMS));
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		assertFalse(e_hasNoParams.is(HAS_PARAMS));
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertFalse(e_isPublic.is(NOT_PUBLIC));
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertFalse(e_isNotPublic.is(PUBLIC));
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertFalse(e_isStatic.is(NOT_STATIC));
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		assertFalse(e_isNotStatic.is(STATIC));
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertFalse(e_isAbstract.is(NOT_ABSTRACT));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertFalse(e_isNotAbstract.is(ABSTRACT));
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertFalse(e_deprecated.is(NOT_DEPRECATED));
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertFalse(e_notDeprecated.is(DEPRECATED));
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertFalse(e_hasParams.is(HAS_NO_PARAMS));
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		assertFalse(e_hasNoParams.is(HAS_PARAMS));
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertFalse(e_isPublic.is(NOT_PUBLIC));
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		assertFalse(e_isNotPublic.is(PUBLIC));
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertFalse(e_isStatic.is(NOT_STATIC));
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertFalse(e_isNotStatic.is(STATIC));
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertFalse(e_isAbstract.is(NOT_ABSTRACT));
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertFalse(e_isNotAbstract.is(ABSTRACT));
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@Test <strong class="jxr_keyword">void</strong> isAll_invalidFlag() {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<em class="jxr_comment">// TRANSIENT is a valid modifier flag but doesn't apply to executables</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<em class="jxr_comment">// Should return false (executables can't be transient) but not throw exception</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertFalse(e_deprecated.is(TRANSIENT));
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<em class="jxr_comment">// CLASS is not a modifier flag and doesn't apply to executables, should throw exception</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid flag for element: CLASS"</span>, () -&gt; e_deprecated.is(ElementFlag.CLASS));
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	@Test <strong class="jxr_keyword">void</strong> hasArgs() {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertTrue(e_hasParams.hasParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertFalse(e_hasParams.hasParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertFalse(e_hasParams.hasParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		assertTrue(e_hasNoParams.hasParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		assertFalse(e_hasNoParams.hasParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	@Test <strong class="jxr_keyword">void</strong> hasArgParents() {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertTrue(e_hasStringParam.hasMatchingParameterTypes(String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(CharSequence.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(StringBuilder.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	@Test <strong class="jxr_keyword">void</strong> hasFuzzyArgs() {
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertTrue(e_hasParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertTrue(e_hasParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		assertFalse(e_hasParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertTrue(e_hasNoParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		assertTrue(e_hasNoParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	}
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	@Test <strong class="jxr_keyword">void</strong> isDeprecated() {
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertTrue(e_deprecated.isDeprecated());
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		assertFalse(e_notDeprecated.isDeprecated());
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	}
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	@Test <strong class="jxr_keyword">void</strong> isNotDeprecated() {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertFalse(e_deprecated.isNotDeprecated());
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertTrue(e_notDeprecated.isNotDeprecated());
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	}
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	@Test <strong class="jxr_keyword">void</strong> isAbstract() {
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertTrue(e_isAbstract.isAbstract());
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		assertFalse(e_isNotAbstract.isAbstract());
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	@Test <strong class="jxr_keyword">void</strong> isNotAbstract() {
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertFalse(e_isAbstract.isNotAbstract());
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		assertTrue(e_isNotAbstract.isNotAbstract());
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	}
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	@Test <strong class="jxr_keyword">void</strong> isPublic() {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		assertTrue(e_isPublic.isPublic());
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertFalse(e_isNotPublic.isPublic());
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	@Test <strong class="jxr_keyword">void</strong> isNotPublic() {
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		assertFalse(e_isPublic.isNotPublic());
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		assertTrue(e_isNotPublic.isNotPublic());
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	}
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	@Test <strong class="jxr_keyword">void</strong> isStatic() {
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		assertTrue(e_isStatic.isStatic());
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		assertFalse(e_isNotStatic.isStatic());
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	}
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	@Test <strong class="jxr_keyword">void</strong> isNotStatic() {
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		assertFalse(e_isStatic.isNotStatic());
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		assertTrue(e_isNotStatic.isNotStatic());
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	@Test <strong class="jxr_keyword">void</strong> isAll_invalidFlag() {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<em class="jxr_comment">// TRANSIENT is a valid modifier flag but doesn't apply to executables</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<em class="jxr_comment">// Should return false (executables can't be transient) but not throw exception</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		assertFalse(e_deprecated.is(TRANSIENT));
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<em class="jxr_comment">// CLASS is not a modifier flag and doesn't apply to executables, should throw exception</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid flag for element: CLASS"</span>, () -&gt; e_deprecated.is(ElementFlag.CLASS));
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test <strong class="jxr_keyword">void</strong> hasArgs() {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		assertTrue(e_hasParams.hasParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertFalse(e_hasParams.hasParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertFalse(e_hasParams.hasParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertTrue(e_hasNoParams.hasParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertFalse(e_hasNoParams.hasParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	}
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	@Test <strong class="jxr_keyword">void</strong> hasArgParents() {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		assertTrue(e_hasStringParam.hasMatchingParameterTypes(String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(CharSequence.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(StringBuilder.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertFalse(e_hasStringParam.hasMatchingParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	@Test <strong class="jxr_keyword">void</strong> hasFuzzyArgs() {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertTrue(e_hasParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertTrue(e_hasParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		assertFalse(e_hasParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertTrue(e_hasNoParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		assertTrue(e_hasNoParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	}
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	@Test <strong class="jxr_keyword">void</strong> isDeprecated() {
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertTrue(e_deprecated.isDeprecated());
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertFalse(e_notDeprecated.isDeprecated());
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	@Test <strong class="jxr_keyword">void</strong> isNotDeprecated() {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertFalse(e_deprecated.isNotDeprecated());
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		assertTrue(e_notDeprecated.isNotDeprecated());
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	}
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	@Test <strong class="jxr_keyword">void</strong> isAbstract() {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		assertTrue(e_isAbstract.isAbstract());
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertFalse(e_isNotAbstract.isAbstract());
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	}
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	@Test <strong class="jxr_keyword">void</strong> isNotAbstract() {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		assertFalse(e_isAbstract.isNotAbstract());
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertTrue(e_isNotAbstract.isNotAbstract());
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	@Test <strong class="jxr_keyword">void</strong> isPublic() {
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertTrue(e_isPublic.isPublic());
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertFalse(e_isNotPublic.isPublic());
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	}
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	@Test <strong class="jxr_keyword">void</strong> isNotPublic() {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertFalse(e_isPublic.isNotPublic());
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		assertTrue(e_isNotPublic.isNotPublic());
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	@Test <strong class="jxr_keyword">void</strong> isStatic() {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		assertTrue(e_isStatic.isStatic());
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		assertFalse(e_isNotStatic.isStatic());
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	@Test <strong class="jxr_keyword">void</strong> isNotStatic() {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		assertFalse(e_isStatic.isNotStatic());
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertTrue(e_isNotStatic.isNotStatic());
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	<em class="jxr_comment">// Visibility</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F {
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> isPublic() {}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> isProtected() {}
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		@SuppressWarnings(<span class="jxr_string">"unused"</span>)
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> isPrivate() {}
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		<strong class="jxr_keyword">void</strong> isDefault() {}
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 	}
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<em class="jxr_comment">// Visibility</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	<strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F {
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> isPublic() {}
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> isProtected() {}
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		@SuppressWarnings(<span class="jxr_string">"unused"</span>)
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> isPrivate() {}
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">void</strong> isDefault() {}
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	}
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	<strong class="jxr_keyword">static</strong> ClassInfo f = ClassInfo.of(F.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">static</strong> ExecutableInfo
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		f_isPublic = f.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isPublic"</span>)),
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		f_isProtected = f.getMethod(x -&gt; x.hasName(<span class="jxr_string">"isProtected"</span>)),
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		f_isPrivate = f.getMethod(x -&gt; x.hasName(<span class="jxr_string">"isPrivate"</span>)),
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		f_isDefault = f.getMethod(x -&gt; x.hasName(<span class="jxr_string">"isDefault"</span>));
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	@Test <strong class="jxr_keyword">void</strong> setAccessible() {
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		assertDoesNotThrow(()-&gt;f_isPublic.accessible());
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		assertDoesNotThrow(()-&gt;f_isProtected.accessible());
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		assertDoesNotThrow(()-&gt;f_isPrivate.accessible());
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		assertDoesNotThrow(()-&gt;f_isDefault.accessible());
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	@Test <strong class="jxr_keyword">void</strong> isVisible() {
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		assertTrue(f_isPublic.isVisible(Visibility.PUBLIC));
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		assertTrue(f_isPublic.isVisible(Visibility.PROTECTED));
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		assertTrue(f_isPublic.isVisible(Visibility.PRIVATE));
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		assertTrue(f_isPublic.isVisible(Visibility.DEFAULT));
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		assertFalse(f_isProtected.isVisible(Visibility.PUBLIC));
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		assertTrue(f_isProtected.isVisible(Visibility.PROTECTED));
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		assertTrue(f_isProtected.isVisible(Visibility.PRIVATE));
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		assertTrue(f_isProtected.isVisible(Visibility.DEFAULT));
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		assertFalse(f_isPrivate.isVisible(Visibility.PUBLIC));
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		assertFalse(f_isPrivate.isVisible(Visibility.PROTECTED));
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		assertTrue(f_isPrivate.isVisible(Visibility.PRIVATE));
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		assertFalse(f_isPrivate.isVisible(Visibility.DEFAULT));
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		assertFalse(f_isDefault.isVisible(Visibility.PUBLIC));
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		assertFalse(f_isDefault.isVisible(Visibility.PROTECTED));
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		assertTrue(f_isDefault.isVisible(Visibility.PRIVATE));
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		assertTrue(f_isDefault.isVisible(Visibility.DEFAULT));
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	}
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<em class="jxr_comment">// Labels</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> X {
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">public</strong> X() {}
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">public</strong> X(String foo) {}  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">public</strong> X(Map&lt;String,Object&gt; foo) {}  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> foo(){}  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> foo(String foo){}  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> foo(Map&lt;String,Object&gt; foo){}  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	}
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	<strong class="jxr_keyword">static</strong> ClassInfo x2 = ClassInfo.of(X.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	<strong class="jxr_keyword">static</strong> ClassInfo f = ClassInfo.of(F.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<strong class="jxr_keyword">static</strong> ExecutableInfo
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		f_isPublic = f.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"isPublic"</span>)),
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		f_isProtected = f.getMethod(x -&gt; x.hasName(<span class="jxr_string">"isProtected"</span>)),
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		f_isPrivate = f.getMethod(x -&gt; x.hasName(<span class="jxr_string">"isPrivate"</span>)),
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		f_isDefault = f.getMethod(x -&gt; x.hasName(<span class="jxr_string">"isDefault"</span>));
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	@Test <strong class="jxr_keyword">void</strong> setAccessible() {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		assertDoesNotThrow(()-&gt;f_isPublic.accessible());
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		assertDoesNotThrow(()-&gt;f_isProtected.accessible());
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		assertDoesNotThrow(()-&gt;f_isPrivate.accessible());
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		assertDoesNotThrow(()-&gt;f_isDefault.accessible());
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	}
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	@Test <strong class="jxr_keyword">void</strong> isVisible() {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		assertTrue(f_isPublic.isVisible(Visibility.PUBLIC));
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		assertTrue(f_isPublic.isVisible(Visibility.PROTECTED));
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		assertTrue(f_isPublic.isVisible(Visibility.PRIVATE));
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		assertTrue(f_isPublic.isVisible(Visibility.DEFAULT));
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		assertFalse(f_isProtected.isVisible(Visibility.PUBLIC));
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		assertTrue(f_isProtected.isVisible(Visibility.PROTECTED));
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		assertTrue(f_isProtected.isVisible(Visibility.PRIVATE));
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		assertTrue(f_isProtected.isVisible(Visibility.DEFAULT));
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		assertFalse(f_isPrivate.isVisible(Visibility.PUBLIC));
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		assertFalse(f_isPrivate.isVisible(Visibility.PROTECTED));
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		assertTrue(f_isPrivate.isVisible(Visibility.PRIVATE));
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		assertFalse(f_isPrivate.isVisible(Visibility.DEFAULT));
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		assertFalse(f_isDefault.isVisible(Visibility.PUBLIC));
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		assertFalse(f_isDefault.isVisible(Visibility.PROTECTED));
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		assertTrue(f_isDefault.isVisible(Visibility.PRIVATE));
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		assertTrue(f_isDefault.isVisible(Visibility.DEFAULT));
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	}
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	<em class="jxr_comment">// Labels</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> X {
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<strong class="jxr_keyword">public</strong> X() {}
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">public</strong> X(String foo) {}  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<strong class="jxr_keyword">public</strong> X(Map&lt;String,Object&gt; foo) {}  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> foo(){}  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> foo(String foo){}  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> foo(Map&lt;String,Object&gt; foo){}  <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	}
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	<strong class="jxr_keyword">static</strong> ClassInfo x2 = ClassInfo.of(X.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	@Test <strong class="jxr_keyword">void</strong> getFullName_method() {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParameters()).getFullName());
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo(java.lang.String)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	}
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	@Test <strong class="jxr_keyword">void</strong> getFullName_constructor() {
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X()"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParameters).getFullName());
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X(java.lang.String)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	}
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> 
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 	@Test <strong class="jxr_keyword">void</strong> getFullName_method() {
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParameters()).getFullName());
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo(java.lang.String)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X.foo(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 	@Test <strong class="jxr_keyword">void</strong> getShortName_method() {
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		assertEquals(<span class="jxr_string">"foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParameters()).getShortName());
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		assertEquals(<span class="jxr_string">"foo(String)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getShortName());
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		assertEquals(<span class="jxr_string">"foo(Map)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getShortName());
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 	}
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	@Test <strong class="jxr_keyword">void</strong> getFullName_constructor() {
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X()"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParameters).getFullName());
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X(java.lang.String)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getFullName());
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		assertEquals(<span class="jxr_string">"org.apache.juneau.common.reflect.ExecutableInfo_Test$X(java.util.Map&lt;java.lang.String,java.lang.Object&gt;)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getFullName());
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	@Test <strong class="jxr_keyword">void</strong> getShortName_constructor() {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		assertEquals(<span class="jxr_string">"X()"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParameters).getShortName());
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		assertEquals(<span class="jxr_string">"X(String)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getShortName());
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		assertEquals(<span class="jxr_string">"X(Map)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getShortName());
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 	}
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	@Test <strong class="jxr_keyword">void</strong> getShortName_method() {
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		assertEquals(<span class="jxr_string">"foo()"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParameters()).getShortName());
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		assertEquals(<span class="jxr_string">"foo(String)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getShortName());
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		assertEquals(<span class="jxr_string">"foo(Map)"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getShortName());
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	@Test <strong class="jxr_keyword">void</strong> getSimpleName_method() {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParameters()).getSimpleName());
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getSimpleName());
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getSimpleName());
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 	}
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	@Test <strong class="jxr_keyword">void</strong> getShortName_constructor() {
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		assertEquals(<span class="jxr_string">"X()"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParameters).getShortName());
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		assertEquals(<span class="jxr_string">"X(String)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getShortName());
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		assertEquals(<span class="jxr_string">"X(Map)"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getShortName());
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	@Test <strong class="jxr_keyword">void</strong> getSimpleName_constructor() {
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParameters).getSimpleName());
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getSimpleName());
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getSimpleName());
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 	}
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	@Test <strong class="jxr_keyword">void</strong> getSimpleName_method() {
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasNoParameters()).getSimpleName());
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getSimpleName());
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		assertEquals(<span class="jxr_string">"foo"</span>, x2.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"foo"</span>) &amp;&amp; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getSimpleName());
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	}
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	@Test <strong class="jxr_keyword">void</strong> getSimpleName_constructor() {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(ConstructorInfo::hasNoParameters).getSimpleName());
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(String.<strong class="jxr_keyword">class</strong>)).getSimpleName());
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		assertEquals(<span class="jxr_string">"X"</span>, x2.getPublicConstructor(x -&gt; x.hasParameterTypes(Map.<strong class="jxr_keyword">class</strong>)).getSimpleName());
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	}
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> }
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -785,30 +785,35 @@
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 			<strong class="jxr_keyword">var</strong> mi = (<a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a>)executable;
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 			<strong class="jxr_keyword">var</strong> ci = executable.getParameter(index).getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 			ci.forEachAnnotation(ap, a, filter, action);
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 			mi.forEachMatchingParentFirst(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; x.forEachParameterAnnotation(index, a, filter, action));
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		}
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 	}
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 	<em class="jxr_comment">// Annotatable interface methods</em>
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotatableType" href="../../../../../org/apache/juneau/common/reflect/AnnotatableType.html#AnnotatableType">AnnotatableType</a> getAnnotatableType() {
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">return</strong> AnnotatableType.PARAMETER_TYPE;
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 	}
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 			mi.forEachMatchingParentFirst(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; {
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 				x.getParameter(index).getAnnotationInfos().stream()
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 					.filter(ai -&gt; a.isInstance(ai.<strong class="jxr_keyword">inner</strong>()))
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 					.map(ai -&gt; a.<strong class="jxr_keyword">cast</strong>(ai.<strong class="jxr_keyword">inner</strong>()))
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 					.forEach(ann -&gt; consumeIf(filter, action, ann));
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 			});
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		}
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 	}
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 	<em class="jxr_comment">// Annotatable interface methods</em>
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	<strong class="jxr_keyword">public</strong> ClassInfo getClassInfo() {
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		<strong class="jxr_keyword">return</strong> getDeclaringExecutable().getDeclaringClass();
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	<strong class="jxr_keyword">public</strong> <a name="AnnotatableType" href="../../../../../org/apache/juneau/common/reflect/AnnotatableType.html#AnnotatableType">AnnotatableType</a> getAnnotatableType() {
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		<strong class="jxr_keyword">return</strong> AnnotatableType.PARAMETER_TYPE;
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 	}
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> 
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 	<strong class="jxr_keyword">public</strong> String getAnnotatableName() {
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 		<strong class="jxr_keyword">return</strong> getName();
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 	<strong class="jxr_keyword">public</strong> ClassInfo getClassInfo() {
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 		<strong class="jxr_keyword">return</strong> getDeclaringExecutable().getDeclaringClass();
 <a class="jxr_linenumber" name="L802" href="#L802">802</a> 	}
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> }
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 	@Override <em class="jxr_comment">/* Annotatable */</em>
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 	<strong class="jxr_keyword">public</strong> String getAnnotatableName() {
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		<strong class="jxr_keyword">return</strong> getName();
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 	}
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
