@@ -281,18 +281,6 @@ class ExecutableInfo_Test extends TestBase {
 		assertTrue(c_m3.hasAnnotation(CA.class));
 	}
 
-	@Test void getAnnotation() {
-		check(null, c_c2.getAnnotation(CA.class));
-		check("@CA()", c_c3.getAnnotation(CA.class));
-		check(null, c_m1.getAnnotation(CA.class));
-		check(null, c_m2.getAnnotation(CA.class));
-		check("@CA()", c_m3.getAnnotation(CA.class));
-	}
-
-	@Test void getAnnotation_nullArg() {
-		check(null, c_c3.getAnnotation(null));
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Exceptions
 	//-----------------------------------------------------------------------------------------------------------------
@@ -378,7 +366,7 @@ class ExecutableInfo_Test extends TestBase {
 		// TRANSIENT is a valid modifier flag but doesn't apply to executables
 		// Should return false (executables can't be transient) but not throw exception
 		assertFalse(e_deprecated.is(TRANSIENT));
-		
+
 		// CLASS is not a modifier flag and doesn't apply to executables, should throw exception
 		assertThrowsWithMessage(RuntimeException.class, "Invalid flag for element: CLASS", () -> e_deprecated.is(ElementFlag.CLASS));
 	}

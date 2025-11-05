@@ -71,19 +71,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		this.c = c;
 	}
 
-	/**
-	 * Performs an action on this object if the specified predicate test passes.
-	 *
-	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on this object.
-	 * @return This object.
-	 */
-	public ConstructorInfo accept(Predicate<ConstructorInfo> test, Consumer<ConstructorInfo> action) {
-		if (matches(test))
-			action.accept(this);
-		return this;
-	}
-
 	@Override /* Overridden from ExecutableInfo */
 	public ConstructorInfo accessible() {
 		super.accessible();
@@ -151,17 +138,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		Value<A> t = Value.empty();
 		annotationProvider.forEachAnnotation(type, c, x -> true, x -> t.set(x));
 		return t.orElse(null);
-	}
-
-	/**
-	 * Finds the annotation of the specified type defined on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return The annotation if found, or <jk>null</jk> if not.
-	 */
-	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**

@@ -525,6 +525,16 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
+	 * Returns the method with the specified name on this annotation.
+	 *
+	 * @param methodName The method name.
+	 * @return An optional containing the method, or empty if method not found.
+	 */
+	public Optional<MethodInfo> getMethod(String methodName) {
+		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName())).findFirst();
+	}
+
+	/**
 	 * Returns the value of the <c>value()</c> method on this annotation as a string.
 	 *
 	 * @return An optional containing the value of the <c>value()</c> method, or empty if not found or not a string.
@@ -540,7 +550,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the value of the specified method, or empty if not found or not a string.
 	 */
 	public Optional<String> getString(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(String.class)).map(x -> s(x.invoke(a))).findFirst();
+		return getMethod(methodName).filter(x -> x.hasReturnType(String.class)).map(x -> s(x.invoke(a)));
 	}
 
 	/**
@@ -550,7 +560,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the value of the specified method, or empty if not found or not an integer.
 	 */
 	public Optional<Integer> getInt(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(int.class)).map(x -> (Integer)x.invoke(a)).findFirst();
+		return getMethod(methodName).filter(x -> x.hasReturnType(int.class)).map(x -> (Integer)x.invoke(a));
 	}
 
 	/**
@@ -560,7 +570,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the value of the specified method, or empty if not found or not a boolean.
 	 */
 	public Optional<Boolean> getBoolean(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(boolean.class)).map(x -> (Boolean)x.invoke(a)).findFirst();
+		return getMethod(methodName).filter(x -> x.hasReturnType(boolean.class)).map(x -> (Boolean)x.invoke(a));
 	}
 
 	/**
@@ -570,7 +580,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the value of the specified method, or empty if not found or not a long.
 	 */
 	public Optional<Long> getLong(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(long.class)).map(x -> (Long)x.invoke(a)).findFirst();
+		return getMethod(methodName).filter(x -> x.hasReturnType(long.class)).map(x -> (Long)x.invoke(a));
 	}
 
 	/**
@@ -580,7 +590,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the value of the specified method, or empty if not found or not a double.
 	 */
 	public Optional<Double> getDouble(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(double.class)).map(x -> (Double)x.invoke(a)).findFirst();
+		return getMethod(methodName).filter(x -> x.hasReturnType(double.class)).map(x -> (Double)x.invoke(a));
 	}
 
 	/**
@@ -590,7 +600,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the value of the specified method, or empty if not found or not a float.
 	 */
 	public Optional<Float> getFloat(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(float.class)).map(x -> (Float)x.invoke(a)).findFirst();
+		return getMethod(methodName).filter(x -> x.hasReturnType(float.class)).map(x -> (Float)x.invoke(a));
 	}
 
 	/**
@@ -601,7 +611,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Optional<Class<?>> getClassValue(String methodName) {
-		return (Optional<Class<?>>)(Optional<?>)methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(Class.class)).map(x -> x.invoke(a)).findFirst();
+		return (Optional<Class<?>>)(Optional<?>)getMethod(methodName).filter(x -> x.hasReturnType(Class.class)).map(x -> x.invoke(a));
 	}
 
 	/**
@@ -611,7 +621,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the value of the specified method, or empty if not found or not a string array.
 	 */
 	public Optional<String[]> getStringArray(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(String[].class)).map(x -> (String[])x.invoke(a)).findFirst();
+		return getMethod(methodName).filter(x -> x.hasReturnType(String[].class)).map(x -> (String[])x.invoke(a));
 	}
 
 	/**
@@ -622,7 +632,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Optional<Class<?>[]> getClassArray(String methodName) {
-		return (Optional<Class<?>[]>)(Optional<?>)methods.get().stream().filter(x -> eq(methodName, x.getSimpleName()) && x.hasReturnType(Class[].class)).map(x -> x.invoke(a)).findFirst();
+		return (Optional<Class<?>[]>)(Optional<?>)getMethod(methodName).filter(x -> x.hasReturnType(Class[].class)).map(x -> x.invoke(a));
 	}
 
 	/**
@@ -637,6 +647,6 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return An optional containing the return type of the specified method, or empty if method not found.
 	 */
 	public Optional<ClassInfo> getReturnType(String methodName) {
-		return methods.get().stream().filter(x -> eq(methodName, x.getSimpleName())).map(x -> x.getReturnType()).findFirst();
+		return getMethod(methodName).map(x -> x.getReturnType());
 	}
 }

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.reflect.ClassArrayFormat.*;
+import static org.apache.juneau.common.reflect.ClassNameFormat.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -24,6 +26,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 
@@ -65,6 +68,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	Field f;  // Effectively final
 	private final ClassInfo declaringClass;
 	private final Supplier<ClassInfo> typeCache = memoize(() -> ClassInfo.of(f.getType()));
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
+	private final Supplier<String> fullName = memoize(this::findFullName);
 
 	/**
 	 * Constructor.
@@ -78,17 +83,53 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		this.f = f;
 	}
 
+	private List<AnnotationInfo<Annotation>> _findAnnotations() {
+		return stream(f.getAnnotations()).map(a -> AnnotationInfo.of(this, a)).toList();
+	}
+
+	private String findFullName() {
+		var sb = new StringBuilder(128);
+		var dc = declaringClass;
+		var pi = dc.getPackage();
+		if (nn(pi))
+			sb.append(pi.getName()).append('.');
+		dc.appendNameFormatted(sb, SHORT, true, '$', BRACKETS);
+		sb.append('.').append(getName());
+		return sb.toString();
+	}
+
 	/**
-	 * Performs an action on this object if the specified predicate test passes.
+	 * Returns all annotations declared on this field.
 	 *
-	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on this object.
-	 * @return This object.
+	 * @return An unmodifiable list of all annotations declared on this field.
 	 */
-	public FieldInfo accept(Predicate<FieldInfo> test, Consumer<FieldInfo> action) {
-		if (matches(test))
-			action.accept(this);
-		return this;
+	public List<AnnotationInfo<Annotation>> getAnnotationInfos() {
+		return annotations.get();
+	}
+
+	/**
+	 * Returns all annotations of the specified type declared on this field.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type.
+	 * @return A stream of all matching annotations.
+	 */
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotationInfos(Class<A> type) {
+		return annotations.get().stream()
+			.filter(x -> type.isInstance(x.inner()))
+			.map(x -> (AnnotationInfo<A>)x);
+	}
+
+	/**
+	 * Returns the first annotation of the specified type declared on this field.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type.
+	 * @return An optional containing the first matching annotation, or empty if not found.
+	 */
+	public <A extends Annotation> Optional<AnnotationInfo<A>> getAnnotationInfo(Class<A> type) {
+		return getAnnotationInfos(type).findFirst();
 	}
 
 	/**
@@ -146,7 +187,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		return getAnnotation(AnnotationProvider.DEFAULT, type);
+		return getAnnotationInfo(type).map(AnnotationInfo::inner).orElse(null);
 	}
 
 	/**
@@ -167,14 +208,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return The underlying executable name.
 	 */
 	public String getFullName() {
-		var sb = new StringBuilder(128);
-		ClassInfo dc = declaringClass;
-		PackageInfo pi = dc.getPackage();
-		if (nn(pi))
-			sb.append(pi.getName()).append('.');
-		dc.appendNameFormatted(sb, ClassNameFormat.SHORT, true, '$', ClassArrayFormat.BRACKETS);
-		sb.append(".").append(getName());
-		return sb.toString();
+		return fullName.get();
 	}
 
 	/**
@@ -404,30 +438,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 */
 	public boolean isEnumConstant() {
 		return f.isEnumConstant();
-	}
-
-	/**
-	 * Returns a {@link Type} object that represents the declared type for the field represented by this object.
-	 *
-	 * <p>
-	 * Same as calling {@link Field#getGenericType()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Get generic type information for field: List&lt;String&gt; values</jc>
-	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"values"</js>);
-	 * 	Type <jv>type</jv> = <jv>fi</jv>.getGenericType();
-	 * 	<jk>if</jk> (<jv>type</jv> <jk>instanceof</jk> ParameterizedType) {
-	 * 		ParameterizedType <jv>pType</jv> = (ParameterizedType)<jv>type</jv>;
-	 * 		<jc>// pType.getActualTypeArguments()[0] is String.class</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @return A {@link Type} object representing the declared type.
-	 * @see Field#getGenericType()
-	 */
-	public Type getGenericType() {
-		return f.getGenericType();
 	}
 
 	/**

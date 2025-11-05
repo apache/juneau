@@ -75,24 +75,6 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	}
 
 	/**
-	 * Performs an action on all matching parameter annotations at the specified parameter index.
-	 *
-	 * @param <A> The annotation type.
-	 * @param index The parameter index.
-	 * @param type The annotation type.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
-	 * @return This object.
-	 */
-	@Deprecated
-	public final <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		for (var ai : getParameter(index).getAnnotationInfos())
-			if (type.isInstance(ai.inner()))
-				consumeIf(predicate, consumer, type.cast(ai.inner()));
-		return this;
-	}
-
-	/**
 	 * Returns how well this method matches the specified arg types.
 	 *
 	 * <p>

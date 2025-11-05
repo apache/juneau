@@ -777,7 +777,12 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			var mi = (MethodInfo)executable;
 			var ci = executable.getParameter(index).getParameterType().unwrap(Value.class, Optional.class);
 			ci.forEachAnnotation(ap, a, filter, action);
-			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, a, filter, action));
+			mi.forEachMatchingParentFirst(x -> true, x -> {
+				x.getParameter(index).getAnnotationInfos().stream()
+					.filter(ai -> a.isInstance(ai.inner()))
+					.map(ai -> a.cast(ai.inner()))
+					.forEach(ann -> consumeIf(filter, action, ann));
+			});
 		}
 		return this;
 	}
