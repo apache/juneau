@@ -272,10 +272,52 @@ public class AnnotationProvider2 {
 		return classDeclaredAnnotations.get(onClass);
 	}
 
+	@SuppressWarnings("unchecked")
 	public <A extends Annotation> Stream<AnnotationInfo<A>> findDeclared(Class<A> type, Class<?> onClass) {
 		assertArgNotNull("type", type);
 		assertArgNotNull("onClass", onClass);
 		return findDeclared(onClass).stream()
+			.filter(a -> a.isType(type))
+			.map(a -> (AnnotationInfo<A>)a);
+	}
+
+	/**
+	 * Finds all declared annotations on the specified class in parent-to-child order (reversed).
+	 *
+	 * <p>
+	 * This method returns annotations in the opposite order from {@link #findDeclared(Class)}.
+	 * It processes parent/declared annotations first (lower priority), then runtime annotations (higher priority).
+	 * This is useful when you want to process multiple annotation values where child annotations
+	 * can override values from parent annotations.
+	 *
+	 * @param onClass The class to search on.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order.
+	 */
+	public Stream<AnnotationInfo<Annotation>> findDeclaredParentFirst(Class<?> onClass) {
+		assertArgNotNull("onClass", onClass);
+		var list = classDeclaredAnnotations.get(onClass);
+		// Iterate backwards to get parent-to-child order
+		return java.util.stream.IntStream.range(0, list.size())
+			.map(i -> list.size() - 1 - i)
+			.mapToObj(list::get);
+	}
+
+	/**
+	 * Finds all declared annotations of the specified type on the specified class in parent-to-child order (reversed).
+	 *
+	 * <p>
+	 * This method returns annotations in the opposite order from {@link #findDeclared(Class, Class)}.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param type The annotation type to find.
+	 * @param onClass The class to search on.
+	 * @return A stream of {@link AnnotationInfo} objects in parent-to-child order.
+	 */
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> Stream<AnnotationInfo<A>> findDeclaredParentFirst(Class<A> type, Class<?> onClass) {
+		assertArgNotNull("type", type);
+		assertArgNotNull("onClass", onClass);
+		return findDeclaredParentFirst(onClass)
 			.filter(a -> a.isType(type))
 			.map(a -> (AnnotationInfo<A>)a);
 	}

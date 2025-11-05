@@ -124,4 +124,54 @@ public final class PredicateUtils {
 		if (test(predicate, value))
 			consumer.accept(value);
 	}
+
+	/**
+	 * Returns a function that prints the input value to stderr and returns it unchanged.
+	 *
+	 * <p>
+	 * Useful for debugging streams by inserting into a stream pipeline with {@code .map(peek())}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	list.stream()
+	 * 		.map(peek())
+	 * 		.filter(x -&gt; x != <jk>null</jk>)
+	 * 		.collect(Collectors.toList());
+	 * </p>
+	 *
+	 * @param <T> The type of value.
+	 * @return A function that prints and returns the value.
+	 */
+	public static <T> Function<T,T> peek() {
+		return v -> {
+			System.err.println(v);
+			return v;
+		};
+	}
+
+	/**
+	 * Returns a function that prints the input value to stderr using a custom formatter and returns it unchanged.
+	 *
+	 * <p>
+	 * Useful for debugging streams by inserting into a stream pipeline with {@code .map(peek(...))}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	list.stream()
+	 * 		.map(peek(<js>"Processing: {0}"</js>, x -&gt; x.getName()))
+	 * 		.filter(x -&gt; x != <jk>null</jk>)
+	 * 		.collect(Collectors.toList());
+	 * </p>
+	 *
+	 * @param <T> The type of value.
+	 * @param message A format string using {@code {0}} as placeholder for the formatted value.
+	 * @param formatter A function to extract/format the value for display.
+	 * @return A function that prints and returns the value.
+	 */
+	public static <T> Function<T,T> peek(String message, Function<T,?> formatter) {
+		return v -> {
+			System.err.println(message.replace("{0}", String.valueOf(formatter.apply(v))));
+			return v;
+		};
+	}
 }
