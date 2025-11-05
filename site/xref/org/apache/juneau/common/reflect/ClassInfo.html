@@ -2160,20 +2160,20 @@
 <a class="jxr_linenumber" name="L2152" href="#L2152">2152</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2153" href="#L2153">2153</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L2154" href="#L2154">2154</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L2155" href="#L2155">2155</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;).isParentOfFuzzyPrimitives(String.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L2156" href="#L2156">2156</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(CharSequence.&lt;jk&gt;class&lt;/jk&gt;).isParentOfFuzzyPrimitives(String.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;).isParentOfFuzzyPrimitives(CharSequence.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// false&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;).isParentOfFuzzyPrimitives(Integer.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;).isParentOfFuzzyPrimitives(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(Number.&lt;jk&gt;class&lt;/jk&gt;).isParentOfFuzzyPrimitives(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;).isParentOfFuzzyPrimitives(Number.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// false&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;).isParentOfFuzzyPrimitives(&lt;jk&gt;long&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2155" href="#L2155">2155</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;).isParentOfLenient(String.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2156" href="#L2156">2156</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(CharSequence.&lt;jk&gt;class&lt;/jk&gt;).isParentOfLenient(String.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;).isParentOfLenient(CharSequence.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;).isParentOfLenient(Integer.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(Integer.&lt;jk&gt;class&lt;/jk&gt;).isParentOfLenient(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(Number.&lt;jk&gt;class&lt;/jk&gt;).isParentOfLenient(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;).isParentOfLenient(Number.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> <em class="jxr_javadoccomment">	 * 		ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;int&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;).isParentOfLenient(&lt;jk&gt;long&lt;/jk&gt;.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// false&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L2163" href="#L2163">2163</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L2164" href="#L2164">2164</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2165" href="#L2165">2165</a> <em class="jxr_javadoccomment">	 * @param child The child class.</em>
 <a class="jxr_linenumber" name="L2166" href="#L2166">2166</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class is a parent or the same as &lt;c&gt;child&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L2167" href="#L2167">2167</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2168" href="#L2168">2168</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isParentOfFuzzyPrimitives(Class&lt;?&gt; child) {
+<a class="jxr_linenumber" name="L2168" href="#L2168">2168</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isParentOfLenient(Class&lt;?&gt; child) {
 <a class="jxr_linenumber" name="L2169" href="#L2169">2169</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong> || child == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2170" href="#L2170">2170</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L2171" href="#L2171">2171</a> 		<strong class="jxr_keyword">if</strong> (c.isAssignableFrom(child))
@@ -2185,12 +2185,12 @@
 <a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> 	}
 <a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> 
 <a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> <em class="jxr_javadoccomment">	 * Same as {@link #isParentOfFuzzyPrimitives(Class)} but takes in a {@link ClassInfo}.</em>
+<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> <em class="jxr_javadoccomment">	 * Same as {@link #isParentOfLenient(Class)} but takes in a {@link ClassInfo}.</em>
 <a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> <em class="jxr_javadoccomment">	 * @param child The child class.</em>
 <a class="jxr_linenumber" name="L2183" href="#L2183">2183</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class is a parent or the same as &lt;c&gt;child&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isParentOfFuzzyPrimitives(ClassInfo child) {
+<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isParentOfLenient(ClassInfo child) {
 <a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong> || child == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 		<strong class="jxr_keyword">if</strong> (c.isAssignableFrom(child.<strong class="jxr_keyword">inner</strong>()))
@@ -2207,9 +2207,9 @@
 <a class="jxr_linenumber" name="L2199" href="#L2199">2199</a> <em class="jxr_javadoccomment">	 * @param child The child class.</em>
 <a class="jxr_linenumber" name="L2200" href="#L2200">2200</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this class is a parent or the same as &lt;c&gt;child&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L2201" href="#L2201">2201</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isParentOfFuzzyPrimitives(Type child) {
+<a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isParentOfLenient(Type child) {
 <a class="jxr_linenumber" name="L2203" href="#L2203">2203</a> 		<strong class="jxr_keyword">if</strong> (child instanceof Class)
-<a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> 			<strong class="jxr_keyword">return</strong> isParentOfFuzzyPrimitives((Class&lt;?&gt;)child);
+<a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> 			<strong class="jxr_keyword">return</strong> isParentOfLenient((Class&lt;?&gt;)child);
 <a class="jxr_linenumber" name="L2205" href="#L2205">2205</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L2206" href="#L2206">2206</a> 	}
 <a class="jxr_linenumber" name="L2207" href="#L2207">2207</a> 

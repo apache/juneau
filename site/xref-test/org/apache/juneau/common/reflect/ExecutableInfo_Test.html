@@ -398,11 +398,11 @@
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 
 <a class="jxr_linenumber" name="L392" href="#L392">392</a> 	@Test <strong class="jxr_keyword">void</strong> hasFuzzyArgs() {
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertTrue(e_hasParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertTrue(e_hasParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		assertFalse(e_hasParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertTrue(e_hasNoParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">new</strong> Class[0]));
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		assertTrue(e_hasNoParams.hasFuzzyParameterTypes(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertTrue(e_hasParams.hasParameterTypesLenient(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertTrue(e_hasParams.hasParameterTypesLenient(<strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		assertFalse(e_hasParams.hasParameterTypesLenient(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertTrue(e_hasNoParams.hasParameterTypesLenient(<strong class="jxr_keyword">new</strong> Class[0]));
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		assertTrue(e_hasNoParams.hasParameterTypesLenient(<strong class="jxr_keyword">long</strong>.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 	}
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 	@Test <strong class="jxr_keyword">void</strong> isDeprecated() {

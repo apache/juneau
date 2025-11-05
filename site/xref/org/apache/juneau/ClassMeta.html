@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 					x -&gt; x.isStatic()
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 					&amp;&amp; x.isNotDeprecated()
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 					&amp;&amp; x.hasName(<span class="jxr_string">"example"</span>)
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 					&amp;&amp; x.hasFuzzyParameterTypes(BeanSession.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 					&amp;&amp; x.hasParameterTypesLenient(BeanSession.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			).map(MethodInfo::<strong class="jxr_keyword">inner</strong>)
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -251,7 +251,7 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 			}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 			ci.forEachDeclaredMethod(m -&gt; m.hasAnnotation(bc, Example.<strong class="jxr_keyword">class</strong>), m -&gt; {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 				<strong class="jxr_keyword">if</strong> (! (m.isStatic() &amp;&amp; m.hasFuzzyParameterTypes(BeanSession.<strong class="jxr_keyword">class</strong>) &amp;&amp; ci.isParentOf(m.getReturnType().<strong class="jxr_keyword">inner</strong>())))
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 				<strong class="jxr_keyword">if</strong> (! (m.isStatic() &amp;&amp; m.hasParameterTypesLenient(BeanSession.<strong class="jxr_keyword">class</strong>) &amp;&amp; ci.isParentOf(m.getReturnType().<strong class="jxr_keyword">inner</strong>())))
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ClassMetaRuntimeException" href="../../../org/apache/juneau/ClassMetaRuntimeException.html#ClassMetaRuntimeException">ClassMetaRuntimeException</a>(c, <span class="jxr_string">"@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class."</span>, m.toString());
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 				m.setAccessible();
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 				exampleMethod = m.<strong class="jxr_keyword">inner</strong>();
@@ -1020,7 +1020,7 @@
 <a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 			<strong class="jxr_keyword">if</strong> (nn(example))
 <a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 				<strong class="jxr_keyword">return</strong> jpSession.parse(example, <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 			<strong class="jxr_keyword">if</strong> (nn(exampleMethod))
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 				<strong class="jxr_keyword">return</strong> (T)MethodInfo.of(exampleMethod).invokeFuzzy(<strong class="jxr_keyword">null</strong>, session);
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 				<strong class="jxr_keyword">return</strong> (T)MethodInfo.of(exampleMethod).invokeLenient(<strong class="jxr_keyword">null</strong>, session);
 <a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 			<strong class="jxr_keyword">if</strong> (nn(exampleField))
 <a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 				<strong class="jxr_keyword">return</strong> (T)exampleField.get(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 

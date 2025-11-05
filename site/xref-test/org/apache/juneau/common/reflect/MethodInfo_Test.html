@@ -490,9 +490,9 @@
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 	@Test <strong class="jxr_keyword">void</strong> invokeFuzzy() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> E();
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		e_a1.invokeFuzzy(e, <span class="jxr_string">"foo"</span>, 123);
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		e_a1.invokeLenient(e, <span class="jxr_string">"foo"</span>, 123);
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 		assertEquals(<span class="jxr_string">"foo"</span>, e.f);
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		e_a1.invokeFuzzy(e, 123, <span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		e_a1.invokeLenient(e, 123, <span class="jxr_string">"bar"</span>);
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 		assertEquals(<span class="jxr_string">"bar"</span>, e.f);
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 	}
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 
