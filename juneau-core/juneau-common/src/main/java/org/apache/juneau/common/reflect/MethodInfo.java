@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.common.reflect;
 
+import static org.apache.juneau.common.utils.AssertionUtils.*;
 import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -25,6 +26,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.common.collections.*;
 import org.apache.juneau.common.utils.*;
@@ -94,6 +96,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 	private final Supplier<List<MethodInfo>> matchingMethods = memoize(this::_findMatchingMethods);
 
+	// All annotations on this method and parent overridden methods in child-to-parent order.
+	private final Supplier<List<AnnotationInfo<Annotation>>> annotationInfos = memoize(this::findAnnotationInfos);
+
 	/**
 	 * Constructor.
 	 *
@@ -146,6 +151,41 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		return matchingMethods.get();
 	}
 
+	/**
+	 * Returns all annotations on this method and parent overridden methods in child-to-parent order.
+	 *
+	 * <p>
+	 * 	Results include annotations from:
+	 * <ul>
+	 * 	<li>This method
+	 * 	<li>Matching methods in parent classes
+	 * 	<li>Matching methods in interfaces
+	 * </ul>
+	 *
+	 * <p>
+	 * 	List is unmodifiable.
+	 *
+	 * @return A list of all annotations on this method and overridden methods.
+	 */
+	public List<AnnotationInfo<Annotation>> getAnnotationInfos() {
+		return annotationInfos.get();
+	}
+
+	/**
+	 * Returns all annotations of the specified type on this method and parent overridden methods.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to filter by.
+	 * @return A stream of matching annotation infos.
+	 */
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAnnotationInfos(Class<A> type) {
+		assertArgNotNull("type", type);
+		return getAnnotationInfos().stream()
+			.filter(a -> a.isType(type))
+			.map(a -> (AnnotationInfo<A>)a);
+	}
+
 	private List<MethodInfo> _findMatchingMethods() {
 		var result = new ArrayList<MethodInfo>();
 		result.add(this); // 1. This method
@@ -180,6 +220,12 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		// Recursively search parent interfaces
 		iface.getDeclaredInterfaces().stream()
 			.forEach(pi -> addMatchingMethodsFromInterface(result, pi));
+	}
+
+	private List<AnnotationInfo<Annotation>> findAnnotationInfos() {
+		var list = new ArrayList<AnnotationInfo<Annotation>>();
+		getMatching().forEach(m -> list.addAll(m.getDeclaredAnnotationInfos()));
+		return u(list);
 	}
 
 	@Override /* Overridden from ExecutableInfo */
@@ -333,47 +379,12 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		return forEachAnnotation(AnnotationProvider.DEFAULT, type, filter, action);
 	}
 
-	/**
-	 * Perform an action on all matching annotations on this method.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public MethodInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		AnnotationInfo.forEachAnnotationInfo(this, filter, action);
-		return this;
+	public Stream<MethodInfo> getMatching() {
+		return matchingCache.get().stream();
 	}
 
-	/**
-	 * Performs an action on all matching declared methods with the same name and arguments on all superclasses and interfaces.
-	 *
-	 * <p>
-	 * Methods are accessed from child-to-parent order.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public MethodInfo forEachMatching(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		for (var m : matchingCache.get())
-			consumeIf(filter, action, m);
-		return this;
-	}
-
-	/**
-	 * Performs an action on all matching declared methods with the same name and arguments on all superclasses and interfaces.
-	 *
-	 * <p>
-	 * Methods are accessed from parent-to-child order.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public MethodInfo forEachMatchingParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
-		rstream(matchingCache.get()).forEach(m -> consumeIf(filter, action, m));
-		return this;
+	public Stream<MethodInfo> getMatchingParentFirst() {
+		return rstream(matchingCache.get());
 	}
 
 	/**

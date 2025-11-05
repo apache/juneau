@@ -155,7 +155,7 @@ class MethodInfo_Test extends TestBase {
 	@Test void findMatchingMethods() throws Exception {
 		var mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
 		var l = new ArrayList<MethodInfo>();
-		mi.forEachMatching(x -> true, l::add);
+		mi.getMatching().forEach(l::add);
 		check("B3.foo(int),B2.foo(int),B1.foo(int)", l);
 	}
 

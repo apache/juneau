@@ -450,27 +450,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Performs an action on all matching annotations on this class/parents/package.
-	 *
-	 * <p>
-	 * Annotations are consumed in the following order:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered parent-to-child.
-	 * 	<li>On parent classes ordered parent-to-child.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public ClassInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		AnnotationInfo.forEachAnnotationInfo(this, filter, action);
-		return this;
-	}
-
-	/**
 	 * Returns all fields on this class and all parent classes.
 	 *
 	 * <p>

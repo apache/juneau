@@ -4582,7 +4582,7 @@ public class RestContext extends Context {
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {
 					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && nn(x.getDeclaringClass().getAnnotation(Rest.class));
-					mi.forEachMatching(isRestAnnotatedInterface, x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
+					mi.getMatching().filter(isRestAnnotatedInterface).forEach(x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 				}
 
 				if (al.size() > 0) {

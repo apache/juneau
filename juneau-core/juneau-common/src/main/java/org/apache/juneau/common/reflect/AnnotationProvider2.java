@@ -297,9 +297,7 @@ public class AnnotationProvider2 {
 		assertArgNotNull("onClass", onClass);
 		var list = classDeclaredAnnotations.get(onClass);
 		// Iterate backwards to get parent-to-child order
-		return java.util.stream.IntStream.range(0, list.size())
-			.map(i -> list.size() - 1 - i)
-			.mapToObj(list::get);
+		return rstream(list);
 	}
 
 	/**
