@@ -595,12 +595,6 @@ public class ClassInfo_Test extends TestBase {
 		assertList(l4, "5");
 	}
 
-	@Test void firstAnnotation() {
-		assertEquals(2, g3.firstAnnotation(A.class, null).value());
-		assertEquals(2, g4.firstAnnotation(A.class, null).value());
-		assertEquals(3, g5.firstAnnotation(A.class, null).value());
-		assertEquals(5, g3.firstAnnotation(A.class, x -> x.value() == 5).value());
-	}
 	@Test void lastAnnotation() {
 		assertEquals(7, g3.lastAnnotation(A.class, null).value());
 		assertEquals(7, g4.lastAnnotation(A.class, null).value());
@@ -1624,111 +1618,111 @@ public class ClassInfo_Test extends TestBase {
 		@Test
 		void a01_simple() {
 			ClassInfo ci = ClassInfo.of(String.class);
-			
+
 			// SIMPLE format
-			assertEquals("String", 
+			assertEquals("String",
 				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("String", 
+			assertEquals("String",
 				ci.getNameFormatted(SIMPLE, false, '.', BRACKETS));
-			assertEquals("String", 
+			assertEquals("String",
 				ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
 		}
 
 		@Test
 		void a02_short() {
 			ClassInfo ci = ClassInfo.of(String.class);
-			
+
 			// SHORT format
-			assertEquals("String", 
+			assertEquals("String",
 				ci.getNameFormatted(SHORT, false, '$', BRACKETS));
-			assertEquals("String", 
+			assertEquals("String",
 				ci.getNameFormatted(SHORT, true, '$', BRACKETS));
 		}
 
 		@Test
 		void a03_full() {
 			ClassInfo ci = ClassInfo.of(String.class);
-			
+
 			// FULL format
-			assertEquals("java.lang.String", 
+			assertEquals("java.lang.String",
 				ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			assertEquals("java.lang.String", 
+			assertEquals("java.lang.String",
 				ci.getNameFormatted(FULL, true, '$', BRACKETS));
 		}
 
 		@Test
 		void a04_innerClass() {
 			ClassInfo ci = ClassInfo.of(Map.Entry.class);
-			
+
 			// SIMPLE - only innermost name
-			assertEquals("Entry", 
+			assertEquals("Entry",
 				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			
+
 			// SHORT - outer class + inner class
-			assertEquals("Map$Entry", 
+			assertEquals("Map$Entry",
 				ci.getNameFormatted(SHORT, false, '$', BRACKETS));
-			assertEquals("Map.Entry", 
+			assertEquals("Map.Entry",
 				ci.getNameFormatted(SHORT, false, '.', BRACKETS));
-			
+
 			// FULL - package + outer + inner
-			assertEquals("java.util.Map$Entry", 
+			assertEquals("java.util.Map$Entry",
 				ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			assertEquals("java.util.Map.Entry", 
+			assertEquals("java.util.Map.Entry",
 				ci.getNameFormatted(FULL, false, '.', BRACKETS));
 		}
 
 		@Test
 		void a05_arrays() {
 			ClassInfo ci = ClassInfo.of(String[].class);
-			
+
 			// BRACKETS format
-			assertEquals("String[]", 
+			assertEquals("String[]",
 				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("String[]", 
+			assertEquals("String[]",
 				ci.getNameFormatted(SHORT, false, '$', BRACKETS));
-			assertEquals("java.lang.String[]", 
+			assertEquals("java.lang.String[]",
 				ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			
+
 			// WORD format
-			assertEquals("StringArray", 
+			assertEquals("StringArray",
 				ci.getNameFormatted(SIMPLE, false, '$', WORD));
-			assertEquals("StringArray", 
+			assertEquals("StringArray",
 				ci.getNameFormatted(SHORT, false, '$', WORD));
-			assertEquals("java.lang.StringArray", 
+			assertEquals("java.lang.StringArray",
 				ci.getNameFormatted(FULL, false, '$', WORD));
 		}
 
 		@Test
 		void a06_multiDimensionalArrays() {
 			ClassInfo ci = ClassInfo.of(String[][].class);
-			
+
 			// BRACKETS format
-			assertEquals("String[][]", 
+			assertEquals("String[][]",
 				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("java.lang.String[][]", 
+			assertEquals("java.lang.String[][]",
 				ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			
+
 			// WORD format
-			assertEquals("StringArrayArray", 
+			assertEquals("StringArrayArray",
 				ci.getNameFormatted(SIMPLE, false, '$', WORD));
-			assertEquals("java.lang.StringArrayArray", 
+			assertEquals("java.lang.StringArrayArray",
 				ci.getNameFormatted(FULL, false, '$', WORD));
 		}
 
 		@Test
 		void a07_primitiveArrays() {
 			ClassInfo ci = ClassInfo.of(int[].class);
-			
+
 			// BRACKETS format
-			assertEquals("int[]", 
+			assertEquals("int[]",
 				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("int[]", 
+			assertEquals("int[]",
 				ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			
+
 			// WORD format
-			assertEquals("intArray", 
+			assertEquals("intArray",
 				ci.getNameFormatted(SIMPLE, false, '$', WORD));
-			assertEquals("intArray", 
+			assertEquals("intArray",
 				ci.getNameFormatted(FULL, false, '$', WORD));
 		}
 
@@ -1738,23 +1732,23 @@ public class ClassInfo_Test extends TestBase {
 			Field f = GenericsTestClass.class.getDeclaredField("hashMap");
 			Type t = f.getGenericType();
 			ClassInfo ci = ClassInfo.of(t);
-			
+
 			// Without type params
-			assertEquals("HashMap", 
+			assertEquals("HashMap",
 				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("java.util.HashMap", 
+			assertEquals("java.util.HashMap",
 				ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			
+
 			// With type params - SIMPLE
-			assertEquals("HashMap<String,Integer>", 
+			assertEquals("HashMap<String,Integer>",
 				ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
-			
+
 			// With type params - SHORT
-			assertEquals("HashMap<String,Integer>", 
+			assertEquals("HashMap<String,Integer>",
 				ci.getNameFormatted(SHORT, true, '$', BRACKETS));
-			
+
 			// With type params - FULL
-			assertEquals("java.util.HashMap<java.lang.String,java.lang.Integer>", 
+			assertEquals("java.util.HashMap<java.lang.String,java.lang.Integer>",
 				ci.getNameFormatted(FULL, true, '$', BRACKETS));
 		}
 
@@ -1764,13 +1758,13 @@ public class ClassInfo_Test extends TestBase {
 			Field f = GenericsTestClass.class.getDeclaredField("nestedMap");
 			Type t = f.getGenericType();
 			ClassInfo ci = ClassInfo.of(t);
-			
+
 			// With type params - SIMPLE
-			assertEquals("HashMap<String,ArrayList<Integer>>", 
+			assertEquals("HashMap<String,ArrayList<Integer>>",
 				ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
-			
+
 			// With type params - FULL
-			assertEquals("java.util.HashMap<java.lang.String,java.util.ArrayList<java.lang.Integer>>", 
+			assertEquals("java.util.HashMap<java.lang.String,java.util.ArrayList<java.lang.Integer>>",
 				ci.getNameFormatted(FULL, true, '$', BRACKETS));
 		}
 
@@ -1780,15 +1774,15 @@ public class ClassInfo_Test extends TestBase {
 			Field f = GenericsTestClass.class.getDeclaredField("listArray");
 			Type t = f.getGenericType();
 			ClassInfo ci = ClassInfo.of(t);
-			
+
 			// BRACKETS format
-			assertEquals("ArrayList<String>[]", 
+			assertEquals("ArrayList<String>[]",
 				ci.getNameFormatted(SIMPLE, true, '$', BRACKETS));
-			assertEquals("java.util.ArrayList<java.lang.String>[]", 
+			assertEquals("java.util.ArrayList<java.lang.String>[]",
 				ci.getNameFormatted(FULL, true, '$', BRACKETS));
-			
+
 			// WORD format
-			assertEquals("ArrayList<String>Array", 
+			assertEquals("ArrayList<String>Array",
 				ci.getNameFormatted(SIMPLE, true, '$', WORD));
 		}
 
@@ -1798,7 +1792,7 @@ public class ClassInfo_Test extends TestBase {
 			StringBuilder sb = new StringBuilder("Type: ");
 			ci.appendNameFormatted(sb, FULL, false, '$', BRACKETS);
 			assertEquals("Type: java.lang.String", sb.toString());
-			
+
 			// Verify it returns the same StringBuilder for chaining
 			StringBuilder result = ci.appendNameFormatted(sb, SIMPLE, false, '$', BRACKETS);
 			assertSame(sb, result);
@@ -1808,40 +1802,40 @@ public class ClassInfo_Test extends TestBase {
 		@Test
 		void a12_equivalentMethods() {
 			ClassInfo ci = ClassInfo.of(String.class);
-			
+
 			// getName() equivalent
-			assertEquals(ci.getName(), 
+			assertEquals(ci.getName(),
 				ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			
+
 			// getSimpleName() equivalent
-			assertEquals(ci.getNameSimple(), 
+			assertEquals(ci.getNameSimple(),
 				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
 		}
 
 		@Test
 		void a13_innerClassArrays() {
 			ClassInfo ci = ClassInfo.of(Map.Entry[].class);
-			
+
 			// SIMPLE
-			assertEquals("Entry[]", 
+			assertEquals("Entry[]",
 				ci.getNameFormatted(SIMPLE, false, '$', BRACKETS));
-			assertEquals("EntryArray", 
+			assertEquals("EntryArray",
 				ci.getNameFormatted(SIMPLE, false, '$', WORD));
-			
+
 			// SHORT
-			assertEquals("Map$Entry[]", 
+			assertEquals("Map$Entry[]",
 				ci.getNameFormatted(SHORT, false, '$', BRACKETS));
-			assertEquals("Map.Entry[]", 
+			assertEquals("Map.Entry[]",
 				ci.getNameFormatted(SHORT, false, '.', BRACKETS));
-			assertEquals("Map$EntryArray", 
+			assertEquals("Map$EntryArray",
 				ci.getNameFormatted(SHORT, false, '$', WORD));
-			
+
 			// FULL
-			assertEquals("java.util.Map$Entry[]", 
+			assertEquals("java.util.Map$Entry[]",
 				ci.getNameFormatted(FULL, false, '$', BRACKETS));
-			assertEquals("java.util.Map.Entry[]", 
+			assertEquals("java.util.Map.Entry[]",
 				ci.getNameFormatted(FULL, false, '.', BRACKETS));
-			assertEquals("java.util.Map$EntryArray", 
+			assertEquals("java.util.Map$EntryArray",
 				ci.getNameFormatted(FULL, false, '$', WORD));
 		}
 

@@ -759,11 +759,8 @@ public abstract class Context implements AnnotationProvider {
 	final boolean debug;
 
 	private final ReflectionMap<Annotation> annotationMap;
-	private final Cache2<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache;
 	private final Cache2<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache;
-	private final Cache2<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache;
-	private final Cache2<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache;
-	private final Cache2<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache;
+	private final AnnotationProvider2 annotationProvider;
 
 	/**
 	 * Constructor for this class.
@@ -804,11 +801,9 @@ public abstract class Context implements AnnotationProvider {
 		});
 		this.annotationMap = rmb.build();
 		var disabled = Boolean.getBoolean("juneau.disableAnnotationCaching");
-		classAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
 		declaredClassAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2))).build();
-		methodAnnotationCache = (Cache2)Cache2.of(Method.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
-		fieldAnnotationCache = (Cache2)Cache2.of(Field.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
-		constructorAnnotationCache = (Cache2)Cache2.of(Constructor.class, Class.class, Annotation[].class).disableCaching(disabled).supplier((k1, k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2))).build();
+
+		annotationProvider = AnnotationProvider2.create().addRuntimeAnnotations(annotations).build();
 	}
 
 	/**
@@ -820,11 +815,12 @@ public abstract class Context implements AnnotationProvider {
 		annotationMap = copyFrom.annotationMap;
 		annotations = copyFrom.annotations;
 		debug = copyFrom.debug;
-		classAnnotationCache = copyFrom.classAnnotationCache;
 		declaredClassAnnotationCache = copyFrom.declaredClassAnnotationCache;
-		methodAnnotationCache = copyFrom.methodAnnotationCache;
-		fieldAnnotationCache = copyFrom.fieldAnnotationCache;
-		constructorAnnotationCache = copyFrom.constructorAnnotationCache;
+		annotationProvider = copyFrom.annotationProvider;
+	}
+
+	public AnnotationProvider2 getAnnotationProvider() {
+		return annotationProvider;
 	}
 
 	/**
@@ -854,75 +850,47 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		if (nn(type) && nn(onClass))
-			for (var a : annotations(type, onClass))
-				if (test(filter, a))
-					return a;
-		return null;
+		return getAnnotationProvider().find(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-		if (nn(type) && nn(onConstructor))
-			for (var a : annotations(type, onConstructor))
-				if (test(filter, a))
-					return a;
-		return null;
+		return getAnnotationProvider().find(type, onConstructor).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-		if (nn(type) && nn(onField))
-			for (var a : annotations(type, onField))
-				if (test(filter, a))
-					return a;
-		return null;
+		return getAnnotationProvider().find(type, onField).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-		if (nn(type) && nn(onMethod))
-			for (var a : annotations(type, onMethod))
-				if (test(filter, a))
-					return a;
-		return null;
+		return getAnnotationProvider().find(type, onMethod).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		if (nn(type) && nn(onClass))
-			for (var a : declaredAnnotations(type, onClass))
-				if (test(filter, a))
-					return a;
-		return null;
+		return getAnnotationProvider().findDeclared(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-		if (nn(type) && nn(onClass))
-			for (var a : annotations(type, onClass))
-				consumeIf(filter, action, a);
+		getAnnotationProvider().find(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).forEach(x -> action.accept(x));
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
-		if (nn(type) && nn(onConstructor))
-			for (var a : annotations(type, onConstructor))
-				consumeIf(filter, action, a);
+		getAnnotationProvider().find(type, onConstructor).map(x -> x.inner()).filter(x -> filter.test(x)).forEach(x -> action.accept(x));
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
-		if (nn(type) && nn(onField))
-			for (var a : annotations(type, onField))
-				consumeIf(filter, action, a);
+		getAnnotationProvider().find(type, onField).map(x -> x.inner()).filter(x -> filter.test(x)).forEach(x -> action.accept(x));
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
-		if (nn(type) && nn(onMethod))
-			for (var a : annotations(type, onMethod))
-				consumeIf(filter, action, a);
+		getAnnotationProvider().find(type, onMethod).map(x -> x.inner()).filter(x -> filter.test(x)).forEach(x -> action.accept(x));
 	}
 
 	@Override /* Overridden from MetaProvider */
@@ -951,7 +919,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified class.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Class<?> onClass) {
-		return annotations(type, onClass).length > 0;
+		return getAnnotationProvider().find(type, onClass).map(x -> x.inner()).findFirst().isPresent();
 	}
 
 	/**
@@ -963,7 +931,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Constructor<?> onConstructor) {
-		return annotations(type, onConstructor).length > 0;
+		return getAnnotationProvider().find(type, onConstructor).map(x -> x.inner()).findFirst().isPresent();
 	}
 
 	/**
@@ -975,7 +943,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Field onField) {
-		return annotations(type, onField).length > 0;
+		return getAnnotationProvider().find(type, onField).map(x -> x.inner()).findFirst().isPresent();
 	}
 
 	/**
@@ -987,7 +955,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified method.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Method onMethod) {
-		return annotations(type, onMethod).length > 0;
+		return getAnnotationProvider().find(type, onMethod).map(x -> x.inner()).findFirst().isPresent();
 	}
 
 	/**
@@ -1001,77 +969,32 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		A x = null;
-		if (nn(type) && nn(onClass))
-			for (var a : annotations(type, onClass))
-				if (test(filter, a))
-					x = a;
-		return x;
+		return getAnnotationProvider().find(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-		A x = null;
-		if (nn(type) && nn(onConstructor))
-			for (var a : annotations(type, onConstructor))
-				if (test(filter, a))
-					x = a;
-		return x;
+		return getAnnotationProvider().find(type, onConstructor).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-		A x = null;
-		if (nn(type) && nn(onField))
-			for (var a : annotations(type, onField))
-				if (test(filter, a))
-					x = a;
-		return x;
+		return getAnnotationProvider().find(type, onField).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-		A x = null;
-		if (nn(type) && nn(onMethod))
-			for (var a : annotations(type, onMethod))
-				if (test(filter, a))
-					x = a;
-		return x;
+		return getAnnotationProvider().find(type, onMethod).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		A x = null;
-		if (nn(type) && nn(onClass))
-			for (var a : declaredAnnotations(type, onClass))
-				if (test(filter, a))
-					x = a;
-		return x;
+		return getAnnotationProvider().findDeclared(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
 	}
 
 	@Override /* Overridden from Object */
 	public String toString() {
 		return Utils2.toPropertyMap(this).asReadableString();
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> type, Class<?> onClass) {
-		return (A[])classAnnotationCache.get(onClass, type);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> type, Constructor<?> onConstructor) {
-		return (A[])constructorAnnotationCache.get(onConstructor, type);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> type, Field onField) {
-		return (A[])fieldAnnotationCache.get(onField, type);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> type, Method onMethod) {
-		return (A[])methodAnnotationCache.get(onMethod, type);
 	}
 
 	@SuppressWarnings("unchecked")

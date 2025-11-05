@@ -852,27 +852,6 @@ public class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns the first matching annotation on this class or parent classes/interfaces in parent-to-child order.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to search for.
-	 * @param filter A predicate to apply to the entries to determine if annotation should be used.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public <A extends Annotation> Optional<A> firstAnnotation(Class<A> type, Predicate<A> filter) {
-		A[] array = annotationArray(type);
-		if (array == null) {
-			if (beanContext == null)
-				return Optional.ofNullable(info.firstAnnotation(BeanContext.DEFAULT, type, filter));
-			return Optional.empty();
-		}
-		for (var a : array)
-			if (test(filter, a))
-				return Optional.of(a);
-		return Optional.empty();
-	}
-
-	/**
 	 * Performs an action on all matching annotations of the specified type defined on this class or parent classes/interfaces in parent-to-child order.
 	 *
 	 * @param <A> The annotation type to look for.

@@ -635,9 +635,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		BeanContext bc = beanContext;
 		if (nn(a)) {
-			bc.forEachAnnotation(a, field, filter, action);
-			bc.forEachAnnotation(a, getter, filter, action);
-			bc.forEachAnnotation(a, setter, filter, action);
+			if (nn(field)) bc.forEachAnnotation(a, field, filter, action);
+			if (nn(getter)) bc.forEachAnnotation(a, getter, filter, action);
+			if (nn(setter)) bc.forEachAnnotation(a, setter, filter, action);
 		}
 		return this;
 	}

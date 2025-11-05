@@ -307,16 +307,6 @@ class ClassMeta_Test extends TestBase {
 		assertList(l4, "5");
 	}
 
-	@Test void firstAnnotation() {
-		var c3 = bc.getClassMeta(C3.class);
-		var c4 = bc.getClassMeta(C4.class);
-		var c5 = bc.getClassMeta(C5.class);
-		assertEquals(2, c3.firstAnnotation(A.class, null).get().value());
-		assertEquals(2, c4.firstAnnotation(A.class, null).get().value());
-		assertEquals(3, c5.firstAnnotation(A.class, null).get().value());
-		assertEquals(5, c3.firstAnnotation(A.class, x -> x.value() == 5).get().value());
-	}
-
 	@Test void lastAnnotation() {
 		var c3 = bc.getClassMeta(C3.class);
 		var c4 = bc.getClassMeta(C4.class);
