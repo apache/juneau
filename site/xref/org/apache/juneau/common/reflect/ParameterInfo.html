@@ -66,8 +66,8 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> index;
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ClassInfo type;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@SuppressWarnings({<span class="jxr_string">"rawtypes"</span>})
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Cache" href="../../../../../org/apache/juneau/common/collections/Cache.html#Cache">Cache</a> foundAnnotations = Cache.of(Class.<strong class="jxr_keyword">class</strong>, List.<strong class="jxr_keyword">class</strong>).supplier(<strong class="jxr_keyword">this</strong>::findAnnotationInfosInternal).build();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@SuppressWarnings({<span class="jxr_string">"rawtypes"</span>,<span class="jxr_string">"unchecked"</span>})
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Cache&lt;Class,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; foundAnnotations = Cache.&lt;Class,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt;create().supplier((k) -&gt; findAnnotationInfosInternal(k)).build();
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; annotations = memoize(<strong class="jxr_keyword">this</strong>::_findAnnotations);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Supplier&lt;List&lt;ParameterInfo&gt;&gt; matchingParameters = memoize(<strong class="jxr_keyword">this</strong>::_findMatchingParameters);
@@ -223,9 +223,9 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * @param type The annotation type to look for.</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * @return A list of annotation infos found, or an empty list if none found.</em>
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	@SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"rawtypes"</span> })
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; List&lt;AnnotationInfo&lt;A&gt;&gt; findAnnotationInfos(Class&lt;A&gt; type) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">return</strong> (List&lt;AnnotationInfo&lt;A&gt;&gt;)foundAnnotations.get(type);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">return</strong> (List)foundAnnotations.get(type);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<em class="jxr_javadoccomment">/**</em>
