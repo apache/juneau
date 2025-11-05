@@ -74,16 +74,17 @@ public class Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V> 
 	 * @param <V> The value type.
 	 */
 	public static class Builder<K1,K2,K3,K4,V> {
-		boolean disableCaching, logOnExit;
+		boolean disableCaching;
 		int maxSize;
-		Class<V> type;
+		String id;
+		boolean logOnExit;
 		Function4<K1,K2,K3,K4,V> supplier;
 
-		Builder(Class<V> type) {
-			this.type = type;
+		Builder() {
 			disableCaching = env("juneau.cache.disable", false);
 			maxSize = env("juneau.cache.maxSize", 1000);
 			logOnExit = env("juneau.cache.logOnExit", false);
+			id = "Cache4";
 		}
 
 		/**
@@ -119,10 +120,29 @@ public class Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V> 
 		/**
 		 * Enables logging of cache statistics when the JVM exits.
 		 *
+		 * @param id The identifier to use in the log message.
 		 * @return This object for method chaining.
 		 */
-		public Builder<K1,K2,K3,K4,V> logOnExit() {
-			logOnExit = true;
+		public Builder<K1,K2,K3,K4,V> logOnExit(String id) {
+			this.id = id;
+			this.logOnExit = true;
+			return this;
+		}
+
+		/**
+		 * Conditionally enables logging of cache statistics when the JVM exits.
+		 *
+		 * <p>
+		 * When enabled, the cache will register a shutdown hook that logs the cache name,
+		 * total cache hits, and total cache misses (size of cache) to help analyze cache effectiveness.
+		 *
+		 * @param value Whether to enable logging on exit.
+		 * @param id The identifier to use in the log message.
+		 * @return This object for method chaining.
+		 */
+		public Builder<K1,K2,K3,K4,V> logOnExit(boolean value, String id) {
+			this.id = id;
+			this.logOnExit = value;
 			return this;
 		}
 
@@ -150,6 +170,24 @@ public class Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V> 
 	}
 
 	/**
+	 * Creates a new {@link Builder} for constructing a cache with explicit type parameters.
+	 *
+	 * <p>
+	 * This variant allows you to specify the cache's generic types explicitly without passing
+	 * the class objects, which is useful when working with complex parameterized types.
+	 *
+	 * @param <K1> The first key type.
+	 * @param <K2> The second key type.
+	 * @param <K3> The third key type.
+	 * @param <K4> The fourth key type.
+	 * @param <V> The value type.
+	 * @return A new builder for configuring the cache.
+	 */
+	public static <K1,K2,K3,K4,V> Builder<K1,K2,K3,K4,V> create() {
+		return new Builder<>();
+	}
+
+	/**
 	 * Creates a new {@link Builder} for constructing a cache.
 	 *
 	 * @param <K1> The first key type.
@@ -161,11 +199,11 @@ public class Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V> 
 	 * @param key2 The second key type class (used for type safety).
 	 * @param key3 The third key type class (used for type safety).
 	 * @param key4 The fourth key type class (used for type safety).
-	 * @param type The value type class (used for logging and type safety).
+	 * @param type The value type class.
 	 * @return A new builder for configuring the cache.
 	 */
 	public static <K1,K2,K3,K4,V> Builder<K1,K2,K3,K4,V> of(Class<K1> key1, Class<K2> key2, Class<K3> key3, Class<K4> key4, Class<V> type) {
-		return new Builder<>(type);
+		return new Builder<>();
 	}
 
 	private final int maxSize;
@@ -183,7 +221,7 @@ public class Cache4<K1,K2,K3,K4,V> extends ConcurrentHashMap4Key<K1,K2,K3,K4,V> 
 		this.disableCaching = builder.disableCaching;
 		this.supplier = builder.supplier;
 		if (builder.logOnExit) {
-			shutdownMessage(() -> scn(builder.type) + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
+			shutdownMessage(() -> builder.id + ":  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
 

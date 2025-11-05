@@ -33,7 +33,6 @@ import org.apache.juneau.common.collections.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
-@SuppressWarnings("rawtypes")
 public interface AnnotationProvider {
 
 	/**
@@ -44,15 +43,14 @@ public interface AnnotationProvider {
 	/**
 	 * Default metadata provider.
 	 */
-	@SuppressWarnings("unchecked")
 	AnnotationProvider DEFAULT = new AnnotationProvider() {
 
 		// @formatter:off
-		private final Cache2<Class<?>,Class<? extends Annotation>,List<Annotation>> classAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
-		private final Cache2<Class<?>,Class<? extends Annotation>,List<Annotation>> declaredClassAnnotationCache = (Cache2)Cache2.of(Class.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getDeclaredAnnotationsByType(k2)))).build();
-		private final Cache2<Method,Class<? extends Annotation>,List<Annotation>> methodAnnotationCache = (Cache2)Cache2.of(Method.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
-		private final Cache2<Field,Class<? extends Annotation>,List<Annotation>> fieldAnnotationCache = (Cache2)Cache2.of(Field.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
-		private final Cache2<Constructor<?>,Class<? extends Annotation>,List<Annotation>> constructorAnnotationCache = (Cache2)Cache2.of(Constructor.class, Class.class, List.class).disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
+		private final Cache2<Class<?>,Class<? extends Annotation>,List<Annotation>> classAnnotationCache = Cache2.<Class<?>,Class<? extends Annotation>,List<Annotation>>create().disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
+		private final Cache2<Class<?>,Class<? extends Annotation>,List<Annotation>> declaredClassAnnotationCache = Cache2.<Class<?>,Class<? extends Annotation>,List<Annotation>>create().disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getDeclaredAnnotationsByType(k2)))).build();
+		private final Cache2<Method,Class<? extends Annotation>,List<Annotation>> methodAnnotationCache = Cache2.<Method,Class<? extends Annotation>,List<Annotation>>create().disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
+		private final Cache2<Field,Class<? extends Annotation>,List<Annotation>> fieldAnnotationCache = Cache2.<Field,Class<? extends Annotation>,List<Annotation>>create().disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
+		private final Cache2<Constructor<?>,Class<? extends Annotation>,List<Annotation>> constructorAnnotationCache = Cache2.<Constructor<?>,Class<? extends Annotation>,List<Annotation>>create().disableCaching(DISABLE_ANNOTATION_CACHING).supplier((k1, k2) -> u(l(k1.getAnnotationsByType(k2)))).build();
 		// @formatter:on
 
 		@Override /* Overridden from AnnotationProvider */

@@ -60,16 +60,9 @@ public class AnnotationProvider2 {
 	public static final AnnotationProvider2 INSTANCE = new AnnotationProvider2();
 
 	// @formatter:off
-	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classAnnotationsInfo = _buildClassAnnotationsCache();
+	private final Cache<Class<?>,List<AnnotationInfo<Annotation>>> classAnnotationsInfo = Cache.<Class<?>,List<AnnotationInfo<Annotation>>>create().supplier(this::findClassAnnotations).disableCaching(DISABLE_ANNOTATION_CACHING).build();
 	// @formatter:on
 
-	@SuppressWarnings("unchecked")
-	private Cache<Class<?>,List<AnnotationInfo<Annotation>>> _buildClassAnnotationsCache() {
-		var builder = Cache.of(Class.class, List.class).supplier(this::findClassAnnotations);
-		if (DISABLE_ANNOTATION_CACHING)
-			builder.disableCaching();
-		return (Cache<Class<?>,List<AnnotationInfo<Annotation>>>)(Cache<?,?>)builder.build();
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Public API
@@ -133,25 +126,25 @@ public class AnnotationProvider2 {
 	private List<AnnotationInfo<Annotation>> findClassAnnotations(Class<?> forClass) {
 		var ci = ClassInfo.of(forClass);
 		var list = new ArrayList<AnnotationInfo<Annotation>>();
-		
+
 		// On this class
 		findDeclaredAnnotations(list, forClass);
-		
+
 		// On parent classes ordered child-to-parent
 		var parents = ci.getParents();
 		for (int i = 0; i < parents.size(); i++)
 			findDeclaredAnnotations(list, parents.get(i).inner());
-		
+
 		// On interfaces ordered child-to-parent
 		var interfaces = ci.getInterfaces();
 		for (int i = 0; i < interfaces.size(); i++)
 			findDeclaredAnnotations(list, interfaces.get(i).inner());
-		
+
 		// On the package of this class
 		var pkg = ci.getPackage();
 		if (nn(pkg))
 			findDeclaredAnnotations(list, pkg.inner());
-		
+
 		return u(list);
 	}
 

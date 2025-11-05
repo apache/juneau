@@ -100,15 +100,21 @@ import java.util.function.*;
  *
  * <h5 class='section'>Examples:</h5>
  * <p class='bjava'>
- * 	<jc>// Simple cache with defaults</jc>
+ * 	<jc>// Simple cache with defaults using of()</jc>
  * 	Cache&lt;String,Integer&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>).build();
  *
- * 	<jc>// Cache with custom configuration</jc>
+ * 	<jc>// Cache with custom configuration using of()</jc>
  * 	Cache&lt;Class&lt;?&gt;,ClassMeta&gt; <jv>classMetaCache</jv> = Cache
  * 		.<jsm>of</jsm>(Class.<jk>class</jk>, ClassMeta.<jk>class</jk>)
  * 		.maxSize(500)
- * 		.logOnExit()
+ * 		.logOnExit(<js>"ClassMeta"</js>)
  * 		.build();
+ *
+ * 	<jc>// Complex generics using create()</jc>
+ * 	Cache&lt;Class&lt;?&gt;,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; <jv>annotationsCache</jv> =
+ * 		Cache.&lt;Class&lt;?&gt;,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt;<jsm>create</jsm>()
+ * 			.supplier(<jk>this</jk>::findClassAnnotations)
+ * 			.build();
  *
  * 	<jc>// Disabled cache for testing</jc>
  * 	Cache&lt;String,Object&gt; <jv>disabledCache</jv> = Cache
@@ -134,32 +140,41 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Cache&lt;String,Pattern&gt; <jv>cache</jv> = Cache
+	 * 	<jc>// Using of() for simple types</jc>
+	 * 	Cache&lt;String,Pattern&gt; <jv>cache1</jv> = Cache
 	 * 		.<jsm>of</jsm>(String.<jk>class</jk>, Pattern.<jk>class</jk>)
 	 * 		.maxSize(200)
-	 * 		.logOnExit()
+	 * 		.logOnExit(<js>"Pattern"</js>)
 	 * 		.build();
+	 *
+	 * 	<jc>// Using create() for complex generics</jc>
+	 * 	Cache&lt;Class&lt;?&gt;,List&lt;Method&gt;&gt; <jv>cache2</jv> =
+	 * 		Cache.&lt;Class&lt;?&gt;,List&lt;Method&gt;&gt;<jsm>create</jsm>()
+	 * 			.supplier(<jk>this</jk>::findMethods)
+	 * 			.build();
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5>
 	 * <ul>
 	 * 	<li class='jm'>{@link Cache#of(Class, Class)}
+	 * 	<li class='jm'>{@link Cache#create()}
 	 * </ul>
 	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
 	 */
 	public static class Builder<K,V> {
-		boolean disableCaching, logOnExit;
+		boolean disableCaching;
 		int maxSize;
-		Class<V> type;
+		String id;
+		boolean logOnExit;
 		Function<K,V> supplier;
 
-		Builder(Class<V> type) {
-			this.type = type;
+		Builder() {
 			disableCaching = env("juneau.cache.disable", false);
 			maxSize = env("juneau.cache.maxSize", 1000);
 			logOnExit = env("juneau.cache.logOnExit", false);
+			id = "Cache";
 		}
 
 		/**
@@ -194,6 +209,32 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 		}
 
 		/**
+		 * Conditionally disables or enables caching.
+		 *
+		 * <p>
+		 * When disabled, the {@link Cache#get(Object)} and {@link Cache#get(Object, Supplier)} methods
+		 * will always invoke the supplier and never store or retrieve values from the cache.
+		 *
+		 * <p>
+		 * This is typically used when the disable flag comes from an external configuration or system property.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	Cache&lt;String,Object&gt; <jv>cache</jv> = Cache.<jsm>of</jsm>(String.<jk>class</jk>, Object.<jk>class</jk>)
+		 * 		.disableCaching(Boolean.<jsm>getBoolean</jsm>(<js>"myapp.disableCache"</js>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value If <jk>true</jk>, caching is disabled. If <jk>false</jk>, caching is enabled (default).
+		 * @return This object for method chaining.
+		 * @see #disableCaching()
+		 */
+		public Builder<K,V> disableCaching(boolean value) {
+			disableCaching = value;
+			return this;
+		}
+
+		/**
 		 * Enables logging of cache statistics when the JVM exits.
 		 *
 		 * <p>
@@ -214,10 +255,29 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 		 * 	<li>Monitoring cache efficiency in production
 		 * </ul>
 		 *
+		 * @param id The identifier to use in the log message.
 		 * @return This object for method chaining.
 		 */
-		public Builder<K,V> logOnExit() {
-			logOnExit = true;
+		public Builder<K,V> logOnExit(String id) {
+			this.id = id;
+			this.logOnExit = true;
+			return this;
+		}
+
+		/**
+		 * Conditionally enables logging of cache statistics when the JVM exits.
+		 *
+		 * <p>
+		 * When enabled, the cache will register a shutdown hook that logs the cache name,
+		 * total cache hits, and total cache misses (size of cache) to help analyze cache effectiveness.
+		 *
+		 * @param value Whether to enable logging on exit.
+		 * @param id The identifier to use in the log message.
+		 * @return This object for method chaining.
+		 */
+		public Builder<K,V> logOnExit(boolean value, String id) {
+			this.id = id;
+			this.logOnExit = value;
 			return this;
 		}
 
@@ -274,6 +334,30 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	}
 
 	/**
+	 * Creates a new {@link Builder} for constructing a cache with explicit type parameters.
+	 *
+	 * <p>
+	 * This variant allows you to specify the cache's generic types explicitly without passing
+	 * the class objects, which is useful when working with complex parameterized types.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Working with complex generic types</jc>
+	 * 	Cache&lt;Class&lt;?&gt;,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt; <jv>cache</jv> =
+	 * 		Cache.&lt;Class&lt;?&gt;,List&lt;AnnotationInfo&lt;Annotation&gt;&gt;&gt;<jsm>create</jsm>()
+	 * 			.supplier(<jv>key</jv> -&gt; findAnnotations(<jv>key</jv>))
+	 * 			.build();
+	 * </p>
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @return A new builder for configuring the cache.
+	 */
+	public static <K,V> Builder<K,V> create() {
+		return new Builder<>();
+	}
+
+	/**
 	 * Creates a new {@link Builder} for constructing a cache.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -287,11 +371,11 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 	 * @param <K> The key type.
 	 * @param <V> The value type.
 	 * @param key The key type class (used for type safety).
-	 * @param type The value type class (used for logging and type safety).
+	 * @param type The value type class.
 	 * @return A new builder for configuring the cache.
 	 */
 	public static <K,V> Builder<K,V> of(Class<K> key, Class<V> type) {
-		return new Builder<>(type);
+		return new Builder<>();
 	}
 
 	private final int maxSize;
@@ -309,7 +393,7 @@ public class Cache<K,V> extends ConcurrentHashMap<K,V> {
 		this.disableCaching = builder.disableCaching;
 		this.supplier = builder.supplier != null ? builder.supplier : (K)->null;
 		if (builder.logOnExit) {
-			shutdownMessage(() -> scn(builder.type) + " cache:  hits=" + cacheHits.get() + ", misses: " + size());
+			shutdownMessage(() -> builder.id + ":  hits=" + cacheHits.get() + ", misses: " + size());
 		}
 	}
 

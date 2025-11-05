@@ -263,7 +263,7 @@ public class MimeTypeDetector {
 			cacheBuilder.disableCaching();
 		}
 		if (builder.cacheLogOnExit) {
-			cacheBuilder.logOnExit();
+			cacheBuilder.logOnExit("MimeTypeDetector");
 		}
 
 		this.cache = cacheBuilder.build();

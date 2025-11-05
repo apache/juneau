@@ -58,8 +58,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	private final int index;
 	private final ClassInfo type;
 
-	@SuppressWarnings({"rawtypes"})
-	private final Cache foundAnnotations = Cache.of(Class.class, List.class).supplier(this::findAnnotationInfosInternal).build();
+	@SuppressWarnings({"rawtypes","unchecked"})
+	private final Cache<Class,List<AnnotationInfo<Annotation>>> foundAnnotations = Cache.<Class,List<AnnotationInfo<Annotation>>>create().supplier((k) -> findAnnotationInfosInternal(k)).build();
 
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotations = memoize(this::_findAnnotations);
 	private final Supplier<List<ParameterInfo>> matchingParameters = memoize(this::_findMatchingParameters);
@@ -215,9 +215,9 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @param type The annotation type to look for.
 	 * @return A list of annotation infos found, or an empty list if none found.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <A extends Annotation> List<AnnotationInfo<A>> findAnnotationInfos(Class<A> type) {
-		return (List<AnnotationInfo<A>>)foundAnnotations.get(type);
+		return (List)foundAnnotations.get(type);
 	}
 
 	/**
