@@ -315,26 +315,16 @@
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		assertList(l4, <span class="jxr_string">"5"</span>);
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	@Test <strong class="jxr_keyword">void</strong> firstAnnotation() {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	@Test <strong class="jxr_keyword">void</strong> lastAnnotation() {
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">var</strong> c3 = bc.getClassMeta(C3.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> c4 = bc.getClassMeta(C4.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">var</strong> c5 = bc.getClassMeta(C5.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		assertEquals(2, c3.firstAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>).get().value());
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertEquals(2, c4.firstAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>).get().value());
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertEquals(3, c5.firstAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>).get().value());
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertEquals(5, c3.firstAnnotation(A.<strong class="jxr_keyword">class</strong>, x -&gt; x.value() == 5).get().value());
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		assertEquals(7, c3.lastAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>).get().value());
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertEquals(7, c4.lastAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>).get().value());
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertEquals(3, c5.lastAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>).get().value());
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertEquals(5, c3.lastAnnotation(A.<strong class="jxr_keyword">class</strong>, x -&gt; x.value() == 5).get().value());
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	@Test <strong class="jxr_keyword">void</strong> lastAnnotation() {
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">var</strong> c3 = bc.getClassMeta(C3.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">var</strong> c4 = bc.getClassMeta(C4.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> c5 = bc.getClassMeta(C5.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		assertEquals(7, c3.lastAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>).get().value());
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		assertEquals(7, c4.lastAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>).get().value());
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		assertEquals(3, c5.lastAnnotation(A.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>).get().value());
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		assertEquals(5, c3.lastAnnotation(A.<strong class="jxr_keyword">class</strong>, x -&gt; x.value() == 5).get().value());
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	}
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> }
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

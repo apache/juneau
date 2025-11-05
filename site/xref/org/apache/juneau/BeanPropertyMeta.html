@@ -643,9 +643,9 @@
 <a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; BeanPropertyMeta forEachAnnotation(Class&lt;A&gt; a, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 		BeanContext bc = beanContext;
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">if</strong> (nn(a)) {
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			bc.forEachAnnotation(a, field, filter, action);
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			bc.forEachAnnotation(a, getter, filter, action);
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			bc.forEachAnnotation(a, setter, filter, action);
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			<strong class="jxr_keyword">if</strong> (nn(field)) bc.forEachAnnotation(a, field, filter, action);
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			<strong class="jxr_keyword">if</strong> (nn(getter)) bc.forEachAnnotation(a, getter, filter, action);
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">if</strong> (nn(setter)) bc.forEachAnnotation(a, setter, filter, action);
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 		}
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 	}
