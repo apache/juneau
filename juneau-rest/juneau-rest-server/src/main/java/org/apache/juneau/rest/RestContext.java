@@ -42,6 +42,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
+import java.util.stream.*;
 
 import org.apache.http.Header;
 import org.apache.juneau.*;
@@ -4580,7 +4581,7 @@ public class RestContext extends Context {
 			// @formatter:on
 
 			for (var mi : rci.getPublicMethods()) {
-				AnnotationList al = mi.getAnnotationList(REST_OP_GROUP);
+				AnnotationList al = rstream(mi.getAllAnnotationInfos()).filter(REST_OP_GROUP).collect(Collectors.toCollection(AnnotationList::new));
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.isEmpty()) {
