@@ -18,7 +18,9 @@ package org.apache.juneau.common.utils;
 
 import static org.apache.juneau.common.utils.Utils.*;
 
+import java.lang.annotation.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.common.reflect.*;
 
@@ -240,5 +242,30 @@ public final class PredicateUtils {
 	 */
 	public static Predicate<ElementInfo> isAny(ElementFlag...flags) {
 		return ei -> ei.isAny(flags);
+	}
+
+	/**
+	 * Returns a function that filters and casts {@link AnnotationInfo} objects to a specific annotation type.
+	 *
+	 * <p>
+	 * This function is designed to be used with {@link Stream#flatMap(Function)} to both filter and type-cast
+	 * in a single operation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; annotations = ...;
+	 * 	List&lt;MyAnnotation&gt; myAnnotations = annotations.stream()
+	 * 		.flatMap(type(MyAnnotation.<jk>class</jk>))
+	 * 		.map(AnnotationInfo::inner)
+	 * 		.collect(Collectors.toList());
+	 * </p>
+	 *
+	 * @param <A> The annotation type.
+	 * @param annotationType The annotation class to filter and cast to.
+	 * @return A function that returns a stream containing the annotation if it matches the type, or an empty stream otherwise.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <A extends Annotation> Function<AnnotationInfo<?>, Stream<AnnotationInfo<A>>> type(Class<A> annotationType) {
+		return ai -> ai.isType(annotationType) ? Stream.of((AnnotationInfo<A>)ai) : Stream.empty();
 	}
 }

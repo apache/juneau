@@ -64,8 +64,8 @@ public class RequestBeanPropertyMeta {
 
 	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, MethodInfo m) {
 		HttpPartSchema.Builder sb = HttpPartSchema.create().name(m.getPropertyName());
-		m.forEachAnnotation(Schema.class, x -> true, x -> sb.apply(x));
-		m.forEachAnnotation(c, x -> true, x -> sb.apply(x));
+		m.getAllAnnotationInfosParentFirst(Schema.class).map(AnnotationInfo::inner).forEach(x -> sb.apply(x));
+		m.getAllAnnotationInfosParentFirst(c).map(AnnotationInfo::inner).forEach(x -> sb.apply(x));
 		return new Builder().partType(partType).schema(sb.build()).getter(m.inner());
 	}
 

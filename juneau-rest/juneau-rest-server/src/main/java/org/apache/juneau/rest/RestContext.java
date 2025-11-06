@@ -204,7 +204,9 @@ public class RestContext extends Context {
 			// @formatter:off
 			ClassInfo.ofProxy(r).getAllMethodsParentFirst().stream()
 				.filter(y -> y.hasAnnotation(annotation))
-				.forEach(y -> y.forEachAnnotation(annotation, predicate, z -> x.put(y.getSignature(), y.accessible().inner())));
+				.forEach(y -> y.getAllAnnotationInfosParentFirst(annotation).map(AnnotationInfo::inner)
+					.filter(z -> predicate == null || predicate.test(z))
+					.forEach(z -> x.put(y.getSignature(), y.accessible().inner())));
 			// @formatter:on
 
 			var x2 = MethodList.of(x.values());
@@ -212,12 +214,12 @@ public class RestContext extends Context {
 		}
 
 		private static boolean isRestBeanMethod(MethodInfo mi) {
-			var x = mi.getAnnotation(RestInject.class);
+			var x = mi.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 			return nn(x) && x.methodScope().length == 0;
 		}
 
 		private static boolean isRestBeanMethod(MethodInfo mi, String name) {
-			var x = mi.getAnnotation(RestInject.class);
+			var x = mi.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 			return nn(x) && x.methodScope().length == 0 && x.name().equals(name);
 		}
 
@@ -1770,7 +1772,7 @@ public class RestContext extends Context {
 
 			rci.getMethods().stream().filter(x -> x.hasAnnotation(RestInject.class)).forEach(x -> {
 				var rt = x.getReturnType().<Object>inner();
-				var name = RestInjectAnnotation.name(x.getAnnotation(RestInject.class));
+				var name = RestInjectAnnotation.name(x.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null));
 				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
 					// @formatter:off
 					beanStore

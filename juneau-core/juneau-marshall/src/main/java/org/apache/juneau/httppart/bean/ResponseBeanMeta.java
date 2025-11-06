@@ -86,7 +86,7 @@ public class ResponseBeanMeta {
 				if (x.hasAnnotation(Header.class)) {
 					assertNoArgs(x, Header.class);
 					assertReturnNotVoid(x, Header.class);
-					var s = HttpPartSchema.create(x.getAnnotation(Header.class), x.getPropertyName());
+					var s = HttpPartSchema.create(x.getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null), x.getPropertyName());
 					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, x));
 				} else if (x.hasAnnotation(StatusCode.class)) {
 					assertNoArgs(x, Header.class);
@@ -125,8 +125,8 @@ public class ResponseBeanMeta {
 			return null;
 		var b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
-		m.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
-		m.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
+		m.getAllAnnotationInfosParentFirst(Response.class).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
+		m.getAllAnnotationInfosParentFirst(StatusCode.class).map(AnnotationInfo::inner).forEach(x -> b.apply(x));
 		return b.build();
 	}
 

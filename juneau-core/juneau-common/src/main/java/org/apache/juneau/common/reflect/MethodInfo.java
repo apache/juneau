@@ -429,27 +429,9 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
 	}
 
-	/**
-	 * Performs an action on all matching annotations defined on this method.
-	 *
-	 * <p>
-	 * Searches all methods with the same signature on the parent classes or interfaces
-	 * and the return type on the method.
-	 * <br>Results are parent-to-child ordered.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public <A extends Annotation> void forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		rstream(getAllAnnotationInfos())
-			.filter(x -> x.isType(type))
-			.map(AnnotationInfo::inner)
-			.map(x -> (A)x)
-			.filter(x -> filter == null || filter.test(x))
-			.forEach(action);
+	public <A extends Annotation> Stream<AnnotationInfo<A>> getAllAnnotationInfosParentFirst(Class<A> type) {
+		return rstream(getAllAnnotationInfos())
+			.flatMap(type(type));
 	}
 
 	public Stream<MethodInfo> getMatching() {
@@ -478,22 +460,6 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			.filter(Objects::nonNull)
 			.findFirst()
 			.orElse(null);
-	}
-
-	/**
-	 * Finds the annotation of the specified type defined on this method.
-	 *
-	 * <p>
-	 * If this is a method and the annotation cannot be found on the immediate method, searches methods with the same
-	 * signature on the parent classes or interfaces.
-	 * <br>The search is performed in child-to-parent order.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return The annotation if found, or <jk>null</jk> if not.
-	 */
-	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
@@ -544,7 +510,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	@SafeVarargs
 	public final Annotation getAnyAnnotation(Class<? extends Annotation>...types) {
 		return Arrays.stream(types)
-			.map(this::getAnnotation)
+			.map(t -> getAnnotationInfos(t).findFirst().map(AnnotationInfo::inner).orElse(null))
 			.filter(Objects::nonNull)
 			.findFirst()
 			.orElse(null);

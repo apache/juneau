@@ -354,16 +354,9 @@ class MethodInfo_Test extends TestBase {
 
 	private static List<A> annotations(MethodInfo mi, Class<? extends Annotation> a) {
 		var l = new ArrayList<A>();
-		mi.forEachAnnotation(a, x -> true, x -> l.add((A)x));
+		mi.getAllAnnotationInfosParentFirst(a).map(AnnotationInfo::inner)
+			.forEach(x -> l.add((A)x));
 		return l;
-	}
-
-	@Test void getAnnotation() {
-		check("@A(a1)", c_a1.getAnnotation(A.class));
-		check("@A(a2b)", c_a2.getAnnotation(A.class));
-		check("@A(a3)", c_a3.getAnnotation(A.class));
-		check("@A(a4)", c_a4.getAnnotation(A.class));
-		check(null, c_a5.getAnnotation(A.class));
 	}
 
 	@Test void getAnnotationAny() {

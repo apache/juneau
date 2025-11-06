@@ -447,7 +447,7 @@ public class BasicSwaggerProviderSession {
 					List<MethodInfo> methods = eci.getMethods();
 					for (int i = methods.size() - 1; i >= 0; i--) {
 						MethodInfo ecmi = methods.get(i);
-						Header a = ecmi.getAnnotation(Header.class);
+						Header a = ecmi.getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 						if (a == null)
 							a = ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotation(Header.class);
 						if (nn(a) && ! isMulti(a)) {
@@ -485,7 +485,7 @@ public class BasicSwaggerProviderSession {
 					for (int i = methods.size() - 1; i >= 0; i--) {
 						MethodInfo ecmi = methods.get(i);
 						if (ecmi.hasAnnotation(Header.class)) {
-							Header a = ecmi.getAnnotation(Header.class);
+							Header a = ecmi.getAnnotationInfos(Header.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 							String ha = a.name();
 							if (! isMulti(a)) {
 								for (var code : codes) {

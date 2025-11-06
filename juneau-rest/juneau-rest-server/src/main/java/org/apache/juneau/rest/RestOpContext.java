@@ -1307,18 +1307,18 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 	private boolean matches(MethodInfo annotated) {
-		var a = annotated.getAnnotation(RestInject.class);
+		var a = annotated.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (nn(a)) {
 			for (var n : a.methodScope()) {
-					if ("*".equals(n) || restMethod.getName().equals(n))
-						return true;
-				}
+				if ("*".equals(n) || restMethod.getName().equals(n))
+					return true;
 			}
-			return false;
 		}
+		return false;
+	}
 
 	private boolean matches(MethodInfo annotated, String beanName) {
-		var a = annotated.getAnnotation(RestInject.class);
+		var a = annotated.getAnnotationInfos(RestInject.class).findFirst().map(AnnotationInfo::inner).orElse(null);
 		if (nn(a)) {
 			if (! a.name().equals(beanName))
 				return false;
@@ -1948,7 +1948,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				httpMethod = "delete";
 			else if (mi.hasAnnotation(RestOp.class)) {
 				var _httpMethod = Value.<String>empty();
-				mi.forEachAnnotation(RestOp.class, x -> isNotEmpty(x.method()), x -> _httpMethod.set(x.method()));
+				mi.getAllAnnotationInfosParentFirst(RestOp.class).map(AnnotationInfo::inner)
+					.filter(x -> isNotEmpty(x.method()))
+					.forEach(x -> _httpMethod.set(x.method()));
 				httpMethod = _httpMethod.orElse(null);
 			}
 
