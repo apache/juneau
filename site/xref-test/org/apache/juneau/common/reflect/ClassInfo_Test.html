@@ -1857,19 +1857,70 @@
 <a class="jxr_linenumber" name="L1849" href="#L1849">1849</a> 	}
 <a class="jxr_linenumber" name="L1850" href="#L1850">1850</a> 
 <a class="jxr_linenumber" name="L1851" href="#L1851">1851</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 	<em class="jxr_comment">// Other</em>
+<a class="jxr_linenumber" name="L1852" href="#L1852">1852</a> 	<em class="jxr_comment">// getParentsAndInterfaces tests</em>
 <a class="jxr_linenumber" name="L1853" href="#L1853">1853</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L1854" href="#L1854">1854</a> 
-<a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> 	@Test <strong class="jxr_keyword">void</strong> xToString() {
-<a class="jxr_linenumber" name="L1856" href="#L1856">1856</a> 		assertEquals(<span class="jxr_string">"class org.apache.juneau.common.reflect.AClass"</span>, aClass.toString());
-<a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> 		assertEquals(<span class="jxr_string">"interface org.apache.juneau.common.reflect.AInterface"</span>, aInterface.toString());
-<a class="jxr_linenumber" name="L1858" href="#L1858">1858</a> 		assertEquals(<span class="jxr_string">"class org.apache.juneau.common.reflect.ClassInfo_Test$A1"</span>, aType.toString());
-<a class="jxr_linenumber" name="L1859" href="#L1859">1859</a> 		assertEquals(<span class="jxr_string">"java.util.Map&lt;java.lang.String, java.util.List&lt;java.lang.String&gt;&gt;"</span>, pType.toString());
-<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> 		assertEquals(<span class="jxr_string">"java.util.Map&lt;java.lang.String, java.lang.String[][]&gt;"</span>, pTypeDimensional.toString());
-<a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> 		assertEquals(<span class="jxr_string">"java.util.AbstractMap&lt;K, V&gt;"</span>, pTypeGeneric.toString());
-<a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> 		assertEquals(<span class="jxr_string">"V"</span>, pTypeGenericArg.toString());
-<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> 	}
-<a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> }
+<a class="jxr_linenumber" name="L1855" href="#L1855">1855</a> 	<em class="jxr_comment">// Test hierarchy that mimics RootResources structure:</em>
+<a class="jxr_linenumber" name="L1856" href="#L1856">1856</a> 	<em class="jxr_comment">// - Child extends Parent implements IChild</em>
+<a class="jxr_linenumber" name="L1857" href="#L1857">1857</a> 	<em class="jxr_comment">// - Parent extends GrandParent implements IParent</em>
+<a class="jxr_linenumber" name="L1858" href="#L1858">1858</a> 	<em class="jxr_comment">// - GrandParent implements IGrandParent</em>
+<a class="jxr_linenumber" name="L1859" href="#L1859">1859</a> 	<em class="jxr_comment">// - IParent extends ISuperParent</em>
+<a class="jxr_linenumber" name="L1860" href="#L1860">1860</a> 	<em class="jxr_comment">// - IGrandParent extends ISuperGrandParent</em>
+<a class="jxr_linenumber" name="L1861" href="#L1861">1861</a> 
+<a class="jxr_linenumber" name="L1862" href="#L1862">1862</a> 	<strong class="jxr_keyword">interface</strong> ISuperGrandParent {}
+<a class="jxr_linenumber" name="L1863" href="#L1863">1863</a> 	<strong class="jxr_keyword">interface</strong> IGrandParent <strong class="jxr_keyword">extends</strong> ISuperGrandParent {}
+<a class="jxr_linenumber" name="L1864" href="#L1864">1864</a> 	<strong class="jxr_keyword">interface</strong> ISuperParent {}
+<a class="jxr_linenumber" name="L1865" href="#L1865">1865</a> 	<strong class="jxr_keyword">interface</strong> IParent <strong class="jxr_keyword">extends</strong> ISuperParent {}
+<a class="jxr_linenumber" name="L1866" href="#L1866">1866</a> 	<strong class="jxr_keyword">interface</strong> IChild {}
+<a class="jxr_linenumber" name="L1867" href="#L1867">1867</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> GrandParent <strong class="jxr_keyword">implements</strong> IGrandParent {}
+<a class="jxr_linenumber" name="L1868" href="#L1868">1868</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Parent <strong class="jxr_keyword">extends</strong> GrandParent <strong class="jxr_keyword">implements</strong> IParent {}
+<a class="jxr_linenumber" name="L1869" href="#L1869">1869</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Child <strong class="jxr_keyword">extends</strong> Parent <strong class="jxr_keyword">implements</strong> IChild {}
+<a class="jxr_linenumber" name="L1870" href="#L1870">1870</a> 
+<a class="jxr_linenumber" name="L1871" href="#L1871">1871</a> 	@Test
+<a class="jxr_linenumber" name="L1872" href="#L1872">1872</a> 	<strong class="jxr_keyword">void</strong> getParentsAndInterfaces_includesAllInterfaces() {
+<a class="jxr_linenumber" name="L1873" href="#L1873">1873</a> 		<strong class="jxr_keyword">var</strong> ci = ClassInfo.of(Child.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1874" href="#L1874">1874</a> 		<strong class="jxr_keyword">var</strong> parentsAndInterfaces = ci.getParentsAndInterfaces();
+<a class="jxr_linenumber" name="L1875" href="#L1875">1875</a> 		
+<a class="jxr_linenumber" name="L1876" href="#L1876">1876</a> 		<em class="jxr_comment">// Should include:</em>
+<a class="jxr_linenumber" name="L1877" href="#L1877">1877</a> 		<em class="jxr_comment">// 1. Child itself</em>
+<a class="jxr_linenumber" name="L1878" href="#L1878">1878</a> 		<em class="jxr_comment">// 2. IChild (direct interface on Child)</em>
+<a class="jxr_linenumber" name="L1879" href="#L1879">1879</a> 		<em class="jxr_comment">// 3. Parent (direct parent)</em>
+<a class="jxr_linenumber" name="L1880" href="#L1880">1880</a> 		<em class="jxr_comment">// 4. IParent (direct interface on Parent)</em>
+<a class="jxr_linenumber" name="L1881" href="#L1881">1881</a> 		<em class="jxr_comment">// 5. ISuperParent (parent interface of IParent)</em>
+<a class="jxr_linenumber" name="L1882" href="#L1882">1882</a> 		<em class="jxr_comment">// 6. GrandParent (parent's parent)</em>
+<a class="jxr_linenumber" name="L1883" href="#L1883">1883</a> 		<em class="jxr_comment">// 7. IGrandParent (direct interface on GrandParent)</em>
+<a class="jxr_linenumber" name="L1884" href="#L1884">1884</a> 		<em class="jxr_comment">// 8. ISuperGrandParent (parent interface of IGrandParent)</em>
+<a class="jxr_linenumber" name="L1885" href="#L1885">1885</a> 		
+<a class="jxr_linenumber" name="L1886" href="#L1886">1886</a> 		<strong class="jxr_keyword">var</strong> names = parentsAndInterfaces.stream()
+<a class="jxr_linenumber" name="L1887" href="#L1887">1887</a> 			.map(ClassInfo::getNameSimple)
+<a class="jxr_linenumber" name="L1888" href="#L1888">1888</a> 			.collect(Collectors.toList());
+<a class="jxr_linenumber" name="L1889" href="#L1889">1889</a> 		
+<a class="jxr_linenumber" name="L1890" href="#L1890">1890</a> 		<em class="jxr_comment">// Verify all expected classes/interfaces are present</em>
+<a class="jxr_linenumber" name="L1891" href="#L1891">1891</a> 		assertTrue(names.contains(<span class="jxr_string">"Child"</span>), <span class="jxr_string">"Should include Child itself"</span>);
+<a class="jxr_linenumber" name="L1892" href="#L1892">1892</a> 		assertTrue(names.contains(<span class="jxr_string">"Parent"</span>), <span class="jxr_string">"Should include Parent"</span>);
+<a class="jxr_linenumber" name="L1893" href="#L1893">1893</a> 		assertTrue(names.contains(<span class="jxr_string">"GrandParent"</span>), <span class="jxr_string">"Should include GrandParent"</span>);
+<a class="jxr_linenumber" name="L1894" href="#L1894">1894</a> 		
+<a class="jxr_linenumber" name="L1895" href="#L1895">1895</a> 		assertTrue(names.contains(<span class="jxr_string">"IChild"</span>), <span class="jxr_string">"Should include IChild"</span>);
+<a class="jxr_linenumber" name="L1896" href="#L1896">1896</a> 		assertTrue(names.contains(<span class="jxr_string">"IParent"</span>), <span class="jxr_string">"Should include IParent from Parent"</span>);
+<a class="jxr_linenumber" name="L1897" href="#L1897">1897</a> 		assertTrue(names.contains(<span class="jxr_string">"ISuperParent"</span>), <span class="jxr_string">"Should include ISuperParent from IParent hierarchy"</span>);
+<a class="jxr_linenumber" name="L1898" href="#L1898">1898</a> 		assertTrue(names.contains(<span class="jxr_string">"IGrandParent"</span>), <span class="jxr_string">"Should include IGrandParent from GrandParent"</span>);
+<a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 		assertTrue(names.contains(<span class="jxr_string">"ISuperGrandParent"</span>), <span class="jxr_string">"Should include ISuperGrandParent from IGrandParent hierarchy"</span>);
+<a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> 	}
+<a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> 
+<a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> 	<em class="jxr_comment">// Other</em>
+<a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> 
+<a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> 	@Test <strong class="jxr_keyword">void</strong> xToString() {
+<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 		assertEquals(<span class="jxr_string">"class org.apache.juneau.common.reflect.AClass"</span>, aClass.toString());
+<a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 		assertEquals(<span class="jxr_string">"interface org.apache.juneau.common.reflect.AInterface"</span>, aInterface.toString());
+<a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> 		assertEquals(<span class="jxr_string">"class org.apache.juneau.common.reflect.ClassInfo_Test$A1"</span>, aType.toString());
+<a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> 		assertEquals(<span class="jxr_string">"java.util.Map&lt;java.lang.String, java.util.List&lt;java.lang.String&gt;&gt;"</span>, pType.toString());
+<a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> 		assertEquals(<span class="jxr_string">"java.util.Map&lt;java.lang.String, java.lang.String[][]&gt;"</span>, pTypeDimensional.toString());
+<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> 		assertEquals(<span class="jxr_string">"java.util.AbstractMap&lt;K, V&gt;"</span>, pTypeGeneric.toString());
+<a class="jxr_linenumber" name="L1913" href="#L1913">1913</a> 		assertEquals(<span class="jxr_string">"V"</span>, pTypeGenericArg.toString());
+<a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> 	}
+<a class="jxr_linenumber" name="L1915" href="#L1915">1915</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
