@@ -18,12 +18,14 @@ package org.apache.juneau.rest.servlet;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.logging.Level.*;
+import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
 import java.io.*;
 import java.text.*;
+import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
@@ -113,7 +115,7 @@ public abstract class RestServlet extends HttpServlet {
 			return context.getFullPath();
 		var ci = ClassInfo.of(getClass());
 		Value<String> path = Value.empty();
-		ci.forEachAnnotation(Rest.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
+		rstream(ci.getAnnotationInfos()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).filter(x -> isNotEmpty(x.path())).forEach(x -> path.set(trimSlashes(x.path())));
 		return path.orElse("");
 	}
 

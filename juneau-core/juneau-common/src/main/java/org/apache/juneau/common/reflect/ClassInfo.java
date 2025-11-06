@@ -437,19 +437,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Performs an action on all matching annotations on this class and superclasses/interfaces.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the entry.
-	 * @return This object.
-	 */
-	public <A extends Annotation> ClassInfo forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		return forEachAnnotation(null, type, filter, action);
-	}
-
-	/**
 	 * Returns all fields on this class and all parent classes.
 	 *
 	 * <p>

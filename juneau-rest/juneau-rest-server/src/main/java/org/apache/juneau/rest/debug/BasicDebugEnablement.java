@@ -20,6 +20,7 @@ import static org.apache.juneau.common.utils.CollectionUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
+import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
@@ -74,15 +75,11 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @Rest(debug) settings.
 		// @formatter:off
-		ci.forEachAnnotation(
-			Rest.class,
-			x -> true,
-			x -> {
-				String x2 = varResolver.resolve(x.debug());
-				if (! x2.isEmpty())
-					b.enable(Enablement.fromString(x2), ci.getNameFull());
-			}
-		);
+		rstream(ci.getAnnotationInfos()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> {
+			String x2 = varResolver.resolve(x.debug());
+			if (! x2.isEmpty())
+				b.enable(Enablement.fromString(x2), ci.getNameFull());
+		});
 		// @formatter:on
 
 		// Gather @RestOp(debug) settings.
@@ -105,21 +102,17 @@ public class BasicDebugEnablement extends DebugEnablement {
 
 		// Gather @Rest(debugOn) settings.
 		// @formatter:off
-		ci.forEachAnnotation(
-			Rest.class,
-			x -> true,
-			x -> {
+		rstream(ci.getAnnotationInfos()).map(x -> x.cast(Rest.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> {
 			String x2 = varResolver.resolve(x.debugOn());
 			for (var e : splitMap(x2, true).entrySet()) {
 				var k = e.getKey();
 				var v = e.getValue();
 				if (v.isEmpty())
 					v = "ALWAYS";
-					if (! k.isEmpty())
-						b.enable(Enablement.fromString(v), k);
-				}
+				if (! k.isEmpty())
+					b.enable(Enablement.fromString(v), k);
 			}
-		);
+		});
 		// @formatter:on
 
 		return b;

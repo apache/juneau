@@ -456,7 +456,7 @@ public class BasicSwaggerProviderSession {
 							for (var code : codes) {
 								JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
 								ecmi.forEachAnnotation(context, Schema.class, x -> true, x -> merge(header, x));
-								ecmi.getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(Schema.class, x -> true, x -> merge(header, x));
+								rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Value.class, Optional.class).innerType(), bs));
 							}
 						}
@@ -492,7 +492,7 @@ public class BasicSwaggerProviderSession {
 								for (var code : codes) {
 									JsonMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
 									ecmi.forEachAnnotation(context, Schema.class, x -> true, x -> merge(header, x));
-									ecmi.getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(Schema.class, x -> true, x -> merge(header, x));
+									rstream(ecmi.getReturnType().unwrap(Value.class, Optional.class).getAnnotationInfos()).map(x -> x.cast(Schema.class)).filter(Objects::nonNull).map(AnnotationInfo::inner).forEach(x -> merge(header, x));
 									merge(header, a.schema());
 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 								}
