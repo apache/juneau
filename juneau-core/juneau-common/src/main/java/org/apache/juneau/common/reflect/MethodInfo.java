@@ -190,7 +190,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
-	 * Returns all annotations on the declaring class, this method and parent overridden methods, and return type in child-to-parent order.
+	 * Returns all annotations on the declaring class, this method and parent overridden methods, return type, and package in child-to-parent order.
 	 *
 	 * <p>
 	 * 	Annotations are ordered as follows:
@@ -201,6 +201,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 * 	<li>Return type on parent methods (child-to-parent order)
 	 * 	<li>Current class
 	 * 	<li>Parent classes/interfaces (child-to-parent order)
+	 * 	<li>Package annotations on the declaring class's package
 	 * </ol>
 	 *
 	 * <p>
@@ -213,7 +214,10 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	}
 
 	/**
-	 * Returns all annotations of the specified type on the declaring class, this method and parent overridden methods, and return type.
+	 * Returns all annotations of the specified type on the declaring class, this method and parent overridden methods, return type, and declaring class's package.
+	 *
+	 * <p>
+	 * 	See {@link #getAllAnnotationInfos()} for ordering details.
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to filter by.
@@ -293,6 +297,11 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 		// 6. Parent classes/interfaces in child-to-parent order
 		declaringClass.getParentsAndInterfaces().stream().skip(1).forEach(c -> c.getDeclaredAnnotationInfos().forEach(x -> list.add((AnnotationInfo<Annotation>)x)));
+
+		// 7. Package annotations
+		var pkg = declaringClass.getPackage();
+		if (nn(pkg))
+			pkg.getAnnotations().forEach(x -> list.add((AnnotationInfo<Annotation>)x));
 
 		return u(list);
 	}
@@ -429,6 +438,16 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		getReturnType().unwrap(Value.class, Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
 	}
 
+	/**
+	 * Returns a stream of annotations of the specified type in parent-to-child order.
+	 *
+	 * <p>
+	 * 	This is the same as {@link #getAllAnnotationInfos(Class)} but returns results in reversed (parent-to-child) order.
+	 *
+	 * @param <A> The annotation type.
+	 * @param type The annotation type to filter by.
+	 * @return A stream of matching annotation infos in parent-to-child order.
+	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAllAnnotationInfosParentFirst(Class<A> type) {
 		return rstream(getAllAnnotationInfos())
 			.flatMap(type(type));
