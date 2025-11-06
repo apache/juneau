@@ -516,33 +516,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation type to look for.
-	 * @return The matching annotations.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> type) {
-		return getAnnotations(null, type);
-	}
-
-	/**
-	 * Returns the first matching parent class or interface.
-	 *
-	 * <p>
-	 * Results are classes-before-interfaces, then child-to-parent order.
-	 *
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
-	 * @return The parent class or interface that matches the specified predicate.
-	 */
-	public ClassInfo getAnyParent(Predicate<ClassInfo> filter) {
-		for (var ci : allParents.get())
-			if (test(filter, ci))
-				return ci;
-		return null;
-	}
-
-	/**
 	 * Returns the {@link ClassLoader} for this class.
 	 *
 	 * <p>

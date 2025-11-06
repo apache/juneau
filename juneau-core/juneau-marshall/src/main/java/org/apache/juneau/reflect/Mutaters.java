@@ -205,7 +205,7 @@ public class Mutaters {
 		var ici = ClassInfo.of(ic);
 		var oci = ClassInfo.of(oc);
 
-		ClassInfo pic = ici.getAnyParent(x -> nn(m.get(x.inner())));
+		ClassInfo pic = ici.getAllParents().stream().filter(x -> nn(m.get(x.inner()))).findFirst().orElse(null);
 		if (nn(pic))
 			return m.get(pic.inner());
 

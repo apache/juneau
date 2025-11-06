@@ -572,9 +572,9 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	@Test void getAnnotations() {
-		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotations(A.class));
-		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g4.getAnnotations(A.class));
-		check("@A(3)", g5.getAnnotations(A.class));
+		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g3.getAnnotationInfos(A.class).toList()).map(AnnotationInfo::inner).toList());
+		check("@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)", rstream(g4.getAnnotationInfos(A.class).toList()).map(AnnotationInfo::inner).toList());
+		check("@A(3)", rstream(g5.getAnnotationInfos(A.class).toList()).map(AnnotationInfo::inner).toList());
 	}
 
 	@Test void forEachAnnotation() {
