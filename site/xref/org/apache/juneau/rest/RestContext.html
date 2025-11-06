@@ -1775,7 +1775,7 @@
 <a class="jxr_linenumber" name="L1767" href="#L1767">1767</a> 					y -&gt; beanStore.add(
 <a class="jxr_linenumber" name="L1768" href="#L1768">1768</a> 						x.getType().<strong class="jxr_keyword">inner</strong>(),
 <a class="jxr_linenumber" name="L1769" href="#L1769">1769</a> 						y,
-<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 						RestInjectAnnotation.name(x.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L1770" href="#L1770">1770</a> 						RestInjectAnnotation.name(x.getAnnotationInfo(RestInject.<strong class="jxr_keyword">class</strong>).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L1771" href="#L1771">1771</a> 				)
 <a class="jxr_linenumber" name="L1772" href="#L1772">1772</a> 			));
 <a class="jxr_linenumber" name="L1773" href="#L1773">1773</a> 			<em class="jxr_comment">// @formatter:on</em>
@@ -1812,7 +1812,7 @@
 <a class="jxr_linenumber" name="L1804" href="#L1804">1804</a> 				resource.get(),
 <a class="jxr_linenumber" name="L1805" href="#L1805">1805</a> 				beanStore.getBean(
 <a class="jxr_linenumber" name="L1806" href="#L1806">1806</a> 					x.getType().<strong class="jxr_keyword">inner</strong>(),
-<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 					RestInjectAnnotation.name(x.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L1807" href="#L1807">1807</a> 					RestInjectAnnotation.name(x.getAnnotationInfo(RestInject.<strong class="jxr_keyword">class</strong>).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L1808" href="#L1808">1808</a> 				).orElse(<strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1809" href="#L1809">1809</a> 			));
 <a class="jxr_linenumber" name="L1810" href="#L1810">1810</a> 		<em class="jxr_comment">// @formatter:on</em>
