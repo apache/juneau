@@ -1315,18 +1315,18 @@
 <a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 		}
 <a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 
 <a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> matches(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> annotated) {
-<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 		<strong class="jxr_keyword">var</strong> a = annotated.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 		<strong class="jxr_keyword">var</strong> a = annotated.getAnnotationInfos(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 		<strong class="jxr_keyword">if</strong> (nn(a)) {
 <a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> n : a.methodScope()) {
-<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(n) || restMethod.getName().equals(n))
-<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 				}
-<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 			}
-<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 		}
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(n) || restMethod.getName().equals(n))
+<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 			}
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 		}
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 	}
 <a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> 
 <a class="jxr_linenumber" name="L1320" href="#L1320">1320</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> matches(<a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> annotated, String beanName) {
-<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 		<strong class="jxr_keyword">var</strong> a = annotated.getAnnotation(RestInject.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> 		<strong class="jxr_keyword">var</strong> a = annotated.getAnnotationInfos(RestInject.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> 		<strong class="jxr_keyword">if</strong> (nn(a)) {
 <a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> 			<strong class="jxr_keyword">if</strong> (! a.name().equals(beanName))
 <a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> 				<strong class="jxr_keyword">return</strong> false;
@@ -1956,617 +1956,619 @@
 <a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> 				httpMethod = <span class="jxr_string">"delete"</span>;
 <a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (mi.hasAnnotation(RestOp.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> 				<strong class="jxr_keyword">var</strong> _httpMethod = Value.&lt;String&gt;empty();
-<a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> 				mi.forEachAnnotation(RestOp.<strong class="jxr_keyword">class</strong>, x -&gt; isNotEmpty(x.method()), x -&gt; _httpMethod.set(x.method()));
-<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 				httpMethod = _httpMethod.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> 			}
-<a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> 
-<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 				p = HttpUtils.detectHttpPath(restMethod, httpMethod);
+<a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> 				mi.getAllAnnotationInfosParentFirst(RestOp.<strong class="jxr_keyword">class</strong>).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>)
+<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 					.filter(x -&gt; isNotEmpty(x.method()))
+<a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> 					.forEach(x -&gt; _httpMethod.set(x.method()));
+<a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> 				httpMethod = _httpMethod.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 			}
 <a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 
-<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 				<strong class="jxr_keyword">if</strong> (dotAll &amp;&amp; ! p.endsWith(<span class="jxr_string">"/*"</span>))
-<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 					p += <span class="jxr_string">"/*"</span>;
-<a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 
-<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 				v.get().add(UrlPathMatcher.of(p));
-<a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> 			}
-<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> 
-<a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> 			<em class="jxr_comment">// Replace with bean from:  @RestInject(methodScope="foo") public [static] UrlPathMatcherList xxx(&lt;args&gt;)</em>
-<a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> 			<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> 			beanStore
-<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> 				.createMethodFinder(UrlPathMatcherList.<strong class="jxr_keyword">class</strong>, resource().get())
-<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> 				.addBean(UrlPathMatcherList.<strong class="jxr_keyword">class</strong>, v.get())
-<a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 				.find(<strong class="jxr_keyword">this</strong>::matches)
-<a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 				.run(x -&gt; v.set(x));
-<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 			<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> 
-<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> 			<strong class="jxr_keyword">return</strong> v.get();
-<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> 		}
-<a class="jxr_linenumber" name="L1974" href="#L1974">1974</a> 
-<a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> <em class="jxr_javadoccomment">		 * Handles processing of any annotations on parameters.</em>
-<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> <em class="jxr_javadoccomment">		 * This includes: {@link Header}, {@link Query}, {@link FormData}.</em>
-<a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> processParameterAnnotations() {
-<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> aa : restMethod.getParameterAnnotations()) {
-<a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> 
-<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> 		String def = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : aa) {
-<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 			<strong class="jxr_keyword">if</strong> (a instanceof Schema s) {
-<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 				def = joinnlFirstNonEmptyArray(s._<strong class="jxr_keyword">default</strong>(), s.df());
-<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 			}
-<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 		}
-<a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 
-<a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : aa) {
-<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 			<strong class="jxr_keyword">if</strong> (a instanceof Header h) {
-<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 					<strong class="jxr_keyword">if</strong> (nn(def)) {
-<a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> 						<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> 							defaultRequestHeaders().set(basicHeader(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
-<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> 						} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
-<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Malformed @Header annotation"</span>);
-<a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> 						}
-<a class="jxr_linenumber" name="L1999" href="#L1999">1999</a> 			}
-<a class="jxr_linenumber" name="L2000" href="#L2000">2000</a> 		}
-<a class="jxr_linenumber" name="L2001" href="#L2001">2001</a> 		<strong class="jxr_keyword">if</strong> (a instanceof Query h) {
-<a class="jxr_linenumber" name="L2002" href="#L2002">2002</a> 			<strong class="jxr_keyword">if</strong> (nn(def)) {
-<a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> 						<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2004" href="#L2004">2004</a> 							defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
-<a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> 						} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
-<a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Malformed @Query annotation"</span>);
-<a class="jxr_linenumber" name="L2007" href="#L2007">2007</a> 						}
-<a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> 			}
-<a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> 		}
-<a class="jxr_linenumber" name="L2010" href="#L2010">2010</a> 		<strong class="jxr_keyword">if</strong> (a instanceof FormData h) {
-<a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> 			<strong class="jxr_keyword">if</strong> (nn(def)) {
-<a class="jxr_linenumber" name="L2012" href="#L2012">2012</a> 						<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2013" href="#L2013">2013</a> 							defaultRequestFormData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
-<a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> 						} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
-<a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Malformed @FormData annotation"</span>);
-<a class="jxr_linenumber" name="L2016" href="#L2016">2016</a> 							}
-<a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> 						}
-<a class="jxr_linenumber" name="L2018" href="#L2018">2018</a> 					}
-<a class="jxr_linenumber" name="L2019" href="#L2019">2019</a> 				}
-<a class="jxr_linenumber" name="L2020" href="#L2020">2020</a> 			}
-<a class="jxr_linenumber" name="L2021" href="#L2021">2021</a> 		}
-<a class="jxr_linenumber" name="L2022" href="#L2022">2022</a> 
-<a class="jxr_linenumber" name="L2023" href="#L2023">2023</a> 		Optional&lt;BeanContext&gt; getBeanContext() { <strong class="jxr_keyword">return</strong> opt(beanContext).map(BeanContext.Builder::build); }
+<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 				p = HttpUtils.detectHttpPath(restMethod, httpMethod);
+<a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 
+<a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 				<strong class="jxr_keyword">if</strong> (dotAll &amp;&amp; ! p.endsWith(<span class="jxr_string">"/*"</span>))
+<a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 					p += <span class="jxr_string">"/*"</span>;
+<a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> 
+<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> 				v.get().add(UrlPathMatcher.of(p));
+<a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> 			}
+<a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> 
+<a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> 			<em class="jxr_comment">// Replace with bean from:  @RestInject(methodScope="foo") public [static] UrlPathMatcherList xxx(&lt;args&gt;)</em>
+<a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> 			<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> 			beanStore
+<a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 				.createMethodFinder(UrlPathMatcherList.<strong class="jxr_keyword">class</strong>, resource().get())
+<a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 				.addBean(UrlPathMatcherList.<strong class="jxr_keyword">class</strong>, v.get())
+<a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 				.find(<strong class="jxr_keyword">this</strong>::matches)
+<a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> 				.run(x -&gt; v.set(x));
+<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> 			<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> 
+<a class="jxr_linenumber" name="L1974" href="#L1974">1974</a> 			<strong class="jxr_keyword">return</strong> v.get();
+<a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> 		}
+<a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> 
+<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> <em class="jxr_javadoccomment">		 * Handles processing of any annotations on parameters.</em>
+<a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> <em class="jxr_javadoccomment">		 * This includes: {@link Header}, {@link Query}, {@link FormData}.</em>
+<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> processParameterAnnotations() {
+<a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> aa : restMethod.getParameterAnnotations()) {
+<a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 
+<a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 		String def = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : aa) {
+<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 			<strong class="jxr_keyword">if</strong> (a instanceof Schema s) {
+<a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 				def = joinnlFirstNonEmptyArray(s._<strong class="jxr_keyword">default</strong>(), s.df());
+<a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 			}
+<a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 		}
+<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 
+<a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : aa) {
+<a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> 			<strong class="jxr_keyword">if</strong> (a instanceof Header h) {
+<a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> 					<strong class="jxr_keyword">if</strong> (nn(def)) {
+<a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> 						<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> 							defaultRequestHeaders().set(basicHeader(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+<a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> 						} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
+<a class="jxr_linenumber" name="L1999" href="#L1999">1999</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Malformed @Header annotation"</span>);
+<a class="jxr_linenumber" name="L2000" href="#L2000">2000</a> 						}
+<a class="jxr_linenumber" name="L2001" href="#L2001">2001</a> 			}
+<a class="jxr_linenumber" name="L2002" href="#L2002">2002</a> 		}
+<a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> 		<strong class="jxr_keyword">if</strong> (a instanceof Query h) {
+<a class="jxr_linenumber" name="L2004" href="#L2004">2004</a> 			<strong class="jxr_keyword">if</strong> (nn(def)) {
+<a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> 						<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> 							defaultRequestQueryData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+<a class="jxr_linenumber" name="L2007" href="#L2007">2007</a> 						} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
+<a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Malformed @Query annotation"</span>);
+<a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> 						}
+<a class="jxr_linenumber" name="L2010" href="#L2010">2010</a> 			}
+<a class="jxr_linenumber" name="L2011" href="#L2011">2011</a> 		}
+<a class="jxr_linenumber" name="L2012" href="#L2012">2012</a> 		<strong class="jxr_keyword">if</strong> (a instanceof FormData h) {
+<a class="jxr_linenumber" name="L2013" href="#L2013">2013</a> 			<strong class="jxr_keyword">if</strong> (nn(def)) {
+<a class="jxr_linenumber" name="L2014" href="#L2014">2014</a> 						<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L2015" href="#L2015">2015</a> 							defaultRequestFormData().setDefault(basicPart(firstNonEmpty(h.name(), h.value()), parseAnything(def)));
+<a class="jxr_linenumber" name="L2016" href="#L2016">2016</a> 						} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
+<a class="jxr_linenumber" name="L2017" href="#L2017">2017</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Malformed @FormData annotation"</span>);
+<a class="jxr_linenumber" name="L2018" href="#L2018">2018</a> 							}
+<a class="jxr_linenumber" name="L2019" href="#L2019">2019</a> 						}
+<a class="jxr_linenumber" name="L2020" href="#L2020">2020</a> 					}
+<a class="jxr_linenumber" name="L2021" href="#L2021">2021</a> 				}
+<a class="jxr_linenumber" name="L2022" href="#L2022">2022</a> 			}
+<a class="jxr_linenumber" name="L2023" href="#L2023">2023</a> 		}
 <a class="jxr_linenumber" name="L2024" href="#L2024">2024</a> 
-<a class="jxr_linenumber" name="L2025" href="#L2025">2025</a> 		Optional&lt;EncoderSet&gt; getEncoders() { <strong class="jxr_keyword">return</strong> opt(encoders).map(EncoderSet.Builder::build); }
+<a class="jxr_linenumber" name="L2025" href="#L2025">2025</a> 		Optional&lt;BeanContext&gt; getBeanContext() { <strong class="jxr_keyword">return</strong> opt(beanContext).map(BeanContext.Builder::build); }
 <a class="jxr_linenumber" name="L2026" href="#L2026">2026</a> 
-<a class="jxr_linenumber" name="L2027" href="#L2027">2027</a> 	RestGuardList getGuards() {
-<a class="jxr_linenumber" name="L2028" href="#L2028">2028</a> 		<strong class="jxr_keyword">var</strong> b = guards();
-<a class="jxr_linenumber" name="L2029" href="#L2029">2029</a> 		<strong class="jxr_keyword">var</strong> roleGuard = opt(<strong class="jxr_keyword">this</strong>.roleGuard).orElseGet(CollectionUtils::set);
-<a class="jxr_linenumber" name="L2030" href="#L2030">2030</a> 
-<a class="jxr_linenumber" name="L2031" href="#L2031">2031</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rg : roleGuard) {
-<a class="jxr_linenumber" name="L2032" href="#L2032">2032</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2033" href="#L2033">2033</a> 					b.append(<strong class="jxr_keyword">new</strong> <a name="RoleBasedRestGuard" href="../../../../org/apache/juneau/rest/guard/RoleBasedRestGuard.html#RoleBasedRestGuard">RoleBasedRestGuard</a>(rolesDeclared, rg));
-<a class="jxr_linenumber" name="L2034" href="#L2034">2034</a> 				} <strong class="jxr_keyword">catch</strong> (java.text.ParseException e1) {
-<a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> 					<strong class="jxr_keyword">throw</strong> toRuntimeException(e1);
-<a class="jxr_linenumber" name="L2036" href="#L2036">2036</a> 				}
-<a class="jxr_linenumber" name="L2037" href="#L2037">2037</a> 			}
-<a class="jxr_linenumber" name="L2038" href="#L2038">2038</a> 
-<a class="jxr_linenumber" name="L2039" href="#L2039">2039</a> 			<strong class="jxr_keyword">return</strong> guards.build();
-<a class="jxr_linenumber" name="L2040" href="#L2040">2040</a> 		}
-<a class="jxr_linenumber" name="L2041" href="#L2041">2041</a> 
-<a class="jxr_linenumber" name="L2042" href="#L2042">2042</a> 		Optional&lt;JsonSchemaGenerator&gt; getJsonSchemaGenerator() { <strong class="jxr_keyword">return</strong> opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build); }
+<a class="jxr_linenumber" name="L2027" href="#L2027">2027</a> 		Optional&lt;EncoderSet&gt; getEncoders() { <strong class="jxr_keyword">return</strong> opt(encoders).map(EncoderSet.Builder::build); }
+<a class="jxr_linenumber" name="L2028" href="#L2028">2028</a> 
+<a class="jxr_linenumber" name="L2029" href="#L2029">2029</a> 	RestGuardList getGuards() {
+<a class="jxr_linenumber" name="L2030" href="#L2030">2030</a> 		<strong class="jxr_keyword">var</strong> b = guards();
+<a class="jxr_linenumber" name="L2031" href="#L2031">2031</a> 		<strong class="jxr_keyword">var</strong> roleGuard = opt(<strong class="jxr_keyword">this</strong>.roleGuard).orElseGet(CollectionUtils::set);
+<a class="jxr_linenumber" name="L2032" href="#L2032">2032</a> 
+<a class="jxr_linenumber" name="L2033" href="#L2033">2033</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rg : roleGuard) {
+<a class="jxr_linenumber" name="L2034" href="#L2034">2034</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L2035" href="#L2035">2035</a> 					b.append(<strong class="jxr_keyword">new</strong> <a name="RoleBasedRestGuard" href="../../../../org/apache/juneau/rest/guard/RoleBasedRestGuard.html#RoleBasedRestGuard">RoleBasedRestGuard</a>(rolesDeclared, rg));
+<a class="jxr_linenumber" name="L2036" href="#L2036">2036</a> 				} <strong class="jxr_keyword">catch</strong> (java.text.ParseException e1) {
+<a class="jxr_linenumber" name="L2037" href="#L2037">2037</a> 					<strong class="jxr_keyword">throw</strong> toRuntimeException(e1);
+<a class="jxr_linenumber" name="L2038" href="#L2038">2038</a> 				}
+<a class="jxr_linenumber" name="L2039" href="#L2039">2039</a> 			}
+<a class="jxr_linenumber" name="L2040" href="#L2040">2040</a> 
+<a class="jxr_linenumber" name="L2041" href="#L2041">2041</a> 			<strong class="jxr_keyword">return</strong> guards.build();
+<a class="jxr_linenumber" name="L2042" href="#L2042">2042</a> 		}
 <a class="jxr_linenumber" name="L2043" href="#L2043">2043</a> 
-<a class="jxr_linenumber" name="L2044" href="#L2044">2044</a> 		RestMatcherList getMatchers(<a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> restContext) {
-<a class="jxr_linenumber" name="L2045" href="#L2045">2045</a> 			RestMatcherList.Builder b = matchers();
-<a class="jxr_linenumber" name="L2046" href="#L2046">2046</a> 			<strong class="jxr_keyword">if</strong> (nn(clientVersion))
-<a class="jxr_linenumber" name="L2047" href="#L2047">2047</a> 				b.append(<strong class="jxr_keyword">new</strong> <a name="ClientVersionMatcher" href="../../../../org/apache/juneau/rest/matcher/ClientVersionMatcher.html#ClientVersionMatcher">ClientVersionMatcher</a>(restContext.getClientVersionHeader(), MethodInfo.of(restMethod)));
-<a class="jxr_linenumber" name="L2048" href="#L2048">2048</a> 
-<a class="jxr_linenumber" name="L2049" href="#L2049">2049</a> 			<strong class="jxr_keyword">return</strong> b.build();
-<a class="jxr_linenumber" name="L2050" href="#L2050">2050</a> 		}
-<a class="jxr_linenumber" name="L2051" href="#L2051">2051</a> 
-<a class="jxr_linenumber" name="L2052" href="#L2052">2052</a> 		Optional&lt;ParserSet&gt; getParsers() { <strong class="jxr_keyword">return</strong> opt(parsers).map(ParserSet.Builder::build); }
+<a class="jxr_linenumber" name="L2044" href="#L2044">2044</a> 		Optional&lt;JsonSchemaGenerator&gt; getJsonSchemaGenerator() { <strong class="jxr_keyword">return</strong> opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build); }
+<a class="jxr_linenumber" name="L2045" href="#L2045">2045</a> 
+<a class="jxr_linenumber" name="L2046" href="#L2046">2046</a> 		RestMatcherList getMatchers(<a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> restContext) {
+<a class="jxr_linenumber" name="L2047" href="#L2047">2047</a> 			RestMatcherList.Builder b = matchers();
+<a class="jxr_linenumber" name="L2048" href="#L2048">2048</a> 			<strong class="jxr_keyword">if</strong> (nn(clientVersion))
+<a class="jxr_linenumber" name="L2049" href="#L2049">2049</a> 				b.append(<strong class="jxr_keyword">new</strong> <a name="ClientVersionMatcher" href="../../../../org/apache/juneau/rest/matcher/ClientVersionMatcher.html#ClientVersionMatcher">ClientVersionMatcher</a>(restContext.getClientVersionHeader(), MethodInfo.of(restMethod)));
+<a class="jxr_linenumber" name="L2050" href="#L2050">2050</a> 
+<a class="jxr_linenumber" name="L2051" href="#L2051">2051</a> 			<strong class="jxr_keyword">return</strong> b.build();
+<a class="jxr_linenumber" name="L2052" href="#L2052">2052</a> 		}
 <a class="jxr_linenumber" name="L2053" href="#L2053">2053</a> 
-<a class="jxr_linenumber" name="L2054" href="#L2054">2054</a> 		Optional&lt;HttpPartParser&gt; getPartParser() { <strong class="jxr_keyword">return</strong> opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create); }
+<a class="jxr_linenumber" name="L2054" href="#L2054">2054</a> 		Optional&lt;ParserSet&gt; getParsers() { <strong class="jxr_keyword">return</strong> opt(parsers).map(ParserSet.Builder::build); }
 <a class="jxr_linenumber" name="L2055" href="#L2055">2055</a> 
-<a class="jxr_linenumber" name="L2056" href="#L2056">2056</a> 		Optional&lt;HttpPartSerializer&gt; getPartSerializer() { <strong class="jxr_keyword">return</strong> opt(partSerializer).map(Creator::create); }
+<a class="jxr_linenumber" name="L2056" href="#L2056">2056</a> 		Optional&lt;HttpPartParser&gt; getPartParser() { <strong class="jxr_keyword">return</strong> opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create); }
 <a class="jxr_linenumber" name="L2057" href="#L2057">2057</a> 
-<a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 		Optional&lt;SerializerSet&gt; getSerializers() { <strong class="jxr_keyword">return</strong> opt(serializers).map(SerializerSet.Builder::build); }
+<a class="jxr_linenumber" name="L2058" href="#L2058">2058</a> 		Optional&lt;HttpPartSerializer&gt; getPartSerializer() { <strong class="jxr_keyword">return</strong> opt(partSerializer).map(Creator::create); }
 <a class="jxr_linenumber" name="L2059" href="#L2059">2059</a> 
-<a class="jxr_linenumber" name="L2060" href="#L2060">2060</a> 	}
+<a class="jxr_linenumber" name="L2060" href="#L2060">2060</a> 		Optional&lt;SerializerSet&gt; getSerializers() { <strong class="jxr_keyword">return</strong> opt(serializers).map(SerializerSet.Builder::build); }
 <a class="jxr_linenumber" name="L2061" href="#L2061">2061</a> 
-<a class="jxr_linenumber" name="L2062" href="#L2062">2062</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2063" href="#L2063">2063</a> <em class="jxr_javadoccomment">	 * Creates a new builder for this object.</em>
-<a class="jxr_linenumber" name="L2064" href="#L2064">2064</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2065" href="#L2065">2065</a> <em class="jxr_javadoccomment">	 * @param method The Java method this context belongs to.</em>
-<a class="jxr_linenumber" name="L2066" href="#L2066">2066</a> <em class="jxr_javadoccomment">	 * @param context The Java class context.</em>
-<a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
-<a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create(java.lang.reflect.Method method, <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> context) {
-<a class="jxr_linenumber" name="L2070" href="#L2070">2070</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(method, context);
-<a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> 	}
-<a class="jxr_linenumber" name="L2072" href="#L2072">2072</a> 
-<a class="jxr_linenumber" name="L2073" href="#L2073">2073</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="HttpPartSerializer" href="../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> createPartSerializer(Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; c, <a name="HttpPartSerializer" href="../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> _<strong class="jxr_keyword">default</strong>) {
-<a class="jxr_linenumber" name="L2074" href="#L2074">2074</a> 		<strong class="jxr_keyword">return</strong> BeanCreator.of(HttpPartSerializer.<strong class="jxr_keyword">class</strong>).type(c).orElse(_<strong class="jxr_keyword">default</strong>);
-<a class="jxr_linenumber" name="L2075" href="#L2075">2075</a> 	}
-<a class="jxr_linenumber" name="L2076" href="#L2076">2076</a> 
-<a class="jxr_linenumber" name="L2077" href="#L2077">2077</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String httpMethod;
-<a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="UrlPathMatcher" href="../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a>[] pathMatchers;
-<a class="jxr_linenumber" name="L2079" href="#L2079">2079</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestGuard" href="../../../../org/apache/juneau/rest/guard/RestGuard.html#RestGuard">RestGuard</a>[] guards;
-<a class="jxr_linenumber" name="L2080" href="#L2080">2080</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestMatcher" href="../../../../org/apache/juneau/rest/matcher/RestMatcher.html#RestMatcher">RestMatcher</a>[] requiredMatchers, optionalMatchers;
-<a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestConverter" href="../../../../org/apache/juneau/rest/converter/RestConverter.html#RestConverter">RestConverter</a>[] converters;
-<a class="jxr_linenumber" name="L2082" href="#L2082">2082</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> context;
-<a class="jxr_linenumber" name="L2083" href="#L2083">2083</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Method" href="../../../../org/apache/juneau/rest/annotation/Method.html#Method">Method</a> method;
-<a class="jxr_linenumber" name="L2084" href="#L2084">2084</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a> methodInvoker;
-<a class="jxr_linenumber" name="L2085" href="#L2085">2085</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>[] preCallMethods, postCallMethods;
-<a class="jxr_linenumber" name="L2086" href="#L2086">2086</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi;
-<a class="jxr_linenumber" name="L2087" href="#L2087">2087</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BeanContext beanContext;
-<a class="jxr_linenumber" name="L2088" href="#L2088">2088</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="SerializerSet" href="../../../../org/apache/juneau/serializer/SerializerSet.html#SerializerSet">SerializerSet</a> serializers;
-<a class="jxr_linenumber" name="L2089" href="#L2089">2089</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ParserSet" href="../../../../org/apache/juneau/parser/ParserSet.html#ParserSet">ParserSet</a> parsers;
-<a class="jxr_linenumber" name="L2090" href="#L2090">2090</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="EncoderSet" href="../../../../org/apache/juneau/encoders/EncoderSet.html#EncoderSet">EncoderSet</a> encoders;
-<a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartSerializer" href="../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> partSerializer;
-<a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartParser" href="../../../../org/apache/juneau/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> partParser;
-<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="JsonSchemaGenerator" href="../../../../org/apache/juneau/jsonschema/JsonSchemaGenerator.html#JsonSchemaGenerator">JsonSchemaGenerator</a> jsonSchemaGenerator;
-<a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HeaderList" href="../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> defaultRequestHeaders, defaultResponseHeaders;
-<a class="jxr_linenumber" name="L2095" href="#L2095">2095</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="PartList" href="../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> defaultRequestQueryData, defaultRequestFormData;
-<a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="NamedAttributeMap" href="../../../../org/apache/juneau/rest/httppart/NamedAttributeMap.html#NamedAttributeMap">NamedAttributeMap</a> defaultRequestAttributes;
-<a class="jxr_linenumber" name="L2097" href="#L2097">2097</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Charset defaultCharset;
-<a class="jxr_linenumber" name="L2098" href="#L2098">2098</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> maxInput;
-<a class="jxr_linenumber" name="L2099" href="#L2099">2099</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;MediaType&gt; supportedAcceptTypes, supportedContentTypes;
-<a class="jxr_linenumber" name="L2100" href="#L2100">2100</a> 
-<a class="jxr_linenumber" name="L2101" href="#L2101">2101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="CallLogger" href="../../../../org/apache/juneau/rest/logger/CallLogger.html#CallLogger">CallLogger</a> callLogger;
-<a class="jxr_linenumber" name="L2102" href="#L2102">2102</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,ResponseBeanMeta&gt; responseBeanMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L2103" href="#L2103">2103</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,ResponsePartMeta&gt; headerPartMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L2104" href="#L2104">2104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ResponseBeanMeta" href="../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> responseMeta;
-<a class="jxr_linenumber" name="L2105" href="#L2105">2105</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> hierarchyDepth;
-<a class="jxr_linenumber" name="L2106" href="#L2106">2106</a> 
-<a class="jxr_linenumber" name="L2107" href="#L2107">2107</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="DebugEnablement" href="../../../../org/apache/juneau/rest/debug/DebugEnablement.html#DebugEnablement">DebugEnablement</a> debug;
+<a class="jxr_linenumber" name="L2062" href="#L2062">2062</a> 	}
+<a class="jxr_linenumber" name="L2063" href="#L2063">2063</a> 
+<a class="jxr_linenumber" name="L2064" href="#L2064">2064</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2065" href="#L2065">2065</a> <em class="jxr_javadoccomment">	 * Creates a new builder for this object.</em>
+<a class="jxr_linenumber" name="L2066" href="#L2066">2066</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2067" href="#L2067">2067</a> <em class="jxr_javadoccomment">	 * @param method The Java method this context belongs to.</em>
+<a class="jxr_linenumber" name="L2068" href="#L2068">2068</a> <em class="jxr_javadoccomment">	 * @param context The Java class context.</em>
+<a class="jxr_linenumber" name="L2069" href="#L2069">2069</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
+<a class="jxr_linenumber" name="L2070" href="#L2070">2070</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2071" href="#L2071">2071</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create(java.lang.reflect.Method method, <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> context) {
+<a class="jxr_linenumber" name="L2072" href="#L2072">2072</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(method, context);
+<a class="jxr_linenumber" name="L2073" href="#L2073">2073</a> 	}
+<a class="jxr_linenumber" name="L2074" href="#L2074">2074</a> 
+<a class="jxr_linenumber" name="L2075" href="#L2075">2075</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="HttpPartSerializer" href="../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> createPartSerializer(Class&lt;? <strong class="jxr_keyword">extends</strong> HttpPartSerializer&gt; c, <a name="HttpPartSerializer" href="../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> _<strong class="jxr_keyword">default</strong>) {
+<a class="jxr_linenumber" name="L2076" href="#L2076">2076</a> 		<strong class="jxr_keyword">return</strong> BeanCreator.of(HttpPartSerializer.<strong class="jxr_keyword">class</strong>).type(c).orElse(_<strong class="jxr_keyword">default</strong>);
+<a class="jxr_linenumber" name="L2077" href="#L2077">2077</a> 	}
+<a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 
+<a class="jxr_linenumber" name="L2079" href="#L2079">2079</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String httpMethod;
+<a class="jxr_linenumber" name="L2080" href="#L2080">2080</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="UrlPathMatcher" href="../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a>[] pathMatchers;
+<a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestGuard" href="../../../../org/apache/juneau/rest/guard/RestGuard.html#RestGuard">RestGuard</a>[] guards;
+<a class="jxr_linenumber" name="L2082" href="#L2082">2082</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestMatcher" href="../../../../org/apache/juneau/rest/matcher/RestMatcher.html#RestMatcher">RestMatcher</a>[] requiredMatchers, optionalMatchers;
+<a class="jxr_linenumber" name="L2083" href="#L2083">2083</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestConverter" href="../../../../org/apache/juneau/rest/converter/RestConverter.html#RestConverter">RestConverter</a>[] converters;
+<a class="jxr_linenumber" name="L2084" href="#L2084">2084</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> context;
+<a class="jxr_linenumber" name="L2085" href="#L2085">2085</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="Method" href="../../../../org/apache/juneau/rest/annotation/Method.html#Method">Method</a> method;
+<a class="jxr_linenumber" name="L2086" href="#L2086">2086</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a> methodInvoker;
+<a class="jxr_linenumber" name="L2087" href="#L2087">2087</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>[] preCallMethods, postCallMethods;
+<a class="jxr_linenumber" name="L2088" href="#L2088">2088</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> mi;
+<a class="jxr_linenumber" name="L2089" href="#L2089">2089</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BeanContext beanContext;
+<a class="jxr_linenumber" name="L2090" href="#L2090">2090</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="SerializerSet" href="../../../../org/apache/juneau/serializer/SerializerSet.html#SerializerSet">SerializerSet</a> serializers;
+<a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ParserSet" href="../../../../org/apache/juneau/parser/ParserSet.html#ParserSet">ParserSet</a> parsers;
+<a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="EncoderSet" href="../../../../org/apache/juneau/encoders/EncoderSet.html#EncoderSet">EncoderSet</a> encoders;
+<a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartSerializer" href="../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> partSerializer;
+<a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartParser" href="../../../../org/apache/juneau/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> partParser;
+<a class="jxr_linenumber" name="L2095" href="#L2095">2095</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="JsonSchemaGenerator" href="../../../../org/apache/juneau/jsonschema/JsonSchemaGenerator.html#JsonSchemaGenerator">JsonSchemaGenerator</a> jsonSchemaGenerator;
+<a class="jxr_linenumber" name="L2096" href="#L2096">2096</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HeaderList" href="../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> defaultRequestHeaders, defaultResponseHeaders;
+<a class="jxr_linenumber" name="L2097" href="#L2097">2097</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="PartList" href="../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> defaultRequestQueryData, defaultRequestFormData;
+<a class="jxr_linenumber" name="L2098" href="#L2098">2098</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="NamedAttributeMap" href="../../../../org/apache/juneau/rest/httppart/NamedAttributeMap.html#NamedAttributeMap">NamedAttributeMap</a> defaultRequestAttributes;
+<a class="jxr_linenumber" name="L2099" href="#L2099">2099</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Charset defaultCharset;
+<a class="jxr_linenumber" name="L2100" href="#L2100">2100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> maxInput;
+<a class="jxr_linenumber" name="L2101" href="#L2101">2101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;MediaType&gt; supportedAcceptTypes, supportedContentTypes;
+<a class="jxr_linenumber" name="L2102" href="#L2102">2102</a> 
+<a class="jxr_linenumber" name="L2103" href="#L2103">2103</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="CallLogger" href="../../../../org/apache/juneau/rest/logger/CallLogger.html#CallLogger">CallLogger</a> callLogger;
+<a class="jxr_linenumber" name="L2104" href="#L2104">2104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,ResponseBeanMeta&gt; responseBeanMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L2105" href="#L2105">2105</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,ResponsePartMeta&gt; headerPartMetas = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L2106" href="#L2106">2106</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ResponseBeanMeta" href="../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> responseMeta;
+<a class="jxr_linenumber" name="L2107" href="#L2107">2107</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> hierarchyDepth;
 <a class="jxr_linenumber" name="L2108" href="#L2108">2108</a> 
-<a class="jxr_linenumber" name="L2109" href="#L2109">2109</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2110" href="#L2110">2110</a> <em class="jxr_javadoccomment">	 * Context constructor.</em>
-<a class="jxr_linenumber" name="L2111" href="#L2111">2111</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2112" href="#L2112">2112</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
-<a class="jxr_linenumber" name="L2113" href="#L2113">2113</a> <em class="jxr_javadoccomment">	 * @throws ServletException If context could not be created.</em>
-<a class="jxr_linenumber" name="L2114" href="#L2114">2114</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2115" href="#L2115">2115</a> 	<strong class="jxr_keyword">protected</strong> <a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a>(Builder builder) <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L2116" href="#L2116">2116</a> 		<strong class="jxr_keyword">super</strong>(builder);
-<a class="jxr_linenumber" name="L2117" href="#L2117">2117</a> 
-<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2119" href="#L2119">2119</a> 			context = builder.restContext;
-<a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 			method = builder.restMethod;
-<a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 
-<a class="jxr_linenumber" name="L2122" href="#L2122">2122</a> 			<strong class="jxr_keyword">if</strong> (builder.debug == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2123" href="#L2123">2123</a> 				debug = context.getDebugEnablement();
-<a class="jxr_linenumber" name="L2124" href="#L2124">2124</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L2125" href="#L2125">2125</a> 				debug = DebugEnablement.create(context.getBeanStore()).enable(builder.debug, <span class="jxr_string">"*"</span>).build();
-<a class="jxr_linenumber" name="L2126" href="#L2126">2126</a> 
-<a class="jxr_linenumber" name="L2127" href="#L2127">2127</a> 		mi = MethodInfo.of(method).accessible();
-<a class="jxr_linenumber" name="L2128" href="#L2128">2128</a> 		<strong class="jxr_keyword">var</strong> r = context.getResource();
-<a class="jxr_linenumber" name="L2129" href="#L2129">2129</a> 
-<a class="jxr_linenumber" name="L2130" href="#L2130">2130</a> 		<em class="jxr_comment">// @formatter:off</em>
-<a class="jxr_linenumber" name="L2131" href="#L2131">2131</a> 		<strong class="jxr_keyword">var</strong> bs = BeanStore.of(context.getRootBeanStore(), r)
-<a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> 				.addBean(RestOpContext.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>)
-<a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> 				.addBean(Method.<strong class="jxr_keyword">class</strong>, method)
-<a class="jxr_linenumber" name="L2134" href="#L2134">2134</a> 				.addBean(AnnotationWorkList.<strong class="jxr_keyword">class</strong>, builder.getApplied());
-<a class="jxr_linenumber" name="L2135" href="#L2135">2135</a> 			<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L2136" href="#L2136">2136</a> 			bs.addBean(BeanStore.<strong class="jxr_keyword">class</strong>, bs);
-<a class="jxr_linenumber" name="L2137" href="#L2137">2137</a> 
-<a class="jxr_linenumber" name="L2138" href="#L2138">2138</a> 			beanContext = bs.add(BeanContext.<strong class="jxr_keyword">class</strong>, builder.getBeanContext().orElse(context.getBeanContext()));
-<a class="jxr_linenumber" name="L2139" href="#L2139">2139</a> 			encoders = bs.add(EncoderSet.<strong class="jxr_keyword">class</strong>, builder.getEncoders().orElse(context.getEncoders()));
-<a class="jxr_linenumber" name="L2140" href="#L2140">2140</a> 			serializers = bs.add(SerializerSet.<strong class="jxr_keyword">class</strong>, builder.getSerializers().orElse(context.getSerializers()));
-<a class="jxr_linenumber" name="L2141" href="#L2141">2141</a> 			parsers = bs.add(ParserSet.<strong class="jxr_keyword">class</strong>, builder.getParsers().orElse(context.getParsers()));
-<a class="jxr_linenumber" name="L2142" href="#L2142">2142</a> 			partSerializer = bs.add(HttpPartSerializer.<strong class="jxr_keyword">class</strong>, builder.getPartSerializer().orElse(context.getPartSerializer()));
-<a class="jxr_linenumber" name="L2143" href="#L2143">2143</a> 			partParser = bs.add(HttpPartParser.<strong class="jxr_keyword">class</strong>, builder.getPartParser().orElse(context.getPartParser()));
-<a class="jxr_linenumber" name="L2144" href="#L2144">2144</a> 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.<strong class="jxr_keyword">class</strong>, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
-<a class="jxr_linenumber" name="L2145" href="#L2145">2145</a> 		converters = bs.add(<a name="RestConverter" href="../../../../org/apache/juneau/rest/converter/RestConverter.html#RestConverter">RestConverter</a>[].<strong class="jxr_keyword">class</strong>, builder.converters().build().asArray());
-<a class="jxr_linenumber" name="L2146" href="#L2146">2146</a> 		guards = bs.add(<a name="RestGuard" href="../../../../org/apache/juneau/rest/guard/RestGuard.html#RestGuard">RestGuard</a>[].<strong class="jxr_keyword">class</strong>, builder.getGuards().asArray());
-<a class="jxr_linenumber" name="L2147" href="#L2147">2147</a> 
-<a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> 		<strong class="jxr_keyword">var</strong> matchers = builder.getMatchers(context);
-<a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 		optionalMatchers = matchers.getOptionalEntries();
-<a class="jxr_linenumber" name="L2150" href="#L2150">2150</a> 		requiredMatchers = matchers.getRequiredEntries();
-<a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> 
-<a class="jxr_linenumber" name="L2152" href="#L2152">2152</a> 			pathMatchers = bs.add(<a name="UrlPathMatcher" href="../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a>[].<strong class="jxr_keyword">class</strong>, builder.getPathMatchers().asArray());
-<a class="jxr_linenumber" name="L2153" href="#L2153">2153</a> 			bs.addBean(UrlPathMatcher.<strong class="jxr_keyword">class</strong>, pathMatchers.length &gt; 0 ? pathMatchers[0] : <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L2154" href="#L2154">2154</a> 
-<a class="jxr_linenumber" name="L2155" href="#L2155">2155</a> 			supportedAcceptTypes = u(nn(builder.produces) ? builder.produces : serializers.getSupportedMediaTypes());
-<a class="jxr_linenumber" name="L2156" href="#L2156">2156</a> 			supportedContentTypes = u(nn(builder.consumes) ? builder.consumes : parsers.getSupportedMediaTypes());
-<a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> 
-<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> 			defaultRequestHeaders = builder.defaultRequestHeaders();
-<a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> 			defaultResponseHeaders = builder.defaultResponseHeaders();
-<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> 			defaultRequestQueryData = builder.defaultRequestQueryData();
-<a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> 			defaultRequestFormData = builder.defaultRequestFormData();
-<a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> 			defaultRequestAttributes = builder.defaultRequestAttributes();
-<a class="jxr_linenumber" name="L2163" href="#L2163">2163</a> 
-<a class="jxr_linenumber" name="L2164" href="#L2164">2164</a> 			<strong class="jxr_keyword">int</strong> _hierarchyDepth = 0;
-<a class="jxr_linenumber" name="L2165" href="#L2165">2165</a> 			Class&lt;?&gt; sc = method.getDeclaringClass().getSuperclass();
-<a class="jxr_linenumber" name="L2166" href="#L2166">2166</a> 			<strong class="jxr_keyword">while</strong> (nn(sc)) {
-<a class="jxr_linenumber" name="L2167" href="#L2167">2167</a> 				_hierarchyDepth++;
-<a class="jxr_linenumber" name="L2168" href="#L2168">2168</a> 				sc = sc.getSuperclass();
-<a class="jxr_linenumber" name="L2169" href="#L2169">2169</a> 			}
-<a class="jxr_linenumber" name="L2170" href="#L2170">2170</a> 			hierarchyDepth = _hierarchyDepth;
-<a class="jxr_linenumber" name="L2171" href="#L2171">2171</a> 
-<a class="jxr_linenumber" name="L2172" href="#L2172">2172</a> 			String _httpMethod = builder.httpMethod;
-<a class="jxr_linenumber" name="L2173" href="#L2173">2173</a> 			<strong class="jxr_keyword">if</strong> (_httpMethod == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2174" href="#L2174">2174</a> 				_httpMethod = HttpUtils.detectHttpMethod(method, <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"GET"</span>);
-<a class="jxr_linenumber" name="L2175" href="#L2175">2175</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"METHOD"</span>.equals(_httpMethod))
-<a class="jxr_linenumber" name="L2176" href="#L2176">2176</a> 				_httpMethod = <span class="jxr_string">"*"</span>;
-<a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
-<a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> 
-<a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> 			defaultCharset = nn(builder.defaultCharset) ? builder.defaultCharset : context.defaultCharset;
-<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 			maxInput = nn(builder.maxInput) ? builder.maxInput : context.maxInput;
-<a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 
-<a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> 			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
+<a class="jxr_linenumber" name="L2109" href="#L2109">2109</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="DebugEnablement" href="../../../../org/apache/juneau/rest/debug/DebugEnablement.html#DebugEnablement">DebugEnablement</a> debug;
+<a class="jxr_linenumber" name="L2110" href="#L2110">2110</a> 
+<a class="jxr_linenumber" name="L2111" href="#L2111">2111</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2112" href="#L2112">2112</a> <em class="jxr_javadoccomment">	 * Context constructor.</em>
+<a class="jxr_linenumber" name="L2113" href="#L2113">2113</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2114" href="#L2114">2114</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
+<a class="jxr_linenumber" name="L2115" href="#L2115">2115</a> <em class="jxr_javadoccomment">	 * @throws ServletException If context could not be created.</em>
+<a class="jxr_linenumber" name="L2116" href="#L2116">2116</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2117" href="#L2117">2117</a> 	<strong class="jxr_keyword">protected</strong> <a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a>(Builder builder) <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 		<strong class="jxr_keyword">super</strong>(builder);
+<a class="jxr_linenumber" name="L2119" href="#L2119">2119</a> 
+<a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 			context = builder.restContext;
+<a class="jxr_linenumber" name="L2122" href="#L2122">2122</a> 			method = builder.restMethod;
+<a class="jxr_linenumber" name="L2123" href="#L2123">2123</a> 
+<a class="jxr_linenumber" name="L2124" href="#L2124">2124</a> 			<strong class="jxr_keyword">if</strong> (builder.debug == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2125" href="#L2125">2125</a> 				debug = context.getDebugEnablement();
+<a class="jxr_linenumber" name="L2126" href="#L2126">2126</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L2127" href="#L2127">2127</a> 				debug = DebugEnablement.create(context.getBeanStore()).enable(builder.debug, <span class="jxr_string">"*"</span>).build();
+<a class="jxr_linenumber" name="L2128" href="#L2128">2128</a> 
+<a class="jxr_linenumber" name="L2129" href="#L2129">2129</a> 		mi = MethodInfo.of(method).accessible();
+<a class="jxr_linenumber" name="L2130" href="#L2130">2130</a> 		<strong class="jxr_keyword">var</strong> r = context.getResource();
+<a class="jxr_linenumber" name="L2131" href="#L2131">2131</a> 
+<a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> 		<strong class="jxr_keyword">var</strong> bs = BeanStore.of(context.getRootBeanStore(), r)
+<a class="jxr_linenumber" name="L2134" href="#L2134">2134</a> 				.addBean(RestOpContext.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">this</strong>)
+<a class="jxr_linenumber" name="L2135" href="#L2135">2135</a> 				.addBean(Method.<strong class="jxr_keyword">class</strong>, method)
+<a class="jxr_linenumber" name="L2136" href="#L2136">2136</a> 				.addBean(AnnotationWorkList.<strong class="jxr_keyword">class</strong>, builder.getApplied());
+<a class="jxr_linenumber" name="L2137" href="#L2137">2137</a> 			<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L2138" href="#L2138">2138</a> 			bs.addBean(BeanStore.<strong class="jxr_keyword">class</strong>, bs);
+<a class="jxr_linenumber" name="L2139" href="#L2139">2139</a> 
+<a class="jxr_linenumber" name="L2140" href="#L2140">2140</a> 			beanContext = bs.add(BeanContext.<strong class="jxr_keyword">class</strong>, builder.getBeanContext().orElse(context.getBeanContext()));
+<a class="jxr_linenumber" name="L2141" href="#L2141">2141</a> 			encoders = bs.add(EncoderSet.<strong class="jxr_keyword">class</strong>, builder.getEncoders().orElse(context.getEncoders()));
+<a class="jxr_linenumber" name="L2142" href="#L2142">2142</a> 			serializers = bs.add(SerializerSet.<strong class="jxr_keyword">class</strong>, builder.getSerializers().orElse(context.getSerializers()));
+<a class="jxr_linenumber" name="L2143" href="#L2143">2143</a> 			parsers = bs.add(ParserSet.<strong class="jxr_keyword">class</strong>, builder.getParsers().orElse(context.getParsers()));
+<a class="jxr_linenumber" name="L2144" href="#L2144">2144</a> 			partSerializer = bs.add(HttpPartSerializer.<strong class="jxr_keyword">class</strong>, builder.getPartSerializer().orElse(context.getPartSerializer()));
+<a class="jxr_linenumber" name="L2145" href="#L2145">2145</a> 			partParser = bs.add(HttpPartParser.<strong class="jxr_keyword">class</strong>, builder.getPartParser().orElse(context.getPartParser()));
+<a class="jxr_linenumber" name="L2146" href="#L2146">2146</a> 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.<strong class="jxr_keyword">class</strong>, builder.getJsonSchemaGenerator().orElse(context.getJsonSchemaGenerator()));
+<a class="jxr_linenumber" name="L2147" href="#L2147">2147</a> 		converters = bs.add(<a name="RestConverter" href="../../../../org/apache/juneau/rest/converter/RestConverter.html#RestConverter">RestConverter</a>[].<strong class="jxr_keyword">class</strong>, builder.converters().build().asArray());
+<a class="jxr_linenumber" name="L2148" href="#L2148">2148</a> 		guards = bs.add(<a name="RestGuard" href="../../../../org/apache/juneau/rest/guard/RestGuard.html#RestGuard">RestGuard</a>[].<strong class="jxr_keyword">class</strong>, builder.getGuards().asArray());
+<a class="jxr_linenumber" name="L2149" href="#L2149">2149</a> 
+<a class="jxr_linenumber" name="L2150" href="#L2150">2150</a> 		<strong class="jxr_keyword">var</strong> matchers = builder.getMatchers(context);
+<a class="jxr_linenumber" name="L2151" href="#L2151">2151</a> 		optionalMatchers = matchers.getOptionalEntries();
+<a class="jxr_linenumber" name="L2152" href="#L2152">2152</a> 		requiredMatchers = matchers.getRequiredEntries();
+<a class="jxr_linenumber" name="L2153" href="#L2153">2153</a> 
+<a class="jxr_linenumber" name="L2154" href="#L2154">2154</a> 			pathMatchers = bs.add(<a name="UrlPathMatcher" href="../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a>[].<strong class="jxr_keyword">class</strong>, builder.getPathMatchers().asArray());
+<a class="jxr_linenumber" name="L2155" href="#L2155">2155</a> 			bs.addBean(UrlPathMatcher.<strong class="jxr_keyword">class</strong>, pathMatchers.length &gt; 0 ? pathMatchers[0] : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L2156" href="#L2156">2156</a> 
+<a class="jxr_linenumber" name="L2157" href="#L2157">2157</a> 			supportedAcceptTypes = u(nn(builder.produces) ? builder.produces : serializers.getSupportedMediaTypes());
+<a class="jxr_linenumber" name="L2158" href="#L2158">2158</a> 			supportedContentTypes = u(nn(builder.consumes) ? builder.consumes : parsers.getSupportedMediaTypes());
+<a class="jxr_linenumber" name="L2159" href="#L2159">2159</a> 
+<a class="jxr_linenumber" name="L2160" href="#L2160">2160</a> 			defaultRequestHeaders = builder.defaultRequestHeaders();
+<a class="jxr_linenumber" name="L2161" href="#L2161">2161</a> 			defaultResponseHeaders = builder.defaultResponseHeaders();
+<a class="jxr_linenumber" name="L2162" href="#L2162">2162</a> 			defaultRequestQueryData = builder.defaultRequestQueryData();
+<a class="jxr_linenumber" name="L2163" href="#L2163">2163</a> 			defaultRequestFormData = builder.defaultRequestFormData();
+<a class="jxr_linenumber" name="L2164" href="#L2164">2164</a> 			defaultRequestAttributes = builder.defaultRequestAttributes();
+<a class="jxr_linenumber" name="L2165" href="#L2165">2165</a> 
+<a class="jxr_linenumber" name="L2166" href="#L2166">2166</a> 			<strong class="jxr_keyword">int</strong> _hierarchyDepth = 0;
+<a class="jxr_linenumber" name="L2167" href="#L2167">2167</a> 			Class&lt;?&gt; sc = method.getDeclaringClass().getSuperclass();
+<a class="jxr_linenumber" name="L2168" href="#L2168">2168</a> 			<strong class="jxr_keyword">while</strong> (nn(sc)) {
+<a class="jxr_linenumber" name="L2169" href="#L2169">2169</a> 				_hierarchyDepth++;
+<a class="jxr_linenumber" name="L2170" href="#L2170">2170</a> 				sc = sc.getSuperclass();
+<a class="jxr_linenumber" name="L2171" href="#L2171">2171</a> 			}
+<a class="jxr_linenumber" name="L2172" href="#L2172">2172</a> 			hierarchyDepth = _hierarchyDepth;
+<a class="jxr_linenumber" name="L2173" href="#L2173">2173</a> 
+<a class="jxr_linenumber" name="L2174" href="#L2174">2174</a> 			String _httpMethod = builder.httpMethod;
+<a class="jxr_linenumber" name="L2175" href="#L2175">2175</a> 			<strong class="jxr_keyword">if</strong> (_httpMethod == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2176" href="#L2176">2176</a> 				_httpMethod = HttpUtils.detectHttpMethod(method, <strong class="jxr_keyword">true</strong>, <span class="jxr_string">"GET"</span>);
+<a class="jxr_linenumber" name="L2177" href="#L2177">2177</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"METHOD"</span>.equals(_httpMethod))
+<a class="jxr_linenumber" name="L2178" href="#L2178">2178</a> 				_httpMethod = <span class="jxr_string">"*"</span>;
+<a class="jxr_linenumber" name="L2179" href="#L2179">2179</a> 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
+<a class="jxr_linenumber" name="L2180" href="#L2180">2180</a> 
+<a class="jxr_linenumber" name="L2181" href="#L2181">2181</a> 			defaultCharset = nn(builder.defaultCharset) ? builder.defaultCharset : context.defaultCharset;
+<a class="jxr_linenumber" name="L2182" href="#L2182">2182</a> 			maxInput = nn(builder.maxInput) ? builder.maxInput : context.maxInput;
 <a class="jxr_linenumber" name="L2183" href="#L2183">2183</a> 
-<a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> 			preCallMethods = context.getPreCallMethods().stream().map(x -&gt; <strong class="jxr_keyword">new</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(<a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 			postCallMethods = context.getPostCallMethods().stream().map(x -&gt; <strong class="jxr_keyword">new</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(<a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> 			methodInvoker = <strong class="jxr_keyword">new</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>(method, context.findRestOperationArgs(method, bs), context.getMethodExecStats(method));
-<a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 
-<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 			<strong class="jxr_keyword">this</strong>.callLogger = context.getCallLogger();
-<a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ServletException(e);
-<a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 		}
-<a class="jxr_linenumber" name="L2192" href="#L2192">2192</a> 	}
-<a class="jxr_linenumber" name="L2193" href="#L2193">2193</a> 
-<a class="jxr_linenumber" name="L2194" href="#L2194">2194</a> 	<em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L2195" href="#L2195">2195</a> <em class="jxr_comment">	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.</em>
-<a class="jxr_linenumber" name="L2196" href="#L2196">2196</a> <em class="jxr_comment">	 * It maintains the order in which matches are made during requests.</em>
-<a class="jxr_linenumber" name="L2197" href="#L2197">2197</a> <em class="jxr_comment">	 */</em>
-<a class="jxr_linenumber" name="L2198" href="#L2198">2198</a> 	@Override <em class="jxr_comment">/* Overridden from Comparable */</em>
-<a class="jxr_linenumber" name="L2199" href="#L2199">2199</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(<a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> o) {
-<a class="jxr_linenumber" name="L2200" href="#L2200">2200</a> 		<strong class="jxr_keyword">int</strong> c;
-<a class="jxr_linenumber" name="L2201" href="#L2201">2201</a> 
-<a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Math.min(pathMatchers.length, o.pathMatchers.length); i++) {
-<a class="jxr_linenumber" name="L2203" href="#L2203">2203</a> 			c = pathMatchers[i].compareTo(o.pathMatchers[i]);
-<a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> 			<strong class="jxr_keyword">if</strong> (c != 0)
-<a class="jxr_linenumber" name="L2205" href="#L2205">2205</a> 				<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L2206" href="#L2206">2206</a> 		}
-<a class="jxr_linenumber" name="L2207" href="#L2207">2207</a> 
-<a class="jxr_linenumber" name="L2208" href="#L2208">2208</a> 		c = compare(o.hierarchyDepth, hierarchyDepth);
-<a class="jxr_linenumber" name="L2209" href="#L2209">2209</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
-<a class="jxr_linenumber" name="L2210" href="#L2210">2210</a> 			<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L2211" href="#L2211">2211</a> 
-<a class="jxr_linenumber" name="L2212" href="#L2212">2212</a> 		c = compare(o.requiredMatchers.length, requiredMatchers.length);
-<a class="jxr_linenumber" name="L2213" href="#L2213">2213</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
-<a class="jxr_linenumber" name="L2214" href="#L2214">2214</a> 			<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L2215" href="#L2215">2215</a> 
-<a class="jxr_linenumber" name="L2216" href="#L2216">2216</a> 		c = compare(o.optionalMatchers.length, optionalMatchers.length);
-<a class="jxr_linenumber" name="L2217" href="#L2217">2217</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
-<a class="jxr_linenumber" name="L2218" href="#L2218">2218</a> 			<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L2219" href="#L2219">2219</a> 
-<a class="jxr_linenumber" name="L2220" href="#L2220">2220</a> 		c = compare(o.guards.length, guards.length);
+<a class="jxr_linenumber" name="L2184" href="#L2184">2184</a> 			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
+<a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 
+<a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> 			preCallMethods = context.getPreCallMethods().stream().map(x -&gt; <strong class="jxr_keyword">new</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(<a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 			postCallMethods = context.getPostCallMethods().stream().map(x -&gt; <strong class="jxr_keyword">new</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>(x, context.findRestOperationArgs(x, bs), context.getMethodExecStats(x))).toArray(<a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 			methodInvoker = <strong class="jxr_keyword">new</strong> <a name="RestOpInvoker" href="../../../../org/apache/juneau/rest/RestOpInvoker.html#RestOpInvoker">RestOpInvoker</a>(method, context.findRestOperationArgs(method, bs), context.getMethodExecStats(method));
+<a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> 
+<a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> 			<strong class="jxr_keyword">this</strong>.callLogger = context.getCallLogger();
+<a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L2192" href="#L2192">2192</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ServletException(e);
+<a class="jxr_linenumber" name="L2193" href="#L2193">2193</a> 		}
+<a class="jxr_linenumber" name="L2194" href="#L2194">2194</a> 	}
+<a class="jxr_linenumber" name="L2195" href="#L2195">2195</a> 
+<a class="jxr_linenumber" name="L2196" href="#L2196">2196</a> 	<em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2197" href="#L2197">2197</a> <em class="jxr_comment">	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.</em>
+<a class="jxr_linenumber" name="L2198" href="#L2198">2198</a> <em class="jxr_comment">	 * It maintains the order in which matches are made during requests.</em>
+<a class="jxr_linenumber" name="L2199" href="#L2199">2199</a> <em class="jxr_comment">	 */</em>
+<a class="jxr_linenumber" name="L2200" href="#L2200">2200</a> 	@Override <em class="jxr_comment">/* Overridden from Comparable */</em>
+<a class="jxr_linenumber" name="L2201" href="#L2201">2201</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(<a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> o) {
+<a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> 		<strong class="jxr_keyword">int</strong> c;
+<a class="jxr_linenumber" name="L2203" href="#L2203">2203</a> 
+<a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; Math.min(pathMatchers.length, o.pathMatchers.length); i++) {
+<a class="jxr_linenumber" name="L2205" href="#L2205">2205</a> 			c = pathMatchers[i].compareTo(o.pathMatchers[i]);
+<a class="jxr_linenumber" name="L2206" href="#L2206">2206</a> 			<strong class="jxr_keyword">if</strong> (c != 0)
+<a class="jxr_linenumber" name="L2207" href="#L2207">2207</a> 				<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L2208" href="#L2208">2208</a> 		}
+<a class="jxr_linenumber" name="L2209" href="#L2209">2209</a> 
+<a class="jxr_linenumber" name="L2210" href="#L2210">2210</a> 		c = compare(o.hierarchyDepth, hierarchyDepth);
+<a class="jxr_linenumber" name="L2211" href="#L2211">2211</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
+<a class="jxr_linenumber" name="L2212" href="#L2212">2212</a> 			<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L2213" href="#L2213">2213</a> 
+<a class="jxr_linenumber" name="L2214" href="#L2214">2214</a> 		c = compare(o.requiredMatchers.length, requiredMatchers.length);
+<a class="jxr_linenumber" name="L2215" href="#L2215">2215</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
+<a class="jxr_linenumber" name="L2216" href="#L2216">2216</a> 			<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L2217" href="#L2217">2217</a> 
+<a class="jxr_linenumber" name="L2218" href="#L2218">2218</a> 		c = compare(o.optionalMatchers.length, optionalMatchers.length);
+<a class="jxr_linenumber" name="L2219" href="#L2219">2219</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
+<a class="jxr_linenumber" name="L2220" href="#L2220">2220</a> 			<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L2221" href="#L2221">2221</a> 
-<a class="jxr_linenumber" name="L2222" href="#L2222">2222</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
-<a class="jxr_linenumber" name="L2223" href="#L2223">2223</a> 			<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L2224" href="#L2224">2224</a> 
-<a class="jxr_linenumber" name="L2225" href="#L2225">2225</a> 		c = compare(method.getName(), o.method.getName());
-<a class="jxr_linenumber" name="L2226" href="#L2226">2226</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
-<a class="jxr_linenumber" name="L2227" href="#L2227">2227</a> 			<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L2228" href="#L2228">2228</a> 
-<a class="jxr_linenumber" name="L2229" href="#L2229">2229</a> 		c = compare(method.getParameterCount(), o.method.getParameterCount());
-<a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
-<a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> 			<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 
-<a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; method.getParameterCount(); i++) {
-<a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 			c = compare(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
-<a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> 			<strong class="jxr_keyword">if</strong> (c != 0)
-<a class="jxr_linenumber" name="L2236" href="#L2236">2236</a> 				<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L2237" href="#L2237">2237</a> 		}
-<a class="jxr_linenumber" name="L2238" href="#L2238">2238</a> 
-<a class="jxr_linenumber" name="L2239" href="#L2239">2239</a> 		c = compare(method.getReturnType().getName(), o.method.getReturnType().getName());
-<a class="jxr_linenumber" name="L2240" href="#L2240">2240</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
-<a class="jxr_linenumber" name="L2241" href="#L2241">2241</a> 			<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> 
-<a class="jxr_linenumber" name="L2243" href="#L2243">2243</a> 		<strong class="jxr_keyword">return</strong> 0;
-<a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> 	}
-<a class="jxr_linenumber" name="L2245" href="#L2245">2245</a> 
-<a class="jxr_linenumber" name="L2246" href="#L2246">2246</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L2247" href="#L2247">2247</a> 	<strong class="jxr_keyword">public</strong> Context.Builder copy() {
-<a class="jxr_linenumber" name="L2248" href="#L2248">2248</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
-<a class="jxr_linenumber" name="L2249" href="#L2249">2249</a> 	}
-<a class="jxr_linenumber" name="L2250" href="#L2250">2250</a> 
-<a class="jxr_linenumber" name="L2251" href="#L2251">2251</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2252" href="#L2252">2252</a> <em class="jxr_javadoccomment">	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.</em>
-<a class="jxr_linenumber" name="L2253" href="#L2253">2253</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2254" href="#L2254">2254</a> <em class="jxr_javadoccomment">	 * @param session The current REST call.</em>
-<a class="jxr_linenumber" name="L2255" href="#L2255">2255</a> <em class="jxr_javadoccomment">	 * @return The wrapped request object.</em>
-<a class="jxr_linenumber" name="L2256" href="#L2256">2256</a> <em class="jxr_javadoccomment">	 * @throws Exception If any errors occur trying to interpret the request.</em>
-<a class="jxr_linenumber" name="L2257" href="#L2257">2257</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2258" href="#L2258">2258</a> 	<strong class="jxr_keyword">public</strong> RestRequest createRequest(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L2259" href="#L2259">2259</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RestRequest(<strong class="jxr_keyword">this</strong>, session);
-<a class="jxr_linenumber" name="L2260" href="#L2260">2260</a> 	}
-<a class="jxr_linenumber" name="L2261" href="#L2261">2261</a> 
-<a class="jxr_linenumber" name="L2262" href="#L2262">2262</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2263" href="#L2263">2263</a> <em class="jxr_javadoccomment">	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object</em>
-<a class="jxr_linenumber" name="L2264" href="#L2264">2264</a> <em class="jxr_javadoccomment">	 * and the request returned by {@link #createRequest(RestSession)}.</em>
-<a class="jxr_linenumber" name="L2265" href="#L2265">2265</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2266" href="#L2266">2266</a> <em class="jxr_javadoccomment">	 * @param session The current REST call.</em>
-<a class="jxr_linenumber" name="L2267" href="#L2267">2267</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
-<a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> <em class="jxr_javadoccomment">	 * @return The wrapped response object.</em>
-<a class="jxr_linenumber" name="L2269" href="#L2269">2269</a> <em class="jxr_javadoccomment">	 * @throws Exception If any errors occur trying to interpret the request or response.</em>
-<a class="jxr_linenumber" name="L2270" href="#L2270">2270</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2271" href="#L2271">2271</a> 	<strong class="jxr_keyword">public</strong> <a name="RestResponse" href="../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> createResponse(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session, RestRequest req) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L2272" href="#L2272">2272</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="RestResponse" href="../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a>(<strong class="jxr_keyword">this</strong>, session, req);
-<a class="jxr_linenumber" name="L2273" href="#L2273">2273</a> 	}
-<a class="jxr_linenumber" name="L2274" href="#L2274">2274</a> 
-<a class="jxr_linenumber" name="L2275" href="#L2275">2275</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2276" href="#L2276">2276</a> <em class="jxr_javadoccomment">	 * Creates a new REST operation session.</em>
-<a class="jxr_linenumber" name="L2277" href="#L2277">2277</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2278" href="#L2278">2278</a> <em class="jxr_javadoccomment">	 * @param session The REST session.</em>
-<a class="jxr_linenumber" name="L2279" href="#L2279">2279</a> <em class="jxr_javadoccomment">	 * @return A new REST operation session.</em>
-<a class="jxr_linenumber" name="L2280" href="#L2280">2280</a> <em class="jxr_javadoccomment">	 * @throws Exception If op session could not be created.</em>
-<a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> 	<strong class="jxr_keyword">public</strong> RestOpSession.Builder createSession(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> 		<strong class="jxr_keyword">return</strong> RestOpSession.create(<strong class="jxr_keyword">this</strong>, session).logger(callLogger).debug(debug.isDebug(<strong class="jxr_keyword">this</strong>, session.getRequest()));
-<a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> 	}
-<a class="jxr_linenumber" name="L2285" href="#L2285">2285</a> 
-<a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L2287" href="#L2287">2287</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L2288" href="#L2288">2288</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; x.method.equals(y.method));
-<a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> 	}
-<a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> 
-<a class="jxr_linenumber" name="L2291" href="#L2291">2291</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> <em class="jxr_javadoccomment">	 * Returns the bean context associated with this context.</em>
-<a class="jxr_linenumber" name="L2293" href="#L2293">2293</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2294" href="#L2294">2294</a> <em class="jxr_javadoccomment">	 * @return The bean context associated with this context.</em>
-<a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2296" href="#L2296">2296</a> 	<strong class="jxr_keyword">public</strong> BeanContext getBeanContext() { <strong class="jxr_keyword">return</strong> beanContext; }
-<a class="jxr_linenumber" name="L2297" href="#L2297">2297</a> 
-<a class="jxr_linenumber" name="L2298" href="#L2298">2298</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> <em class="jxr_javadoccomment">	 * Returns the default charset.</em>
-<a class="jxr_linenumber" name="L2300" href="#L2300">2300</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2301" href="#L2301">2301</a> <em class="jxr_javadoccomment">	 * @return The default charset.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L2302" href="#L2302">2302</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2303" href="#L2303">2303</a> 	<strong class="jxr_keyword">public</strong> Charset getDefaultCharset() { <strong class="jxr_keyword">return</strong> defaultCharset; }
-<a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> 
-<a class="jxr_linenumber" name="L2305" href="#L2305">2305</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2306" href="#L2306">2306</a> <em class="jxr_javadoccomment">	 * Returns the default request attributes.</em>
-<a class="jxr_linenumber" name="L2307" href="#L2307">2307</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2308" href="#L2308">2308</a> <em class="jxr_javadoccomment">	 * @return The default request attributes.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L2309" href="#L2309">2309</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> 	<strong class="jxr_keyword">public</strong> <a name="NamedAttributeMap" href="../../../../org/apache/juneau/rest/httppart/NamedAttributeMap.html#NamedAttributeMap">NamedAttributeMap</a> getDefaultRequestAttributes() { <strong class="jxr_keyword">return</strong> defaultRequestAttributes; }
-<a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> 
-<a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> <em class="jxr_javadoccomment">	 * Returns the default form data parameters.</em>
-<a class="jxr_linenumber" name="L2314" href="#L2314">2314</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2315" href="#L2315">2315</a> <em class="jxr_javadoccomment">	 * @return The default form data parameters.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L2316" href="#L2316">2316</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2317" href="#L2317">2317</a> 	<strong class="jxr_keyword">public</strong> <a name="PartList" href="../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> getDefaultRequestFormData() { <strong class="jxr_keyword">return</strong> defaultRequestFormData; }
-<a class="jxr_linenumber" name="L2318" href="#L2318">2318</a> 
-<a class="jxr_linenumber" name="L2319" href="#L2319">2319</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2320" href="#L2320">2320</a> <em class="jxr_javadoccomment">	 * Returns the default request headers.</em>
-<a class="jxr_linenumber" name="L2321" href="#L2321">2321</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2322" href="#L2322">2322</a> <em class="jxr_javadoccomment">	 * @return The default request headers.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L2323" href="#L2323">2323</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2324" href="#L2324">2324</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> getDefaultRequestHeaders() { <strong class="jxr_keyword">return</strong> defaultRequestHeaders; }
-<a class="jxr_linenumber" name="L2325" href="#L2325">2325</a> 
-<a class="jxr_linenumber" name="L2326" href="#L2326">2326</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2327" href="#L2327">2327</a> <em class="jxr_javadoccomment">	 * Returns the default request query parameters.</em>
-<a class="jxr_linenumber" name="L2328" href="#L2328">2328</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2329" href="#L2329">2329</a> <em class="jxr_javadoccomment">	 * @return The default request query parameters.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L2330" href="#L2330">2330</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2331" href="#L2331">2331</a> 	<strong class="jxr_keyword">public</strong> <a name="PartList" href="../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> getDefaultRequestQueryData() { <strong class="jxr_keyword">return</strong> defaultRequestQueryData; }
-<a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> 
-<a class="jxr_linenumber" name="L2333" href="#L2333">2333</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2334" href="#L2334">2334</a> <em class="jxr_javadoccomment">	 * Returns the default response headers.</em>
-<a class="jxr_linenumber" name="L2335" href="#L2335">2335</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2336" href="#L2336">2336</a> <em class="jxr_javadoccomment">	 * @return The default response headers.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L2337" href="#L2337">2337</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2338" href="#L2338">2338</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> getDefaultResponseHeaders() { <strong class="jxr_keyword">return</strong> defaultResponseHeaders; }
-<a class="jxr_linenumber" name="L2339" href="#L2339">2339</a> 
-<a class="jxr_linenumber" name="L2340" href="#L2340">2340</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2341" href="#L2341">2341</a> <em class="jxr_javadoccomment">	 * Returns the compression encoders to use for this method.</em>
-<a class="jxr_linenumber" name="L2342" href="#L2342">2342</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2343" href="#L2343">2343</a> <em class="jxr_javadoccomment">	 * @return The compression encoders to use for this method.</em>
-<a class="jxr_linenumber" name="L2344" href="#L2344">2344</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2345" href="#L2345">2345</a> 	<strong class="jxr_keyword">public</strong> <a name="EncoderSet" href="../../../../org/apache/juneau/encoders/EncoderSet.html#EncoderSet">EncoderSet</a> getEncoders() { <strong class="jxr_keyword">return</strong> encoders; }
-<a class="jxr_linenumber" name="L2346" href="#L2346">2346</a> 
-<a class="jxr_linenumber" name="L2347" href="#L2347">2347</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2348" href="#L2348">2348</a> <em class="jxr_javadoccomment">	 * Returns the HTTP method name (e.g. &lt;js&gt;"GET"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L2349" href="#L2349">2349</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2350" href="#L2350">2350</a> <em class="jxr_javadoccomment">	 * @return The HTTP method name.</em>
-<a class="jxr_linenumber" name="L2351" href="#L2351">2351</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2352" href="#L2352">2352</a> 	<strong class="jxr_keyword">public</strong> String getHttpMethod() { <strong class="jxr_keyword">return</strong> httpMethod; }
-<a class="jxr_linenumber" name="L2353" href="#L2353">2353</a> 
-<a class="jxr_linenumber" name="L2354" href="#L2354">2354</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2355" href="#L2355">2355</a> <em class="jxr_javadoccomment">	 * Returns the underlying Java method that this context belongs to.</em>
-<a class="jxr_linenumber" name="L2356" href="#L2356">2356</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2357" href="#L2357">2357</a> <em class="jxr_javadoccomment">	 * @return The underlying Java method that this context belongs to.</em>
-<a class="jxr_linenumber" name="L2358" href="#L2358">2358</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2359" href="#L2359">2359</a> 	<strong class="jxr_keyword">public</strong> <a name="Method" href="../../../../org/apache/juneau/rest/annotation/Method.html#Method">Method</a> getJavaMethod() { <strong class="jxr_keyword">return</strong> method; }
-<a class="jxr_linenumber" name="L2360" href="#L2360">2360</a> 
-<a class="jxr_linenumber" name="L2361" href="#L2361">2361</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2362" href="#L2362">2362</a> <em class="jxr_javadoccomment">	 * Returns the JSON-Schema generator applicable to this Java method.</em>
-<a class="jxr_linenumber" name="L2363" href="#L2363">2363</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2364" href="#L2364">2364</a> <em class="jxr_javadoccomment">	 * @return The JSON-Schema generator applicable to this Java method.</em>
-<a class="jxr_linenumber" name="L2365" href="#L2365">2365</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2366" href="#L2366">2366</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaGenerator" href="../../../../org/apache/juneau/jsonschema/JsonSchemaGenerator.html#JsonSchemaGenerator">JsonSchemaGenerator</a> getJsonSchemaGenerator() { <strong class="jxr_keyword">return</strong> jsonSchemaGenerator; }
-<a class="jxr_linenumber" name="L2367" href="#L2367">2367</a> 
-<a class="jxr_linenumber" name="L2368" href="#L2368">2368</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2369" href="#L2369">2369</a> <em class="jxr_javadoccomment">	 * Returns the max number of bytes to process in the input content.</em>
-<a class="jxr_linenumber" name="L2370" href="#L2370">2370</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2371" href="#L2371">2371</a> <em class="jxr_javadoccomment">	 * @return The max number of bytes to process in the input content.</em>
-<a class="jxr_linenumber" name="L2372" href="#L2372">2372</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2373" href="#L2373">2373</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getMaxInput() { <strong class="jxr_keyword">return</strong> maxInput; }
-<a class="jxr_linenumber" name="L2374" href="#L2374">2374</a> 
-<a class="jxr_linenumber" name="L2375" href="#L2375">2375</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2376" href="#L2376">2376</a> <em class="jxr_javadoccomment">	 * Returns the parsers to use for this method.</em>
-<a class="jxr_linenumber" name="L2377" href="#L2377">2377</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2378" href="#L2378">2378</a> <em class="jxr_javadoccomment">	 * @return The parsers to use for this method.</em>
-<a class="jxr_linenumber" name="L2379" href="#L2379">2379</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2380" href="#L2380">2380</a> 	<strong class="jxr_keyword">public</strong> <a name="ParserSet" href="../../../../org/apache/juneau/parser/ParserSet.html#ParserSet">ParserSet</a> getParsers() { <strong class="jxr_keyword">return</strong> parsers; }
-<a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> 
-<a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2383" href="#L2383">2383</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;partParser&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L2384" href="#L2384">2384</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2385" href="#L2385">2385</a> <em class="jxr_javadoccomment">	 * @return The value of the &lt;property&gt;partParser&lt;/property&gt; property on this bean, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
-<a class="jxr_linenumber" name="L2386" href="#L2386">2386</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2387" href="#L2387">2387</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpPartParser" href="../../../../org/apache/juneau/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> getPartParser() { <strong class="jxr_keyword">return</strong> partParser; }
-<a class="jxr_linenumber" name="L2388" href="#L2388">2388</a> 
-<a class="jxr_linenumber" name="L2389" href="#L2389">2389</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2390" href="#L2390">2390</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;partSerializer&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L2391" href="#L2391">2391</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2392" href="#L2392">2392</a> <em class="jxr_javadoccomment">	 * @return The value of the &lt;property&gt;partSerializer&lt;/property&gt; property on this bean, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
-<a class="jxr_linenumber" name="L2393" href="#L2393">2393</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2394" href="#L2394">2394</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpPartSerializer" href="../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> getPartSerializer() { <strong class="jxr_keyword">return</strong> partSerializer; }
-<a class="jxr_linenumber" name="L2395" href="#L2395">2395</a> 
-<a class="jxr_linenumber" name="L2396" href="#L2396">2396</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2397" href="#L2397">2397</a> <em class="jxr_javadoccomment">	 * Returns the path pattern for this method.</em>
-<a class="jxr_linenumber" name="L2398" href="#L2398">2398</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2399" href="#L2399">2399</a> <em class="jxr_javadoccomment">	 * @return The path pattern.</em>
-<a class="jxr_linenumber" name="L2400" href="#L2400">2400</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2401" href="#L2401">2401</a> 	<strong class="jxr_keyword">public</strong> String getPathPattern() { <strong class="jxr_keyword">return</strong> pathMatchers[0].toString(); }
-<a class="jxr_linenumber" name="L2402" href="#L2402">2402</a> 
-<a class="jxr_linenumber" name="L2403" href="#L2403">2403</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2404" href="#L2404">2404</a> <em class="jxr_javadoccomment">	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.</em>
-<a class="jxr_linenumber" name="L2405" href="#L2405">2405</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2406" href="#L2406">2406</a> <em class="jxr_javadoccomment">	 * @param o The response POJO.</em>
-<a class="jxr_linenumber" name="L2407" href="#L2407">2407</a> <em class="jxr_javadoccomment">	 * @return Metadata about the specified response object, or &lt;jk&gt;null&lt;/jk&gt; if it's not annotated with {@link Response @Response}.</em>
-<a class="jxr_linenumber" name="L2408" href="#L2408">2408</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2409" href="#L2409">2409</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanMeta" href="../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> getResponseBeanMeta(Object o) {
-<a class="jxr_linenumber" name="L2410" href="#L2410">2410</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2411" href="#L2411">2411</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L2412" href="#L2412">2412</a> 		<strong class="jxr_keyword">var</strong> c = o.getClass();
-<a class="jxr_linenumber" name="L2413" href="#L2413">2413</a> 		<strong class="jxr_keyword">var</strong> rbm = responseBeanMetas.get(c);
-<a class="jxr_linenumber" name="L2414" href="#L2414">2414</a> 		<strong class="jxr_keyword">if</strong> (rbm == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L2415" href="#L2415">2415</a> 			rbm = ResponseBeanMeta.create(c, AnnotationWorkList.create());
-<a class="jxr_linenumber" name="L2416" href="#L2416">2416</a> 			<strong class="jxr_keyword">if</strong> (rbm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2417" href="#L2417">2417</a> 				rbm = ResponseBeanMeta.NULL;
-<a class="jxr_linenumber" name="L2418" href="#L2418">2418</a> 			responseBeanMetas.put(c, rbm);
-<a class="jxr_linenumber" name="L2419" href="#L2419">2419</a> 		}
-<a class="jxr_linenumber" name="L2420" href="#L2420">2420</a> 		<strong class="jxr_keyword">if</strong> (rbm == ResponseBeanMeta.NULL)
-<a class="jxr_linenumber" name="L2421" href="#L2421">2421</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L2422" href="#L2422">2422</a> 		<strong class="jxr_keyword">return</strong> rbm;
-<a class="jxr_linenumber" name="L2423" href="#L2423">2423</a> 	}
-<a class="jxr_linenumber" name="L2424" href="#L2424">2424</a> 
-<a class="jxr_linenumber" name="L2425" href="#L2425">2425</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2426" href="#L2426">2426</a> <em class="jxr_javadoccomment">	 * Returns metadata about the specified response object if it's annotated with {@link Header @Header}.</em>
-<a class="jxr_linenumber" name="L2427" href="#L2427">2427</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2428" href="#L2428">2428</a> <em class="jxr_javadoccomment">	 * @param o The response POJO.</em>
-<a class="jxr_linenumber" name="L2429" href="#L2429">2429</a> <em class="jxr_javadoccomment">	 * @return Metadata about the specified response object, or &lt;jk&gt;null&lt;/jk&gt; if it's not annotated with {@link Header @Header}.</em>
-<a class="jxr_linenumber" name="L2430" href="#L2430">2430</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2431" href="#L2431">2431</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponsePartMeta" href="../../../../org/apache/juneau/rest/httppart/ResponsePartMeta.html#ResponsePartMeta">ResponsePartMeta</a> getResponseHeaderMeta(Object o) {
-<a class="jxr_linenumber" name="L2432" href="#L2432">2432</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2433" href="#L2433">2433</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L2434" href="#L2434">2434</a> 		<strong class="jxr_keyword">var</strong> c = o.getClass();
-<a class="jxr_linenumber" name="L2435" href="#L2435">2435</a> 		<strong class="jxr_keyword">var</strong> pm = headerPartMetas.get(c);
-<a class="jxr_linenumber" name="L2436" href="#L2436">2436</a> 		<strong class="jxr_keyword">if</strong> (pm == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L2437" href="#L2437">2437</a> 			<strong class="jxr_keyword">var</strong> a = c.getAnnotation(Header.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L2438" href="#L2438">2438</a> 			<strong class="jxr_keyword">if</strong> (nn(a)) {
-<a class="jxr_linenumber" name="L2439" href="#L2439">2439</a> 				<strong class="jxr_keyword">var</strong> schema = HttpPartSchema.create(a);
-<a class="jxr_linenumber" name="L2440" href="#L2440">2440</a> 				<strong class="jxr_keyword">var</strong> serializer = createPartSerializer(schema.getSerializer(), partSerializer);
-<a class="jxr_linenumber" name="L2441" href="#L2441">2441</a> 				pm = <strong class="jxr_keyword">new</strong> <a name="ResponsePartMeta" href="../../../../org/apache/juneau/rest/httppart/ResponsePartMeta.html#ResponsePartMeta">ResponsePartMeta</a>(HEADER, schema, serializer);
-<a class="jxr_linenumber" name="L2442" href="#L2442">2442</a> 			}
-<a class="jxr_linenumber" name="L2443" href="#L2443">2443</a> 			<strong class="jxr_keyword">if</strong> (pm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2444" href="#L2444">2444</a> 				pm = ResponsePartMeta.NULL;
-<a class="jxr_linenumber" name="L2445" href="#L2445">2445</a> 			headerPartMetas.put(c, pm);
-<a class="jxr_linenumber" name="L2446" href="#L2446">2446</a> 		}
-<a class="jxr_linenumber" name="L2447" href="#L2447">2447</a> 		<strong class="jxr_keyword">if</strong> (pm == ResponsePartMeta.NULL)
-<a class="jxr_linenumber" name="L2448" href="#L2448">2448</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L2449" href="#L2449">2449</a> 		<strong class="jxr_keyword">return</strong> pm;
-<a class="jxr_linenumber" name="L2450" href="#L2450">2450</a> 	}
-<a class="jxr_linenumber" name="L2451" href="#L2451">2451</a> 
-<a class="jxr_linenumber" name="L2452" href="#L2452">2452</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2453" href="#L2453">2453</a> <em class="jxr_javadoccomment">	 * Returns the response bean meta if this method returns a {@link Response}-annotated bean.</em>
-<a class="jxr_linenumber" name="L2454" href="#L2454">2454</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2455" href="#L2455">2455</a> <em class="jxr_javadoccomment">	 * @return The response bean meta or &lt;jk&gt;null&lt;/jk&gt; if it's not a {@link Response}-annotated bean.</em>
-<a class="jxr_linenumber" name="L2456" href="#L2456">2456</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2457" href="#L2457">2457</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanMeta" href="../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> getResponseMeta() { <strong class="jxr_keyword">return</strong> responseMeta; }
-<a class="jxr_linenumber" name="L2458" href="#L2458">2458</a> 
-<a class="jxr_linenumber" name="L2459" href="#L2459">2459</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2460" href="#L2460">2460</a> <em class="jxr_javadoccomment">	 * Returns the serializers to use for this method.</em>
-<a class="jxr_linenumber" name="L2461" href="#L2461">2461</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2462" href="#L2462">2462</a> <em class="jxr_javadoccomment">	 * @return The serializers to use for this method.</em>
-<a class="jxr_linenumber" name="L2463" href="#L2463">2463</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2464" href="#L2464">2464</a> 	<strong class="jxr_keyword">public</strong> <a name="SerializerSet" href="../../../../org/apache/juneau/serializer/SerializerSet.html#SerializerSet">SerializerSet</a> getSerializers() { <strong class="jxr_keyword">return</strong> serializers; }
-<a class="jxr_linenumber" name="L2465" href="#L2465">2465</a> 
-<a class="jxr_linenumber" name="L2466" href="#L2466">2466</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2467" href="#L2467">2467</a> <em class="jxr_javadoccomment">	 * Returns a list of supported accept types.</em>
-<a class="jxr_linenumber" name="L2468" href="#L2468">2468</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2469" href="#L2469">2469</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list.</em>
-<a class="jxr_linenumber" name="L2470" href="#L2470">2470</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2471" href="#L2471">2471</a> 	<strong class="jxr_keyword">public</strong> List&lt;MediaType&gt; getSupportedAcceptTypes() { <strong class="jxr_keyword">return</strong> supportedAcceptTypes; }
-<a class="jxr_linenumber" name="L2472" href="#L2472">2472</a> 
-<a class="jxr_linenumber" name="L2473" href="#L2473">2473</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2474" href="#L2474">2474</a> <em class="jxr_javadoccomment">	 * Returns the list of supported content types.</em>
-<a class="jxr_linenumber" name="L2475" href="#L2475">2475</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2476" href="#L2476">2476</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list.</em>
-<a class="jxr_linenumber" name="L2477" href="#L2477">2477</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2478" href="#L2478">2478</a> 	<strong class="jxr_keyword">public</strong> List&lt;MediaType&gt; getSupportedContentTypes() { <strong class="jxr_keyword">return</strong> supportedContentTypes; }
-<a class="jxr_linenumber" name="L2479" href="#L2479">2479</a> 
-<a class="jxr_linenumber" name="L2480" href="#L2480">2480</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L2481" href="#L2481">2481</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L2482" href="#L2482">2482</a> 		<strong class="jxr_keyword">return</strong> method.hashCode();
-<a class="jxr_linenumber" name="L2483" href="#L2483">2483</a> 	}
-<a class="jxr_linenumber" name="L2484" href="#L2484">2484</a> 
-<a class="jxr_linenumber" name="L2485" href="#L2485">2485</a> 	<strong class="jxr_keyword">private</strong> <a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> matchPattern(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> call) {
-<a class="jxr_linenumber" name="L2486" href="#L2486">2486</a> 		<strong class="jxr_keyword">var</strong> pm = (<a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a>)<strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L2487" href="#L2487">2487</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pp : pathMatchers)
-<a class="jxr_linenumber" name="L2488" href="#L2488">2488</a> 			<strong class="jxr_keyword">if</strong> (pm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2489" href="#L2489">2489</a> 				pm = pp.match(call.getUrlPath());
-<a class="jxr_linenumber" name="L2490" href="#L2490">2490</a> 		<strong class="jxr_keyword">return</strong> pm;
-<a class="jxr_linenumber" name="L2491" href="#L2491">2491</a> 	}
-<a class="jxr_linenumber" name="L2492" href="#L2492">2492</a> 
-<a class="jxr_linenumber" name="L2493" href="#L2493">2493</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L2494" href="#L2494">2494</a> <em class="jxr_javadoccomment">	 * Identifies if this method can process the specified call.</em>
-<a class="jxr_linenumber" name="L2495" href="#L2495">2495</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2496" href="#L2496">2496</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L2497" href="#L2497">2497</a> <em class="jxr_javadoccomment">	 * To process the call, the following must be true:</em>
-<a class="jxr_linenumber" name="L2498" href="#L2498">2498</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L2499" href="#L2499">2499</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Path pattern must match.</em>
-<a class="jxr_linenumber" name="L2500" href="#L2500">2500</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Matchers (if any) must match.</em>
-<a class="jxr_linenumber" name="L2501" href="#L2501">2501</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L2502" href="#L2502">2502</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L2503" href="#L2503">2503</a> <em class="jxr_javadoccomment">	 * @param session The call to check.</em>
-<a class="jxr_linenumber" name="L2504" href="#L2504">2504</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L2505" href="#L2505">2505</a> <em class="jxr_javadoccomment">	 * 	One of the following values:</em>
-<a class="jxr_linenumber" name="L2506" href="#L2506">2506</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L2507" href="#L2507">2507</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;0&lt;/c&gt; - Path doesn't match.</em>
-<a class="jxr_linenumber" name="L2508" href="#L2508">2508</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;1&lt;/c&gt; - Path matched but matchers did not.</em>
-<a class="jxr_linenumber" name="L2509" href="#L2509">2509</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;2&lt;/c&gt; - Matches.</em>
-<a class="jxr_linenumber" name="L2510" href="#L2510">2510</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L2511" href="#L2511">2511</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">int</strong> match(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session) {
-<a class="jxr_linenumber" name="L2513" href="#L2513">2513</a> 
-<a class="jxr_linenumber" name="L2514" href="#L2514">2514</a> 		<strong class="jxr_keyword">var</strong> pm = matchPattern(session);
+<a class="jxr_linenumber" name="L2222" href="#L2222">2222</a> 		c = compare(o.guards.length, guards.length);
+<a class="jxr_linenumber" name="L2223" href="#L2223">2223</a> 
+<a class="jxr_linenumber" name="L2224" href="#L2224">2224</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
+<a class="jxr_linenumber" name="L2225" href="#L2225">2225</a> 			<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L2226" href="#L2226">2226</a> 
+<a class="jxr_linenumber" name="L2227" href="#L2227">2227</a> 		c = compare(method.getName(), o.method.getName());
+<a class="jxr_linenumber" name="L2228" href="#L2228">2228</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
+<a class="jxr_linenumber" name="L2229" href="#L2229">2229</a> 			<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> 
+<a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> 		c = compare(method.getParameterCount(), o.method.getParameterCount());
+<a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
+<a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 			<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 
+<a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; method.getParameterCount(); i++) {
+<a class="jxr_linenumber" name="L2236" href="#L2236">2236</a> 			c = compare(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
+<a class="jxr_linenumber" name="L2237" href="#L2237">2237</a> 			<strong class="jxr_keyword">if</strong> (c != 0)
+<a class="jxr_linenumber" name="L2238" href="#L2238">2238</a> 				<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L2239" href="#L2239">2239</a> 		}
+<a class="jxr_linenumber" name="L2240" href="#L2240">2240</a> 
+<a class="jxr_linenumber" name="L2241" href="#L2241">2241</a> 		c = compare(method.getReturnType().getName(), o.method.getReturnType().getName());
+<a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> 		<strong class="jxr_keyword">if</strong> (c != 0)
+<a class="jxr_linenumber" name="L2243" href="#L2243">2243</a> 			<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> 
+<a class="jxr_linenumber" name="L2245" href="#L2245">2245</a> 		<strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L2246" href="#L2246">2246</a> 	}
+<a class="jxr_linenumber" name="L2247" href="#L2247">2247</a> 
+<a class="jxr_linenumber" name="L2248" href="#L2248">2248</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L2249" href="#L2249">2249</a> 	<strong class="jxr_keyword">public</strong> Context.Builder copy() {
+<a class="jxr_linenumber" name="L2250" href="#L2250">2250</a> 		<strong class="jxr_keyword">throw</strong> unsupportedOp();
+<a class="jxr_linenumber" name="L2251" href="#L2251">2251</a> 	}
+<a class="jxr_linenumber" name="L2252" href="#L2252">2252</a> 
+<a class="jxr_linenumber" name="L2253" href="#L2253">2253</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2254" href="#L2254">2254</a> <em class="jxr_javadoccomment">	 * Creates a {@link RestRequest} object based on the specified incoming {@link HttpServletRequest} object.</em>
+<a class="jxr_linenumber" name="L2255" href="#L2255">2255</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2256" href="#L2256">2256</a> <em class="jxr_javadoccomment">	 * @param session The current REST call.</em>
+<a class="jxr_linenumber" name="L2257" href="#L2257">2257</a> <em class="jxr_javadoccomment">	 * @return The wrapped request object.</em>
+<a class="jxr_linenumber" name="L2258" href="#L2258">2258</a> <em class="jxr_javadoccomment">	 * @throws Exception If any errors occur trying to interpret the request.</em>
+<a class="jxr_linenumber" name="L2259" href="#L2259">2259</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2260" href="#L2260">2260</a> 	<strong class="jxr_keyword">public</strong> RestRequest createRequest(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L2261" href="#L2261">2261</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RestRequest(<strong class="jxr_keyword">this</strong>, session);
+<a class="jxr_linenumber" name="L2262" href="#L2262">2262</a> 	}
+<a class="jxr_linenumber" name="L2263" href="#L2263">2263</a> 
+<a class="jxr_linenumber" name="L2264" href="#L2264">2264</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2265" href="#L2265">2265</a> <em class="jxr_javadoccomment">	 * Creates a {@link RestResponse} object based on the specified incoming {@link HttpServletResponse} object</em>
+<a class="jxr_linenumber" name="L2266" href="#L2266">2266</a> <em class="jxr_javadoccomment">	 * and the request returned by {@link #createRequest(RestSession)}.</em>
+<a class="jxr_linenumber" name="L2267" href="#L2267">2267</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> <em class="jxr_javadoccomment">	 * @param session The current REST call.</em>
+<a class="jxr_linenumber" name="L2269" href="#L2269">2269</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
+<a class="jxr_linenumber" name="L2270" href="#L2270">2270</a> <em class="jxr_javadoccomment">	 * @return The wrapped response object.</em>
+<a class="jxr_linenumber" name="L2271" href="#L2271">2271</a> <em class="jxr_javadoccomment">	 * @throws Exception If any errors occur trying to interpret the request or response.</em>
+<a class="jxr_linenumber" name="L2272" href="#L2272">2272</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2273" href="#L2273">2273</a> 	<strong class="jxr_keyword">public</strong> <a name="RestResponse" href="../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> createResponse(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session, RestRequest req) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L2274" href="#L2274">2274</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="RestResponse" href="../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a>(<strong class="jxr_keyword">this</strong>, session, req);
+<a class="jxr_linenumber" name="L2275" href="#L2275">2275</a> 	}
+<a class="jxr_linenumber" name="L2276" href="#L2276">2276</a> 
+<a class="jxr_linenumber" name="L2277" href="#L2277">2277</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2278" href="#L2278">2278</a> <em class="jxr_javadoccomment">	 * Creates a new REST operation session.</em>
+<a class="jxr_linenumber" name="L2279" href="#L2279">2279</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2280" href="#L2280">2280</a> <em class="jxr_javadoccomment">	 * @param session The REST session.</em>
+<a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> <em class="jxr_javadoccomment">	 * @return A new REST operation session.</em>
+<a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> <em class="jxr_javadoccomment">	 * @throws Exception If op session could not be created.</em>
+<a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> 	<strong class="jxr_keyword">public</strong> RestOpSession.Builder createSession(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L2285" href="#L2285">2285</a> 		<strong class="jxr_keyword">return</strong> RestOpSession.create(<strong class="jxr_keyword">this</strong>, session).logger(callLogger).debug(debug.isDebug(<strong class="jxr_keyword">this</strong>, session.getRequest()));
+<a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 	}
+<a class="jxr_linenumber" name="L2287" href="#L2287">2287</a> 
+<a class="jxr_linenumber" name="L2288" href="#L2288">2288</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L2289" href="#L2289">2289</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
+<a class="jxr_linenumber" name="L2290" href="#L2290">2290</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="RestOpContext" href="../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> o2) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, o2, (x, y) -&gt; x.method.equals(y.method));
+<a class="jxr_linenumber" name="L2291" href="#L2291">2291</a> 	}
+<a class="jxr_linenumber" name="L2292" href="#L2292">2292</a> 
+<a class="jxr_linenumber" name="L2293" href="#L2293">2293</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2294" href="#L2294">2294</a> <em class="jxr_javadoccomment">	 * Returns the bean context associated with this context.</em>
+<a class="jxr_linenumber" name="L2295" href="#L2295">2295</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2296" href="#L2296">2296</a> <em class="jxr_javadoccomment">	 * @return The bean context associated with this context.</em>
+<a class="jxr_linenumber" name="L2297" href="#L2297">2297</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2298" href="#L2298">2298</a> 	<strong class="jxr_keyword">public</strong> BeanContext getBeanContext() { <strong class="jxr_keyword">return</strong> beanContext; }
+<a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> 
+<a class="jxr_linenumber" name="L2300" href="#L2300">2300</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2301" href="#L2301">2301</a> <em class="jxr_javadoccomment">	 * Returns the default charset.</em>
+<a class="jxr_linenumber" name="L2302" href="#L2302">2302</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2303" href="#L2303">2303</a> <em class="jxr_javadoccomment">	 * @return The default charset.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L2304" href="#L2304">2304</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2305" href="#L2305">2305</a> 	<strong class="jxr_keyword">public</strong> Charset getDefaultCharset() { <strong class="jxr_keyword">return</strong> defaultCharset; }
+<a class="jxr_linenumber" name="L2306" href="#L2306">2306</a> 
+<a class="jxr_linenumber" name="L2307" href="#L2307">2307</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2308" href="#L2308">2308</a> <em class="jxr_javadoccomment">	 * Returns the default request attributes.</em>
+<a class="jxr_linenumber" name="L2309" href="#L2309">2309</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> <em class="jxr_javadoccomment">	 * @return The default request attributes.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> 	<strong class="jxr_keyword">public</strong> <a name="NamedAttributeMap" href="../../../../org/apache/juneau/rest/httppart/NamedAttributeMap.html#NamedAttributeMap">NamedAttributeMap</a> getDefaultRequestAttributes() { <strong class="jxr_keyword">return</strong> defaultRequestAttributes; }
+<a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> 
+<a class="jxr_linenumber" name="L2314" href="#L2314">2314</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2315" href="#L2315">2315</a> <em class="jxr_javadoccomment">	 * Returns the default form data parameters.</em>
+<a class="jxr_linenumber" name="L2316" href="#L2316">2316</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2317" href="#L2317">2317</a> <em class="jxr_javadoccomment">	 * @return The default form data parameters.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L2318" href="#L2318">2318</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2319" href="#L2319">2319</a> 	<strong class="jxr_keyword">public</strong> <a name="PartList" href="../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> getDefaultRequestFormData() { <strong class="jxr_keyword">return</strong> defaultRequestFormData; }
+<a class="jxr_linenumber" name="L2320" href="#L2320">2320</a> 
+<a class="jxr_linenumber" name="L2321" href="#L2321">2321</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2322" href="#L2322">2322</a> <em class="jxr_javadoccomment">	 * Returns the default request headers.</em>
+<a class="jxr_linenumber" name="L2323" href="#L2323">2323</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2324" href="#L2324">2324</a> <em class="jxr_javadoccomment">	 * @return The default request headers.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L2325" href="#L2325">2325</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2326" href="#L2326">2326</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> getDefaultRequestHeaders() { <strong class="jxr_keyword">return</strong> defaultRequestHeaders; }
+<a class="jxr_linenumber" name="L2327" href="#L2327">2327</a> 
+<a class="jxr_linenumber" name="L2328" href="#L2328">2328</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2329" href="#L2329">2329</a> <em class="jxr_javadoccomment">	 * Returns the default request query parameters.</em>
+<a class="jxr_linenumber" name="L2330" href="#L2330">2330</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2331" href="#L2331">2331</a> <em class="jxr_javadoccomment">	 * @return The default request query parameters.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L2332" href="#L2332">2332</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2333" href="#L2333">2333</a> 	<strong class="jxr_keyword">public</strong> <a name="PartList" href="../../../../org/apache/juneau/http/part/PartList.html#PartList">PartList</a> getDefaultRequestQueryData() { <strong class="jxr_keyword">return</strong> defaultRequestQueryData; }
+<a class="jxr_linenumber" name="L2334" href="#L2334">2334</a> 
+<a class="jxr_linenumber" name="L2335" href="#L2335">2335</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2336" href="#L2336">2336</a> <em class="jxr_javadoccomment">	 * Returns the default response headers.</em>
+<a class="jxr_linenumber" name="L2337" href="#L2337">2337</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2338" href="#L2338">2338</a> <em class="jxr_javadoccomment">	 * @return The default response headers.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L2339" href="#L2339">2339</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2340" href="#L2340">2340</a> 	<strong class="jxr_keyword">public</strong> <a name="HeaderList" href="../../../../org/apache/juneau/http/header/HeaderList.html#HeaderList">HeaderList</a> getDefaultResponseHeaders() { <strong class="jxr_keyword">return</strong> defaultResponseHeaders; }
+<a class="jxr_linenumber" name="L2341" href="#L2341">2341</a> 
+<a class="jxr_linenumber" name="L2342" href="#L2342">2342</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2343" href="#L2343">2343</a> <em class="jxr_javadoccomment">	 * Returns the compression encoders to use for this method.</em>
+<a class="jxr_linenumber" name="L2344" href="#L2344">2344</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2345" href="#L2345">2345</a> <em class="jxr_javadoccomment">	 * @return The compression encoders to use for this method.</em>
+<a class="jxr_linenumber" name="L2346" href="#L2346">2346</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2347" href="#L2347">2347</a> 	<strong class="jxr_keyword">public</strong> <a name="EncoderSet" href="../../../../org/apache/juneau/encoders/EncoderSet.html#EncoderSet">EncoderSet</a> getEncoders() { <strong class="jxr_keyword">return</strong> encoders; }
+<a class="jxr_linenumber" name="L2348" href="#L2348">2348</a> 
+<a class="jxr_linenumber" name="L2349" href="#L2349">2349</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2350" href="#L2350">2350</a> <em class="jxr_javadoccomment">	 * Returns the HTTP method name (e.g. &lt;js&gt;"GET"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L2351" href="#L2351">2351</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2352" href="#L2352">2352</a> <em class="jxr_javadoccomment">	 * @return The HTTP method name.</em>
+<a class="jxr_linenumber" name="L2353" href="#L2353">2353</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2354" href="#L2354">2354</a> 	<strong class="jxr_keyword">public</strong> String getHttpMethod() { <strong class="jxr_keyword">return</strong> httpMethod; }
+<a class="jxr_linenumber" name="L2355" href="#L2355">2355</a> 
+<a class="jxr_linenumber" name="L2356" href="#L2356">2356</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2357" href="#L2357">2357</a> <em class="jxr_javadoccomment">	 * Returns the underlying Java method that this context belongs to.</em>
+<a class="jxr_linenumber" name="L2358" href="#L2358">2358</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2359" href="#L2359">2359</a> <em class="jxr_javadoccomment">	 * @return The underlying Java method that this context belongs to.</em>
+<a class="jxr_linenumber" name="L2360" href="#L2360">2360</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2361" href="#L2361">2361</a> 	<strong class="jxr_keyword">public</strong> <a name="Method" href="../../../../org/apache/juneau/rest/annotation/Method.html#Method">Method</a> getJavaMethod() { <strong class="jxr_keyword">return</strong> method; }
+<a class="jxr_linenumber" name="L2362" href="#L2362">2362</a> 
+<a class="jxr_linenumber" name="L2363" href="#L2363">2363</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2364" href="#L2364">2364</a> <em class="jxr_javadoccomment">	 * Returns the JSON-Schema generator applicable to this Java method.</em>
+<a class="jxr_linenumber" name="L2365" href="#L2365">2365</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2366" href="#L2366">2366</a> <em class="jxr_javadoccomment">	 * @return The JSON-Schema generator applicable to this Java method.</em>
+<a class="jxr_linenumber" name="L2367" href="#L2367">2367</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2368" href="#L2368">2368</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaGenerator" href="../../../../org/apache/juneau/jsonschema/JsonSchemaGenerator.html#JsonSchemaGenerator">JsonSchemaGenerator</a> getJsonSchemaGenerator() { <strong class="jxr_keyword">return</strong> jsonSchemaGenerator; }
+<a class="jxr_linenumber" name="L2369" href="#L2369">2369</a> 
+<a class="jxr_linenumber" name="L2370" href="#L2370">2370</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2371" href="#L2371">2371</a> <em class="jxr_javadoccomment">	 * Returns the max number of bytes to process in the input content.</em>
+<a class="jxr_linenumber" name="L2372" href="#L2372">2372</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2373" href="#L2373">2373</a> <em class="jxr_javadoccomment">	 * @return The max number of bytes to process in the input content.</em>
+<a class="jxr_linenumber" name="L2374" href="#L2374">2374</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2375" href="#L2375">2375</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getMaxInput() { <strong class="jxr_keyword">return</strong> maxInput; }
+<a class="jxr_linenumber" name="L2376" href="#L2376">2376</a> 
+<a class="jxr_linenumber" name="L2377" href="#L2377">2377</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2378" href="#L2378">2378</a> <em class="jxr_javadoccomment">	 * Returns the parsers to use for this method.</em>
+<a class="jxr_linenumber" name="L2379" href="#L2379">2379</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2380" href="#L2380">2380</a> <em class="jxr_javadoccomment">	 * @return The parsers to use for this method.</em>
+<a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> 	<strong class="jxr_keyword">public</strong> <a name="ParserSet" href="../../../../org/apache/juneau/parser/ParserSet.html#ParserSet">ParserSet</a> getParsers() { <strong class="jxr_keyword">return</strong> parsers; }
+<a class="jxr_linenumber" name="L2383" href="#L2383">2383</a> 
+<a class="jxr_linenumber" name="L2384" href="#L2384">2384</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2385" href="#L2385">2385</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;partParser&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L2386" href="#L2386">2386</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2387" href="#L2387">2387</a> <em class="jxr_javadoccomment">	 * @return The value of the &lt;property&gt;partParser&lt;/property&gt; property on this bean, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
+<a class="jxr_linenumber" name="L2388" href="#L2388">2388</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2389" href="#L2389">2389</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpPartParser" href="../../../../org/apache/juneau/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> getPartParser() { <strong class="jxr_keyword">return</strong> partParser; }
+<a class="jxr_linenumber" name="L2390" href="#L2390">2390</a> 
+<a class="jxr_linenumber" name="L2391" href="#L2391">2391</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2392" href="#L2392">2392</a> <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;partSerializer&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L2393" href="#L2393">2393</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2394" href="#L2394">2394</a> <em class="jxr_javadoccomment">	 * @return The value of the &lt;property&gt;partSerializer&lt;/property&gt; property on this bean, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
+<a class="jxr_linenumber" name="L2395" href="#L2395">2395</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2396" href="#L2396">2396</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpPartSerializer" href="../../../../org/apache/juneau/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> getPartSerializer() { <strong class="jxr_keyword">return</strong> partSerializer; }
+<a class="jxr_linenumber" name="L2397" href="#L2397">2397</a> 
+<a class="jxr_linenumber" name="L2398" href="#L2398">2398</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2399" href="#L2399">2399</a> <em class="jxr_javadoccomment">	 * Returns the path pattern for this method.</em>
+<a class="jxr_linenumber" name="L2400" href="#L2400">2400</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2401" href="#L2401">2401</a> <em class="jxr_javadoccomment">	 * @return The path pattern.</em>
+<a class="jxr_linenumber" name="L2402" href="#L2402">2402</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2403" href="#L2403">2403</a> 	<strong class="jxr_keyword">public</strong> String getPathPattern() { <strong class="jxr_keyword">return</strong> pathMatchers[0].toString(); }
+<a class="jxr_linenumber" name="L2404" href="#L2404">2404</a> 
+<a class="jxr_linenumber" name="L2405" href="#L2405">2405</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2406" href="#L2406">2406</a> <em class="jxr_javadoccomment">	 * Returns metadata about the specified response object if it's annotated with {@link Response @Response}.</em>
+<a class="jxr_linenumber" name="L2407" href="#L2407">2407</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2408" href="#L2408">2408</a> <em class="jxr_javadoccomment">	 * @param o The response POJO.</em>
+<a class="jxr_linenumber" name="L2409" href="#L2409">2409</a> <em class="jxr_javadoccomment">	 * @return Metadata about the specified response object, or &lt;jk&gt;null&lt;/jk&gt; if it's not annotated with {@link Response @Response}.</em>
+<a class="jxr_linenumber" name="L2410" href="#L2410">2410</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2411" href="#L2411">2411</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanMeta" href="../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> getResponseBeanMeta(Object o) {
+<a class="jxr_linenumber" name="L2412" href="#L2412">2412</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2413" href="#L2413">2413</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L2414" href="#L2414">2414</a> 		<strong class="jxr_keyword">var</strong> c = o.getClass();
+<a class="jxr_linenumber" name="L2415" href="#L2415">2415</a> 		<strong class="jxr_keyword">var</strong> rbm = responseBeanMetas.get(c);
+<a class="jxr_linenumber" name="L2416" href="#L2416">2416</a> 		<strong class="jxr_keyword">if</strong> (rbm == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L2417" href="#L2417">2417</a> 			rbm = ResponseBeanMeta.create(c, AnnotationWorkList.create());
+<a class="jxr_linenumber" name="L2418" href="#L2418">2418</a> 			<strong class="jxr_keyword">if</strong> (rbm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2419" href="#L2419">2419</a> 				rbm = ResponseBeanMeta.NULL;
+<a class="jxr_linenumber" name="L2420" href="#L2420">2420</a> 			responseBeanMetas.put(c, rbm);
+<a class="jxr_linenumber" name="L2421" href="#L2421">2421</a> 		}
+<a class="jxr_linenumber" name="L2422" href="#L2422">2422</a> 		<strong class="jxr_keyword">if</strong> (rbm == ResponseBeanMeta.NULL)
+<a class="jxr_linenumber" name="L2423" href="#L2423">2423</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L2424" href="#L2424">2424</a> 		<strong class="jxr_keyword">return</strong> rbm;
+<a class="jxr_linenumber" name="L2425" href="#L2425">2425</a> 	}
+<a class="jxr_linenumber" name="L2426" href="#L2426">2426</a> 
+<a class="jxr_linenumber" name="L2427" href="#L2427">2427</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2428" href="#L2428">2428</a> <em class="jxr_javadoccomment">	 * Returns metadata about the specified response object if it's annotated with {@link Header @Header}.</em>
+<a class="jxr_linenumber" name="L2429" href="#L2429">2429</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2430" href="#L2430">2430</a> <em class="jxr_javadoccomment">	 * @param o The response POJO.</em>
+<a class="jxr_linenumber" name="L2431" href="#L2431">2431</a> <em class="jxr_javadoccomment">	 * @return Metadata about the specified response object, or &lt;jk&gt;null&lt;/jk&gt; if it's not annotated with {@link Header @Header}.</em>
+<a class="jxr_linenumber" name="L2432" href="#L2432">2432</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2433" href="#L2433">2433</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponsePartMeta" href="../../../../org/apache/juneau/rest/httppart/ResponsePartMeta.html#ResponsePartMeta">ResponsePartMeta</a> getResponseHeaderMeta(Object o) {
+<a class="jxr_linenumber" name="L2434" href="#L2434">2434</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2435" href="#L2435">2435</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L2436" href="#L2436">2436</a> 		<strong class="jxr_keyword">var</strong> c = o.getClass();
+<a class="jxr_linenumber" name="L2437" href="#L2437">2437</a> 		<strong class="jxr_keyword">var</strong> pm = headerPartMetas.get(c);
+<a class="jxr_linenumber" name="L2438" href="#L2438">2438</a> 		<strong class="jxr_keyword">if</strong> (pm == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L2439" href="#L2439">2439</a> 			<strong class="jxr_keyword">var</strong> a = c.getAnnotation(Header.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L2440" href="#L2440">2440</a> 			<strong class="jxr_keyword">if</strong> (nn(a)) {
+<a class="jxr_linenumber" name="L2441" href="#L2441">2441</a> 				<strong class="jxr_keyword">var</strong> schema = HttpPartSchema.create(a);
+<a class="jxr_linenumber" name="L2442" href="#L2442">2442</a> 				<strong class="jxr_keyword">var</strong> serializer = createPartSerializer(schema.getSerializer(), partSerializer);
+<a class="jxr_linenumber" name="L2443" href="#L2443">2443</a> 				pm = <strong class="jxr_keyword">new</strong> <a name="ResponsePartMeta" href="../../../../org/apache/juneau/rest/httppart/ResponsePartMeta.html#ResponsePartMeta">ResponsePartMeta</a>(HEADER, schema, serializer);
+<a class="jxr_linenumber" name="L2444" href="#L2444">2444</a> 			}
+<a class="jxr_linenumber" name="L2445" href="#L2445">2445</a> 			<strong class="jxr_keyword">if</strong> (pm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2446" href="#L2446">2446</a> 				pm = ResponsePartMeta.NULL;
+<a class="jxr_linenumber" name="L2447" href="#L2447">2447</a> 			headerPartMetas.put(c, pm);
+<a class="jxr_linenumber" name="L2448" href="#L2448">2448</a> 		}
+<a class="jxr_linenumber" name="L2449" href="#L2449">2449</a> 		<strong class="jxr_keyword">if</strong> (pm == ResponsePartMeta.NULL)
+<a class="jxr_linenumber" name="L2450" href="#L2450">2450</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L2451" href="#L2451">2451</a> 		<strong class="jxr_keyword">return</strong> pm;
+<a class="jxr_linenumber" name="L2452" href="#L2452">2452</a> 	}
+<a class="jxr_linenumber" name="L2453" href="#L2453">2453</a> 
+<a class="jxr_linenumber" name="L2454" href="#L2454">2454</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2455" href="#L2455">2455</a> <em class="jxr_javadoccomment">	 * Returns the response bean meta if this method returns a {@link Response}-annotated bean.</em>
+<a class="jxr_linenumber" name="L2456" href="#L2456">2456</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2457" href="#L2457">2457</a> <em class="jxr_javadoccomment">	 * @return The response bean meta or &lt;jk&gt;null&lt;/jk&gt; if it's not a {@link Response}-annotated bean.</em>
+<a class="jxr_linenumber" name="L2458" href="#L2458">2458</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2459" href="#L2459">2459</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanMeta" href="../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> getResponseMeta() { <strong class="jxr_keyword">return</strong> responseMeta; }
+<a class="jxr_linenumber" name="L2460" href="#L2460">2460</a> 
+<a class="jxr_linenumber" name="L2461" href="#L2461">2461</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2462" href="#L2462">2462</a> <em class="jxr_javadoccomment">	 * Returns the serializers to use for this method.</em>
+<a class="jxr_linenumber" name="L2463" href="#L2463">2463</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2464" href="#L2464">2464</a> <em class="jxr_javadoccomment">	 * @return The serializers to use for this method.</em>
+<a class="jxr_linenumber" name="L2465" href="#L2465">2465</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2466" href="#L2466">2466</a> 	<strong class="jxr_keyword">public</strong> <a name="SerializerSet" href="../../../../org/apache/juneau/serializer/SerializerSet.html#SerializerSet">SerializerSet</a> getSerializers() { <strong class="jxr_keyword">return</strong> serializers; }
+<a class="jxr_linenumber" name="L2467" href="#L2467">2467</a> 
+<a class="jxr_linenumber" name="L2468" href="#L2468">2468</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2469" href="#L2469">2469</a> <em class="jxr_javadoccomment">	 * Returns a list of supported accept types.</em>
+<a class="jxr_linenumber" name="L2470" href="#L2470">2470</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2471" href="#L2471">2471</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list.</em>
+<a class="jxr_linenumber" name="L2472" href="#L2472">2472</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2473" href="#L2473">2473</a> 	<strong class="jxr_keyword">public</strong> List&lt;MediaType&gt; getSupportedAcceptTypes() { <strong class="jxr_keyword">return</strong> supportedAcceptTypes; }
+<a class="jxr_linenumber" name="L2474" href="#L2474">2474</a> 
+<a class="jxr_linenumber" name="L2475" href="#L2475">2475</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2476" href="#L2476">2476</a> <em class="jxr_javadoccomment">	 * Returns the list of supported content types.</em>
+<a class="jxr_linenumber" name="L2477" href="#L2477">2477</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2478" href="#L2478">2478</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list.</em>
+<a class="jxr_linenumber" name="L2479" href="#L2479">2479</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2480" href="#L2480">2480</a> 	<strong class="jxr_keyword">public</strong> List&lt;MediaType&gt; getSupportedContentTypes() { <strong class="jxr_keyword">return</strong> supportedContentTypes; }
+<a class="jxr_linenumber" name="L2481" href="#L2481">2481</a> 
+<a class="jxr_linenumber" name="L2482" href="#L2482">2482</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L2483" href="#L2483">2483</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L2484" href="#L2484">2484</a> 		<strong class="jxr_keyword">return</strong> method.hashCode();
+<a class="jxr_linenumber" name="L2485" href="#L2485">2485</a> 	}
+<a class="jxr_linenumber" name="L2486" href="#L2486">2486</a> 
+<a class="jxr_linenumber" name="L2487" href="#L2487">2487</a> 	<strong class="jxr_keyword">private</strong> <a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> matchPattern(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> call) {
+<a class="jxr_linenumber" name="L2488" href="#L2488">2488</a> 		<strong class="jxr_keyword">var</strong> pm = (<a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a>)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L2489" href="#L2489">2489</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pp : pathMatchers)
+<a class="jxr_linenumber" name="L2490" href="#L2490">2490</a> 			<strong class="jxr_keyword">if</strong> (pm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2491" href="#L2491">2491</a> 				pm = pp.match(call.getUrlPath());
+<a class="jxr_linenumber" name="L2492" href="#L2492">2492</a> 		<strong class="jxr_keyword">return</strong> pm;
+<a class="jxr_linenumber" name="L2493" href="#L2493">2493</a> 	}
+<a class="jxr_linenumber" name="L2494" href="#L2494">2494</a> 
+<a class="jxr_linenumber" name="L2495" href="#L2495">2495</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L2496" href="#L2496">2496</a> <em class="jxr_javadoccomment">	 * Identifies if this method can process the specified call.</em>
+<a class="jxr_linenumber" name="L2497" href="#L2497">2497</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2498" href="#L2498">2498</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L2499" href="#L2499">2499</a> <em class="jxr_javadoccomment">	 * To process the call, the following must be true:</em>
+<a class="jxr_linenumber" name="L2500" href="#L2500">2500</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2501" href="#L2501">2501</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Path pattern must match.</em>
+<a class="jxr_linenumber" name="L2502" href="#L2502">2502</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Matchers (if any) must match.</em>
+<a class="jxr_linenumber" name="L2503" href="#L2503">2503</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L2504" href="#L2504">2504</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L2505" href="#L2505">2505</a> <em class="jxr_javadoccomment">	 * @param session The call to check.</em>
+<a class="jxr_linenumber" name="L2506" href="#L2506">2506</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L2507" href="#L2507">2507</a> <em class="jxr_javadoccomment">	 * 	One of the following values:</em>
+<a class="jxr_linenumber" name="L2508" href="#L2508">2508</a> <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L2509" href="#L2509">2509</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;0&lt;/c&gt; - Path doesn't match.</em>
+<a class="jxr_linenumber" name="L2510" href="#L2510">2510</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;1&lt;/c&gt; - Path matched but matchers did not.</em>
+<a class="jxr_linenumber" name="L2511" href="#L2511">2511</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;&lt;c&gt;2&lt;/c&gt; - Matches.</em>
+<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L2513" href="#L2513">2513</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L2514" href="#L2514">2514</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">int</strong> match(<a name="RestSession" href="../../../../org/apache/juneau/rest/RestSession.html#RestSession">RestSession</a> session) {
 <a class="jxr_linenumber" name="L2515" href="#L2515">2515</a> 
-<a class="jxr_linenumber" name="L2516" href="#L2516">2516</a> 		<strong class="jxr_keyword">if</strong> (pm == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L2517" href="#L2517">2517</a> 			<strong class="jxr_keyword">return</strong> 0;
-<a class="jxr_linenumber" name="L2518" href="#L2518">2518</a> 
-<a class="jxr_linenumber" name="L2519" href="#L2519">2519</a> 		<strong class="jxr_keyword">if</strong> (requiredMatchers.length == 0 &amp;&amp; optionalMatchers.length == 0) {
-<a class="jxr_linenumber" name="L2520" href="#L2520">2520</a> 			session.urlPathMatch(pm);  <em class="jxr_comment">// Cache so we don't have to recalculate.</em>
-<a class="jxr_linenumber" name="L2521" href="#L2521">2521</a> 			<strong class="jxr_keyword">return</strong> 2;
-<a class="jxr_linenumber" name="L2522" href="#L2522">2522</a> 		}
-<a class="jxr_linenumber" name="L2523" href="#L2523">2523</a> 
-<a class="jxr_linenumber" name="L2524" href="#L2524">2524</a> 	<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L2525" href="#L2525">2525</a> 		<strong class="jxr_keyword">var</strong> req = session.getRequest();
-<a class="jxr_linenumber" name="L2526" href="#L2526">2526</a> 
-<a class="jxr_linenumber" name="L2527" href="#L2527">2527</a> 		<em class="jxr_comment">// If the method implements matchers, test them.</em>
-<a class="jxr_linenumber" name="L2528" href="#L2528">2528</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : requiredMatchers)
-<a class="jxr_linenumber" name="L2529" href="#L2529">2529</a> 			<strong class="jxr_keyword">if</strong> (! m.matches(req))
-<a class="jxr_linenumber" name="L2530" href="#L2530">2530</a> 				<strong class="jxr_keyword">return</strong> 1;
-<a class="jxr_linenumber" name="L2531" href="#L2531">2531</a> 		<strong class="jxr_keyword">if</strong> (optionalMatchers.length &gt; 0) {
-<a class="jxr_linenumber" name="L2532" href="#L2532">2532</a> 			<strong class="jxr_keyword">boolean</strong> matches = false;
-<a class="jxr_linenumber" name="L2533" href="#L2533">2533</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : optionalMatchers)
-<a class="jxr_linenumber" name="L2534" href="#L2534">2534</a> 					matches |= m.matches(req);
-<a class="jxr_linenumber" name="L2535" href="#L2535">2535</a> 				<strong class="jxr_keyword">if</strong> (! matches)
-<a class="jxr_linenumber" name="L2536" href="#L2536">2536</a> 					<strong class="jxr_keyword">return</strong> 1;
-<a class="jxr_linenumber" name="L2537" href="#L2537">2537</a> 			}
-<a class="jxr_linenumber" name="L2538" href="#L2538">2538</a> 
-<a class="jxr_linenumber" name="L2539" href="#L2539">2539</a> 			session.urlPathMatch(pm);  <em class="jxr_comment">// Cache so we don't have to recalculate.</em>
-<a class="jxr_linenumber" name="L2540" href="#L2540">2540</a> 			<strong class="jxr_keyword">return</strong> 2;
-<a class="jxr_linenumber" name="L2541" href="#L2541">2541</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L2542" href="#L2542">2542</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e);
-<a class="jxr_linenumber" name="L2543" href="#L2543">2543</a> 		}
-<a class="jxr_linenumber" name="L2544" href="#L2544">2544</a> 	}
-<a class="jxr_linenumber" name="L2545" href="#L2545">2545</a> 
-<a class="jxr_linenumber" name="L2546" href="#L2546">2546</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
-<a class="jxr_linenumber" name="L2547" href="#L2547">2547</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
-<a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 		<strong class="jxr_keyword">return</strong> filteredMap().append(<span class="jxr_string">"defaultRequestFormData"</span>, defaultRequestFormData).append(<span class="jxr_string">"defaultRequestHeaders"</span>, defaultRequestHeaders).append(<span class="jxr_string">"defaultRequestQueryData"</span>, defaultRequestQueryData)
-<a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> 			.append(<span class="jxr_string">"httpMethod"</span>, httpMethod);
-<a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 	}
-<a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> 
-<a class="jxr_linenumber" name="L2552" href="#L2552">2552</a> 	RestConverter[] getConverters() { <strong class="jxr_keyword">return</strong> converters; }
+<a class="jxr_linenumber" name="L2516" href="#L2516">2516</a> 		<strong class="jxr_keyword">var</strong> pm = matchPattern(session);
+<a class="jxr_linenumber" name="L2517" href="#L2517">2517</a> 
+<a class="jxr_linenumber" name="L2518" href="#L2518">2518</a> 		<strong class="jxr_keyword">if</strong> (pm == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L2519" href="#L2519">2519</a> 			<strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L2520" href="#L2520">2520</a> 
+<a class="jxr_linenumber" name="L2521" href="#L2521">2521</a> 		<strong class="jxr_keyword">if</strong> (requiredMatchers.length == 0 &amp;&amp; optionalMatchers.length == 0) {
+<a class="jxr_linenumber" name="L2522" href="#L2522">2522</a> 			session.urlPathMatch(pm);  <em class="jxr_comment">// Cache so we don't have to recalculate.</em>
+<a class="jxr_linenumber" name="L2523" href="#L2523">2523</a> 			<strong class="jxr_keyword">return</strong> 2;
+<a class="jxr_linenumber" name="L2524" href="#L2524">2524</a> 		}
+<a class="jxr_linenumber" name="L2525" href="#L2525">2525</a> 
+<a class="jxr_linenumber" name="L2526" href="#L2526">2526</a> 	<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L2527" href="#L2527">2527</a> 		<strong class="jxr_keyword">var</strong> req = session.getRequest();
+<a class="jxr_linenumber" name="L2528" href="#L2528">2528</a> 
+<a class="jxr_linenumber" name="L2529" href="#L2529">2529</a> 		<em class="jxr_comment">// If the method implements matchers, test them.</em>
+<a class="jxr_linenumber" name="L2530" href="#L2530">2530</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : requiredMatchers)
+<a class="jxr_linenumber" name="L2531" href="#L2531">2531</a> 			<strong class="jxr_keyword">if</strong> (! m.matches(req))
+<a class="jxr_linenumber" name="L2532" href="#L2532">2532</a> 				<strong class="jxr_keyword">return</strong> 1;
+<a class="jxr_linenumber" name="L2533" href="#L2533">2533</a> 		<strong class="jxr_keyword">if</strong> (optionalMatchers.length &gt; 0) {
+<a class="jxr_linenumber" name="L2534" href="#L2534">2534</a> 			<strong class="jxr_keyword">boolean</strong> matches = false;
+<a class="jxr_linenumber" name="L2535" href="#L2535">2535</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : optionalMatchers)
+<a class="jxr_linenumber" name="L2536" href="#L2536">2536</a> 					matches |= m.matches(req);
+<a class="jxr_linenumber" name="L2537" href="#L2537">2537</a> 				<strong class="jxr_keyword">if</strong> (! matches)
+<a class="jxr_linenumber" name="L2538" href="#L2538">2538</a> 					<strong class="jxr_keyword">return</strong> 1;
+<a class="jxr_linenumber" name="L2539" href="#L2539">2539</a> 			}
+<a class="jxr_linenumber" name="L2540" href="#L2540">2540</a> 
+<a class="jxr_linenumber" name="L2541" href="#L2541">2541</a> 			session.urlPathMatch(pm);  <em class="jxr_comment">// Cache so we don't have to recalculate.</em>
+<a class="jxr_linenumber" name="L2542" href="#L2542">2542</a> 			<strong class="jxr_keyword">return</strong> 2;
+<a class="jxr_linenumber" name="L2543" href="#L2543">2543</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L2544" href="#L2544">2544</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e);
+<a class="jxr_linenumber" name="L2545" href="#L2545">2545</a> 		}
+<a class="jxr_linenumber" name="L2546" href="#L2546">2546</a> 	}
+<a class="jxr_linenumber" name="L2547" href="#L2547">2547</a> 
+<a class="jxr_linenumber" name="L2548" href="#L2548">2548</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
+<a class="jxr_linenumber" name="L2549" href="#L2549">2549</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
+<a class="jxr_linenumber" name="L2550" href="#L2550">2550</a> 		<strong class="jxr_keyword">return</strong> filteredMap().append(<span class="jxr_string">"defaultRequestFormData"</span>, defaultRequestFormData).append(<span class="jxr_string">"defaultRequestHeaders"</span>, defaultRequestHeaders).append(<span class="jxr_string">"defaultRequestQueryData"</span>, defaultRequestQueryData)
+<a class="jxr_linenumber" name="L2551" href="#L2551">2551</a> 			.append(<span class="jxr_string">"httpMethod"</span>, httpMethod);
+<a class="jxr_linenumber" name="L2552" href="#L2552">2552</a> 	}
 <a class="jxr_linenumber" name="L2553" href="#L2553">2553</a> 
-<a class="jxr_linenumber" name="L2554" href="#L2554">2554</a> 	RestGuard[] getGuards() { <strong class="jxr_keyword">return</strong> guards; }
+<a class="jxr_linenumber" name="L2554" href="#L2554">2554</a> 	RestConverter[] getConverters() { <strong class="jxr_keyword">return</strong> converters; }
 <a class="jxr_linenumber" name="L2555" href="#L2555">2555</a> 
-<a class="jxr_linenumber" name="L2556" href="#L2556">2556</a> 	RestOpInvoker getMethodInvoker() { <strong class="jxr_keyword">return</strong> methodInvoker; }
+<a class="jxr_linenumber" name="L2556" href="#L2556">2556</a> 	RestGuard[] getGuards() { <strong class="jxr_keyword">return</strong> guards; }
 <a class="jxr_linenumber" name="L2557" href="#L2557">2557</a> 
-<a class="jxr_linenumber" name="L2558" href="#L2558">2558</a> 	RestOpInvoker[] getPostCallMethods() { <strong class="jxr_keyword">return</strong> postCallMethods; }
+<a class="jxr_linenumber" name="L2558" href="#L2558">2558</a> 	RestOpInvoker getMethodInvoker() { <strong class="jxr_keyword">return</strong> methodInvoker; }
 <a class="jxr_linenumber" name="L2559" href="#L2559">2559</a> 
-<a class="jxr_linenumber" name="L2560" href="#L2560">2560</a> 	RestOpInvoker[] getPreCallMethods() { <strong class="jxr_keyword">return</strong> preCallMethods; }
-<a class="jxr_linenumber" name="L2561" href="#L2561">2561</a> }
+<a class="jxr_linenumber" name="L2560" href="#L2560">2560</a> 	RestOpInvoker[] getPostCallMethods() { <strong class="jxr_keyword">return</strong> postCallMethods; }
+<a class="jxr_linenumber" name="L2561" href="#L2561">2561</a> 
+<a class="jxr_linenumber" name="L2562" href="#L2562">2562</a> 	RestOpInvoker[] getPreCallMethods() { <strong class="jxr_keyword">return</strong> preCallMethods; }
+<a class="jxr_linenumber" name="L2563" href="#L2563">2563</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

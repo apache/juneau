@@ -72,8 +72,8 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">static</strong> RequestBeanPropertyMeta.Builder create(<a name="HttpPartType" href="../../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType, Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; c, <a name="MethodInfo" href="../../../../../org/apache/juneau/common/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		HttpPartSchema.Builder sb = HttpPartSchema.create().name(m.getPropertyName());
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		m.forEachAnnotation(Schema.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; sb.apply(x));
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		m.forEachAnnotation(c, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; sb.apply(x));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		m.getAllAnnotationInfosParentFirst(Schema.<strong class="jxr_keyword">class</strong>).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; sb.apply(x));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		m.getAllAnnotationInfosParentFirst(c).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; sb.apply(x));
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder().partType(partType).schema(sb.build()).getter(m.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  

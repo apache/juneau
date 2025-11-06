@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  				<strong class="jxr_keyword">if</strong> (x.hasAnnotation(Header.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  					assertNoArgs(x, Header.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  					assertReturnNotVoid(x, Header.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  					<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create(x.getAnnotation(Header.<strong class="jxr_keyword">class</strong>), x.getPropertyName());
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  					<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create(x.getAnnotationInfos(Header.<strong class="jxr_keyword">class</strong>).findFirst().map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).orElse(<strong class="jxr_keyword">null</strong>), x.getPropertyName());
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, x));
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x.hasAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  					assertNoArgs(x, Header.<strong class="jxr_keyword">class</strong>);
@@ -133,8 +133,8 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> Builder(annotations);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		b.apply(m.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).innerType());
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		m.forEachAnnotation(Response.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.apply(x));
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		m.forEachAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.apply(x));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		m.getAllAnnotationInfosParentFirst(Response.<strong class="jxr_keyword">class</strong>).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; b.apply(x));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		m.getAllAnnotationInfosParentFirst(StatusCode.<strong class="jxr_keyword">class</strong>).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).forEach(x -&gt; b.apply(x));
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">return</strong> b.build();
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 
