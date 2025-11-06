@@ -499,18 +499,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	}
 
 	/**
-	 * Returns the first matching annotation of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> filter) {
-		return getAnnotation(null, type, filter);
-	}
-
-	/**
 	 * Returns all annotations of the specified type defined on this or parent classes/interfaces.
 	 *
 	 * <p>
@@ -2378,27 +2366,6 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			t = c2.getAnnotation(ap, a);
 			if (nn(t))
 				return t;
-		}
-		return null;
-	}
-
-	private <A extends Annotation> A getAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter) {
-		if (ap == null)
-			ap = AnnotationProvider.DEFAULT;
-		A t2 = getPackageAnnotation(a);
-		if (nn(t2) && filter.test(t2))
-			return t2;
-		var interfaces2 = interfaces.get();
-		for (int i = interfaces2.size() - 1; i >= 0; i--) {
-			A o = ap.firstDeclaredAnnotation(a, interfaces2.get(i).inner(), filter);
-			if (nn(o))
-				return o;
-		}
-		var parents2 = parents.get();
-		for (int i = parents2.size() - 1; i >= 0; i--) {
-			A o = ap.firstDeclaredAnnotation(a, parents2.get(i).inner(), filter);
-			if (nn(o))
-				return o;
 		}
 		return null;
 	}
