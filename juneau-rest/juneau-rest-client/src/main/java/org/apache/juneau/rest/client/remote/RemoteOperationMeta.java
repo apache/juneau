@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.common.utils.CollectionUtils.*;
+import static org.apache.juneau.common.utils.PredicateUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
@@ -144,103 +145,138 @@ public class RemoteOperationMeta {
 		// These handle both individual annotations and repeated annotation arrays
 
 		private void processContentDefaults(MethodInfo mi) {
-			mi.getAnnotationList().forEach(Content.class, null, x -> {
-				Content c = x.inner();
-				String def = c.def();
-				if (isNotEmpty(def)) {
-					contentDefault = def;
-				}
-			});
-			mi.getAnnotationList().forEach(ContentAnnotation.Array.class, null, x -> {
-				for (var c : x.inner().value()) {
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(Content.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(c -> {
 					String def = c.def();
 					if (isNotEmpty(def)) {
 						contentDefault = def;
 					}
-				}
-			});
+				});
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(ContentAnnotation.Array.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(x -> {
+					for (var c : x.value()) {
+						String def = c.def();
+						if (isNotEmpty(def)) {
+							contentDefault = def;
+						}
+					}
+				});
 		}
 
 		private static void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
-			mi.getAnnotationList().forEach(FormData.class, null, x -> {
-				FormData fd = x.inner();
-				String name = firstNonEmpty(fd.name(), fd.value());
-				String def = fd.def();
-				if (isNotEmpty(name) && isNotEmpty(def)) {
-					defaults.put(name, def);
-				}
-			});
-			mi.getAnnotationList().forEach(FormDataAnnotation.Array.class, null, x -> {
-				for (var fd : x.inner().value()) {
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(FormData.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(fd -> {
 					String name = firstNonEmpty(fd.name(), fd.value());
 					String def = fd.def();
 					if (isNotEmpty(name) && isNotEmpty(def)) {
 						defaults.put(name, def);
 					}
-				}
-			});
+				});
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(FormDataAnnotation.Array.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(x -> {
+					for (var fd : x.value()) {
+						String name = firstNonEmpty(fd.name(), fd.value());
+						String def = fd.def();
+						if (isNotEmpty(name) && isNotEmpty(def)) {
+							defaults.put(name, def);
+						}
+					}
+				});
 		}
 
 		private static void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
 			// Check for individual @Header annotations
-			mi.getAnnotationList().forEach(Header.class, null, x -> {
-				Header h = x.inner();
-				String name = firstNonEmpty(h.name(), h.value());
-				String def = h.def();
-				if (isNotEmpty(name) && isNotEmpty(def)) {
-					defaults.put(name, def);
-				}
-			});
-			// Check for @Header.Array (repeated annotations)
-			mi.getAnnotationList().forEach(HeaderAnnotation.Array.class, null, x -> {
-				for (var h : x.inner().value()) {
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(Header.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(h -> {
 					String name = firstNonEmpty(h.name(), h.value());
 					String def = h.def();
 					if (isNotEmpty(name) && isNotEmpty(def)) {
 						defaults.put(name, def);
 					}
-				}
-			});
+				});
+			// Check for @Header.Array (repeated annotations)
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(HeaderAnnotation.Array.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(x -> {
+					for (var h : x.value()) {
+						String name = firstNonEmpty(h.name(), h.value());
+						String def = h.def();
+						if (isNotEmpty(name) && isNotEmpty(def)) {
+							defaults.put(name, def);
+						}
+					}
+				});
 		}
-
+	
 		private static void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
-			mi.getAnnotationList().forEach(Path.class, null, x -> {
-				Path p = x.inner();
-				String name = firstNonEmpty(p.name(), p.value());
-				String def = p.def();
-				if (isNotEmpty(name) && isNotEmpty(def)) {
-					defaults.put(name, def);
-				}
-			});
-			mi.getAnnotationList().forEach(PathAnnotation.Array.class, null, x -> {
-				for (var p : x.inner().value()) {
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(Path.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(p -> {
 					String name = firstNonEmpty(p.name(), p.value());
 					String def = p.def();
 					if (isNotEmpty(name) && isNotEmpty(def)) {
 						defaults.put(name, def);
 					}
-				}
-			});
+				});
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(PathAnnotation.Array.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(x -> {
+					for (var p : x.value()) {
+						String name = firstNonEmpty(p.name(), p.value());
+						String def = p.def();
+						if (isNotEmpty(name) && isNotEmpty(def)) {
+							defaults.put(name, def);
+						}
+					}
+				});
 		}
-
+	
 		private static void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
-			mi.getAnnotationList().forEach(Query.class, null, x -> {
-				Query q = x.inner();
-				String name = firstNonEmpty(q.name(), q.value());
-				String def = q.def();
-				if (isNotEmpty(name) && isNotEmpty(def)) {
-					defaults.put(name, def);
-				}
-			});
-			mi.getAnnotationList().forEach(QueryAnnotation.Array.class, null, x -> {
-				for (var q : x.inner().value()) {
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(Query.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(q -> {
 					String name = firstNonEmpty(q.name(), q.value());
 					String def = q.def();
 					if (isNotEmpty(name) && isNotEmpty(def)) {
 						defaults.put(name, def);
 					}
-				}
-			});
+				});
+			rstream(mi.getAllAnnotationInfos())
+				.map(x -> x.cast(QueryAnnotation.Array.class))
+				.filter(notNull())
+				.map(AnnotationInfo::inner)
+				.forEach(x -> {
+					for (var q : x.value()) {
+						String name = firstNonEmpty(q.name(), q.value());
+						String def = q.def();
+						if (isNotEmpty(name) && isNotEmpty(def)) {
+							defaults.put(name, def);
+						}
+					}
+				});
 		}
 	}
 
