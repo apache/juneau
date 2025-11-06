@@ -243,22 +243,4 @@ public final class PredicateUtils {
 	public static Predicate<ElementInfo> isAny(ElementFlag...flags) {
 		return ei -> ei.isAny(flags);
 	}
-
-	/**
-	 * Returns a predicate that tests if an object is not null.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	List&lt;String&gt; strings = ...;
-	 * 	List&lt;String&gt; nonNullStrings = strings.stream()
-	 * 		.filter(notNull())
-	 * 		.collect(Collectors.toList());
-	 * </p>
-	 *
-	 * @param <T> The input type of the predicate.
-	 * @return A predicate that returns {@code true} if the input is not null, {@code false} otherwise.
-	 */
-	public static <T> Predicate<T> notNull() {
-		return t -> t != null;
-	}
 }

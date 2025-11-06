@@ -180,17 +180,6 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	}
 
 	/**
-	 * Returns the specified annotation on this field.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		return getAnnotationInfo(type).map(AnnotationInfo::inner).orElse(null);
-	}
-
-	/**
 	 * Returns metadata about the declaring class.
 	 *
 	 * @return Metadata about the declaring class.

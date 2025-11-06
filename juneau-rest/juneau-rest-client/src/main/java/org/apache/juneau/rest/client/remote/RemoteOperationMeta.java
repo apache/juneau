@@ -147,7 +147,7 @@ public class RemoteOperationMeta {
 		private void processContentDefaults(MethodInfo mi) {
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(Content.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(c -> {
 					String def = c.def();
@@ -157,7 +157,7 @@ public class RemoteOperationMeta {
 				});
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(ContentAnnotation.Array.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(x -> {
 					for (var c : x.value()) {
@@ -172,7 +172,7 @@ public class RemoteOperationMeta {
 		private static void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(FormData.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(fd -> {
 					String name = firstNonEmpty(fd.name(), fd.value());
@@ -183,7 +183,7 @@ public class RemoteOperationMeta {
 				});
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(FormDataAnnotation.Array.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(x -> {
 					for (var fd : x.value()) {
@@ -200,7 +200,7 @@ public class RemoteOperationMeta {
 			// Check for individual @Header annotations
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(Header.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(h -> {
 					String name = firstNonEmpty(h.name(), h.value());
@@ -212,7 +212,7 @@ public class RemoteOperationMeta {
 			// Check for @Header.Array (repeated annotations)
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(HeaderAnnotation.Array.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(x -> {
 					for (var h : x.value()) {
@@ -228,7 +228,7 @@ public class RemoteOperationMeta {
 		private static void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(Path.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(p -> {
 					String name = firstNonEmpty(p.name(), p.value());
@@ -239,7 +239,7 @@ public class RemoteOperationMeta {
 				});
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(PathAnnotation.Array.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(x -> {
 					for (var p : x.value()) {
@@ -255,7 +255,7 @@ public class RemoteOperationMeta {
 		private static void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(Query.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(q -> {
 					String name = firstNonEmpty(q.name(), q.value());
@@ -266,7 +266,7 @@ public class RemoteOperationMeta {
 				});
 			rstream(mi.getAllAnnotationInfos())
 				.map(x -> x.cast(QueryAnnotation.Array.class))
-				.filter(notNull())
+				.filter(Objects::nonNull)
 				.map(AnnotationInfo::inner)
 				.forEach(x -> {
 					for (var q : x.value()) {

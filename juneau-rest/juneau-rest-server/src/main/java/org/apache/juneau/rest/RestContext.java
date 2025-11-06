@@ -1767,7 +1767,7 @@ public class RestContext extends Context {
 					y -> beanStore.add(
 						x.getType().inner(),
 						y,
-						RestInjectAnnotation.name(x.getAnnotation(RestInject.class))
+						RestInjectAnnotation.name(x.getAnnotationInfo(RestInject.class).map(AnnotationInfo::inner).orElse(null))
 				)
 			));
 			// @formatter:on
@@ -1804,7 +1804,7 @@ public class RestContext extends Context {
 				resource.get(),
 				beanStore.getBean(
 					x.getType().inner(),
-					RestInjectAnnotation.name(x.getAnnotation(RestInject.class))
+					RestInjectAnnotation.name(x.getAnnotationInfo(RestInject.class).map(AnnotationInfo::inner).orElse(null))
 				).orElse(null)
 			));
 		// @formatter:on
