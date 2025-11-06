@@ -262,7 +262,7 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			return;
 
 		// Process parent interfaces recursively
-		var parentInterfaces = iface.getParents();
+		var parentInterfaces = iface.getDeclaredInterfaces();
 		for (int i = 0; i < parentInterfaces.size(); i++)
 			addInterfaceHierarchy(set, parentInterfaces.get(i));
 	}
@@ -877,6 +877,35 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * This is useful for annotation processing where you need to traverse the complete type hierarchy
 	 * without duplicates.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Interface hierarchy:</jc>
+	 * 	<jk>interface</jk> ISuperGrandParent {}
+	 * 	<jk>interface</jk> IGrandParent <jk>extends</jk> ISuperGrandParent {}
+	 * 	<jk>interface</jk> ISuperParent {}
+	 * 	<jk>interface</jk> IParent <jk>extends</jk> ISuperParent {}
+	 * 	<jk>interface</jk> IChild {}
+	 *
+	 * 	<jc>// Class hierarchy:</jc>
+	 * 	<jk>class</jk> GrandParent <jk>implements</jk> IGrandParent {}
+	 * 	<jk>class</jk> Parent <jk>extends</jk> GrandParent <jk>implements</jk> IParent {}
+	 * 	<jk>class</jk> Child <jk>extends</jk> Parent <jk>implements</jk> IChild {}
+	 *
+	 * 	<jc>// For Child, returns (in this order):</jc>
+	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>);
+	 * 	List&lt;ClassInfo&gt; <jv>result</jv> = <jv>ci</jv>.getParentsAndInterfaces();
+	 * 	<jc>// Result: [</jc>
+	 * 	<jc>//   Child,                  // 1. This class</jc>
+	 * 	<jc>//   IChild,                 // 2. Interface on Child</jc>
+	 * 	<jc>//   Parent,                 // 3. Parent class</jc>
+	 * 	<jc>//   IParent,                // 4. Interface on Parent</jc>
+	 * 	<jc>//   ISuperParent,           // 5. Parent interface of IParent</jc>
+	 * 	<jc>//   GrandParent,            // 6. Grandparent class</jc>
+	 * 	<jc>//   IGrandParent,           // 7. Interface on GrandParent</jc>
+	 * 	<jc>//   ISuperGrandParent       // 8. Parent interface of IGrandParent</jc>
+	 * 	<jc>// ]</jc>
+	 * </p>
 	 *
 	 * @return An unmodifiable list of all parent classes and interfaces, properly ordered without duplicates.
 	 */

@@ -1849,6 +1849,57 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// getParentsAndInterfaces tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// Test hierarchy that mimics RootResources structure:
+	// - Child extends Parent implements IChild
+	// - Parent extends GrandParent implements IParent
+	// - GrandParent implements IGrandParent
+	// - IParent extends ISuperParent
+	// - IGrandParent extends ISuperGrandParent
+
+	interface ISuperGrandParent {}
+	interface IGrandParent extends ISuperGrandParent {}
+	interface ISuperParent {}
+	interface IParent extends ISuperParent {}
+	interface IChild {}
+	static class GrandParent implements IGrandParent {}
+	static class Parent extends GrandParent implements IParent {}
+	static class Child extends Parent implements IChild {}
+
+	@Test
+	void getParentsAndInterfaces_includesAllInterfaces() {
+		var ci = ClassInfo.of(Child.class);
+		var parentsAndInterfaces = ci.getParentsAndInterfaces();
+		
+		// Should include:
+		// 1. Child itself
+		// 2. IChild (direct interface on Child)
+		// 3. Parent (direct parent)
+		// 4. IParent (direct interface on Parent)
+		// 5. ISuperParent (parent interface of IParent)
+		// 6. GrandParent (parent's parent)
+		// 7. IGrandParent (direct interface on GrandParent)
+		// 8. ISuperGrandParent (parent interface of IGrandParent)
+		
+		var names = parentsAndInterfaces.stream()
+			.map(ClassInfo::getNameSimple)
+			.collect(Collectors.toList());
+		
+		// Verify all expected classes/interfaces are present
+		assertTrue(names.contains("Child"), "Should include Child itself");
+		assertTrue(names.contains("Parent"), "Should include Parent");
+		assertTrue(names.contains("GrandParent"), "Should include GrandParent");
+		
+		assertTrue(names.contains("IChild"), "Should include IChild");
+		assertTrue(names.contains("IParent"), "Should include IParent from Parent");
+		assertTrue(names.contains("ISuperParent"), "Should include ISuperParent from IParent hierarchy");
+		assertTrue(names.contains("IGrandParent"), "Should include IGrandParent from GrandParent");
+		assertTrue(names.contains("ISuperGrandParent"), "Should include ISuperGrandParent from IGrandParent hierarchy");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// Other
 	//-----------------------------------------------------------------------------------------------------------------
 

@@ -99,7 +99,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	// All annotations on this method and parent overridden methods in child-to-parent order.
 	private final Supplier<List<AnnotationInfo<Annotation>>> annotationInfos = memoize(this::findAnnotationInfos);
 
-	// All annotations on declaring class, this method and parent overridden methods, and return type in child-to-parent order.
+	// All annotations on declaring class, this method and parent overridden methods, return type, and package in child-to-parent order.
 	private final Supplier<List<AnnotationInfo<Annotation>>> allAnnotationInfos = memoize(this::findAllAnnotationInfos);
 
 	/**

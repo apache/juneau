@@ -259,6 +259,41 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
+	 * Returns a simple string representation of this annotation showing the annotation type and location.
+	 *
+	 * <p>
+	 * Format: {@code @AnnotationName(on=location)}
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul>
+	 * 	<li>{@code @Rest(on=MyClass)} - Annotation on a class
+	 * 	<li>{@code @RestGet(on=MyClass.myMethod)} - Annotation on a method
+	 * 	<li>{@code @Inject(on=MyClass.myField)} - Annotation on a field
+	 * 	<li>{@code @PackageAnnotation(on=my.package)} - Annotation on a package
+	 * </ul>
+	 *
+	 * @return A simple string representation of this annotation.
+	 */
+	public String toSimpleString() {
+		var location = new StringBuilder();
+		var ci = annotatable.getClassInfo();
+
+		if (nn(ci)) {
+			location.append(ci.getNameSimple());
+			var type = annotatable.getAnnotatableType();
+			if (type == AnnotatableType.METHOD_TYPE || type == AnnotatableType.FIELD_TYPE ||
+				type == AnnotatableType.CONSTRUCTOR_TYPE || type == AnnotatableType.PARAMETER_TYPE) {
+				location.append('.').append(annotatable.getAnnotatableName());
+			}
+		} else {
+			// Package
+			location.append(annotatable.getAnnotatableName());
+		}
+
+		return "@" + scn(a.annotationType()) + "(on=" + location + ")";
+	}
+
+	/**
 	 * Returns a string representation of this annotation.
 	 *
 	 * <p>
