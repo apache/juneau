@@ -450,7 +450,8 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 */
 	public <A extends Annotation> Stream<AnnotationInfo<A>> getAllAnnotationInfosParentFirst(Class<A> type) {
 		return rstream(getAllAnnotationInfos())
-			.flatMap(type(type));
+			.map(x -> x.cast(type))
+			.filter(notNull());
 	}
 
 	public Stream<MethodInfo> getMatching() {

@@ -114,6 +114,18 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
+	 * Casts this annotation info to a specific annotation type.
+	 *
+	 * @param <A> The annotation type to cast to.
+	 * @param type The annotation type to cast to.
+	 * @return This annotation info cast to the specified type, or <jk>null</jk> if the cast is not valid.
+	 */
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> AnnotationInfo<A> cast(Class<A> type) {
+		return type.isInstance(a) ? (AnnotationInfo<A>)this : null;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this annotation has the specified annotation defined on it.
 	 *
 	 * @param <A> The annotation class.

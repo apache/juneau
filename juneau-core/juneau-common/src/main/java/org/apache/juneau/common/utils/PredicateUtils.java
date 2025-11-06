@@ -245,27 +245,20 @@ public final class PredicateUtils {
 	}
 
 	/**
-	 * Returns a function that filters and casts {@link AnnotationInfo} objects to a specific annotation type.
-	 *
-	 * <p>
-	 * This function is designed to be used with {@link Stream#flatMap(Function)} to both filter and type-cast
-	 * in a single operation.
+	 * Returns a predicate that tests if an object is not null.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; annotations = ...;
-	 * 	List&lt;MyAnnotation&gt; myAnnotations = annotations.stream()
-	 * 		.flatMap(type(MyAnnotation.<jk>class</jk>))
-	 * 		.map(AnnotationInfo::inner)
+	 * 	List&lt;String&gt; strings = ...;
+	 * 	List&lt;String&gt; nonNullStrings = strings.stream()
+	 * 		.filter(notNull())
 	 * 		.collect(Collectors.toList());
 	 * </p>
 	 *
-	 * @param <A> The annotation type.
-	 * @param annotationType The annotation class to filter and cast to.
-	 * @return A function that returns a stream containing the annotation if it matches the type, or an empty stream otherwise.
+	 * @param <T> The input type of the predicate.
+	 * @return A predicate that returns {@code true} if the input is not null, {@code false} otherwise.
 	 */
-	@SuppressWarnings("unchecked")
-	public static <A extends Annotation> Function<AnnotationInfo<?>, Stream<AnnotationInfo<A>>> type(Class<A> annotationType) {
-		return ai -> ai.isType(annotationType) ? Stream.of((AnnotationInfo<A>)ai) : Stream.empty();
+	public static <T> Predicate<T> notNull() {
+		return t -> t != null;
 	}
 }
