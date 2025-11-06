@@ -814,32 +814,32 @@ public abstract class Context implements AnnotationProvider {
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		return getAnnotationProvider().find(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-		return getAnnotationProvider().find(type, onConstructor).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-		return getAnnotationProvider().find(type, onField).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-		return getAnnotationProvider().find(type, onMethod).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		return getAnnotationProvider().findDeclared(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).findFirst().orElse(null);
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-		getAnnotationProvider().find(type, onClass).map(x -> x.inner()).filter(x -> filter.test(x)).forEach(x -> action.accept(x));
+		throw unsupportedOp();
 	}
 
 	@Override /* Overridden from MetaProvider */

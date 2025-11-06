@@ -182,8 +182,9 @@ public class BeanMeta<T> {
 		private String findPropertyName(Field f) {
 			List<Beanp> lp = list();
 			List<Name> ln = list();
-			ctx.forEachAnnotation(Beanp.class, f, x -> true, x -> lp.add(x));
-			ctx.forEachAnnotation(Name.class, f, x -> true, x -> ln.add(x));
+			// Inline Context.forEachAnnotation() calls
+			ctx.getAnnotationProvider().find(Beanp.class, f).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
+			ctx.getAnnotationProvider().find(Name.class, f).map(x -> x.inner()).filter(x -> true).forEach(x -> ln.add(x));
 			String name = bpName(lp, ln);
 			if (isNotEmpty(name))
 				return name;
@@ -252,7 +253,8 @@ public class BeanMeta<T> {
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
-					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = splita(z.properties()));
+					// Inline Context.forEachAnnotation() call
+				ctx.getAnnotationProvider().find(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
 					if (! x.hasNumParameters(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 						throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -275,7 +277,8 @@ public class BeanMeta<T> {
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = splita(z.properties()));
+						// Inline Context.forEachAnnotation() call
+				ctx.getAnnotationProvider().find(Beanc.class, x.inner()).map(x2 -> x2.inner()).filter(y -> ! y.properties().isEmpty()).forEach(z -> constructorArgs = splita(z.properties()));
 						if (! x.hasNumParameters(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");

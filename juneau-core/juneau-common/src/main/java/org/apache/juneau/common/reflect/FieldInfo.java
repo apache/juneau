@@ -223,7 +223,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return nn(annotationProvider.firstAnnotation(type, f, x -> true));
+		// Inline Context.firstAnnotation() call
+		return nn(annotationProvider.getAnnotationProvider().find(type, f).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
 	}
 
 	/**

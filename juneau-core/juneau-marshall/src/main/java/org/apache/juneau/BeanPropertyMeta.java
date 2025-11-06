@@ -220,7 +220,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			if (nn(innerField)) {
 				List<Beanp> lp = list();
-				bc.forEachAnnotation(Beanp.class, innerField, x -> true, x -> lp.add(x));
+				// Inline Context.forEachAnnotation() call
+				bc.getAnnotationProvider().find(Beanp.class, innerField).map(x -> x.inner()).filter(x -> true).forEach(x -> lp.add(x));
 				if (nn(field) || isNotEmpty(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
@@ -238,8 +239,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					if (! x.wo().isEmpty())
 						writeOnly = Boolean.valueOf(x.wo());
 				});
-				bc.forEachAnnotation(Swap.class, innerField, x -> true, x -> swap = getPropertySwap(x));
-				isUri |= nn(bc.firstAnnotation(Uri.class, innerField, x -> true));
+				// Inline Context.forEachAnnotation() call
+				bc.getAnnotationProvider().find(Swap.class, innerField).map(x -> x.inner()).filter(x -> true).forEach(x -> swap = getPropertySwap(x));
+				isUri |= nn(bc.getAnnotationProvider().find(Uri.class, innerField).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
 			}
 
 			if (nn(getter)) {
@@ -635,9 +637,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		BeanContext bc = beanContext;
 		if (nn(a)) {
-			if (nn(field)) bc.forEachAnnotation(a, field, filter, action);
-			if (nn(getter)) bc.forEachAnnotation(a, getter, filter, action);
-			if (nn(setter)) bc.forEachAnnotation(a, setter, filter, action);
+			if (nn(field)) bc.getAnnotationProvider().find(a, field).map(x -> x.inner()).filter(filter).forEach(action);
+			if (nn(getter)) bc.getAnnotationProvider().find(a, getter).map(x -> x.inner()).filter(filter).forEach(action);
+			if (nn(setter)) bc.getAnnotationProvider().find(a, setter).map(x -> x.inner()).filter(filter).forEach(action);
 		}
 		return this;
 	}
@@ -679,7 +681,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return l;
 		getBeanMeta().getClassMeta().getInfo().forEachAnnotation(bc, a, x -> true, x -> l.add(x));
 		if (nn(field)) {
-			bc.forEachAnnotation(a, field, x -> true, x -> l.add(x));
+			bc.getAnnotationProvider().find(a, field).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(x));
 			ClassInfo.of(field.getType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
 		}
 		if (nn(getter)) {

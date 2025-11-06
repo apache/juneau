@@ -41,6 +41,16 @@ public interface AnnotationProvider {
 	boolean DISABLE_ANNOTATION_CACHING = Boolean.getBoolean("juneau.disableAnnotationCaching");
 
 	/**
+	 * Returns the underlying AnnotationProvider2 instance.
+	 * 
+	 * <p>
+	 * This allows direct access to AnnotationProvider2 methods which support runtime annotations.
+	 *
+	 * @return The underlying AnnotationProvider2 instance.
+	 */
+	AnnotationProvider2 getAnnotationProvider();
+
+	/**
 	 * Finds the first matching annotation on the specified class.
 	 *
 	 * @param <A> The annotation type to find.

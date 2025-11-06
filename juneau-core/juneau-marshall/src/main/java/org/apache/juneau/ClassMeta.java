@@ -362,7 +362,8 @@ public class ClassMeta<T> implements Type {
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
 			if (nn(bc)) {
-				bc.forEachAnnotation(Bean.class, c, x -> true, x -> {
+				// Inline Context.forEachAnnotation() call
+				bc.getAnnotationProvider().find(Bean.class, c).map(x -> x.inner()).filter(x -> true).forEach(x -> {
 					if (x.dictionary().length != 0)
 						beanRegistry = new BeanRegistry(bc, null, x.dictionary());
 					// This could be a non-bean POJO with a type name.
@@ -372,7 +373,8 @@ public class ClassMeta<T> implements Type {
 			}
 
 			if (example == null && nn(bc)) {
-				bc.forEachAnnotation(Example.class, c, x -> ! x.value().isEmpty(), x -> example = x.value());
+				// Inline Context.forEachAnnotation() call
+				bc.getAnnotationProvider().find(Example.class, c).map(x -> x.inner()).filter(x -> ! x.value().isEmpty()).forEach(x -> example = x.value());
 			}
 
 			if (example == null) {
@@ -494,8 +496,9 @@ public class ClassMeta<T> implements Type {
 
 		private void findSwaps(List<ObjectSwap> l, BeanContext bc) {
 
-			if (nn(bc))
-				bc.forEachAnnotation(Swap.class, innerClass, x -> true, x -> l.add(createSwap(x)));
+		if (nn(bc))
+			// Inline Context.forEachAnnotation() call
+			bc.getAnnotationProvider().find(Swap.class, innerClass).map(x -> x.inner()).filter(x -> true).forEach(x -> l.add(createSwap(x)));
 
 			ObjectSwap defaultSwap = DefaultSwaps.find(ci);
 			if (defaultSwap == null)

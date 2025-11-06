@@ -1664,7 +1664,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		if (annotationProvider == null)
 			throw unsupportedOp();
-		return nn(annotationProvider.firstAnnotation(type, c, x -> true));
+		// Inline Context.firstAnnotation() call
+		return nn(annotationProvider.getAnnotationProvider().find(type, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null));
 	}
 
 	/**
@@ -2339,7 +2340,8 @@ public class ClassInfo extends ElementInfo implements Annotatable {
 			return null;
 		if (ap == null)
 			throw unsupportedOp();
-		A t = ap.firstDeclaredAnnotation(a, c, x -> true);
+		// Inline Context.firstDeclaredAnnotation() call
+		A t = ap.getAnnotationProvider().findDeclared(a, c).map(x -> x.inner()).filter(x -> true).findFirst().orElse(null);
 		if (nn(t))
 			return t;
 		ClassInfo sci = getSuperclass();
