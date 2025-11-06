@@ -580,9 +580,9 @@
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 	@Test <strong class="jxr_keyword">void</strong> getAnnotations() {
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		check(<span class="jxr_string">"@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)"</span>, g3.getAnnotations(A.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		check(<span class="jxr_string">"@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)"</span>, g4.getAnnotations(A.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		check(<span class="jxr_string">"@A(3)"</span>, g5.getAnnotations(A.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		check(<span class="jxr_string">"@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g3.getAnnotationInfos(A.<strong class="jxr_keyword">class</strong>).toList()).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList());
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		check(<span class="jxr_string">"@A(2),@A(1),@A(5),@A(3),@A(6),@A(7)"</span>, rstream(g4.getAnnotationInfos(A.<strong class="jxr_keyword">class</strong>).toList()).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList());
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		check(<span class="jxr_string">"@A(3)"</span>, rstream(g5.getAnnotationInfos(A.<strong class="jxr_keyword">class</strong>).toList()).map(AnnotationInfo::<strong class="jxr_keyword">inner</strong>).toList());
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 	}
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 	@Test <strong class="jxr_keyword">void</strong> forEachAnnotation() {

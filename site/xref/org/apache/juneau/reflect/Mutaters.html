@@ -213,7 +213,7 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> ici = ClassInfo.of(ic);
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">var</strong> oci = ClassInfo.of(oc);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		ClassInfo pic = ici.getAnyParent(x -&gt; nn(m.get(x.<strong class="jxr_keyword">inner</strong>())));
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		ClassInfo pic = ici.getAllParents().stream().filter(x -&gt; nn(m.get(x.<strong class="jxr_keyword">inner</strong>()))).findFirst().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">if</strong> (nn(pic))
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">return</strong> m.get(pic.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
